@@ -1,0 +1,2614 @@
+{
+  "schemaVersion": 1,
+  "topic": "kafka",
+  "questions": [
+    {
+      "id": "kafka.architecture.001",
+      "section": "architecture",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which property makes Kafka a distributed log rather than a traditional message queue such as classic ActiveMQ or RabbitMQ?",
+        "ru": "Какое свойство делает Kafka распределённым логом, а не традиционной очередью сообщений вроде классических ActiveMQ или RabbitMQ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Records stay in the log until retention removes them, and each consumer group tracks its own offset independently.",
+            "ru": "Записи лежат в логе до срабатывания retention, и каждая consumer group независимо ведёт собственный offset."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The broker deletes a record as soon as one consumer group has acknowledged it, which keeps the log small.",
+            "ru": "Брокер удаляет запись сразу после подтверждения одной consumer group, за счёт этого лог остаётся небольшим."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The broker pushes records to registered consumers and tracks per-message delivery state for each of them.",
+            "ru": "Брокер сам отправляет записи зарегистрированным консьюмерам и отслеживает состояние доставки каждого сообщения для каждого из них."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Offsets are global for the whole cluster, so a record can be delivered to exactly one consumer anywhere in the cluster.",
+            "ru": "Offset'ы глобальны для всего кластера, поэтому запись может быть доставлена ровно одному консьюмеру в пределах кластера."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Records are held in broker memory and replayed from an external database when a consumer asks for history.",
+            "ru": "Записи хранятся в памяти брокера, а история восстанавливается из внешней базы данных, когда консьюмер её запрашивает."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Kafka brokers are dumb storage: a partition is an append-only log and consumption is just reading at an offset, so nothing is removed on consumption and independent consumer groups can replay the same data. The \"delete after ack\" option describes a queue, where the broker owns per-message delivery state — exactly the responsibility Kafka moved to the consumer.",
+        "ru": "Брокер Kafka — это просто хранилище: партиция представляет собой append-only лог, а чтение — это чтение по offset'у, поэтому при потреблении ничего не удаляется и независимые группы могут перечитывать те же данные. Вариант «удалить после ack» описывает очередь, где брокер владеет состоянием доставки каждого сообщения — именно эту ответственность Kafka перенесла на консьюмера."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#design",
+        "https://kafka.apache.org/documentation/#intro_concepts_and_terms"
+      ]
+    },
+    {
+      "id": "kafka.architecture.002",
+      "section": "architecture",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about KRaft mode is TRUE?",
+        "ru": "Какое утверждение о режиме KRaft верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "KRaft replaced ZooKeeper only for consumer offsets; topic and partition metadata still require a ZooKeeper ensemble.",
+            "ru": "KRaft заменил ZooKeeper только для offset'ов консьюмеров; метаданные топиков и партиций по-прежнему требуют ансамбля ZooKeeper."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Cluster metadata lives in an internal Kafka log replicated by a Raft quorum of controllers, and ZooKeeper support was removed in Kafka 4.0.",
+            "ru": "Метаданные кластера хранятся во внутреннем Kafka-логе, который реплицируется Raft-кворумом контроллеров, а поддержка ZooKeeper удалена в Kafka 4.0."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "KRaft is a new replication protocol between partition leaders and followers that replaced the ISR mechanism.",
+            "ru": "KRaft — это новый протокол репликации между лидером партиции и фолловерами, заменивший механизм ISR."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "In KRaft every broker is a controller and there is no leader among them, decisions are taken by majority vote per request.",
+            "ru": "В KRaft каждый брокер является контроллером, лидера среди них нет, а решения принимаются голосованием большинства на каждый запрос."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "KRaft keeps metadata in ZooKeeper but caches it on brokers, which is what removes the read load from ZooKeeper.",
+            "ru": "KRaft хранит метаданные в ZooKeeper, но кэширует их на брокерах, и именно это снимает нагрузку чтения с ZooKeeper."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "KRaft stores all cluster metadata in the internal __cluster_metadata topic, replicated by a quorum of controller nodes with a Raft-based protocol; one controller is the active leader and the others are hot standbys that replay the same log. KRaft has nothing to do with partition data replication, which still uses leaders, followers and the ISR.",
+        "ru": "KRaft хранит все метаданные кластера во внутреннем топике __cluster_metadata, который реплицируется кворумом controller-узлов по протоколу на базе Raft; один контроллер является активным лидером, остальные — горячим резервом, проигрывающим тот же лог. К репликации данных партиций KRaft отношения не имеет: там по-прежнему лидер, фолловеры и ISR."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#kraft",
+        "https://kafka.apache.org/blog/2025/03/18/apache-kafka-4.0.0-release-announcement/"
+      ]
+    },
+    {
+      "id": "kafka.architecture.003",
+      "section": "architecture",
+      "difficulty": "medium",
+      "text": {
+        "en": "A broker runs in Docker with the configuration below. A client outside Docker connects to localhost:9092 (published port), successfully fetches metadata, and then every produce attempt fails with a connection error. Why?",
+        "ru": "Брокер запущен в Docker со следующей конфигурацией. Клиент вне Docker подключается к localhost:9092 (опубликованный порт), успешно получает метаданные, после чего любая попытка отправки падает с ошибкой соединения. Почему?"
+      },
+      "code": "listeners=PLAINTEXT://0.0.0.0:9092\nadvertised.listeners=PLAINTEXT://kafka:9092",
+      "options": [
+        {
+          "text": {
+            "en": "Metadata returns kafka:9092, and the client then connects directly to that host name, which does not resolve outside the Docker network.",
+            "ru": "В метаданных возвращается kafka:9092, и клиент подключается напрямую к этому имени хоста, а оно не разрешается вне сети Docker."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The broker rejects produce requests until advertised.listeners holds an IP address rather than a host name, because only metadata may use names.",
+            "ru": "Брокер отклоняет запросы записи, пока в advertised.listeners не окажется IP-адрес вместо имени хоста, так как имена допустимы только в метаданных."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "listeners and advertised.listeners must be identical, otherwise the broker refuses produce requests while still answering metadata requests.",
+            "ru": "listeners и advertised.listeners должны совпадать, иначе брокер отклоняет запросы на запись, продолжая отвечать на запросы метаданных."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The PLAINTEXT security protocol can carry metadata requests only; produce requests require at least SASL_PLAINTEXT.",
+            "ru": "Протокол PLAINTEXT позволяет передавать только запросы метаданных; для запросов записи нужен минимум SASL_PLAINTEXT."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The bootstrap connection uses advertised.listeners while later connections use listeners, so 0.0.0.0 is used as a destination address.",
+            "ru": "Bootstrap-соединение использует advertised.listeners, а последующие соединения — listeners, поэтому в качестве адреса назначения берётся 0.0.0.0."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Bootstrap only discovers the cluster: the client then talks directly to the partition leader at the address the broker advertises. advertised.listeners is what clients receive, so it must be resolvable and reachable from the client network, while listeners is only the local bind address. Setting them equal is not a requirement — using separate internal and external listeners is the normal fix.",
+        "ru": "Bootstrap нужен только для обнаружения кластера: далее клиент обращается напрямую к лидеру партиции по адресу, который анонсировал брокер. Клиенты получают именно advertised.listeners, поэтому он должен разрешаться и быть достижим из сети клиента, тогда как listeners — это лишь локальный адрес привязки. Требования их совпадения нет: штатное решение — отдельные внутренний и внешний listener'ы."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#brokerconfigs_advertised.listeners",
+        "https://www.confluent.io/blog/kafka-listeners-explained/"
+      ]
+    },
+    {
+      "id": "kafka.architecture.004",
+      "section": "architecture",
+      "difficulty": "medium",
+      "text": {
+        "en": "Kafka consumption is pull-based. Which consequence of that design is stated correctly?",
+        "ru": "Потребление в Kafka построено на модели pull. Какое следствие этого решения описано верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The broker maintains a per-consumer send buffer and applies backpressure through TCP flow control when the consumer is slow.",
+            "ru": "Брокер поддерживает буфер отправки на каждого консьюмера и применяет backpressure через TCP flow control, когда консьюмер медленный."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The consumer controls its own fetch rate, so a slow consumer just accumulates lag, and fetch.max.wait.ms damps idle polls.",
+            "ru": "Консьюмер сам управляет скоростью выборки, поэтому медленный консьюмер лишь накапливает lag, а fetch.max.wait.ms гасит холостые опросы."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Every poll() call opens a fresh TCP connection to the leader of each assigned partition, which is why polling in a tight loop is discouraged.",
+            "ru": "Каждый вызов poll() открывает новое TCP-соединение к лидеру каждой назначенной партиции, поэтому опрос в тесном цикле не рекомендуется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because consumers pull, the broker must keep an in-memory index of not-yet-delivered messages for every consumer group.",
+            "ru": "Поскольку консьюмеры сами забирают данные, брокер обязан держать в памяти индекс ещё не доставленных сообщений для каждой consumer group."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Pull-based delivery requires per-message acknowledgements from the consumer, which is what the commit API implements.",
+            "ru": "Модель pull требует подтверждения каждого сообщения консьюмером, и именно это реализует API коммитов."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Pulling puts flow control in the consumer: it fetches batches at its own pace and the only visible effect of being slow is growing lag, never an overwhelmed client. The obvious downside — spinning when there is no data — is handled by long polling on the broker side via fetch.min.bytes together with fetch.max.wait.ms, not by broker-side buffers or per-message acknowledgements.",
+        "ru": "Pull переносит управление потоком на консьюмера: он забирает батчи в своём темпе, и единственное видимое следствие медлительности — рост lag, а не перегрузка клиента. Очевидный минус — холостые опросы при отсутствии данных — решается long polling на стороне брокера через fetch.min.bytes вместе с fetch.max.wait.ms, а не буферами на брокере и не подтверждением каждого сообщения."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#design_pull",
+        "https://kafka.apache.org/documentation/#consumerconfigs_fetch.min.bytes"
+      ]
+    },
+    {
+      "id": "kafka.architecture.005",
+      "section": "architecture",
+      "difficulty": "medium",
+      "text": {
+        "en": "What is the responsibility of the active controller in a KRaft cluster?",
+        "ru": "За что отвечает активный контроллер в кластере KRaft?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It runs log compaction and retention deletion on behalf of all brokers to keep the cleaning policy consistent.",
+            "ru": "Он выполняет компакцию логов и удаление по retention за все брокеры, чтобы политика очистки была согласованной."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It receives all produce and fetch requests from clients and forwards them to the current partition leaders.",
+            "ru": "Он принимает все запросы записи и чтения от клиентов и перенаправляет их текущим лидерам партиций."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It stores committed consumer group offsets and answers OffsetFetch requests for every group in the cluster.",
+            "ru": "Он хранит зафиксированные offset'ы consumer group и отвечает на запросы OffsetFetch для всех групп кластера."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It owns cluster metadata and elects partition leaders, publishing every change to the metadata log that brokers replay.",
+            "ru": "Он владеет метаданными кластера и выбирает лидеров партиций, публикуя каждое изменение в metadata-лог, который проигрывают брокеры."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is the leader replica for every partition in the cluster, which is why it must be the largest broker.",
+            "ru": "Он является лидером-репликой для всех партиций кластера, поэтому должен быть самым мощным брокером."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The controller is a metadata service: it decides leadership and replica placement and writes the results to the metadata log, from which brokers apply them. Client data traffic never goes through it — produce and fetch always go straight to the partition leader — and committed offsets live in __consumer_offsets, managed by the group coordinator, not the controller.",
+        "ru": "Контроллер — это сервис метаданных: он решает, кто лидер и как размещены реплики, и записывает результат в metadata-лог, из которого брокеры применяют изменения. Клиентский трафик через него не идёт — запись и чтение всегда адресованы лидеру партиции, — а зафиксированные offset'ы лежат в __consumer_offsets и управляются group coordinator'ом, а не контроллером."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#kraft",
+        "https://developer.confluent.io/learn/kraft/"
+      ]
+    },
+    {
+      "id": "kafka.architecture.006",
+      "section": "architecture",
+      "difficulty": "hard",
+      "text": {
+        "en": "Which statement about Kafka's log-structured storage on the broker is TRUE?",
+        "ru": "Какое утверждение о лог-структурированном хранении данных на брокере Kafka верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Each replica is an append-only sequence of segment files, and fetches from the OS page cache go out over the zero-copy sendfile path.",
+            "ru": "Каждая реплика — это append-only последовательность segment-файлов, а выдача из page cache ОС идёт по zero-copy пути sendfile."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The broker caches recent records on the JVM heap, so the heap must be sized to roughly cover the retention window of the hottest topics.",
+            "ru": "Брокер кэширует свежие записи в heap JVM, поэтому heap нужно подбирать так, чтобы он примерно покрывал окно retention самых горячих топиков."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Records are stored in a per-partition B-tree keyed by the record key, which makes lookup by key logarithmic in the partition size.",
+            "ru": "Записи хранятся в B-дереве на партицию с ключом записи, поэтому поиск по ключу логарифмичен относительно размера партиции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Every produce request is fsync'ed to disk before it is acknowledged; that flush is what makes acks=all durable.",
+            "ru": "Каждый запрос записи сбрасывается на диск через fsync до подтверждения; именно этот flush делает acks=all надёжным."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Segments are mutable files, which is why log compaction can overwrite superseded records in place instead of writing new segments.",
+            "ru": "Segment-файлы изменяемы, поэтому компакция может перезаписывать устаревшие записи на месте, не создавая новые segment'ы."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A partition replica is a directory of immutable, append-only segments; the broker relies on the OS page cache and the zero-copy sendfile path instead of its own record cache, which is why Kafka brokers run with a modest heap. Durability comes from replication to the ISR rather than from a synchronous fsync on every produce, and compaction always writes fresh segments and swaps them in — segments themselves are never edited in place.",
+        "ru": "Реплика партиции — это каталог неизменяемых append-only segment'ов; брокер опирается на page cache ОС и zero-copy через sendfile вместо собственного кэша записей, поэтому брокеры Kafka работают со скромным heap. Надёжность обеспечивается репликацией в ISR, а не синхронным fsync на каждый запрос записи, а компакция всегда пишет новые segment'ы и подменяет старые — сами segment'ы на месте не правятся."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#persistence",
+        "https://kafka.apache.org/documentation/#maximizingefficiency"
+      ]
+    },
+    {
+      "id": "kafka.topics-partitions.001",
+      "section": "topics-partitions",
+      "difficulty": "easy",
+      "text": {
+        "en": "Why is the partition count of a topic a decision that is hard to change later?",
+        "ru": "Почему количество партиций топика — решение, которое трудно изменить позже?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The partition count may be raised or lowered at any time; only the leader election for the affected partitions changes.",
+            "ru": "Число партиций можно как увеличивать, так и уменьшать в любой момент; меняются только выборы лидера для затронутых партиций."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Kafka redistributes the already stored records over the new partitions, and that rewrite invalidates all committed consumer offsets.",
+            "ru": "Kafka перераспределяет уже сохранённые записи по новым партициям, и эта перезапись делает недействительными все зафиксированные offset'ы консьюмеров."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Keyed records are placed by a hash of the key modulo the partition count, so adding partitions sends existing keys elsewhere and the count can never be reduced.",
+            "ru": "Записи с ключом распределяются по хэшу ключа по модулю числа партиций, поэтому добавление партиций отправляет существующие ключи в другие партиции, а уменьшить их число нельзя вовсе."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Adding partitions is safe for ordering, but each new partition needs its own consumer group because groups are bound to a fixed assignment.",
+            "ru": "Добавление партиций безопасно для порядка, но каждой новой партиции нужна отдельная consumer group, поскольку группы привязаны к фиксированному назначению."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The new partition count takes effect only after the topic's retention window has fully expired for all existing segments.",
+            "ru": "Новое число партиций вступает в силу только после того, как окно retention полностью истечёт для всех существующих segment'ов."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The default partitioner picks partition = murmur2(key) % numPartitions, so growing the topic remaps keys: records for one key can live in two partitions, and their relative order across the change is lost. Kafka never moves stored records between partitions, and kafka-topics --alter can only increase the count.",
+        "ru": "Партиционер по умолчанию выбирает partition = murmur2(key) % numPartitions, поэтому увеличение топика переотображает ключи: записи одного ключа могут оказаться в двух партициях, и их взаимный порядок на границе изменения теряется. Kafka никогда не переносит уже сохранённые записи между партициями, а kafka-topics --alter умеет только увеличивать их число."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#basic_ops_modify_topic",
+        "https://www.confluent.io/blog/how-choose-number-topics-partitions-kafka-cluster/"
+      ]
+    },
+    {
+      "id": "kafka.topics-partitions.002",
+      "section": "topics-partitions",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about offsets is TRUE?",
+        "ru": "Какое утверждение об offset'ах верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The offset is chosen by the producer and travels inside the ProducerRecord, which is how idempotent retries are detected.",
+            "ru": "Offset выбирается продюсером и передаётся внутри ProducerRecord, и именно так распознаются идемпотентные повторы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Offsets are recycled from zero once retention deletes the oldest segment, so a partition never runs out of offset values.",
+            "ru": "Offset'ы переиспользуются с нуля, как только retention удаляет самый старый segment, поэтому значения offset'ов в партиции не заканчиваются."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An offset is unique across the whole topic, which is how a consumer can seek to a record without knowing its partition.",
+            "ru": "Offset уникален в пределах всего топика, и именно поэтому консьюмер может перейти к записи, не зная её партиции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An offset is the record's append timestamp in milliseconds, which is why offsetsForTimes can translate a time into an offset directly.",
+            "ru": "Offset — это временная метка добавления записи в миллисекундах, и поэтому offsetsForTimes может напрямую превратить время в offset."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An offset is a monotonically increasing position assigned by the partition leader on append; it is unique inside one partition and never reused.",
+            "ru": "Offset — это монотонно возрастающая позиция, присваиваемая лидером партиции при добавлении записи; он уникален внутри одной партиции и никогда не переиспользуется."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Offsets are per-partition sequence numbers assigned by the leader; they only grow, are never reused, and mean nothing outside their partition — a position is always the pair (partition, offset). Retention deletes records but does not renumber anything, so after deletion the log simply starts at a higher offset.",
+        "ru": "Offset — это порядковый номер внутри партиции, присваиваемый лидером; он только растёт, не переиспользуется и вне своей партиции ничего не значит — позиция всегда задаётся парой (партиция, offset). Retention удаляет записи, но ничего не перенумеровывает, поэтому после удаления лог просто начинается с более высокого offset'а."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#intro_concepts_and_terms",
+        "https://kafka.apache.org/documentation/#log"
+      ]
+    },
+    {
+      "id": "kafka.topics-partitions.003",
+      "section": "topics-partitions",
+      "difficulty": "medium",
+      "text": {
+        "en": "A topic has the configuration below and receives a steady but low volume of traffic. A consumer that starts from the beginning still sees records that are three days old. What explains it?",
+        "ru": "У топика следующая конфигурация, и он получает стабильный, но небольшой поток данных. Консьюмер, начавший чтение с начала, всё ещё видит записи трёхдневной давности. Чем это объясняется?"
+      },
+      "code": "cleanup.policy=delete\nretention.ms=86400000\nsegment.bytes=1073741824\nretention.bytes=-1",
+      "options": [
+        {
+          "text": {
+            "en": "retention.ms is ignored unless retention.bytes is also set to a positive value; with -1 the topic effectively keeps data forever.",
+            "ru": "retention.ms игнорируется, пока retention.bytes не задан положительным значением; при -1 топик фактически хранит данные бессрочно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "retention.ms is measured from the last time the record was read, so a rarely read topic keeps its data much longer.",
+            "ru": "retention.ms отсчитывается от момента последнего чтения записи, поэтому редко читаемый топик хранит данные значительно дольше."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Retention is enforced per log segment: the active segment is never deleted, so records survive until it rolls and ages out.",
+            "ru": "Retention применяется к segment'у целиком: активный segment не удаляется, поэтому записи живут, пока он не закроется и не выйдет за retention."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Records become eligible for deletion only after some consumer group has committed an offset beyond them.",
+            "ru": "Записи становятся кандидатами на удаление только после того, как какая-нибудь consumer group зафиксирует offset за ними."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The broker deletes individual expired records lazily while serving fetches, so unread ranges are never cleaned.",
+            "ru": "Брокер удаляет отдельные истёкшие записи «лениво», во время обслуживания чтений, поэтому непрочитанные диапазоны не очищаются вовсе."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The log cleaner works at segment granularity: a segment is deleted only when it is closed and its newest record is older than retention.ms, so with a 1 GiB segment and low throughput the active segment can hold days of data. Consumer offsets play no part in retention — Kafka deletes data whether or not anyone has read it, which is why segment.ms is the knob to add here.",
+        "ru": "Очистка лога работает на уровне segment'а: segment удаляется только когда он закрыт и его самая свежая запись старше retention.ms, поэтому при segment'е в 1 ГиБ и низком трафике активный segment может держать данные сутками. Offset'ы консьюмеров на retention не влияют — Kafka удаляет данные независимо от того, прочитал их кто-то или нет, поэтому здесь нужно добавить segment.ms."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#topicconfigs_retention.ms",
+        "https://kafka.apache.org/documentation/#topicconfigs_segment.ms"
+      ]
+    },
+    {
+      "id": "kafka.topics-partitions.004",
+      "section": "topics-partitions",
+      "difficulty": "medium",
+      "text": {
+        "en": "A topic is configured as below. What can a consumer that reads this topic from the beginning rely on?",
+        "ru": "Топик сконфигурирован так, как показано ниже. На что может рассчитывать консьюмер, читающий этот топик с начала?"
+      },
+      "code": "cleanup.policy=compact\ndelete.retention.ms=86400000\nmin.cleanable.dirty.ratio=0.5",
+      "options": [
+        {
+          "text": {
+            "en": "It will see only records written in the last 24 hours, because delete.retention.ms replaces retention.ms for compacted topics.",
+            "ru": "Он увидит только записи, записанные за последние 24 часа, поскольку для компактируемых топиков delete.retention.ms заменяет retention.ms."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It will see a log in which every tombstone has already been removed, because tombstones are dropped by the cleaner on its first pass.",
+            "ru": "Он увидит лог, из которого все tombstone уже удалены, поскольку cleaner убирает их на первом же проходе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It will see all versions of every key, but reordered so that the newest version of each key comes first.",
+            "ru": "Он увидит все версии каждого ключа, но переупорядоченные так, что самая свежая версия каждого ключа идёт первой."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It will see at least the latest value of every key that has not been deleted; older values may or may not still be there.",
+            "ru": "Он увидит как минимум последнее значение каждого неудалённого ключа; более старые значения могут как остаться, так и исчезнуть."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It will see exactly one record per key, and the surviving records are renumbered so that offsets stay contiguous.",
+            "ru": "Он увидит ровно одну запись на ключ, а сохранившиеся записи будут перенумерованы, чтобы offset'ы оставались непрерывными."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Compaction guarantees only that the last value for each key is retained; the cleaner runs asynchronously on the closed part of the log, so duplicates can still be visible in the not-yet-cleaned head and removed records leave offset gaps — offsets are immutable and never renumbered. delete.retention.ms is how long a null-valued tombstone stays readable so that consumers can observe the delete before it disappears.",
+        "ru": "Компакция гарантирует только сохранение последнего значения для каждого ключа; cleaner работает асинхронно по закрытой части лога, поэтому в ещё не очищенной «голове» дубликаты вполне могут быть видны, а удалённые записи оставляют пропуски в offset'ах — offset'ы неизменяемы и никогда не перенумеровываются. delete.retention.ms задаёт, сколько tombstone (запись с null-значением) остаётся читаемым, чтобы консьюмеры успели увидеть удаление."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#compaction",
+        "https://kafka.apache.org/documentation/#topicconfigs_delete.retention.ms"
+      ]
+    },
+    {
+      "id": "kafka.topics-partitions.005",
+      "section": "topics-partitions",
+      "difficulty": "medium",
+      "text": {
+        "en": "You need a topic that keeps the latest value for every entity id forever, stays writable while two in-sync copies are available, and fails writes rather than accepting them once only one copy is left. The topic has replication.factor=3. Which configuration meets all three requirements?",
+        "ru": "Нужен топик, который бессрочно хранит последнее значение для каждого id сущности, остаётся доступным для записи, пока есть две синхронные копии, и отклоняет запись, а не принимает её, когда остаётся лишь одна копия. У топика replication.factor=3. Какая конфигурация удовлетворяет все три требования?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "cleanup.policy=compact and min.insync.replicas=3, with producers using acks=all",
+            "ru": "cleanup.policy=compact и min.insync.replicas=3, продюсеры с acks=all"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "cleanup.policy=compact and min.insync.replicas=2, with producers using acks=1",
+            "ru": "cleanup.policy=compact и min.insync.replicas=2, продюсеры с acks=1"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "cleanup.policy=delete with retention.ms=-1 and min.insync.replicas=2, with producers using acks=all",
+            "ru": "cleanup.policy=delete с retention.ms=-1 и min.insync.replicas=2, продюсеры с acks=all"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "cleanup.policy=compact and min.insync.replicas=2, with producers using acks=all",
+            "ru": "cleanup.policy=compact и min.insync.replicas=2, продюсеры с acks=all"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "cleanup.policy=compact,delete with retention.ms=604800000 and min.insync.replicas=2, with producers using acks=all",
+            "ru": "cleanup.policy=compact,delete с retention.ms=604800000 и min.insync.replicas=2, продюсеры с acks=all"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "min.insync.replicas is only consulted for produce requests with acks=all, so the acks=1 variant silently accepts writes with a single copy; compact keeps the last value per key indefinitely, while delete (or compact,delete) eventually drops old records regardless of key. min.insync.replicas=3 on replication.factor=3 is durable but breaks the second requirement: the partition stops accepting writes as soon as one broker is down, even though two in-sync copies are still there.",
+        "ru": "min.insync.replicas учитывается только для запросов с acks=all, поэтому вариант с acks=1 молча принимает запись при одной копии; compact хранит последнее значение по каждому ключу бессрочно, тогда как delete (и compact,delete) рано или поздно удаляет старые записи независимо от ключа. min.insync.replicas=3 при replication.factor=3 надёжен, но нарушает второе требование: партиция перестаёт принимать запись сразу при падении одного брокера, хотя две синхронные копии остаются."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#topicconfigs_min.insync.replicas",
+        "https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy"
+      ]
+    },
+    {
+      "id": "kafka.topics-partitions.006",
+      "section": "topics-partitions",
+      "difficulty": "hard",
+      "text": {
+        "en": "Each log segment on disk is accompanied by .index and .timeindex files. Which statement about them is TRUE?",
+        "ru": "Каждый segment лога на диске сопровождается файлами .index и .timeindex. Какое утверждение о них верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The .timeindex file maps offsets to producer ids and epochs and is what makes the idempotent producer work.",
+            "ru": "Файл .timeindex сопоставляет offset'ы с producer id и epoch и именно он обеспечивает работу идемпотентного продюсера."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Index files are derived data rebuilt on every fetch request, which is why they are excluded from replication.",
+            "ru": "Индексные файлы — это производные данные, перестраиваемые на каждый запрос чтения, поэтому они исключены из репликации."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The .index file has one entry per record, which is exactly why it must be memory-mapped to stay affordable.",
+            "ru": "Файл .index содержит по записи на каждое сообщение, и именно поэтому он обязательно отображается в память, чтобы оставаться приемлемым по стоимости."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The .index file is sparse, mapping a relative offset to a physical file position roughly every log.index.interval.bytes.",
+            "ru": "Файл .index разрежен: он сопоставляет относительный offset с физической позицией в файле примерно каждые log.index.interval.bytes."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Index files store absolute offsets, so they have to be rewritten whenever retention deletes an older segment.",
+            "ru": "Индексные файлы хранят абсолютные offset'ы, поэтому их приходится перезаписывать всякий раз, когда retention удаляет более старый segment."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Both indexes are sparse and store offsets relative to the segment's base offset, which keeps entries small and makes the files independent of what other segments exist; a fetch binary-searches for the nearest entry and then scans the log forward. The .timeindex maps timestamps to offsets and is what offsetsForTimes uses; producer ids and sequence numbers live in the record batch headers and a separate producer snapshot file, not in the offset index.",
+        "ru": "Оба индекса разрежены и хранят offset'ы относительно базового offset'а segment'а, что делает записи компактными и не зависящими от наличия других segment'ов; чтение делает бинарный поиск ближайшей записи и затем сканирует лог вперёд. .timeindex сопоставляет временные метки с offset'ами и используется offsetsForTimes; producer id и sequence number лежат в заголовках батчей записей и в отдельном producer-снапшоте, а не в offset-индексе."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#log",
+        "https://kafka.apache.org/documentation/#brokerconfigs_log.index.interval.bytes"
+      ]
+    },
+    {
+      "id": "kafka.producers.001",
+      "section": "producers",
+      "difficulty": "easy",
+      "text": {
+        "en": "A producer uses the default partitioner (partitioner.class is not set). How is the target partition chosen for a ProducerRecord?",
+        "ru": "Продюсер использует партиционер по умолчанию (partitioner.class не задан). Как выбирается целевая партиция для ProducerRecord?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The broker assigns the partition when it receives the batch, balancing by current partition size; the client only suggests a preference.",
+            "ru": "Партицию назначает брокер при получении батча, балансируя по текущему размеру партиций; клиент лишь высказывает пожелание."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Records are always distributed round-robin over the partitions; the key only affects compaction and is ignored by the partitioner.",
+            "ru": "Записи всегда распределяются round-robin по партициям; ключ влияет только на компакцию и партиционером игнорируется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Keys are hashed with the JDK's String.hashCode, so two producers written in different languages may disagree on the partition for the same key.",
+            "ru": "Ключи хэшируются через String.hashCode из JDK, поэтому два продюсера на разных языках могут разойтись в выборе партиции для одного ключа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An explicit partition on the record wins; otherwise a non-null key is hashed, and a null key goes to a sticky partition that changes every batch.size bytes.",
+            "ru": "Явно указанная в записи партиция имеет приоритет; иначе непустой ключ хэшируется, а при null-ключе запись идёт в «липкую» партицию, меняющуюся каждые batch.size байт."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A non-null key is hashed, and a null key causes the send to fail with IllegalArgumentException because a partition cannot be derived.",
+            "ru": "Непустой ключ хэшируется, а null-ключ приводит к падению send с IllegalArgumentException, поскольку партицию вывести невозможно."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Precedence is explicit partition, then key hash, then the sticky choice for keyless records. The hash is murmur2 over the serialized key bytes, deliberately language-independent so any client maps a key to the same partition; keyless records are batched into one partition until batch.size bytes have accumulated, which produces far larger batches than plain round-robin.",
+        "ru": "Приоритет такой: явно заданная партиция, затем хэш ключа, затем «липкий» выбор для записей без ключа. Хэш — это murmur2 по сериализованным байтам ключа, специально независимый от языка, чтобы любой клиент отображал ключ в ту же партицию; записи без ключа складываются в одну партицию, пока не накопится batch.size байт, что даёт заметно более крупные батчи, чем обычный round-robin."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#producerconfigs_partitioner.class",
+        "https://cwiki.apache.org/confluence/display/KAFKA/KIP-794%3A+Strictly+Uniform+Sticky+Partitioner"
+      ]
+    },
+    {
+      "id": "kafka.producers.002",
+      "section": "producers",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about acks=1 is TRUE?",
+        "ru": "Какое утверждение об acks=1 верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The leader waits for min.insync.replicas replicas, which is why min.insync.replicas=2 already protects an acks=1 producer.",
+            "ru": "Лидер ждёт min.insync.replicas реплик, поэтому min.insync.replicas=2 уже защищает продюсера с acks=1."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The leader waits for one follower in addition to itself, giving two copies before the acknowledgement.",
+            "ru": "Лидер ждёт одного фолловера в дополнение к себе, обеспечивая две копии до подтверждения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "acks=1 means the producer waits for any one broker in the cluster to receive the batch, not necessarily the partition leader.",
+            "ru": "acks=1 означает, что продюсер ждёт получения батча любым одним брокером кластера, не обязательно лидером партиции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "acks=1 is the default for a modern producer client, so switching on idempotence changes retries but leaves the durability of a send unchanged.",
+            "ru": "acks=1 — значение по умолчанию для современного клиента-продюсера, поэтому включение идемпотентности меняет retries, но не надёжность отправки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The leader acknowledges once the record is in its own log, so it is lost if the leader fails before a follower replicates it.",
+            "ru": "Лидер подтверждает запись, как только она попала в его лог, поэтому она теряется при падении лидера до репликации."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "With acks=1 only the leader's local write is confirmed, leaving a window in which an unreplicated record disappears together with the failed leader. The produce path consults min.insync.replicas only for acks=all, so pairing it with acks=1 buys the producer no durability at all — a very common misconfiguration. It still gates consumer visibility, but a record the producer already treats as written can vanish before any consumer sees it.",
+        "ru": "При acks=1 подтверждается только локальная запись лидера, из-за чего остаётся окно, в котором нереплицированная запись исчезает вместе с упавшим лидером. На пути записи брокер проверяет min.insync.replicas только при acks=all, поэтому в паре с acks=1 он не даёт продюсеру никакой дополнительной надёжности — очень частая ошибка конфигурации. Видимость для консьюмеров он всё же ограничивает, но запись, которую продюсер уже считает сохранённой, может исчезнуть до того, как её кто-нибудь прочитает."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#producerconfigs_acks",
+        "https://kafka.apache.org/documentation/#topicconfigs_min.insync.replicas"
+      ]
+    },
+    {
+      "id": "kafka.producers.003",
+      "section": "producers",
+      "difficulty": "medium",
+      "text": {
+        "en": "A producer is built with a modern (3.x/4.x) Kafka client and nothing but the properties below. Which delivery configuration is in effect?",
+        "ru": "Продюсер создан на современном клиенте Kafka (3.x/4.x) и только со следующими свойствами. Какая конфигурация доставки при этом действует?"
+      },
+      "code": "Properties props = new Properties();\nprops.put(\"bootstrap.servers\", \"broker-1:9092\");\nprops.put(\"key.serializer\", \"org.apache.kafka.common.serialization.StringSerializer\");\nprops.put(\"value.serializer\", \"org.apache.kafka.common.serialization.StringSerializer\");\nKafkaProducer<String, String> producer = new KafkaProducer<>(props);",
+      "options": [
+        {
+          "text": {
+            "en": "enable.idempotence=false, acks=all, retries=3, max.in.flight.requests.per.connection=1",
+            "ru": "enable.idempotence=false, acks=all, retries=3, max.in.flight.requests.per.connection=1"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "enable.idempotence=true, acks=all, retries=Integer.MAX_VALUE, max.in.flight.requests.per.connection=1",
+            "ru": "enable.idempotence=true, acks=all, retries=Integer.MAX_VALUE, max.in.flight.requests.per.connection=1"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "enable.idempotence=false, acks=1, retries=0, max.in.flight.requests.per.connection=5",
+            "ru": "enable.idempotence=false, acks=1, retries=0, max.in.flight.requests.per.connection=5"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "enable.idempotence=false, acks=0, retries=0, max.in.flight.requests.per.connection=5",
+            "ru": "enable.idempotence=false, acks=0, retries=0, max.in.flight.requests.per.connection=5"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "enable.idempotence=true, acks=all, retries=Integer.MAX_VALUE, max.in.flight.requests.per.connection=5",
+            "ru": "enable.idempotence=true, acks=all, retries=Integer.MAX_VALUE, max.in.flight.requests.per.connection=5"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "KIP-679 made the producer safe by default from Kafka 3.0: enable.idempotence=true, and with it acks=all and retries=Integer.MAX_VALUE. Idempotence only requires max.in.flight.requests.per.connection to be at most 5, and the default stays 5 — the broker orders batches by their sequence numbers, so pipelining does not break ordering; forcing 1 was the pre-idempotence workaround and needlessly caps throughput.",
+        "ru": "KIP-679 сделал продюсера безопасным по умолчанию начиная с Kafka 3.0: enable.idempotence=true, а вместе с ним acks=all и retries=Integer.MAX_VALUE. Идемпотентность требует лишь max.in.flight.requests.per.connection не больше 5, и значение по умолчанию остаётся 5 — брокер упорядочивает батчи по sequence number, поэтому конвейеризация порядок не ломает; принудительная 1 была обходным приёмом до идемпотентности и напрасно ограничивает пропускную способность."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#producerconfigs_enable.idempotence",
+        "https://cwiki.apache.org/confluence/display/KAFKA/KIP-679%3A+Producer+will+enable+the+strongest+delivery+guarantee+by+default"
+      ]
+    },
+    {
+      "id": "kafka.producers.004",
+      "section": "producers",
+      "difficulty": "medium",
+      "text": {
+        "en": "The producer below sends two records with the same key back to back, and the first batch is rejected with a retriable error that succeeds on retry. What can be observed in the partition?",
+        "ru": "Продюсер ниже отправляет подряд две записи с одинаковым ключом, и первый батч отклоняется с retriable-ошибкой, которая при повторе завершается успешно. Что можно наблюдать в партиции?"
+      },
+      "code": "props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, false);\nprops.put(ProducerConfig.RETRIES_CONFIG, 5);\nprops.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, 5);\n\nproducer.send(new ProducerRecord<>(\"orders\", \"A\", \"v1\"));\nproducer.send(new ProducerRecord<>(\"orders\", \"A\", \"v2\"));",
+      "options": [
+        {
+          "text": {
+            "en": "v2 can end up at a lower offset than v1, because the retry of the first batch is queued behind a request that was already in flight.",
+            "ru": "v2 может оказаться на меньшем offset'е, чем v1, поскольку повтор первого батча встаёт в очередь позади запроса, который уже был в полёте."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Order is preserved because retries are only attempted after all currently in-flight requests have been resolved.",
+            "ru": "Порядок сохраняется, потому что повторы выполняются только после того, как разрешены все текущие in-flight запросы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The broker re-sorts the records on append using the producer timestamp, so the log order matches the send order.",
+            "ru": "Брокер пересортировывает записи при добавлении по producer timestamp, поэтому порядок в логе совпадает с порядком отправки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both records fail together, because records with the same key always end up in the same batch and share its fate.",
+            "ru": "Обе записи падают вместе, поскольку записи с одинаковым ключом всегда попадают в один батч и разделяют его судьбу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Order is preserved because the producer keeps a separate in-flight slot per key and never pipelines two records with the same key.",
+            "ru": "Порядок сохраняется, потому что продюсер держит отдельный in-flight слот на каждый ключ и никогда не конвейеризирует две записи с одним ключом."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Without idempotence the broker has no sequence numbers to order batches by, so a retried batch is simply appended whenever it arrives — after a later batch that already succeeded, giving silent reordering. The historical fix was max.in.flight.requests.per.connection=1; the modern fix is to leave enable.idempotence=true, which lets the broker reject out-of-order batches and preserves order with up to 5 requests in flight.",
+        "ru": "Без идемпотентности у брокера нет sequence number, по которым упорядочивать батчи, поэтому повторно отправленный батч просто дописывается тогда, когда приходит — уже после более позднего успешного батча, что даёт незаметную перестановку. Историческое решение — max.in.flight.requests.per.connection=1; современное — оставить enable.idempotence=true, тогда брокер отклоняет батчи не по порядку и сохраняет порядок при 5 запросах в полёте."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#producerconfigs_max.in.flight.requests.per.connection",
+        "https://kafka.apache.org/documentation/#producerconfigs_retries"
+      ]
+    },
+    {
+      "id": "kafka.producers.005",
+      "section": "producers",
+      "difficulty": "medium",
+      "text": {
+        "en": "Given the producer settings below, which statement about batching and compression is TRUE?",
+        "ru": "Учитывая настройки продюсера ниже, какое утверждение о батчинге и сжатии верно?"
+      },
+      "code": "props.put(ProducerConfig.BATCH_SIZE_CONFIG, 32768);\nprops.put(ProducerConfig.LINGER_MS_CONFIG, 20);\nprops.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, \"lz4\");",
+      "options": [
+        {
+          "text": {
+            "en": "linger.ms is a per-record deadline: if the record is not acknowledged within 20 ms, send() reports a TimeoutException.",
+            "ru": "linger.ms — это дедлайн на запись: если запись не подтверждена за 20 мс, send() сообщает о TimeoutException."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Compression is performed by the broker after the batch is received, which is why compression.type is also a topic-level setting.",
+            "ru": "Сжатие выполняется брокером после получения батча, поэтому compression.type существует ещё и как настройка топика."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "batch.size is a per-partition byte limit and a batch is sent as soon as it is reached, without waiting out linger.ms.",
+            "ru": "batch.size — это лимит в байтах на партицию, и батч отправляется сразу по его достижении, не дожидаясь окончания linger.ms."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "batch.size is a record count, so a batch always contains exactly 32768 records unless linger.ms expires first.",
+            "ru": "batch.size — это количество записей, поэтому батч всегда содержит ровно 32768 записей, если раньше не истечёт linger.ms."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A batch is only sent after linger.ms has elapsed; batch.size merely caps how much can accumulate in that window.",
+            "ru": "Батч отправляется только после истечения linger.ms; batch.size лишь ограничивает объём, который может накопиться за это окно."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Kafka batches per topic-partition: records accumulate until batch.size bytes are buffered or linger.ms elapses, whichever comes first, so linger.ms is an upper bound on the added latency and not a mandatory wait. The producer compresses the whole batch, which is why compression ratios improve with larger batches; the broker normally stores the compressed batch as-is and only recompresses if the topic's compression.type differs.",
+        "ru": "Kafka батчит по каждой паре топик-партиция: записи накапливаются, пока не наберётся batch.size байт или не истечёт linger.ms — что наступит раньше, поэтому linger.ms задаёт верхнюю границу добавленной задержки, а не обязательное ожидание. Продюсер сжимает батч целиком, поэтому с ростом батча коэффициент сжатия улучшается; брокер обычно хранит сжатый батч как есть и перепаковывает только если compression.type топика отличается."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#producerconfigs_batch.size",
+        "https://kafka.apache.org/documentation/#producerconfigs_linger.ms"
+      ]
+    },
+    {
+      "id": "kafka.producers.006",
+      "section": "producers",
+      "difficulty": "hard",
+      "text": {
+        "en": "In the transactional loop below, why must ProducerFencedException be handled by closing the producer instead of calling abortTransaction()?",
+        "ru": "В транзакционном цикле ниже: почему ProducerFencedException нужно обрабатывать закрытием продюсера, а не вызовом abortTransaction()?"
+      },
+      "code": "producer.initTransactions();\ntry {\n    producer.beginTransaction();\n    producer.send(new ProducerRecord<>(\"out\", key, value));\n    producer.sendOffsetsToTransaction(offsets, consumer.groupMetadata());\n    producer.commitTransaction();\n} catch (ProducerFencedException | OutOfOrderSequenceException | AuthorizationException e) {\n    producer.close();\n} catch (KafkaException e) {\n    producer.abortTransaction();\n}",
+      "options": [
+        {
+          "text": {
+            "en": "abortTransaction() would roll back the transaction of the newer producer that took over the transactional.id.",
+            "ru": "abortTransaction() откатил бы транзакцию нового продюсера, перехватившего этот transactional.id."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ProducerFencedException is retriable, and close() simply schedules a faster reconnect with a fresh producer id.",
+            "ru": "ProducerFencedException является retriable, а close() просто планирует более быстрое переподключение с новым producer id."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "abortTransaction() is only legal after commitTransaction() itself has thrown, and here the exception can come from send().",
+            "ru": "abortTransaction() допустим только после того, как исключение выбросил сам commitTransaction(), а здесь исключение может прийти из send()."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Another producer with the same transactional.id has bumped the epoch, so every further transactional call would fail too.",
+            "ru": "Другой продюсер с тем же transactional.id увеличил epoch, поэтому любой дальнейший транзакционный вызов тоже завершится ошибкой."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A fenced producer must call initTransactions() again first, and close() performs that re-initialisation implicitly.",
+            "ru": "Отсечённый продюсер обязан сначала снова вызвать initTransactions(), и close() выполняет эту повторную инициализацию неявно."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Fencing is how Kafka guarantees a single active writer per transactional.id: initTransactions() from a newer instance bumps the producer epoch, and the transaction coordinator then rejects everything from the old epoch, so abort would only throw again. ProducerFencedException, OutOfOrderSequenceException and AuthorizationException are fatal for the producer instance — the only correct reaction is to close it and let the newer instance continue.",
+        "ru": "Fencing — это механизм, которым Kafka гарантирует единственного активного писателя на transactional.id: initTransactions() у нового экземпляра увеличивает producer epoch, после чего координатор транзакций отвергает всё от старого epoch, поэтому abort лишь выбросит исключение снова. ProducerFencedException, OutOfOrderSequenceException и AuthorizationException фатальны для экземпляра продюсера — единственная верная реакция — закрыть его и дать работать новому."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#producerapi",
+        "https://www.confluent.io/blog/transactions-apache-kafka/"
+      ]
+    },
+    {
+      "id": "kafka.consumers-groups.001",
+      "section": "consumers-groups",
+      "difficulty": "easy",
+      "text": {
+        "en": "A topic has 4 partitions and 6 consumers with the same group.id subscribe to it. What is the resulting assignment?",
+        "ru": "У топика 4 партиции, и на него подписываются 6 консьюмеров с одинаковым group.id. Каким будет итоговое назначение?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Kafka automatically raises the partition count to 6 so that every group member has exactly one partition.",
+            "ru": "Kafka автоматически увеличивает число партиций до 6, чтобы каждому участнику группы досталась ровно одна партиция."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "All six consumers receive work: two partitions are read by two consumers each, with offsets coordinated by the group leader.",
+            "ru": "Все шесть консьюмеров получают работу: две партиции читаются двумя консьюмерами каждая, а offset'ы координирует лидер группы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Four consumers get one partition each and two remain idle until a member leaves the group.",
+            "ru": "Четыре консьюмера получают по одной партиции, а два остаются простаивать, пока кто-нибудь не покинет группу."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The group coordinator rejects the two extra members with a fatal error, so they must be started with a different group.id.",
+            "ru": "Group coordinator отклоняет двух лишних участников с фатальной ошибкой, поэтому их нужно запускать с другим group.id."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The four partitions are handed round-robin to a different pair of consumers on every poll, so all six make progress over time.",
+            "ru": "Четыре партиции на каждом poll передаются round-robin другой паре консьюмеров, поэтому со временем прогресс есть у всех шести."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Within a group a partition is owned by exactly one member at a time, so the partition count is the hard ceiling on useful parallelism and surplus members simply hold an empty assignment. They are not useless, though: they stay in the group and pick up partitions at the next rebalance if a member dies.",
+        "ru": "Внутри группы партиция в каждый момент принадлежит ровно одному участнику, поэтому число партиций — жёсткий предел полезного параллелизма, а лишние участники просто получают пустое назначение. Бесполезными они не являются: они остаются в группе и получат партиции на следующем ребалансе, если кто-то из участников упадёт."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#intro_consumers",
+        "https://kafka.apache.org/documentation/#design_consumerposition"
+      ]
+    },
+    {
+      "id": "kafka.consumers-groups.002",
+      "section": "consumers-groups",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about consumer.assign() compared with consumer.subscribe() is TRUE?",
+        "ru": "Какое утверждение о consumer.assign() в сравнении с consumer.subscribe() верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "assign() still makes the consumer a group member, it only pins the assignment so that rebalances cannot move those partitions.",
+            "ru": "assign() всё равно делает консьюмера участником группы, он лишь закрепляет назначение, чтобы ребалансы не забирали эти партиции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "assign() takes manual ownership of specific partitions, so there is no group management and no rebalancing at all.",
+            "ru": "assign() берёт конкретные партиции в ручное владение, поэтому управления группой и ребалансов нет вовсе."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "assign() and subscribe() can be combined on one consumer to read some partitions manually and the rest through the group.",
+            "ru": "assign() и subscribe() можно комбинировать на одном консьюмере, чтобы часть партиций читать вручную, а остальные — через группу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "assign() forbids committing offsets to Kafka altogether; the position must be stored in an external system.",
+            "ru": "assign() полностью запрещает коммит offset'ов в Kafka; позицию нужно хранить во внешней системе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "assign() requires group.id to be unset, otherwise the constructor fails with a ConfigException.",
+            "ru": "assign() требует, чтобы group.id не был задан, иначе конструктор падает с ConfigException."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "assign() bypasses the group protocol entirely: no coordinator-driven assignment, no rebalance callbacks, and no automatic failover if the process dies. Offset commits still work when group.id is configured, but the two modes are mutually exclusive on a single consumer — mixing them throws IllegalStateException.",
+        "ru": "assign() полностью обходит групповой протокол: нет назначения от координатора, нет rebalance-колбэков и нет автоматического переезда партиций при падении процесса. Коммит offset'ов при заданном group.id по-прежнему работает, но два режима взаимоисключающи для одного консьюмера — их смешивание приводит к IllegalStateException."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#consumerapi",
+        "https://kafka.apache.org/40/javadoc/org/apache/kafka/clients/consumer/KafkaConsumer.html"
+      ]
+    },
+    {
+      "id": "kafka.consumers-groups.003",
+      "section": "consumers-groups",
+      "difficulty": "medium",
+      "text": {
+        "en": "The poll loop below processes each record in about 700 ms with the default timeouts shown. What happens?",
+        "ru": "Цикл poll ниже обрабатывает каждую запись примерно за 700 мс при показанных таймаутах по умолчанию. Что произойдёт?"
+      },
+      "code": "props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 500);\nprops.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, 300000);\nprops.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, 45000);\n\nwhile (true) {\n    ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));\n    for (ConsumerRecord<String, String> r : records) {\n        process(r); // ~700 ms\n    }\n    consumer.commitSync();\n}",
+      "options": [
+        {
+          "text": {
+            "en": "A full batch takes about 350 s, exceeding max.poll.interval.ms, so the consumer leaves the group and commitSync() then fails.",
+            "ru": "Полный батч занимает около 350 с, превышая max.poll.interval.ms, поэтому консьюмер покидает группу, и commitSync() затем падает."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The broker starts throttling the consumer's fetches but keeps its assignment, so the loop only becomes slower.",
+            "ru": "Брокер начинает троттлить чтения консьюмера, но сохраняет за ним назначение, поэтому цикл лишь замедляется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing goes wrong: the max.poll.interval.ms timer is reset after each individual record is processed.",
+            "ru": "Ничего плохого не происходит: таймер max.poll.interval.ms сбрасывается после обработки каждой отдельной записи."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "session.timeout.ms of 45 s expires first, because heartbeats are sent from inside poll() and processing blocks them.",
+            "ru": "Первым истекает session.timeout.ms в 45 с, поскольку heartbeat'ы отправляются изнутри poll(), а обработка их блокирует."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The consumer is removed from the group only if enable.auto.commit is true, because the eviction is triggered by the commit timer.",
+            "ru": "Консьюмер исключается из группы только при enable.auto.commit=true, поскольку исключение вызывается таймером автокоммита."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "500 records at 700 ms each is roughly 350 s between two poll() calls, past the 300 s max.poll.interval.ms, so the client sends a LeaveGroup itself and the coordinator rebalances; the later commit is rejected because the generation no longer owns the partitions. Heartbeats are not the problem — since KIP-62 they run on a background thread, so session.timeout.ms keeps being satisfied while processing is stuck, which is exactly why max.poll.interval.ms exists. The fix is a smaller max.poll.records or faster processing.",
+        "ru": "500 записей по 700 мс — это примерно 350 с между двумя вызовами poll(), больше 300 с из max.poll.interval.ms, поэтому клиент сам отправляет LeaveGroup, и координатор запускает ребаланс; последующий коммит отвергается, так как это поколение группы больше не владеет партициями. Heartbeat'ы здесь не при чём — начиная с KIP-62 они идут в фоновом потоке, поэтому session.timeout.ms соблюдается даже когда обработка «залипла», ровно для этого и существует max.poll.interval.ms. Лечится уменьшением max.poll.records или ускорением обработки."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#consumerconfigs_max.poll.interval.ms",
+        "https://cwiki.apache.org/confluence/display/KAFKA/KIP-62%3A+Allow+consumer+to+send+heartbeats+from+a+background+thread"
+      ]
+    },
+    {
+      "id": "kafka.consumers-groups.004",
+      "section": "consumers-groups",
+      "difficulty": "medium",
+      "text": {
+        "en": "A consumer group is switched to the assignor below. What changes compared with the default configuration?",
+        "ru": "Consumer group переводится на указанный ниже assignor. Что изменится по сравнению с конфигурацией по умолчанию?"
+      },
+      "code": "props.put(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG,\n        \"org.apache.kafka.clients.consumer.CooperativeStickyAssignor\");",
+      "options": [
+        {
+          "text": {
+            "en": "The group no longer needs a group coordinator, because assignment is computed locally by every member.",
+            "ru": "Группе больше не нужен group coordinator, поскольку назначение вычисляется локально каждым участником."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Partitions of different topics are interleaved so that each consumer gets partitions from every subscribed topic, which the default assignor cannot do.",
+            "ru": "Партиции разных топиков перемешиваются так, чтобы каждому консьюмеру достались партиции из каждого подписанного топика, чего assignor по умолчанию не умеет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Rebalances stop happening on consumer restart, because the assignor stores the previous assignment in the group metadata.",
+            "ru": "Ребалансы перестают происходить при перезапуске консьюмера, поскольку assignor хранит прежнее назначение в метаданных группы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing changes in the rebalance protocol; the assignor only makes the assignment more even across members.",
+            "ru": "В протоколе ребаланса ничего не меняется; assignor лишь делает назначение более равномерным между участниками."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Rebalances become incremental: only the partitions that must move are revoked, and the other members keep consuming.",
+            "ru": "Ребалансы становятся инкрементальными: отзываются только те партиции, которые должны переехать, остальные продолжают читать."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "CooperativeStickyAssignor uses the cooperative protocol (COOPERATIVE rebalance): instead of the eager stop-the-world round where everyone revokes everything, revocation is limited to partitions that change owner and takes a second, short rebalance. The default is the list [RangeAssignor, CooperativeStickyAssignor], which negotiates RangeAssignor — an eager assignor — so the switch is a real behaviour change; suppressing rebalances on restart is instead what static membership (group.instance.id) does.",
+        "ru": "CooperativeStickyAssignor использует кооперативный протокол (COOPERATIVE rebalance): вместо «остановки мира», когда все отзывают всё, отзыв ограничен только меняющими владельца партициями и происходит во втором коротком ребалансе. По умолчанию задан список [RangeAssignor, CooperativeStickyAssignor], из которого согласуется RangeAssignor — eager-assignor, — так что переключение действительно меняет поведение; а подавлением ребалансов при перезапуске занимается static membership (group.instance.id)."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#consumerconfigs_partition.assignment.strategy",
+        "https://cwiki.apache.org/confluence/display/KAFKA/KIP-429%3A+Kafka+Consumer+Incremental+Rebalance+Protocol"
+      ]
+    },
+    {
+      "id": "kafka.consumers-groups.005",
+      "section": "consumers-groups",
+      "difficulty": "medium",
+      "text": {
+        "en": "What does setting group.instance.id on a consumer achieve?",
+        "ru": "Чего добиваются установкой group.instance.id на консьюмере?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It makes the member static, so a restart within session.timeout.ms rejoins without triggering a rebalance.",
+            "ru": "Он делает участника статическим, поэтому перезапуск в пределах session.timeout.ms возвращает его без запуска ребаланса."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It speeds up failure detection, because the coordinator can tell a crash from a restart by the instance id.",
+            "ru": "Он ускоряет обнаружение сбоев, поскольку по instance id координатор отличает падение от перезапуска."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It pins the member's partitions permanently, so session.timeout.ms and heartbeats no longer apply to it.",
+            "ru": "Он закрепляет за участником партиции навсегда, поэтому session.timeout.ms и heartbeat'ы к нему больше не применяются."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It lets the consumer skip offset commits, since the assignment can no longer change hands.",
+            "ru": "Он позволяет консьюмеру не коммитить offset'ы, поскольку назначение больше не может перейти к другому участнику."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It requires the CooperativeStickyAssignor, because only that assignor can remember a previous assignment.",
+            "ru": "Он требует CooperativeStickyAssignor, поскольку только этот assignor умеет запоминать прежнее назначение."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Static membership (KIP-345) gives the member a durable id, so the coordinator keeps its assignment across a graceful restart or a brief outage — ideal for rolling deployments of stateful consumers. The trade-off is real: a truly dead static member is only detected after session.timeout.ms expires, so failure detection is slower, and the setting has nothing to do with the choice of assignor.",
+        "ru": "Static membership (KIP-345) даёт участнику устойчивый идентификатор, поэтому координатор сохраняет его назначение при аккуратном перезапуске или коротком сбое — идеально для rolling-деплоя stateful-консьюмеров. Плата вполне реальна: по-настоящему упавший статический участник обнаруживается только по истечении session.timeout.ms, то есть детекция сбоя медленнее; к выбору assignor'а эта настройка отношения не имеет."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#consumerconfigs_group.instance.id",
+        "https://cwiki.apache.org/confluence/display/KAFKA/KIP-345%3A+Introduce+static+membership+protocol+to+reduce+consumer+rebalances"
+      ]
+    },
+    {
+      "id": "kafka.consumers-groups.006",
+      "section": "consumers-groups",
+      "difficulty": "hard",
+      "text": {
+        "en": "Which statement about the group coordinator in the classic consumer group protocol is TRUE?",
+        "ru": "Какое утверждение о group coordinator в классическом протоколе consumer group верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The coordinator is the leader of partition 0 of the first topic the group subscribes to, which keeps offset commits local to the data.",
+            "ru": "Координатором является лидер партиции 0 первого топика, на который подписана группа, что держит коммиты offset'ов рядом с данными."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is the leader of the __consumer_offsets partition derived from a hash of group.id; it manages membership and offsets, but not the assignment.",
+            "ru": "Это лидер той партиции __consumer_offsets, которая выводится из хэша group.id; он управляет составом группы и offset'ами, но не назначением."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The coordinator computes the assignment itself and pushes it to the members, which is what makes the classic protocol eager.",
+            "ru": "Координатор сам вычисляет назначение и рассылает его участникам, и именно это делает классический протокол eager."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The coordinator is always the active controller of the cluster, which is why controller failover also rebalances every group.",
+            "ru": "Координатором всегда является активный контроллер кластера, поэтому смена контроллера заодно ребалансирует все группы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Every group is served by a coordinator broker picked at random at each rebalance, so the group survives any single broker loss without state transfer.",
+            "ru": "Каждую группу обслуживает брокер-координатор, выбираемый случайно на каждом ребалансе, поэтому группа переживает потерю любого брокера без переноса состояния."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The coordinator for a group is deterministic: hash the group.id into one of the __consumer_offsets partitions (50 by default) and the leader of that partition coordinates the group and owns its committed offsets. In the classic protocol the coordinator only orchestrates JoinGroup/SyncGroup and one member — the group leader — runs the assignor; the new protocol of KIP-848, GA in Kafka 4.0, is precisely the change that moves assignment computation to the broker.",
+        "ru": "Координатор группы определяется детерминированно: group.id хэшируется в одну из партиций __consumer_offsets (по умолчанию их 50), и лидер этой партиции координирует группу и владеет её зафиксированными offset'ами. В классическом протоколе координатор лишь дирижирует JoinGroup/SyncGroup, а assignor выполняет один из участников — лидер группы; новый протокол KIP-848, ставший GA в Kafka 4.0, как раз переносит вычисление назначения на брокер."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#brokerconfigs_offsets.topic.num.partitions",
+        "https://cwiki.apache.org/confluence/display/KAFKA/KIP-848%3A+The+Next+Generation+of+the+Consumer+Rebalance+Protocol"
+      ]
+    },
+    {
+      "id": "kafka.offsets-semantics.001",
+      "section": "offsets-semantics",
+      "difficulty": "easy",
+      "text": {
+        "en": "A brand-new group.id subscribes to a topic that already holds one million records. auto.offset.reset is left at its default. What does the consumer read?",
+        "ru": "Совершенно новый group.id подписывается на топик, в котором уже лежит миллион записей. auto.offset.reset оставлен по умолчанию. Что прочитает консьюмер?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing: poll() throws NoOffsetForPartitionException until an initial offset is committed explicitly.",
+            "ru": "Ничего: poll() выбрасывает NoOffsetForPartitionException, пока начальный offset не будет зафиксирован явно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only records produced after it joined, because the default is latest and there is no committed offset to resume from.",
+            "ru": "Только записи, произведённые после его подключения, поскольку значение по умолчанию — latest, а зафиксированного offset'а для продолжения нет."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The last max.poll.records records of each partition, which is the window the first poll can return.",
+            "ru": "Последние max.poll.records записей каждой партиции — окно, которое может вернуть первый poll."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Everything still inside the topic's retention window, since retention rather than auto.offset.reset defines the starting point.",
+            "ru": "Всё, что попадает в окно retention топика, поскольку начальную точку определяет retention, а не auto.offset.reset."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "All one million records and then the new ones, because a group without committed offsets always starts from the beginning.",
+            "ru": "Все миллион записей, а затем новые, поскольку группа без зафиксированных offset'ов всегда начинает с начала."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "auto.offset.reset only applies when there is no valid committed offset, and its default is latest, so a fresh group skips the backlog entirely; earliest is what replays it. The value none is the one that makes poll() throw NoOffsetForPartitionException, and an explicit seek() or offsetsForTimes() overrides the reset policy altogether.",
+        "ru": "auto.offset.reset применяется только когда нет корректного зафиксированного offset'а, и его значение по умолчанию — latest, поэтому новая группа полностью пропускает накопленное; перечитывает его вариант earliest. Именно значение none заставляет poll() выбросить NoOffsetForPartitionException, а явный seek() или offsetsForTimes() вообще перекрывает политику сброса."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#consumerconfigs_auto.offset.reset"
+      ]
+    },
+    {
+      "id": "kafka.offsets-semantics.002",
+      "section": "offsets-semantics",
+      "difficulty": "easy",
+      "text": {
+        "en": "A consumer has just processed the record at offset 42 of a partition and commits. Which statement is TRUE?",
+        "ru": "Консьюмер только что обработал запись с offset 42 в партиции и делает коммит. Какое утверждение верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The committed value is 42, the offset just processed, and the coordinator adds one when the group next resumes reading.",
+            "ru": "Фиксируется значение 42 — только что обработанный offset, — а координатор прибавляет единицу, когда группа в следующий раз возобновляет чтение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The committed value is 43, the offset of the next record to read, and it is stored as a message in __consumer_offsets.",
+            "ru": "Фиксируется значение 43 — offset следующей записи для чтения — и оно сохраняется сообщением в __consumer_offsets."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The commit is kept only in the coordinator's memory and is rebuilt from consumer heartbeats after a broker restart.",
+            "ru": "Коммит хранится только в памяти координатора и восстанавливается из heartbeat'ов консьюмеров после перезапуска брокера."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The commit updates a marker inside the partition's own log, which is why committing generates no extra write traffic.",
+            "ru": "Коммит обновляет маркер внутри лога самой партиции, поэтому дополнительного трафика записи он не создаёт."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The commit is stored in the cluster metadata log by the controller, together with the group membership.",
+            "ru": "Коммит сохраняется контроллером в metadata-логе кластера вместе с составом группы."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A committed offset is the position to resume from, i.e. last processed + 1 — the classic off-by-one when offsets are committed manually. Commits are ordinary produced records in __consumer_offsets, a compacted topic keyed by (group, topic, partition), so the coordinator can rebuild all group positions by replaying it after a restart.",
+        "ru": "Зафиксированный offset — это позиция, с которой продолжать чтение, то есть последний обработанный + 1 — классическая ошибка на единицу при ручном коммите. Коммиты — это обычные записи в __consumer_offsets, компактируемый топик с ключом (группа, топик, партиция), поэтому координатор восстанавливает все позиции групп, проиграв его после перезапуска."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#design_consumerposition",
+        "https://kafka.apache.org/40/javadoc/org/apache/kafka/clients/consumer/KafkaConsumer.html"
+      ]
+    },
+    {
+      "id": "kafka.offsets-semantics.003",
+      "section": "offsets-semantics",
+      "difficulty": "medium",
+      "text": {
+        "en": "The consumer below runs with enable.auto.commit=false. Which delivery semantics does this loop provide?",
+        "ru": "Консьюмер ниже работает с enable.auto.commit=false. Какую семантику доставки даёт этот цикл?"
+      },
+      "code": "while (true) {\n    ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(1));\n    consumer.commitSync();\n    for (ConsumerRecord<String, String> r : records) {\n        handle(r);\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "At-least-once: commitSync() blocks until the broker confirms, so the records are guaranteed to be handled after it returns.",
+            "ru": "At-least-once: commitSync() блокируется до подтверждения брокером, поэтому после его возврата записи гарантированно будут обработаны."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Exactly-once: a synchronous commit plus manual commit mode makes processing and the offset update atomic.",
+            "ru": "Exactly-once: синхронный коммит вместе с ручным режимом коммита делают обработку и обновление offset'а атомарными."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "At-least-once: poll() re-delivers any record whose handle() call has not returned, regardless of the commit.",
+            "ru": "At-least-once: poll() повторно выдаёт любую запись, для которой handle() не завершился, независимо от коммита."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "At-most-once only if enable.auto.commit were true; with manual commits the position advances only after the loop body finishes.",
+            "ru": "At-most-once только при enable.auto.commit=true; при ручных коммитах позиция сдвигается лишь после завершения тела цикла."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "At-most-once: the offsets are committed before the batch is handled, so a crash in the middle of the loop loses the unprocessed records for good.",
+            "ru": "At-most-once: offset'ы фиксируются до обработки батча, поэтому падение в середине цикла безвозвратно теряет необработанные записи."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Delivery semantics are decided purely by whether the commit happens before or after the side effect: committing first gives at-most-once, committing after processing gives at-least-once. Moving commitSync() below the for loop is the whole fix; commitAsync() at the same place would also give at-least-once but does not retry a failed commit, so it is usually paired with a final commitSync() on shutdown.",
+        "ru": "Семантика доставки определяется исключительно тем, происходит коммит до или после побочного эффекта: коммит раньше даёт at-most-once, коммит после обработки — at-least-once. Достаточно перенести commitSync() под цикл for; commitAsync() на том же месте тоже дал бы at-least-once, но он не повторяет неудавшийся коммит, поэтому его обычно дополняют финальным commitSync() при остановке."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#semantics",
+        "https://kafka.apache.org/documentation/#consumerconfigs_enable.auto.commit"
+      ]
+    },
+    {
+      "id": "kafka.offsets-semantics.004",
+      "section": "offsets-semantics",
+      "difficulty": "medium",
+      "text": {
+        "en": "A consumer is configured with isolation.level=read_committed. Which statement is TRUE?",
+        "ru": "Консьюмер настроен с isolation.level=read_committed. Какое утверждение верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It filters out aborted records but still reads all the way up to the high watermark, so an open transaction never delays it.",
+            "ru": "Он отфильтровывает записи прерванных транзакций, но читает вплоть до high watermark, поэтому открытая транзакция его никогда не задерживает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is the default since Kafka 3.0, in line with the producer becoming idempotent by default.",
+            "ru": "Он является значением по умолчанию начиная с Kafka 3.0, вслед за тем, как продюсер стал идемпотентным по умолчанию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It never returns records from aborted transactions and can only read up to the last stable offset, not the high watermark.",
+            "ru": "Он никогда не возвращает записи прерванных транзакций и читает только до last stable offset, а не до high watermark."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It makes the consumer's own offset commits transactional, which is what removes the need for sendOffsetsToTransaction.",
+            "ru": "Он делает коммиты offset'ов самого консьюмера транзакционными, что снимает необходимость в sendOffsetsToTransaction."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It requires the consumer to define transactional.id so the broker can match it with the writing producer.",
+            "ru": "Он требует, чтобы консьюмер задал transactional.id, чтобы брокер мог сопоставить его с пишущим продюсером."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "read_committed hides aborted data and caps fetching at the last stable offset (LSO) — the first offset of the oldest still-open transaction — which is why a hanging transaction shows up as consumer lag that never drains until transaction.timeout.ms fires. The default is read_uncommitted, offset commits of the consumer are unaffected by this setting, and transactional.id is a producer-only config.",
+        "ru": "read_committed скрывает прерванные данные и ограничивает выборку last stable offset (LSO) — первым offset'ом самой старой ещё открытой транзакции, — поэтому подвисшая транзакция выглядит как lag консьюмера, который не убывает до срабатывания transaction.timeout.ms. По умолчанию действует read_uncommitted, на коммиты offset'ов самого консьюмера эта настройка не влияет, а transactional.id — конфиг исключительно продюсера."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#consumerconfigs_isolation.level",
+        "https://www.confluent.io/blog/transactions-apache-kafka/"
+      ]
+    },
+    {
+      "id": "kafka.offsets-semantics.005",
+      "section": "offsets-semantics",
+      "difficulty": "medium",
+      "text": {
+        "en": "The code below is meant to rewind a partition to a point in time. Under which condition does it throw a NullPointerException?",
+        "ru": "Код ниже должен перевести партицию на определённый момент времени. При каком условии он выбросит NullPointerException?"
+      },
+      "code": "TopicPartition tp = new TopicPartition(\"orders\", 0);\nMap<TopicPartition, OffsetAndTimestamp> found =\n        consumer.offsetsForTimes(Map.of(tp, timestampMs));\nOffsetAndTimestamp oat = found.get(tp);\nconsumer.seek(tp, oat.offset());",
+      "options": [
+        {
+          "text": {
+            "en": "When the partition is not currently assigned to this consumer, because offsetsForTimes returns an empty entry for unassigned partitions.",
+            "ru": "Когда партиция сейчас не назначена этому консьюмеру, поскольку offsetsForTimes возвращает пустую запись для неназначенных партиций."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whenever timestampMs is older than the retention window, because expired timestamps are removed from the .timeindex file.",
+            "ru": "Всякий раз, когда timestampMs старше окна retention, поскольку истёкшие метки удаляются из файла .timeindex."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only when the partition has no leader at that moment; otherwise offsetsForTimes blocks until a value is available.",
+            "ru": "Только когда у партиции в этот момент нет лидера; иначе offsetsForTimes блокируется, пока значение не появится."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Never: offsetsForTimes throws TimeoutException instead of returning null when nothing matches.",
+            "ru": "Никогда: при отсутствии совпадений offsetsForTimes выбрасывает TimeoutException, а не возвращает null."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When no record in the partition has a timestamp greater than or equal to timestampMs, the map value is null and oat.offset() dereferences null.",
+            "ru": "Когда ни у одной записи партиции нет временной метки больше или равной timestampMs, значение в map равно null, и oat.offset() разыменовывает null."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "offsetsForTimes returns the earliest offset whose timestamp is at least the requested one, and maps the partition to null when the requested time is beyond the last record — so a null check (or falling back to endOffsets) is mandatory. Note also that seek() only works on partitions the consumer already owns, so it must be called after an assignment exists, typically from a ConsumerRebalanceListener or after the first poll.",
+        "ru": "offsetsForTimes возвращает самый ранний offset с временной меткой не меньше запрошенной, а если запрошенное время лежит за последней записью, сопоставляет партиции null — поэтому проверка на null (или откат к endOffsets) обязательна. Учтите также, что seek() работает только для партиций, которыми консьюмер уже владеет, то есть вызывать его нужно после появления назначения — обычно из ConsumerRebalanceListener или после первого poll."
+      },
+      "sources": [
+        "https://kafka.apache.org/40/javadoc/org/apache/kafka/clients/consumer/KafkaConsumer.html#offsetsForTimes(java.util.Map)",
+        "https://kafka.apache.org/documentation/#consumerapi"
+      ]
+    },
+    {
+      "id": "kafka.offsets-semantics.006",
+      "section": "offsets-semantics",
+      "difficulty": "hard",
+      "text": {
+        "en": "The consume-transform-produce loop below is intended to be exactly-once. Which statement about it is TRUE?",
+        "ru": "Цикл consume-transform-produce ниже задуман как exactly-once. Какое утверждение о нём верно?"
+      },
+      "code": "producer.initTransactions();\nwhile (true) {\n    ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(200));\n    producer.beginTransaction();\n    for (ConsumerRecord<String, String> r : records) {\n        producer.send(transform(r));\n    }\n    producer.sendOffsetsToTransaction(offsetsOf(records), consumer.groupMetadata());\n    producer.commitTransaction();\n}",
+      "options": [
+        {
+          "text": {
+            "en": "The guarantee holds for any downstream consumer regardless of its isolation.level, because aborted records are physically removed from the log at abort time.",
+            "ru": "Гарантия соблюдается для любого читателя ниже по потоку независимо от его isolation.level, поскольку записи прерванной транзакции физически удаляются из лога при abort."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "consumer.commitSync() is still needed after commitTransaction(), otherwise the group's committed offset never advances.",
+            "ru": "После commitTransaction() всё равно нужен consumer.commitSync(), иначе зафиксированный offset группы никогда не сдвинется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "sendOffsetsToTransaction only works when the producer's transactional.id is equal to the consumer's group.id, which is how the coordinator links them.",
+            "ru": "sendOffsetsToTransaction работает только когда transactional.id продюсера равен group.id консьюмера — именно так координатор их связывает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "isolation.level=read_committed must also be set on the producer, so that it does not read back its own uncommitted writes during the transaction.",
+            "ru": "isolation.level=read_committed нужно задать и на продюсере, чтобы он не перечитывал внутри транзакции собственные незакоммиченные записи."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The input offsets are committed inside the same transaction, so the consumer needs enable.auto.commit=false and readers need read_committed.",
+            "ru": "Offset'ы входных записей фиксируются внутри той же транзакции, поэтому консьюмеру нужен enable.auto.commit=false, а читателям — read_committed."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "sendOffsetsToTransaction writes the input offsets to __consumer_offsets as part of the transaction, so output records and the consumed position commit or abort together — which only works if the consumer never commits on its own, hence enable.auto.commit=false and no separate commitSync(). Aborted records stay physically in the log and are filtered at read time, so a read_uncommitted reader would still see them and the end-to-end guarantee degrades. The producer's transactional.id must be stable across restarts but is unrelated to group.id, and isolation.level is a consumer-only setting.",
+        "ru": "sendOffsetsToTransaction записывает offset'ы входных записей в __consumer_offsets как часть транзакции, поэтому выходные записи и позиция чтения коммитятся или откатываются вместе — а это работает только если консьюмер не коммитит сам, отсюда enable.auto.commit=false и отсутствие отдельного commitSync(). Записи прерванной транзакции физически остаются в логе и фильтруются при чтении, поэтому читатель с read_uncommitted их всё равно увидит и сквозная гарантия разрушается. transactional.id продюсера должен быть стабильным между перезапусками, но с group.id не связан, а isolation.level — настройка только консьюмера."
+      },
+      "sources": [
+        "https://kafka.apache.org/40/javadoc/org/apache/kafka/clients/producer/KafkaProducer.html#sendOffsetsToTransaction(java.util.Map,org.apache.kafka.clients.consumer.ConsumerGroupMetadata)",
+        "https://www.confluent.io/blog/transactions-apache-kafka/"
+      ]
+    },
+    {
+      "id": "kafka.replication-durability.001",
+      "section": "replication-durability",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about partition leaders and followers is TRUE by default?",
+        "ru": "Какое утверждение о лидере и фолловерах партиции верно при настройках по умолчанию?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Every replica of a partition is the leader for a disjoint range of offsets, which is how write throughput scales inside one partition.",
+            "ru": "Каждая реплика партиции является лидером для своего непересекающегося диапазона offset'ов, за счёт чего масштабируется запись внутри одной партиции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Producers and consumers talk only to the leader; followers replicate by issuing fetch requests to the leader and serve no client traffic.",
+            "ru": "Продюсеры и консьюмеры общаются только с лидером; фолловеры реплицируют данные, отправляя лидеру fetch-запросы, и клиентский трафик не обслуживают."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The active controller is the leader for all partitions and delegates only replication to the other brokers.",
+            "ru": "Активный контроллер является лидером для всех партиций и делегирует другим брокерам только репликацию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Consumers read from the closest follower to avoid cross-zone traffic, while producers write to the leader.",
+            "ru": "Консьюмеры читают из ближайшего фолловера, чтобы избежать межзонного трафика, а продюсеры пишут в лидера."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Followers accept produce requests too and forward them to the leader, which is why acks=1 can be satisfied by any replica.",
+            "ru": "Фолловеры тоже принимают запросы записи и перенаправляют их лидеру, поэтому acks=1 может быть удовлетворён любой репликой."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A partition has exactly one leader that handles every read and write, and followers are plain replicas that pull from it with the same fetch protocol consumers use. Reading from the nearest replica does exist as an opt-in feature (KIP-392, configured with client.rack and a broker-side replica selector), but it is not the default and never applies to producers.",
+        "ru": "У партиции ровно один лидер, обслуживающий все чтения и записи, а фолловеры — обычные реплики, которые забирают данные тем же fetch-протоколом, что и консьюмеры. Чтение с ближайшей реплики существует как опциональная возможность (KIP-392, настраивается через client.rack и replica selector на брокере), но по умолчанию не включено и к продюсерам не относится вовсе."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#replication",
+        "https://cwiki.apache.org/confluence/display/KAFKA/KIP-392%3A+Allow+consumers+to+fetch+from+closest+replica"
+      ]
+    },
+    {
+      "id": "kafka.replication-durability.002",
+      "section": "replication-durability",
+      "difficulty": "easy",
+      "text": {
+        "en": "What exactly is the ISR (in-sync replica set) of a partition?",
+        "ru": "Что именно представляет собой ISR (набор синхронных реплик) партиции?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The leader plus every follower that has caught up within replica.lag.time.max.ms; a lagging follower is dropped and later rejoins.",
+            "ru": "Лидер плюс все фолловеры, догнавшие его в пределах replica.lag.time.max.ms; отставший фолловер исключается и позже возвращается."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The set of replicas whose log files have the same size in bytes as the leader's, compared after every segment roll.",
+            "ru": "Набор реплик, размер лог-файлов которых в байтах совпадает с лидером; сравнение выполняется после каждой смены segment'а."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The set of followers only; the leader is tracked separately, which is why min.insync.replicas=2 means two followers.",
+            "ru": "Только набор фолловеров; лидер учитывается отдельно, поэтому min.insync.replicas=2 означает двух фолловеров."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The replica list fixed at topic creation by replication.factor; it only changes when a partition reassignment is executed.",
+            "ru": "Список реплик, фиксируемый при создании топика через replication.factor; он меняется только при выполнении переназначения партиций."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The set of replicas that have acknowledged the most recent produce request, recomputed for every batch.",
+            "ru": "Набор реплик, подтвердивших самый последний запрос записи; он пересчитывается для каждого батча."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The ISR always contains the leader itself plus the followers that are not lagging by more than replica.lag.time.max.ms, and it shrinks and grows dynamically as followers fall behind and catch up. That is why min.insync.replicas=2 on replication.factor=3 is satisfied by the leader plus one healthy follower — a frequent source of confusion.",
+        "ru": "ISR всегда включает самого лидера плюс фолловеров, отстающих не более чем на replica.lag.time.max.ms, и динамически сужается и расширяется по мере отставания и догона фолловеров. Поэтому min.insync.replicas=2 при replication.factor=3 удовлетворяется лидером и одним здоровым фолловером — частый источник путаницы."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#replication",
+        "https://kafka.apache.org/documentation/#brokerconfigs_replica.lag.time.max.ms"
+      ]
+    },
+    {
+      "id": "kafka.replication-durability.003",
+      "section": "replication-durability",
+      "difficulty": "medium",
+      "text": {
+        "en": "A topic uses the settings below on a three-broker cluster. One broker is taken down for maintenance. What is the effect on producers and consumers?",
+        "ru": "Топик использует приведённые настройки на кластере из трёх брокеров. Один брокер выводится на обслуживание. Как это отразится на продюсерах и консьюмерах?"
+      },
+      "code": "replication.factor=3\nmin.insync.replicas=2\nacks=all",
+      "options": [
+        {
+          "text": {
+            "en": "The topic becomes read-only until the replication factor is fully restored, so producers must buffer on the application side.",
+            "ru": "Топик становится доступным только для чтения, пока фактор репликации не восстановится полностью, поэтому продюсерам приходится буферизовать данные на стороне приложения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The producer silently downgrades to acks=1 for the affected partitions, which is what keeps the cluster available.",
+            "ru": "Продюсер молча понижает acks до 1 для затронутых партиций, и именно это сохраняет доступность кластера."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Produce requests succeed but the record only reaches the leader's log until the missing broker returns and catches up.",
+            "ru": "Запросы записи проходят, но запись попадает только в лог лидера, пока отсутствующий брокер не вернётся и не догонит."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Produce requests fail immediately, because acks=all requires an acknowledgement from all three configured replicas.",
+            "ru": "Запросы записи падают сразу, поскольку acks=all требует подтверждения от всех трёх сконфигурированных реплик."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Everything keeps working: the ISR still has two members, so min.insync.replicas is satisfied and writes are accepted.",
+            "ru": "Всё продолжает работать: в ISR остаётся два участника, поэтому min.insync.replicas соблюдён и запись принимается."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "acks=all means \"all in-sync replicas\", not all configured replicas, so replication.factor=3 with min.insync.replicas=2 tolerates exactly one broker loss and still keeps two copies of every acknowledged record. Once the ISR drops below min.insync.replicas the leader answers NotEnoughReplicasException (a retriable error) instead of silently accepting a less durable write — reads are unaffected because they only need the leader and the high watermark.",
+        "ru": "acks=all означает «все синхронные реплики», а не все сконфигурированные, поэтому replication.factor=3 с min.insync.replicas=2 переживает потерю ровно одного брокера, сохраняя две копии каждой подтверждённой записи. Как только ISR становится меньше min.insync.replicas, лидер отвечает NotEnoughReplicasException (retriable-ошибка) вместо молчаливого приёма менее надёжной записи — на чтение это не влияет, ему нужны только лидер и high watermark."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#topicconfigs_min.insync.replicas",
+        "https://kafka.apache.org/documentation/#producerconfigs_acks"
+      ]
+    },
+    {
+      "id": "kafka.replication-durability.004",
+      "section": "replication-durability",
+      "difficulty": "medium",
+      "text": {
+        "en": "What is the effect of setting unclean.leader.election.enable=true?",
+        "ru": "К чему приводит установка unclean.leader.election.enable=true?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "An out-of-sync replica may be elected leader, but only after it has fully caught up from the old leader, so no data is lost.",
+            "ru": "Несинхронная реплика может стать лидером, но только полностью догнав старого лидера, поэтому данные не теряются."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It allows the controller to move leadership during a rolling restart without waiting for the ISR to stabilise.",
+            "ru": "Она позволяет контроллеру переносить лидерство при rolling restart, не дожидаясь стабилизации ISR."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A replica outside the ISR may be elected leader, so the partition stays available at the price of losing unreplicated records.",
+            "ru": "Лидером может стать реплика вне ISR, поэтому партиция остаётся доступной ценой потери нереплицированных записей."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is the default in modern Kafka, since availability is preferred over durability for most workloads.",
+            "ru": "Это значение по умолчанию в современной Kafka, поскольку для большинства нагрузок доступность предпочтительнее надёжности."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It applies only to internal topics such as __consumer_offsets, which is why it is considered safe to enable.",
+            "ru": "Она применяется только к внутренним топикам вроде __consumer_offsets, поэтому её считают безопасной для включения."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Unclean election is the explicit availability-over-durability switch: when no in-sync replica survives, an out-of-sync one is promoted and its shorter log becomes the truth, so already acknowledged records vanish and consumers can even see offsets move backwards. The default has been false since Kafka 0.11 — with it, such a partition simply stays offline until an ISR member returns.",
+        "ru": "Unclean election — это явный выбор доступности в ущерб надёжности: когда не осталось ни одной синхронной реплики, лидером становится несинхронная, и её более короткий лог объявляется истиной, из-за чего уже подтверждённые записи исчезают, а консьюмеры могут увидеть даже откат offset'ов назад. Значение по умолчанию — false начиная с Kafka 0.11: в этом случае партиция просто остаётся недоступной, пока не вернётся участник ISR."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#brokerconfigs_unclean.leader.election.enable",
+        "https://kafka.apache.org/documentation/#design_uncleanleader"
+      ]
+    },
+    {
+      "id": "kafka.replication-durability.005",
+      "section": "replication-durability",
+      "difficulty": "medium",
+      "text": {
+        "en": "What is the high watermark of a partition?",
+        "ru": "Что такое high watermark партиции?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The offset up to which the log cleaner has already compacted the partition.",
+            "ru": "Offset, до которого log cleaner уже выполнил компакцию партиции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The highest offset that has been replicated to every ISR member; consumers can never read beyond it.",
+            "ru": "Наибольший offset, реплицированный на все участники ISR; читать дальше него консьюмеры не могут."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The log end offset of the slowest replica in the replica set, including replicas that have dropped out of the ISR.",
+            "ru": "Log end offset самой медленной реплики из набора реплик, включая реплики, выпавшие из ISR."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The largest offset committed by any consumer group, which is how the broker knows what may be deleted.",
+            "ru": "Наибольший offset, зафиксированный какой-либо consumer group, — так брокер понимает, что можно удалять."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The offset of the last record the leader has written to its own log, which is the same as the log end offset.",
+            "ru": "Offset последней записи, которую лидер записал в свой лог, то есть то же самое, что log end offset."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The high watermark is the replication commit point: the leader advances it once all ISR members have the record, and only data below it is exposed to consumers, which is what prevents a consumer from reading a record that a leader failover could still erase. It is not the leader's log end offset — the gap between the two is exactly the not-yet-fully-replicated tail — and it has nothing to do with consumer commits, which are stored in __consumer_offsets.",
+        "ru": "High watermark — это точка фиксации репликации: лидер продвигает её, когда запись есть у всех участников ISR, и только данные ниже неё видны консьюмерам, что не даёт прочитать запись, которую ещё может стереть смена лидера. Это не log end offset лидера — разрыв между ними и есть ещё не полностью реплицированный «хвост», — и к коммитам консьюмеров, которые лежат в __consumer_offsets, high watermark отношения не имеет."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#design_replicatedlog",
+        "https://kafka.apache.org/documentation/#replication"
+      ]
+    },
+    {
+      "id": "kafka.replication-durability.006",
+      "section": "replication-durability",
+      "difficulty": "hard",
+      "text": {
+        "en": "An operator runs the command below after a rolling restart. Which statement about preferred leader election and rack awareness is TRUE?",
+        "ru": "Оператор выполняет приведённую команду после rolling restart. Какое утверждение о preferred leader election и rack awareness верно?"
+      },
+      "code": "kafka-leader-election.sh --bootstrap-server broker-1:9092 \\\n  --election-type PREFERRED --all-topic-partitions",
+      "options": [
+        {
+          "text": {
+            "en": "The preferred leader is the replica with the lowest broker id currently in the ISR, so the command concentrates leadership on the oldest brokers.",
+            "ru": "Preferred leader — это реплика с наименьшим broker id из текущего ISR, поэтому команда концентрирует лидерство на самых старых брокерах."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "With broker.rack configured, the command additionally guarantees that consumers are served by the replica in their own rack.",
+            "ru": "При заданном broker.rack команда дополнительно гарантирует, что консьюмеров обслуживает реплика из их собственной стойки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It rewrites each partition's replica assignment so that the current leader becomes the first entry, which is why it should be run rarely.",
+            "ru": "Она перезаписывает список реплик каждой партиции так, чтобы текущий лидер стал первым элементом, поэтому запускать её стоит редко."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The preferred leader is the first broker in the partition's replica assignment, and leadership moves back to it whenever it is in the ISR.",
+            "ru": "Preferred leader — это первый брокер в списке реплик партиции, и лидерство возвращается к нему, когда он находится в ISR."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The command is a no-op unless unclean.leader.election.enable=true, because moving leadership requires promoting a replica outside the ISR.",
+            "ru": "Команда ничего не делает, пока не установлен unclean.leader.election.enable=true, поскольку перенос лидерства требует повышения реплики вне ISR."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Kafka records an ordered replica list per partition and treats its first entry as the preferred leader, so leadership drifts after restarts and preferred election restores the intended balance — the assignment itself is never rewritten by this operation, and only ISR members are eligible, so nothing unclean happens. Rack awareness is a placement concern: broker.rack makes the controller spread replicas across racks so one rack failure cannot take out the whole ISR, while serving reads from a local replica is the separate opt-in follower-fetching feature.",
+        "ru": "Kafka хранит для каждой партиции упорядоченный список реплик и считает его первый элемент preferred leader, поэтому после перезапусков лидерство «уплывает», а preferred election возвращает задуманный баланс — сам список этой операцией не перезаписывается, а кандидатами являются только участники ISR, так что ничего unclean не происходит. Rack awareness относится к размещению: broker.rack заставляет контроллер распределять реплики по стойкам, чтобы отказ одной стойки не уничтожил весь ISR, а чтение с локальной реплики — это отдельная опциональная возможность follower fetching."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#basic_ops_leader_balancing",
+        "https://kafka.apache.org/documentation/#brokerconfigs_auto.leader.rebalance.enable"
+      ]
+    },
+    {
+      "id": "kafka.serialization.001",
+      "section": "serialization",
+      "difficulty": "easy",
+      "text": {
+        "en": "What is the main practical advantage of Avro or Protobuf with a Schema Registry over plain JSON documents on a high-volume topic?",
+        "ru": "В чём главное практическое преимущество Avro или Protobuf со Schema Registry по сравнению с обычными JSON-документами на высоконагруженном топике?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Each record carries only a small schema id plus a compact binary payload instead of repeating the field names.",
+            "ru": "Каждая запись несёт лишь небольшой id схемы и компактный бинарный payload вместо повторяющихся имён полей."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Producer and consumer are forced to use the exact same schema version, which removes schema drift between services.",
+            "ru": "Продюсер и консьюмер обязаны использовать в точности одну и ту же версию схемы, что устраняет расхождение схем между сервисами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Binary formats make compression unnecessary, because the payload is already entropy-coded by the serializer.",
+            "ru": "Бинарные форматы делают сжатие ненужным, поскольку сериализатор уже применяет энтропийное кодирование к payload."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Avro records embed the full schema, so any consumer can decode them without contacting a registry or agreeing on a contract.",
+            "ru": "Записи Avro содержат полную схему, поэтому любой консьюмер может их декодировать, не обращаясь к registry и не согласовывая контракт."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The broker validates every record against the registered schema and rejects malformed payloads, which JSON cannot offer.",
+            "ru": "Брокер проверяет каждую запись по зарегистрированной схеме и отклоняет некорректные данные, чего JSON предложить не может."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The Confluent serializers register the writer schema once, cache its id, and put only that id in front of the binary payload, so field names are not repeated per record and the registry rejects an incompatible schema at produce time. Embedding the full schema is what Avro *object container files* do, not the Kafka serializer. An Apache Kafka broker never looks at a record payload at all, and even Confluent Server's optional broker-side schema validation only checks that the schema id in the header is registered and compatible, never the field values.",
+        "ru": "Сериализаторы Confluent регистрируют схему писателя один раз, кэшируют её id и добавляют перед бинарным payload только этот id, поэтому имена полей не повторяются в каждой записи, а registry отклоняет несовместимую схему уже на этапе записи. Полную схему внутри себя носят Avro *object container files*, а не Kafka-сериализатор. Брокер Apache Kafka вообще не смотрит на payload записи, и даже опциональная валидация схем на брокере в Confluent Server проверяет лишь то, что id схемы из заголовка зарегистрирован и совместим, но не значения полей."
+      },
+      "sources": [
+        "https://docs.confluent.io/platform/current/schema-registry/fundamentals/index.html",
+        "https://docs.confluent.io/platform/current/schema-registry/fundamentals/serdes-develop/index.html"
+      ]
+    },
+    {
+      "id": "kafka.serialization.002",
+      "section": "serialization",
+      "difficulty": "easy",
+      "text": {
+        "en": "With the default subject naming strategy, under which subject does the Confluent serializer register the value schema for topic orders?",
+        "ru": "При стратегии именования subject по умолчанию под каким subject сериализатор Confluent регистрирует схему значения для топика orders?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "orders-0, orders-1 and so on — one subject per partition, so compatibility is checked per partition.",
+            "ru": "orders-0, orders-1 и так далее — по одному subject на партицию, чтобы совместимость проверялась для каждой партиции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The fully qualified record name, for example com.example.OrderCreated, so the same schema is shared by every topic.",
+            "ru": "Полное имя записи, например com.example.OrderCreated, чтобы одна схема использовалась всеми топиками."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "orders-value, because TopicNameStrategy derives the subject from the topic name and the key/value role.",
+            "ru": "orders-value, поскольку TopicNameStrategy формирует subject из имени топика и роли key/value."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "orders, with keys and values sharing one subject; the serializer distinguishes them by the magic byte.",
+            "ru": "orders, при этом ключи и значения используют один subject; сериализатор различает их по magic byte."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The topic name combined with the schema's namespace, which is what makes TopicNameStrategy safe for multi-tenant clusters.",
+            "ru": "Имя топика вместе с namespace схемы — именно это делает TopicNameStrategy безопасной для мультиарендных кластеров."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "TopicNameStrategy, the default, produces <topic>-key and <topic>-value, so the compatibility rules of a subject apply to one topic and one role. RecordNameStrategy (subject = record name) and TopicRecordNameStrategy (topic plus record name) exist precisely for the case where one topic must carry several unrelated event types, which the default strategy would treat as incompatible versions of a single schema.",
+        "ru": "TopicNameStrategy, стратегия по умолчанию, даёт <topic>-key и <topic>-value, поэтому правила совместимости subject действуют для одного топика и одной роли. RecordNameStrategy (subject = имя записи) и TopicRecordNameStrategy (топик плюс имя записи) существуют именно для случая, когда в одном топике должны жить несколько несвязанных типов событий — стратегия по умолчанию сочла бы их несовместимыми версиями одной схемы."
+      },
+      "sources": [
+        "https://docs.confluent.io/platform/current/schema-registry/fundamentals/serdes-develop/index.html#subject-name-strategy"
+      ]
+    },
+    {
+      "id": "kafka.serialization.003",
+      "section": "serialization",
+      "difficulty": "medium",
+      "text": {
+        "en": "Both serializers are configured as StringSerializer, but the producer is declared with a byte[] value type. What happens when this code runs?",
+        "ru": "Оба сериализатора настроены как StringSerializer, но продюсер объявлен с типом значения byte[]. Что произойдёт при запуске этого кода?"
+      },
+      "code": "props.put(\"key.serializer\", \"org.apache.kafka.common.serialization.StringSerializer\");\nprops.put(\"value.serializer\", \"org.apache.kafka.common.serialization.StringSerializer\");\n\nKafkaProducer<String, byte[]> producer = new KafkaProducer<>(props);\nproducer.send(new ProducerRecord<>(\"events\", \"k1\", new byte[]{1, 2, 3}));",
+      "options": [
+        {
+          "text": {
+            "en": "The record is never sent: value serialization fails with a SerializationException wrapping a ClassCastException, reported via the callback.",
+            "ru": "Запись не отправляется: сериализация значения падает с SerializationException, обёрнутым вокруг ClassCastException, о чём сообщает callback."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The record is sent unchanged, because a byte[] needs no serialization and the configured serializer is bypassed for byte arrays.",
+            "ru": "Запись отправляется без изменений, поскольку byte[] не нуждается в сериализации и для массивов байт настроенный сериализатор обходится."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The broker rejects the record with InvalidRecordException, because the payload does not match the format registered for the topic.",
+            "ru": "Брокер отклоняет запись с InvalidRecordException, поскольку payload не соответствует формату, зарегистрированному для топика."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The producer falls back to String.valueOf on the value, so the array's textual representation is sent.",
+            "ru": "Продюсер использует String.valueOf для значения, поэтому отправляется текстовое представление массива."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The constructor already fails with a ConfigException, because the generic type parameters are validated against the configured serializer classes.",
+            "ru": "Уже конструктор падает с ConfigException, поскольку параметры-дженерики проверяются на соответствие настроенным классам сериализаторов."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Serializers are configured by class name and instantiated reflectively, so the compiler cannot connect them to the producer's type parameters — the mismatch only shows up when serialize() receives the wrong runtime type. KafkaProducer catches that ClassCastException and rethrows it as SerializationException with a message naming both classes; because SerializationException is an ApiException, the failure arrives via the callback and the failed Future rather than as a throw out of send(), so code that ignores the future silently drops records.",
+        "ru": "Сериализаторы задаются именем класса и создаются через рефлексию, поэтому компилятор не может связать их с параметрами-дженериками продюсера — рассогласование проявляется только когда serialize() получает неверный рантайм-тип. KafkaProducer перехватывает этот ClassCastException и пробрасывает его как SerializationException с сообщением, называющим оба класса; а поскольку SerializationException является ApiException, ошибка приходит через callback и неуспешный Future, а не выбрасывается из send(), поэтому код, игнорирующий future, молча теряет записи."
+      },
+      "sources": [
+        "https://kafka.apache.org/40/javadoc/org/apache/kafka/clients/producer/KafkaProducer.html#send(org.apache.kafka.clients.producer.ProducerRecord,org.apache.kafka.clients.producer.Callback)",
+        "https://kafka.apache.org/documentation/#producerconfigs_value.serializer"
+      ]
+    },
+    {
+      "id": "kafka.serialization.004",
+      "section": "serialization",
+      "difficulty": "medium",
+      "text": {
+        "en": "A value was written with the Confluent Avro serializer using a schema whose registered id is 7. A raw byte[] consumer inspects it with the code below. What is printed?",
+        "ru": "Значение записано сериализатором Confluent Avro со схемой, зарегистрированной под id 7. Консьюмер, читающий сырой byte[], разбирает его кодом ниже. Что будет напечатано?"
+      },
+      "code": "byte[] payload = record.value();\nSystem.out.println(payload[0]);\nSystem.out.println(ByteBuffer.wrap(payload, 1, 4).getInt());",
+      "options": [
+        {
+          "text": {
+            "en": "0, followed by a BufferUnderflowException",
+            "ru": "0, а затем BufferUnderflowException"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "0 and 7",
+            "ru": "0 и 7"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "7 and 0",
+            "ru": "7 и 0"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "0 and 117440512",
+            "ru": "0 и 117440512"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "1 and 7",
+            "ru": "1 и 7"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The Confluent wire format is one magic byte 0x00, then the 4-byte schema id in big-endian order, then the Avro-encoded body, so the first byte prints 0 and the big-endian int at offset 1 prints 7. Reading the id little-endian is what would give 117440512, and ByteBuffer.wrap(array, 1, 4) has exactly four readable bytes, so getInt() cannot underflow.",
+        "ru": "Формат Confluent на проводе таков: один magic byte 0x00, затем 4-байтовый id схемы в порядке big-endian, затем тело в кодировке Avro, поэтому первый байт печатает 0, а big-endian int по смещению 1 печатает 7. Значение 117440512 получилось бы при чтении id как little-endian, а ByteBuffer.wrap(array, 1, 4) содержит ровно четыре доступных байта, так что getInt() переполниться по нижней границе не может."
+      },
+      "sources": [
+        "https://docs.confluent.io/platform/current/schema-registry/fundamentals/serdes-develop/index.html#wire-format"
+      ]
+    },
+    {
+      "id": "kafka.serialization.005",
+      "section": "serialization",
+      "difficulty": "medium",
+      "text": {
+        "en": "A subject uses the default compatibility level of Confluent Schema Registry. Which statement about evolving its schema is TRUE?",
+        "ru": "Для subject задан уровень совместимости Confluent Schema Registry по умолчанию. Какое утверждение об эволюции его схемы верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The level is FORWARD, which allows adding a required field without a default because old readers simply ignore unknown fields.",
+            "ru": "Уровень — FORWARD, что позволяет добавить обязательное поле без значения по умолчанию, поскольку старые читатели просто игнорируют неизвестные поля."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The level is FULL, so every new version is checked against all previously registered versions of the subject.",
+            "ru": "Уровень — FULL, поэтому каждая новая версия проверяется против всех ранее зарегистрированных версий subject."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The level is BACKWARD: fields may be deleted and fields with a default added, and consumers should be upgraded before producers.",
+            "ru": "Уровень — BACKWARD: можно удалять поля и добавлять поля со значением по умолчанию, а консьюмеров нужно обновлять раньше продюсеров."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The level is BACKWARD, which means old consumers can read data written with the new schema, so producers are upgraded first.",
+            "ru": "Уровень — BACKWARD, то есть старые консьюмеры могут читать данные, записанные новой схемой, поэтому продюсеров обновляют первыми."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The level is NONE by default, so the registry stores versions but performs no compatibility checks until one is configured.",
+            "ru": "По умолчанию уровень — NONE, поэтому registry хранит версии, но не выполняет проверок совместимости, пока уровень не задан явно."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "BACKWARD is the default and is defined from the reader's side: the new schema must be able to read data produced by the immediately preceding version, which is why deletions and defaulted additions are allowed and consumers go first. FORWARD is the mirror image (old readers cope with new data, producers go first), FULL means both directions against the previous version only, and it is FULL_TRANSITIVE or BACKWARD_TRANSITIVE that widen the check to all earlier versions.",
+        "ru": "BACKWARD — уровень по умолчанию, и он определяется со стороны читателя: новая схема должна уметь читать данные, произведённые непосредственно предыдущей версией, поэтому разрешены удаления и добавления полей со значением по умолчанию, а консьюмеры обновляются первыми. FORWARD — зеркальный случай (старые читатели справляются с новыми данными, первыми обновляются продюсеры), FULL означает оба направления, но только против предыдущей версии, а расширяют проверку на все прежние версии именно FULL_TRANSITIVE и BACKWARD_TRANSITIVE."
+      },
+      "sources": [
+        "https://docs.confluent.io/platform/current/schema-registry/fundamentals/schema-evolution.html"
+      ]
+    },
+    {
+      "id": "kafka.serialization.006",
+      "section": "serialization",
+      "difficulty": "hard",
+      "text": {
+        "en": "One malformed record was produced to a topic read by a JSON consumer. Which statement about the failure and the configuration below is TRUE?",
+        "ru": "В топик, читаемый JSON-консьюмером, попала одна некорректная запись. Какое утверждение об этом сбое и о конфигурации ниже верно?"
+      },
+      "code": "props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,\n        ErrorHandlingDeserializer.class.getName());\nprops.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS,\n        JsonDeserializer.class.getName());",
+      "options": [
+        {
+          "text": {
+            "en": "Without such a wrapper the failing record makes every poll() throw before the offset can advance, so the consumer loops forever.",
+            "ru": "Без такой обёртки проблемная запись заставляет каждый poll() выбрасывать исключение до сдвига offset'а, и консьюмер зацикливается."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Kafka skips a record it cannot deserialize and logs a warning, so the wrapper only changes the log message.",
+            "ru": "Kafka сама пропускает запись, которую не может десериализовать, и пишет предупреждение в лог, поэтому обёртка меняет лишь текст сообщения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The deserialization error carries no partition or offset information, so the only manual recovery is to reset the whole group's offsets.",
+            "ru": "Ошибка десериализации не несёт информации о партиции и offset'е, поэтому единственный ручной способ восстановления — сбросить offset'ы всей группы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Setting auto.offset.reset=latest recovers the consumer, because the reset policy is applied whenever deserialization fails.",
+            "ru": "Установка auto.offset.reset=latest выводит консьюмера из тупика, поскольку политика сброса применяется при любом сбое десериализации."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The broker validates payloads at produce time, so a poison pill cannot reach the log in the first place and the wrapper is defensive only.",
+            "ru": "Брокер проверяет payload на этапе записи, поэтому poison pill вообще не попадает в лог, и обёртка нужна лишь на всякий случай."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Deserialization happens inside poll(), so an unreadable record poisons the batch: the exception escapes before anything is processed or committed, and the next poll() re-fetches the same offset — the classic poison-pill stall. Spring Kafka's ErrorHandlingDeserializer delegates to the real deserializer, converts a failure into a null payload with the exception in a header, and lets the container's error handler log, skip or route the record to a dead-letter topic. Manual recovery is also possible because RecordDeserializationException exposes the topic-partition and offset, so the application can seek past the bad record.",
+        "ru": "Десериализация выполняется внутри poll(), поэтому нечитаемая запись «отравляет» весь батч: исключение вылетает раньше, чем что-то обработано и закоммичено, и следующий poll() снова вычитывает тот же offset — классическое залипание на poison pill. ErrorHandlingDeserializer из Spring Kafka делегирует настоящему десериализатору, превращает сбой в null-значение с исключением в header и позволяет error handler'у контейнера залогировать запись, пропустить её или отправить в dead-letter топик. Ручное восстановление тоже возможно: RecordDeserializationException отдаёт topic-partition и offset, так что приложение может перепрыгнуть плохую запись через seek."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-kafka/reference/kafka/serdes.html",
+        "https://kafka.apache.org/40/javadoc/org/apache/kafka/common/errors/RecordDeserializationException.html"
+      ]
+    },
+    {
+      "id": "kafka.streams-connect.001",
+      "section": "streams-connect",
+      "difficulty": "easy",
+      "text": {
+        "en": "What is the difference between a KStream and a KTable in Kafka Streams?",
+        "ru": "В чём разница между KStream и KTable в Kafka Streams?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A KStream is always materialized in a state store, whereas a KTable is a purely logical view computed on the fly.",
+            "ru": "KStream всегда материализуется в state store, тогда как KTable — чисто логическое представление, вычисляемое на лету."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A KStream treats each record as an independent fact; a KTable reads records as upserts by key, and a null value deletes the key.",
+            "ru": "KStream трактует каждую запись как независимый факт; KTable читает записи как upsert по ключу, а null-значение удаляет ключ."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A KTable keeps every version of every key so that history can be replayed, while a KStream keeps only the newest record per key.",
+            "ru": "KTable хранит все версии каждого ключа, чтобы можно было воспроизвести историю, а KStream хранит только самую свежую запись по ключу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A KStream may only be built from a cleanup.policy=delete topic and a KTable only from a compacted one, and Streams checks this at startup.",
+            "ru": "KStream можно построить только из топика с cleanup.policy=delete, а KTable — только из компактируемого, и Streams проверяет это при старте."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A KTable is always global: every application instance holds all keys, which is why a KTable join needs no co-partitioning.",
+            "ru": "KTable всегда глобальна: каждый экземпляр приложения держит все ключи, поэтому join с KTable не требует co-partitioning."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The two abstractions differ in interpretation, not in storage: a stream is an append-only sequence of events, a table is the changelog-to-table duality where the latest value per key wins and a tombstone removes the key. Any topic can be read either way; compaction on the source topic is a good idea for a table but is not enforced, and a KTable is partitioned exactly like its input — GlobalKTable is the abstraction that replicates all keys to every instance.",
+        "ru": "Абстракции различаются трактовкой, а не способом хранения: поток — это append-only последовательность событий, таблица — дуальность changelog/таблица, где побеждает последнее значение по ключу, а tombstone удаляет ключ. Любой топик можно читать и так, и так; компакция исходного топика для таблицы желательна, но не обязательна, а KTable партиционирована точно так же, как её вход — реплицирует же все ключи на каждый экземпляр именно GlobalKTable."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/streams/core-concepts",
+        "https://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html"
+      ]
+    },
+    {
+      "id": "kafka.streams-connect.002",
+      "section": "streams-connect",
+      "difficulty": "easy",
+      "text": {
+        "en": "How does Kafka Connect in distributed mode differ from standalone mode?",
+        "ru": "Чем Kafka Connect в distributed-режиме отличается от standalone?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Distributed mode requires a ZooKeeper ensemble to coordinate the workers, which is why it is being phased out.",
+            "ru": "Distributed-режим требует ансамбля ZooKeeper для координации worker'ов, поэтому от него постепенно отказываются."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Standalone mode also stores its state in Kafka, but restricted to a single-partition topic, which is the only real difference.",
+            "ru": "Standalone-режим тоже хранит состояние в Kafka, но только в топике с одной партицией, и это единственное реальное отличие."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Standalone mode supports several workers sharing one REST endpoint, it simply does not rebalance tasks automatically.",
+            "ru": "Standalone-режим поддерживает несколько worker'ов с общим REST-эндпоинтом, он просто не перераспределяет задачи автоматически."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Distributed mode keeps connector configs, offsets and status in internal Kafka topics and rebalances tasks across workers.",
+            "ru": "Distributed-режим хранит конфигурации коннекторов, offset'ы и статусы во внутренних топиках Kafka и перераспределяет задачи между worker'ами."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Distributed mode runs exactly one worker JVM per connector, so scaling means adding connectors rather than workers.",
+            "ru": "В distributed-режиме на каждый коннектор приходится ровно одна JVM worker'а, поэтому масштабирование означает добавление коннекторов, а не worker'ов."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Distributed workers form a group over three internal topics — config.storage.topic (which must have exactly one partition), offset.storage.topic and status.storage.topic, all compacted — and connectors are submitted through the REST API, so tasks survive a worker loss by being reassigned. Standalone is a single process configured from property files that stores source offsets in offset.storage.file.filename, useful for demos and edge collectors but with no fault tolerance; Connect itself never needs ZooKeeper.",
+        "ru": "Distributed-worker'ы образуют группу поверх трёх внутренних топиков — config.storage.topic (в нём должна быть ровно одна партиция), offset.storage.topic и status.storage.topic, все компактируемые, — а коннекторы отправляются через REST API, поэтому при потере worker'а задачи просто переназначаются. Standalone — это один процесс, настраиваемый из property-файлов и хранящий offset'ы источника в offset.storage.file.filename: удобно для демо и краевых сборщиков, но без отказоустойчивости; сам Connect в ZooKeeper не нуждается никогда."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#connect_running",
+        "https://docs.confluent.io/platform/current/connect/userguide.html"
+      ]
+    },
+    {
+      "id": "kafka.streams-connect.003",
+      "section": "streams-connect",
+      "difficulty": "medium",
+      "text": {
+        "en": "Consider the windowed aggregation below. Which statement about it is TRUE?",
+        "ru": "Рассмотрите оконную агрегацию ниже. Какое утверждение о ней верно?"
+      },
+      "code": "KTable<Windowed<String>, Long> counts = builder.stream(\"clicks\")\n        .groupByKey()\n        .windowedBy(TimeWindows.ofSizeAndGrace(Duration.ofMinutes(1), Duration.ofSeconds(10)))\n        .count(Materialized.as(\"clicks-per-minute\"));",
+      "options": [
+        {
+          "text": {
+            "en": "The changelog topic uses cleanup.policy=compact only, which is why a windowed store grows without bound and must be pruned manually.",
+            "ru": "Changelog-топик использует только cleanup.policy=compact, поэтому оконное хранилище растёт неограниченно, и его приходится чистить вручную."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The state is held only in memory, so after a restart the counts are recomputed by re-reading the clicks topic from the beginning.",
+            "ru": "Состояние хранится только в памяти, поэтому после перезапуска счётчики пересчитываются повторным чтением топика clicks с начала."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Windows are cut by the wall-clock time at which the record is processed, so a replay of historical data produces a single window.",
+            "ru": "Окна нарезаются по системному времени обработки записи, поэтому повторное проигрывание исторических данных даёт одно окно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A record more than 10 s past the end of its window is dropped, and the store's changelog topic uses cleanup.policy=compact,delete.",
+            "ru": "Запись, опоздавшая более чем на 10 с после конца своего окна, отбрасывается, а changelog-топик хранилища использует cleanup.policy=compact,delete."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The grace period delays every emitted result by 10 s but no record is ever dropped, because late records reopen their window.",
+            "ru": "Grace period задерживает каждый выдаваемый результат на 10 с, но ни одна запись не отбрасывается, поскольку опоздавшие записи заново открывают своё окно."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Windows in Streams are event-time based, and the grace period defines how long a window stays open for late arrivals — anything later is counted in the dropped-records metric and discarded. A Materialized store is a persistent RocksDB store whose fault tolerance comes from an internal changelog topic named <application.id>-clicks-per-minute-changelog; window store changelogs are created with cleanup.policy=compact,delete and a retention of window size plus grace plus windowstore.changelog.additional.retention.ms, since the windowed key space is unbounded and pure compaction would grow forever.",
+        "ru": "Окна в Streams строятся по event time, а grace period задаёт, как долго окно остаётся открытым для опоздавших записей — всё, что позже, попадает в метрику dropped-records и отбрасывается. Materialized-хранилище — это персистентное RocksDB-хранилище, отказоустойчивость которому даёт внутренний changelog-топик с именем <application.id>-clicks-per-minute-changelog; для оконных хранилищ такие топики создаются с cleanup.policy=compact,delete и retention, равным размеру окна плюс grace плюс windowstore.changelog.additional.retention.ms, поскольку пространство оконных ключей не ограничено и чистая компакция росла бы бесконечно."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#windowing",
+        "https://kafka.apache.org/documentation/streams/developer-guide/manage-topics.html"
+      ]
+    },
+    {
+      "id": "kafka.streams-connect.004",
+      "section": "streams-connect",
+      "difficulty": "medium",
+      "text": {
+        "en": "The topology below enriches orders from a GlobalKTable. Which statement is TRUE?",
+        "ru": "Топология ниже обогащает заказы данными из GlobalKTable. Какое утверждение верно?"
+      },
+      "code": "KStream<String, Order> orders = builder.stream(\"orders\");\nGlobalKTable<String, Customer> customers = builder.globalTable(\"customers\");\n\nKStream<String, Enriched> enriched = orders.join(customers,\n        (orderKey, order) -> order.customerId(),\n        (order, customer) -> enrich(order, customer));",
+      "options": [
+        {
+          "text": {
+            "en": "An update to the customers topic re-emits join results for orders that were already processed, which is why the output can contain duplicates.",
+            "ru": "Обновление в топике customers заново выдаёт результаты join для уже обработанных заказов, из-за чего в выходе могут появляться дубликаты."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The join is windowed, so an order is dropped if its matching customer record arrives outside the default join window.",
+            "ru": "Join является оконным, поэтому заказ отбрасывается, если соответствующая запись customer приходит вне окна join по умолчанию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "No co-partitioning is required and no repartition topic is created, because every instance holds the whole customers table.",
+            "ru": "Co-partitioning не требуется и repartition-топик не создаётся, поскольку каждый экземпляр держит таблицу customers целиком."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "orders and customers must have the same number of partitions and the same partitioning strategy, as for any stream-table join.",
+            "ru": "У orders и customers должно совпадать число партиций и стратегия партиционирования, как и для любого stream-table join."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Streams silently inserts a repartition topic on orders keyed by customerId, which is the price of using a GlobalKTable.",
+            "ru": "Streams незаметно вставляет repartition-топик для orders с ключом customerId — это плата за использование GlobalKTable."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A GlobalKTable is fully replicated to every instance, so a lookup can use any attribute of the stream record via the KeyValueMapper and neither co-partitioning nor a repartition topic is needed — the classic reason to choose it for small, slowly changing reference data. Such joins are also strictly stream-driven: only a record on the stream side produces output, so a later customer update never retroactively re-emits earlier orders.",
+        "ru": "GlobalKTable полностью реплицируется на каждый экземпляр, поэтому поиск может использовать любое поле записи потока через KeyValueMapper, и ни co-partitioning, ни repartition-топик не нужны — классическая причина выбирать её для небольших, редко меняющихся справочных данных. Такие join'ы к тому же строго управляются потоком: результат выдаёт только запись со стороны потока, поэтому позднее обновление customer никогда не переиздаёт результаты для прежних заказов."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#kstream-globalktable-join",
+        "https://docs.confluent.io/platform/current/streams/developer-guide/dsl-api.html#joining"
+      ]
+    },
+    {
+      "id": "kafka.streams-connect.005",
+      "section": "streams-connect",
+      "difficulty": "medium",
+      "text": {
+        "en": "In Kafka Connect, how do converters relate to single message transforms (SMTs)?",
+        "ru": "Как в Kafka Connect соотносятся конвертеры и single message transforms (SMT)?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Converters translate between Connect's internal record format and the topic bytes, while SMTs operate on the Connect record.",
+            "ru": "Конвертеры переводят между внутренним форматом записи Connect и байтами в топике, а SMT работают с самой Connect-записью."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The converter is selected per record by the broker from the record headers, which is how one topic can mix Avro and JSON.",
+            "ru": "Конвертер выбирается брокером для каждой записи по её header'ам — именно так в одном топике могут смешиваться Avro и JSON."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "SMTs can join or aggregate several records, because the framework buffers a batch before handing it to the transform chain.",
+            "ru": "SMT могут соединять или агрегировать несколько записей, поскольку фреймворк буферизует батч перед передачей его в цепочку преобразований."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Converters are simply the built-in SMTs shipped with Connect, so the two are configured with the same transforms property.",
+            "ru": "Конвертеры — это просто встроенные SMT, поставляемые вместе с Connect, поэтому и настраиваются они через то же свойство transforms."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "SMTs execute on the broker, which is why their jars have to be present in plugin.path on every broker node.",
+            "ru": "SMT выполняются на брокере, поэтому их jar-файлы должны присутствовать в plugin.path на каждом брокере."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "key.converter and value.converter (AvroConverter, JsonConverter with schemas.enable, StringConverter, ByteArrayConverter, …) sit at the boundary with Kafka, while SMTs operate on the structured Connect record: for a source the connector produces records, the transforms rewrite them, then the converter serializes; for a sink the order is reversed. SMTs are strictly one-record-in, one-record-out — no joins or aggregations — and everything runs in the Connect worker, never on a broker.",
+        "ru": "key.converter и value.converter (AvroConverter, JsonConverter с schemas.enable, StringConverter, ByteArrayConverter и другие) стоят на границе с Kafka, а SMT работают со структурированной Connect-записью: для source коннектор выдаёт записи, преобразования их правят, затем конвертер сериализует; для sink порядок обратный. SMT строго преобразуют одну запись в одну — никаких join'ов и агрегаций, — и всё это выполняется в worker'е Connect, а не на брокере."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#connect_transforms",
+        "https://docs.confluent.io/platform/current/connect/concepts.html"
+      ]
+    },
+    {
+      "id": "kafka.streams-connect.006",
+      "section": "streams-connect",
+      "difficulty": "hard",
+      "text": {
+        "en": "A Kafka Streams application is switched to the setting below. Which statement about the consequences is TRUE?",
+        "ru": "Приложение Kafka Streams переключают на приведённую настройку. Какое утверждение о последствиях верно?"
+      },
+      "code": "props.put(StreamsConfig.PROCESSING_GUARANTEE_CONFIG, StreamsConfig.EXACTLY_ONCE_V2);",
+      "options": [
+        {
+          "text": {
+            "en": "The guarantee also covers side effects performed inside a processor, such as an HTTP call or a JDBC insert.",
+            "ru": "Гарантия распространяется и на побочные эффекты внутри процессора, например HTTP-вызов или вставку через JDBC."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "commit.interval.ms stays at its default of 30 seconds, but state stores are flushed after every processed record.",
+            "ru": "commit.interval.ms остаётся равным 30 секундам по умолчанию, но state store'ы сбрасываются на диск после каждой обработанной записи."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Input offsets, changelog writes and output records commit as one transaction, and the default commit.interval.ms drops to 100 ms.",
+            "ru": "Offset'ы входа, записи в changelog и выходные записи фиксируются одной транзакцией, а commit.interval.ms по умолчанию падает до 100 мс."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "num.standby.replicas must be raised to at least 1, otherwise Streams refuses to start with this guarantee.",
+            "ru": "num.standby.replicas нужно поднять минимум до 1, иначе Streams отказывается запускаться с такой гарантией."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Streams stops relying on the idempotent producer, because duplicates are instead detected by key in the state store.",
+            "ru": "Streams перестаёт опираться на идемпотентного продюсера, поскольку дубликаты вместо этого выявляются по ключу в state store."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "exactly_once_v2 makes each stream thread use one transactional producer that atomically writes output records, changelog updates and the input offsets, so the default commit interval is lowered to 100 ms to keep end-to-end latency acceptable for read_committed readers. It builds on the idempotent producer rather than replacing it, requires no standby replicas, and its scope is strictly Kafka-to-Kafka — anything a processor does to an external system is outside the transaction and can be repeated after a failure.",
+        "ru": "exactly_once_v2 заставляет каждый stream-поток использовать один транзакционный продюсер, атомарно записывающий выходные записи, обновления changelog и offset'ы входа, поэтому интервал коммита по умолчанию снижен до 100 мс, чтобы сквозная задержка для читателей с read_committed оставалась приемлемой. Он опирается на идемпотентного продюсера, а не заменяет его, standby-реплик не требует, и его область строго Kafka-to-Kafka: всё, что процессор делает во внешней системе, лежит вне транзакции и может повториться после сбоя."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/streams/core-concepts#streams_processing_guarantee",
+        "https://docs.confluent.io/platform/current/streams/developer-guide/config-streams.html#processing-guarantee"
+      ]
+    }
+  ]
+}

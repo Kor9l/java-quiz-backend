@@ -1,0 +1,2946 @@
+{
+  "schemaVersion": 1,
+  "topic": "java-core",
+  "questions": [
+    {
+      "id": "java-core.oop-basics.001",
+      "section": "oop-basics",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about interfaces and abstract classes in Java 17+ is TRUE?",
+        "ru": "Какое утверждение об интерфейсах и абстрактных классах в Java 17+ верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "An interface may declare private methods with a body, but it cannot declare instance fields.",
+            "ru": "Интерфейс может объявлять private-методы с телом, но не может объявлять поля экземпляра."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The default keyword may also be used in an abstract class to give a method a fallback body.",
+            "ru": "Ключевое слово default можно использовать и в абстрактном классе, чтобы задать методу резервную реализацию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An abstract class cannot declare constructors, because it cannot be instantiated.",
+            "ru": "Абстрактный класс не может объявлять конструкторы, поскольку его нельзя инстанцировать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A class may extend several abstract classes as long as none of them declares fields.",
+            "ru": "Класс может унаследоваться от нескольких абстрактных классов, если ни один из них не объявляет полей."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An interface cannot declare static methods; only abstract and default methods are allowed.",
+            "ru": "Интерфейс не может объявлять static-методы; допустимы только абстрактные и default-методы."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Since Java 9 an interface may have private methods that serve as helpers for its default methods, but every field declared in an interface is implicitly public static final, so instance state is impossible. Static interface methods have been legal since Java 8, and abstract classes do have constructors — they are invoked by subclass constructors.",
+        "ru": "С Java 9 интерфейс может содержать private-методы — вспомогательные для default-методов, — но любое поле интерфейса неявно public static final, поэтому состояния экземпляра быть не может. static-методы в интерфейсах разрешены ещё с Java 8, а у абстрактных классов конструкторы есть: их вызывают конструкторы наследников."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html",
+        "https://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html"
+      ]
+    },
+    {
+      "id": "java-core.oop-basics.002",
+      "section": "oop-basics",
+      "difficulty": "easy",
+      "text": {
+        "en": "Why is implementation inheritance generally considered a more fragile reuse mechanism than composition?",
+        "ru": "Почему наследование реализации обычно считают более хрупким способом переиспользования кода, чем композицию?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Inheritance breaks encapsulation because a subclass can only reach the public members of its superclass.",
+            "ru": "Наследование ломает инкапсуляцию, потому что подкласс может обращаться только к public-членам суперкласса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A collaborator held by composition cannot be swapped at run time, so the coupling becomes permanent.",
+            "ru": "Объект, вложенный по композиции, нельзя подменить во время выполнения, поэтому связность становится постоянной."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Composition avoids virtual dispatch, so delegating calls are always faster than overridden ones.",
+            "ru": "Композиция обходится без виртуального вызова, поэтому делегирование всегда быстрее переопределённого метода."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A class that extends another class cannot implement any interface, which constrains the design.",
+            "ru": "Класс, унаследованный от другого класса, не может реализовать ни один интерфейс, что ограничивает дизайн."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A subclass depends on the superclass's implementation and on how it calls its own overridable methods.",
+            "ru": "Подкласс зависит от реализации суперкласса и от того, как тот вызывает свои же переопределяемые методы."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Inheritance couples a subclass to the self-use pattern of its superclass: adding or reordering internal calls to overridable methods in a later release can silently break subclasses that used to work. The encapsulation option is backwards — the real problem is that a subclass sees too much (protected members and self-use), not too little.",
+        "ru": "Наследование связывает подкласс с тем, как суперкласс вызывает свои же переопределяемые методы: добавление или изменение порядка таких внутренних вызовов в новой версии может незаметно сломать ранее работавшие наследники. Вариант про инкапсуляцию перевёрнут: проблема как раз в том, что подкласс видит слишком много (protected-члены и внутренние вызовы), а не слишком мало."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html"
+      ]
+    },
+    {
+      "id": "java-core.oop-basics.003",
+      "section": "oop-basics",
+      "difficulty": "medium",
+      "text": {
+        "en": "What is the output of this program?",
+        "ru": "Что выведет эта программа?"
+      },
+      "code": "class Demo {\n    static int x = log(\"static field\");\n    int y = log(\"instance field\");\n    static { System.out.println(\"static block\"); }\n    { System.out.println(\"instance block\"); }\n\n    Demo() { System.out.println(\"constructor\"); }\n\n    static int log(String s) { System.out.println(s); return 0; }\n\n    public static void main(String[] args) { new Demo(); }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "static field, static block, instance block, instance field, constructor",
+            "ru": "static field, static block, instance block, instance field, constructor"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "static block, static field, instance block, instance field, constructor",
+            "ru": "static block, static field, instance block, instance field, constructor"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "static field, static block, constructor, instance field, instance block",
+            "ru": "static field, static block, constructor, instance field, instance block"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "instance field, instance block, static field, static block, constructor",
+            "ru": "instance field, instance block, static field, static block, constructor"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "static field, static block, instance field, instance block, constructor",
+            "ru": "static field, static block, instance field, instance block, constructor"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Class initialisation runs static field initialisers and static blocks once, in the order they appear in the source. Instance field initialisers and instance initialiser blocks then run in textual order for every new instance, and the constructor body runs last, after the implicit super() call.",
+        "ru": "При инициализации класса инициализаторы static-полей и static-блоки выполняются один раз в порядке их появления в исходнике. Затем для каждого нового объекта в текстовом порядке выполняются инициализаторы полей экземпляра и инициализирующие блоки, а тело конструктора — последним, после неявного вызова super()."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-12.html#jls-12.5",
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-12.html#jls-12.4.2"
+      ]
+    },
+    {
+      "id": "java-core.oop-basics.004",
+      "section": "oop-basics",
+      "difficulty": "medium",
+      "text": {
+        "en": "What happens when this code is compiled?",
+        "ru": "Что произойдёт при компиляции этого кода?"
+      },
+      "code": "interface Walker { default String move() { return \"walk\"; } }\ninterface Swimmer { default String move() { return \"swim\"; } }\n\nclass Duck implements Walker, Swimmer { }",
+      "options": [
+        {
+          "text": {
+            "en": "It compiles, but calling move() throws IncompatibleClassChangeError at run time.",
+            "ru": "Код компилируется, но вызов move() во время выполнения бросает IncompatibleClassChangeError."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Compilation fails: Duck inherits unrelated defaults for move() and must override it.",
+            "ru": "Компиляция падает: Duck наследует несвязанные default-реализации move() и обязан его переопределить."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It compiles; move() resolves to the first interface in the implements clause and returns walk.",
+            "ru": "Код компилируется; move() разрешается в первый интерфейс из implements и возвращает walk."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It compiles; the JVM picks the default from the interface declared last and returns swim.",
+            "ru": "Код компилируется; JVM берёт default из последнего объявленного интерфейса и возвращает swim."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It compiles only if Duck is declared abstract; then move() returns walk.",
+            "ru": "Код компилируется только если объявить Duck абстрактным; тогда move() вернёт walk."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Inheriting two override-equivalent default methods from unrelated interfaces is a compile-time error; Duck must declare move() itself and can delegate with Walker.super.move(). There is no implicit ordering rule based on the implements clause, and declaring Duck abstract does not remove the conflict.",
+        "ru": "Наследование двух эквивалентных по сигнатуре default-методов из несвязанных интерфейсов — ошибка компиляции; Duck обязан объявить move() сам и может делегировать через Walker.super.move(). Никакого неявного правила приоритета по порядку в implements нет, а объявление Duck абстрактным конфликт не снимает."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.4.8",
+        "https://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html"
+      ]
+    },
+    {
+      "id": "java-core.oop-basics.005",
+      "section": "oop-basics",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about record classes is TRUE?",
+        "ru": "Какое утверждение о record-классах верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A record automatically implements Comparable, ordering instances by their first component.",
+            "ru": "Record автоматически реализует Comparable, упорядочивая объекты по первой компоненте."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The canonical constructor of a record cannot be given a body, so validation must live in a factory method.",
+            "ru": "Каноническому конструктору record нельзя задать тело, поэтому валидацию приходится выносить в фабричный метод."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Record components are not final; that is why a record may declare setters for them.",
+            "ru": "Компоненты record не являются final, поэтому record может объявлять для них сеттеры."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A record is implicitly final, so it cannot implement an interface.",
+            "ru": "Record неявно final, поэтому он не может реализовать интерфейс."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A record may declare static fields and extra instance methods, but not additional instance fields.",
+            "ru": "Record может объявлять static-поля и дополнительные методы экземпляра, но не дополнительные поля экземпляра."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The state of a record is exactly its component list, so extra instance fields are rejected by the compiler, while static fields and additional methods are fine. A record is final but may implement interfaces, and you can write a compact canonical constructor to validate or normalise arguments.",
+        "ru": "Состояние record — это в точности список его компонент, поэтому дополнительные поля экземпляра компилятор отвергает, а static-поля и дополнительные методы разрешены. Record является final, но интерфейсы реализовывать может, а для валидации или нормализации аргументов пишут compact-канонический конструктор."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/language/records.html",
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.10"
+      ]
+    },
+    {
+      "id": "java-core.oop-basics.006",
+      "section": "oop-basics",
+      "difficulty": "hard",
+      "text": {
+        "en": "Which statement about sealed classes and interfaces is TRUE?",
+        "ru": "Какое утверждение о sealed-классах и интерфейсах верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "sealed is only recorded in the class file for reflection; javac does not reject unlisted subclasses.",
+            "ru": "sealed лишь записывается в class-файл для рефлексии; javac не отвергает не указанных наследников."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A permitted subtype must be a direct subclass or subinterface and, in a named module, live in the same module.",
+            "ru": "Разрешённый подтип должен быть прямым наследником и, если запечатанный тип объявлен в именованном модуле, находиться в том же модуле."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The permits clause may be omitted only when the permitted subclasses live in different compilation units.",
+            "ru": "Секцию permits можно опустить только если разрешённые наследники находятся в разных единицах компиляции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A sealed interface cannot be implemented by a record, because a record is already final.",
+            "ru": "Sealed-интерфейс не может быть реализован record-ом, поскольку record и так final."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Each permitted subclass must itself be declared sealed, so a sealed hierarchy can only ever be closed at its leaves.",
+            "ru": "Каждый разрешённый подкласс сам должен быть объявлен sealed, поэтому запечатанная иерархия закрывается только на листьях."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A permitted subclass must be a direct subclass, be accessible to the sealed type, and live in the same module (or, for an unnamed module, the same package). Each permitted subclass must be final, sealed, or explicitly non-sealed — sealed is only one of the three — and permits may be omitted when all subclasses are declared in the same compilation unit.",
+        "ru": "Разрешённый наследник обязан быть прямым наследником, быть доступным для sealed-типа и находиться в том же модуле (а для безымянного модуля — в том же пакете). Каждый разрешённый наследник должен быть final, sealed или явно non-sealed — sealed лишь один из трёх вариантов, — а permits можно опустить, если все наследники объявлены в той же единице компиляции."
+      },
+      "sources": [
+        "https://openjdk.org/jeps/409",
+        "https://docs.oracle.com/en/java/javase/21/language/sealed-classes-and-interfaces.html"
+      ]
+    },
+    {
+      "id": "java-core.strings.001",
+      "section": "strings",
+      "difficulty": "easy",
+      "text": {
+        "en": "What does this snippet print?",
+        "ru": "Что выведет этот фрагмент?"
+      },
+      "code": "String a = \"java\";\nString b = \"ja\" + \"va\";\nString c = new String(\"java\");\nString d = c.intern();\nSystem.out.println((a == b) + \" \" + (a == c) + \" \" + (a == d));",
+      "options": [
+        {
+          "text": {
+            "en": "false true false",
+            "ru": "false true false"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "true false false",
+            "ru": "true false false"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "true true true",
+            "ru": "true true true"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "true false true",
+            "ru": "true false true"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "false false true",
+            "ru": "false false true"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "\"ja\" + \"va\" is a constant expression, so javac folds it at compile time and the literal is interned — a == b is true. new String(...) always allocates a fresh object outside the pool, so a == c is false, while intern() returns the pooled instance, making a == d true.",
+        "ru": "\"ja\" + \"va\" — константное выражение, javac свернёт его на этапе компиляции, и литерал попадёт в пул, поэтому a == b даёт true. new String(...) всегда создаёт новый объект вне пула, поэтому a == c равно false, а intern() возвращает объект из пула, из-за чего a == d равно true."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-3.html#jls-3.10.5",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html#intern()"
+      ]
+    },
+    {
+      "id": "java-core.strings.002",
+      "section": "strings",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about String immutability is TRUE?",
+        "ru": "Какое утверждение о неизменяемости String верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "concat() mutates the receiver in place when the argument is an empty string.",
+            "ru": "concat() изменяет сам объект-получатель, если аргумент — пустая строка."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because a String never changes, it can be shared between threads safely and can cache its hash code.",
+            "ru": "Поскольку String никогда не меняется, его можно безопасно разделять между потоками и кэшировать в нём hash code."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "substring() returns a view that shares the original backing array, so it runs in constant time.",
+            "ru": "substring() возвращает представление, разделяющее исходный массив, поэтому работает за константное время."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "StringBuilder is immutable as well, which is why its toString() does not need to copy anything.",
+            "ru": "StringBuilder тоже неизменяем, поэтому его toString() ничего не копирует."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "String is immutable because its backing array is private, so reflection cannot reach it either.",
+            "ru": "String неизменяем потому, что его внутренний массив private, и рефлексия до него тоже не доберётся."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Immutability is what makes strings inherently thread-safe and lets String compute its hash lazily and cache it in a field. The substring option describes pre-7u6 behaviour: modern JDKs copy the requested range, which is O(n) but avoids the memory-leak of retaining a huge parent array.",
+        "ru": "Именно неизменяемость делает строки потокобезопасными по своей природе и позволяет String лениво вычислять хеш и кэшировать его в поле. Вариант про substring описывает поведение до 7u6: современные JDK копируют запрошенный диапазон — это O(n), зато нет утечки памяти из-за удержания огромного родительского массива."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html",
+        "https://bugs.openjdk.org/browse/JDK-7168044"
+      ]
+    },
+    {
+      "id": "java-core.strings.003",
+      "section": "strings",
+      "difficulty": "medium",
+      "text": {
+        "en": "How does javac 9+ compile a non-constant string concatenation such as \"id=\" + id + \":\" + name?",
+        "ru": "Как javac 9+ компилирует неконстантную конкатенацию строк вида \"id=\" + id + \":\" + name?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It still emits a StringBuilder append chain; invokedynamic is used only inside text blocks.",
+            "ru": "Он по-прежнему генерирует цепочку StringBuilder.append; invokedynamic используется только внутри текстовых блоков."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It routes the result through the string pool, so every concatenation result is interned.",
+            "ru": "Он проводит результат через пул строк, поэтому каждый результат конкатенации попадает в пул."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It emits one invokedynamic bound to StringConcatFactory, so the JDK chooses the strategy at run time.",
+            "ru": "Он генерирует один invokedynamic, привязанный к StringConcatFactory, и JDK выбирает стратегию во время выполнения."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It uses invokedynamic for constant expressions too, replacing compile-time constant folding.",
+            "ru": "Он применяет invokedynamic и к константным выражениям, заменяя свёртку констант на этапе компиляции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It rewrites the expression so that repeating it inside a loop stays linear in the total length.",
+            "ru": "Он переписывает выражение так, что его повторение в цикле остаётся линейным по суммарной длине."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "JEP 280 replaced the StringBuilder chain with a single invokedynamic whose bootstrap method is StringConcatFactory.makeConcatWithConstants, so the concatenation strategy can be improved in the JDK without recompiling user code. Constant expressions are still folded by javac and never reach the call site, and each concatenation in a loop still allocates a new String, so loops remain quadratic.",
+        "ru": "JEP 280 заменил цепочку StringBuilder на один invokedynamic с bootstrap-методом StringConcatFactory.makeConcatWithConstants, поэтому стратегию конкатенации можно улучшать в JDK без перекомпиляции пользовательского кода. Константные выражения по-прежнему свёртываются javac и до call site не доходят, а каждая конкатенация в цикле всё так же создаёт новую строку, так что цикл остаётся квадратичным."
+      },
+      "sources": [
+        "https://openjdk.org/jeps/280",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/invoke/StringConcatFactory.html"
+      ]
+    },
+    {
+      "id": "java-core.strings.004",
+      "section": "strings",
+      "difficulty": "medium",
+      "text": {
+        "en": "What happens when this code runs?",
+        "ru": "Что произойдёт при выполнении этого кода?"
+      },
+      "code": "String s = null;\nswitch (s) {\n    case \"a\" -> System.out.println(\"a\");\n    case \"b\" -> System.out.println(\"b\");\n    default -> System.out.println(\"default\");\n}",
+      "options": [
+        {
+          "text": {
+            "en": "It prints nothing; the switch is skipped because no label matches.",
+            "ru": "Ничего не выводится: switch пропускается, поскольку ни одна метка не совпала."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It does not compile: a String selector expression must be provably non-null.",
+            "ru": "Код не компилируется: выражение-селектор типа String должно быть доказуемо не-null."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It prints default, because the default branch covers the null selector.",
+            "ru": "Выводится default, потому что ветка default покрывает и null-селектор."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It throws MatchException, since arrow labels require exhaustive matching.",
+            "ru": "Бросается MatchException, поскольку arrow-метки требуют исчерпывающего сопоставления."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It throws NullPointerException, because there is no case null label.",
+            "ru": "Бросается NullPointerException, потому что нет метки case null."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A switch whose selector is a reference type throws NullPointerException on a null selector unless the switch block contains a case null label; default does not catch null. Arrow form changes only fall-through, not null handling.",
+        "ru": "switch с селектором ссылочного типа бросает NullPointerException на null-селекторе, если в блоке нет метки case null; default null не перехватывает. Arrow-форма меняет только поведение fall-through, но не обработку null."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.11.3",
+        "https://openjdk.org/jeps/441"
+      ]
+    },
+    {
+      "id": "java-core.strings.005",
+      "section": "strings",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about StringBuilder and StringBuffer is TRUE?",
+        "ru": "Какое утверждение о StringBuilder и StringBuffer верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "StringBuilder is thread-safe when the variable holding it is declared final.",
+            "ru": "StringBuilder потокобезопасен, если переменная, которая его хранит, объявлена final."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "StringBuffer is faster on a single thread because it caches its char array between calls.",
+            "ru": "StringBuffer быстрее в одном потоке, потому что кэширует свой массив символов между вызовами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Since JDK 9 javac silently rewrites StringBuffer usages into StringBuilder ones.",
+            "ru": "С JDK 9 javac молча заменяет использование StringBuffer на StringBuilder."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "StringBuffer synchronizes each method, but a sequence of calls on it is still not atomic.",
+            "ru": "StringBuffer синхронизирует каждый метод, но последовательность вызовов всё равно не атомарна."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The two classes implement different interfaces, so they are not interchangeable in an API.",
+            "ru": "Эти классы реализуют разные интерфейсы, поэтому в API они не взаимозаменяемы."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Per-method synchronization gives you no help with multi-step logic such as \"check length, then append\", so StringBuffer rarely fixes a real race; it only costs you uncontended lock overhead. Both classes extend the same package-private AbstractStringBuilder and implement CharSequence and Appendable, and final on a local variable says nothing about the mutable object it references.",
+        "ru": "Синхронизация каждого метода не помогает с многошаговой логикой вида «проверить длину, потом дописать», поэтому StringBuffer редко устраняет реальную гонку — он лишь добавляет накладные расходы на незанятый монитор. Оба класса наследуют один и тот же package-private AbstractStringBuilder и реализуют CharSequence и Appendable, а final у локальной переменной ничего не говорит об изменяемости объекта, на который она ссылается."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/StringBuffer.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/StringBuilder.html"
+      ]
+    },
+    {
+      "id": "java-core.strings.006",
+      "section": "strings",
+      "difficulty": "hard",
+      "text": {
+        "en": "What does this program print?",
+        "ru": "Что выведет эта программа?"
+      },
+      "code": "String s = \"\"\"\n    Hello \\\n    World\"\"\";\nSystem.out.println(s);",
+      "options": [
+        {
+          "text": {
+            "en": "Hello World",
+            "ru": "Hello World"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A compile-time error: illegal escape sequence in a text block",
+            "ru": "Ошибка компиляции: недопустимая escape-последовательность в текстовом блоке"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "    Hello     World, with the source indentation preserved",
+            "ru": "    Hello     World, с сохранением отступов из исходника"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Hello and World on two separate lines",
+            "ru": "Hello и World на двух отдельных строках"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Hello \\World",
+            "ru": "Hello \\World"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Text block content is processed in three steps: line terminators are normalised, incidental white space is stripped (here the common four-space indent), and only then escapes are translated. The trailing backslash is the text-block line-continuation escape, so the newline between the two lines disappears and the space before the backslash survives, yielding a single line.",
+        "ru": "Содержимое текстового блока обрабатывается в три шага: нормализуются переводы строк, удаляется случайный отступ (здесь — общие четыре пробела) и только затем интерпретируются escape-последовательности. Завершающий обратный слэш — это escape продолжения строки, доступный в текстовых блоках, поэтому перевод строки между строками исчезает, а пробел перед слэшем сохраняется, и получается одна строка."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-3.html#jls-3.10.6",
+        "https://docs.oracle.com/en/java/javase/21/text-blocks/index.html"
+      ]
+    },
+    {
+      "id": "java-core.equals-hashcode.001",
+      "section": "equals-hashcode",
+      "difficulty": "easy",
+      "text": {
+        "en": "A class overrides equals() but keeps the inherited hashCode(). Instances are used as HashMap keys. What is the practical consequence?",
+        "ru": "Класс переопределяет equals(), но оставляет унаследованный hashCode(). Его объекты используются как ключи HashMap. Каково практическое следствие?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A lookup with an equal but distinct key object usually lands in another bucket and finds nothing.",
+            "ru": "Поиск по равному, но другому объекту-ключу обычно попадает в другую корзину и ничего не находит."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The code does not compile: overriding equals without hashCode is rejected by javac.",
+            "ru": "Код не скомпилируется: javac запрещает переопределять equals без hashCode."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Everything works, because HashMap compares keys with equals() and uses the hash only for sizing.",
+            "ru": "Всё работает, потому что HashMap сравнивает ключи через equals(), а хеш нужен лишь для выбора размера таблицы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "HashMap detects the mismatch and falls back to scanning all buckets with equals().",
+            "ru": "HashMap обнаруживает несоответствие и переходит к перебору всех корзин с помощью equals()."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "get() still works, but remove() silently fails, because remove() is the only Map method that consults hashCode().",
+            "ru": "get() ещё работает, а remove() молча ничего не удаляет, потому что только remove() из методов Map использует hashCode()."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Object.hashCode() is identity based, so two equal instances almost certainly hash to different buckets and the map never even compares them with equals(). The contract only requires equal objects to have equal hash codes and nothing in the JDK enforces it at compile time; every hash-based operation (get, put, remove, containsKey) starts from the hash, so none of them can recover by scanning other buckets.",
+        "ru": "Object.hashCode() основан на идентичности, поэтому два равных экземпляра почти наверняка попадают в разные бакеты, и до сравнения через equals() дело вообще не доходит. Контракт требует лишь равных хеш-кодов у равных объектов, и ничто в JDK не проверяет это при компиляции; любая операция на хеше (get, put, remove, containsKey) начинается с хеша, поэтому ни одна из них не спасётся обходом других бакетов."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashMap.html"
+      ]
+    },
+    {
+      "id": "java-core.equals-hashcode.002",
+      "section": "equals-hashcode",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about the equals()/hashCode() contract is TRUE?",
+        "ru": "Какое утверждение о контракте equals()/hashCode() верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "hashCode() must return different values for objects that are not equal.",
+            "ru": "hashCode() обязан возвращать разные значения для неравных объектов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Equal objects may have different hash codes as long as both are non-zero.",
+            "ru": "У равных объектов могут быть разные хеш-коды, если оба не равны нулю."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "equals() may return different results on repeated calls even when no field it compares has changed.",
+            "ru": "equals() может возвращать разные результаты при повторных вызовах, даже если ни одно из сравниваемых полей не изменилось."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "For every non-null reference x, x.equals(null) must return false.",
+            "ru": "Для любой не-null ссылки x вызов x.equals(null) обязан вернуть false."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "equals() must throw NullPointerException when the argument is null.",
+            "ru": "equals() обязан бросить NullPointerException, если аргумент равен null."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The contract explicitly requires x.equals(null) to be false, which is why the usual instanceof check is enough — it already rejects null. Distinct objects are allowed to share a hash code (that is just a collision), but equal objects must never disagree on it, and equals() must be consistent while the fields used in the comparison do not change.",
+        "ru": "Контракт прямо требует, чтобы x.equals(null) возвращал false, поэтому обычной проверки instanceof достаточно — она уже отсекает null. Разным объектам разрешено иметь одинаковый хеш-код (это просто коллизия), но у равных объектов он расходиться не может, а equals() обязан быть согласованным, пока не меняются участвующие в сравнении поля."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)"
+      ]
+    },
+    {
+      "id": "java-core.equals-hashcode.003",
+      "section": "equals-hashcode",
+      "difficulty": "medium",
+      "text": {
+        "en": "What does this program print?",
+        "ru": "Что выведет эта программа?"
+      },
+      "code": "class Key {\n    int id;\n    Key(int id) { this.id = id; }\n    @Override public boolean equals(Object o) { return o instanceof Key k && k.id == id; }\n    @Override public int hashCode() { return Integer.hashCode(id); }\n}\n\nSet<Key> set = new HashSet<>();\nKey k = new Key(1);\nset.add(k);\nk.id = 2;\nSystem.out.println(set.contains(k) + \" \" + set.contains(new Key(1)) + \" \" + set.size());",
+      "options": [
+        {
+          "text": {
+            "en": "true false 1",
+            "ru": "true false 1"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "false false 1",
+            "ru": "false false 1"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "false true 1",
+            "ru": "false true 1"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "false false 2",
+            "ru": "false false 2"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "true true 1",
+            "ru": "true true 1"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The element was stored in the bucket for hash(1); after the mutation, contains(k) hashes to the bucket for 2 and never sees it, while contains(new Key(1)) reaches the right bucket but equals() now compares 1 against the mutated id 2. The element is still there, so size() is 1 — the object has become unreachable through the set's own API.",
+        "ru": "Элемент был положен в корзину для hash(1); после мутации contains(k) хеширует в корзину для 2 и его не видит, а contains(new Key(1)) попадает в нужную корзину, но equals() теперь сравнивает 1 с изменённым id, равным 2. Элемент никуда не пропал, поэтому size() равен 1 — просто объект стал недостижим через собственный API множества."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashSet.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashMap.html"
+      ]
+    },
+    {
+      "id": "java-core.equals-hashcode.004",
+      "section": "equals-hashcode",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about ordering in TreeSet and TreeMap is TRUE?",
+        "ru": "Какое утверждение об упорядочивании в TreeSet и TreeMap верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "They decide uniqueness with compareTo/compare, so a comparator inconsistent with equals merges unequal elements.",
+            "ru": "Уникальность они определяют через compareTo/compare, поэтому несогласованный с equals компаратор склеивает неравные элементы."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The element type must implement both Comparable and Comparator for a TreeMap to work.",
+            "ru": "Чтобы TreeMap работал, тип элемента должен реализовывать и Comparable, и Comparator."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "javac rejects a compareTo() that is inconsistent with the class's equals().",
+            "ru": "javac отвергает compareTo(), несогласованный с equals() того же класса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Collections.sort() throws IllegalArgumentException whenever compareTo is inconsistent with equals.",
+            "ru": "Collections.sort() бросает IllegalArgumentException всякий раз, когда compareTo несогласован с equals."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "They use equals() for uniqueness and consult the comparator only to decide iteration order, exactly as LinkedHashSet does.",
+            "ru": "Уникальность они определяют через equals(), а компаратор используют только для порядка обхода — ровно так же, как LinkedHashSet."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The sorted collections are documented to be \"consistent with equals\" only if the ordering is; internally they treat compare(a, b) == 0 as \"same key\", so a comparator on a subset of fields silently drops elements. The IllegalArgumentException \"Comparison method violates its general contract!\" comes from TimSort detecting a non-transitive comparator, which is a different defect.",
+        "ru": "Отсортированные коллекции соответствуют equals только если этому соответствует сам порядок: внутри они считают compare(a, b) == 0 признаком «того же ключа», поэтому компаратор по части полей молча теряет элементы. Исключение IllegalArgumentException «Comparison method violates its general contract!» бросает TimSort, обнаружив нетранзитивный компаратор — это другой дефект."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/TreeSet.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Comparable.html"
+      ]
+    },
+    {
+      "id": "java-core.equals-hashcode.005",
+      "section": "equals-hashcode",
+      "difficulty": "medium",
+      "text": {
+        "en": "What does this snippet print?",
+        "ru": "Что выведет этот фрагмент?"
+      },
+      "code": "record Point(int x, int y) { }\nrecord Box(int[] data) { }\n\nvar p1 = new Point(1, 2);\nvar p2 = new Point(1, 2);\nvar b1 = new Box(new int[] { 1 });\nvar b2 = new Box(new int[] { 1 });\nSystem.out.println(p1.equals(p2) + \" \" + b1.equals(b2));",
+      "options": [
+        {
+          "text": {
+            "en": "It does not compile: a record component may not have an array type.",
+            "ru": "Код не компилируется: компонента record не может иметь тип массива."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "true false",
+            "ru": "true false"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "true true",
+            "ru": "true true"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "false true",
+            "ru": "false true"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "false false",
+            "ru": "false false"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The generated equals() compares primitive components with == (Float.equals and Double.equals for floating point) and reference components with Objects.equals(), which for arrays means reference identity. So Point works as expected while Box needs a hand-written equals()/hashCode() using Arrays.equals().",
+        "ru": "Сгенерированный equals() сравнивает примитивные компоненты через == (для float и double — через Float.equals и Double.equals), а ссылочные — через Objects.equals(), что для массивов означает сравнение ссылок. Поэтому Point ведёт себя ожидаемо, а Box требует собственных equals()/hashCode() на базе Arrays.equals()."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html#equals(java.lang.Object)",
+        "https://docs.oracle.com/en/java/javase/21/language/records.html"
+      ]
+    },
+    {
+      "id": "java-core.equals-hashcode.006",
+      "section": "equals-hashcode",
+      "difficulty": "hard",
+      "text": {
+        "en": "What does this code print, and which part of the equals contract does it violate?",
+        "ru": "Что выведет этот код и какую часть контракта equals он нарушает?"
+      },
+      "code": "class Point {\n    final int x, y;\n    Point(int x, int y) { this.x = x; this.y = y; }\n    @Override public boolean equals(Object o) {\n        if (!(o instanceof Point p)) return false;\n        return p.x == x && p.y == y;\n    }\n    @Override public int hashCode() { return 31 * x + y; }\n}\n\nclass ColorPoint extends Point {\n    final String color;\n    ColorPoint(int x, int y, String color) { super(x, y); this.color = color; }\n    @Override public boolean equals(Object o) {\n        if (!(o instanceof ColorPoint cp)) return false;\n        return super.equals(o) && cp.color.equals(color);\n    }\n    @Override public int hashCode() { return 31 * super.hashCode() + color.hashCode(); }\n}\n\nPoint p = new Point(1, 2);\nColorPoint cp = new ColorPoint(1, 2, \"red\");\nSystem.out.println(p.equals(cp) + \" \" + cp.equals(p));",
+      "options": [
+        {
+          "text": {
+            "en": "It does not compile: equals() may not be overridden twice in the same hierarchy.",
+            "ru": "Код не компилируется: equals() нельзя переопределять дважды в одной иерархии."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "true false — equals is fine, only hashCode is inconsistent between the two classes.",
+            "ru": "true false — equals корректен, несогласован только hashCode между двумя классами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "true false — equals is not symmetric, so results depend on the argument order.",
+            "ru": "true false — equals не симметричен, поэтому результат зависит от порядка аргументов."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "true true — the call to super.equals() makes the comparison symmetric again.",
+            "ru": "true true — вызов super.equals() снова делает сравнение симметричным."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "false false — the instanceof check rejects instances of a different class in both directions.",
+            "ru": "false false — проверка instanceof в обе стороны отвергает объекты другого класса."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "p.equals(cp) is true because a ColorPoint is a Point with matching coordinates, but cp.equals(p) is false because a Point is not a ColorPoint — symmetry is broken, and a List.contains() can then answer differently depending on which object is in the list. The classic fixes are getClass() comparison instead of instanceof, or replacing the inheritance with composition plus an asPoint() view.",
+        "ru": "p.equals(cp) возвращает true, потому что ColorPoint — это Point с теми же координатами, а cp.equals(p) возвращает false, потому что Point не является ColorPoint: симметрия нарушена, и, например, List.contains() будет отвечать по-разному в зависимости от того, какой объект лежит в списке. Классические решения — сравнение через getClass() вместо instanceof либо замена наследования композицией с методом-представлением asPoint()."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)"
+      ]
+    },
+    {
+      "id": "java-core.collections.001",
+      "section": "collections",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about ArrayList and LinkedList is TRUE?",
+        "ru": "Какое утверждение об ArrayList и LinkedList верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "LinkedList gives O(1) insertion only when you already hold the position, for example via an Iterator.",
+            "ru": "LinkedList даёт вставку за O(1) только если позиция уже есть на руках — например, через Iterator."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Appending to an ArrayList is O(n) on every call, because the backing array has to be copied to make room for the new element.",
+            "ru": "Добавление в конец ArrayList всегда O(n), потому что при каждом вызове массив копируется, чтобы освободить место под новый элемент."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "LinkedList.add(int index, E e) is O(1), because it only has to relink two neighbouring nodes.",
+            "ru": "LinkedList.add(int index, E e) работает за O(1), потому что достаточно перелинковать два соседних узла."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "LinkedList uses less memory per element, since it stores no unused array slots.",
+            "ru": "LinkedList расходует меньше памяти на элемент, поскольку не хранит незанятых ячеек массива."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ArrayList.remove(0) is O(1), because the list only advances an internal offset.",
+            "ru": "ArrayList.remove(0) работает за O(1), потому что список лишь сдвигает внутреннее смещение."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Insertion into a LinkedList at a given index first walks the chain to that index, so add(index, e) is O(n); the O(1) benefit only materialises with ListIterator.add or the deque ends. ArrayList.remove(0) has to System.arraycopy the tail, appending is amortised O(1) because capacity grows by half whenever it runs out, and each LinkedList node carries two extra references plus an object header, so it uses more memory than ArrayList's slack capacity.",
+        "ru": "Вставка в LinkedList по индексу сначала проходит цепочку до этого индекса, поэтому add(index, e) — это O(n); выигрыш O(1) появляется только у ListIterator.add и у концов дека. ArrayList.remove(0) вынужден сдвигать хвост через System.arraycopy, добавление в конец амортизированно O(1), так как ёмкость растёт на половину при исчерпании, а каждый узел LinkedList несёт две дополнительные ссылки и заголовок объекта, поэтому памяти он занимает больше, чем запас ёмкости ArrayList."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedList.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/ArrayList.html"
+      ]
+    },
+    {
+      "id": "java-core.collections.002",
+      "section": "collections",
+      "difficulty": "easy",
+      "text": {
+        "en": "What happens when this code runs?",
+        "ru": "Что произойдёт при выполнении этого кода?"
+      },
+      "code": "List<String> list = List.of(\"a\", \"b\");\nList<String> copy = new ArrayList<>(list);\ncopy.add(\"c\");\nlist.set(0, \"z\");",
+      "options": [
+        {
+          "text": {
+            "en": "It does not compile, because List.of returns a type that does not declare set.",
+            "ru": "Код не компилируется, потому что List.of возвращает тип, в котором не объявлен set."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It throws UnsupportedOperationException on the list.set call.",
+            "ru": "На вызове list.set бросается UnsupportedOperationException."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It throws ConcurrentModificationException, because copy still iterates the source list.",
+            "ru": "Бросается ConcurrentModificationException, потому что copy всё ещё итерирует исходный список."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It runs without error; list.set silently does nothing on an unmodifiable list.",
+            "ru": "Код выполняется без ошибок: list.set на неизменяемом списке просто ничего не делает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It throws UnsupportedOperationException on the copy.add call, since copy is a view of an immutable list.",
+            "ru": "UnsupportedOperationException бросается на copy.add, поскольку copy — представление неизменяемого списка."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "List.of returns an unmodifiable list whose mutators all throw UnsupportedOperationException, and set is a mutator. The ArrayList constructor copies the elements, so copy is an independent, fully modifiable list — adding to it is fine.",
+        "ru": "List.of возвращает неизменяемый список, все модифицирующие операции которого бросают UnsupportedOperationException, а set — как раз модифицирующая операция. Конструктор ArrayList копирует элементы, поэтому copy — независимый и полностью изменяемый список, и добавление в него проходит нормально."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html#of(E...)",
+        "https://docs.oracle.com/en/java/javase/21/core/creating-immutable-lists-sets-and-maps.html"
+      ]
+    },
+    {
+      "id": "java-core.collections.003",
+      "section": "collections",
+      "difficulty": "medium",
+      "text": {
+        "en": "What does this program print?",
+        "ru": "Что выведет эта программа?"
+      },
+      "code": "List<String> list = new ArrayList<>(List.of(\"a\", \"b\", \"c\"));\nfor (String s : list) {\n    if (s.equals(\"b\")) {\n        list.remove(s);\n    }\n}\nSystem.out.println(list);",
+      "options": [
+        {
+          "text": {
+            "en": "It throws IndexOutOfBoundsException on the next iteration.",
+            "ru": "На следующей итерации бросается IndexOutOfBoundsException."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "[a, c]",
+            "ru": "[a, c]"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "[a, b, c]",
+            "ru": "[a, b, c]"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "[a]",
+            "ru": "[a]"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It throws ConcurrentModificationException.",
+            "ru": "Бросается ConcurrentModificationException."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "ArrayList's iterator only compares cursor != size in hasNext(), and the modCount check lives in next(). Removing the second-to-last element makes cursor equal to the new size, so the loop ends before next() is called again and the fail-fast check never fires. Removing \"a\" instead would throw ConcurrentModificationException.",
+        "ru": "Итератор ArrayList в hasNext() лишь сравнивает cursor != size, а проверка modCount находится в next(). Удаление предпоследнего элемента делает cursor равным новому size, поэтому цикл завершается до очередного вызова next(), и fail-fast-проверка не срабатывает. Если бы удалялся \"a\", было бы ConcurrentModificationException."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/ArrayList.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/ConcurrentModificationException.html"
+      ]
+    },
+    {
+      "id": "java-core.collections.004",
+      "section": "collections",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about the HashMap implementation in the JDK (Java 8 and later) is TRUE?",
+        "ru": "Какое утверждение о реализации HashMap в JDK (Java 8 и новее) верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A bin becomes a red-black tree only if it reaches 8 nodes while the table capacity is at least 64.",
+            "ru": "Корзина превращается в красно-чёрное дерево только при достижении 8 узлов и ёмкости таблицы не менее 64."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Once a bin has been treeified it stays a tree for the lifetime of the map.",
+            "ru": "Однажды превращённая в дерево корзина остаётся деревом до конца жизни map."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A bin becomes a red-black tree as soon as it reaches 8 nodes, regardless of the table capacity.",
+            "ru": "Корзина превращается в красно-чёрное дерево сразу при достижении 8 узлов, независимо от ёмкости таблицы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The table is resized once the number of entries exceeds the capacity, i.e. at load factor 1.0.",
+            "ru": "Таблица расширяется, когда число записей превышает ёмкость, то есть при коэффициенте загрузки 1.0."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Treeification requires the keys to implement Comparable, otherwise put throws ClassCastException.",
+            "ru": "Для древовидности ключи обязаны реализовать Comparable, иначе put бросит ClassCastException."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "TREEIFY_THRESHOLD is 8 but MIN_TREEIFY_CAPACITY is 64: below that capacity a long bin triggers a resize instead, because spreading entries over more buckets is cheaper than building a tree. The default load factor is 0.75, and a tree shrinks back to a list at UNTREEIFY_THRESHOLD = 6 during a resize; non-Comparable keys are ordered by a class-name and identity-hash tie-break rather than rejected.",
+        "ru": "TREEIFY_THRESHOLD равен 8, но MIN_TREEIFY_CAPACITY равен 64: при меньшей ёмкости длинная корзина вызывает не построение дерева, а resize, поскольку размазать записи по большему числу корзин дешевле. Коэффициент загрузки по умолчанию — 0.75, а при resize дерево возвращается в список по UNTREEIFY_THRESHOLD = 6; ключи без Comparable упорядочиваются по имени класса и identity hash, а не отвергаются."
+      },
+      "sources": [
+        "https://github.com/openjdk/jdk/blob/master/src/java.base/share/classes/java/util/HashMap.java",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashMap.html"
+      ]
+    },
+    {
+      "id": "java-core.collections.005",
+      "section": "collections",
+      "difficulty": "medium",
+      "text": {
+        "en": "What happens when this code runs?",
+        "ru": "Что произойдёт при выполнении этого кода?"
+      },
+      "code": "int[] nums = { 1, 2, 3 };\nSystem.out.println(Arrays.asList(nums).size());\n\nList<Integer> list = Arrays.asList(1, 2, 3);\nlist.set(0, 9);\nlist.add(4);",
+      "options": [
+        {
+          "text": {
+            "en": "It prints 1 and then throws UnsupportedOperationException already on set.",
+            "ru": "Печатается 1, и UnsupportedOperationException бросается уже на set."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It prints 3 and then throws UnsupportedOperationException on add.",
+            "ru": "Печатается 3, затем на add бросается UnsupportedOperationException."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It prints 3 and completes normally; the list ends up with four elements.",
+            "ru": "Печатается 3 и код завершается нормально; в списке оказывается четыре элемента."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It prints 1 and then throws UnsupportedOperationException on add.",
+            "ru": "Печатается 1, затем на add бросается UnsupportedOperationException."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It does not compile: Arrays.asList cannot accept an int[] argument.",
+            "ru": "Код не компилируется: Arrays.asList не принимает аргумент типа int[]."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A type variable cannot be a primitive, so T is inferred as int[] and the varargs call wraps the whole array in a single-element List<int[]> — hence size 1. Arrays.asList returns a fixed-size list backed by the array: set writes through to the array and works, while add and remove throw UnsupportedOperationException.",
+        "ru": "Типовой параметр не может быть примитивом, поэтому T выводится как int[], и varargs-вызов оборачивает весь массив в List<int[]> из одного элемента — отсюда размер 1. Arrays.asList возвращает список фиксированного размера, работающий поверх массива: set пишет в массив и проходит успешно, а add и remove бросают UnsupportedOperationException."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Arrays.html#asList(T...)"
+      ]
+    },
+    {
+      "id": "java-core.collections.006",
+      "section": "collections",
+      "difficulty": "hard",
+      "text": {
+        "en": "What does this program print?",
+        "ru": "Что выведет эта программа?"
+      },
+      "code": "Map<Integer, String> cache = new LinkedHashMap<>(16, 0.75f, true) {\n    @Override protected boolean removeEldestEntry(Map.Entry<Integer, String> eldest) {\n        return size() > 2;\n    }\n};\ncache.put(1, \"a\");\ncache.put(2, \"b\");\ncache.get(1);\ncache.put(3, \"c\");\nSystem.out.println(cache.keySet());",
+      "options": [
+        {
+          "text": {
+            "en": "[3, 1]",
+            "ru": "[3, 1]"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "[2, 3]",
+            "ru": "[2, 3]"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "[1, 3]",
+            "ru": "[1, 3]"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "[2, 1]",
+            "ru": "[2, 1]"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "[1, 2, 3]",
+            "ru": "[1, 2, 3]"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The third constructor argument turns on access order, so get(1) moves key 1 to the end of the linked list, leaving the order 2, 1. Inserting key 3 makes size 3, removeEldestEntry returns true and the eldest — now key 2 — is evicted, so iteration yields 1 then 3. This is the standard way to build an LRU cache on top of LinkedHashMap.",
+        "ru": "Третий аргумент конструктора включает access order, поэтому get(1) перемещает ключ 1 в конец связного списка и порядок становится 2, 1. Вставка ключа 3 доводит размер до 3, removeEldestEntry возвращает true, и вытесняется самый старый элемент — теперь это ключ 2, — поэтому обход даёт 1, затем 3. Так на базе LinkedHashMap и строят LRU-кэш."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedHashMap.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedHashMap.html#removeEldestEntry(java.util.Map.Entry)"
+      ]
+    },
+    {
+      "id": "java-core.generics.001",
+      "section": "generics",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about type erasure is TRUE?",
+        "ru": "Какое утверждение о стирании типов верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because the type argument is erased, new T[10] is allowed and simply creates an Object[].",
+            "ru": "Поскольку типовой аргумент стирается, выражение new T[10] допустимо и просто создаёт Object[]."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Erasure replaces every type variable with Object, so a bound like <T extends Number> is lost in the bytecode.",
+            "ru": "Стирание заменяет любую типовую переменную на Object, поэтому ограничение <T extends Number> в байткоде теряется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The actual type arguments of an object can be read back at run time from getClass().getTypeParameters().",
+            "ru": "Фактические типовые аргументы объекта можно узнать во время выполнения через getClass().getTypeParameters()."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Erasure applies only to generic interfaces; generic classes keep their type arguments in the class file.",
+            "ru": "Стирание применяется только к обобщённым интерфейсам; обобщённые классы сохраняют типовые аргументы в class-файле."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "List<String> and List<Integer> share one runtime class, so a test like x instanceof List<String> is illegal.",
+            "ru": "List<String> и List<Integer> имеют один и тот же класс во время выполнения, поэтому проверка x instanceof List<String> недопустима."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "All parameterisations of a generic type erase to the same raw class, which is exactly why a parameterised type is not a reifiable type and cannot appear in instanceof (only List<?> or the raw List can). A type variable erases to the erasure of its leftmost bound — Number for <T extends Number> — and getTypeParameters() returns the declared variables, not the arguments used at the call site.",
+        "ru": "Все параметризации обобщённого типа стираются в один и тот же raw-класс — именно поэтому параметризованный тип не является reifiable и не может стоять в instanceof (там допустимы только List<?> или raw List). Типовая переменная стирается до стирания своего левого ограничения — Number для <T extends Number>, — а getTypeParameters() возвращает объявленные переменные, а не аргументы из места использования."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/tutorial/java/generics/erasure.html",
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-4.html#jls-4.6"
+      ]
+    },
+    {
+      "id": "java-core.generics.002",
+      "section": "generics",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about this code is TRUE?",
+        "ru": "Какое утверждение об этом коде верно?"
+      },
+      "code": "Object[] arr = new String[2];\narr[0] = Integer.valueOf(1);",
+      "options": [
+        {
+          "text": {
+            "en": "It compiles and runs, leaving an Integer stored inside a String[] instance.",
+            "ru": "Код компилируется и работает, оставляя Integer внутри объекта типа String[]."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It does not compile, because String[] is not assignable to Object[].",
+            "ru": "Код не компилируется, потому что String[] нельзя присвоить Object[]."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It compiles and throws ClassCastException at run time on the array store.",
+            "ru": "Код компилируется и во время выполнения бросает ClassCastException на записи в массив."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It does not compile: javac tracks the run-time type of arr through the assignment and rejects storing an Integer into a String[].",
+            "ru": "Не компилируется: javac отслеживает фактический тип arr через присваивание и запрещает запись Integer в String[]."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It compiles and throws ArrayStoreException at run time; the List<Object> analogue is rejected by javac.",
+            "ru": "Код компилируется и во время выполнения бросает ArrayStoreException; аналог с List<Object> javac отвергает."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Java arrays are covariant, so String[] is a subtype of Object[] and the assignment compiles; the JVM checks every array store and throws ArrayStoreException — a deliberately specific exception, not ClassCastException. Generic types are invariant, so the analogous List<Object> l = new ArrayList<String>() is caught at compile time instead.",
+        "ru": "Массивы в Java ковариантны, поэтому String[] является подтипом Object[] и присваивание компилируется; JVM проверяет каждую запись в массив и бросает именно ArrayStoreException, а не ClassCastException. Обобщённые типы инвариантны, поэтому аналогичное List<Object> l = new ArrayList<String>() отсекается уже на компиляции."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-10.html#jls-10.10",
+        "https://docs.oracle.com/javase/tutorial/java/generics/subtyping.html"
+      ]
+    },
+    {
+      "id": "java-core.generics.003",
+      "section": "generics",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement correctly describes the PECS rule for wildcards?",
+        "ru": "Какое утверждение верно описывает правило PECS для wildcards?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "List<?> permits adding any Object, because the element type is unknown and therefore unconstrained.",
+            "ru": "List<?> позволяет добавить любой Object, потому что тип элемента неизвестен и потому ничем не ограничен."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "From List<? extends T> you can read T but add only null; into List<? super T> you can add T but reads give Object.",
+            "ru": "Из List<? extends T> можно читать T, но добавлять только null; в List<? super T> можно добавлять T, но чтение даёт Object."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Into List<? extends T> you can add T but reads give Object; for List<? super T> it is the other way round.",
+            "ru": "В List<? extends T> можно добавлять T, но чтение даёт Object; для List<? super T> всё наоборот."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "List<? super T> forbids both add and get, since the exact element type cannot be determined.",
+            "ru": "List<? super T> запрещает и add, и get, поскольку точный тип элемента определить нельзя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both wildcard forms permit add; only List<? extends T> additionally permits get.",
+            "ru": "Обе формы wildcard разрешают add; и только List<? extends T> дополнительно разрешает get."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Producer Extends, Consumer Super: an upper-bounded wildcard is safe to read as T because every possible element is a T, but nothing except null is known to be assignable to the unknown subtype. A lower-bounded wildcard accepts T on write, while reads can only be typed as Object, and List<?> is effectively read-only for the same reason.",
+        "ru": "Producer Extends, Consumer Super: из wildcard с верхней границей безопасно читать T, поскольку любой возможный элемент является T, но записать в неизвестный подтип гарантированно можно только null. Wildcard с нижней границей принимает T на запись, а чтение типизируется лишь как Object; List<?> по той же причине фактически доступен только для чтения."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/tutorial/java/generics/wildcardGuidelines.html",
+        "https://docs.oracle.com/javase/tutorial/java/generics/upperBounded.html"
+      ]
+    },
+    {
+      "id": "java-core.generics.004",
+      "section": "generics",
+      "difficulty": "medium",
+      "text": {
+        "en": "Why does this class fail to compile?",
+        "ru": "Почему этот класс не компилируется?"
+      },
+      "code": "class Store {\n    void put(List<String> values) { }\n    void put(List<Integer> values) { }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "Both methods erase to put(List), so they have the same signature after erasure — a name clash.",
+            "ru": "Оба метода стираются в put(List), то есть после стирания их сигнатуры совпадают — это name clash."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It does compile; the JVM disambiguates the two methods using the generic signature attribute.",
+            "ru": "Он компилируется; JVM различает эти методы по атрибуту с обобщённой сигнатурой."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "List<String> and List<Integer> are unrelated by subtyping, and overloads must be related.",
+            "ru": "List<String> и List<Integer> не связаны отношением подтипирования, а перегрузки обязаны быть связаны."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Overloading is not allowed for methods whose parameters are parameterised types.",
+            "ru": "Перегрузка запрещена для методов, параметры которых являются параметризованными типами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It does compile, but any call such as put(List.of()) is reported as ambiguous.",
+            "ru": "Он компилируется, но любой вызов вида put(List.of()) объявляется неоднозначным."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Method overloading is resolved on erased signatures, and both parameters erase to the raw List, so javac reports \"name clash: both methods have the same erasure\". The Signature attribute records generic information for compilers and reflection, but the JVM's method resolution never uses it for dispatch.",
+        "ru": "Перегрузка разрешается по стёртым сигнатурам, а оба параметра стираются в raw List, поэтому javac сообщает «name clash: both methods have the same erasure». Атрибут Signature хранит обобщённую информацию для компиляторов и рефлексии, но при разрешении методов JVM его не использует."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.4.8.3",
+        "https://docs.oracle.com/javase/tutorial/java/generics/erasure.html"
+      ]
+    },
+    {
+      "id": "java-core.generics.005",
+      "section": "generics",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about the restrictions on type parameters is TRUE?",
+        "ru": "Какое утверждение об ограничениях на типовые параметры верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A class's type parameter may be used in a static field as long as the field is declared final.",
+            "ru": "Типовой параметр класса можно использовать в static-поле, если поле объявлено final."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "new T[n] is legal if you suppress the unchecked warning at the declaration site.",
+            "ru": "Выражение new T[n] допустимо, если подавить unchecked-предупреждение в месте объявления."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "x instanceof T is allowed whenever T has an explicit upper bound such as <T extends Number>.",
+            "ru": "Проверка x instanceof T допустима, если у T есть явная верхняя граница, например <T extends Number>."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A class's type parameter is unusable in a static member; a static method must declare its own.",
+            "ru": "Типовой параметр класса нельзя использовать в static-члене; static-метод обязан объявить свой собственный."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "static <T> T create() { return new T(); } compiles, because T is declared on the method itself.",
+            "ru": "static <T> T create() { return new T(); } компилируется, поскольку T объявлен у самого метода."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A class type parameter belongs to an instance, so static members cannot refer to it — a static method needs its own <T>, as Collections.emptyList() does. Even then T is not reifiable: new T(), new T[n] and instanceof T are all compile-time errors regardless of bounds or warning suppression; the usual workarounds are (T[]) new Object[n] or a passed-in Class<T> / Supplier<T>.",
+        "ru": "Типовой параметр класса принадлежит экземпляру, поэтому static-члены на него ссылаться не могут — static-методу нужен собственный <T>, как у Collections.emptyList(). Но и тогда T не reifiable: new T(), new T[n] и instanceof T — ошибки компиляции независимо от границ и подавления предупреждений; обычные обходные пути — (T[]) new Object[n] либо переданный Class<T> или Supplier<T>."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/tutorial/java/generics/restrictions.html",
+        "https://docs.oracle.com/javase/tutorial/java/generics/methods.html"
+      ]
+    },
+    {
+      "id": "java-core.generics.006",
+      "section": "generics",
+      "difficulty": "hard",
+      "text": {
+        "en": "What happens when this program is compiled and run?",
+        "ru": "Что произойдёт при компиляции и запуске этой программы?"
+      },
+      "code": "static <T> T[] toArray(T... args) { return args; }\n\nstatic <T> T[] pickTwo(T a, T b) { return toArray(a, b); }\n\npublic static void main(String[] args) {\n    String[] attributes = pickTwo(\"good\", \"fast\");\n    System.out.println(attributes.length);\n}",
+      "options": [
+        {
+          "text": {
+            "en": "It throws ArrayStoreException when toArray writes the arguments into the varargs array.",
+            "ru": "Бросается ArrayStoreException, когда toArray записывает аргументы в varargs-массив."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It compiles with an unchecked warning and throws ClassCastException at run time.",
+            "ru": "Компилируется с unchecked-предупреждением и во время выполнения бросает ClassCastException."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It does not compile, because generic array creation of the form new T[] is forbidden.",
+            "ru": "Код не компилируется, потому что создание обобщённого массива вида new T[] запрещено."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It prints 2; the varargs array is created as a String[] at the pickTwo call site.",
+            "ru": "Печатается 2; varargs-массив создаётся как String[] в месте вызова pickTwo."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It does not compile: a varargs parameter may not have a type-variable element type.",
+            "ru": "Код не компилируется: у varargs-параметра не может быть типом элемента типовая переменная."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Inside pickTwo the type variable T is erased to Object, so the varargs array created for the toArray call is an Object[]. main then needs a String[], and javac inserts a checkcast on the returned value, which fails with \"[Ljava.lang.Object; cannot be cast to [Ljava.lang.String;\". This is why a generic varargs method that exposes its varargs array is unsafe, and why @SafeVarargs exists only for methods that do not leak it.",
+        "ru": "Внутри pickTwo типовая переменная T стёрта до Object, поэтому varargs-массив, созданный для вызова toArray, имеет тип Object[]. В main нужен String[], и javac вставляет checkcast для возвращённого значения, который падает с «[Ljava.lang.Object; cannot be cast to [Ljava.lang.String;». Именно поэтому обобщённый varargs-метод, который отдаёт наружу свой varargs-массив, небезопасен, а @SafeVarargs предназначен только для методов, которые его не выпускают."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.4.1",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/SafeVarargs.html"
+      ]
+    },
+    {
+      "id": "java-core.exceptions.001",
+      "section": "exceptions",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about the Throwable hierarchy and checked exceptions is TRUE?",
+        "ru": "Какое утверждение об иерархии Throwable и проверяемых исключениях верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Exception and every one of its subclasses are checked; Error is the only branch of Throwable exempt from the throws clause.",
+            "ru": "Exception и все его подклассы являются проверяемыми; только ветвь Error освобождена от объявления в throws."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Throwable itself is unchecked, because it is the root of the hierarchy.",
+            "ru": "Сам Throwable непроверяемый, поскольку он является корнем иерархии."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "catch (Throwable t) does not compile, because Throwable is an abstract class.",
+            "ru": "catch (Throwable t) не компилируется, поскольку Throwable — абстрактный класс."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The unchecked throwables are RuntimeException, Error and their subclasses; every other Throwable is checked.",
+            "ru": "Непроверяемые — это RuntimeException, Error и их наследники; все остальные наследники Throwable проверяемые."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Error is checked, which is why a method that may run out of memory must declare it.",
+            "ru": "Error относится к проверяемым, поэтому метод, который может исчерпать память, обязан его объявить."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The JLS defines the unchecked exception classes as the run-time exception classes and the error classes; RuntimeException is a subclass of Exception, so \"all Exception subclasses are checked\" is wrong. Throwable and its direct non-Error, non-RuntimeException descendants are checked, and Throwable is a concrete class you can catch.",
+        "ru": "JLS определяет непроверяемые классы исключений как run-time exception classes и error classes; RuntimeException — наследник Exception, поэтому утверждение «все наследники Exception проверяемые» неверно. Сам Throwable и его потомки, не относящиеся к Error и RuntimeException, проверяемые, а Throwable — конкретный класс, который можно поймать."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-11.html#jls-11.1.1",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Throwable.html"
+      ]
+    },
+    {
+      "id": "java-core.exceptions.002",
+      "section": "exceptions",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about try-with-resources is TRUE?",
+        "ru": "Какое утверждение о try-with-resources верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Resources are closed in the order in which they were declared in the resource specification.",
+            "ru": "Ресурсы закрываются в том порядке, в котором они объявлены в спецификации ресурсов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "If close() throws, its exception replaces the one thrown by the body and propagates instead, with the body's exception recorded as suppressed.",
+            "ru": "Если close() выбрасывает исключение, оно заменяет исключение из тела и распространяется вместо него, а исключение тела записывается как подавленное."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "If the body throws and close() also throws, the close() exception is added to the primary one as suppressed.",
+            "ru": "Если тело бросило исключение и close() тоже бросил, исключение из close() добавляется к основному как suppressed."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A resource variable may be reassigned inside the body to switch to another resource.",
+            "ru": "Переменную ресурса можно переприсвоить внутри тела, чтобы переключиться на другой ресурс."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "close() is skipped when the body throws, so a failing body may leak the resource.",
+            "ru": "Если тело бросило исключение, close() пропускается, поэтому ресурс может утечь."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The exception from the body wins and is the one you catch; exceptions from close() are attached via addSuppressed() and reachable with getSuppressed(). Resources are always closed in reverse declaration order, and each resource variable is implicitly final, so it cannot be reassigned.",
+        "ru": "Исключение из тела считается основным — именно его вы ловите, — а исключения из close() прикрепляются через addSuppressed() и доступны через getSuppressed(). Ресурсы всегда закрываются в порядке, обратном объявлению, а каждая переменная ресурса неявно final, поэтому переприсвоить её нельзя."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.20.3",
+        "https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html"
+      ]
+    },
+    {
+      "id": "java-core.exceptions.003",
+      "section": "exceptions",
+      "difficulty": "medium",
+      "text": {
+        "en": "What does this program print?",
+        "ru": "Что выведет эта программа?"
+      },
+      "code": "static int f() {\n    int x = 1;\n    try {\n        return x;\n    } finally {\n        x = 2;\n    }\n}\n\nstatic int g() {\n    try {\n        return 1;\n    } finally {\n        return 2;\n    }\n}\n\nSystem.out.println(f() + \" \" + g());",
+      "options": [
+        {
+          "text": {
+            "en": "It does not compile: a return statement is not allowed inside a finally block.",
+            "ru": "Код не компилируется: оператор return недопустим внутри блока finally."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "1 2",
+            "ru": "1 2"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "2 1",
+            "ru": "2 1"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "2 2",
+            "ru": "2 2"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "1 1",
+            "ru": "1 1"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "return evaluates its expression and stores the value before finally runs, so mutating the local variable afterwards has no effect and f() returns 1. A return inside finally, however, completes the whole method abruptly and discards the pending return value, so g() returns 2 — the reason IDEs warn against returning from finally.",
+        "ru": "return вычисляет выражение и сохраняет значение до выполнения finally, поэтому последующее изменение локальной переменной ни на что не влияет и f() возвращает 1. Но return внутри finally завершает весь метод и отбрасывает отложенное возвращаемое значение, поэтому g() возвращает 2 — именно за это IDE и предупреждают о return в finally."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.20.2",
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.17"
+      ]
+    },
+    {
+      "id": "java-core.exceptions.004",
+      "section": "exceptions",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about a multi-catch clause such as catch (IOException | SQLException e) is TRUE?",
+        "ru": "Какое утверждение о multi-catch вида catch (IOException | SQLException e) верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The parameter may be reassigned inside the block, which is the usual way to wrap and rethrow it.",
+            "ru": "Параметру можно присвоить новое значение внутри блока — так обычно и оборачивают исключение для повторного выброса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The parameter always has the static type Throwable, so calling a subtype method requires a cast.",
+            "ru": "Параметр всегда имеет статический тип Throwable, поэтому вызов метода подтипа требует приведения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The alternatives may be in a subtype relationship, for example IOException | FileNotFoundException.",
+            "ru": "Перечисленные типы могут быть связаны наследованием, например IOException | FileNotFoundException."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The parameter is implicitly final and its static type is the least upper bound of the alternatives.",
+            "ru": "Параметр неявно final, а его статический тип — наименьшая общая верхняя граница перечисленных типов."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "javac expands the clause into one handler per alternative, duplicating the block's bytecode.",
+            "ru": "javac разворачивает такой catch в отдельный обработчик на каждый тип, дублируя байткод блока."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The JLS gives a multi-catch parameter the type lub of its alternatives (here Exception) and makes it implicitly final, so it cannot be reassigned. Listing a type together with its own subtype is a compile-time error, and javac emits a single handler referenced by several exception-table entries rather than duplicating the body.",
+        "ru": "По JLS параметр multi-catch получает тип lub от перечисленных вариантов (здесь Exception) и является неявно final, поэтому переприсвоить его нельзя. Указывать тип вместе с его собственным подтипом — ошибка компиляции, а javac генерирует один обработчик, на который ссылаются несколько записей в таблице исключений, а не дублирует тело."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.20",
+        "https://docs.oracle.com/javase/tutorial/essential/exceptions/catch.html"
+      ]
+    },
+    {
+      "id": "java-core.exceptions.005",
+      "section": "exceptions",
+      "difficulty": "medium",
+      "text": {
+        "en": "The system property is not set. What does this program print?",
+        "ru": "Системное свойство не задано. Что выведет эта программа?"
+      },
+      "code": "class Config {\n    static final String VALUE;\n    static {\n        VALUE = System.getProperty(\"app.missing\").trim();\n    }\n}\n\nfor (int i = 0; i < 2; i++) {\n    try {\n        new Config();\n    } catch (Throwable t) {\n        System.out.println(t.getClass().getSimpleName());\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "ExceptionInInitializerError, then nothing — the second instantiation succeeds",
+            "ru": "ExceptionInInitializerError, затем ничего — второе создание объекта проходит успешно"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "NullPointerException, then NullPointerException",
+            "ru": "NullPointerException, затем NullPointerException"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "NullPointerException, then NoClassDefFoundError",
+            "ru": "NullPointerException, затем NoClassDefFoundError"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ExceptionInInitializerError, then ExceptionInInitializerError",
+            "ru": "ExceptionInInitializerError, затем ExceptionInInitializerError"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ExceptionInInitializerError, then NoClassDefFoundError",
+            "ru": "ExceptionInInitializerError, затем NoClassDefFoundError"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "An unchecked exception escaping a static initialiser is wrapped in ExceptionInInitializerError, with the NullPointerException available as its cause. The class is then marked erroneous, so every later attempt to use it fails immediately with NoClassDefFoundError — which is why static initialisers that can fail are a notoriously confusing source of production errors.",
+        "ru": "Непроверяемое исключение, вылетевшее из статического инициализатора, оборачивается в ExceptionInInitializerError, а исходный NullPointerException доступен как его cause. После этого класс помечается как erroneous, поэтому каждая последующая попытка его использовать сразу падает с NoClassDefFoundError — из-за этого падающие статические инициализаторы и считаются особенно запутанным источником ошибок в продакшене."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-12.html#jls-12.4.2",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/ExceptionInInitializerError.html"
+      ]
+    },
+    {
+      "id": "java-core.exceptions.006",
+      "section": "exceptions",
+      "difficulty": "hard",
+      "text": {
+        "en": "What does this program print?",
+        "ru": "Что выведет эта программа?"
+      },
+      "code": "class Res implements AutoCloseable {\n    private final String name;\n    Res(String name) { this.name = name; }\n    @Override public void close() {\n        System.out.println(\"close \" + name);\n        throw new IllegalStateException(name);\n    }\n}\n\ntry (Res a = new Res(\"a\"); Res b = new Res(\"b\")) {\n    throw new RuntimeException(\"body\");\n} catch (Exception e) {\n    System.out.println(e.getMessage() + \" \" + e.getSuppressed().length);\n}",
+      "options": [
+        {
+          "text": {
+            "en": "close b, then close a, then body 2",
+            "ru": "close b, затем close a, затем body 2"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "close b, then body 1 — closing stops at the first failing resource",
+            "ru": "close b, затем body 1 — закрытие прекращается на первом упавшем ресурсе"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "close b, then close a, then b 1",
+            "ru": "close b, затем close a, затем b 1"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "close a, then close b, then body 2",
+            "ru": "close a, затем close b, затем body 2"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "close b, then close a, then a 1",
+            "ru": "close b, затем close a, затем a 1"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Resources are closed in reverse declaration order, so b is closed first and then a, and every resource is closed even if an earlier close() failed. The exception from the body stays primary, and both IllegalStateExceptions are attached to it as suppressed, giving getSuppressed().length == 2.",
+        "ru": "Ресурсы закрываются в порядке, обратном объявлению, поэтому сначала закрывается b, затем a, и закрываются все ресурсы, даже если предыдущий close() упал. Исключение из тела остаётся основным, а оба IllegalStateException прикрепляются к нему как suppressed, поэтому getSuppressed().length равен 2."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.20.3",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Throwable.html#getSuppressed()"
+      ]
+    },
+    {
+      "id": "java-core.concurrency.001",
+      "section": "concurrency",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about the volatile keyword is TRUE?",
+        "ru": "Какое утверждение о ключевом слове volatile верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It has no effect on long and double fields, whose access is already specified as atomic.",
+            "ru": "Он не влияет на поля типов long и double, доступ к которым и так специфицирован как атомарный."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It makes counter++ atomic, because a volatile read and the following write both bypass the cache and go straight to main memory.",
+            "ru": "Он делает counter++ атомарным, потому что и volatile-чтение, и последующая запись минуют кеш и идут прямо в основную память."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It guarantees visibility and ordering for reads and writes of that field, but does not make counter++ atomic.",
+            "ru": "Он гарантирует видимость и упорядоченность чтений и записей этого поля, но не делает counter++ атомарным."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A final field must also be volatile for other threads to see it after construction.",
+            "ru": "Поле final должно быть ещё и volatile, чтобы другие потоки увидели его после конструирования."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is a lightweight form of synchronized that also provides mutual exclusion between threads.",
+            "ru": "Это облегчённая форма synchronized, которая тоже обеспечивает взаимное исключение между потоками."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A volatile write happens-before every subsequent volatile read of the same field, which fixes visibility and reordering, but counter++ is a read-modify-write and stays racy — that is what AtomicInteger is for. volatile also does make 64-bit long and double accesses atomic, which non-volatile ones are not guaranteed to be, and correctly published final fields need no volatile.",
+        "ru": "Запись в volatile-поле happens-before каждого последующего volatile-чтения того же поля, что решает проблемы видимости и переупорядочивания, но counter++ — это read-modify-write, и гонка остаётся; для этого и есть AtomicInteger. Кроме того, volatile как раз делает доступ к 64-битным long и double атомарным, чего для не-volatile полей не гарантируется, а корректно опубликованным final-полям volatile не нужен."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-17.html#jls-17.4",
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-17.html#jls-17.7"
+      ]
+    },
+    {
+      "id": "java-core.concurrency.002",
+      "section": "concurrency",
+      "difficulty": "easy",
+      "text": {
+        "en": "What happens when this code runs?",
+        "ru": "Что произойдёт при выполнении этого кода?"
+      },
+      "code": "Thread t = new Thread(() -> System.out.println(\"run\"));\nt.run();\nt.start();\nt.join();\nt.start();",
+      "options": [
+        {
+          "text": {
+            "en": "It prints run twice and then throws IllegalThreadStateException.",
+            "ru": "Дважды печатается run, после чего бросается IllegalThreadStateException."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It prints run three times, once per invocation.",
+            "ru": "run печатается три раза — по одному на каждый вызов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It prints run once, because run() does nothing until start() has been called.",
+            "ru": "run печатается один раз, поскольку run() ничего не делает до вызова start()."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It prints run twice; the second start() call is silently ignored.",
+            "ru": "run печатается дважды; второй вызов start() молча игнорируется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It throws IllegalThreadStateException already on the first start(), because run() was invoked manually.",
+            "ru": "IllegalThreadStateException бросается уже на первом start(), потому что run() был вызван вручную."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "t.run() is an ordinary method call that executes the body on the current thread; only start() creates a new thread, which prints the second line. A Thread object can be started at most once, so calling start() on a terminated thread throws IllegalThreadStateException.",
+        "ru": "t.run() — это обычный вызов метода, который выполняет тело в текущем потоке; новый поток создаёт только start(), и он печатает вторую строку. Объект Thread можно запустить не более одного раза, поэтому start() на уже завершившемся потоке бросает IllegalThreadStateException."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Thread.html#start()",
+        "https://docs.oracle.com/javase/tutorial/essential/concurrency/runthread.html"
+      ]
+    },
+    {
+      "id": "java-core.concurrency.003",
+      "section": "concurrency",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which of these establishes a happens-before edge under the Java Memory Model?",
+        "ru": "Что из перечисленного создаёт связь happens-before в модели памяти Java?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Thread.yield() flushes pending writes, ordering them before any later read by other threads.",
+            "ru": "Thread.yield() выталкивает отложенные записи, упорядочивая их перед любыми последующими чтениями других потоков."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A call to Thread.sleep in one thread happens-before any action in another thread that starts later.",
+            "ru": "Вызов Thread.sleep в одном потоке happens-before любого действия в другом потоке, начавшегося позже."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An unlock of a monitor happens-before every subsequent lock of that same monitor.",
+            "ru": "Освобождение монитора happens-before каждого последующего захвата того же монитора."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Two synchronized blocks on different monitors are ordered by the program order of the threads entering them.",
+            "ru": "Два synchronized-блока на разных мониторах упорядочены программным порядком входящих в них потоков."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A write to a plain field happens-before a read of any volatile field by another thread.",
+            "ru": "Запись в обычное поле happens-before чтения любого volatile-поля другим потоком."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Monitor release/acquire on the same monitor is one of the primitive happens-before rules, together with volatile write/read on the same field, Thread.start(), Thread.join() and the ordering of final field initialisation. Thread.sleep and Thread.yield have no memory-model effect at all, and edges only exist between matching actions on the same variable or monitor.",
+        "ru": "Освобождение и захват одного и того же монитора — одно из базовых правил happens-before, наряду с записью и чтением одного volatile-поля, Thread.start(), Thread.join() и упорядочиванием инициализации final-полей. Thread.sleep и Thread.yield вообще не имеют эффекта в модели памяти, а связи возникают только между парными действиями над одной и той же переменной или монитором."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-17.html#jls-17.4.5",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/package-summary.html"
+      ]
+    },
+    {
+      "id": "java-core.concurrency.004",
+      "section": "concurrency",
+      "difficulty": "medium",
+      "text": {
+        "en": "What does this snippet print?",
+        "ru": "Что выведет этот фрагмент?"
+      },
+      "code": "AtomicInteger counter = new AtomicInteger();\nint a = counter.getAndIncrement();\nint b = counter.incrementAndGet();\nint c = counter.getAndAdd(5);\nint d = counter.updateAndGet(v -> v * 2);\nSystem.out.println(a + \" \" + b + \" \" + c + \" \" + d);",
+      "options": [
+        {
+          "text": {
+            "en": "0 2 7 14",
+            "ru": "0 2 7 14"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "0 2 2 7",
+            "ru": "0 2 2 7"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "1 2 2 7",
+            "ru": "1 2 2 7"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "0 1 2 14",
+            "ru": "0 1 2 14"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "0 2 2 14",
+            "ru": "0 2 2 14"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The getAndX methods return the value before the update while the xAndGet methods return the value after it: 0 then 2, then getAndAdd(5) returns the old 2 and leaves 7, and updateAndGet returns the new 14. updateAndGet applies the function in a CAS retry loop, so the function must be side-effect free — it can run more than once under contention.",
+        "ru": "Методы getAndX возвращают значение до изменения, а xAndGet — после: сначала 0, затем 2; getAndAdd(5) возвращает старое 2 и оставляет 7, а updateAndGet возвращает новое 14. updateAndGet применяет функцию в цикле повторных попыток CAS, поэтому функция должна быть без побочных эффектов: при конкуренции она может выполниться несколько раз."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/atomic/AtomicInteger.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/atomic/package-summary.html"
+      ]
+    },
+    {
+      "id": "java-core.concurrency.005",
+      "section": "concurrency",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about ExecutorService and Future is TRUE?",
+        "ru": "Какое утверждение об ExecutorService и Future верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "execute() also wraps the failure into a Future, so an exception can never be lost.",
+            "ru": "execute() тоже оборачивает сбой в Future, поэтому исключение не может быть потеряно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Future.cancel(true) forcibly terminates a running task even if the task never checks for interruption.",
+            "ru": "Future.cancel(true) принудительно завершает выполняющуюся задачу, даже если та никогда не проверяет прерывание."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An exception thrown by a task submitted with submit() surfaces only as ExecutionException from Future.get().",
+            "ru": "Исключение задачи, отправленной через submit(), проявится только как ExecutionException из Future.get()."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "shutdown() interrupts the tasks that are currently running and returns as soon as they stop.",
+            "ru": "shutdown() прерывает выполняющиеся сейчас задачи и возвращает управление, как только они остановятся."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "newFixedThreadPool uses a bounded queue, so submit() throws RejectedExecutionException once it is full.",
+            "ru": "newFixedThreadPool использует ограниченную очередь, поэтому при её заполнении submit() бросает RejectedExecutionException."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "submit() captures any Throwable in the FutureTask, so a task that fails looks like nothing happened until someone calls get(); this is why ignoring the returned Future silently swallows failures. execute() has no Future and routes the exception to the thread's uncaught handler, shutdown() only stops accepting new tasks and lets running ones finish, newFixedThreadPool uses an unbounded LinkedBlockingQueue, and cancel(true) merely interrupts.",
+        "ru": "submit() перехватывает любой Throwable внутри FutureTask, поэтому упавшая задача выглядит так, будто ничего не произошло, пока кто-нибудь не вызовет get(); именно поэтому проигнорированный Future молча съедает сбои. У execute() нет Future, и исключение уходит в uncaught-обработчик потока; shutdown() лишь перестаёт принимать новые задачи и даёт текущим завершиться; newFixedThreadPool использует неограниченную LinkedBlockingQueue; а cancel(true) только выставляет прерывание."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/ExecutorService.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Executors.html#newFixedThreadPool(int)"
+      ]
+    },
+    {
+      "id": "java-core.concurrency.006",
+      "section": "concurrency",
+      "difficulty": "hard",
+      "text": {
+        "en": "Which statement about virtual threads in current JDK releases is TRUE?",
+        "ru": "Какое утверждение о виртуальных потоках в актуальных версиях JDK верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Virtual threads should be pooled and reused, because creating one costs about as much as a platform thread.",
+            "ru": "Виртуальные потоки следует складывать в пул и переиспользовать, поскольку создание одного стоит примерно как платформенного."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A virtual thread stays pinned for as long as it holds a ReentrantLock, so explicit locks must be avoided.",
+            "ru": "Виртуальный поток остаётся закреплённым, пока держит ReentrantLock, поэтому явных блокировок следует избегать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Since JDK 24, blocking inside synchronized no longer pins the carrier, but native calls and the FFM API still can.",
+            "ru": "С JDK 24 блокировка внутри synchronized больше не закрепляет carrier, но нативные вызовы и FFM API — по-прежнему могут."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Virtual threads are scheduled directly by the operating system, which is why they need no carrier threads.",
+            "ru": "Виртуальные потоки планируются напрямую операционной системой, поэтому carrier-потоки им не нужны."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ThreadLocal is not supported on a virtual thread and throws UnsupportedOperationException.",
+            "ru": "ThreadLocal не поддерживается в виртуальном потоке и бросает UnsupportedOperationException."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "JEP 491 in JDK 24 reimplemented monitors so a virtual thread can release its carrier while blocked in synchronized or Object.wait(); the remaining pinning cases are native methods and Foreign Function & Memory downcalls. Virtual threads are scheduled by a ForkJoinPool of carrier threads, are cheap enough to create one per task (pooling them defeats the point), and support ThreadLocal — though ScopedValue is usually the better fit.",
+        "ru": "JEP 491 в JDK 24 переделал мониторы так, что виртуальный поток может отпустить carrier, будучи заблокированным в synchronized или Object.wait(); остаточные случаи pinning — это нативные методы и downcall через Foreign Function & Memory API. Виртуальные потоки планируются ForkJoinPool из carrier-потоков, достаточно дёшевы, чтобы создавать по одному на задачу (пул сводит всю идею на нет), и поддерживают ThreadLocal, хотя обычно уместнее ScopedValue."
+      },
+      "sources": [
+        "https://openjdk.org/jeps/491",
+        "https://openjdk.org/jeps/444",
+        "https://docs.oracle.com/en/java/javase/21/core/virtual-threads.html"
+      ]
+    },
+    {
+      "id": "java-core.streams-lambdas.001",
+      "section": "streams-lambdas",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about intermediate and terminal stream operations is TRUE?",
+        "ru": "Какое утверждение о промежуточных и терминальных операциях стрима верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "sorted() is terminal, because it has to consume the whole source before producing a result.",
+            "ru": "sorted() — терминальная операция, поскольку она обязана вычитать весь источник, прежде чем выдать результат."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "peek() is terminal and exists specifically for logging at the end of a pipeline.",
+            "ru": "peek() — терминальная операция, созданная специально для логирования в конце конвейера."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A stream may be traversed again as long as the pipeline contains no stateful operation.",
+            "ru": "Стрим можно обойти повторно, если в конвейере нет операций с состоянием."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "collect() is intermediate; a pipeline is finished only by calling close() on the stream.",
+            "ru": "collect() — промежуточная операция; конвейер завершается только вызовом close() у стрима."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Intermediate operations return a new Stream and run nothing until a terminal operation is invoked.",
+            "ru": "Промежуточные операции возвращают новый Stream и ничего не выполняют до вызова терминальной операции."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Intermediate operations are lazy: they only build the pipeline, and the source is traversed once when the terminal operation runs. sorted() and peek() are both intermediate (sorted is a stateful intermediate operation), and any stream throws IllegalStateException if you try to reuse it after it has been operated upon.",
+        "ru": "Промежуточные операции ленивы: они лишь собирают конвейер, а источник обходится один раз при выполнении терминальной операции. И sorted(), и peek() — промежуточные (sorted при этом операция с состоянием), а любой стрим бросает IllegalStateException при попытке использовать его повторно."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/package-summary.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html"
+      ]
+    },
+    {
+      "id": "java-core.streams-lambdas.002",
+      "section": "streams-lambdas",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about Optional is TRUE?",
+        "ru": "Какое утверждение об Optional верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Calling map() on an empty Optional throws NoSuchElementException instead of returning empty.",
+            "ru": "Вызов map() у пустого Optional бросает NoSuchElementException вместо возврата пустого значения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Optional is Serializable and is intended for use as an entity or DTO field.",
+            "ru": "Optional сериализуем и предназначен для использования в качестве поля сущности или DTO."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "get() returns null when the Optional is empty, which is why it must be guarded by a null check.",
+            "ru": "get() возвращает null, если Optional пуст, поэтому его нужно защищать проверкой на null."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Optional.of(null) throws NullPointerException; ofNullable is the factory for a possibly absent value.",
+            "ru": "Optional.of(null) бросает NullPointerException; для возможно отсутствующего значения есть фабрика ofNullable."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "orElse(compute()) is evaluated lazily, so compute() runs only when the Optional is empty.",
+            "ru": "orElse(compute()) вычисляется лениво, поэтому compute() выполняется только когда Optional пуст."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "of() requires a non-null value and fails fast, while ofNullable() turns null into an empty Optional. get() on an empty Optional throws NoSuchElementException, Optional is deliberately not Serializable and not meant for fields, and orElse's argument is an ordinary expression evaluated eagerly — use orElseGet for a lazy fallback.",
+        "ru": "of() требует значение не-null и падает сразу, а ofNullable() превращает null в пустой Optional. get() у пустого Optional бросает NoSuchElementException, Optional намеренно не сериализуем и не предназначен для полей, а аргумент orElse — обычное выражение, вычисляемое сразу; для ленивого значения по умолчанию есть orElseGet."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html#orElseGet(java.util.function.Supplier)"
+      ]
+    },
+    {
+      "id": "java-core.streams-lambdas.003",
+      "section": "streams-lambdas",
+      "difficulty": "medium",
+      "text": {
+        "en": "What does this program print, and in which order?",
+        "ru": "Что и в каком порядке выведет эта программа?"
+      },
+      "code": "Stream<Integer> stream = Stream.of(1, 2, 3, 4)\n        .map(i -> { System.out.println(\"map \" + i); return i * 2; })\n        .filter(i -> i > 4);\nSystem.out.println(\"created\");\nSystem.out.println(stream.findFirst().get());",
+      "options": [
+        {
+          "text": {
+            "en": "created, map 1, map 2, map 3, 8",
+            "ru": "created, map 1, map 2, map 3, 8"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "created, map 1, map 2, map 3, map 4, 6",
+            "ru": "created, map 1, map 2, map 3, map 4, 6"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "map 1, map 2, map 3, map 4, created, 6",
+            "ru": "map 1, map 2, map 3, map 4, created, 6"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "created, map 1, map 2, map 3, 6",
+            "ru": "created, map 1, map 2, map 3, 6"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "created, map 3, 6",
+            "ru": "created, map 3, 6"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "map and filter are lazy, so nothing is mapped before findFirst() runs — hence created is printed first. Elements are then pushed through the pipeline one at a time and findFirst short-circuits as soon as 3 maps to 6, so element 4 is never touched.",
+        "ru": "map и filter ленивы, поэтому до вызова findFirst() ничего не отображается — и created печатается первым. Затем элементы проходят конвейер по одному, и findFirst обрывает обход, как только 3 превращается в 6, так что элемент 4 вообще не обрабатывается."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/package-summary.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html#findFirst()"
+      ]
+    },
+    {
+      "id": "java-core.streams-lambdas.004",
+      "section": "streams-lambdas",
+      "difficulty": "medium",
+      "text": {
+        "en": "What does this snippet print?",
+        "ru": "Что выведет этот фрагмент?"
+      },
+      "code": "List<List<Integer>> nested = List.of(List.of(1, 2), List.of(), List.of(3));\nint sum = nested.stream().flatMap(List::stream).reduce(0, Integer::sum);\nOptional<Integer> max = nested.stream().flatMap(List::stream).max(Integer::compare);\nSystem.out.println(sum + \" \" + max.get());",
+      "options": [
+        {
+          "text": {
+            "en": "3 3",
+            "ru": "3 3"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "6 3",
+            "ru": "6 3"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It does not compile: reduce with an identity returns Optional<Integer>, not Integer.",
+            "ru": "Код не компилируется: reduce с identity возвращает Optional<Integer>, а не Integer."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It throws NoSuchElementException, because one of the inner lists is empty.",
+            "ru": "Бросается NoSuchElementException, потому что один из вложенных списков пуст."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "6 2",
+            "ru": "6 2"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "flatMap replaces each element with the contents of the stream it produces, so the empty inner list simply contributes nothing and the flattened stream is 1, 2, 3. The two-argument reduce always returns a value (the identity when the stream is empty), so it yields the Integer 6, and max returns a non-empty Optional holding 3.",
+        "ru": "flatMap заменяет каждый элемент содержимым порождённого им стрима, поэтому пустой вложенный список просто ничего не добавляет, и после уплощения получается 1, 2, 3. Двухаргументный reduce всегда возвращает значение (identity, если стрим пуст), поэтому даёт Integer 6, а max возвращает непустой Optional со значением 3."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html#flatMap(java.util.function.Function)",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html#reduce(T,java.util.function.BinaryOperator)"
+      ]
+    },
+    {
+      "id": "java-core.streams-lambdas.005",
+      "section": "streams-lambdas",
+      "difficulty": "medium",
+      "text": {
+        "en": "What happens when this code runs?",
+        "ru": "Что произойдёт при выполнении этого кода?"
+      },
+      "code": "Map<Integer, String> byLength = Stream.of(\"a\", \"bb\", \"cc\")\n        .collect(Collectors.toMap(String::length, s -> s));\nSystem.out.println(byLength);",
+      "options": [
+        {
+          "text": {
+            "en": "It prints {1=a, 2=cc}; for a duplicate key the later element wins.",
+            "ru": "Печатается {1=a, 2=cc}; при дублировании ключа побеждает более поздний элемент."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It throws NullPointerException while merging the two values for key 2.",
+            "ru": "Бросается NullPointerException при слиянии двух значений для ключа 2."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It prints {1=[a], 2=[bb, cc]}; equal keys are collected into a list of values.",
+            "ru": "Печатается {1=[a], 2=[bb, cc]}; одинаковые ключи собираются в список значений."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It prints {1=a, 2=bb}; for a duplicate key the first element wins.",
+            "ru": "Печатается {1=a, 2=bb}; при дублировании ключа побеждает первый элемент."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It throws IllegalStateException, because two elements map to the key 2.",
+            "ru": "Бросается IllegalStateException, поскольку два элемента дают один и тот же ключ 2."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The two-argument toMap has no merge function, so a duplicate key is a programming error and the collector throws IllegalStateException naming the key and the two values. To keep both you need either the three-argument toMap with an explicit merge function, or groupingBy, which is what produces a map of lists.",
+        "ru": "У двухаргументного toMap нет функции слияния, поэтому дублирующийся ключ считается ошибкой программиста, и коллектор бросает IllegalStateException с указанием ключа и двух значений. Чтобы сохранить оба, нужен либо трёхаргументный toMap с явной функцией слияния, либо groupingBy — именно он даёт map со списками."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Collectors.html#toMap(java.util.function.Function,java.util.function.Function)",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Collectors.html#groupingBy(java.util.function.Function)"
+      ]
+    },
+    {
+      "id": "java-core.streams-lambdas.006",
+      "section": "streams-lambdas",
+      "difficulty": "hard",
+      "text": {
+        "en": "What is the behaviour of this code?",
+        "ru": "Как поведёт себя этот код?"
+      },
+      "code": "List<Integer> result = new ArrayList<>();\nIntStream.range(0, 10_000).parallel().forEach(result::add);\nSystem.out.println(result.size());",
+      "options": [
+        {
+          "text": {
+            "en": "It always prints 10000; only the order of the elements in the list is unspecified.",
+            "ru": "Всегда печатается 10000; не определён только порядок элементов в списке."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It deterministically throws ConcurrentModificationException on the first conflicting add.",
+            "ru": "Детерминированно бросается ConcurrentModificationException при первом конфликтующем add."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Unspecified: ArrayList is not thread-safe, so the size may be wrong or an exception may be thrown.",
+            "ru": "Не определено: ArrayList не потокобезопасен, поэтому размер может быть неверным либо возникнет исключение."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It prints 10000, because IntStream.range ignores parallel() for a bounded range source.",
+            "ru": "Печатается 10000, поскольку IntStream.range игнорирует parallel() для источника с известными границами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It always prints 10000, because forEach synchronizes the consumer internally.",
+            "ru": "Всегда печатается 10000, поскольку forEach внутри синхронизирует переданный consumer."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A parallel forEach invokes the consumer from several threads with no synchronization, so unsynchronized mutation of a shared ArrayList is a data race: you may see a smaller size, nulls, or an ArrayIndexOutOfBoundsException from a concurrent grow. The correct approach is to let the pipeline build the container itself — collect(Collectors.toList()) or toList() — rather than accumulating into external mutable state.",
+        "ru": "Параллельный forEach вызывает consumer из нескольких потоков без синхронизации, поэтому несинхронизированное изменение общего ArrayList — это гонка данных: можно получить меньший размер, null-ы или ArrayIndexOutOfBoundsException при одновременном расширении массива. Правильный подход — позволить конвейеру самому собрать контейнер через collect(Collectors.toList()) или toList(), а не накапливать во внешнем изменяемом состоянии."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/package-summary.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html#collect(java.util.stream.Collector)"
+      ]
+    },
+    {
+      "id": "java-core.jvm-memory.001",
+      "section": "jvm-memory",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about heap, stack and Metaspace is TRUE?",
+        "ru": "Какое утверждение о heap, stack и Metaspace верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Each thread has its own heap, which is exactly what makes escape analysis possible.",
+            "ru": "У каждого потока есть свой heap — именно это и делает возможным escape analysis."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A thread's stack is carved out of the Java heap, so -Xmx has to be large enough to cover the stacks of all threads too.",
+            "ru": "Стек потока выделяется внутри Java-кучи, поэтому -Xmx должен быть достаточным, чтобы покрыть и стеки всех потоков."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Frames and local variables live on a per-thread stack, objects on the heap, and class metadata in native Metaspace.",
+            "ru": "Кадры и локальные переменные лежат в стеке своего потока, объекты — в heap, а метаданные классов — в нативном Metaspace."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Metaspace is a region inside the heap, so -Xmx puts an upper bound on class metadata too.",
+            "ru": "Metaspace — это область внутри heap, поэтому -Xmx ограничивает и метаданные классов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Interned string literals live in Metaspace rather than in the heap.",
+            "ru": "Интернированные строковые литералы находятся в Metaspace, а не в heap."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Metaspace is native memory outside the Java heap and is bounded by -XX:MaxMetaspaceSize, not -Xmx; thread stacks are native memory as well, sized by -Xss and also outside -Xmx. Threads share one heap — a TLAB is only a private allocation buffer inside it — and since JDK 7 interned string literals are ordinary heap objects referenced from the string table.",
+        "ru": "Metaspace — это нативная память вне Java-кучи, ограниченная -XX:MaxMetaspaceSize, а не -Xmx; стеки потоков тоже нативные, задаются через -Xss и также не входят в -Xmx. Куча у потоков одна общая — TLAB лишь приватный буфер аллокации внутри неё, — а интернированные строковые литералы с JDK 7 являются обычными объектами кучи, на которые ссылается string table."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/gctuning/introduction-garbage-collection-tuning.html",
+        "https://docs.oracle.com/javase/specs/jvms/se21/html/jvms-2.html#jvms-2.5"
+      ]
+    },
+    {
+      "id": "java-core.jvm-memory.002",
+      "section": "jvm-memory",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about the java.lang.ref reference types is TRUE?",
+        "ru": "Какое утверждение о ссылочных типах из java.lang.ref верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A SoftReference is cleared only when the collector needs memory; a WeakReference goes as soon as no strong reference remains.",
+            "ru": "SoftReference очищается только когда сборщику нужна память; WeakReference исчезает сразу, как только не осталось сильных ссылок."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A WeakReference survives until memory pressure appears, while a SoftReference is cleared at the next GC.",
+            "ru": "WeakReference живёт до появления нехватки памяти, а SoftReference очищается на следующей сборке."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A weak or soft reference is enqueued on its ReferenceQueue first and cleared only afterwards, so get() still returns the referent while it sits in the queue.",
+            "ru": "Слабая или мягкая ссылка сначала попадает в ReferenceQueue и только потом очищается, поэтому get() всё ещё возвращает объект, пока ссылка лежит в очереди."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "WeakHashMap holds its values weakly, so entries disappear once the values become unreachable.",
+            "ru": "WeakHashMap хранит слабо свои значения, поэтому записи исчезают, когда значения становятся недостижимыми."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "PhantomReference.get() returns the referent right up to the moment the reference is enqueued.",
+            "ru": "PhantomReference.get() возвращает объект вплоть до момента постановки ссылки в очередь."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Soft references are the memory-sensitive ones and are meant for caches; weak references are cleared at the first collection that finds the referent only weakly reachable. A reference is always cleared before it is enqueued, PhantomReference.get() always returns null by design, and WeakHashMap holds its keys weakly — a value that strongly references its own key keeps the entry alive forever.",
+        "ru": "Мягкие ссылки — как раз чувствительные к памяти и предназначены для кешей; слабые очищаются при первой сборке, которая находит объект только слабо достижимым. Ссылка всегда очищается до постановки в очередь, PhantomReference.get() по определению всегда возвращает null, а WeakHashMap держит слабо именно ключи — значение, сильно ссылающееся на свой ключ, навсегда сохраняет запись живой."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/ref/package-summary.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/WeakHashMap.html"
+      ]
+    },
+    {
+      "id": "java-core.jvm-memory.003",
+      "section": "jvm-memory",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about OutOfMemoryError is TRUE?",
+        "ru": "Какое утверждение об OutOfMemoryError верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "OutOfMemoryError extends RuntimeException, so catching it and continuing is a supported pattern.",
+            "ru": "OutOfMemoryError наследуется от RuntimeException, поэтому его перехват с продолжением работы — поддерживаемый приём."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "\"Metaspace\" is the message you fix by raising -Xmx, since Metaspace grows with the heap.",
+            "ru": "Сообщение «Metaspace» лечится увеличением -Xmx, поскольку Metaspace растёт вместе с heap."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A deep recursion is reported as \"OutOfMemoryError: stack space\" once the thread stack is full.",
+            "ru": "Глубокая рекурсия при заполнении стека потока сообщается как «OutOfMemoryError: stack space»."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "\"unable to create native thread\" means OS or native resources are exhausted, so raising -Xmx does not help.",
+            "ru": "«unable to create native thread» означает исчерпание ресурсов ОС или нативной памяти, поэтому увеличение -Xmx не поможет."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "\"GC overhead limit exceeded\" means the heap is completely full and not a single object is reclaimable.",
+            "ru": "«GC overhead limit exceeded» означает, что heap заполнен полностью и ни один объект нельзя освободить."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "That message comes from a failed native thread creation — the fix is fewer threads, smaller -Xss, or higher OS limits, and a bigger heap actually leaves less address space for thread stacks. Metaspace is sized by -XX:MaxMetaspaceSize, OutOfMemoryError is an Error (not a RuntimeException) and leaves the JVM in an unreliable state, exhausting a thread stack raises StackOverflowError, and \"GC overhead limit exceeded\" means the JVM spent over 98% of its time collecting while recovering under 2% of the heap.",
+        "ru": "Это сообщение возникает при неудачном создании нативного потока: лечится уменьшением числа потоков, меньшим -Xss или повышением лимитов ОС, причём больший heap лишь оставляет меньше адресного пространства под стеки потоков. Размер Metaspace задаётся через -XX:MaxMetaspaceSize; OutOfMemoryError — это Error, а не RuntimeException, и после него состояние JVM ненадёжно; исчерпание стека потока даёт StackOverflowError; а «GC overhead limit exceeded» означает, что JVM провела в сборке более 98% времени, освободив менее 2% heap."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/troubleshoot/troubleshoot-memory-leaks.html",
+        "https://docs.oracle.com/en/java/javase/21/gctuning/factors-affecting-garbage-collection-performance.html"
+      ]
+    },
+    {
+      "id": "java-core.jvm-memory.004",
+      "section": "jvm-memory",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about generational garbage collection is TRUE?",
+        "ru": "Какое утверждение о поколенческой сборке мусора верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Objects are allocated in the old generation and moved into Eden once they have survived a collection.",
+            "ru": "Объекты создаются в старом поколении и перемещаются в Eden, когда переживут сборку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The weak generational hypothesis states that most objects survive many collections.",
+            "ru": "Гипотеза о поколениях утверждает, что большинство объектов переживает много сборок."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A young collection copies survivors between survivor spaces and promotes them once they pass the tenuring threshold.",
+            "ru": "Молодая сборка копирует выживших между survivor-пространствами и продвигает их после превышения порога tenuring."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A full collection touches only the old generation and leaves the young generation untouched.",
+            "ru": "Полная сборка затрагивает только старое поколение и не касается молодого."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A minor collection always pauses the application longer than a major collection of the same heap, because it has to scan every card table entry twice.",
+            "ru": "Малая сборка всегда останавливает приложение дольше полной сборки той же кучи, потому что ей приходится дважды просматривать всю card table."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Young collections use copying: live objects move from Eden into a survivor space, are copied between survivor spaces on each cycle, and are promoted to the old generation after enough cycles. The hypothesis behind this is the opposite of the option that states it — most objects die young — which is precisely why a minor collection is normally much cheaper than a full one, and a full collection covers the whole heap.",
+        "ru": "Молодые сборки работают копированием: живые объекты переносятся из Eden в survivor-пространство, на каждом цикле копируются между survivor-пространствами и после достаточного числа циклов продвигаются в старое поколение. Гипотеза, лежащая в основе этого, противоположна тому, что утверждает соответствующий вариант: большинство объектов умирает молодыми — именно поэтому молодая сборка обычно намного дешевле полной, а полная сборка обрабатывает весь heap."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/gctuning/garbage-collector-implementation.html",
+        "https://docs.oracle.com/en/java/javase/21/gctuning/factors-affecting-garbage-collection-performance.html"
+      ]
+    },
+    {
+      "id": "java-core.jvm-memory.005",
+      "section": "jvm-memory",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about garbage collector defaults in recent JDK releases is TRUE?",
+        "ru": "Какое утверждение о сборщиках мусора по умолчанию в свежих версиях JDK верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Ergonomics picks G1 only on a server-class machine — more than two processors and at least 1792 MB of heap — and Serial GC otherwise.",
+            "ru": "Эргономика выбирает G1 только на машине класса server — более двух процессоров и не менее 1792 МБ кучи, — а иначе включает Serial GC."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Serial GC can no longer be requested explicitly, because the -XX:+UseSerialGC flag was removed together with the single-CPU ergonomics in JDK 25.",
+            "ru": "Serial GC больше нельзя запросить явно: флаг -XX:+UseSerialGC удалён вместе с однопроцессорной эргономикой в JDK 25."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ZGC has been the default collector since JDK 21, chosen for its sub-millisecond pause times on heaps of any size, with G1 kept only as an opt-in.",
+            "ru": "ZGC является сборщиком по умолчанию с JDK 21 — его выбрали за субмиллисекундные паузы на кучах любого размера, а G1 остался лишь опциональным."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "JDK 25 already made G1 the default in every environment, so the ergonomic fallback to Serial GC no longer exists.",
+            "ru": "JDK 25 уже сделал G1 умолчанием во всех окружениях, поэтому эргономического отката к Serial GC больше нет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ZGC still runs non-generationally by default; the generational mode needs -XX:+ZGenerational.",
+            "ru": "ZGC по умолчанию всё ещё работает в non-generational режиме; для generational нужен -XX:+ZGenerational."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "HotSpot ergonomics still treat a machine as server-class only when it detects more than two processors and at least 1792 MB of heap, and fall back to Serial GC otherwise. Making G1 the default in every environment is JEP 523, which is targeted at JDK 27, not JDK 25, and -XX:+UseSerialGC is still a supported flag. ZGC has never been the default: its generational mode became the default in JDK 23 and the non-generational mode was removed in JDK 24, so -XX:+ZGenerational is obsolete.",
+        "ru": "Эргономика HotSpot по-прежнему считает машину server-class только при более чем двух процессорах и куче не менее 1792 МБ, иначе выбирается Serial GC. Сделать G1 умолчанием во всех окружениях предлагает JEP 523, нацеленный на JDK 27, а не на JDK 25, и флаг -XX:+UseSerialGC по-прежнему поддерживается. ZGC никогда не был умолчанием: его generational-режим стал основным в JDK 23, а non-generational удалён в JDK 24, поэтому -XX:+ZGenerational устарел."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/gctuning/ergonomics.html",
+        "https://openjdk.org/jeps/523",
+        "https://openjdk.org/jeps/490"
+      ]
+    },
+    {
+      "id": "java-core.jvm-memory.006",
+      "section": "jvm-memory",
+      "difficulty": "hard",
+      "text": {
+        "en": "What does this program print?",
+        "ru": "Что выведет эта программа?"
+      },
+      "code": "class Parent {\n    static { System.out.println(\"Parent init\"); }\n    static final int A = 1;\n    static int B = 2;\n}\n\nclass Child extends Parent {\n    static { System.out.println(\"Child init\"); }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(Parent.A);\n        System.out.println(Child.B);\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "Parent init, 1, then Parent init, Child init, 2",
+            "ru": "Parent init, 1, затем Parent init, Child init, 2"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Parent init, 1, then 2",
+            "ru": "Parent init, 1, затем 2"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "1, then Parent init, then Child init, then 2",
+            "ru": "1, затем Parent init, затем Child init, затем 2"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "1, then Parent init, then 2",
+            "ru": "1, затем Parent init, затем 2"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Parent init, Child init, 1, then 2",
+            "ru": "Parent init, Child init, 1, затем 2"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A is a constant variable — static final with a constant-expression initialiser — so javac inlines the literal 1 and reading Parent.A does not initialise Parent at all. Reading Child.B does trigger initialisation, but only of the class that actually declares B, so Parent init is printed and Child's static block never runs.",
+        "ru": "A — это constant variable: static final с инициализатором-константным выражением, поэтому javac подставляет литерал 1, и чтение Parent.A вообще не инициализирует Parent. Чтение Child.B инициализацию запускает, но только у класса, который в действительности объявляет B, поэтому печатается Parent init, а статический блок Child не выполняется никогда."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-12.html#jls-12.4.1",
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-4.html#jls-4.12.4"
+      ]
+    }
+  ]
+}

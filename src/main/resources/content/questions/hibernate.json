@@ -1,0 +1,2615 @@
+{
+  "schemaVersion": 1,
+  "topic": "hibernate",
+  "questions": [
+    {
+      "id": "hibernate.jpa-orm-basics.001",
+      "section": "jpa-orm-basics",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement correctly describes the relationship between Jakarta Persistence (JPA) and Hibernate ORM?",
+        "ru": "Какое утверждение верно описывает отношение между Jakarta Persistence (JPA) и Hibernate ORM?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Hibernate is the reference implementation of JPA, so the Hibernate API and the JPA API are identical.",
+            "ru": "Hibernate — эталонная реализация JPA, поэтому API Hibernate и API JPA полностью совпадают."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "JPA is a thin abstraction extracted from Hibernate and is maintained by the Hibernate team.",
+            "ru": "JPA — тонкая абстракция, выделенная из Hibernate, и её развивает команда Hibernate."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "JPA is a specification; Hibernate implements it and also exposes native APIs that go beyond the specification.",
+            "ru": "JPA — это спецификация; Hibernate реализует её и дополнительно предоставляет собственный API, выходящий за рамки спецификации."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "JPA is a set of JDBC helper classes; Hibernate adds object mapping on top of them.",
+            "ru": "JPA — набор вспомогательных классов над JDBC; Hibernate добавляет поверх них объектный маппинг."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Hibernate implements JPA but exposes no functionality outside what the specification defines.",
+            "ru": "Hibernate реализует JPA, но не предоставляет никакой функциональности за пределами спецификации."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "JPA is only an API contract; Hibernate is one provider of it and adds features such as @NaturalId, filters, StatelessSession and multi-tenancy. Hibernate is not the reference implementation — that role belonged to EclipseLink — and its native Session API is a superset of EntityManager.",
+        "ru": "JPA — это только контракт API; Hibernate — один из его провайдеров, который добавляет @NaturalId, фильтры, StatelessSession, мультитенантность и прочее. Hibernate не является эталонной реализацией (эту роль играл EclipseLink), а его нативный Session API — надмножество EntityManager."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/persistence/3.2/",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html"
+      ]
+    },
+    {
+      "id": "hibernate.jpa-orm-basics.002",
+      "section": "jpa-orm-basics",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about a detached entity is TRUE?",
+        "ru": "Какое утверждение о detached-сущности верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It has a database identity but no persistence context tracks it, so changes to it are never flushed.",
+            "ru": "У неё есть идентичность в базе, но её не отслеживает ни один persistence context, поэтому изменения не попадают в flush."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It has never been persisted, and therefore the provider has not assigned an identifier value to it yet.",
+            "ru": "Она никогда не сохранялась, и поэтому провайдер ещё не присвоил ей значение идентификатора."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is associated with a persistence context, so any modification is written automatically at flush time.",
+            "ru": "Она связана с persistence context, поэтому любое изменение автоматически записывается при flush."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is scheduled for deletion and the corresponding DELETE is issued at the next flush.",
+            "ru": "Она помечена на удаление, и соответствующий DELETE будет выполнен при следующем flush."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It becomes managed again automatically as soon as a query in the same context returns the same row.",
+            "ru": "Она автоматически снова становится managed, как только запрос в том же контексте вернёт ту же строку."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A detached instance was managed once but its persistence context is closed or cleared, so dirty checking no longer applies; merge() is needed to propagate its state. A query returning the same row creates a separate managed instance and leaves the detached object detached.",
+        "ru": "Detached-экземпляр когда-то был managed, но его persistence context закрыт или очищен, поэтому dirty checking к нему больше не применяется — нужен merge(). Запрос, возвращающий ту же строку, создаст отдельный managed-экземпляр, а detached-объект так и останется detached."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/persistence/3.2/",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#pc"
+      ]
+    },
+    {
+      "id": "hibernate.jpa-orm-basics.003",
+      "section": "jpa-orm-basics",
+      "difficulty": "medium",
+      "text": {
+        "en": "What does this code give you?",
+        "ru": "Что даёт этот код?"
+      },
+      "code": "EntityManager em = emf.createEntityManager();\nem.getTransaction().begin();\nSession session = em.unwrap(Session.class);\nsession.enableFilter(\"activeOnly\");",
+      "options": [
+        {
+          "text": {
+            "en": "A new Hibernate Session with its own persistence context, so entities read through it are separate instances.",
+            "ru": "Новый Hibernate Session со своим persistence context, поэтому сущности, прочитанные через него, будут отдельными экземплярами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A Session that bypasses the persistence context, writing straight through JDBC without dirty checking.",
+            "ru": "Session, обходящий persistence context и пишущий напрямую через JDBC без dirty checking."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A Session obtained by closing the EntityManager, which becomes unusable after the call.",
+            "ru": "Session, полученный за счёт закрытия EntityManager, который после вызова становится непригодным."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A Session that only works outside a transaction, because Hibernate filters are applied before the transaction starts.",
+            "ru": "Session, работающий только вне транзакции, поскольку фильтры Hibernate применяются до её начала."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The Hibernate Session that backs this EntityManager, sharing its persistence context and transaction.",
+            "ru": "Hibernate Session, лежащий в основе этого EntityManager, с тем же persistence context и той же транзакцией."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "In Hibernate, Session extends EntityManager and SessionFactory extends EntityManagerFactory, so unwrap() simply casts to the native type — the same persistence context and transaction are used. The stateless, dirty-check-free behaviour described by one distractor belongs to StatelessSession, not to an unwrapped Session.",
+        "ru": "В Hibernate Session наследует EntityManager, а SessionFactory — EntityManagerFactory, поэтому unwrap() просто приводит к нативному типу: persistence context и транзакция те же. Поведение без dirty checking, описанное в одном из вариантов, свойственно StatelessSession, а не полученному через unwrap Session."
+      },
+      "sources": [
+        "https://docs.hibernate.org/orm/6.6/javadocs/org/hibernate/Session.html",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html"
+      ]
+    },
+    {
+      "id": "hibernate.jpa-orm-basics.004",
+      "section": "jpa-orm-basics",
+      "difficulty": "medium",
+      "text": {
+        "en": "An application is migrated to Spring Boot 3 with Hibernate 6. Which statement about the persistence annotations is TRUE?",
+        "ru": "Приложение переводят на Spring Boot 3 с Hibernate 6. Какое утверждение об аннотациях персистентности верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "javax.persistence remains available as a deprecated alias, so existing imports keep compiling and working.",
+            "ru": "javax.persistence остаётся доступным как устаревший псевдоним, поэтому существующие импорты продолжают компилироваться и работать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "They move from javax.persistence to jakarta.persistence, and the two packages cannot be mixed within one persistence unit.",
+            "ru": "Они переезжают из javax.persistence в jakarta.persistence, и смешивать эти два пакета в одном persistence unit нельзя."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Only the XML namespaces changed; Java imports were deliberately kept as javax.persistence for compatibility.",
+            "ru": "Изменились только XML-пространства имён; Java-импорты сознательно оставили как javax.persistence для совместимости."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Hibernate's own annotations were renamed too, from org.hibernate.annotations to jakarta.hibernate.annotations.",
+            "ru": "Собственные аннотации Hibernate тоже переименованы: из org.hibernate.annotations в jakarta.hibernate.annotations."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The rename happened in Jakarta EE 8 together with the move to JDK 11, so Spring Boot 2 already used it.",
+            "ru": "Переименование произошло в Jakarta EE 8 вместе с переходом на JDK 11, поэтому Spring Boot 2 уже его использовал."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Jakarta EE 9 renamed every javax.* API package to jakarta.*; it is a hard break with no alias, which is why Spring Boot 3 and Hibernate 6 require jakarta.persistence. Hibernate's own annotations stayed in org.hibernate.annotations — only the specification packages moved.",
+        "ru": "В Jakarta EE 9 все пакеты javax.* были переименованы в jakarta.*; это несовместимое изменение без псевдонимов, поэтому Spring Boot 3 и Hibernate 6 требуют jakarta.persistence. Собственные аннотации Hibernate остались в org.hibernate.annotations — переехали только пакеты спецификации."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/persistence/3.0/",
+        "https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Migration-Guide"
+      ]
+    },
+    {
+      "id": "hibernate.jpa-orm-basics.005",
+      "section": "jpa-orm-basics",
+      "difficulty": "medium",
+      "text": {
+        "en": "A Spring Boot application uses spring-boot-starter-data-jpa and has no persistence.xml. Which statement is TRUE?",
+        "ru": "Приложение на Spring Boot использует spring-boot-starter-data-jpa и не содержит persistence.xml. Какое утверждение верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "persistence.xml is still mandatory; Spring Boot's annotation processor generates one into META-INF at build time, listing every @Entity class found on the compile classpath.",
+            "ru": "persistence.xml по-прежнему обязателен; процессор аннотаций Spring Boot на этапе сборки генерирует его в META-INF, перечисляя все классы @Entity, найденные в classpath компиляции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Entity classes must be listed in an application.properties key, because classpath scanning cannot detect @Entity.",
+            "ru": "Классы сущностей нужно перечислить в свойстве application.properties, потому что сканирование classpath не умеет находить @Entity."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "persistence.xml becomes mandatory as soon as more than one DataSource is configured.",
+            "ru": "persistence.xml становится обязательным, как только настроен более чем один DataSource."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Spring builds the persistence unit programmatically through LocalContainerEntityManagerFactoryBean and discovers @Entity classes by classpath scanning.",
+            "ru": "Spring строит persistence unit программно через LocalContainerEntityManagerFactoryBean и находит классы @Entity сканированием classpath."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Without persistence.xml the persistence unit cannot declare a transaction type, so JTA is used by default.",
+            "ru": "Без persistence.xml persistence unit не может объявить тип транзакций, поэтому по умолчанию используется JTA."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Spring never needed persistence.xml: LocalContainerEntityManagerFactoryBean supplies the persistence unit info itself, taking the DataSource, the packages to scan and the Hibernate properties from the container. Spring Boot's auto-configuration wires that bean and defaults the scan to the @EnableAutoConfiguration package.",
+        "ru": "Spring никогда не требовал persistence.xml: LocalContainerEntityManagerFactoryBean сам формирует persistence unit info, беря DataSource, сканируемые пакеты и свойства Hibernate из контейнера. Автоконфигурация Spring Boot создаёт этот бин и по умолчанию сканирует пакет класса с @EnableAutoConfiguration."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/data-access/orm/jpa.html",
+        "https://docs.spring.io/spring-boot/reference/data/sql.html"
+      ]
+    },
+    {
+      "id": "hibernate.jpa-orm-basics.006",
+      "section": "jpa-orm-basics",
+      "difficulty": "hard",
+      "text": {
+        "en": "Which is a genuine trade-off of using an ORM instead of hand-written JDBC?",
+        "ru": "Что является реальным недостатком ORM по сравнению с вручную написанным JDBC?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The SQL and the moment it is executed are decided by the provider at flush time, so statement content and ordering are less predictable.",
+            "ru": "SQL и момент его выполнения определяет провайдер во время flush, поэтому состав и порядок операторов менее предсказуемы."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Native, vendor-specific SQL cannot be executed, so such queries must live outside the persistence layer.",
+            "ru": "Нативный SQL, специфичный для СУБД, выполнить нельзя, поэтому такие запросы приходится выносить за пределы слоя персистентности."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "JDBC batching is unavailable, so bulk writes are always slower than with a plain PreparedStatement.",
+            "ru": "JDBC-батчинг недоступен, поэтому массовая запись всегда медленнее, чем через обычный PreparedStatement."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The schema must be generated by the provider, which makes working against a legacy database impossible.",
+            "ru": "Схему обязан генерировать провайдер, поэтому работать с унаследованной базой невозможно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Optimistic locking replaces the SELECT ... FOR UPDATE that JDBC code would use, so pessimistic locks are no longer reachable from the persistence layer.",
+            "ru": "Оптимистичные блокировки заменяют SELECT ... FOR UPDATE, который использовал бы JDBC-код, поэтому пессимистичные блокировки из слоя персистентности больше недоступны."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Hibernate uses transactional write-behind: changes are queued and translated into SQL when the context is flushed, in an order the provider chooses, which is exactly what makes deadlock analysis and constraint-timing issues harder than with explicit JDBC. Native queries, JDBC batching and legacy schemas are all fully supported, so those options are false.",
+        "ru": "Hibernate применяет transactional write-behind: изменения накапливаются и превращаются в SQL при flush, причём порядок выбирает провайдер — именно это усложняет разбор дедлоков и проблем с моментом проверки ограничений по сравнению с явным JDBC. Нативные запросы, JDBC-батчинг и работа с унаследованной схемой полностью поддерживаются, поэтому остальные варианты неверны."
+      },
+      "sources": [
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#flushing",
+        "https://vladmihalcea.com/a-beginners-guide-to-jpa-hibernate-flush-strategies/"
+      ]
+    },
+    {
+      "id": "hibernate.entity-mapping.001",
+      "section": "entity-mapping",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which requirement does the Jakarta Persistence specification actually impose on an entity class?",
+        "ru": "Какое требование спецификация Jakarta Persistence действительно предъявляет к классу сущности?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It must declare a public no-argument constructor; a protected one is not sufficient for the provider.",
+            "ru": "Он обязан объявлять public-конструктор без аргументов; protected провайдеру недостаточно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It must implement Serializable, because the provider serialises entities into the persistence context.",
+            "ru": "Он обязан реализовывать Serializable, поскольку провайдер сериализует сущности в persistence context."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It must carry both @Entity and @Table, since the table name cannot be derived from the class name.",
+            "ru": "На нём должны быть и @Entity, и @Table, поскольку имя таблицы нельзя вывести из имени класса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It must declare a no-argument constructor that is public or protected, and the class itself must not be final.",
+            "ru": "Он обязан объявлять конструктор без аргументов с модификатором public или protected, а сам класс не должен быть final."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "All persistent state must be private and reachable only through public getters and setters.",
+            "ru": "Всё персистентное состояние должно быть private и доступно только через public-геттеры и сеттеры."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The specification requires a no-arg constructor that is public or protected so the provider can instantiate the class, and neither the class nor its persistent members may be final because Hibernate subclasses it for proxies. Serializable is only recommended for entities that travel outside the JVM, and @Table is optional — the table name defaults to the entity name.",
+        "ru": "Спецификация требует конструктор без аргументов с модификатором public или protected, чтобы провайдер мог создать экземпляр, и запрещает final для класса и его персистентных членов, так как Hibernate наследует класс для прокси. Serializable лишь рекомендуется для сущностей, покидающих JVM, а @Table необязательна — имя таблицы по умолчанию берётся из имени сущности."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/persistence/3.2/",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#entity"
+      ]
+    },
+    {
+      "id": "hibernate.entity-mapping.002",
+      "section": "entity-mapping",
+      "difficulty": "easy",
+      "text": {
+        "en": "How is a java.time.LocalDateTime field of an entity mapped in Jakarta Persistence 3.x?",
+        "ru": "Как в Jakarta Persistence 3.x маппится поле сущности типа java.time.LocalDateTime?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It must be annotated @Temporal(TemporalType.TIMESTAMP), otherwise the provider stores its toString() form.",
+            "ru": "Его нужно пометить @Temporal(TemporalType.TIMESTAMP), иначе провайдер сохранит результат toString()."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is a basic type mapped to a timestamp column with no extra annotation; @Temporal applies only to java.util.Date and Calendar.",
+            "ru": "Это базовый тип, который маппится в timestamp-колонку без дополнительных аннотаций; @Temporal применима только к java.util.Date и Calendar."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It needs a custom AttributeConverter, because java.time types are not part of the basic types of the specification.",
+            "ru": "Для него нужен собственный AttributeConverter, поскольку типы java.time не входят в базовые типы спецификации."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It must be annotated @Temporal, and choosing TemporalType.DATE would silently truncate the time part.",
+            "ru": "Его нужно пометить @Temporal, и выбор TemporalType.DATE молча отбросит часть со временем."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is mapped automatically only from Jakarta Persistence 3.2 onwards; earlier versions required @Temporal for it.",
+            "ru": "Он маппится автоматически только начиная с Jakarta Persistence 3.2; в более ранних версиях для него требовалась @Temporal."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "JPA 2.2 already added LocalDate, LocalTime, LocalDateTime, OffsetTime and OffsetDateTime to the list of basic types, and Jakarta Persistence 3.2 deprecated @Temporal altogether. @Temporal is legal only on java.util.Date and java.util.Calendar attributes, where it disambiguates DATE, TIME and TIMESTAMP.",
+        "ru": "Ещё в JPA 2.2 типы LocalDate, LocalTime, LocalDateTime, OffsetTime и OffsetDateTime вошли в список базовых, а в Jakarta Persistence 3.2 аннотация @Temporal объявлена устаревшей. @Temporal допустима только для атрибутов java.util.Date и java.util.Calendar, где она различает DATE, TIME и TIMESTAMP."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/persistence/3.2/apidocs/jakarta.persistence/jakarta/persistence/temporal",
+        "https://in.relation.to/2024/04/22/stop-using-date/"
+      ]
+    },
+    {
+      "id": "hibernate.entity-mapping.003",
+      "section": "entity-mapping",
+      "difficulty": "medium",
+      "text": {
+        "en": "What is stored in the status column, and what is the real risk of this mapping?",
+        "ru": "Что будет храниться в колонке status и в чём реальный риск такого маппинга?"
+      },
+      "code": "public enum Status { NEW, PAID, SHIPPED }\n\n@Entity\npublic class Order {\n    @Id\n    private Long id;\n\n    @Enumerated\n    private Status status;\n}",
+      "options": [
+        {
+          "text": {
+            "en": "The constant name, because STRING has been the default since Jakarta Persistence 3.0; renaming a constant then breaks every existing row.",
+            "ru": "Имя константы, поскольку STRING — значение по умолчанию начиная с Jakarta Persistence 3.0; переименование константы после этого ломает все существующие строки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The ordinal, and adding a new constant at the end of the enum invalidates the rows already written.",
+            "ru": "Порядковый номер, и добавление новой константы в конец enum делает уже записанные строки некорректными."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The ordinal, but Hibernate refuses to bootstrap until the EnumType is stated explicitly.",
+            "ru": "Порядковый номер, но Hibernate откажется стартовать, пока EnumType не указан явно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing: without an explicit EnumType the attribute is treated as @Transient and never persisted.",
+            "ru": "Ничего: без явного EnumType атрибут считается @Transient и не сохраняется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The ordinal, because ORDINAL is the default; inserting a constant in the middle silently reinterprets existing rows.",
+            "ru": "Порядковый номер, поскольку ORDINAL — значение по умолчанию; вставка константы в середину молча меняет смысл существующих строк."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "@Enumerated defaults to EnumType.ORDINAL, so 0, 1 and 2 are written. Appending a constant at the end is harmless — the danger is inserting or reordering constants, which shifts the ordinals of everything after them; EnumType.STRING avoids the whole class of problem at the cost of a wider column.",
+        "ru": "По умолчанию @Enumerated использует EnumType.ORDINAL, то есть пишутся 0, 1 и 2. Добавление константы в конец безопасно — опасны вставка в середину или изменение порядка, потому что сдвигаются ординалы всех последующих; EnumType.STRING полностью снимает эту проблему ценой более широкой колонки."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/persistence/3.2/apidocs/jakarta.persistence/jakarta/persistence/enumerated",
+        "https://thorben-janssen.com/hibernate-enum-mappings/"
+      ]
+    },
+    {
+      "id": "hibernate.entity-mapping.004",
+      "section": "entity-mapping",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about the resulting mapping is TRUE?",
+        "ru": "Какое утверждение о получившемся маппинге верно?"
+      },
+      "code": "@Embeddable\npublic class Address {\n    @Column(name = \"street\", nullable = false)\n    private String street;\n    private String city;\n}\n\n@Entity\npublic class Person {\n    @Id\n    private Long id;\n\n    @Embedded\n    private Address homeAddress;\n\n    @Embedded\n    @AttributeOverrides({\n        @AttributeOverride(name = \"street\", column = @Column(name = \"work_street\")),\n        @AttributeOverride(name = \"city\", column = @Column(name = \"work_city\"))\n    })\n    private Address workAddress;\n}",
+      "options": [
+        {
+          "text": {
+            "en": "Hibernate creates a separate ADDRESS table and joins it to PERSON twice, once per embedded field.",
+            "ru": "Hibernate создаст отдельную таблицу ADDRESS и присоединит её к PERSON дважды — по одному разу на каждое встроенное поле."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Bootstrap fails: the same @Embeddable type may not be embedded twice in a single entity.",
+            "ru": "Старт завершится ошибкой: один и тот же тип @Embeddable нельзя встраивать в одну сущность дважды."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both addresses are inlined into the PERSON table, and every attribute of the second copy needs its own override.",
+            "ru": "Оба адреса встраиваются в таблицу PERSON, и каждому атрибуту второй копии нужен свой override."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Overriding street alone would be enough: an attribute with no explicit @Column gets its column name prefixed with the embedded field name, so home_city and work_city are derived automatically.",
+            "ru": "Достаточно было бы переопределить только street: атрибут без явного @Column получает имя колонки с префиксом имени встроенного поля, поэтому home_city и work_city выводятся автоматически."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The two embedded objects share one set of columns, and the value written last at flush time wins.",
+            "ru": "Оба встроенных объекта делят один набор колонок, и при flush побеждает записанное последним значение."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "An embeddable has no identity and no table of its own, so its columns are inlined into the owning entity's table. The default implicit naming strategy does not prefix them with the embedded field name, so embedding Address twice makes both copies claim street and city; every colliding attribute needs its own @AttributeOverride, otherwise bootstrap fails with \"Repeated column in mapping for entity\".",
+        "ru": "У embeddable нет ни собственной идентичности, ни своей таблицы, поэтому его колонки встраиваются в таблицу владеющей сущности. Стратегия имён по умолчанию не добавляет к ним префикс имени встроенного поля, поэтому при двойном встраивании Address обе копии претендуют на street и city; каждому конфликтующему атрибуту нужен свой @AttributeOverride, иначе старт падает с ошибкой «Repeated column in mapping for entity»."
+      },
+      "sources": [
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#embeddables",
+        "https://jakarta.ee/specifications/persistence/3.2/apidocs/jakarta.persistence/jakarta/persistence/attributeoverride"
+      ]
+    },
+    {
+      "id": "hibernate.entity-mapping.005",
+      "section": "entity-mapping",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which access type does Hibernate use here, and what does that mean for the value read from the database?",
+        "ru": "Какой тип доступа использует Hibernate в этом случае и что это значит для значения, прочитанного из базы?"
+      },
+      "code": "@Entity\npublic class Book {\n    @Id\n    private Long id;\n\n    private String title;\n\n    public String getTitle() {\n        return title == null ? \"\" : title;\n    }\n\n    public void setTitle(String t) {\n        this.title = t.trim();\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "Property access, because public getters and setters exist; the getter's null handling is applied on every load.",
+            "ru": "Доступ через свойства, потому что есть public-геттеры и сеттеры; обработка null в геттере применяется при каждой загрузке."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Field access, but Hibernate still routes hydration through the setter, so the value is trimmed on load.",
+            "ru": "Доступ через поля, но при гидрации Hibernate всё равно идёт через сеттер, поэтому значение при загрузке обрезается."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Field access, because @Id is on a field; Hibernate reads and writes the fields directly and never calls the accessors.",
+            "ru": "Доступ через поля, потому что @Id стоит на поле; Hibernate читает и пишет поля напрямую и не вызывает аксессоры."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Mixed access: the identifier uses field access and the remaining attributes use property access.",
+            "ru": "Смешанный доступ: идентификатор через поле, остальные атрибуты — через свойства."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Bootstrap fails, because the access type is ambiguous and must be declared with @Access.",
+            "ru": "Старт завершится ошибкой, потому что тип доступа неоднозначен и должен быть объявлен через @Access."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The placement of the mapping annotations decides the access type for the whole class: an annotated field means AccessType.FIELD, an annotated getter means AccessType.PROPERTY. With field access the accessors are irrelevant to persistence, so neither the getter's empty-string substitution nor the setter's trim() affects loaded state — a common source of surprises when logic is hidden in accessors.",
+        "ru": "Тип доступа для всего класса определяется тем, где стоят аннотации маппинга: аннотация на поле означает AccessType.FIELD, на геттере — AccessType.PROPERTY. При доступе через поля аксессоры к персистентности не относятся, поэтому ни подстановка пустой строки в геттере, ни trim() в сеттере не влияют на загруженное состояние — частый источник сюрпризов, когда логика спрятана в аксессорах."
+      },
+      "sources": [
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#access",
+        "https://thorben-janssen.com/access-strategies-in-jpa-and-hibernate/"
+      ]
+    },
+    {
+      "id": "hibernate.entity-mapping.006",
+      "section": "entity-mapping",
+      "difficulty": "hard",
+      "text": {
+        "en": "An inheritance hierarchy is mapped with InheritanceType.TABLE_PER_CLASS. Which statement is TRUE?",
+        "ru": "Иерархия наследования размечена как InheritanceType.TABLE_PER_CLASS. Какое утверждение верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A polymorphic query on the base type is executed as a UNION over the subclass tables, and GenerationType.IDENTITY cannot be used for the identifier.",
+            "ru": "Полиморфный запрос по базовому типу выполняется как UNION по таблицам подклассов, а GenerationType.IDENTITY для идентификатора использовать нельзя."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A polymorphic query uses a discriminator column to pick the matching rows out of one shared table.",
+            "ru": "Полиморфный запрос использует колонку-дискриминатор, чтобы выбрать подходящие строки из одной общей таблицы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Each subclass table holds only the subclass-specific columns while the inherited ones stay in the base class table, so every read needs one join per inheritance level.",
+            "ru": "Таблица каждого подкласса содержит только специфичные для него колонки, а унаследованные остаются в таблице базового класса, поэтому каждое чтение требует одного join на каждый уровень иерархии."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is the only strategy that keeps NOT NULL constraints on subclass columns, at the cost of one join per level.",
+            "ru": "Это единственная стратегия, сохраняющая ограничения NOT NULL на колонках подклассов, ценой одного join на каждый уровень."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "GenerationType.IDENTITY is required, because a sequence cannot be shared between the subclass tables.",
+            "ru": "GenerationType.IDENTITY обязателен, поскольку последовательность нельзя разделять между таблицами подклассов."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "TABLE_PER_CLASS gives every concrete class a complete table, so a query on the base type has to UNION them; identifiers must be unique across the whole hierarchy, which rules out per-table IDENTITY columns and forces a shared sequence or table generator. Discriminator-based selection belongs to SINGLE_TABLE, and the join-per-level model with enforceable NOT NULL columns is JOINED.",
+        "ru": "При TABLE_PER_CLASS у каждого конкретного класса есть полная таблица, поэтому запрос по базовому типу приходится собирать через UNION; идентификаторы должны быть уникальны на всю иерархию, что исключает IDENTITY-колонки в каждой таблице и требует общей последовательности или table-генератора. Выборка по дискриминатору — это SINGLE_TABLE, а модель с join на каждый уровень и работающими NOT NULL — это JOINED."
+      },
+      "sources": [
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#entity-inheritance",
+        "https://vladmihalcea.com/hibernate-inheritance/"
+      ]
+    },
+    {
+      "id": "hibernate.associations.001",
+      "section": "associations",
+      "difficulty": "easy",
+      "text": {
+        "en": "What does the mappedBy attribute of a bidirectional association declare?",
+        "ru": "Что объявляет атрибут mappedBy в двунаправленной связи?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "That this side owns the association, and it names the column that holds the foreign key.",
+            "ru": "Что эта сторона владеет связью, и указывает имя колонки, в которой лежит внешний ключ."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That both sides are now synchronised by the provider, so each of them is written independently at flush.",
+            "ru": "Что теперь провайдер синхронизирует обе стороны, поэтому каждая из них записывается при flush независимо."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That the association is bidirectional; it must therefore be present on both sides so the provider can pair them.",
+            "ru": "Что связь двунаправленная; поэтому его нужно указывать на обеих сторонах, чтобы провайдер сопоставил их."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That @JoinColumn is no longer needed anywhere, because mappedBy names the database column directly.",
+            "ru": "Что @JoinColumn больше нигде не нужен, поскольку mappedBy напрямую указывает колонку в базе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That this side is the inverse, non-owning side; the other side holds the foreign key and its state is what gets written.",
+            "ru": "Что эта сторона — обратная, не владеющая; внешний ключ держит другая сторона, и записывается именно её состояние."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "mappedBy names the Java attribute on the owning side and marks the annotated side as inverse: Hibernate reads it but ignores its state when generating INSERT and UPDATE statements. It appears on exactly one side — the side holding the foreign key stays free to use @JoinColumn.",
+        "ru": "mappedBy указывает Java-атрибут на владеющей стороне и помечает аннотированную сторону как обратную: Hibernate её читает, но игнорирует её состояние при генерации INSERT и UPDATE. Он указывается ровно на одной стороне — сторона с внешним ключом при этом может использовать @JoinColumn."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/persistence/3.2/apidocs/jakarta.persistence/jakarta/persistence/onetomany",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#associations"
+      ]
+    },
+    {
+      "id": "hibernate.associations.002",
+      "section": "associations",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about cascading and orphanRemoval is TRUE?",
+        "ru": "Какое утверждение о каскадах и orphanRemoval верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "CascadeType.ALL includes orphanRemoval, so dereferencing a child from the parent's collection is by itself enough to have its row deleted at the next flush.",
+            "ru": "CascadeType.ALL включает orphanRemoval, поэтому изъятия ребёнка из коллекции родителя само по себе достаточно, чтобы его строка была удалена при следующем flush."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "No operation is cascaded by default; CascadeType.REMOVE propagates remove() to children but does not delete a child merely taken out of the collection.",
+            "ru": "По умолчанию не каскадируется ничего; CascadeType.REMOVE передаёт remove() дочерним сущностям, но не удаляет ребёнка, просто убранного из коллекции."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "CascadeType.PERSIST is the default for @OneToMany, because the children belong to the parent's aggregate.",
+            "ru": "CascadeType.PERSIST — значение по умолчанию для @OneToMany, поскольку дочерние сущности входят в агрегат родителя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "orphanRemoval = true implies CascadeType.ALL and therefore also cascades merge and refresh.",
+            "ru": "orphanRemoval = true включает CascadeType.ALL и поэтому каскадирует также merge и refresh."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Cascading must be declared on the inverse side, because that is the side that owns the collection.",
+            "ru": "Каскады нужно объявлять на обратной стороне, поскольку именно она владеет коллекцией."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The default cascade is an empty set. CascadeType.REMOVE only forwards an explicit em.remove(parent) to the children; deleting a child that was dereferenced from the collection is exactly what orphanRemoval adds, and the two settings are independent. orphanRemoval does imply a remove cascade, but not persist, merge or refresh.",
+        "ru": "По умолчанию набор каскадов пуст. CascadeType.REMOVE лишь пробрасывает явный em.remove(parent) на детей; удаление ребёнка, убранного из коллекции, добавляет именно orphanRemoval, и эти две настройки независимы. orphanRemoval действительно подразумевает каскад удаления, но не persist, merge или refresh."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/persistence/3.2/apidocs/jakarta.persistence/jakarta/persistence/onetomany",
+        "https://vladmihalcea.com/orphanremoval-jpa-hibernate/"
+      ]
+    },
+    {
+      "id": "hibernate.associations.003",
+      "section": "associations",
+      "difficulty": "medium",
+      "text": {
+        "en": "Post.comments is mapped as @OneToMany(mappedBy = \"post\", cascade = CascadeType.ALL) and Comment.post as @ManyToOne. What does the flush produce?",
+        "ru": "Post.comments размечено как @OneToMany(mappedBy = \"post\", cascade = CascadeType.ALL), а Comment.post — как @ManyToOne. Что произойдёт при flush?"
+      },
+      "code": "Post post = em.find(Post.class, 1L);\nComment comment = new Comment(\"nice\");\npost.getComments().add(comment);\nem.flush();",
+      "options": [
+        {
+          "text": {
+            "en": "The comment is inserted with post_id set to 1: Hibernate derives the foreign key from the collection it was added to.",
+            "ru": "Комментарий вставляется с post_id, равным 1: Hibernate выводит внешний ключ из коллекции, в которую его добавили."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing is inserted: the inverse side is ignored completely, so the new comment is simply dropped.",
+            "ru": "Ничего не вставляется: обратная сторона полностью игнорируется, поэтому новый комментарий просто теряется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A TransientObjectException is thrown, because a transient instance was added to a managed collection.",
+            "ru": "Будет выброшено TransientObjectException, потому что transient-экземпляр добавили в managed-коллекцию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The comment is inserted through the cascade, but its post_id column is left NULL because the owning side was never set.",
+            "ru": "Комментарий вставляется по каскаду, но его колонка post_id остаётся NULL, потому что владеющая сторона так и не была выставлена."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The comment is inserted and an extra UPDATE sets post_id, so calling the setter is only a performance optimisation.",
+            "ru": "Комментарий вставляется, а дополнительный UPDATE проставляет post_id, поэтому вызов сеттера — лишь оптимизация производительности."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Cascading is attached to the collection, so persist does reach the new comment, but the foreign key lives on Comment.post — the owning side — and it is still null, so the INSERT writes NULL (or fails if the column is NOT NULL). This is why bidirectional associations need an addComment() helper that sets both ends; without cascade the same code would instead raise TransientObjectException.",
+        "ru": "Каскад привязан к коллекции, поэтому persist действительно доходит до нового комментария, но внешний ключ живёт в Comment.post — на владеющей стороне — и он всё ещё null, поэтому INSERT запишет NULL (или упадёт, если колонка NOT NULL). Именно поэтому двунаправленным связям нужен метод addComment(), выставляющий оба конца; без каскада тот же код вместо этого дал бы TransientObjectException."
+      },
+      "sources": [
+        "https://vladmihalcea.com/jpa-hibernate-synchronize-bidirectional-entity-associations/",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#associations-one-to-many"
+      ]
+    },
+    {
+      "id": "hibernate.associations.004",
+      "section": "associations",
+      "difficulty": "medium",
+      "text": {
+        "en": "Why is Set usually preferred over List for a @ManyToMany association in Hibernate?",
+        "ru": "Почему для связи @ManyToMany в Hibernate обычно предпочитают Set, а не List?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Removing one element from a List makes Hibernate delete every join-table row of that owner and re-insert the survivors; with a Set only the affected row is deleted.",
+            "ru": "Удаление одного элемента из List заставляет Hibernate удалить все строки join-таблицы для этого владельца и заново вставить оставшиеся; с Set удаляется только затронутая строка."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A List cannot be mapped for @ManyToMany at all: Hibernate rejects it at bootstrap unless @OrderColumn is present.",
+            "ru": "List вообще нельзя использовать для @ManyToMany: Hibernate отклонит маппинг при старте, если нет @OrderColumn."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A Set preserves the physical row order of the join table, while a List loads its elements in arbitrary order.",
+            "ru": "Set сохраняет физический порядок строк join-таблицы, тогда как List загружает элементы в произвольном порядке."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A List forces EAGER fetching because Hibernate has to materialise its index positions before the collection can be handed out, while a Set can stay LAZY behind a proxy.",
+            "ru": "List вынуждает EAGER-загрузку, поскольку Hibernate обязан материализовать позиции индекса, прежде чем отдать коллекцию, а Set может остаться LAZY за прокси."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A Set lets Hibernate use JDBC batching on the join table, while a List always issues one statement per element.",
+            "ru": "Set позволяет Hibernate применять JDBC-батчинг к join-таблице, а List всегда выполняет по одному оператору на элемент."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "An unordered List is mapped as a bag, and Hibernate cannot address a single bag row, so any collection change is implemented as delete-all plus re-insert of the remaining rows. A Set has no index and its elements are identifiable, so Hibernate emits a targeted DELETE — the reason Set is the recommended collection type for @ManyToMany.",
+        "ru": "Неупорядоченный List маппится как bag, и Hibernate не может адресовать отдельную строку bag, поэтому любое изменение коллекции реализуется как удаление всех строк и повторная вставка оставшихся. У Set нет индекса, а его элементы идентифицируемы, поэтому Hibernate выдаёт точечный DELETE — из-за этого Set и рекомендуют для @ManyToMany."
+      },
+      "sources": [
+        "https://vladmihalcea.com/the-best-way-to-use-the-manytomany-annotation-with-jpa-and-hibernate/",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#collections"
+      ]
+    },
+    {
+      "id": "hibernate.associations.005",
+      "section": "associations",
+      "difficulty": "medium",
+      "text": {
+        "en": "A parent maps its children as a unidirectional List with @OneToMany and no @JoinColumn and no @ManyToOne on the child. Why is this mapping discouraged?",
+        "ru": "Родитель размечает детей как односторонний List с @OneToMany, без @JoinColumn и без @ManyToOne на дочерней сущности. Почему такой маппинг не рекомендуется?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Without a foreign key on the child table the collection cannot be proxied, so it cannot be lazy and the full list of children is loaded by a join together with every parent.",
+            "ru": "Без внешнего ключа в таблице ребёнка коллекцию нельзя проксировать, поэтому она не может быть ленивой, и полный список детей загружается join-ом вместе с каждым родителем."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It forces the child entity to use GenerationType.IDENTITY, which in turn disables JDBC batching.",
+            "ru": "Он вынуждает дочернюю сущность использовать GenerationType.IDENTITY, что в свою очередь отключает JDBC-батчинг."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Hibernate cannot cascade persist through it, so every child has to be persisted explicitly.",
+            "ru": "Hibernate не может каскадировать persist через него, поэтому каждого ребёнка приходится сохранять явно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Hibernate stores the association in a join table and treats the List as a bag, so removing one child deletes all of that parent's join rows and re-inserts the rest.",
+            "ru": "Hibernate хранит связь в join-таблице и трактует List как bag, поэтому удаление одного ребёнка удаляет все join-строки этого родителя и заново вставляет остальные."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Reading the parent triggers one query per child, because batch fetching is disabled for unidirectional collections.",
+            "ru": "Чтение родителя вызывает по одному запросу на каждого ребёнка, поскольку для односторонних коллекций batch fetching отключён."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Without a @ManyToOne or a @JoinColumn there is no foreign key on the child table, so the specification's default is a join table, and an unordered List is a bag whose rows Hibernate cannot address individually — hence delete-all plus re-insert on every change. The idiomatic fix is a bidirectional @ManyToOne / @OneToMany(mappedBy) pair.",
+        "ru": "Без @ManyToOne или @JoinColumn на таблице ребёнка нет внешнего ключа, поэтому по умолчанию спецификация создаёт join-таблицу, а неупорядоченный List — это bag, строки которого Hibernate не может адресовать по отдельности, отсюда удаление всех строк и повторная вставка при каждом изменении. Идиоматичное решение — двунаправленная пара @ManyToOne / @OneToMany(mappedBy)."
+      },
+      "sources": [
+        "https://vladmihalcea.com/the-best-way-to-map-a-onetomany-association-with-jpa-and-hibernate/",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#associations-one-to-many-unidirectional"
+      ]
+    },
+    {
+      "id": "hibernate.associations.006",
+      "section": "associations",
+      "difficulty": "hard",
+      "text": {
+        "en": "Loading a User still triggers an immediate SELECT on the profile table. Why is FetchType.LAZY ineffective here?",
+        "ru": "Загрузка User всё равно вызывает немедленный SELECT по таблице профиля. Почему FetchType.LAZY здесь не работает?"
+      },
+      "code": "@Entity\npublic class User {\n    @Id\n    private Long id;\n\n    @OneToOne(mappedBy = \"user\", fetch = FetchType.LAZY)\n    private Profile profile;\n}\n\n@Entity\npublic class Profile {\n    @Id\n    private Long id;\n\n    @OneToOne\n    @JoinColumn(name = \"user_id\")\n    private User user;\n}",
+      "options": [
+        {
+          "text": {
+            "en": "@OneToOne ignores FetchType by specification; only collection-valued associations can be lazy.",
+            "ru": "@OneToOne по спецификации игнорирует FetchType; ленивыми могут быть только коллекционные связи."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The mappedBy side has no foreign key column, so Hibernate must query the profile table just to know whether a row exists and cannot hand out a proxy.",
+            "ru": "На стороне с mappedBy нет колонки внешнего ключа, поэтому Hibernate обязан обратиться к таблице профиля, чтобы узнать, существует ли строка, и не может выдать прокси."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Any lazy association needs bytecode enhancement, which is off by default, so no to-one association is ever lazy.",
+            "ru": "Любая ленивая связь требует bytecode enhancement, который по умолчанию выключен, поэтому ни одна to-one связь ленивой не бывает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The inverse side is eager because Hibernate cannot record a null in the persistence context, so it must materialise the Profile just to register its absence.",
+            "ru": "Обратная сторона жадная, потому что Hibernate не умеет записать null в persistence context и обязан материализовать Profile, чтобы зафиксировать его отсутствие."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Hibernate keeps the inverse side eager so that both ends of the association stay consistent inside the persistence context.",
+            "ru": "Hibernate оставляет обратную сторону жадной, чтобы оба конца связи оставались согласованными внутри persistence context."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A proxy can only be created when the identifier is already known, which is the case on the owning side - the FK column sits in the row just read - but not on the mappedBy side, where Hibernate must query to decide between a proxy and null. The robust fix is a shared primary key with @MapsId, which removes the inverse side altogether; declaring the inverse side optional = false or turning on bytecode enhancement helps on some versions but is not something to rely on.",
+        "ru": "Прокси можно создать только когда идентификатор уже известен: на владеющей стороне это так — колонка FK есть в только что прочитанной строке, — а на стороне с mappedBy нет, и Hibernate обязан сделать запрос, чтобы выбрать между прокси и null. Надёжное решение — общий первичный ключ через @MapsId, при котором обратная сторона исчезает вовсе; optional = false на обратной стороне или включённый bytecode enhancement помогают лишь в отдельных версиях, и полагаться на это не стоит."
+      },
+      "sources": [
+        "https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate/",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#associations-one-to-one"
+      ]
+    },
+    {
+      "id": "hibernate.identifiers.001",
+      "section": "identifiers",
+      "difficulty": "easy",
+      "text": {
+        "en": "Why does GenerationType.IDENTITY prevent Hibernate from batching INSERT statements?",
+        "ru": "Почему GenerationType.IDENTITY не позволяет Hibernate батчить INSERT-операторы?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Identity columns are not supported by the JDBC batch API, which requires the driver to return no generated keys.",
+            "ru": "Identity-колонки не поддерживаются JDBC batch API, который требует, чтобы драйвер не возвращал сгенерированные ключи."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Hibernate must hold a lock on the identity column for the whole transaction, and a lock cannot span a batch.",
+            "ru": "Hibernate обязан удерживать блокировку на identity-колонке всю транзакцию, а блокировка не может распространяться на батч."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "IDENTITY forces FlushModeType.COMMIT, and JDBC batching only works with FlushModeType.AUTO.",
+            "ru": "IDENTITY принудительно включает FlushModeType.COMMIT, а JDBC-батчинг работает только с FlushModeType.AUTO."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The generated value must be read back with a separate SELECT, and mixing SELECT with INSERT in one batch is illegal.",
+            "ru": "Сгенерированное значение нужно дочитывать отдельным SELECT, а смешивать SELECT и INSERT в одном батче нельзя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The identifier is only known after the INSERT has run, so each INSERT must be executed at persist time instead of being queued.",
+            "ru": "Идентификатор становится известен только после выполнения INSERT, поэтому каждый INSERT приходится выполнять сразу при persist, а не складывать в очередь."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Hibernate's transactional write-behind requires the identifier before an entity can become managed, and with IDENTITY that value only exists once the row is inserted, so persist() executes the statement immediately and there is nothing left to batch. SEQUENCE with a pooled allocation keeps identifiers available up front and therefore preserves batching.",
+        "ru": "Модель transactional write-behind в Hibernate требует идентификатор до того, как сущность станет managed, а при IDENTITY это значение появляется только после вставки строки, поэтому persist() выполняет оператор немедленно и батчить уже нечего. SEQUENCE с пулом заранее выдаёт идентификаторы и потому сохраняет батчинг."
+      },
+      "sources": [
+        "https://vladmihalcea.com/hibernate-identity-sequence-and-table-sequence-generator/",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#batch"
+      ]
+    },
+    {
+      "id": "hibernate.identifiers.002",
+      "section": "identifiers",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about using a UUID as the entity identifier is TRUE?",
+        "ru": "Какое утверждение об использовании UUID в качестве идентификатора сущности верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A UUID key has to be produced by the database with a function such as gen_random_uuid(), so the value is only known after the INSERT and batching is lost exactly as with IDENTITY.",
+            "ru": "UUID-ключ обязана выдавать база данных функцией вроде gen_random_uuid(), поэтому значение известно только после INSERT и батчинг теряется точно так же, как с IDENTITY."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A UUID must be mapped as a String, because Hibernate has no binary or native UUID column mapping.",
+            "ru": "UUID нужно маппить как String, поскольку в Hibernate нет ни бинарного, ни нативного маппинга UUID-колонки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "GenerationType.UUID generates it in the application, which keeps JDBC batching available, but a random UUID as primary key hurts index locality on insert.",
+            "ru": "GenerationType.UUID генерирует его в приложении, поэтому JDBC-батчинг остаётся доступен, но случайный UUID как первичный ключ ухудшает локальность индекса при вставке."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A UUID identifier makes equals and hashCode unsafe, because its value is only assigned at flush time.",
+            "ru": "UUID-идентификатор делает equals и hashCode небезопасными, поскольку его значение присваивается только при flush."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A UUID removes the need for a surrogate key, because it is a natural key of the row by definition.",
+            "ru": "UUID снимает необходимость в суррогатном ключе, поскольку по определению является естественным ключом строки."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Jakarta Persistence 3.1 added GenerationType.UUID, and Hibernate can also map java.util.UUID to a native uuid or binary(16) column. Because the value is created in memory, the entity is fully identified before the INSERT, so batching still works — the real cost is the random insertion point in a B-tree index and the wider key.",
+        "ru": "В Jakarta Persistence 3.1 добавили GenerationType.UUID, а Hibernate умеет маппить java.util.UUID в нативную колонку uuid или в binary(16). Поскольку значение создаётся в памяти, сущность полностью идентифицирована до INSERT, и батчинг продолжает работать — реальная цена в случайной точке вставки в B-tree индекс и в более широком ключе."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/persistence/3.2/apidocs/jakarta.persistence/jakarta/persistence/generationtype",
+        "https://vladmihalcea.com/uuid-database-primary-key/"
+      ]
+    },
+    {
+      "id": "hibernate.identifiers.003",
+      "section": "identifiers",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about @GeneratedValue(strategy = GenerationType.AUTO) is TRUE?",
+        "ru": "Какое утверждение о @GeneratedValue(strategy = GenerationType.AUTO) верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "AUTO always resolves to IDENTITY, since that is the only mechanism every relational database offers.",
+            "ru": "AUTO всегда сводится к IDENTITY, поскольку это единственный механизм, доступный в любой реляционной базе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "AUTO is a synonym for TABLE and always creates a hibernate_sequences table holding one row per entity.",
+            "ru": "AUTO — синоним TABLE и всегда создаёт таблицу hibernate_sequences с одной строкой на сущность."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The provider picks it from the dialect; on a sequence-capable database Hibernate 6 uses a per-entity sequence, not Hibernate 5's shared hibernate_sequence.",
+            "ru": "Провайдер выбирает её по диалекту; на базе с поддержкой последовательностей Hibernate 6 берёт отдельную последовательность на сущность, а не общую hibernate_sequence из Hibernate 5."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "AUTO is resolved at compile time by the Jakarta Persistence annotation processor, so the strategy is baked into the generated metamodel and is fixed for every database the application runs against.",
+            "ru": "AUTO разрешается на этапе компиляции процессором аннотаций Jakarta Persistence, поэтому стратегия зашивается в сгенерированную метамодель и фиксирована для всех баз, с которыми работает приложение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "AUTO means the application assigns the identifier itself and the provider only checks that it is not null.",
+            "ru": "AUTO означает, что идентификатор присваивает само приложение, а провайдер лишь проверяет, что он не null."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "AUTO delegates the choice to the provider and is resolved at bootstrap from the configured dialect, so the same mapping can become a sequence on PostgreSQL and something else elsewhere. Hibernate 6 changed the default from one global hibernate_sequence to a sequence per entity, which is a migration hazard when upgrading an existing schema.",
+        "ru": "AUTO отдаёт выбор провайдеру и разрешается при старте исходя из настроенного диалекта, поэтому один и тот же маппинг может превратиться в последовательность на PostgreSQL и в другое решение на иной базе. В Hibernate 6 значение по умолчанию сменилось с единой hibernate_sequence на последовательность на каждую сущность, что создаёт риск при миграции существующей схемы."
+      },
+      "sources": [
+        "https://vladmihalcea.com/hibernate-default-entity-sequence/",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#identifiers-generators"
+      ]
+    },
+    {
+      "id": "hibernate.identifiers.004",
+      "section": "identifiers",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about this identifier mapping is TRUE?",
+        "ru": "Какое утверждение об этом маппинге идентификатора верно?"
+      },
+      "code": "@Id\n@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = \"post_seq\")\n@SequenceGenerator(name = \"post_seq\", sequenceName = \"post_seq\", allocationSize = 50)\nprivate Long id;",
+      "options": [
+        {
+          "text": {
+            "en": "Hibernate calls the sequence once and hands out 50 ids from memory, so it must be declared INCREMENT BY 50.",
+            "ru": "Hibernate обращается к последовательности один раз и выдаёт 50 идентификаторов из памяти, поэтому она должна быть объявлена с INCREMENT BY 50."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The database sequence must stay at INCREMENT BY 1; Hibernate multiplies the returned value by allocationSize itself.",
+            "ru": "Последовательность в базе должна остаться с INCREMENT BY 1; Hibernate сам умножает полученное значение на allocationSize."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "allocationSize caps how many rows Hibernate puts into one JDBC batch; the sequence is still called once per entity.",
+            "ru": "allocationSize ограничивает число строк в одном JDBC-батче; к последовательности по-прежнему обращаются на каждую сущность."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "allocationSize is ignored for GenerationType.SEQUENCE and only takes effect with GenerationType.TABLE.",
+            "ru": "allocationSize игнорируется для GenerationType.SEQUENCE и работает только с GenerationType.TABLE."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Any allocationSize above 1 makes Hibernate fall back to IDENTITY on databases without sequence caching.",
+            "ru": "Любое allocationSize больше 1 заставляет Hibernate откатиться к IDENTITY на базах без кеширования последовательностей."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "With allocationSize greater than 1 Hibernate installs the pooled optimizer: one sequence call returns the top of a range and the next 49 values are handed out without a round trip, which is why the physical sequence increment has to match allocationSize. The legacy hi/lo optimizer is the one that multiplies a value from an INCREMENT BY 1 sequence, and its identifiers are not safe for other applications sharing the table.",
+        "ru": "При allocationSize больше 1 Hibernate включает pooled-оптимизатор: один вызов последовательности возвращает верхнюю границу диапазона, а следующие 49 значений выдаются без обращения к базе — поэтому физический шаг последовательности должен совпадать с allocationSize. Умножением значения из последовательности с INCREMENT BY 1 занимается устаревший hi/lo оптимизатор, и его идентификаторы небезопасны, если с таблицей работают другие приложения."
+      },
+      "sources": [
+        "https://vladmihalcea.com/hibernate-hidden-gem-the-pooled-lo-optimizer/",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#identifiers-generators-sequence"
+      ]
+    },
+    {
+      "id": "hibernate.identifiers.005",
+      "section": "identifiers",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement contrasts @EmbeddedId with @IdClass correctly?",
+        "ru": "Какое утверждение верно противопоставляет @EmbeddedId и @IdClass?"
+      },
+      "code": "@Embeddable\npublic class OrderLineId implements Serializable {\n    private Long orderId;\n    private Long productId;\n}\n\n@Entity\npublic class OrderLine {\n    @EmbeddedId\n    private OrderLineId id;\n}",
+      "options": [
+        {
+          "text": {
+            "en": "With @EmbeddedId the key attributes must be duplicated as plain @Id fields on the entity as well, which is why @IdClass needs no separate class and is simpler for legacy schemas.",
+            "ru": "При @EmbeddedId атрибуты ключа нужно дублировать в самой сущности как обычные поля @Id, поэтому @IdClass не требует отдельного класса и проще для унаследованных схем."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@EmbeddedId requires @GeneratedValue on each key attribute, whereas @IdClass forbids generation entirely.",
+            "ru": "@EmbeddedId требует @GeneratedValue на каждом атрибуте ключа, тогда как @IdClass полностью запрещает генерацию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The two forms are interchangeable in JPQL, because the id attribute is unwrapped automatically and ol.orderId works either way.",
+            "ru": "В JPQL обе формы взаимозаменяемы, поскольку атрибут id разворачивается автоматически и ol.orderId работает в любом случае."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@EmbeddedId maps the composite key to a separate key table, while @IdClass keeps the columns in the entity's own table.",
+            "ru": "@EmbeddedId выносит составной ключ в отдельную таблицу ключей, а @IdClass оставляет колонки в таблице самой сущности."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "With @EmbeddedId the key is one attribute, navigated as ol.id.orderId; with @IdClass the key attributes also exist on the entity and are referenced directly.",
+            "ru": "При @EmbeddedId ключ — один атрибут, к которому обращаются как ol.id.orderId; при @IdClass атрибуты ключа объявлены и в самой сущности и используются напрямую."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "@EmbeddedId keeps one composite attribute on the entity, which makes queries slightly more verbose but keeps a single object to pass to find(); @IdClass instead declares the key columns as plain @Id fields on the entity and duplicates them in a separate class. Both keep the columns in the entity table, and both key classes must be Serializable with a correct equals and hashCode.",
+        "ru": "@EmbeddedId держит в сущности один составной атрибут: запросы становятся чуть длиннее, зато в find() передаётся один объект; @IdClass же объявляет колонки ключа обычными полями @Id в сущности и дублирует их в отдельном классе. В обоих случаях колонки остаются в таблице сущности, и оба класса ключа обязаны быть Serializable с корректными equals и hashCode."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/persistence/3.2/apidocs/jakarta.persistence/jakarta/persistence/embeddedid",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#identifiers-composite"
+      ]
+    },
+    {
+      "id": "hibernate.identifiers.006",
+      "section": "identifiers",
+      "difficulty": "hard",
+      "text": {
+        "en": "An entity uses a database-generated surrogate identifier and instances are put into a HashSet before being persisted. Which equals/hashCode design is safe?",
+        "ru": "Сущность использует суррогатный идентификатор, генерируемый базой, и её экземпляры попадают в HashSet до сохранения. Какая реализация equals/hashCode безопасна?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Use the generated identifier in both equals and hashCode: it is unique per row, so this is always safe.",
+            "ru": "Использовать сгенерированный идентификатор и в equals, и в hashCode: он уникален для строки, поэтому это всегда безопасно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "equals compares the identifier, treating a null id as equal only to the same instance, while hashCode ignores the identifier.",
+            "ru": "equals сравнивает идентификатор, считая null-идентификатор равным только тому же экземпляру, а hashCode игнорирует идентификатор."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Use Objects.hash over all persistent fields, since two rows with identical content denote the same entity.",
+            "ru": "Использовать Objects.hash по всем персистентным полям, поскольку две строки с одинаковым содержимым обозначают одну сущность."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Leave the inherited Object identity in place: the persistence context guarantees one instance per row, so overriding is never needed.",
+            "ru": "Оставить унаследованную идентичность Object: persistence context гарантирует один экземпляр на строку, поэтому переопределять ничего не нужно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Annotate the identifier with @NaturalId and let bytecode enhancement generate equals and hashCode from it.",
+            "ru": "Пометить идентификатор аннотацией @NaturalId и позволить bytecode enhancement сгенерировать по нему equals и hashCode."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The hash of an object must not change while it sits in a hash-based collection, and a generated id changes from null to a value at flush, so hashCode must not depend on it — a constant derived from the class works. Object identity is only sufficient inside one persistence context and breaks for detached copies; hashing all fields breaks as soon as any mutable field changes. When a real immutable business key exists, using it in both methods is the cleanest solution.",
+        "ru": "Хеш объекта не должен меняться, пока объект лежит в хеш-коллекции, а сгенерированный id при flush меняется с null на значение, поэтому hashCode не должен от него зависеть — подойдёт константа, производная от класса. Идентичности Object хватает только внутри одного persistence context и она ломается для detached-копий; хеш по всем полям ломается при изменении любого изменяемого поля. Если есть настоящий неизменяемый бизнес-ключ, самое чистое решение — использовать его в обоих методах."
+      },
+      "sources": [
+        "https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#mapping-model-pojo-equalshashcode"
+      ]
+    },
+    {
+      "id": "hibernate.persistence-context.001",
+      "section": "persistence-context",
+      "difficulty": "easy",
+      "text": {
+        "en": "What does this code print, and why?",
+        "ru": "Что выведет этот код и почему?"
+      },
+      "code": "em.getTransaction().begin();\nBook b1 = em.find(Book.class, 1L);\nBook b2 = em.find(Book.class, 1L);\nSystem.out.println(b1 == b2);",
+      "options": [
+        {
+          "text": {
+            "en": "false, because every find builds a new object; only an identifier-based equals would report them as equal.",
+            "ru": "false, потому что каждый find создаёт новый объект; равными их признал бы только equals по идентификатору."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "true, but only because Book overrides equals; without that override the comparison would be false.",
+            "ru": "true, но только потому, что Book переопределяет equals; без этого переопределения сравнение дало бы false."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "true, and both calls still issue a SELECT, because find always goes to the database.",
+            "ru": "true, и оба вызова всё равно выполняют SELECT, поскольку find всегда обращается к базе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "true, because a persistence context keeps exactly one managed instance per row and the second lookup needs no query.",
+            "ru": "true, потому что persistence context держит ровно один managed-экземпляр на строку, и второй поиск не требует запроса."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "false, because the first-level cache stores the loaded row state rather than the instance, so a fresh object is built each time.",
+            "ru": "false, потому что кеш первого уровня хранит состояние загруженной строки, а не экземпляр, поэтому объект создаётся заново каждый раз."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The persistence context is a first-level cache with an identity guarantee: one entity instance per (entity type, identifier) pair, so the second find returns the very same reference and skips the SELECT. The comparison uses ==, so equals plays no role here at all.",
+        "ru": "Persistence context — это кеш первого уровня с гарантией идентичности: один экземпляр сущности на пару (тип, идентификатор), поэтому второй find возвращает ту же самую ссылку и SELECT не выполняется. Сравнение выполняется через ==, поэтому equals здесь вообще не участвует."
+      },
+      "sources": [
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#pc",
+        "https://jakarta.ee/specifications/persistence/3.2/"
+      ]
+    },
+    {
+      "id": "hibernate.persistence-context.002",
+      "section": "persistence-context",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about persist and merge is TRUE?",
+        "ru": "Какое утверждение о persist и merge верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "persist makes the argument itself managed; merge copies state onto a managed instance that it returns.",
+            "ru": "persist делает managed сам аргумент; merge копирует состояние в managed-экземпляр, который и возвращает."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Both return a managed instance, so the return value of persist should always be used instead of the argument.",
+            "ru": "Оба возвращают managed-экземпляр, поэтому вместо аргумента всегда нужно использовать возвращённое значение persist."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "merge makes the argument itself managed and returns that very instance, so its return value can safely be ignored.",
+            "ru": "merge делает managed сам аргумент и возвращает именно его, поэтому возвращаемое значение можно спокойно игнорировать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "persist re-attaches a detached instance, which is precisely why Hibernate deprecated saveOrUpdate.",
+            "ru": "persist повторно присоединяет detached-экземпляр — именно поэтому Hibernate объявил saveOrUpdate устаревшим."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "merge always results in a SELECT followed by an UPDATE and can therefore never produce an INSERT.",
+            "ru": "merge всегда приводит к SELECT и последующему UPDATE и поэтому никогда не может привести к INSERT."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "persist has a void return type and attaches the passed instance; merge returns a different, managed object and the caller must keep using that reference. merge also handles a transient argument by copying it into a new managed entity, which ends up as an INSERT, and persist on a detached instance is an error rather than a re-attach.",
+        "ru": "persist возвращает void и присоединяет сам переданный экземпляр; merge возвращает другой, managed-объект, и дальше работать нужно именно с этой ссылкой. merge также обрабатывает transient-аргумент, копируя его в новую managed-сущность, что приводит к INSERT, а persist для detached-экземпляра — ошибка, а не повторное присоединение."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/persistence/3.2/apidocs/jakarta.persistence/jakarta/persistence/entitymanager",
+        "https://docs.hibernate.org/orm/6.6/javadocs/org/hibernate/Session.html"
+      ]
+    },
+    {
+      "id": "hibernate.persistence-context.003",
+      "section": "persistence-context",
+      "difficulty": "medium",
+      "text": {
+        "en": "A @Transactional service loads an Order and returns it; the web layer then serialises order.getItems() and a LazyInitializationException is thrown. What is the correct explanation?",
+        "ru": "Сервис с @Transactional загружает Order и возвращает его; затем web-слой сериализует order.getItems() и получает LazyInitializationException. Какое объяснение верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The collection was mapped EAGER, and Hibernate throws because eagerly loaded collections cannot be serialised.",
+            "ru": "Коллекция размечена как EAGER, и Hibernate падает, потому что жадно загруженные коллекции нельзя сериализовать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The proxy lost the reference to its owner's identifier, so Hibernate can no longer build the SELECT for it.",
+            "ru": "Прокси потерял ссылку на идентификатор владельца, поэтому Hibernate больше не может построить для него SELECT."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The serialiser reads the field directly instead of going through the getter, bypassing the proxy's initialisation hook.",
+            "ru": "Сериализатор читает поле напрямую, минуя геттер, и тем самым обходит точку инициализации прокси."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The transaction and its persistence context ended when the service method returned, so the collection proxy has no open Session to load itself from.",
+            "ru": "Транзакция и её persistence context закончились при выходе из метода сервиса, поэтому прокси коллекции не имеет открытой Session, из которой можно загрузиться."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The persistence context is still open but becomes read-only after commit, and initialising a proxy requires a writable context.",
+            "ru": "Persistence context ещё открыт, но после коммита становится read-only, а инициализация прокси требует контекста с правом записи."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "An uninitialised proxy keeps a reference to its session; once that session is closed the proxy can no longer fetch anything and throws. The fix is to fetch what the caller needs while the context is open — a JOIN FETCH, an @EntityGraph, or a DTO projection — rather than keeping the context open for the whole request.",
+        "ru": "Неинициализированный прокси хранит ссылку на свою сессию; как только сессия закрыта, прокси не может ничего дозагрузить и выбрасывает исключение. Правильное решение — загрузить нужные данные, пока контекст открыт: JOIN FETCH, @EntityGraph или проекция в DTO, а не держать контекст открытым на весь запрос."
+      },
+      "sources": [
+        "https://vladmihalcea.com/the-best-way-to-handle-the-lazyinitializationexception/",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#fetching"
+      ]
+    },
+    {
+      "id": "hibernate.persistence-context.004",
+      "section": "persistence-context",
+      "difficulty": "medium",
+      "text": {
+        "en": "The Author with id 1 currently has the name \"Old name\" in the database. How many rows does the query return?",
+        "ru": "У Author с id 1 в базе сейчас имя \"Old name\". Сколько строк вернёт запрос?"
+      },
+      "code": "em.getTransaction().begin();\nAuthor a = em.find(Author.class, 1L);\na.setName(\"New name\");\n\nList<Author> found = em.createQuery(\n        \"select a from Author a where a.name = 'New name'\", Author.class)\n    .getResultList();",
+      "options": [
+        {
+          "text": {
+            "en": "Zero, because the UPDATE is only sent at commit and the query therefore reads the unchanged row.",
+            "ru": "Ноль, потому что UPDATE отправляется только при коммите, и запрос читает неизменённую строку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "One, because with the default FlushModeType.AUTO Hibernate flushes the pending UPDATE before executing the query.",
+            "ru": "Одну, потому что при FlushModeType.AUTO по умолчанию Hibernate выполняет отложенный UPDATE перед выполнением запроса."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "One, because the query is answered from the first-level cache without touching the database at all.",
+            "ru": "Одну, потому что запрос обслуживается из кеша первого уровня и вообще не обращается к базе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Zero, because JPQL queries always bypass the persistence context and read the database directly.",
+            "ru": "Ноль, потому что JPQL-запросы всегда обходят persistence context и читают базу напрямую."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "One, but only if setFlushMode(FlushModeType.AUTO) is called explicitly, since the default is COMMIT.",
+            "ru": "Одну, но только если явно вызвать setFlushMode(FlushModeType.AUTO), поскольку по умолчанию используется COMMIT."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "AUTO is the default flush mode, and it guarantees that a query sees the effects of pending changes in the same persistence context, so Hibernate flushes the dirty Author first and the query matches the row. Queries do go to the database — the first-level cache only answers lookups by identifier — but the returned instance is the same managed object that was modified.",
+        "ru": "AUTO — режим flush по умолчанию, и он гарантирует, что запрос увидит эффект отложенных изменений в том же persistence context, поэтому Hibernate сначала выполняет UPDATE, и запрос находит строку. Запросы действительно идут в базу — кеш первого уровня обслуживает только поиск по идентификатору — но возвращённый экземпляр будет тем же managed-объектом, который изменили."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/persistence/3.2/apidocs/jakarta.persistence/jakarta/persistence/flushmodetype",
+        "https://vladmihalcea.com/a-beginners-guide-to-jpa-hibernate-flush-strategies/"
+      ]
+    },
+    {
+      "id": "hibernate.persistence-context.005",
+      "section": "persistence-context",
+      "difficulty": "medium",
+      "text": {
+        "en": "What is the practical consequence of switching a query or an EntityManager to FlushModeType.COMMIT?",
+        "ru": "Каково практическое следствие переключения запроса или EntityManager в FlushModeType.COMMIT?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Dirty checking is turned off entirely, so modifications have to be written back with an explicit merge.",
+            "ru": "Dirty checking полностью отключается, поэтому изменения приходится записывать явным merge."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is the specification default; AUTO has to be requested when a query must observe pending changes.",
+            "ru": "Это значение по умолчанию по спецификации; AUTO нужно запрашивать, когда запрос обязан видеть отложенные изменения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The context flushes after every statement to keep the database and the managed entities in step.",
+            "ru": "Контекст выполняет flush после каждого оператора, чтобы база и managed-сущности оставались синхронными."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The persistence context becomes read-only until the transaction commits, so writes are rejected.",
+            "ru": "Persistence context становится read-only до коммита транзакции, поэтому операции записи отклоняются."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The automatic flush before queries is skipped, so a query may return results that do not reflect pending in-memory changes.",
+            "ru": "Автоматический flush перед запросами не выполняется, поэтому запрос может вернуть результат, не отражающий отложенные изменения в памяти."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "COMMIT defers the flush to transaction commit, which removes the per-query flush overhead but breaks read-your-own-writes for queries in the same transaction. Dirty checking still runs and the changes are still written — just later — and AUTO, not COMMIT, is the specification default.",
+        "ru": "COMMIT откладывает flush до коммита транзакции: накладные расходы на flush перед каждым запросом исчезают, но запросы в той же транзакции перестают видеть собственные изменения. Dirty checking при этом продолжает работать, и изменения всё равно будут записаны — просто позже, — а значением по умолчанию в спецификации является AUTO, а не COMMIT."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/persistence/3.2/apidocs/jakarta.persistence/jakarta/persistence/flushmodetype",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#flushing"
+      ]
+    },
+    {
+      "id": "hibernate.persistence-context.006",
+      "section": "persistence-context",
+      "difficulty": "hard",
+      "text": {
+        "en": "Why is em.clear() needed here in addition to em.flush()?",
+        "ru": "Зачем здесь нужен em.clear() в дополнение к em.flush()?"
+      },
+      "code": "for (int i = 1; i <= 100_000; i++) {\n    em.persist(new LogEntry(\"row \" + i));\n    if (i % 50 == 0) {\n        em.flush();\n        em.clear();\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "clear is what actually sends the INSERT statements; flush only marks the entities as ready to be written.",
+            "ru": "Именно clear отправляет INSERT-операторы; flush лишь помечает сущности как готовые к записи."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "clear commits the current transaction so the database can release its undo log between chunks.",
+            "ru": "clear фиксирует текущую транзакцию, чтобы база между порциями могла освободить журнал отката."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "flush writes the queued statements but the entities stay managed, so without clear the context keeps growing and dirty checking gets slower on every iteration.",
+            "ru": "flush отправляет накопленные операторы, но сущности остаются managed, поэтому без clear контекст растёт, и dirty checking замедляется с каждой итерацией."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Without clear the same entities would be flushed again at commit, producing duplicate rows.",
+            "ru": "Без clear те же сущности были бы записаны повторно при коммите, что привело бы к дублирующимся строкам."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "clear resets Hibernate's action queue, and without it the queued insert actions pile up until the JDBC batch limit set by hibernate.jdbc.batch_size is exceeded.",
+            "ru": "clear сбрасывает очередь действий Hibernate, и без него накопленные действия вставки растут, пока не будет превышен предел JDBC-батча из hibernate.jdbc.batch_size."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Flushing only synchronises the queued statements with the database; the 100,000 entities would otherwise all stay in the persistence context, consuming heap and forcing Hibernate to dirty-check an ever-growing set at every flush. clear() detaches them so memory and flush cost stay flat, and the transaction is untouched by it.",
+        "ru": "Flush лишь синхронизирует накопленные операторы с базой; иначе все 100 000 сущностей остались бы в persistence context, занимая память и заставляя Hibernate при каждом flush проверять на изменения всё растущий набор. clear() отсоединяет их, поэтому расход памяти и стоимость flush остаются постоянными, а транзакции это никак не касается."
+      },
+      "sources": [
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#batch",
+        "https://vladmihalcea.com/how-to-batch-insert-and-update-statements-with-hibernate/"
+      ]
+    },
+    {
+      "id": "hibernate.fetching.001",
+      "section": "fetching",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which set of default fetch types does the Jakarta Persistence specification define for associations?",
+        "ru": "Какой набор значений FetchType по умолчанию задаёт спецификация Jakarta Persistence для связей?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "All four association types default to LAZY; EAGER always has to be requested explicitly.",
+            "ru": "Все четыре типа связей по умолчанию LAZY; EAGER всегда нужно указывать явно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@ManyToOne and @OneToMany default to EAGER; @OneToOne and @ManyToMany default to LAZY.",
+            "ru": "@ManyToOne и @OneToMany по умолчанию EAGER; @OneToOne и @ManyToMany по умолчанию LAZY."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@ManyToOne and @OneToOne default to EAGER; @OneToMany and @ManyToMany default to LAZY.",
+            "ru": "@ManyToOne и @OneToOne по умолчанию EAGER; @OneToMany и @ManyToMany по умолчанию LAZY."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "All four default to EAGER, and laziness only becomes available with bytecode enhancement.",
+            "ru": "Все четыре по умолчанию EAGER, а ленивость становится доступна только с bytecode enhancement."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@OneToOne and @ManyToMany default to EAGER; @ManyToOne and @OneToMany default to LAZY.",
+            "ru": "@OneToOne и @ManyToMany по умолчанию EAGER; @ManyToOne и @OneToMany по умолчанию LAZY."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The rule is that single-valued associations default to EAGER and collection-valued ones to LAZY; @Basic is EAGER and @ElementCollection is LAZY for the same reason. Because an eager to-one adds a join or an extra query to every load, making @ManyToOne and @OneToOne explicitly LAZY is standard practice.",
+        "ru": "Правило простое: связи с одиночным значением по умолчанию EAGER, а коллекционные — LAZY; по той же логике @Basic — EAGER, а @ElementCollection — LAZY. Поскольку жадная to-one связь добавляет join или отдельный запрос к каждой загрузке, явно указывать LAZY для @ManyToOne и @OneToOne считается хорошей практикой."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/persistence/3.2/apidocs/jakarta.persistence/jakarta/persistence/manytoone",
+        "https://jakarta.ee/specifications/persistence/3.2/apidocs/jakarta.persistence/jakarta/persistence/onetomany"
+      ]
+    },
+    {
+      "id": "hibernate.fetching.002",
+      "section": "fetching",
+      "difficulty": "easy",
+      "text": {
+        "en": "A JPQL query loads 100 Order entities and the code then reads order.getCustomer().getName() for each of them. Which description of the resulting N+1 problem is accurate?",
+        "ru": "JPQL-запрос загружает 100 сущностей Order, после чего код для каждой читает order.getCustomer().getName(). Какое описание возникающей проблемы N+1 корректно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "One query loads the orders and up to 100 more load the customers one by one; a fetch join collapses them into one.",
+            "ru": "Один запрос загружает заказы и до 100 дополнительных загружают клиентов по одному; fetch join сводит их в один."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The 100 customers are loaded by one extra query, which is acceptable; N+1 only occurs with collection-valued associations.",
+            "ru": "Все 100 клиентов загружаются одним дополнительным запросом, и это нормально; N+1 возникает только для коллекционных связей."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Hibernate detects the repeating pattern and rewrites it into a single join once its statistics show enough repetitions.",
+            "ru": "Hibernate распознаёт повторяющийся шаблон и переписывает его в один join, как только статистика покажет достаточное число повторений."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The cause is LAZY fetching, so declaring the association EAGER removes the extra queries in every case.",
+            "ru": "Причина в LAZY-загрузке, поэтому объявление связи EAGER во всех случаях убирает лишние запросы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Each getName() call issues its own query, so the total is 100 queries for the orders plus 100 for the names.",
+            "ru": "Каждый вызов getName() выполняет собственный запрос, поэтому всего получается 100 запросов на заказы плюс 100 на имена."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "N+1 means one query for the roots plus one per root to resolve the association, and it applies to to-one associations just as much as to collections. Switching the mapping to EAGER does not fix it for a JPQL query: without a fetch join Hibernate still resolves each eager association with its own secondary select, which is why the fix belongs in the query, not in the mapping.",
+        "ru": "N+1 означает один запрос за корневыми сущностями плюс по одному на каждую для разрешения связи, и это касается to-one связей не меньше, чем коллекций. Переключение маппинга на EAGER проблему для JPQL-запроса не решает: без fetch join Hibernate всё равно разрешает каждую жадную связь отдельным select, поэтому исправлять нужно запрос, а не маппинг."
+      },
+      "sources": [
+        "https://vladmihalcea.com/n-plus-1-query-problem/",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#fetching"
+      ]
+    },
+    {
+      "id": "hibernate.fetching.003",
+      "section": "fetching",
+      "difficulty": "medium",
+      "text": {
+        "en": "The application runs on Hibernate 7.4 against PostgreSQL. What does Hibernate do with this query?",
+        "ru": "Приложение работает на Hibernate 7.4 с PostgreSQL. Что Hibernate сделает с этим запросом?"
+      },
+      "code": "List<Post> posts = em.createQuery(\n        \"select p from Post p join fetch p.comments\", Post.class)\n    .setFirstResult(0)\n    .setMaxResults(10)\n    .getResultList();",
+      "options": [
+        {
+          "text": {
+            "en": "It cannot push the limit into SQL, so it reads the whole joined result set, deduplicates the roots and applies the pagination in memory, logging a warning about it.",
+            "ru": "Он не может перенести ограничение в SQL, поэтому вычитывает весь объединённый результат, дедуплицирует корни и применяет пагинацию в памяти, записывая об этом предупреждение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It applies LIMIT 10 directly to the joined rows, so a Post at the page boundary comes back with only some of its comments.",
+            "ru": "Он применяет LIMIT 10 прямо к объединённым строкам, поэтому Post на границе страницы возвращается лишь с частью своих комментариев."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "setMaxResults is silently ignored and the query returns all posts with their comments initialised.",
+            "ru": "setMaxResults молча игнорируется, и запрос возвращает все посты с инициализированными комментариями."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It throws IllegalStateException, because pagination and collection fetch joins are mutually exclusive.",
+            "ru": "Он выбросит IllegalStateException, поскольку пагинация и fetch join коллекции взаимоисключающи."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It pushes the limit into SQL: a nested subquery selects the ten paginated Post ids and the outer query fetches their comments in full.",
+            "ru": "Он переносит ограничение в SQL: вложенный подзапрос отбирает десять идентификаторов Post для страницы, а внешний запрос целиком догружает их комментарии."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Since 7.4 Hibernate pushes the limit down as a nested subquery over the root ids, so pagination combines safely with a collection join fetch on every supported database except Sybase ASE. Hibernate 6 and earlier had to paginate the deduplicated roots in the JVM and logged HHH90003004; that older behaviour is now opt-in through the org.hibernate.limitInMemory query hint.",
+        "ru": "Начиная с 7.4 Hibernate переносит ограничение в SQL как вложенный подзапрос по идентификаторам корней, поэтому пагинация безопасно сочетается с fetch join коллекции на всех поддерживаемых базах, кроме Sybase ASE. Hibernate 6 и более ранние версии применяли пагинацию к дедуплицированным корням в JVM и писали HHH90003004; теперь это поведение включается вручную подсказкой запроса org.hibernate.limitInMemory."
+      },
+      "sources": [
+        "https://docs.hibernate.org/orm/7.4/whats-new/",
+        "https://docs.hibernate.org/orm/7.4/migration-guide/"
+      ]
+    },
+    {
+      "id": "hibernate.fetching.004",
+      "section": "fetching",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about JPA entity graphs is TRUE?",
+        "ru": "Какое утверждение о entity graph в JPA верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A graph is only a hint for the second-level cache and never changes the generated SQL.",
+            "ru": "Граф — лишь подсказка для кеша второго уровня и никогда не меняет генерируемый SQL."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A graph overrides the mapped fetch plan for a single operation and can be attached to em.find or a repository method, not only to a JPQL string.",
+            "ru": "Граф переопределяет заданный в маппинге план загрузки для одной операции и может применяться к em.find или методу репозитория, а не только к строке JPQL."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A graph is registered at bootstrap from its @NamedEntityGraph declaration and changes the fetch plan globally for every query and every find of that entity.",
+            "ru": "Граф регистрируется при старте из объявления @NamedEntityGraph и меняет план загрузки глобально для всех запросов и всех find этой сущности."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A graph affects collections only; single-valued associations are always fetched according to the mapping.",
+            "ru": "Граф действует только на коллекции; связи с одиночным значением всегда загружаются согласно маппингу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A graph triggers one additional SELECT per listed attribute, which is why a fetch join is always faster.",
+            "ru": "Граф вызывает по одному дополнительному SELECT на каждый перечисленный атрибут, поэтому fetch join всегда быстрее."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "An entity graph is a per-operation fetch plan, passed as the jakarta.persistence.fetchgraph or loadgraph hint, and Hibernate normally realises it with joins in the same statement. Its advantage over JOIN FETCH is exactly that it is not tied to a query string, so the same finder can be reused with different fetch plans.",
+        "ru": "Entity graph — это план загрузки для одной операции, передаваемый как подсказка jakarta.persistence.fetchgraph или loadgraph, и Hibernate обычно реализует его джойнами в том же операторе. Его преимущество перед JOIN FETCH именно в том, что он не привязан к тексту запроса, поэтому один и тот же метод поиска можно переиспользовать с разными планами загрузки."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/persistence/3.2/apidocs/jakarta.persistence/jakarta/persistence/namedentitygraph",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#fetching-strategies-dynamic-fetching-entity-graph"
+      ]
+    },
+    {
+      "id": "hibernate.fetching.005",
+      "section": "fetching",
+      "difficulty": "medium",
+      "text": {
+        "en": "The comments collection is annotated as shown. What happens when 200 posts are loaded and their comments are then iterated?",
+        "ru": "Коллекция comments размечена как показано. Что произойдёт, если загрузить 200 постов и затем пройти по их комментариям?"
+      },
+      "code": "@OneToMany(mappedBy = \"post\")\n@BatchSize(size = 20)\nprivate Set<Comment> comments = new HashSet<>();",
+      "options": [
+        {
+          "text": {
+            "en": "Each SELECT is limited to 20 rows, so a collection with more comments is loaded in several pages.",
+            "ru": "Каждый SELECT ограничен 20 строками, поэтому коллекция с большим числом комментариев загружается несколькими порциями."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It sets the JDBC batch size for the INSERT and UPDATE statements produced by this collection.",
+            "ru": "Она задаёт размер JDBC-батча для INSERT и UPDATE, порождаемых этой коллекцией."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The collection becomes EAGER and is loaded in chunks of 20 immediately after each post is selected.",
+            "ru": "Коллекция становится EAGER и загружается порциями по 20 сразу после выборки каждого поста."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Touching one uninitialised collection initialises up to 20 such collections in a single query with an IN list.",
+            "ru": "Обращение к одной неинициализированной коллекции инициализирует до 20 таких коллекций одним запросом с IN-списком."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It behaves exactly like @Fetch(FetchMode.SUBSELECT): the owner query is re-run as a subselect to load all collections.",
+            "ru": "Она ведёт себя точно как @Fetch(FetchMode.SUBSELECT): запрос владельцев переисполняется как подзапрос, загружая все коллекции."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "@BatchSize turns N+1 into roughly N/size queries: Hibernate looks for other uninitialised proxies of the same type in the context and loads them together with an IN clause, so 200 posts need about 10 queries instead of 200. SUBSELECT is the related but different strategy that re-executes the original query as a subselect and therefore loads all owners at once; hibernate.default_batch_fetch_size sets the same behaviour globally.",
+        "ru": "@BatchSize превращает N+1 примерно в N/size запросов: Hibernate находит в контексте другие неинициализированные прокси того же типа и загружает их вместе через IN, поэтому для 200 постов нужно около 10 запросов вместо 200. SUBSELECT — похожая, но другая стратегия: она переисполняет исходный запрос как подзапрос и потому загружает всех владельцев сразу; свойство hibernate.default_batch_fetch_size включает то же поведение глобально."
+      },
+      "sources": [
+        "https://docs.hibernate.org/orm/6.6/javadocs/org/hibernate/annotations/BatchSize.html",
+        "https://vladmihalcea.com/hibernate-batchsize-fetching/"
+      ]
+    },
+    {
+      "id": "hibernate.fetching.006",
+      "section": "fetching",
+      "difficulty": "hard",
+      "text": {
+        "en": "Which statement about Hibernate proxies and bytecode enhancement is TRUE?",
+        "ru": "Какое утверждение о прокси Hibernate и bytecode enhancement верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A lazy to-one is a generated subclass proxy, so a final entity class cannot be proxied; enhancement instruments the entity itself and adds lazy basic attributes.",
+            "ru": "Ленивая to-one связь — это прокси-наследник, поэтому final-класс сущности проксировать нельзя; enhancement инструментирует саму сущность и добавляет ленивые базовые атрибуты."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Bytecode enhancement is required for any lazy loading at all: without it Hibernate has no way to intercept a getter, so every association and every basic attribute is fetched eagerly with its owner.",
+            "ru": "Bytecode enhancement обязателен для любой ленивой загрузки: без него Hibernate не может перехватить геттер, поэтому все связи и все базовые атрибуты загружаются жадно вместе с владельцем."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Proxies are used for collections only; a lazy to-one is held as a bare identifier and swapped for the entity by an interceptor on the first getter call.",
+            "ru": "Прокси применяются только к коллекциям; ленивая to-one связь хранится как один идентификатор и подменяется сущностью перехватчиком при первом вызове геттера."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Enhancement can only be applied by a Java agent at class-load time and is therefore unavailable at build time.",
+            "ru": "Enhancement можно применить только Java-агентом при загрузке классов, поэтому на этапе сборки он недоступен."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A proxy already holds the full loaded state and merely defers the SQL for attributes marked @Basic(fetch = FetchType.LAZY).",
+            "ru": "Прокси уже содержит полностью загруженное состояние и лишь откладывает SQL для атрибутов с @Basic(fetch = FetchType.LAZY)."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Without enhancement Hibernate implements to-one laziness by generating a subclass whose methods trigger initialisation, which is why neither the class nor its persistent getters may be final and why the proxy carries only the identifier. Enhancement instead instruments the entity class itself - by the Gradle or Maven plugin at build time, or by a Java agent at class-load time - and that is what makes lazy basic attributes and a proxy-free lazy to-one possible.",
+        "ru": "Без enhancement Hibernate реализует ленивость to-one связей через генерацию наследника, чьи методы запускают инициализацию — поэтому ни класс, ни его персистентные геттеры не должны быть final, а сам прокси хранит только идентификатор. Enhancement же инструментирует сам класс сущности — плагином Gradle или Maven на этапе сборки либо Java-агентом при загрузке классов — и именно это делает возможными ленивые базовые атрибуты и ленивую to-one связь без прокси."
+      },
+      "sources": [
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#BytecodeEnhancement",
+        "https://vladmihalcea.com/hibernate-facts-the-importance-of-fetch-strategy/"
+      ]
+    },
+    {
+      "id": "hibernate.jpql-criteria.001",
+      "section": "jpql-criteria",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about parameters in a JPQL query is TRUE?",
+        "ru": "Какое утверждение о параметрах в JPQL-запросе верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Positional parameters are zero-based, exactly as in the legacy Hibernate query language, so the very first parameter is written ?0.",
+            "ru": "Позиционные параметры нумеруются с нуля, точно как в устаревшем языке запросов Hibernate, поэтому самый первый параметр записывается как ?0."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Named parameters are a Hibernate extension and are therefore not portable to other providers.",
+            "ru": "Именованные параметры — это расширение Hibernate, поэтому они непереносимы на другие провайдеры."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A parameter may stand in for the entity name in the FROM clause, as long as it is bound to a Class object.",
+            "ru": "Параметр может подставляться вместо имени сущности в предложении FROM, если ему передать объект Class."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Positional parameters are written ?1 and are 1-based, named ones :name, and both reach the database as bind parameters.",
+            "ru": "Позиционные параметры записываются как ?1 и нумеруются с единицы, именованные - как :name, и оба доходят до базы как bind-параметры."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A collection-valued parameter inside an IN predicate has to be positional; named parameters are not allowed there.",
+            "ru": "Параметр-коллекция внутри предиката IN должен быть позиционным; именованные параметры там не допускаются."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "JPQL positional parameters are written ?1 and numbered from one, unlike the legacy zero-based ? form of old HQL; named parameters are part of the specification and portable across providers. Only values can be parameterised - entity names, attribute paths and ORDER BY targets are part of the query structure and must be written literally.",
+        "ru": "Позиционные параметры JPQL начинаются с ?1, в отличие от устаревшей нумерации с нуля в старом HQL; именованные параметры входят в спецификацию и переносимы. Параметризовать можно только значения — имена сущностей, пути к атрибутам и выражения в ORDER BY относятся к структуре запроса и записываются буквально."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/persistence/3.2/",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#hql-parameters"
+      ]
+    },
+    {
+      "id": "hibernate.jpql-criteria.002",
+      "section": "jpql-criteria",
+      "difficulty": "easy",
+      "text": {
+        "en": "What is the practical advantage of declaring a query with @NamedQuery instead of building the JPQL string at the call site?",
+        "ru": "В чём практическое преимущество объявления запроса через @NamedQuery по сравнению с построением строки JPQL на месте вызова?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It is parsed on first use and then cached, which is exactly what an inline createQuery string does not do.",
+            "ru": "Он разбирается при первом обращении и затем кешируется — именно этого не делает строка, переданная в createQuery."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is parsed and validated while the persistence unit is built, so a syntax error surfaces at startup.",
+            "ru": "Он разбирается и проверяется при построении persistence unit, поэтому синтаксическая ошибка обнаруживается на старте."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It must be written in native SQL, which lets the database optimiser see the statement at deployment time.",
+            "ru": "Его нужно писать на нативном SQL, что позволяет оптимизатору базы увидеть оператор во время развёртывания."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Its name is scoped to the declaring entity, so several entities may safely reuse the same query name.",
+            "ru": "Его имя действует в пределах объявляющей сущности, поэтому несколько сущностей могут безопасно переиспользовать одно имя запроса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It cannot take bind parameters, which is what makes it eligible for the query cache.",
+            "ru": "Он не может принимать bind-параметры, и именно это делает его пригодным для кеша запросов."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Named queries are compiled when the EntityManagerFactory is created, so a typo fails fast at bootstrap rather than in production on a rarely taken code path. Their names live in the persistence unit namespace and must be unique across it, and they support named and positional parameters exactly like dynamic queries.",
+        "ru": "Именованные запросы компилируются при создании EntityManagerFactory, поэтому опечатка приводит к падению на старте, а не в продакшене на редко исполняемой ветке. Их имена находятся в пространстве имён persistence unit и должны быть уникальны в его пределах, а параметры — именованные и позиционные — поддерживаются точно так же, как в динамических запросах."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/persistence/3.2/apidocs/jakarta.persistence/jakarta/persistence/namedquery",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#hql-named-queries"
+      ]
+    },
+    {
+      "id": "hibernate.jpql-criteria.003",
+      "section": "jpql-criteria",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about this DTO projection is TRUE?",
+        "ru": "Какое утверждение об этой проекции в DTO верно?"
+      },
+      "code": "List<BookSummary> result = em.createQuery(\n        \"select new com.example.dto.BookSummary(b.title, b.author.name) \"\n      + \"from Book b\", BookSummary.class)\n    .getResultList();",
+      "options": [
+        {
+          "text": {
+            "en": "BookSummary has to be annotated @Entity, otherwise the constructor expression is rejected when the query is compiled.",
+            "ru": "BookSummary обязан быть помечен @Entity, иначе конструкторное выражение будет отклонено при компиляции запроса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The returned objects are managed, so changing a title inside one of them produces an UPDATE at commit.",
+            "ru": "Возвращённые объекты находятся под управлением контекста, поэтому изменение title в одном из них приведёт к UPDATE при коммите."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A simple class name is enough, because the provider resolves it against the packages scanned for the persistence unit.",
+            "ru": "Достаточно простого имени класса, поскольку провайдер разрешает его по пакетам, просканированным для persistence unit."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Navigating b.author.name forces the whole Author entity to be loaded, so the projection saves nothing over selecting entities.",
+            "ru": "Обращение к b.author.name вынуждает загрузить всю сущность Author, поэтому проекция не даёт выигрыша по сравнению с выборкой сущностей."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "BookSummary needs a matching constructor and a fully qualified name, and the results are plain unmanaged objects.",
+            "ru": "BookSummary нужен подходящий конструктор и полное имя класса, а результаты - обычные объекты вне persistence context."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A constructor expression requires the fully qualified name of any class with a matching constructor; the instances are ordinary objects outside the persistence context, so they are cheap, immune to dirty checking and safe to send to a view layer. Navigating b.author.name adds an inner join and selects one column — the Author entity itself is never hydrated.",
+        "ru": "Конструкторное выражение требует полностью квалифицированного имени любого класса с подходящим конструктором; экземпляры получаются обычными объектами вне persistence context, поэтому они дешёвы, не участвуют в dirty checking и безопасны для передачи в слой представления. Обращение к b.author.name добавляет inner join и выбирает одну колонку — сама сущность Author при этом не создаётся."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/persistence/3.2/",
+        "https://vladmihalcea.com/the-best-way-to-map-a-projection-query-to-a-dto-with-jpa-and-hibernate/"
+      ]
+    },
+    {
+      "id": "hibernate.jpql-criteria.004",
+      "section": "jpql-criteria",
+      "difficulty": "medium",
+      "text": {
+        "en": "A native query is executed as em.createNativeQuery(\"select * from book\", Book.class). Which statement is TRUE?",
+        "ru": "Нативный запрос выполняется как em.createNativeQuery(\"select * from book\", Book.class). Какое утверждение верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The rows come back as Object[], because native queries never produce entities; @SqlResultSetMapping is the only way to get objects.",
+            "ru": "Строки возвращаются как Object[], поскольку нативные запросы никогда не создают сущности; получить объекты можно только через @SqlResultSetMapping."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The instances are returned detached, because the provider cannot dirty-check rows it did not read through JPQL.",
+            "ru": "Экземпляры возвращаются detached, поскольку провайдер не может отслеживать изменения строк, прочитанных не через JPQL."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The rows are hydrated into managed Book entities, so the result set must supply every column the entity mapping needs.",
+            "ru": "Строки превращаются в managed-сущности Book, поэтому в результирующем наборе должны присутствовать все колонки, требуемые маппингом сущности."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Columns absent from the result set are filled with null, and the entity is still fully managed.",
+            "ru": "Отсутствующие в результате колонки заполняются null, и сущность всё равно остаётся полностью managed."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The SQL is checked against the mapping while the persistence unit is built, so a wrong column name fails at startup.",
+            "ru": "SQL сверяется с маппингом при построении persistence unit, поэтому неверное имя колонки приводит к падению на старте."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Passing a result class makes the provider map each row onto the entity mapping and register it in the persistence context, so the returned instances are managed and dirty-checked like any other entity — and a missing column raises an error at execution time, not at bootstrap. @SqlResultSetMapping is only needed for more complex shapes such as several entities or a mix of entities and scalars.",
+        "ru": "Передача класса результата заставляет провайдера отобразить каждую строку на маппинг сущности и зарегистрировать её в persistence context, поэтому возвращённые экземпляры managed и участвуют в dirty checking, как любые другие — а отсутствующая колонка приводит к ошибке во время выполнения, а не при старте. @SqlResultSetMapping нужен только для более сложных форм результата: нескольких сущностей или смеси сущностей и скаляров."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/persistence/3.2/apidocs/jakarta.persistence/jakarta/persistence/sqlresultsetmapping",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#sql"
+      ]
+    },
+    {
+      "id": "hibernate.jpql-criteria.005",
+      "section": "jpql-criteria",
+      "difficulty": "medium",
+      "text": {
+        "en": "The Product with id 1 was loaded into this persistence context before the bulk update ran. What does the last line observe?",
+        "ru": "Product с id 1 был загружен в этот persistence context до выполнения массового обновления. Что увидит последняя строка?"
+      },
+      "code": "Product p1 = em.find(Product.class, 1L);   // price = 100\n\nem.createQuery(\"update Product p set p.price = p.price * 1.1\")\n  .executeUpdate();\n\nProduct p2 = em.find(Product.class, 1L);\nSystem.out.println(p2.getPrice());",
+      "options": [
+        {
+          "text": {
+            "en": "The new value 110, because the provider applies the same expression to every managed instance of Product.",
+            "ru": "Новое значение 110, поскольку провайдер применяет то же выражение ко всем managed-экземплярам Product."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The new value 110, because executeUpdate clears the persistence context before returning.",
+            "ru": "Новое значение 110, поскольку executeUpdate очищает persistence context перед возвратом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The stale value 100, because a bulk JPQL update goes straight to the database and does not refresh managed instances.",
+            "ru": "Устаревшее значение 100, поскольку массовый JPQL-update идёт напрямую в базу и не обновляет managed-экземпляры."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "An OptimisticLockException, because the version of the managed instance no longer matches the row.",
+            "ru": "Исключение OptimisticLockException, поскольку версия managed-экземпляра больше не совпадает со строкой."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing: the bulk statement is refused while managed instances of the target entity exist in the context.",
+            "ru": "Ничего: массовый оператор отклоняется, пока в контексте есть managed-экземпляры целевой сущности."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Bulk update and delete statements are translated into a single SQL statement and deliberately bypass the persistence context, the entity lifecycle callbacks, cascading and the second-level cache. The second find therefore returns the same cached instance with the old price; em.refresh or em.clear after the bulk statement is what makes the change visible.",
+        "ru": "Массовые операторы update и delete транслируются в один SQL-оператор и сознательно обходят persistence context, коллбэки жизненного цикла, каскады и кеш второго уровня. Поэтому второй find вернёт тот же закешированный экземпляр со старой ценой; увидеть изменение позволяет em.refresh или em.clear после массового оператора."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/persistence/3.2/",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#hql-update"
+      ]
+    },
+    {
+      "id": "hibernate.jpql-criteria.006",
+      "section": "jpql-criteria",
+      "difficulty": "hard",
+      "text": {
+        "en": "Which statement about the JPA Criteria API is TRUE?",
+        "ru": "Какое утверждение о Criteria API в JPA верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A CriteriaQuery only describes the statement; execution settings such as pagination, hints and flush mode belong to the TypedQuery returned by em.createQuery.",
+            "ru": "CriteriaQuery описывает только сам запрос; настройки выполнения — пагинация, подсказки, режим flush — задаются на TypedQuery, который возвращает em.createQuery."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "CriteriaQuery has its own setFirstResult and setMaxResults, and converting it to a TypedQuery discards them.",
+            "ru": "У CriteriaQuery есть собственные setFirstResult и setMaxResults, и преобразование в TypedQuery их отбрасывает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Criteria queries cannot express a fetch join, because Root exposes only join() and not fetch(), so eager loading has to be moved into a JPQL string or an entity graph.",
+            "ru": "Criteria-запросы не умеют выражать fetch join, поскольку у Root есть только join(), но не fetch(), поэтому жадную загрузку приходится переносить в строку JPQL или в entity graph."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Criteria queries inline their literals into the generated SQL, so bind parameters and statement caching are lost.",
+            "ru": "Criteria-запросы подставляют литералы прямо в сгенерированный SQL, из-за чего теряются bind-параметры и кеширование планов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A CriteriaQuery must be built from the generated static metamodel; string-based attribute names are not supported.",
+            "ru": "CriteriaQuery можно строить только по сгенерированной статической метамодели; имена атрибутов в виде строк не поддерживаются."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The criteria tree is a description of a query, so it is compiled with em.createQuery(criteriaQuery) and every execution concern is then set on the resulting TypedQuery, exactly as for a JPQL string. Root.fetch does express fetch joins, attribute names may be given as strings, and the generated metamodel classes are an optional type-safety aid that turns a renamed field into a compile error.",
+        "ru": "Criteria-дерево — это описание запроса, поэтому оно компилируется через em.createQuery(criteriaQuery), а все настройки выполнения задаются уже на полученном TypedQuery, ровно как для строки JPQL. Root.fetch умеет выражать fetch join, имена атрибутов можно указывать строками, а сгенерированные классы метамодели — необязательное средство типобезопасности, превращающее переименование поля в ошибку компиляции."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/persistence/3.2/apidocs/jakarta.persistence/jakarta/persistence/criteria/criteriaquery",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#criteria"
+      ]
+    },
+    {
+      "id": "hibernate.caching-performance.001",
+      "section": "caching-performance",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement correctly contrasts Hibernate's first-level and second-level caches?",
+        "ru": "Какое утверждение верно противопоставляет кеш первого и второго уровня в Hibernate?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Both caches live in the SessionFactory; the first level is simply the write-behind part of the second.",
+            "ru": "Оба кеша живут в SessionFactory; первый уровень — это просто write-behind часть второго."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The first level is shared by all sessions of a SessionFactory, which is why every cached region needs a CacheConcurrencyStrategy to keep concurrent transactions from reading stale state.",
+            "ru": "Кеш первого уровня разделяется всеми сессиями одной SessionFactory, поэтому каждому кешируемому региону нужна CacheConcurrencyStrategy, чтобы конкурентные транзакции не читали устаревшее состояние."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The second level is enabled by default in Hibernate 6 and has to be switched off for write-heavy workloads.",
+            "ru": "Кеш второго уровня в Hibernate 6 включён по умолчанию, и его приходится отключать для нагрузок с интенсивной записью."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The first level is controlled by hibernate.cache.use_first_level_cache, whose default value is true.",
+            "ru": "Кеш первого уровня управляется свойством hibernate.cache.use_first_level_cache со значением true по умолчанию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The first level is per persistence context and always on; the second is per SessionFactory, shared, and opt-in.",
+            "ru": "Первый уровень существует в рамках persistence context и всегда включён; второй принадлежит SessionFactory, разделяется и включается вручную."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The persistence context is the first-level cache: it cannot be turned off and it is never shared, so it needs no concurrency strategy. The second-level cache is opt-in — hibernate.cache.use_second_level_cache plus hibernate.cache.region.factory_class, typically a JCache provider such as EhCache or Infinispan — and because it is shared across sessions each region needs a CacheConcurrencyStrategy.",
+        "ru": "Persistence context и есть кеш первого уровня: его нельзя отключить и он никогда не разделяется, поэтому стратегия конкурентного доступа ему не нужна. Кеш второго уровня включается явно — hibernate.cache.use_second_level_cache плюс hibernate.cache.region.factory_class, обычно JCache-провайдер вроде EhCache или Infinispan — и, поскольку он общий для сессий, каждому региону нужна CacheConcurrencyStrategy."
+      },
+      "sources": [
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#caching",
+        "https://docs.hibernate.org/orm/6.6/javadocs/org/hibernate/cfg/CacheSettings.html"
+      ]
+    },
+    {
+      "id": "hibernate.caching-performance.002",
+      "section": "caching-performance",
+      "difficulty": "easy",
+      "text": {
+        "en": "What does Hibernate actually keep in the second-level entity cache?",
+        "ru": "Что Hibernate реально хранит в кеше сущностей второго уровня?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The entity instances themselves, shared between sessions, which is why a cached entity has to be immutable and why a hit hands the same object to two persistence contexts.",
+            "ru": "Сами экземпляры сущностей, разделяемые между сессиями, — именно поэтому кешируемая сущность обязана быть неизменяемой, а попадание в кеш отдаёт один и тот же объект двум persistence context."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The dehydrated attribute values of a row keyed by identifier, so a hit still builds a fresh instance for the current persistence context.",
+            "ru": "Разобранные значения атрибутов строки с ключом по идентификатору, поэтому при попадании в кеш для текущего persistence context всё равно создаётся новый экземпляр."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Whole query result sets, so any query touching a cached entity avoids the database.",
+            "ru": "Целые результаты запросов, поэтому любой запрос, затрагивающий кешированную сущность, не идёт в базу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Rows keyed by natural id, so an entity without @NaturalId cannot be cached at all.",
+            "ru": "Строки с ключом по natural id, поэтому сущность без @NaturalId закешировать вообще нельзя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The generated SQL statements together with their execution plans, rather than any row data.",
+            "ru": "Сгенерированные SQL-операторы вместе с планами их выполнения, а не сами данные строк."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Entries are stored in a disassembled, instance-free form keyed by entity type and identifier, so nothing is shared between sessions and mutable entities are perfectly cacheable. Caching whole result sets is the separate, opt-in query cache, and lookups by natural id use their own additional cache region.",
+        "ru": "Записи хранятся в разобранном виде без ссылок на экземпляры, с ключом по типу сущности и идентификатору, поэтому между сессиями ничего не разделяется и изменяемые сущности спокойно кешируются. Кеширование целых результатов — это отдельный, включаемый вручную кеш запросов, а поиск по natural id использует собственный дополнительный регион."
+      },
+      "sources": [
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#caching",
+        "https://vladmihalcea.com/how-does-hibernate-second-level-cache-work/"
+      ]
+    },
+    {
+      "id": "hibernate.caching-performance.003",
+      "section": "caching-performance",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about the Hibernate query cache is TRUE?",
+        "ru": "Какое утверждение о кеше запросов Hibernate верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It always stores the full state of the returned rows, which is why it keeps working even when the second-level cache is switched off entirely.",
+            "ru": "Он всегда хранит полное состояние возвращённых строк, поэтому продолжает работать даже при полностью отключённом кеше второго уровня."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is enabled automatically together with the second-level cache and has no separate switch.",
+            "ru": "Он включается автоматически вместе с кешем второго уровня и не имеет отдельного переключателя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Any write anywhere in the database invalidates the whole query cache, so it only works with a short time-to-live.",
+            "ru": "Любая запись в любую таблицу базы обесценивает весь кеш запросов, поэтому он работает только с малым временем жизни."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "By default it stores only identifiers for entities that are second-level cacheable, so it pays off only when that cache is populated.",
+            "ru": "По умолчанию он хранит только идентификаторы для сущностей, кешируемых во втором уровне, поэтому выгоден лишь при наполненном этом кеше."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It applies to native SQL queries only; JPQL results are already covered by the first-level cache.",
+            "ru": "Он применяется только к нативным SQL-запросам; результаты JPQL и так покрыты кешем первого уровня."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The query cache is switched on separately with hibernate.cache.use_query_cache and every query must be marked cacheable; its layout comes from hibernate.cache.query_cache_layout, whose AUTO default keeps a shallow result - identifiers plus scalars - for second-level cacheable entities and the full state for everything else. A shallow hit therefore turns one query into one primary-key lookup per identifier unless the entity cache is populated, and invalidation is per table through the update-timestamps region rather than global.",
+        "ru": "Кэш запросов включается отдельно свойством hibernate.cache.use_query_cache, и каждый запрос нужно помечать как кешируемый; раскладку задаёт hibernate.cache.query_cache_layout, значение AUTO по умолчанию хранит поверхностный результат - идентификаторы плюс скаляры - для сущностей, кешируемых во втором уровне, и полное состояние для остальных. Поэтому поверхностное попадание превращает один запрос в поиск по первичному ключу для каждого идентификатора, если кеш сущностей не наполнен, а инвалидация идёт по таблицам через регион update-timestamps, а не глобально."
+      },
+      "sources": [
+        "https://docs.hibernate.org/orm/7.2/javadocs/org/hibernate/annotations/CacheLayout.html",
+        "https://docs.hibernate.org/orm/7.2/userguide/html_single/Hibernate_User_Guide.html#caching-query"
+      ]
+    },
+    {
+      "id": "hibernate.caching-performance.004",
+      "section": "caching-performance",
+      "difficulty": "medium",
+      "text": {
+        "en": "The entity below is cached as shown. What happens when a transaction loads a Country and changes its name?",
+        "ru": "Сущность ниже кешируется так, как показано. Что произойдёт, если транзакция загрузит Country и изменит его name?"
+      },
+      "code": "@Entity\n@Cacheable\n@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)\npublic class Country {\n    @Id\n    private Long id;\n    private String name;\n}",
+      "options": [
+        {
+          "text": {
+            "en": "Hibernate raises an exception: READ_ONLY declares the data immutable, so it must never be updated.",
+            "ru": "Hibernate выбрасывает исключение: READ_ONLY объявляет данные неизменяемыми, поэтому обновлять их нельзя."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The update succeeds and the cache entry is simply evicted, since READ_ONLY only forbids caching dirty state.",
+            "ru": "Обновление проходит, а запись в кеше просто вытесняется, поскольку READ_ONLY лишь запрещает кешировать изменённое состояние."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The update succeeds but the region keeps serving the previous value until its time-to-live expires.",
+            "ru": "Обновление проходит, но регион продолжает отдавать предыдущее значение, пока не истечёт его время жизни."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The update succeeds; READ_ONLY only stops other sessions from writing into that cache region.",
+            "ru": "Обновление проходит; READ_ONLY лишь запрещает другим сессиям писать в этот регион кеша."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Hibernate silently promotes the region to NONSTRICT_READ_WRITE for the remainder of the session.",
+            "ru": "Hibernate молча повышает регион до NONSTRICT_READ_WRITE на всё оставшееся время работы сессии."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "READ_ONLY is a contract that the data never changes, which is why it needs no invalidation and is the cheapest strategy; attempting to update such an entity is an error rather than a cache miss. Mutable data needs NONSTRICT_READ_WRITE, READ_WRITE (soft locks, the usual choice) or TRANSACTIONAL with a JTA-aware provider.",
+        "ru": "READ_ONLY — это контракт о том, что данные не меняются, поэтому ему не нужна инвалидация и он самый дешёвый; попытка обновить такую сущность считается ошибкой, а не промахом кеша. Для изменяемых данных нужны NONSTRICT_READ_WRITE, READ_WRITE (soft-блокировки, обычный выбор) или TRANSACTIONAL с провайдером, работающим через JTA."
+      },
+      "sources": [
+        "https://docs.hibernate.org/orm/6.6/javadocs/org/hibernate/annotations/CacheConcurrencyStrategy.html",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#caching-mappings"
+      ]
+    },
+    {
+      "id": "hibernate.caching-performance.005",
+      "section": "caching-performance",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about this configuration is TRUE?",
+        "ru": "Какое утверждение об этой конфигурации верно?"
+      },
+      "code": "hibernate.jdbc.batch_size=50\nhibernate.order_inserts=true\nhibernate.order_updates=true\nhibernate.generate_statistics=true",
+      "options": [
+        {
+          "text": {
+            "en": "batch_size already defaults to 50, so the first line is redundant and only the two ordering flags change anything at all.",
+            "ru": "batch_size и так по умолчанию равен 50, поэтому первая строка избыточна, и что-то меняют только два флага сортировки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "batch_size caps how many rows a single SELECT returns, so it also limits lazy collection loading.",
+            "ru": "batch_size ограничивает число строк, возвращаемых одним SELECT, поэтому он влияет и на ленивую загрузку коллекций."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The ordering flags matter only for the TABLE identifier generator; with SEQUENCE they have no effect.",
+            "ru": "Флаги упорядочивания важны только для TABLE-генератора идентификаторов; с SEQUENCE они ничего не дают."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Batching is off until batch_size is set, and ordering statements by entity type lets more of them share a batch.",
+            "ru": "Пакетирование отключено, пока не задан batch_size, а сортировка операторов по типу сущности позволяет большему их числу попасть в один пакет."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Ordering guarantees that all inserts run before any update, which is what optimistic locking requires.",
+            "ru": "Упорядочивание гарантирует, что все вставки выполнятся раньше любых обновлений, чего и требует оптимистичная блокировка."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "JDBC batching is disabled unless hibernate.jdbc.batch_size is given a positive value; because a batch can only contain identical statements, grouping inserts and updates per entity type is what actually lets the batches fill up. Statistics are the way to verify the result — and for @Version entities hibernate.jdbc.batch_versioned_data controls whether versioned updates may be batched.",
+        "ru": "JDBC-батчинг отключён, пока hibernate.jdbc.batch_size не задан положительным значением; поскольку в один батч попадают только одинаковые операторы, именно группировка вставок и обновлений по типу сущности позволяет батчам заполняться. Проверить результат помогает статистика, а для сущностей с @Version за возможность батчить версионированные обновления отвечает hibernate.jdbc.batch_versioned_data."
+      },
+      "sources": [
+        "https://docs.hibernate.org/orm/6.6/javadocs/org/hibernate/cfg/BatchSettings.html",
+        "https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#batch-jdbcbatch"
+      ]
+    },
+    {
+      "id": "hibernate.caching-performance.006",
+      "section": "caching-performance",
+      "difficulty": "hard",
+      "text": {
+        "en": "Which statement about StatelessSession in Hibernate 7 is TRUE?",
+        "ru": "Какое утверждение о StatelessSession в Hibernate 7 верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It is a read-only session: write operations throw, which is exactly what makes it fast for reporting queries.",
+            "ru": "Это сессия только для чтения: операции записи выбрасывают исключение, и именно поэтому она быстра для отчётных запросов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It has no persistence context, so there is no dirty checking, no cascading and no automatic flush; every write must be requested explicitly.",
+            "ru": "У неё нет persistence context, поэтому нет ни dirty checking, ни каскадов, ни автоматического flush; каждая запись должна запрашиваться явно."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It keeps a first-level cache for the identity guarantee but skips dirty checking, so a modification has to be written back with an explicit update() call.",
+            "ru": "Она сохраняет кеш первого уровня для гарантии идентичности, но не выполняет dirty checking, поэтому изменение приходится записывать явным вызовом update()."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It bypasses the second-level cache entirely, which is why it is the recommended way to read large volumes without polluting that cache.",
+            "ru": "Она полностью обходит кеш второго уровня, поэтому именно её рекомендуют для чтения больших объёмов без загрязнения этого кеша."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It requires bytecode enhancement, because without a proxy there is nothing to intercept lazy attribute access.",
+            "ru": "Она требует bytecode enhancement, поскольку без прокси нечему перехватывать обращения к ленивым атрибутам."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A StatelessSession executes its statements immediately and always works with detached instances, so there is no first-level cache, no dirty checking, no cascading and no automatic flush. Since Hibernate 7 it does participate in the second-level cache by default (bypass it with CacheMode.IGNORE), and hibernate.jdbc.batch_size no longer affects it - use setJdbcBatchSize or the insertMultiple/updateMultiple operations instead.",
+        "ru": "StatelessSession выполняет операторы немедленно и всегда работает с detached-экземплярами, поэтому у неё нет ни кеша первого уровня, ни dirty checking, ни каскадов, ни автоматического flush. Начиная с Hibernate 7 она по умолчанию участвует в кеше второго уровня (отключается через CacheMode.IGNORE), а hibernate.jdbc.batch_size на неё больше не влияет - вместо него применяются setJdbcBatchSize и операции insertMultiple/updateMultiple."
+      },
+      "sources": [
+        "https://docs.hibernate.org/orm/7.2/javadocs/org/hibernate/StatelessSession.html",
+        "https://docs.hibernate.org/orm/7.0/migration-guide/"
+      ]
+    }
+  ]
+}

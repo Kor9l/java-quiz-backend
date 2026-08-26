@@ -1,0 +1,2600 @@
+{
+  "schemaVersion": 1,
+  "topic": "spring-boot",
+  "questions": [
+    {
+      "id": "spring-boot.autoconfiguration.001",
+      "section": "autoconfiguration",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which annotations does @SpringBootApplication combine?",
+        "ru": "Какие аннотации объединяет в себе @SpringBootApplication?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "@Configuration, @ComponentScan and @EnableWebMvc",
+            "ru": "@Configuration, @ComponentScan и @EnableWebMvc"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@SpringBootConfiguration, @ComponentScan and @ConfigurationPropertiesScan",
+            "ru": "@SpringBootConfiguration, @ComponentScan и @ConfigurationPropertiesScan"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@SpringBootConfiguration, @EnableAutoConfiguration and @ComponentScan",
+            "ru": "@SpringBootConfiguration, @EnableAutoConfiguration и @ComponentScan"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "@Configuration, @EnableAutoConfiguration and @PropertySource",
+            "ru": "@Configuration, @EnableAutoConfiguration и @PropertySource"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@SpringBootConfiguration, @EnableAutoConfiguration and @EnableConfigurationProperties",
+            "ru": "@SpringBootConfiguration, @EnableAutoConfiguration и @EnableConfigurationProperties"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "@SpringBootApplication is a meta-annotation over @SpringBootConfiguration (which is itself a @Configuration), @EnableAutoConfiguration and @ComponentScan. Scanning of @ConfigurationProperties types is not part of it and has to be switched on separately with @ConfigurationPropertiesScan.",
+        "ru": "@SpringBootApplication — это мета-аннотация над @SpringBootConfiguration (которая сама является @Configuration), @EnableAutoConfiguration и @ComponentScan. Сканирование типов @ConfigurationProperties в её состав не входит и включается отдельно через @ConfigurationPropertiesScan."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/using/using-the-springbootapplication-annotation.html"
+      ]
+    },
+    {
+      "id": "spring-boot.autoconfiguration.002",
+      "section": "autoconfiguration",
+      "difficulty": "easy",
+      "text": {
+        "en": "Where must a library register its auto-configuration classes so that Spring Boot 3.x picks them up?",
+        "ru": "Где библиотека должна зарегистрировать свои классы автоконфигурации, чтобы Spring Boot 3.x их подхватил?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "In META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports",
+            "ru": "В META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "In META-INF/spring.factories, under the EnableAutoConfiguration key",
+            "ru": "В META-INF/spring.factories, под ключом EnableAutoConfiguration"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "In META-INF/spring-autoconfigure-metadata.properties, next to the condition metadata",
+            "ru": "В META-INF/spring-autoconfigure-metadata.properties, рядом с метаданными условий"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "In META-INF/additional-spring-configuration-metadata.json",
+            "ru": "В META-INF/additional-spring-configuration-metadata.json"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nowhere: any class annotated with @AutoConfiguration is found by classpath scanning",
+            "ru": "Нигде: любой класс с аннотацией @AutoConfiguration находится сканированием classpath"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Since Spring Boot 3.0 auto-configurations are listed in META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports; the old spring.factories entry keyed by EnableAutoConfiguration was removed. spring-autoconfigure-metadata.properties only carries pre-computed condition metadata, and additional-spring-configuration-metadata.json describes configuration keys for IDE completion.",
+        "ru": "Начиная со Spring Boot 3.0 автоконфигурации перечисляются в META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports; старая запись в spring.factories под ключом EnableAutoConfiguration удалена. Файл spring-autoconfigure-metadata.properties содержит лишь предвычисленные метаданные условий, а additional-spring-configuration-metadata.json описывает ключи конфигурации для подсказок в IDE."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/features/developing-auto-configuration.html",
+        "https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Migration-Guide"
+      ]
+    },
+    {
+      "id": "spring-boot.autoconfiguration.003",
+      "section": "autoconfiguration",
+      "difficulty": "medium",
+      "text": {
+        "en": "A colleague copied this pattern from a Spring Boot auto-configuration into an ordinary application @Configuration class. Why is it unreliable there?",
+        "ru": "Коллега скопировал этот приём из автоконфигурации Spring Boot в обычный @Configuration класс приложения. Почему здесь он работает ненадёжно?"
+      },
+      "code": "@Configuration\npublic class AppConfig {\n\n    @Bean\n    @ConditionalOnMissingBean\n    public ObjectMapper objectMapper() {\n        return new ObjectMapper();\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "@ConditionalOnMissingBean is honoured only on classes annotated with @AutoConfiguration and is silently ignored anywhere else",
+            "ru": "@ConditionalOnMissingBean учитывается только на классах с @AutoConfiguration, а в остальных местах молча игнорируется"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@ConditionalOnMissingBean cannot be placed on a @Bean method, it is only supported at class level",
+            "ru": "@ConditionalOnMissingBean нельзя ставить на @Bean-метод, она поддерживается только на уровне класса"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Without an explicit type the condition always matches, so the bean is created unconditionally",
+            "ru": "Без явно указанного типа условие всегда выполняется, поэтому бин создаётся безусловно"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Conditions on user configuration are evaluated after the context refresh, so the bean ends up registered twice",
+            "ru": "Условия на пользовательской конфигурации вычисляются после refresh контекста, поэтому бин регистрируется дважды"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The condition sees only what is registered so far, so the outcome depends on processing order",
+            "ru": "Условие видит только уже зарегистрированные определения, поэтому результат зависит от порядка обработки"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Bean conditions look only at what has already been registered. Auto-configuration is deliberately applied last, which is what makes @ConditionalOnMissingBean safe there; inside a user @Configuration the result depends on which configuration class happens to be processed first. The annotation is not ignored outside auto-configuration - it simply becomes order-sensitive.",
+        "ru": "Условия на бины смотрят только на то, что уже зарегистрировано. Автоконфигурация специально применяется последней, поэтому там @ConditionalOnMissingBean безопасна; внутри пользовательского @Configuration результат зависит от того, какой класс конфигурации обработается первым. Аннотация вне автоконфигурации не игнорируется — она просто становится чувствительной к порядку."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/features/developing-auto-configuration.html",
+        "https://docs.spring.io/spring-boot/docs/3.5.x/api/java/org/springframework/boot/autoconfigure/condition/ConditionalOnMissingBean.html"
+      ]
+    },
+    {
+      "id": "spring-boot.autoconfiguration.004",
+      "section": "autoconfiguration",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about @AutoConfigureAfter is TRUE?",
+        "ru": "Какое утверждение про @AutoConfigureAfter верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It postpones the annotated beans until the referenced beans exist, exactly like @DependsOn",
+            "ru": "Она откладывает создание аннотированных бинов до появления указанных бинов, как и @DependsOn"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It only orders how auto-configuration classes are applied, not how their beans are instantiated",
+            "ru": "Она упорядочивает только применение классов автоконфигурации, но не порядок создания их бинов"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It makes the annotated auto-configuration match only if the referenced auto-configuration matched",
+            "ru": "Она заставляет аннотированную автоконфигурацию применяться только если применилась указанная автоконфигурация"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It can be put on any @Configuration class to order it relative to auto-configuration",
+            "ru": "Её можно поставить на любой @Configuration класс, чтобы упорядочить его относительно автоконфигурации"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is a shorthand for @AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE) on the whole class",
+            "ru": "Это сокращение для @AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE) на всём классе"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "@AutoConfigureAfter and @AutoConfigureBefore (and the after/before attributes of @AutoConfiguration) only decide in which order auto-configuration classes are applied, so that conditions such as @ConditionalOnMissingBean see the intended picture. Bean instantiation order is still driven by dependencies and @DependsOn, and the annotations have no effect on ordinary @Configuration classes.",
+        "ru": "@AutoConfigureAfter и @AutoConfigureBefore (а также атрибуты after/before у @AutoConfiguration) определяют лишь порядок применения классов автоконфигурации, чтобы условия вроде @ConditionalOnMissingBean видели нужную картину. Порядок создания бинов по-прежнему определяется зависимостями и @DependsOn, а на обычные @Configuration классы эти аннотации не действуют."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/features/developing-auto-configuration.html",
+        "https://docs.spring.io/spring-boot/docs/3.5.x/api/java/org/springframework/boot/autoconfigure/AutoConfigureAfter.html"
+      ]
+    },
+    {
+      "id": "spring-boot.autoconfiguration.005",
+      "section": "autoconfiguration",
+      "difficulty": "medium",
+      "text": {
+        "en": "An auto-configuration you expected did not apply. What is the intended way to find out which condition failed?",
+        "ru": "Ожидаемая автоконфигурация не применилась. Каким штатным способом выяснить, какое условие не выполнилось?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Add spring-boot-configuration-processor and inspect the generated spring-configuration-metadata.json",
+            "ru": "Добавить spring-boot-configuration-processor и изучить сгенерированный spring-configuration-metadata.json"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Run mvn dependency:tree and compare it with the dependencies declared by the starter",
+            "ru": "Выполнить mvn dependency:tree и сравнить вывод с зависимостями, объявленными в стартере"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Iterate over ApplicationContext.getBeanDefinitionNames() and diff it against a working application",
+            "ru": "Пройтись по ApplicationContext.getBeanDefinitionNames() и сравнить результат с рабочим приложением"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Start with --debug and read the negative matches in the CONDITIONS EVALUATION REPORT",
+            "ru": "Запустить с --debug и прочитать negative matches в CONDITIONS EVALUATION REPORT"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Set spring.autoconfigure.report=true so that the report is written to target/autoconfig-report.txt",
+            "ru": "Установить spring.autoconfigure.report=true, чтобы отчёт записался в target/autoconfig-report.txt"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Spring Boot builds a ConditionEvaluationReport for every context: it is logged as the CONDITIONS EVALUATION REPORT when debug output is enabled and is also served as JSON by the actuator conditions endpoint. The report names each condition and the reason it did or did not match, which none of the other tools can tell you.",
+        "ru": "Spring Boot строит ConditionEvaluationReport для каждого контекста: он выводится как CONDITIONS EVALUATION REPORT при включённом debug-выводе и доступен в виде JSON через endpoint conditions в actuator. В отчёте указано каждое условие и причина, по которой оно выполнилось или нет, — остальные инструменты этого не показывают."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/using/auto-configuration.html",
+        "https://docs.spring.io/spring-boot/api/rest/actuator/conditions.html"
+      ]
+    },
+    {
+      "id": "spring-boot.autoconfiguration.006",
+      "section": "autoconfiguration",
+      "difficulty": "hard",
+      "text": {
+        "en": "micrometer-core is an optional dependency of this library. When it is absent the application still fails with NoClassDefFoundError for MeterRegistry. Why?",
+        "ru": "micrometer-core — необязательная зависимость этой библиотеки. Когда её нет, приложение всё равно падает с NoClassDefFoundError для MeterRegistry. Почему?"
+      },
+      "code": "@AutoConfiguration\npublic class AcmeMetricsAutoConfiguration {\n\n    @Bean\n    @ConditionalOnClass(MeterRegistry.class)\n    public MeterRegistry meterRegistry() {\n        return new SimpleMeterRegistry();\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "The @Bean method signature is resolved before the method-level condition is evaluated",
+            "ru": "Сигнатура @Bean-метода разрешается раньше, чем вычисляется условие на самом методе"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "@ConditionalOnClass may only reference types present at compile time; for optional types @ConditionalOnMissingClass must be used instead",
+            "ru": "@ConditionalOnClass может ссылаться только на типы, доступные во время компиляции; для необязательных типов нужно использовать @ConditionalOnMissingClass"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Conditions are evaluated only for classes listed in AutoConfiguration.imports, and method-level conditions are skipped there",
+            "ru": "Условия вычисляются только для классов, перечисленных в AutoConfiguration.imports, и условия на методах там пропускаются"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "On a @Bean method @ConditionalOnClass inspects the parameter types only, so the return type is never taken into account",
+            "ru": "На @Bean-методе @ConditionalOnClass проверяет только типы параметров, поэтому возвращаемый тип не учитывается"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The bean name clashes with Micrometer's own meterRegistry bean, which forces the type to be loaded eagerly",
+            "ru": "Имя бина конфликтует с собственным бином meterRegistry из Micrometer, из-за чего тип загружается заранее"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Class-level conditions are read from ASM-parsed metadata without loading anything, but as soon as a configuration class is processed the JVM has to resolve the types used in its @Bean method signatures - including the return type. Spring Boot's own auto-configurations therefore isolate optional types in a nested @Configuration class that carries the @ConditionalOnClass guard.",
+        "ru": "Условия на уровне класса читаются из метаданных, разобранных через ASM, без загрузки классов, но как только класс конфигурации начинает обрабатываться, JVM обязана разрешить типы в сигнатурах его @Bean-методов, включая возвращаемый тип. Поэтому автоконфигурации самого Spring Boot выносят необязательные типы во вложенный @Configuration класс, на который и ставится @ConditionalOnClass."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/features/developing-auto-configuration.html",
+        "https://docs.spring.io/spring-boot/docs/3.5.x/api/java/org/springframework/boot/autoconfigure/condition/ConditionalOnClass.html"
+      ]
+    },
+    {
+      "id": "spring-boot.starters.001",
+      "section": "starters",
+      "difficulty": "easy",
+      "text": {
+        "en": "What does an official starter such as spring-boot-starter-web actually contain?",
+        "ru": "Что на самом деле содержит официальный стартер, например spring-boot-starter-web?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A shaded uber-jar with all required libraries repackaged into one artifact",
+            "ru": "Uber-jar с перепакованными внутрь всеми нужными библиотеками"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The @AutoConfiguration classes for the feature together with their AutoConfiguration.imports file",
+            "ru": "Классы @AutoConfiguration для этой функциональности вместе с их файлом AutoConfiguration.imports"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A BOM that manages versions but declares no dependencies of its own",
+            "ru": "BOM, который управляет версиями, но не объявляет собственных зависимостей"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Practically only a POM that pulls in a curated, version-aligned set of dependencies",
+            "ru": "Практически только POM, который подтягивает согласованный по версиям набор зависимостей"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A Maven plugin that generates the required configuration classes during the build",
+            "ru": "Maven-плагин, который генерирует нужные классы конфигурации во время сборки"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A starter is a dependency descriptor: it carries no code and simply aggregates what you need for a feature, with versions coming from Spring Boot's dependency management. The auto-configuration classes for the official starters live in spring-boot-autoconfigure, not in the starter artifact.",
+        "ru": "Стартер — это дескриптор зависимостей: своего кода в нём нет, он лишь агрегирует то, что нужно для конкретной функциональности, а версии приходят из dependency management Spring Boot. Классы автоконфигурации для официальных стартеров лежат в spring-boot-autoconfigure, а не в самом стартере."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/using/build-systems.html"
+      ]
+    },
+    {
+      "id": "spring-boot.starters.002",
+      "section": "starters",
+      "difficulty": "easy",
+      "text": {
+        "en": "How does using spring-boot-starter-parent differ from importing spring-boot-dependencies as a BOM?",
+        "ru": "Чем использование spring-boot-starter-parent отличается от импорта spring-boot-dependencies как BOM?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The parent additionally declares spring-boot-starter-web as a compile dependency",
+            "ru": "Родительский POM дополнительно объявляет spring-boot-starter-web как compile-зависимость"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The parent adds Maven plugin management and defaults on top of the same dependency management",
+            "ru": "Родительский POM добавляет управление плагинами и настройки Maven поверх того же dependency management"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The BOM manages versions of Spring artifacts only, while the parent also manages third-party libraries",
+            "ru": "BOM управляет версиями только артефактов Spring, а родительский POM — ещё и сторонних библиотек"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only the parent can be used in a multi-module build; an imported BOM is not visible to child modules",
+            "ru": "Только родительский POM годится для многомодульной сборки; импортированный BOM не виден дочерним модулям"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The BOM also pins plugin versions, which makes the two options interchangeable in Maven",
+            "ru": "BOM тоже фиксирует версии плагинов, поэтому в Maven эти варианты взаимозаменяемы"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "spring-boot-starter-parent inherits from spring-boot-dependencies, so both give identical dependency management for Spring and third-party libraries. The parent adds Maven conveniences on top: pluginManagement, the spring-boot-maven-plugin repackage execution, the java.version property and UTF-8 resource filtering.",
+        "ru": "spring-boot-starter-parent наследуется от spring-boot-dependencies, поэтому dependency management для Spring и сторонних библиотек в обоих случаях одинаков. Родительский POM добавляет сверху удобства Maven: pluginManagement, выполнение repackage у spring-boot-maven-plugin, свойство java.version и фильтрацию ресурсов в UTF-8."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/using/build-systems.html",
+        "https://docs.spring.io/spring-boot/3.5/maven-plugin/using.html"
+      ]
+    },
+    {
+      "id": "spring-boot.starters.003",
+      "section": "starters",
+      "difficulty": "medium",
+      "text": {
+        "en": "The project already has a corporate parent POM, so Spring Boot is imported as a BOM. The Jackson version does not change. Why?",
+        "ru": "У проекта уже есть корпоративный родительский POM, поэтому Spring Boot подключён как BOM. Версия Jackson не меняется. Почему?"
+      },
+      "code": "<dependencyManagement>\n  <dependencies>\n    <dependency>\n      <groupId>org.springframework.boot</groupId>\n      <artifactId>spring-boot-dependencies</artifactId>\n      <version>3.5.0</version>\n      <type>pom</type>\n      <scope>import</scope>\n    </dependency>\n  </dependencies>\n</dependencyManagement>\n\n<properties>\n  <jackson-bom.version>2.17.0</jackson-bom.version>\n</properties>",
+      "options": [
+        {
+          "text": {
+            "en": "The property name is wrong: the version managed by Spring Boot is exposed as jackson.version",
+            "ru": "Имя свойства неверное: управляемая Spring Boot версия называется jackson.version"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Maven ignores a <properties> block that appears after <dependencyManagement>, so it has to be moved above it",
+            "ru": "Maven игнорирует блок <properties>, объявленный после <dependencyManagement>, его нужно перенести выше"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Third-party versions in spring-boot-dependencies are hard-coded, so only Spring's own artifacts can be overridden this way",
+            "ru": "Версии сторонних библиотек в spring-boot-dependencies заданы жёстко, поэтому так можно переопределить только артефакты самого Spring"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The import needs <scope>runtime</scope> for properties of the importing project to be applied",
+            "ru": "Для применения свойств импортирующего проекта у импорта должен быть <scope>runtime</scope>"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An imported BOM resolves version properties inside itself, not in the importing POM",
+            "ru": "Импортированный BOM разрешает свойства версий внутри себя, а не в импортирующем POM"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Overriding a managed version through a property works only when spring-boot-dependencies is an ancestor POM; an import brings in already-resolved versions and never sees the importing project's properties. Override it with an explicit dependencyManagement entry (for Jackson, by importing com.fasterxml.jackson:jackson-bom) placed before the Spring Boot import, since the first matching entry wins.",
+        "ru": "Переопределение управляемой версии через свойство работает только когда spring-boot-dependencies является родительским POM; при импорте подтягиваются уже разрешённые версии, и свойства импортирующего проекта на них не влияют. Нужна явная запись в dependencyManagement (для Jackson — импорт com.fasterxml.jackson:jackson-bom), объявленная до импорта Spring Boot, так как побеждает первое подходящее объявление."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/maven-plugin/using.html",
+        "https://docs.spring.io/spring-boot/3.5/reference/using/build-systems.html"
+      ]
+    },
+    {
+      "id": "spring-boot.starters.004",
+      "section": "starters",
+      "difficulty": "medium",
+      "text": {
+        "en": "Both spring-boot-starter-web and spring-boot-starter-webflux are on the classpath. What does Spring Boot do?",
+        "ru": "В classpath присутствуют и spring-boot-starter-web, и spring-boot-starter-webflux. Что сделает Spring Boot?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It starts a reactive WebFlux application on Netty, because the reactive stack takes precedence",
+            "ru": "Запустит реактивное WebFlux-приложение на Netty, поскольку реактивный стек имеет приоритет"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Start-up fails because the web application type cannot be determined unambiguously",
+            "ru": "Запуск завершится ошибкой, потому что тип web-приложения нельзя определить однозначно"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It starts a servlet-based Spring MVC application on embedded Tomcat and does not auto-configure WebFlux",
+            "ru": "Запустит servlet-приложение на Spring MVC во встроенном Tomcat и не будет автоконфигурировать WebFlux"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Both stacks are auto-configured: MVC serves annotated controllers and WebFlux serves the reactive handlers",
+            "ru": "Автоконфигурируются оба стека: MVC обслуживает аннотированные контроллеры, а WebFlux — реактивные обработчики"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It starts Spring MVC on Netty, so annotated controllers keep working on a reactive server",
+            "ru": "Запустит Spring MVC на Netty, так что аннотированные контроллеры продолжат работать на реактивном сервере"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Spring Boot deliberately prefers Spring MVC here, because many MVC applications add the WebFlux starter only to get the reactive WebClient. Set spring.main.web-application-type=reactive (or call SpringApplication.setWebApplicationType) when you really want WebFlux.",
+        "ru": "Spring Boot намеренно отдаёт предпочтение Spring MVC, потому что многие MVC-приложения добавляют стартер WebFlux только ради реактивного WebClient. Если WebFlux действительно нужен, задайте spring.main.web-application-type=reactive или вызовите SpringApplication.setWebApplicationType."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/web/reactive.html"
+      ]
+    },
+    {
+      "id": "spring-boot.starters.005",
+      "section": "starters",
+      "difficulty": "medium",
+      "text": {
+        "en": "The team wants Jetty instead of Tomcat and simply added the Jetty starter. Which server starts, and what is still missing?",
+        "ru": "Команда хочет Jetty вместо Tomcat и просто добавила стартер Jetty. Какой сервер запустится и чего не хватает?"
+      },
+      "code": "<dependency>\n  <groupId>org.springframework.boot</groupId>\n  <artifactId>spring-boot-starter-web</artifactId>\n</dependency>\n<dependency>\n  <groupId>org.springframework.boot</groupId>\n  <artifactId>spring-boot-starter-jetty</artifactId>\n</dependency>",
+      "options": [
+        {
+          "text": {
+            "en": "Jetty starts, because an explicitly declared dependency wins over a transitive one",
+            "ru": "Запустится Jetty, потому что явно объявленная зависимость важнее транзитивной"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Start-up fails with a duplicate ServletWebServerFactory bean until one of the starters is removed",
+            "ru": "Запуск упадёт из-за дублирующегося бина ServletWebServerFactory, пока один из стартеров не убрать"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Tomcat still starts, because the web starter brings it in transitively",
+            "ru": "Всё равно стартует Tomcat, потому что web-стартер подтягивает его транзитивно"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Tomcat starts, and the only way to change that is to set server.type=jetty",
+            "ru": "Запустится Tomcat, и изменить это можно только свойством server.type=jetty"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Jetty starts, but Tomcat stays on the classpath so properties under server.tomcat.* are still applied",
+            "ru": "Запустится Jetty, но Tomcat остаётся в classpath, поэтому свойства server.tomcat.* всё ещё применяются"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Servlet web server auto-configuration checks the candidates in a fixed order and Tomcat comes first, so adding the Jetty starter alone changes nothing. You must exclude spring-boot-starter-tomcat from spring-boot-starter-web; there is no server.type property.",
+        "ru": "Автоконфигурация встроенного servlet-сервера проверяет кандидатов в фиксированном порядке, и Tomcat идёт первым, поэтому добавление одного лишь стартера Jetty ничего не меняет. Нужно исключить spring-boot-starter-tomcat из spring-boot-starter-web; свойства server.type не существует."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/web/servlet.html",
+        "https://docs.spring.io/spring-boot/3.5/how-to/webserver.html"
+      ]
+    },
+    {
+      "id": "spring-boot.starters.006",
+      "section": "starters",
+      "difficulty": "hard",
+      "text": {
+        "en": "A library ships AcmeAutoConfiguration (annotated @AutoConfiguration and listed in AutoConfiguration.imports) in package com.acme.mylib. The application's @SpringBootApplication class sits in com.acme, so component scanning also covers that package. How often is the configuration applied?",
+        "ru": "Библиотека поставляет AcmeAutoConfiguration (с аннотацией @AutoConfiguration и записью в AutoConfiguration.imports) в пакете com.acme.mylib. Класс с @SpringBootApplication находится в com.acme, поэтому сканирование компонентов покрывает и этот пакет. Сколько раз применится конфигурация?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Once, as an auto-configuration: AutoConfigurationExcludeFilter keeps it out of component scanning",
+            "ru": "Один раз, как автоконфигурация: AutoConfigurationExcludeFilter не даёт ей попасть в сканирование компонентов"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Twice, producing duplicate beans unless every @Bean method is guarded with @ConditionalOnMissingBean",
+            "ru": "Дважды, создавая дублирующиеся бины, если каждый @Bean-метод не защитить @ConditionalOnMissingBean"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Once, but as a scanned @Configuration, so its @AutoConfigureAfter ordering is ignored",
+            "ru": "Один раз, но как найденный сканированием @Configuration, поэтому порядок из @AutoConfigureAfter игнорируется"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Twice, and the context fails to start with a BeanDefinitionOverrideException",
+            "ru": "Дважды, и контекст не поднимется из-за BeanDefinitionOverrideException"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Never: a class that is both scanned and listed in AutoConfiguration.imports is skipped to avoid ambiguity",
+            "ru": "Ни разу: класс, который и попадает в сканирование, и перечислен в AutoConfiguration.imports, пропускается во избежание неоднозначности"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The @ComponentScan inside @SpringBootApplication is configured with a TypeExcludeFilter and an AutoConfigurationExcludeFilter; the latter drops any @Configuration class that is also registered as an auto-configuration. The class is therefore applied exactly once and keeps full auto-configuration semantics, including ordering and being processed after user beans.",
+        "ru": "@ComponentScan внутри @SpringBootApplication настроен с TypeExcludeFilter и AutoConfigurationExcludeFilter; последний отбрасывает любой @Configuration класс, который также зарегистрирован как автоконфигурация. Поэтому класс применяется ровно один раз и сохраняет всю семантику автоконфигурации, включая упорядочивание и обработку после пользовательских бинов."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/docs/3.5.x/api/java/org/springframework/boot/autoconfigure/AutoConfigurationExcludeFilter.html",
+        "https://docs.spring.io/spring-boot/3.5/reference/features/developing-auto-configuration.html"
+      ]
+    },
+    {
+      "id": "spring-boot.configuration-properties.001",
+      "section": "configuration-properties",
+      "difficulty": "easy",
+      "text": {
+        "en": "The key acme.timeout is defined in application.properties inside the jar, as an OS environment variable, as a Java system property and as a command-line argument. Which value does the application see?",
+        "ru": "Ключ acme.timeout задан в application.properties внутри jar, в переменной окружения ОС, в системном свойстве Java и в аргументе командной строки. Какое значение увидит приложение?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The Java system property passed with -D",
+            "ru": "Значение из системного свойства Java, переданного через -D"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The OS environment variable",
+            "ru": "Значение из переменной окружения ОС"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The value from application.properties, because config data files are loaded last",
+            "ru": "Значение из application.properties, потому что файлы конфигурации загружаются последними"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The first source Spring Boot encounters, which is application.properties on the classpath",
+            "ru": "Значение из первого найденного источника, то есть из application.properties в classpath"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The command-line argument",
+            "ru": "Значение из аргумента командной строки"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Spring Boot orders property sources so that later ones override earlier ones, and command-line arguments sit near the very top - above SPRING_APPLICATION_JSON, system properties, environment variables and config data files. Only test-specific sources such as @TestPropertySource and Devtools settings rank higher.",
+        "ru": "Spring Boot упорядочивает источники свойств так, что более поздние переопределяют более ранние, и аргументы командной строки находятся почти на самом верху — выше SPRING_APPLICATION_JSON, системных свойств, переменных окружения и файлов конфигурации. Выше стоят только тестовые источники вроде @TestPropertySource и настройки Devtools."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/features/external-config.html"
+      ]
+    },
+    {
+      "id": "spring-boot.configuration-properties.002",
+      "section": "configuration-properties",
+      "difficulty": "easy",
+      "text": {
+        "en": "Both files sit in the same location and both define server.port. Which port does the application bind to?",
+        "ru": "Оба файла лежат в одном и том же месте и оба задают server.port. На каком порту поднимется приложение?"
+      },
+      "code": "# src/main/resources/application.properties\nserver.port=8081\n\n# src/main/resources/application.yaml\nserver:\n  port: 8082",
+      "options": [
+        {
+          "text": {
+            "en": "8082, because YAML is processed after properties files",
+            "ru": "8082, потому что YAML обрабатывается после properties-файлов"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "8081, because the .properties variant takes precedence over YAML in the same location",
+            "ru": "8081, потому что вариант .properties имеет приоритет над YAML в том же месте"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Start-up fails, because two config data files in the same location define the same key",
+            "ru": "Запуск завершится ошибкой, потому что два файла конфигурации в одном месте задают один и тот же ключ"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whichever file the classpath scanner finds first, so the result is not deterministic",
+            "ru": "Тот файл, который сканер classpath найдёт первым, поэтому результат недетерминирован"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "8080, because conflicting definitions are discarded and the default is used",
+            "ru": "8080, потому что конфликтующие определения отбрасываются и берётся значение по умолчанию"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Spring Boot loads both files, but when the same key appears in both variants at the same location the .properties file wins. Mixing the two formats in one application is still discouraged precisely because this precedence is easy to overlook.",
+        "ru": "Spring Boot загружает оба файла, но если один и тот же ключ встречается в обоих вариантах в одном месте, побеждает .properties. Смешивать два формата в одном приложении не рекомендуется именно потому, что об этом приоритете легко забыть."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/features/external-config.html"
+      ]
+    },
+    {
+      "id": "spring-boot.configuration-properties.003",
+      "section": "configuration-properties",
+      "difficulty": "medium",
+      "text": {
+        "en": "Injecting MailProperties fails with NoSuchBeanDefinitionException. What is the correct fix?",
+        "ru": "Внедрение MailProperties падает с NoSuchBeanDefinitionException. Что нужно исправить?"
+      },
+      "code": "@ConfigurationProperties(\"acme.mail\")\npublic record MailProperties(String host, int port) { }\n\n@SpringBootApplication\npublic class Application {\n    public static void main(String[] args) {\n        SpringApplication.run(Application.class, args);\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "Add @ConstructorBinding to the canonical constructor, since records are not bound without it",
+            "ru": "Добавить @ConstructorBinding к каноническому конструктору, так как без него record не биндится"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Replace the record with a class that has a no-arg constructor and setters, because records cannot be bound",
+            "ru": "Заменить record на класс с конструктором без аргументов и сеттерами, так как record забиндить нельзя"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Add @Validated to the record, which is what triggers binding and bean registration",
+            "ru": "Добавить @Validated к record — именно она запускает биндинг и регистрацию бина"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Register the type with @EnableConfigurationProperties(MailProperties.class) or turn on @ConfigurationPropertiesScan",
+            "ru": "Зарегистрировать тип через @EnableConfigurationProperties(MailProperties.class) или включить @ConfigurationPropertiesScan"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Add @ConfigurationPropertiesBinding to the record so that the binder can convert it",
+            "ru": "Добавить @ConfigurationPropertiesBinding к записи, чтобы биндер смог её преобразовать"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "@ConfigurationProperties is not a stereotype annotation, so the type has to be registered explicitly with @EnableConfigurationProperties, picked up by @ConfigurationPropertiesScan, or declared as a @Bean. Records with a single canonical constructor already use constructor binding in Spring Boot 3.x, so @ConstructorBinding is unnecessary there.",
+        "ru": "@ConfigurationProperties не является стереотипной аннотацией, поэтому тип нужно зарегистрировать явно через @EnableConfigurationProperties, найти через @ConfigurationPropertiesScan или объявить как @Bean. Record с единственным каноническим конструктором в Spring Boot 3.x уже использует constructor binding, так что @ConstructorBinding не нужна."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/features/external-config.html",
+        "https://docs.spring.io/spring-boot/3.5/reference/features/external-config.html#features.external-config.typesafe-configuration-properties.constructor-binding"
+      ]
+    },
+    {
+      "id": "spring-boot.configuration-properties.004",
+      "section": "configuration-properties",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about @ConfigurationProperties compared with @Value is TRUE?",
+        "ru": "Какое утверждение о @ConfigurationProperties в сравнении с @Value верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "@ConfigurationProperties supports relaxed binding and jakarta.validation, @Value does not",
+            "ru": "@ConfigurationProperties поддерживает relaxed binding и jakarta.validation, а @Value — нет"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "@ConfigurationProperties evaluates SpEL expressions, which makes it the better choice for computed values",
+            "ru": "@ConfigurationProperties вычисляет SpEL-выражения, что делает её удобнее для вычисляемых значений"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@Value supports relaxed binding too, so acme.myKey and acme.my-key are interchangeable there",
+            "ru": "@Value тоже поддерживает relaxed binding, поэтому acme.myKey и acme.my-key там взаимозаменяемы"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@Value cannot read OS environment variables; only @ConfigurationProperties can",
+            "ru": "@Value не умеет читать переменные окружения ОС; это доступно только @ConfigurationProperties"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both produce configuration metadata for IDE completion, but only @Value handles nested types",
+            "ru": "Оба варианта генерируют метаданные конфигурации для подсказок в IDE, но вложенные типы поддерживает только @Value"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Relaxed binding, nested and complex types, generated metadata and @Validated support are the reasons to prefer @ConfigurationProperties for structured configuration. SpEL is the other way round: @Value evaluates #{...} expressions, while @ConfigurationProperties only resolves ${...} placeholders.",
+        "ru": "Relaxed binding, вложенные и составные типы, генерация метаданных и поддержка @Validated — причины предпочитать @ConfigurationProperties для структурированной конфигурации. С SpEL всё наоборот: @Value вычисляет выражения #{...}, а @ConfigurationProperties только подставляет плейсхолдеры ${...}."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/features/external-config.html#features.external-config.typesafe-configuration-properties.vs-value-annotation"
+      ]
+    },
+    {
+      "id": "spring-boot.configuration-properties.005",
+      "section": "configuration-properties",
+      "difficulty": "medium",
+      "text": {
+        "en": "acme.security.token.ttl-seconds=0 is accepted without an error, while a blank acme.security.secret is rejected. Why?",
+        "ru": "Значение acme.security.token.ttl-seconds=0 принимается без ошибки, а пустой acme.security.secret отклоняется. Почему?"
+      },
+      "code": "@ConfigurationProperties(\"acme.security\")\n@Validated\npublic class SecurityProperties {\n\n    @NotBlank\n    private String secret;\n\n    private final Token token = new Token();\n\n    public static class Token {\n        @Min(1)\n        private int ttlSeconds;\n        // getters and setters omitted\n    }\n    // getters and setters omitted\n}",
+      "options": [
+        {
+          "text": {
+            "en": "jakarta.validation constraints are ignored on primitives, so ttlSeconds must be declared as Integer",
+            "ru": "Ограничения jakarta.validation игнорируются на примитивах, поэтому ttlSeconds нужно объявить как Integer"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@Min is only evaluated for constructor-bound properties, never for setter-bound ones",
+            "ru": "@Min проверяется только для свойств, связанных через конструктор, и никогда для связанных через сеттеры"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A final field cannot be re-bound, so Spring silently skips the whole Token object",
+            "ru": "Финальное поле нельзя перезаписать, поэтому Spring молча пропускает весь объект Token"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Validation does not cascade automatically; the token field has to be annotated with @Valid",
+            "ru": "Валидация не распространяется на вложенные объекты автоматически; поле token нужно пометить аннотацией @Valid"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Nested constraints require a bean named configurationPropertiesValidator to be declared",
+            "ru": "Для вложенных ограничений нужно объявить бин с именем configurationPropertiesValidator"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Spring Boot validates the top-level @ConfigurationProperties object, but a nested object is only walked when its field is annotated with @Valid - that is standard Bean Validation cascading. Primitive int fields are validated normally, so changing the declared type would not help; a final field with a getter is still populated in place.",
+        "ru": "Spring Boot валидирует объект @ConfigurationProperties верхнего уровня, а во вложенный объект валидатор заходит только если поле помечено @Valid — это обычное каскадирование Bean Validation. Поля типа int валидируются нормально, поэтому смена типа не поможет; финальное поле с геттером всё равно заполняется на месте."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/features/external-config.html#features.external-config.typesafe-configuration-properties.validation"
+      ]
+    },
+    {
+      "id": "spring-boot.configuration-properties.006",
+      "section": "configuration-properties",
+      "difficulty": "hard",
+      "text": {
+        "en": "spring.config.import=file:/etc/acme/extra.properties is configured, but on machines where that file is absent the application refuses to start. Which change makes the import tolerant of a missing file?",
+        "ru": "Задано spring.config.import=file:/etc/acme/extra.properties, но на машинах, где файла нет, приложение отказывается стартовать. Какое изменение сделает импорт устойчивым к отсутствию файла?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Add spring.config.on-not-found=ignore to application.properties",
+            "ru": "Добавить spring.config.on-not-found=ignore в application.properties"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Prefix the location: spring.config.import=optional:file:/etc/acme/extra.properties",
+            "ru": "Добавить префикс к пути: spring.config.import=optional:file:/etc/acme/extra.properties"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Use spring.config.additional-location instead, which never fails on a missing location",
+            "ru": "Использовать вместо этого spring.config.additional-location, который никогда не падает из-за отсутствующего пути"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing is needed: a missing import only logs a warning, so the failure has a different cause",
+            "ru": "Ничего менять не нужно: отсутствующий импорт лишь пишет предупреждение, значит причина сбоя другая"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Wrap the location in a placeholder with an empty default: spring.config.import=${ACME_EXTRA:}",
+            "ru": "Обернуть путь в плейсхолдер с пустым значением по умолчанию: spring.config.import=${ACME_EXTRA:}"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "An unresolvable import raises ConfigDataLocationNotFoundException and stops start-up; the optional: prefix turns it into a no-op. spring.config.on-not-found=ignore does exist, but it is only honoured when supplied as a system property, an environment variable or via SpringApplication.setDefaultProperties - not from application.properties itself.",
+        "ru": "Неразрешимый импорт приводит к ConfigDataLocationNotFoundException и останавливает запуск; префикс optional: превращает его в безобидную операцию. Свойство spring.config.on-not-found=ignore существует, но учитывается только если задано системным свойством, переменной окружения или через SpringApplication.setDefaultProperties, а не из самого application.properties."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/features/external-config.html#features.external-config.files.importing",
+        "https://docs.spring.io/spring-boot/3.5/reference/features/external-config.html#features.external-config.files.optional-prefix"
+      ]
+    },
+    {
+      "id": "spring-boot.profiles.001",
+      "section": "profiles",
+      "difficulty": "easy",
+      "text": {
+        "en": "What does @Profile(\"!prod\") on a @Component mean?",
+        "ru": "Что означает @Profile(\"!prod\") на @Component?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The bean is registered only when a profile literally named !prod is active",
+            "ru": "Бин регистрируется только когда активен профиль с буквальным именем !prod"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The bean is registered only when no profile at all has been activated",
+            "ru": "Бин регистрируется только когда ни один профиль не активирован"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The expression is invalid; negation has to be written as @Profile(value = \"prod\", negate = true)",
+            "ru": "Такое выражение недопустимо; отрицание записывается как @Profile(value = \"prod\", negate = true)"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The bean is registered when prod is active, and the exclamation mark only suppresses the start-up warning",
+            "ru": "Бин регистрируется когда активен prod, а восклицательный знак лишь подавляет предупреждение при старте"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The bean is registered whenever prod is not among the accepted profiles",
+            "ru": "Бин регистрируется всегда, когда prod не входит в число принятых профилей"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "@Profile accepts a profile expression built from !, & and | (parentheses are required when & and | are mixed), so !prod registers the bean in every environment except prod. When nothing is active the accepted profile is the default one named default, so !prod still matches.",
+        "ru": "@Profile принимает выражение профилей из операторов !, & и | (при смешивании & и | нужны скобки), поэтому !prod регистрирует бин во всех окружениях, кроме prod. Когда ничего не активировано, принятым считается профиль по умолчанию с именем default, поэтому !prod всё равно срабатывает."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/features/profiles.html",
+        "https://docs.spring.io/spring-framework/reference/core/beans/environment.html"
+      ]
+    },
+    {
+      "id": "spring-boot.profiles.002",
+      "section": "profiles",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which value of acme.sample-rate is in effect?",
+        "ru": "Какое значение acme.sample-rate будет действовать?"
+      },
+      "code": "# application-prod.properties\nacme.sample-rate=0.1\n\n# application-metrics.properties\nacme.sample-rate=1.0\n\n# java -jar app.jar --spring.profiles.active=prod,metrics",
+      "options": [
+        {
+          "text": {
+            "en": "0.1, because profiles are applied in declaration order and the first one wins",
+            "ru": "0.1, потому что профили применяются в порядке объявления и побеждает первый"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "0.1, because prod is treated as the primary profile and metrics only adds new keys",
+            "ru": "0.1, потому что prod считается основным профилем, а metrics только добавляет новые ключи"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "1.0, because the last profile in the list wins",
+            "ru": "1.0, потому что побеждает последний профиль в списке"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Neither: two profile files defining the same key make start-up fail",
+            "ru": "Ни одно: два профильных файла с одним и тем же ключом приводят к ошибке при запуске"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The value from plain application.properties, which always overrides profile-specific files",
+            "ru": "Значение из обычного application.properties, который всегда переопределяет профильные файлы"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Profile-specific files override the plain application.properties, and when several profiles are active a last-wins strategy applies, so metrics overrides prod. The order of names in spring.profiles.active is therefore significant.",
+        "ru": "Профильные файлы переопределяют обычный application.properties, а при нескольких активных профилях действует правило «побеждает последний», поэтому metrics переопределяет prod. Порядок имён в spring.profiles.active имеет значение."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/features/external-config.html#features.external-config.files.profile-specific"
+      ]
+    },
+    {
+      "id": "spring-boot.profiles.003",
+      "section": "profiles",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which profiles are active after start-up?",
+        "ru": "Какие профили будут активны после запуска?"
+      },
+      "code": "# application.properties\nspring.profiles.group.production=proddb,prodmq\n\n# java -jar app.jar --spring.profiles.active=production",
+      "options": [
+        {
+          "text": {
+            "en": "Only proddb and prodmq; the group name itself is replaced by its members",
+            "ru": "Только proddb и prodmq; имя группы заменяется её участниками"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only production; a group affects which property files are read, not the active profiles",
+            "ru": "Только production; группа влияет на то, какие файлы свойств читаются, а не на активные профили"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "production, proddb and prodmq",
+            "ru": "production, proddb и prodmq"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "production, proddb, prodmq and default",
+            "ru": "production, proddb, prodmq и default"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "production plus whichever of proddb and prodmq has a matching property file",
+            "ru": "production плюс тот из proddb и prodmq, для которого существует соответствующий файл свойств"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A profile group expands into its members while the group name itself stays active, so Environment.getActiveProfiles() reports all three names and @Profile(\"proddb\") beans are created. The default profile is not added once anything is explicitly active.",
+        "ru": "Группа профилей раскрывается в своих участников, при этом само имя группы остаётся активным, поэтому Environment.getActiveProfiles() вернёт все три имени, а бины с @Profile(\"proddb\") будут созданы. Профиль default не добавляется, если явно активирован хотя бы один профиль."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/features/profiles.html#features.profiles.groups"
+      ]
+    },
+    {
+      "id": "spring-boot.profiles.004",
+      "section": "profiles",
+      "difficulty": "medium",
+      "text": {
+        "en": "The application is started with --spring.profiles.active=prod. What happens?",
+        "ru": "Приложение запускается с --spring.profiles.active=prod. Что произойдёт?"
+      },
+      "code": "# application-prod.properties\nspring.profiles.active=prod,metrics\nacme.cache.ttl=10m",
+      "options": [
+        {
+          "text": {
+            "en": "Start-up fails: spring.profiles.active must not be set inside a profile-specific document",
+            "ru": "Запуск завершится ошибкой: spring.profiles.active нельзя задавать внутри профильного документа"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The metrics profile is added and application-metrics.properties is loaded as well",
+            "ru": "Профиль metrics добавится, и application-metrics.properties тоже будет загружен"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The line is ignored with a warning and only prod stays active",
+            "ru": "Строка будет проигнорирована с предупреждением, активным останется только prod"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Configuration is re-processed and start-up ends with a circular profile activation error on the second pass",
+            "ru": "Конфигурация обработается заново, и на втором проходе запуск упадёт с ошибкой циклической активации профилей"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It works, but only in a YAML multi-document file using spring.config.activate.on-profile",
+            "ru": "Это работает, но только в многодокументном YAML-файле с spring.config.activate.on-profile"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Spring Boot rejects spring.profiles.active, spring.profiles.default, spring.profiles.include and spring.profiles.group in profile-specific documents and throws InvalidConfigDataPropertyException, because the set of profiles would change while it is already being resolved. Add extra profiles from the non-profile-specific document instead, with spring.profiles.include or a group.",
+        "ru": "Spring Boot запрещает spring.profiles.active, spring.profiles.default, spring.profiles.include и spring.profiles.group в профильных документах и бросает InvalidConfigDataPropertyException, потому что набор профилей менялся бы в момент, когда он уже вычисляется. Дополнительные профили нужно добавлять из непрофильного документа — через spring.profiles.include или группу."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/features/profiles.html",
+        "https://docs.spring.io/spring-boot/3.5/reference/features/external-config.html#features.external-config.files.activation-properties"
+      ]
+    },
+    {
+      "id": "spring-boot.profiles.005",
+      "section": "profiles",
+      "difficulty": "medium",
+      "text": {
+        "en": "A feature has to be switchable by a boolean setting rather than by environment name. Which statement about @ConditionalOnProperty is TRUE?",
+        "ru": "Функциональность нужно включать булевой настройкой, а не именем окружения. Какое утверждение про @ConditionalOnProperty верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "matchIfMissing defaults to true, so the bean is created unless the property is explicitly set to false",
+            "ru": "matchIfMissing по умолчанию true, поэтому бин создаётся, если свойство явно не выставлено в false"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@ConditionalOnProperty works only inside auto-configuration classes; on application beans you have to use @Profile",
+            "ru": "@ConditionalOnProperty работает только внутри классов автоконфигурации; для бинов приложения нужно использовать @Profile"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The condition is re-evaluated when the property changes, so the bean appears and disappears at runtime",
+            "ru": "Условие перевычисляется при изменении свойства, поэтому бин появляется и исчезает во время работы"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "havingValue may only be used together with prefix; otherwise the condition matches any non-empty value",
+            "ru": "havingValue можно использовать только вместе с prefix, иначе условие срабатывает на любое непустое значение"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "With havingValue = \"true\" the bean is created only for that value, because matchIfMissing defaults to false",
+            "ru": "С havingValue = \"true\" бин создаётся только при этом значении, поскольку matchIfMissing по умолчанию false"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The condition is evaluated once, while bean definitions are being registered, and an absent property does not match unless matchIfMissing = true is specified. Unlike @Profile it keys off a value rather than a profile name, which is what makes it the right tool for feature flags.",
+        "ru": "Условие вычисляется один раз, во время регистрации определений бинов, и отсутствующее свойство не считается совпадением, пока не указано matchIfMissing = true. В отличие от @Profile оно опирается на значение, а не на имя профиля, поэтому подходит для feature-флагов."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/docs/3.5.x/api/java/org/springframework/boot/autoconfigure/condition/ConditionalOnProperty.html",
+        "https://docs.spring.io/spring-boot/3.5/reference/features/developing-auto-configuration.html"
+      ]
+    },
+    {
+      "id": "spring-boot.profiles.006",
+      "section": "profiles",
+      "difficulty": "hard",
+      "text": {
+        "en": "Which statement about activating profiles in Spring Boot tests is TRUE?",
+        "ru": "Какое утверждение об активации профилей в тестах Spring Boot верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "@ActiveProfiles is merged with spring.profiles.active from application.properties, so both sets end up active",
+            "ru": "@ActiveProfiles объединяется с spring.profiles.active из application.properties, поэтому активны оба набора"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@ActiveProfiles replaces whatever spring.profiles.active declares in configuration files, and it is part of the context cache key",
+            "ru": "@ActiveProfiles заменяет то, что объявлено в spring.profiles.active в файлах конфигурации, и входит в ключ кэша контекстов"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "@ActiveProfiles is ignored by @SpringBootTest; you have to use @SpringBootTest(properties = \"spring.profiles.active=test\")",
+            "ru": "@ActiveProfiles игнорируется в @SpringBootTest; нужно писать @SpringBootTest(properties = \"spring.profiles.active=test\")"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Profiles set with @ActiveProfiles are not part of the cache key, so all test classes reuse a single context",
+            "ru": "Профили из @ActiveProfiles не входят в ключ кэша, поэтому все тестовые классы переиспользуют один контекст"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@ActiveProfiles requires the test class itself to be annotated with @Profile for the profile to be honoured",
+            "ru": "Чтобы @ActiveProfiles сработала, сам тестовый класс должен быть помечен аннотацией @Profile"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The TestContext framework sets the active profiles programmatically on the Environment, which wins over the spring.profiles.active property, and the resolved profiles form part of the key used to cache and reuse contexts. That is why adding a profile to a single test class can noticeably increase the number of contexts built in a test run.",
+        "ru": "TestContext framework задаёт активные профили программно в Environment, и это перекрывает свойство spring.profiles.active, а вычисленный набор профилей входит в ключ, по которому контексты кэшируются и переиспользуются. Поэтому добавление профиля в один тестовый класс может заметно увеличить число создаваемых контекстов за прогон."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/testing/testcontext-framework/ctx-management/env-profiles.html",
+        "https://docs.spring.io/spring-framework/reference/testing/testcontext-framework/ctx-management/caching.html"
+      ]
+    },
+    {
+      "id": "spring-boot.web-embedded-server.001",
+      "section": "web-embedded-server",
+      "difficulty": "easy",
+      "text": {
+        "en": "What does server.port=0 do, and how does the application learn the port it actually got?",
+        "ru": "Что делает server.port=0 и как приложение узнаёт, какой порт ему реально достался?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It disables the HTTP connector, so the application runs as a non-web application",
+            "ru": "Отключает HTTP-коннектор, и приложение работает как не-web приложение"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It falls back to the default 8080, because 0 simply means \"not configured\"",
+            "ru": "Откатывается к порту 8080 по умолчанию, так как 0 означает просто «не задано»"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It lets the OS choose a port, but only inside the range configured by server.port-range",
+            "ru": "Позволяет ОС выбрать порт, но только внутри диапазона, заданного в server.port-range"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The embedded server binds to a free port chosen by the OS, which is injected with @LocalServerPort",
+            "ru": "Встроенный сервер занимает свободный порт, выбранный ОС; его можно получить через @LocalServerPort"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Start-up fails, because 0 is not a valid TCP port number",
+            "ru": "Запуск завершится ошибкой, так как 0 не является допустимым номером TCP-порта"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Port 0 asks the operating system for any free port, which is exactly what @SpringBootTest(webEnvironment = RANDOM_PORT) relies on; the chosen port is exposed through @LocalServerPort or the WebServerApplicationContext. Turning the web server off is a different setting: server.port=-1 or spring.main.web-application-type=none.",
+        "ru": "Порт 0 просит операционную систему выдать любой свободный порт — именно на этом построен @SpringBootTest(webEnvironment = RANDOM_PORT); полученный порт доступен через @LocalServerPort или WebServerApplicationContext. Отключение web-сервера делается иначе: server.port=-1 или spring.main.web-application-type=none."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/how-to/webserver.html",
+        "https://docs.spring.io/spring-boot/3.5/reference/testing/spring-boot-applications.html"
+      ]
+    },
+    {
+      "id": "spring-boot.web-embedded-server.002",
+      "section": "web-embedded-server",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which property sets the context path of the embedded servlet container?",
+        "ru": "Какое свойство задаёт context path встроенного servlet-контейнера?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "server.servlet.context-path",
+            "ru": "server.servlet.context-path"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "spring.mvc.servlet.path",
+            "ru": "spring.mvc.servlet.path"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "server.context-path",
+            "ru": "server.context-path"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "spring.mvc.base-path",
+            "ru": "spring.mvc.base-path"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "server.servlet.path",
+            "ru": "server.servlet.path"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "server.servlet.context-path configures the context of the embedded container, so it applies to everything the container serves, including error pages and static resources. spring.mvc.servlet.path only changes where the DispatcherServlet is mapped inside that context, and server.context-path is the Spring Boot 1.x name that no longer exists.",
+        "ru": "server.servlet.context-path настраивает контекст встроенного контейнера, поэтому влияет на всё, что контейнер отдаёт, включая страницы ошибок и статические ресурсы. spring.mvc.servlet.path лишь меняет, по какому пути внутри этого контекста замаплен DispatcherServlet, а server.context-path — имя из Spring Boot 1.x, которого больше нет."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/web/servlet.html",
+        "https://docs.spring.io/spring-boot/3.5/appendix/application-properties/index.html"
+      ]
+    },
+    {
+      "id": "spring-boot.web-embedded-server.003",
+      "section": "web-embedded-server",
+      "difficulty": "medium",
+      "text": {
+        "en": "Why does starting a repackaged Spring Boot jar this way fail?",
+        "ru": "Почему запуск перепакованного jar-файла Spring Boot таким способом не работает?"
+      },
+      "code": "$ unzip -l app.jar\n  BOOT-INF/classes/com/example/Application.class\n  BOOT-INF/lib/spring-core-6.2.8.jar\n  META-INF/MANIFEST.MF\n  org/springframework/boot/loader/launch/JarLauncher.class\n\n$ java -cp app.jar com.example.Application\nError: Could not find or load main class com.example.Application",
+      "options": [
+        {
+          "text": {
+            "en": "The nested jars use a Spring-specific compression that only NestedJarFile is able to inflate",
+            "ru": "Вложенные jar-ы сжаты особым алгоритмом Spring, распаковать который умеет только NestedJarFile"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "BOOT-INF is a reserved directory that the JVM refuses to read; the classic layout has to be requested at build time",
+            "ru": "BOOT-INF — зарезервированный каталог, который JVM отказывается читать; классическую раскладку нужно запрашивать при сборке"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The manifest has no Class-Path entry, so every nested jar has to be listed on -cp by hand",
+            "ru": "В манифесте нет записи Class-Path, поэтому каждый вложенный jar нужно вручную перечислить в -cp"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The JDK class loader cannot read BOOT-INF/classes and the jars nested in BOOT-INF/lib",
+            "ru": "Загрузчик классов JDK не умеет читать BOOT-INF/classes и вложенные jar-файлы в BOOT-INF/lib"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The archive is written in ZIP64 format, which the java -cp option is unable to open",
+            "ru": "Архив записан в формате ZIP64, который опция java -cp открыть не умеет"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A repackaged jar is not a plain classpath jar: Main-Class in the manifest points at a Spring Boot launcher which reads BOOT-INF/classes and the nested jars in BOOT-INF/lib through its own class loader, while Start-Class names the real main class. Nested jars are stored uncompressed precisely so that they can be read in place, not with any proprietary compression.",
+        "ru": "Перепакованный jar — не обычный jar для classpath: Main-Class в манифесте указывает на лаунчер Spring Boot, который читает BOOT-INF/classes и вложенные jar-ы из BOOT-INF/lib своим загрузчиком классов, а настоящий main-класс указан в Start-Class. Вложенные jar-ы хранятся без сжатия именно для того, чтобы их можно было читать на месте, а не из-за какого-то особого алгоритма."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/specification/executable-jar/index.html",
+        "https://docs.spring.io/spring-boot/3.5/specification/executable-jar/nested-jars.html"
+      ]
+    },
+    {
+      "id": "spring-boot.web-embedded-server.004",
+      "section": "web-embedded-server",
+      "difficulty": "medium",
+      "text": {
+        "en": "A @Configuration class implements WebMvcConfigurer and is also annotated with @EnableWebMvc. What is the consequence?",
+        "ru": "Класс @Configuration реализует WebMvcConfigurer и вместе с этим помечен аннотацией @EnableWebMvc. К чему это приведёт?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing changes: @EnableWebMvc is required for a WebMvcConfigurer to be picked up at all",
+            "ru": "Ничего не меняется: без @EnableWebMvc реализация WebMvcConfigurer вообще не была бы учтена"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Spring MVC auto-configuration backs off, so Boot's MVC defaults are lost",
+            "ru": "Автоконфигурация Spring MVC отключается, поэтому дефолты Boot для MVC теряются"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The customisations in the configurer are simply applied twice, which is harmless",
+            "ru": "Настройки из конфигуратора просто применяются дважды, и это безвредно"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Auto-configuration still applies, but the configurer's callbacks now run before Boot's own customisations",
+            "ru": "Автоконфигурация продолжает работать, но колбэки конфигуратора теперь вызываются раньше собственных настроек Boot"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The context fails to start with a duplicate WebMvcConfigurationSupport bean definition",
+            "ru": "Контекст не поднимется из-за дублирующегося определения бина WebMvcConfigurationSupport"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "WebMvcAutoConfiguration is guarded by @ConditionalOnMissingBean(WebMvcConfigurationSupport.class), and @EnableWebMvc imports exactly that class, so all of Boot's MVC defaults disappear. Implement WebMvcConfigurer without @EnableWebMvc when you want to add to the defaults rather than replace them.",
+        "ru": "WebMvcAutoConfiguration защищена условием @ConditionalOnMissingBean(WebMvcConfigurationSupport.class), а @EnableWebMvc импортирует именно этот класс, поэтому все настройки MVC от Boot исчезают. Если нужно дополнить настройки по умолчанию, а не заменить их, реализуйте WebMvcConfigurer без @EnableWebMvc."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/web/servlet.html#web.servlet.spring-mvc.auto-configuration"
+      ]
+    },
+    {
+      "id": "spring-boot.web-embedded-server.005",
+      "section": "web-embedded-server",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about graceful shutdown of the embedded server in Spring Boot 3.5 is TRUE?",
+        "ru": "Какое утверждение о graceful shutdown встроенного сервера в Spring Boot 3.5 верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Only Tomcat is able to drain in-flight requests, so on Jetty, Undertow and Reactor Netty the server.shutdown property is silently ignored",
+            "ru": "Дожидаться уже принятых запросов умеет только Tomcat, поэтому на Jetty, Undertow и Reactor Netty свойство server.shutdown молча игнорируется"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It happens only when the actuator shutdown endpoint is called; a SIGTERM always kills the server immediately",
+            "ru": "Он происходит только при вызове endpoint shutdown в actuator; SIGTERM всегда завершает сервер немедленно"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It has to be switched on per server, for example with server.tomcat.graceful-shutdown=true",
+            "ru": "Его нужно включать отдельно для каждого сервера, например через server.tomcat.graceful-shutdown=true"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is driven by @PreDestroy callbacks, so the connector is closed only after every bean has been destroyed",
+            "ru": "Он реализован через @PreDestroy-колбэки, поэтому коннектор закрывается только после уничтожения всех бинов"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is enabled by default; server.shutdown=immediate switches it off",
+            "ru": "Он включён по умолчанию; отключается через server.shutdown=immediate"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Since Spring Boot 3.4 server.shutdown defaults to graceful, so all four embedded servers (Tomcat, Jetty, Undertow, Reactor Netty) stop accepting new requests while in-flight ones finish; server.shutdown=immediate restores the old behaviour. The grace period comes from spring.lifecycle.timeout-per-shutdown-phase, 30s by default. The actuator shutdown endpoint is a separate, disabled-by-default feature that does not change how requests are drained.",
+        "ru": "Начиная с Spring Boot 3.4 свойство server.shutdown по умолчанию равно graceful, поэтому все четыре встроенных сервера (Tomcat, Jetty, Undertow, Reactor Netty) перестают принимать новые запросы, давая завершиться уже принятым; вернуть прежнее поведение можно через server.shutdown=immediate. Длительность отсрочки берётся из spring.lifecycle.timeout-per-shutdown-phase, по умолчанию 30s. Endpoint shutdown в actuator — отдельная и выключенная по умолчанию возможность, на дренаж запросов не влияющая."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/web/graceful-shutdown.html",
+        "https://docs.spring.io/spring-boot/3.5/appendix/application-properties/index.html"
+      ]
+    },
+    {
+      "id": "spring-boot.web-embedded-server.006",
+      "section": "web-embedded-server",
+      "difficulty": "hard",
+      "text": {
+        "en": "The controller threw IllegalStateException(\"order 999 is archived\"), yet the default /error response carries no message. Which change adds it?",
+        "ru": "Контроллер выбросил IllegalStateException(\"order 999 is archived\"), но стандартный ответ /error не содержит сообщения. Какое изменение его добавит?"
+      },
+      "code": "GET /orders/999\nHTTP/1.1 500\n{\n  \"timestamp\": \"2026-03-01T10:15:30.123+00:00\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\",\n  \"path\": \"/orders/999\"\n}",
+      "options": [
+        {
+          "text": {
+            "en": "Set server.error.include-stacktrace=always, because the message is part of the stack trace attribute",
+            "ru": "Задать server.error.include-stacktrace=always, так как сообщение входит в атрибут со стектрейсом"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Set spring.mvc.problemdetails.enabled=true; the message is only suppressed in the legacy error format",
+            "ru": "Задать spring.mvc.problemdetails.enabled=true; сообщение скрывается только в устаревшем формате ошибки"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Set server.error.include-message=always (or on-param); the default is never",
+            "ru": "Задать server.error.include-message=always (или on-param); по умолчанию стоит never"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Implement a custom ErrorAttributes bean, because the message can no longer be enabled by configuration",
+            "ru": "Реализовать собственный бин ErrorAttributes, так как включить сообщение конфигурацией больше нельзя"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Set server.error.include-exception=true, which switches the response to the verbose format",
+            "ru": "Задать server.error.include-exception=true, что переключает ответ на подробный формат"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Since Spring Boot 2.3 both server.error.include-message and server.error.include-stacktrace default to never so that exception details are not leaked to clients; include-message=always brings the message back. include-exception only adds the exception class name, and enabling ProblemDetail changes the media type and shape of the body without re-enabling the message.",
+        "ru": "Начиная со Spring Boot 2.3 и server.error.include-message, и server.error.include-stacktrace по умолчанию равны never, чтобы детали исключений не утекали клиентам; include-message=always возвращает сообщение. include-exception добавляет только имя класса исключения, а включение ProblemDetail меняет тип содержимого и структуру ответа, но сообщение не возвращает."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/web/servlet.html#web.servlet.spring-mvc.error-handling",
+        "https://docs.spring.io/spring-boot/docs/3.5.x/api/java/org/springframework/boot/autoconfigure/web/ErrorProperties.html"
+      ]
+    },
+    {
+      "id": "spring-boot.actuator.001",
+      "section": "actuator",
+      "difficulty": "easy",
+      "text": {
+        "en": "Only spring-boot-starter-actuator has been added, with no further configuration. Which endpoints are reachable over HTTP?",
+        "ru": "Добавлен только spring-boot-starter-actuator, никакой дополнительной настройки нет. Какие endpoint-ы доступны по HTTP?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "health and info",
+            "ru": "health и info"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Every endpoint except shutdown",
+            "ru": "Все endpoint-ы, кроме shutdown"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only health, at /actuator/health",
+            "ru": "Только health, по пути /actuator/health"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "None; every endpoint has to be listed explicitly before it becomes reachable",
+            "ru": "Никакие; каждый endpoint нужно сначала перечислить явно"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "health, info and metrics",
+            "ru": "health, info и metrics"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Most endpoints are enabled but not exposed: management.endpoints.web.exposure.include defaults to health. The info endpoint is enabled yet not exposed, which is why adding it to the include list is usually the first thing people configure.",
+        "ru": "Большинство endpoint-ов включены, но не опубликованы: management.endpoints.web.exposure.include по умолчанию равно health. Endpoint info включён, но не опубликован — именно поэтому его чаще всего первым добавляют в include."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/actuator/endpoints.html"
+      ]
+    },
+    {
+      "id": "spring-boot.actuator.002",
+      "section": "actuator",
+      "difficulty": "easy",
+      "text": {
+        "en": "The info endpoint is exposed and returns HTTP 200, but its body is an empty JSON object. Why are the info.* values missing?",
+        "ru": "Endpoint info опубликован и отвечает HTTP 200, но телом приходит пустой JSON-объект. Почему значений info.* там нет?"
+      },
+      "code": "management.endpoints.web.exposure.include=health,info\ninfo.app.name=orders-service\ninfo.app.version=1.4.2",
+      "options": [
+        {
+          "text": {
+            "en": "The env info contributor is disabled by default; management.info.env.enabled=true has to be set",
+            "ru": "Контрибьютор env для info по умолчанию выключен; нужно задать management.info.env.enabled=true"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The keys have to be moved under the management.info.* prefix to be picked up",
+            "ru": "Ключи нужно перенести под префикс management.info.*, иначе они не подхватываются"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The endpoint only ever reports build and git data and cannot be extended through properties",
+            "ru": "Этот endpoint показывает только данные build и git и не расширяется через свойства"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Properties are ignored entirely, so an InfoContributor bean is the only way to add data",
+            "ru": "Свойства игнорируются полностью, поэтому добавить данные можно только бином InfoContributor"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Values are sanitized because info is exposed without authentication",
+            "ru": "Значения скрываются, потому что info опубликован без аутентификации"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Since Spring Boot 2.6 the env contributor, which is what surfaces info.* properties, is off by default and has to be enabled with management.info.env.enabled=true. The build and git contributors behave differently: they are enabled and contribute automatically as soon as META-INF/build-info.properties or git.properties is on the classpath.",
+        "ru": "Начиная со Spring Boot 2.6 контрибьютор env, который и отдаёт свойства info.*, по умолчанию выключен и включается через management.info.env.enabled=true. Контрибьюторы build и git ведут себя иначе: они включены и добавляют данные автоматически, как только в classpath появляются META-INF/build-info.properties или git.properties."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/actuator/endpoints.html#actuator.endpoints.info",
+        "https://docs.spring.io/spring-boot/3.5/reference/actuator/endpoints.html#actuator.endpoints.exposing"
+      ]
+    },
+    {
+      "id": "spring-boot.actuator.003",
+      "section": "actuator",
+      "difficulty": "medium",
+      "text": {
+        "en": "management.endpoint.health.probes.enabled=true is set and no health groups are declared. What does /actuator/health/readiness report?",
+        "ru": "Задано management.endpoint.health.probes.enabled=true, группы health не объявлены. Что покажет /actuator/health/readiness?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The same aggregate as /actuator/health, so any DOWN indicator fails readiness",
+            "ru": "Тот же агрегат, что и /actuator/health, поэтому любой индикатор в DOWN уронит readiness"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing: the group has to be declared explicitly before the path exists",
+            "ru": "Ничего: пока группа не объявлена явно, такого пути не существует"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "readinessState plus every indicator whose name starts with db",
+            "ru": "readinessState плюс все индикаторы, имя которых начинается с db"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "readinessState and diskSpace, the two indicators Spring Boot puts into readiness by default",
+            "ru": "readinessState и diskSpace — два индикатора, которые Spring Boot по умолчанию кладёт в readiness"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only the readinessState indicator, which reflects application availability",
+            "ru": "Только индикатор readinessState, отражающий доступность приложения"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Enabling probes creates the liveness and readiness groups containing only the livenessState and readinessState indicators, which track ApplicationAvailability rather than external systems. If a dependency outage should stop traffic, add it explicitly with management.endpoint.health.group.readiness.include.",
+        "ru": "Включение probes создаёт группы liveness и readiness, содержащие только индикаторы livenessState и readinessState, которые отражают ApplicationAvailability, а не состояние внешних систем. Если сбой зависимости должен останавливать трафик, добавьте её явно через management.endpoint.health.group.readiness.include."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/actuator/endpoints.html#actuator.endpoints.kubernetes-probes",
+        "https://docs.spring.io/spring-boot/3.5/reference/actuator/endpoints.html#actuator.endpoints.health.groups"
+      ]
+    },
+    {
+      "id": "spring-boot.actuator.004",
+      "section": "actuator",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about securing actuator endpoints in Spring Boot 3.x is TRUE?",
+        "ru": "Какое утверждение о защите endpoint-ов actuator в Spring Boot 3.x верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Actuator endpoints are always open; Spring Boot never applies security to them automatically",
+            "ru": "Endpoint-ы actuator всегда открыты; Spring Boot никогда не применяет к ним защиту автоматически"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "With Spring Security present and no user SecurityFilterChain, every endpoint except health is secured",
+            "ru": "Если Spring Security есть в classpath и своего SecurityFilterChain нет, защищены все endpoint'ы, кроме health"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Every endpoint including health requires authentication as soon as Spring Security is present",
+            "ru": "Как только появляется Spring Security, аутентификация требуется для всех endpoint-ов, включая health"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Moving endpoints to management.server.port takes them out of the filter chain, so they need no protection",
+            "ru": "Перенос endpoint-ов на management.server.port выводит их из цепочки фильтров, поэтому защита не нужна"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only shutdown and heapdump are secured; the remaining endpoints are treated as non-sensitive",
+            "ru": "Защищаются только shutdown и heapdump; остальные endpoint-ы считаются нечувствительными"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Boot's management security auto-configuration protects all endpoints but leaves health open so infrastructure probes keep working. A separate management port does not remove the need for authorisation, and endpoints such as env, configprops, heapdump and threaddump leak configuration and memory contents once they are exposed.",
+        "ru": "Автоконфигурация безопасности management закрывает все endpoint-ы, но оставляет health открытым, чтобы инфраструктурные проверки продолжали работать. Отдельный management-порт не снимает необходимости в авторизации, а endpoint-ы вроде env, configprops, heapdump и threaddump после публикации раскрывают конфигурацию и содержимое памяти."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/actuator/endpoints.html#actuator.endpoints.security",
+        "https://docs.spring.io/spring-boot/3.5/reference/actuator/monitoring.html"
+      ]
+    },
+    {
+      "id": "spring-boot.actuator.005",
+      "section": "actuator",
+      "difficulty": "medium",
+      "text": {
+        "en": "The bean is created, but GET /actuator/features returns 404. What is missing?",
+        "ru": "Бин создаётся, но GET /actuator/features возвращает 404. Чего не хватает?"
+      },
+      "code": "@Component\n@Endpoint(id = \"features\")\npublic class FeaturesEndpoint {\n\n    @ReadOperation\n    public Map<String, Boolean> features() {\n        return Map.of(\"newCheckout\", true);\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "@Endpoint has to be replaced by @WebEndpoint before the operation is mapped over HTTP",
+            "ru": "@Endpoint нужно заменить на @WebEndpoint, иначе операция не мапится на HTTP"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A @ReadOperation must return a WebEndpointResponse in order to be mapped",
+            "ru": "Метод с @ReadOperation должен возвращать WebEndpointResponse, иначе он не мапится"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Custom endpoints have to be registered in META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports",
+            "ru": "Пользовательские endpoint-ы нужно регистрировать в META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The endpoint is not exposed; features has to be added to management.endpoints.web.exposure.include",
+            "ru": "Endpoint не опубликован; features нужно добавить в management.endpoints.web.exposure.include"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The id needs a leading slash, so it has to be written as \"/features\"",
+            "ru": "Идентификатор должен начинаться со слэша, то есть быть записан как \"/features\""
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Custom endpoints obey exactly the same exposure rules as the built-in ones, and only health is included by default. @Endpoint already makes the operation available over both HTTP and JMX; @WebEndpoint would restrict it to HTTP only, and a plain return value is serialised for you.",
+        "ru": "Пользовательские endpoint-ы подчиняются тем же правилам публикации, что и встроенные, а по умолчанию в include входит только health. @Endpoint уже делает операцию доступной и по HTTP, и по JMX; @WebEndpoint ограничил бы её только HTTP, а обычное возвращаемое значение сериализуется автоматически."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/actuator/endpoints.html#actuator.endpoints.implementing-custom",
+        "https://docs.spring.io/spring-boot/3.5/reference/actuator/endpoints.html#actuator.endpoints.exposing"
+      ]
+    },
+    {
+      "id": "spring-boot.actuator.006",
+      "section": "actuator",
+      "difficulty": "hard",
+      "text": {
+        "en": "Which statement about Micrometer metrics in a Spring Boot 3.x application is TRUE?",
+        "ru": "Какое утверждение о метриках Micrometer в приложении на Spring Boot 3.x верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Boot auto-configures a composite MeterRegistry that feeds every backend on the classpath",
+            "ru": "Boot автоконфигурирует составной MeterRegistry, который питает все backend'ы на classpath"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Without an explicitly declared MeterRegistry bean no meters are recorded, so one bean per backend is required",
+            "ru": "Без явно объявленного бина MeterRegistry метрики не записываются, поэтому нужен отдельный бин для каждого бэкенда"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "/actuator/metrics returns the Prometheus text format, which makes a separate scrape endpoint redundant",
+            "ru": "/actuator/metrics отдаёт текстовый формат Prometheus, поэтому отдельный endpoint для сбора не нужен"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Common tags can only be attached per meter; there is no way to apply them to every meter of a registry",
+            "ru": "Общие теги можно навесить только на отдельные метрики; применить их ко всем метрикам реестра нельзя"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Timers created with @Timed are only recorded while the metrics endpoint is exposed over HTTP",
+            "ru": "Таймеры, созданные через @Timed, записываются только пока endpoint metrics опубликован по HTTP"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The auto-configured registry is a CompositeMeterRegistry, so application code depends on a single MeterRegistry while measurements fan out to every backend found on the classpath. Common tags are applied globally with a MeterRegistryCustomizer or management.metrics.tags.*, and /actuator/metrics is a JSON drill-down tool - Prometheus scrapes /actuator/prometheus instead.",
+        "ru": "Автоконфигурируемый реестр — это CompositeMeterRegistry, поэтому код приложения зависит от одного MeterRegistry, а измерения расходятся по всем найденным в classpath бэкендам. Общие теги задаются глобально через MeterRegistryCustomizer или management.metrics.tags.*, а /actuator/metrics — это JSON-инструмент для точечного разбора; Prometheus собирает данные с /actuator/prometheus."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/actuator/metrics.html",
+        "https://docs.spring.io/spring-boot/3.5/reference/actuator/endpoints.html"
+      ]
+    },
+    {
+      "id": "spring-boot.data-access.001",
+      "section": "data-access",
+      "difficulty": "easy",
+      "text": {
+        "en": "spring-boot-starter-data-jpa is on the classpath and only spring.datasource.url, username and password are set. What does Spring Boot create?",
+        "ru": "В classpath есть spring-boot-starter-data-jpa, и заданы только spring.datasource.url, username и password. Что создаст Spring Boot?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A DriverManagerDataSource, since pooling has to be requested explicitly",
+            "ru": "DriverManagerDataSource, так как пулинг нужно запрашивать явно"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A Tomcat JDBC pool, because the servlet container's pool implementation is reused",
+            "ru": "Пул Tomcat JDBC, так как переиспользуется реализация пула из servlet-контейнера"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A HikariCP pool whose maximum size defaults to the number of available processors",
+            "ru": "Пул HikariCP, максимальный размер которого по умолчанию равен числу доступных процессоров"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A HikariCP pool with a maximum size of 10",
+            "ru": "Пул HikariCP с максимальным размером 10"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Nothing, until @EnableJpaRepositories is added to a configuration class",
+            "ru": "Ничего, пока в класс конфигурации не добавлена @EnableJpaRepositories"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The JPA starter brings HikariCP in transitively, and DataSource auto-configuration prefers it over Tomcat JDBC, DBCP2 and Oracle UCP. Hikari's own default maximumPoolSize is 10 and minimumIdle follows it, so you get a fixed-size pool until you tune spring.datasource.hikari.*.",
+        "ru": "Стартер JPA транзитивно подтягивает HikariCP, и автоконфигурация DataSource предпочитает его Tomcat JDBC, DBCP2 и Oracle UCP. Собственное значение maximumPoolSize у Hikari по умолчанию равно 10, а minimumIdle следует за ним, поэтому пул получается фиксированного размера, пока не настроены свойства spring.datasource.hikari.*."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/data/sql.html#data.sql.datasource.connection-pool",
+        "https://github.com/brettwooldridge/HikariCP#gear-configuration-knobs-baby"
+      ]
+    },
+    {
+      "id": "spring-boot.data-access.002",
+      "section": "data-access",
+      "difficulty": "easy",
+      "text": {
+        "en": "spring.jpa.hibernate.ddl-auto is not configured anywhere. Which value does Spring Boot use?",
+        "ru": "Свойство spring.jpa.hibernate.ddl-auto нигде не задано. Какое значение использует Spring Boot?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "none in every case; Spring Boot never generates a schema automatically",
+            "ru": "Всегда none; Spring Boot никогда не генерирует схему автоматически"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "create-drop for an embedded database with no schema manager, otherwise none",
+            "ru": "create-drop для встроенной БД без менеджера схемы, иначе none"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "update, so that entity changes are reflected without losing data",
+            "ru": "update, чтобы изменения сущностей применялись без потери данных"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "validate, so that a mismatch between entities and schema fails fast at start-up",
+            "ru": "validate, чтобы расхождение сущностей и схемы падало сразу при запуске"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "create-drop whenever a DataSource is auto-configured, regardless of the database",
+            "ru": "create-drop всегда, когда DataSource создан автоконфигурацией, независимо от базы"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Spring Boot derives the default from the environment: an embedded H2, HSQL or Derby database with neither Flyway nor Liquibase present gets create-drop, everything else gets none. That is why a mapping mistake against PostgreSQL shows up as a runtime SQL error rather than a start-up failure.",
+        "ru": "Spring Boot выбирает значение по умолчанию исходя из окружения: для встроенной H2, HSQL или Derby при отсутствии Flyway и Liquibase используется create-drop, во всех остальных случаях — none. Поэтому ошибка маппинга на PostgreSQL проявляется как SQL-ошибка во время работы, а не как падение при запуске."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/how-to/data-initialization.html#howto.data-initialization.using-hibernate"
+      ]
+    },
+    {
+      "id": "spring-boot.data-access.003",
+      "section": "data-access",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about these two derived queries is TRUE?",
+        "ru": "Какое утверждение об этих двух производных запросах верно?"
+      },
+      "code": "public interface OrderRepository extends JpaRepository<Order, Long> {\n\n    Page<Order> findByStatus(OrderStatus status, Pageable pageable);\n\n    Slice<Order> findByCustomerId(Long customerId, Pageable pageable);\n}",
+      "options": [
+        {
+          "text": {
+            "en": "Both run a count query; Slice merely hides the total from the caller",
+            "ru": "Оба выполняют count-запрос; Slice просто скрывает общее число от вызывающего кода"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Neither runs a count query; the total is derived from the page size and the number of rows returned",
+            "ru": "Ни один не выполняет count-запрос; общее число вычисляется из размера страницы и количества возвращённых строк"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Slice requires an explicit @Query with a countQuery attribute, otherwise bootstrapping fails",
+            "ru": "Для Slice нужен явный @Query с атрибутом countQuery, иначе инициализация репозитория падает"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Page runs the count query only for the first page and caches it for the rest of the session",
+            "ru": "Page выполняет count-запрос только для первой страницы и кэширует его на остаток сессии"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "findByStatus runs an extra count query, findByCustomerId does not",
+            "ru": "findByStatus выполняет дополнительный count-запрос, findByCustomerId — нет"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A Page exposes totalElements and totalPages, so Spring Data issues an additional count query next to the paged select. A Slice only fetches one row more than requested to decide hasNext, which is measurably cheaper on large tables; neither return type needs a hand-written count query for a derived finder.",
+        "ru": "Page предоставляет totalElements и totalPages, поэтому Spring Data выполняет дополнительный count-запрос рядом с постраничным select. Slice запрашивает лишь на одну строку больше, чтобы определить hasNext, что заметно дешевле на больших таблицах; ни одному из этих типов не нужен написанный вручную count-запрос для производного метода."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-data/jpa/reference/repositories/query-methods-details.html",
+        "https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html"
+      ]
+    },
+    {
+      "id": "spring-boot.data-access.004",
+      "section": "data-access",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about spring.jpa.open-in-view is TRUE?",
+        "ru": "Какое утверждение о spring.jpa.open-in-view верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It keeps a database transaction open for the whole request, so writes made in the view layer are committed",
+            "ru": "Оно держит транзакцию БД открытой на весь запрос, поэтому записи, сделанные на уровне представления, коммитятся"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It has been disabled by default since Spring Boot 3.0 because of the warning it used to log",
+            "ru": "Начиная со Spring Boot 3.0 оно выключено по умолчанию из-за предупреждения, которое раньше писалось в лог"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is on by default for web applications and binds an EntityManager to the whole request",
+            "ru": "Он включён по умолчанию для веб-приложений и привязывает EntityManager ко всему запросу"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It only affects methods annotated with @Transactional(readOnly = true); other methods are unaffected",
+            "ru": "Оно влияет только на методы с @Transactional(readOnly = true), остальные не затрагиваются"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It has to be enabled for @DataJpaTest to avoid LazyInitializationException",
+            "ru": "Его нужно включать, чтобы в @DataJpaTest не возникало LazyInitializationException"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Open EntityManager in View keeps the persistence context alive for the duration of the request but does not hold a transaction, so every lazy load runs as its own auto-commit statement - which is exactly why it hides N+1 problems in the view layer. Spring Boot still enables it by default and logs a warning suggesting that you turn it off.",
+        "ru": "Open EntityManager in View держит persistence context живым на протяжении запроса, но не удерживает транзакцию, поэтому каждая ленивая загрузка выполняется отдельным запросом в режиме auto-commit — именно поэтому она маскирует проблемы N+1 на уровне представления. Spring Boot по-прежнему включает её по умолчанию и пишет в лог предупреждение с рекомендацией отключить."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/data/sql.html#data.sql.jpa-and-spring-data.open-entitymanager-in-view",
+        "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/orm/jpa/support/OpenEntityManagerInViewInterceptor.html"
+      ]
+    },
+    {
+      "id": "spring-boot.data-access.005",
+      "section": "data-access",
+      "difficulty": "medium",
+      "text": {
+        "en": "What happens to the order that was saved before the exception was thrown?",
+        "ru": "Что произойдёт с заказом, сохранённым до выброса исключения?"
+      },
+      "code": "public class InsufficientStockException extends Exception { }\n\n@Service\npublic class OrderService {\n\n    private final OrderRepository repository;\n\n    @Transactional\n    public void place(Order order) throws InsufficientStockException {\n        repository.save(order);\n        throw new InsufficientStockException();\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "It is rolled back, because any exception leaving a @Transactional method triggers a rollback",
+            "ru": "Он будет откачен, потому что любое исключение, вышедшее из @Transactional метода, вызывает откат"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is rolled back, because save() runs in its own transaction that is marked rollback-only",
+            "ru": "Он будет откачен, потому что save() выполняется в своей транзакции, помеченной как rollback-only"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is committed: Spring rolls back only for unchecked exceptions unless rollbackFor names the checked one",
+            "ru": "Он будет закоммичен: Spring откатывает транзакцию только для unchecked-исключений, если checked не указано в rollbackFor"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The call fails with UnexpectedRollbackException, since the checked exception marks the transaction inconsistent",
+            "ru": "Вызов упадёт с UnexpectedRollbackException, так как checked-исключение помечает транзакцию как несогласованную"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The outcome depends on the isolation level; with the default READ_COMMITTED it is rolled back",
+            "ru": "Результат зависит от уровня изоляции; при READ_COMMITTED по умолчанию он будет откачен"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The default rollback rule of Spring's declarative transactions covers RuntimeException and Error only, so a checked exception lets the transaction commit; add @Transactional(rollbackFor = InsufficientStockException.class) to change that. Note also that the default isolation is the datastore's own default rather than READ_COMMITTED.",
+        "ru": "Правило отката по умолчанию в декларативных транзакциях Spring охватывает только RuntimeException и Error, поэтому checked-исключение позволяет транзакции закоммититься; чтобы это изменить, укажите @Transactional(rollbackFor = InsufficientStockException.class). Кроме того, уровень изоляции по умолчанию — это значение по умолчанию самой СУБД, а не READ_COMMITTED."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/rolling-back.html",
+        "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/annotation/Transactional.html"
+      ]
+    },
+    {
+      "id": "spring-boot.data-access.006",
+      "section": "data-access",
+      "difficulty": "hard",
+      "text": {
+        "en": "Flyway is on the classpath with migrations in db/migration, spring.jpa.hibernate.ddl-auto is unset, and an @Entity maps a column that no migration creates. What happens?",
+        "ru": "В classpath есть Flyway с миграциями в db/migration, spring.jpa.hibernate.ddl-auto не задан, а @Entity маппит колонку, которую ни одна миграция не создаёт. Что произойдёт?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Start-up succeeds, and the mismatch only shows up on the first query that touches the column",
+            "ru": "Приложение стартует, и расхождение проявляется только на первом запросе, затрагивающем эту колонку"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Start-up fails with a SchemaManagementException, because validate is the default once Flyway is present",
+            "ru": "Запуск упадёт с SchemaManagementException, так как при наличии Flyway по умолчанию используется validate"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Hibernate adds the missing column, because update becomes the default once migrations are detected",
+            "ru": "Hibernate добавит отсутствующую колонку, так как при обнаружении миграций по умолчанию используется update"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Start-up fails because Flyway runs after the EntityManagerFactory and finds a schema Hibernate already generated",
+            "ru": "Запуск упадёт, потому что Flyway работает после EntityManagerFactory и обнаруживает схему, уже созданную Hibernate"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Start-up succeeds and Hibernate reports the mismatch as a warning during schema validation",
+            "ru": "Приложение запустится, а Hibernate сообщит о расхождении предупреждением во время валидации схемы"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "ddl-auto falls back to create-drop only for an embedded database with no schema manager; in every other case, including \"Flyway is on the classpath\", it is none - and none means Hibernate does not even validate the mappings. Flyway does run first, since Spring Boot makes the EntityManagerFactory depend on it, so the schema is migrated, just never checked against the entities.",
+        "ru": "Значение create-drop подставляется только для встроенной базы без менеджера схемы; во всех остальных случаях, включая наличие Flyway в classpath, используется none, а none означает, что Hibernate даже не проверяет маппинги. Flyway при этом действительно выполняется первым, так как Spring Boot делает EntityManagerFactory зависимым от него, — схема миграциями обновляется, но с сущностями не сверяется."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/how-to/data-initialization.html#howto.data-initialization.migration-tool.flyway",
+        "https://docs.spring.io/spring-boot/3.5/how-to/data-initialization.html#howto.data-initialization.using-hibernate"
+      ]
+    },
+    {
+      "id": "spring-boot.testing-packaging.001",
+      "section": "testing-packaging",
+      "difficulty": "easy",
+      "text": {
+        "en": "What does a plain @SpringBootTest do with respect to the web environment?",
+        "ru": "Что делает @SpringBootTest без параметров в отношении web-окружения?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It starts the embedded server on a random port so that real HTTP clients can be used",
+            "ru": "Запускает встроенный сервер на случайном порту, чтобы можно было использовать настоящие HTTP-клиенты"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It starts the embedded server on the configured port, 8080 unless overridden",
+            "ru": "Запускает встроенный сервер на настроенном порту, по умолчанию 8080"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It loads a plain ApplicationContext with no web infrastructure at all",
+            "ru": "Поднимает обычный ApplicationContext вообще без web-инфраструктуры"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It chooses between a mock environment and a real server depending on which client the test injects",
+            "ru": "Выбирает между mock-окружением и настоящим сервером в зависимости от того, какой клиент внедряет тест"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It loads a web application context with a mock servlet environment and starts no embedded server",
+            "ru": "Поднимает web-контекст с mock-окружением servlet и не запускает встроенный сервер"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The default is WebEnvironment.MOCK: servlet-related beans are created but nothing listens on a socket, which is why MockMvc works and TestRestTemplate does not. Switch to RANDOM_PORT when a real server and real HTTP calls are needed, and to NONE for a non-web context.",
+        "ru": "По умолчанию используется WebEnvironment.MOCK: бины, связанные с servlet, создаются, но ни один сокет не слушается — поэтому MockMvc работает, а TestRestTemplate нет. Для настоящего сервера и реальных HTTP-вызовов нужен RANDOM_PORT, а для не-web контекста — NONE."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/testing/spring-boot-applications.html"
+      ]
+    },
+    {
+      "id": "spring-boot.testing-packaging.002",
+      "section": "testing-packaging",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about @DataJpaTest is TRUE?",
+        "ru": "Какое утверждение о @DataJpaTest верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It loads the full application context but wraps each test in a transaction that is rolled back",
+            "ru": "Поднимает полный контекст приложения, но оборачивает каждый тест в откатываемую транзакцию"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It loads JPA beans only, swaps in an embedded database and rolls back each test",
+            "ru": "Она поднимает только JPA-бины, подменяет БД на встроенную и откатывает каждый тест"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It uses the configured production DataSource and commits, so tests have to clean up after themselves",
+            "ru": "Использует настроенный production-DataSource и коммитит, поэтому тесты должны убирать за собой сами"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It scans @Service and @Repository beans while excluding only web-layer beans",
+            "ru": "Сканирует бины @Service и @Repository, исключая только бины web-слоя"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is not transactional, so @Transactional has to be added to get a rollback",
+            "ru": "Она не транзакционна, поэтому для откатов нужно добавлять @Transactional"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "@DataJpaTest is a slice test: the meta-annotated @AutoConfigureTestDatabase swaps in an embedded database, only JPA-related beans are scanned, and the meta-annotated @Transactional gives an automatic rollback per test method. Use @AutoConfigureTestDatabase(replace = NONE) when you want the real datasource, for example with Testcontainers.",
+        "ru": "@DataJpaTest — это срезовый тест: включённая в неё @AutoConfigureTestDatabase подменяет базу на встроенную, сканируются только относящиеся к JPA бины, а включённая @Transactional даёт автоматический откат после каждого метода. Если нужен настоящий источник данных, например с Testcontainers, используйте @AutoConfigureTestDatabase(replace = NONE)."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/testing/spring-boot-applications.html#testing.spring-boot-applications.autoconfigured-spring-data-jpa"
+      ]
+    },
+    {
+      "id": "spring-boot.testing-packaging.003",
+      "section": "testing-packaging",
+      "difficulty": "medium",
+      "text": {
+        "en": "Why does this test fail before the assertion is even reached?",
+        "ru": "Почему этот тест падает ещё до того, как дело доходит до проверки?"
+      },
+      "code": "@SpringBootTest\nclass OrderApiTests {\n\n    @Autowired\n    TestRestTemplate restTemplate;\n\n    @Test\n    void listsOrders() {\n        assertThat(restTemplate.getForObject(\"/orders\", String.class)).isNotNull();\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "TestRestTemplate needs an absolute URL; relative paths are only supported by MockMvc",
+            "ru": "TestRestTemplate требует абсолютный URL; относительные пути поддерживает только MockMvc"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "TestRestTemplate is only auto-configured when spring-webflux is absent, so WebTestClient must be used here",
+            "ru": "TestRestTemplate автоконфигурируется только при отсутствии spring-webflux, поэтому здесь нужен WebTestClient"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The template is injected, but every call returns 404 because the mock environment maps controllers under /mock",
+            "ru": "Бин внедряется, но все вызовы возвращают 404, так как в mock-окружении контроллеры мапятся под /mock"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "With the default MOCK environment no TestRestTemplate bean is registered, so the injection fails",
+            "ru": "При окружении MOCK по умолчанию бин TestRestTemplate не регистрируется, поэтому инъекция падает"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "@AutoConfigureMockMvc is missing, and it is what registers TestRestTemplate",
+            "ru": "Не хватает @AutoConfigureMockMvc — именно она регистрирует TestRestTemplate"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "TestRestTemplate is contributed by the test auto-configuration only when a real server is running, i.e. for RANDOM_PORT or DEFINED_PORT; with MOCK you use MockMvc (via @AutoConfigureMockMvc) instead. Relative paths are perfectly fine once a port exists, because TestRestTemplate resolves them against the running server.",
+        "ru": "TestRestTemplate добавляется тестовой автоконфигурацией только когда реально работает сервер, то есть при RANDOM_PORT или DEFINED_PORT; при MOCK используют MockMvc через @AutoConfigureMockMvc. Относительные пути при наличии порта вполне допустимы: TestRestTemplate разрешает их относительно запущенного сервера."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/testing/spring-boot-applications.html#testing.spring-boot-applications.with-running-server",
+        "https://docs.spring.io/spring-boot/docs/3.5.x/api/java/org/springframework/boot/test/web/client/TestRestTemplate.html"
+      ]
+    },
+    {
+      "id": "spring-boot.testing-packaging.004",
+      "section": "testing-packaging",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about @WebMvcTest is TRUE?",
+        "ru": "Какое утверждение о @WebMvcTest верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It auto-configures MockMvc and loads web-layer beans only, so collaborators need test doubles",
+            "ru": "Она автоконфигурирует MockMvc и поднимает только бины веб-слоя, поэтому зависимости нужно подменять тестовыми двойниками"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It loads the full context but replaces the DataSource with an embedded database",
+            "ru": "Она поднимает полный контекст, но подменяет DataSource встроенной базой"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It starts an embedded server on a random port and drives it through TestRestTemplate",
+            "ru": "Она запускает встроенный сервер на случайном порту и работает с ним через TestRestTemplate"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It loads every @Component bean and excludes only Spring Data repositories",
+            "ru": "Она поднимает все бины @Component и исключает только репозитории Spring Data"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is transactional, so changes made through the controller are rolled back after each test",
+            "ru": "Она транзакционна, поэтому изменения через контроллер откатываются после каждого теста"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "@WebMvcTest restricts the context to MVC infrastructure - @Controller, @ControllerAdvice, Filter, Converter, HandlerInterceptor and WebMvcConfigurer beans - and deliberately skips ordinary components, which is what keeps the slice fast. When you need the real collaborators, use @SpringBootTest together with @AutoConfigureMockMvc.",
+        "ru": "@WebMvcTest ограничивает контекст инфраструктурой MVC — бинами @Controller, @ControllerAdvice, Filter, Converter, HandlerInterceptor и WebMvcConfigurer — и намеренно пропускает обычные компоненты, за счёт чего срез остаётся быстрым. Если нужны настоящие зависимости, используйте @SpringBootTest вместе с @AutoConfigureMockMvc."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/testing/spring-boot-applications.html#testing.spring-boot-applications.spring-mvc-tests"
+      ]
+    },
+    {
+      "id": "spring-boot.testing-packaging.005",
+      "section": "testing-packaging",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about using Testcontainers with Spring Boot 3.x is TRUE?",
+        "ru": "Какое утверждение об использовании Testcontainers со Spring Boot 3.x верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "@Testcontainers replaces the auto-configured DataSource with an embedded H2 database for speed",
+            "ru": "@Testcontainers подменяет автоконфигурированный DataSource встроенной базой H2 для скорости"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@ServiceConnection only works in combination with @DataJpaTest, because that is where the DataSource is replaced",
+            "ru": "@ServiceConnection работает только вместе с @DataJpaTest, потому что именно там подменяется DataSource"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Connection details still have to be published with @DynamicPropertySource; @ServiceConnection only manages the container lifecycle",
+            "ru": "Параметры подключения всё равно нужно публиковать через @DynamicPropertySource; @ServiceConnection лишь управляет жизненным циклом контейнера"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A container bean annotated with @ServiceConnection feeds its connection details into the matching auto-configuration",
+            "ru": "Бин-контейнер с аннотацией @ServiceConnection передаёт свои параметры подключения в соответствующую автоконфигурацию"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Containers declared as static fields are restarted for every test method to keep tests isolated",
+            "ru": "Контейнеры, объявленные статическими полями, перезапускаются перед каждым тестовым методом ради изоляции тестов"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Since Spring Boot 3.1 a @ServiceConnection-annotated container is turned into ConnectionDetails beans, so spring.datasource.*, the Kafka bootstrap servers, the Redis host and so on no longer have to be set by hand. Container lifecycle stays Testcontainers' job: a static @Container is started once per class, not per test method.",
+        "ru": "Начиная со Spring Boot 3.1 контейнер с @ServiceConnection превращается в бины ConnectionDetails, поэтому spring.datasource.*, адреса брокеров Kafka, хост Redis и прочее задавать вручную не нужно. Жизненным циклом контейнера по-прежнему управляет Testcontainers: статический @Container запускается один раз на класс, а не на каждый тест."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/testing/testcontainers.html",
+        "https://docs.spring.io/spring-boot/docs/3.5.x/api/java/org/springframework/boot/testcontainers/service/connection/ServiceConnection.html"
+      ]
+    },
+    {
+      "id": "spring-boot.testing-packaging.006",
+      "section": "testing-packaging",
+      "difficulty": "hard",
+      "text": {
+        "en": "Which statement about packaging with the Spring Boot Maven plugin and AOT or native images is TRUE?",
+        "ru": "Какое утверждение о сборке через Spring Boot Maven plugin и об AOT или native image верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A native image still evaluates @Conditional at start-up; only reflection metadata is precomputed",
+            "ru": "Native image по-прежнему вычисляет @Conditional при старте; заранее готовятся только метаданные для рефлексии"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "AOT evaluates bean definitions and conditions at build time, so the classpath and profiles are fixed",
+            "ru": "AOT вычисляет определения бинов и условия во время сборки, поэтому classpath и профили фиксируются"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The build-image goal needs a Dockerfile in the project root, which the plugin fills in from layers.idx",
+            "ru": "Цель build-image требует Dockerfile в корне проекта, который плагин заполняет на основе layers.idx"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Layered jars have to be switched on explicitly, otherwise repackage produces a single-layer archive",
+            "ru": "Слоёные jar-ы нужно включать явно, иначе repackage создаёт архив с одним слоем"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The repackage goal deletes the plain jar, so a module cannot be both a library dependency and an executable jar",
+            "ru": "Цель repackage удаляет обычный jar, поэтому модуль не может быть одновременно библиотечной зависимостью и исполняемым jar"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Spring AOT generates bean definitions ahead of time, which fixes the classpath and the outcome of conditions and profiles at build time - the main behavioural difference from a normal JVM run. build-image uses Cloud Native Buildpacks and needs no Dockerfile, layers with layers.idx are produced by default, and repackage renames the original jar to *.jar.original instead of deleting it.",
+        "ru": "Spring AOT генерирует определения бинов заранее, из-за чего classpath и результаты вычисления условий и профилей фиксируются на этапе сборки — это главное отличие в поведении от обычного запуска на JVM. build-image использует Cloud Native Buildpacks и не требует Dockerfile, слои с layers.idx создаются по умолчанию, а repackage переименовывает исходный jar в *.jar.original, а не удаляет его."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/3.5/reference/packaging/aot.html",
+        "https://docs.spring.io/spring-boot/3.5/maven-plugin/packaging.html"
+      ]
+    }
+  ]
+}

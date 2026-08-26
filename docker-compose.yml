@@ -1,0 +1,56 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: java-quiz-postgres
+    environment:
+      POSTGRES_DB: javaquiz
+      POSTGRES_USER: javaquiz
+      POSTGRES_PASSWORD: javaquiz
+    volumes:
+      - java-quiz-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U javaquiz -d javaquiz"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: java-quiz-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/javaquiz
+      SPRING_DATASOURCE_USERNAME: javaquiz
+      SPRING_DATASOURCE_PASSWORD: javaquiz
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production-use-a-long-secret-32+}
+      CORS_ORIGINS: http://localhost,http://127.0.0.1,http://localhost:80
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ../java-quiz-frontend
+      dockerfile: Dockerfile
+    container_name: java-quiz-frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "80:80"
+
+volumes:
+  java-quiz-pgdata:

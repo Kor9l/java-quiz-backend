@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "topics": [
+    {
+      "id": "java-core",
+      "order": 1,
+      "name": { "en": "Java Core", "ru": "Java Core" },
+      "sections": [
+        { "id": "oop-basics",      "order": 1, "title": { "en": "OOP and class design",            "ru": "ООП и проектирование классов" } },
+        { "id": "strings",         "order": 2, "title": { "en": "Strings and immutability",         "ru": "Строки и неизменяемость" } },
+        { "id": "equals-hashcode", "order": 3, "title": { "en": "equals, hashCode, Comparable",     "ru": "equals, hashCode, Comparable" } },
+        { "id": "collections",     "order": 4, "title": { "en": "Collections Framework",           "ru": "Коллекции" } },
+        { "id": "generics",        "order": 5, "title": { "en": "Generics and wildcards",           "ru": "Дженерики и wildcards" } },
+        { "id": "exceptions",      "order": 6, "title": { "en": "Exceptions",                       "ru": "Исключения" } },
+        { "id": "concurrency",     "order": 7, "title": { "en": "Threads and concurrency",          "ru": "Потоки и многопоточность" } },
+        { "id": "streams-lambdas", "order": 8, "title": { "en": "Lambdas and Stream API",           "ru": "Лямбды и Stream API" } },
+        { "id": "jvm-memory",      "order": 9, "title": { "en": "JVM memory model and GC",          "ru": "Память JVM и сборка мусора" } }
+      ]
+    },
+    {
+      "id": "spring",
+      "order": 2,
+      "name": { "en": "Spring Framework", "ru": "Spring Framework" },
+      "sections": [
+        { "id": "ioc-container",        "order": 1, "title": { "en": "IoC container and ApplicationContext", "ru": "IoC-контейнер и ApplicationContext" } },
+        { "id": "dependency-injection", "order": 2, "title": { "en": "Dependency injection",                 "ru": "Внедрение зависимостей" } },
+        { "id": "bean-lifecycle",       "order": 3, "title": { "en": "Bean scopes and lifecycle",             "ru": "Скоупы и жизненный цикл бинов" } },
+        { "id": "configuration",        "order": 4, "title": { "en": "Configuration and stereotypes",         "ru": "Конфигурация и стереотипы" } },
+        { "id": "aop",                  "order": 5, "title": { "en": "AOP and proxies",                       "ru": "AOP и прокси" } },
+        { "id": "spring-mvc",           "order": 6, "title": { "en": "Spring MVC",                            "ru": "Spring MVC" } },
+        { "id": "transactions",         "order": 7, "title": { "en": "Transaction management",                "ru": "Управление транзакциями" } },
+        { "id": "testing",              "order": 8, "title": { "en": "Testing Spring applications",           "ru": "Тестирование Spring-приложений" } }
+      ]
+    },
+    {
+      "id": "spring-boot",
+      "order": 3,
+      "name": { "en": "Spring Boot", "ru": "Spring Boot" },
+      "sections": [
+        { "id": "autoconfiguration",       "order": 1, "title": { "en": "Auto-configuration",                "ru": "Автоконфигурация" } },
+        { "id": "starters",                "order": 2, "title": { "en": "Starters and dependency management", "ru": "Стартеры и управление зависимостями" } },
+        { "id": "configuration-properties","order": 3, "title": { "en": "External configuration",             "ru": "Внешняя конфигурация" } },
+        { "id": "profiles",                "order": 4, "title": { "en": "Profiles and conditions",            "ru": "Профили и условия" } },
+        { "id": "web-embedded-server",     "order": 5, "title": { "en": "Web layer and embedded server",      "ru": "Web-слой и встроенный сервер" } },
+        { "id": "actuator",                "order": 6, "title": { "en": "Actuator and observability",         "ru": "Actuator и наблюдаемость" } },
+        { "id": "data-access",             "order": 7, "title": { "en": "Data access and Spring Data",        "ru": "Доступ к данным и Spring Data" } },
+        { "id": "testing-packaging",       "order": 8, "title": { "en": "Testing and packaging",              "ru": "Тестирование и сборка" } }
+      ]
+    },
+    {
+      "id": "hibernate",
+      "order": 4,
+      "name": { "en": "Hibernate / JPA", "ru": "Hibernate / JPA" },
+      "sections": [
+        { "id": "jpa-orm-basics",      "order": 1, "title": { "en": "ORM and JPA basics",              "ru": "Основы ORM и JPA" } },
+        { "id": "entity-mapping",      "order": 2, "title": { "en": "Entity mapping",                  "ru": "Маппинг сущностей" } },
+        { "id": "associations",        "order": 3, "title": { "en": "Associations",                    "ru": "Связи между сущностями" } },
+        { "id": "identifiers",         "order": 4, "title": { "en": "Identifiers and generation",      "ru": "Идентификаторы и генерация" } },
+        { "id": "persistence-context", "order": 5, "title": { "en": "Session and persistence context", "ru": "Session и persistence context" } },
+        { "id": "fetching",            "order": 6, "title": { "en": "Fetching strategies",             "ru": "Стратегии загрузки" } },
+        { "id": "jpql-criteria",       "order": 7, "title": { "en": "JPQL, Criteria API, native SQL",  "ru": "JPQL, Criteria API, нативный SQL" } },
+        { "id": "caching-performance", "order": 8, "title": { "en": "Caching and performance",         "ru": "Кэширование и производительность" } }
+      ]
+    },
+    {
+      "id": "kafka",
+      "order": 5,
+      "name": { "en": "Apache Kafka", "ru": "Apache Kafka" },
+      "sections": [
+        { "id": "architecture",           "order": 1, "title": { "en": "Architecture and brokers",        "ru": "Архитектура и брокеры" } },
+        { "id": "topics-partitions",      "order": 2, "title": { "en": "Topics, partitions, logs",        "ru": "Топики, партиции, лог" } },
+        { "id": "producers",              "order": 3, "title": { "en": "Producers",                       "ru": "Продюсеры" } },
+        { "id": "consumers-groups",       "order": 4, "title": { "en": "Consumers and consumer groups",   "ru": "Консьюмеры и группы" } },
+        { "id": "offsets-semantics",      "order": 5, "title": { "en": "Offsets and delivery semantics",  "ru": "Оффсеты и семантика доставки" } },
+        { "id": "replication-durability", "order": 6, "title": { "en": "Replication and durability",      "ru": "Репликация и надёжность" } },
+        { "id": "serialization",          "order": 7, "title": { "en": "Serialization and schemas",       "ru": "Сериализация и схемы" } },
+        { "id": "streams-connect",        "order": 8, "title": { "en": "Kafka Streams and Connect",       "ru": "Kafka Streams и Connect" } }
+      ]
+    }
+  ]
+}

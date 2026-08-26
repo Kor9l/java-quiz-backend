@@ -1,0 +1,2612 @@
+{
+  "schemaVersion": 1,
+  "topic": "spring",
+  "questions": [
+    {
+      "id": "spring.ioc-container.001",
+      "section": "ioc-container",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about BeanFactory and ApplicationContext is TRUE?",
+        "ru": "Какое утверждение о BeanFactory и ApplicationContext верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Both interfaces eagerly pre-instantiate singletons during startup; the only real difference is that ApplicationContext can additionally register a JVM shutdown hook to close itself.",
+            "ru": "Оба интерфейса заранее создают синглтоны при старте; единственное реальное отличие в том, что ApplicationContext может дополнительно зарегистрировать JVM shutdown hook для собственного закрытия."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "BeanFactory adds MessageSource, event publishing and resource loading on top of ApplicationContext.",
+            "ru": "BeanFactory добавляет к ApplicationContext поддержку MessageSource, публикацию событий и загрузку ресурсов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ApplicationContext pre-instantiates all non-lazy singletons during refresh, whereas a plain BeanFactory creates a bean only when it is first requested.",
+            "ru": "ApplicationContext создаёт все не-lazy синглтоны заранее, во время refresh, а простой BeanFactory создаёт бин только при первом обращении к нему."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "ApplicationContext supports only Java-based configuration; XML bean definitions require a raw BeanFactory.",
+            "ru": "ApplicationContext поддерживает только Java-конфигурацию; для XML-описаний бинов нужен «чистый» BeanFactory."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Annotation-driven injection such as @Autowired works out of the box in a raw BeanFactory but not in an ApplicationContext.",
+            "ru": "Инъекция по аннотациям вроде @Autowired работает «из коробки» в чистом BeanFactory, но не в ApplicationContext."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "ApplicationContext extends BeanFactory and pre-instantiates non-lazy singletons in finishBeanFactoryInitialization(), so configuration errors surface at startup; a raw BeanFactory is lazy by design. It is ApplicationContext, not BeanFactory, that adds MessageSource, ApplicationEventPublisher and ResourceLoader, and a raw BeanFactory needs post-processors registered manually before @Autowired works.",
+        "ru": "ApplicationContext расширяет BeanFactory и создаёт не-lazy синглтоны заранее в finishBeanFactoryInitialization(), поэтому ошибки конфигурации видны сразу при старте; чистый BeanFactory по определению ленивый. Именно ApplicationContext, а не BeanFactory, добавляет MessageSource, ApplicationEventPublisher и ResourceLoader, а в чистом BeanFactory нужно вручную регистрировать post-processor'ы, чтобы заработал @Autowired."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/beans/beanfactory.html",
+        "https://docs.spring.io/spring-framework/reference/core/beans/introduction.html"
+      ]
+    },
+    {
+      "id": "spring.ioc-container.002",
+      "section": "ioc-container",
+      "difficulty": "easy",
+      "text": {
+        "en": "You need an IoC container in a plain Java SE application: it must bootstrap from @Configuration classes and let you register extra bean definitions programmatically before the container is refreshed. Which implementation fits?",
+        "ru": "Нужен IoC-контейнер в обычном Java SE приложении: он должен подниматься из @Configuration-классов и позволять программно зарегистрировать дополнительные определения бинов до вызова refresh. Какая реализация подходит?"
+      },
+      "code": "var ctx = new ???();\nctx.register(AppConfig.class);\nctx.registerBean(Clock.class, Clock::systemUTC);\nctx.refresh();",
+      "options": [
+        {
+          "text": {
+            "en": "AnnotationConfigApplicationContext",
+            "ru": "AnnotationConfigApplicationContext"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "ClassPathXmlApplicationContext",
+            "ru": "ClassPathXmlApplicationContext"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "AnnotationConfigWebApplicationContext",
+            "ru": "AnnotationConfigWebApplicationContext"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "DefaultListableBeanFactory",
+            "ru": "DefaultListableBeanFactory"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "FileSystemXmlApplicationContext",
+            "ru": "FileSystemXmlApplicationContext"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "AnnotationConfigApplicationContext is the standalone context for annotation-based configuration: register(), scan() and registerBean() are available before refresh(). The XML-based contexts read their definitions from resources instead, AnnotationConfigWebApplicationContext needs a ServletContext, and DefaultListableBeanFactory is only a BeanFactory - it has no refresh(), no event publishing and no automatic post-processor registration.",
+        "ru": "AnnotationConfigApplicationContext — это standalone-контекст для конфигурации на аннотациях: методы register(), scan() и registerBean() доступны до вызова refresh(). XML-контексты читают определения из ресурсов, AnnotationConfigWebApplicationContext требует ServletContext, а DefaultListableBeanFactory — это лишь BeanFactory: у него нет refresh(), публикации событий и автоматической регистрации post-processor'ов."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/AnnotationConfigApplicationContext.html",
+        "https://docs.spring.io/spring-framework/reference/core/beans/java/instantiating-container.html"
+      ]
+    },
+    {
+      "id": "spring.ioc-container.003",
+      "section": "ioc-container",
+      "difficulty": "medium",
+      "text": {
+        "en": "How does BeanFactoryPostProcessor differ from BeanPostProcessor?",
+        "ru": "Чем BeanFactoryPostProcessor отличается от BeanPostProcessor?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Both interfaces work with fully constructed bean instances; BeanFactoryPostProcessor simply runs later in the lifecycle, after every singleton is ready, and can therefore replace an instance with a proxy.",
+            "ru": "Оба интерфейса работают с полностью созданными экземплярами бинов; BeanFactoryPostProcessor просто выполняется позже в жизненном цикле, когда все синглтоны уже готовы, и поэтому может подменить экземпляр на прокси."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "BeanPostProcessor is invoked once per container, while BeanFactoryPostProcessor is invoked once for every bean that is created.",
+            "ru": "BeanPostProcessor вызывается один раз на контейнер, а BeanFactoryPostProcessor — по одному разу для каждого создаваемого бина."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A BeanFactoryPostProcessor declared in a child context is also applied to the bean definitions of its parent contexts.",
+            "ru": "BeanFactoryPostProcessor, объявленный в дочернем контексте, применяется и к определениям бинов родительских контекстов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "BeanPostProcessor is the extension point for replacing ${...} placeholders in bean definitions, which is why PropertySourcesPlaceholderConfigurer implements it and has to run after every singleton has already been instantiated.",
+            "ru": "BeanPostProcessor — это точка расширения для подстановки ${...} в определениях бинов, поэтому PropertySourcesPlaceholderConfigurer реализует именно его и обязан срабатывать после того, как все синглтоны уже созданы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "BeanFactoryPostProcessor can modify or add bean definitions before any regular bean is instantiated, while BeanPostProcessor receives already instantiated bean instances and may wrap them.",
+            "ru": "BeanFactoryPostProcessor может менять и добавлять определения бинов до создания любого обычного бина, а BeanPostProcessor получает уже созданные экземпляры бинов и может их обернуть."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "BeanFactoryPostProcessor operates on the configuration metadata (BeanDefinition objects) and runs before instantiation - PropertySourcesPlaceholderConfigurer and ConfigurationClassPostProcessor are examples. BeanPostProcessor operates on instances around initialization callbacks and is how Spring creates AOP proxies. Both are scoped per container, so a child-context processor never touches the parent's definitions.",
+        "ru": "BeanFactoryPostProcessor работает с метаданными конфигурации (объектами BeanDefinition) и выполняется до создания бинов — примеры: PropertySourcesPlaceholderConfigurer и ConfigurationClassPostProcessor. BeanPostProcessor работает с экземплярами вокруг init-колбэков — именно так Spring создаёт AOP-прокси. Оба ограничены своим контейнером, поэтому процессор дочернего контекста не влияет на определения родительского."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/beans/factory-extension.html"
+      ]
+    },
+    {
+      "id": "spring.ioc-container.004",
+      "section": "ioc-container",
+      "difficulty": "medium",
+      "text": {
+        "en": "Why does this configuration start successfully, and what exactly is injected into A?",
+        "ru": "Почему эта конфигурация успешно запускается и что именно попадает в A?"
+      },
+      "code": "@Component\nclass A {\n    private final B b;\n    A(@Lazy B b) { this.b = b; }\n}\n\n@Component\nclass B {\n    private final A a;\n    B(A a) { this.a = a; }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "The real B instance is injected: Spring detects the cycle and exposes an early reference to the half-initialized B from its singletonFactories cache, exactly as it does for setter injection.",
+            "ru": "Внедряется настоящий экземпляр B: Spring обнаруживает цикл и отдаёт раннюю ссылку на недоинициализированный B из кэша singletonFactories, ровно так же, как при внедрении через сеттер."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@Lazy at the injection point makes Spring inject a lazy-resolving proxy for B, so B is not created while A is being created and the cycle is broken.",
+            "ru": "@Lazy в точке инъекции заставляет Spring подставить прокси с отложенным разрешением для B, поэтому B не создаётся во время создания A и цикл разрывается."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It would start even without @Lazy, because Spring resolves constructor cycles by instantiating one of the beans twice.",
+            "ru": "Оно запустилось бы и без @Lazy, потому что Spring разрешает циклы в конструкторах, создавая один из бинов дважды."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@Lazy turns B into a prototype bean, so a fresh B is created for each call and no cycle exists.",
+            "ru": "@Lazy превращает B в prototype-бин, поэтому на каждый вызов создаётся новый B и цикла не возникает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The context starts because A is registered lazily; B is never instantiated at all unless getBean(B.class) is called.",
+            "ru": "Контекст поднимается потому, что A регистрируется лениво; B вообще не создаётся, пока не вызовут getBean(B.class)."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Without @Lazy this is a constructor-constructor cycle, which the container cannot resolve at all and reports as BeanCurrentlyInCreationException - early references only help for setter or field injection. @Lazy on the parameter makes Spring inject a proxy that looks up the real B on the first method call, after both beans exist.",
+        "ru": "Без @Lazy здесь цикл «конструктор — конструктор», который контейнер разрешить не может и падает с BeanCurrentlyInCreationException — ранние ссылки помогают только при инъекции через сеттер или поле. @Lazy на параметре заставляет Spring внедрить прокси, который найдёт настоящий B при первом вызове метода, когда оба бина уже существуют."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html",
+        "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Lazy.html"
+      ]
+    },
+    {
+      "id": "spring.ioc-container.005",
+      "section": "ioc-container",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which order of steps happens during AbstractApplicationContext.refresh()?",
+        "ru": "В каком порядке выполняются шаги внутри AbstractApplicationContext.refresh()?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Non-lazy singletons are pre-instantiated first, then BeanFactoryPostProcessors get a chance to adjust the remaining bean definitions.",
+            "ru": "Сначала создаются не-lazy синглтоны, а затем BeanFactoryPostProcessor'ы получают возможность поправить оставшиеся определения бинов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "BeanPostProcessors are registered before any BeanFactoryPostProcessor runs, so that the post-processors themselves can be advised by AOP and by the other post-processors of the same container.",
+            "ru": "BeanPostProcessor'ы регистрируются раньше, чем выполняется любой BeanFactoryPostProcessor, чтобы сами post-processor'ы могли быть обработаны через AOP и другими post-processor'ами того же контейнера."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ContextRefreshedEvent is published before singleton pre-instantiation so that listeners can still register additional bean definitions.",
+            "ru": "ContextRefreshedEvent публикуется до создания синглтонов, чтобы слушатели ещё могли зарегистрировать дополнительные определения бинов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "BeanFactoryPostProcessors are invoked, then BeanPostProcessors are registered, then non-lazy singletons are pre-instantiated, then ContextRefreshedEvent is published.",
+            "ru": "Сначала вызываются BeanFactoryPostProcessor'ы, затем регистрируются BeanPostProcessor'ы, затем создаются не-lazy синглтоны, и в конце публикуется ContextRefreshedEvent."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "BeanFactoryPostProcessors are invoked after each singleton is created, once per bean, so they can react to the actual instances.",
+            "ru": "BeanFactoryPostProcessor'ы вызываются после создания каждого синглтона, по одному разу на бин, чтобы реагировать на реальные экземпляры."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "refresh() prepares the bean factory, invokes BeanFactoryPostProcessors (which may still change definitions), registers BeanPostProcessors, initialises the MessageSource and event multicaster, pre-instantiates non-lazy singletons and finally publishes ContextRefreshedEvent. Because post-processors are created before the ordinary beans, they cannot themselves be advised by AOP.",
+        "ru": "refresh() готовит bean factory, вызывает BeanFactoryPostProcessor'ы (они ещё могут менять определения), регистрирует BeanPostProcessor'ы, инициализирует MessageSource и multicaster событий, создаёт не-lazy синглтоны и в самом конце публикует ContextRefreshedEvent. Поскольку post-processor'ы создаются раньше обычных бинов, к ним самим AOP-советы применить нельзя."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/beans/factory-extension.html",
+        "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/support/AbstractApplicationContext.html"
+      ]
+    },
+    {
+      "id": "spring.ioc-container.006",
+      "section": "ioc-container",
+      "difficulty": "hard",
+      "text": {
+        "en": "MyFactory is registered as a bean definition under the name myFactory. What do the two lookups return?",
+        "ru": "MyFactory зарегистрирован как определение бина с именем myFactory. Что вернут два обращения к контейнеру?"
+      },
+      "code": "public class MyFactory implements FactoryBean<PaymentService> {\n    @Override public PaymentService getObject() { return new PaymentServiceImpl(); }\n    @Override public Class<?> getObjectType() { return PaymentService.class; }\n}\n\nObject first  = ctx.getBean(\"myFactory\");\nObject second = ctx.getBean(\"&myFactory\");",
+      "options": [
+        {
+          "text": {
+            "en": "first is the PaymentService produced by the factory, second is the MyFactory instance itself.",
+            "ru": "first — это PaymentService, созданный фабрикой, а second — сам экземпляр MyFactory."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "first is the MyFactory instance, second is the PaymentService produced by the factory.",
+            "ru": "first — это экземпляр MyFactory, а second — созданный фабрикой PaymentService."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both return the MyFactory instance; the produced object is only reachable through an explicit getObject() call.",
+            "ru": "Оба вернут экземпляр MyFactory; созданный объект доступен только через явный вызов getObject()."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both return the PaymentService; the & prefix is ignored because FactoryBean instances are never registered as beans.",
+            "ru": "Оба вернут PaymentService; префикс & игнорируется, так как экземпляры FactoryBean не регистрируются как бины."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The second lookup throws NoSuchBeanDefinitionException, because & is not a legal character in a bean name.",
+            "ru": "Второе обращение бросит NoSuchBeanDefinitionException, потому что & — недопустимый символ в имени бина."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A FactoryBean is a bean that produces another object: getBean(\"myFactory\") returns the product of getObject(), and prefixing the name with & (BeanFactory.FACTORY_BEAN_PREFIX) dereferences the factory itself. The tempting inverted answer confuses the two, and & is explicitly reserved by the container for this purpose.",
+        "ru": "FactoryBean — это бин, который создаёт другой объект: getBean(\"myFactory\") возвращает результат getObject(), а префикс & (BeanFactory.FACTORY_BEAN_PREFIX) даёт саму фабрику. Соблазнительный «перевёрнутый» вариант путает эти два случая, а символ & специально зарезервирован контейнером именно для этого."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/beans/factory-extension.html#beans-factory-extension-factorybean",
+        "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/BeanFactory.html"
+      ]
+    },
+    {
+      "id": "spring.dependency-injection.001",
+      "section": "dependency-injection",
+      "difficulty": "easy",
+      "text": {
+        "en": "Why is constructor injection generally preferred over field injection?",
+        "ru": "Почему инъекцию через конструктор обычно предпочитают инъекции в поле?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "With field injection Spring assigns the dependencies before the constructor body runs, so the constructor can already use them without any @PostConstruct method.",
+            "ru": "При внедрении в поле Spring присваивает зависимости до выполнения тела конструктора, поэтому конструктор уже может ими пользоваться без всякого метода @PostConstruct."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Field injection is measurably slower because Spring has to use reflection for it, while constructor injection is plain bytecode.",
+            "ru": "Инъекция в поле заметно медленнее, потому что Spring вынужден использовать рефлексию, тогда как инъекция через конструктор — обычный байт-код."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Constructor injection is the only form that supports @Qualifier and custom qualifier annotations, because a field carries no parameter metadata that the container could read.",
+            "ru": "Внедрение через конструктор — единственный вариант, который поддерживает @Qualifier и пользовательские квалифицирующие аннотации, потому что у поля нет метаданных параметра, которые мог бы прочитать контейнер."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It lets dependencies be final and guarantees a fully initialized object, and the class stays usable outside a container, for example with plain new in a unit test.",
+            "ru": "Она позволяет сделать зависимости final и гарантирует полностью проинициализированный объект, а класс остаётся пригодным к использованию вне контейнера — например, через обычный new в модульном тесте."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Field injection cannot inject collections or maps of beans, so constructor injection is required for those cases.",
+            "ru": "Инъекция в поле не умеет внедрять коллекции и мапы бинов, поэтому для таких случаев обязательна инъекция через конструктор."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Constructor injection produces an immutable, fully wired object and makes the dependency list explicit in the signature, which is why the reference documentation recommends it. Field injection happens after the constructor has already finished, so dependencies are still null inside the constructor - a very common source of NullPointerException.",
+        "ru": "Инъекция через конструктор даёт неизменяемый и полностью собранный объект, а список зависимостей виден прямо в сигнатуре — поэтому официальная документация её и рекомендует. Инъекция в поле выполняется уже после завершения конструктора, поэтому внутри конструктора зависимости ещё null — очень частая причина NullPointerException."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html",
+        "https://docs.spring.io/spring-framework/reference/core/beans/annotation-config/autowired.html"
+      ]
+    },
+    {
+      "id": "spring.dependency-injection.002",
+      "section": "dependency-injection",
+      "difficulty": "easy",
+      "text": {
+        "en": "No property named app.timeout is defined in any property source. What is the value of timeout after the bean is created?",
+        "ru": "Свойство app.timeout не определено ни в одном property source. Каким будет значение timeout после создания бина?"
+      },
+      "code": "@Component\nclass HttpClientConfig {\n    @Value(\"${app.timeout:5000}\")\n    private long timeout;\n}",
+      "options": [
+        {
+          "text": {
+            "en": "0 - the placeholder stays unresolved and Spring falls back to the field's default value while logging a warning.",
+            "ru": "0 — плейсхолдер остаётся неразрешённым, и Spring оставляет значение поля по умолчанию, записав предупреждение в лог."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "5000 - the part after the colon is the default value used when the placeholder cannot be resolved.",
+            "ru": "5000 — часть после двоеточия является значением по умолчанию, которое используется, если плейсхолдер не разрешён."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Startup fails with IllegalArgumentException: Could not resolve placeholder 'app.timeout'.",
+            "ru": "Старт падает с IllegalArgumentException: Could not resolve placeholder 'app.timeout'."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Startup fails with a type conversion error, because the whole expression is treated as the literal string ${app.timeout:5000}.",
+            "ru": "Старт падает с ошибкой преобразования типа, потому что всё выражение трактуется как строковый литерал ${app.timeout:5000}."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "5000, but only if the configuration class is also annotated with @PropertySource; otherwise the placeholder is left as text.",
+            "ru": "5000, но только если конфигурационный класс дополнительно помечен @PropertySource; иначе плейсхолдер останется текстом."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "In ${key:default} everything after the first colon is the default, so the field is set to 5000 and no exception is thrown. Without the default the same annotation would fail with \"Could not resolve placeholder\" once a PropertySourcesPlaceholderConfigurer is in play - that is what makes the exception option tempting.",
+        "ru": "В записи ${key:default} всё после первого двоеточия — значение по умолчанию, поэтому в поле попадёт 5000 и исключения не будет. Без значения по умолчанию та же аннотация упала бы с «Could not resolve placeholder» при наличии PropertySourcesPlaceholderConfigurer — именно поэтому вариант с исключением выглядит правдоподобно."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/beans/annotation-config/value-annotations.html"
+      ]
+    },
+    {
+      "id": "spring.dependency-injection.003",
+      "section": "dependency-injection",
+      "difficulty": "medium",
+      "text": {
+        "en": "What happens when the context is refreshed?",
+        "ru": "Что произойдёт при подъёме контекста?"
+      },
+      "code": "interface PaymentGateway {}\n\n@Component class StripeGateway implements PaymentGateway {}\n@Component class PayPalGateway implements PaymentGateway {}\n\n@Service\nclass Checkout {\n    @Autowired\n    private PaymentGateway payPalGateway;\n}",
+      "options": [
+        {
+          "text": {
+            "en": "Startup fails with NoUniqueBeanDefinitionException: bean and field names are never taken into account during resolution.",
+            "ru": "Старт падает с NoUniqueBeanDefinitionException: имена бинов и полей вообще не учитываются при разрешении зависимости."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Startup fails: name-based fallback matching applies only to constructor and method parameters, not to fields.",
+            "ru": "Старт падает: резервное сопоставление по имени работает только для параметров конструкторов и методов, но не для полей."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "StripeGateway is injected, because with equal candidates Spring picks the first one found during component scanning.",
+            "ru": "Внедряется StripeGateway, потому что при равных кандидатах Spring берёт первый найденный при сканировании компонентов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It works only if the field is additionally annotated with @Qualifier(\"payPalGateway\"); without it one of the beans must be marked @Primary.",
+            "ru": "Это сработает только если поле дополнительно помечено @Qualifier(\"payPalGateway\"); без него один из бинов обязан быть помечен @Primary."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Injection succeeds with PayPalGateway: when several candidates match by type, the field name is used as a fallback qualifier and matches the bean name.",
+            "ru": "Инъекция проходит успешно и внедряется PayPalGateway: когда по типу подходит несколько кандидатов, имя поля используется как резервный квалификатор и совпадает с именем бина."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Resolution goes by type, then @Primary, then @Priority, and finally falls back to matching the injection point name against bean names - for fields that is the field name, for parameters the parameter name. Relying on it is fragile (renaming the field silently changes the wiring), which is why an explicit @Qualifier is better style, but it is not required here.",
+        "ru": "Разрешение идёт по типу, затем по @Primary, затем по @Priority и в конце — сопоставлением имени точки инъекции с именами бинов: для поля это имя поля, для параметра — имя параметра. Полагаться на это хрупко (переименование поля молча меняет проводку), поэтому явный @Qualifier — лучший стиль, но здесь он не обязателен."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/beans/annotation-config/autowired-qualifiers.html",
+        "https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-autowire.html"
+      ]
+    },
+    {
+      "id": "spring.dependency-injection.004",
+      "section": "dependency-injection",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about optional and programmatic dependency lookup is TRUE?",
+        "ru": "Какое утверждение о необязательных зависимостях и программном поиске бинов верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "ObjectProvider.getIfAvailable() returns null when several candidates match, which makes it the safe way to handle ambiguity.",
+            "ru": "ObjectProvider.getIfAvailable() возвращает null, когда подходит несколько кандидатов, поэтому это безопасный способ обработать неоднозначность."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Injecting Optional<MyService> throws NoSuchBeanDefinitionException when no MyService bean exists; only required = false avoids that.",
+            "ru": "Инъекция Optional<MyService> бросит NoSuchBeanDefinitionException, если бина MyService нет; избежать этого позволяет только required = false."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ObjectProvider.getIfUnique() returns null both when nothing matches and when several candidates match with no @Primary among them.",
+            "ru": "ObjectProvider.getIfUnique() возвращает null и когда ничего не подходит, и когда подходит несколько кандидатов без @Primary среди них."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Injecting List<MyService> yields an empty list when there are no candidates, so a collection injection point can never fail.",
+            "ru": "Инъекция List<MyService> даёт пустой список, если кандидатов нет, поэтому точка инъекции с коллекцией не может упасть."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@Autowired(required = false) on one constructor parameter makes just that parameter optional and leaves it null.",
+            "ru": "@Autowired(required = false) на одном параметре конструктора делает необязательным именно этот параметр, оставляя его null."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "getIfUnique() is documented to return null when nothing matches and when several candidates match with none marked as primary, while getIfAvailable() only tolerates zero candidates and still throws NoUniqueBeanDefinitionException on ambiguity. Note also that a List or Map injection point expects at least one matching element and fails otherwise, and that required applies to the whole injection point (the annotated constructor or setter), not to an individual parameter.",
+        "ru": "По контракту getIfUnique() возвращает null, когда ничего не подходит и когда подходит несколько кандидатов, среди которых ни один не помечен как primary, а getIfAvailable() допускает только отсутствие кандидата и всё равно бросает NoUniqueBeanDefinitionException при неоднозначности. Также стоит помнить: точка инъекции List или Map ожидает хотя бы один подходящий элемент и иначе падает, а required относится ко всей точке инъекции (конструктору или сеттеру), а не к отдельному параметру."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/ObjectProvider.html",
+        "https://docs.spring.io/spring-framework/reference/core/beans/annotation-config/autowired.html"
+      ]
+    },
+    {
+      "id": "spring.dependency-injection.005",
+      "section": "dependency-injection",
+      "difficulty": "medium",
+      "text": {
+        "en": "How do @Primary and @Qualifier interact when several beans of the same type exist?",
+        "ru": "Как взаимодействуют @Primary и @Qualifier, когда есть несколько бинов одного типа?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "@Primary always wins, because it is evaluated on the bean definition and therefore earlier than any injection-point metadata.",
+            "ru": "@Primary всегда побеждает, потому что он вычисляется на определении бина и, значит, раньше любых метаданных точки инъекции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Two beans of the same type may both be @Primary; in that case the one with the lower @Order value is selected.",
+            "ru": "Два бина одного типа могут оба быть @Primary; тогда выбирается тот, у которого меньше значение @Order."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@Qualifier at the injection point wins: @Primary is only the default choice for injection points that do not narrow the candidates themselves.",
+            "ru": "@Qualifier в точке инъекции побеждает: @Primary — это лишь выбор по умолчанию для тех точек инъекции, которые сами не сужают набор кандидатов."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "@Primary only affects the ordering of beans injected into a collection and has no effect on single-value injection points.",
+            "ru": "@Primary влияет только на порядок бинов, внедряемых в коллекцию, и не влияет на точки инъекции с одним значением."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@Qualifier can only reference a bean name; it cannot be used as a meta-annotation on a custom annotation.",
+            "ru": "@Qualifier может ссылаться только на имя бина; его нельзя использовать как мета-аннотацию на пользовательской аннотации."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "@Qualifier narrows the candidate set before the primary/priority tie-breakers are consulted, so a qualified injection point ignores @Primary. Declaring @Primary on two candidates of the same type is an error (NoUniqueBeanDefinitionException), and @Qualifier is explicitly designed to be used as a meta-annotation for custom qualifiers.",
+        "ru": "@Qualifier сужает набор кандидатов ещё до того, как в игру входят @Primary и @Priority, поэтому квалифицированная точка инъекции игнорирует @Primary. Объявить @Primary у двух кандидатов одного типа — ошибка (NoUniqueBeanDefinitionException), а @Qualifier специально спроектирован так, чтобы его можно было использовать как мета-аннотацию для собственных квалификаторов."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/beans/annotation-config/autowired-primary.html",
+        "https://docs.spring.io/spring-framework/reference/core/beans/annotation-config/autowired-qualifiers.html"
+      ]
+    },
+    {
+      "id": "spring.dependency-injection.006",
+      "section": "dependency-injection",
+      "difficulty": "hard",
+      "text": {
+        "en": "What is printed, and why?",
+        "ru": "Что будет выведено и почему?"
+      },
+      "code": "public interface Validator {}\n\n@Component @Order(2) class SizeValidator implements Validator {}\n@Component @Order(1) class NameValidator implements Validator {}\n\n@Service\nclass Pipeline {\n    private final List<Validator> validators;\n\n    Pipeline(List<Validator> validators) { this.validators = validators; }\n\n    @PostConstruct\n    void report() {\n        validators.forEach(v -> System.out.print(v.getClass().getSimpleName() + \" \"));\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "NameValidator SizeValidator - elements of an injected collection are sorted by @Order / Ordered, ascending.",
+            "ru": "NameValidator SizeValidator — элементы внедрённой коллекции сортируются по @Order / Ordered по возрастанию."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "SizeValidator NameValidator - the order follows the order in which the bean definitions were registered; @Order is not applied to injected collections.",
+            "ru": "SizeValidator NameValidator — порядок соответствует порядку регистрации определений бинов; @Order к внедрённым коллекциям не применяется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "NameValidator SizeValidator - injected collections are always sorted alphabetically by bean name, and @Order is only honoured on @Configuration classes.",
+            "ru": "NameValidator SizeValidator — внедрённые коллекции всегда сортируются по имени бина в алфавитном порядке, а @Order учитывается только на @Configuration-классах."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Startup fails with NoUniqueBeanDefinitionException, because two beans implement Validator and neither is @Primary.",
+            "ru": "Старт падает с NoUniqueBeanDefinitionException, потому что Validator реализуют два бина и ни один из них не помечен @Primary."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A NullPointerException is thrown, because @PostConstruct runs before constructor arguments are assigned to fields.",
+            "ru": "Бросается NullPointerException, потому что @PostConstruct выполняется до того, как аргументы конструктора будут присвоены полям."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A List<T> injection point collects every matching bean and sorts the result with Spring's OrderComparator, so @Order(1) comes before @Order(2) regardless of scan or declaration order. A collection injection point is never ambiguous - ambiguity would only arise for a single-valued Validator parameter - and @PostConstruct always runs after the instance is fully constructed and populated.",
+        "ru": "Точка инъекции List<T> собирает все подходящие бины и сортирует результат через OrderComparator, поэтому @Order(1) идёт раньше @Order(2) независимо от порядка сканирования или объявления. Точка инъекции с коллекцией никогда не бывает неоднозначной — неоднозначность возникла бы только для одиночного параметра типа Validator, — а @PostConstruct всегда вызывается после того, как объект полностью создан и заполнен."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/beans/annotation-config/autowired.html",
+        "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html"
+      ]
+    },
+    {
+      "id": "spring.bean-lifecycle.001",
+      "section": "bean-lifecycle",
+      "difficulty": "medium",
+      "text": {
+        "en": "What does the context print while creating the repo bean?",
+        "ru": "Что выведет контекст при создании бина repo?"
+      },
+      "code": "public class Repo implements InitializingBean {\n    @PostConstruct\n    public void post() { System.out.print(\"A\"); }\n\n    @Override\n    public void afterPropertiesSet() { System.out.print(\"B\"); }\n\n    public void warmUp() { System.out.print(\"C\"); }\n}\n\n@Configuration\nclass Cfg {\n    @Bean(initMethod = \"warmUp\")\n    Repo repo() { return new Repo(); }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "BAC",
+            "ru": "BAC"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "CAB",
+            "ru": "CAB"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "BCA",
+            "ru": "BCA"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only C is printed: an explicit initMethod replaces the annotation-driven and interface-driven callbacks.",
+            "ru": "Выведется только C: явный initMethod заменяет колбэки, заданные аннотацией и интерфейсом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ABC",
+            "ru": "ABC"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "@PostConstruct is invoked by CommonAnnotationBeanPostProcessor inside postProcessBeforeInitialization, which runs before invokeInitMethods(); the latter calls afterPropertiesSet() first and only then the configured init method. All three callbacks run - none of them replaces another.",
+        "ru": "@PostConstruct вызывается CommonAnnotationBeanPostProcessor внутри postProcessBeforeInitialization, который выполняется до invokeInitMethods(); а тот сначала вызывает afterPropertiesSet() и только затем настроенный init-метод. Срабатывают все три колбэка — ни один не заменяет другой."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/beans/factory-nature.html",
+        "https://docs.spring.io/spring-framework/reference/core/beans/factory-extension.html"
+      ]
+    },
+    {
+      "id": "spring.bean-lifecycle.002",
+      "section": "bean-lifecycle",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about prototype-scoped beans is TRUE?",
+        "ru": "Какое утверждение о бинах со скоупом prototype верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "@PreDestroy is invoked on every prototype instance ever created when the ApplicationContext is closed.",
+            "ru": "@PreDestroy вызывается на каждом когда-либо созданном prototype-экземпляре при закрытии ApplicationContext."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The container never invokes destruction callbacks for prototype instances; releasing their resources is the client's responsibility.",
+            "ru": "Контейнер никогда не вызывает колбэки уничтожения для prototype-экземпляров; освобождение их ресурсов — забота клиентского кода."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Destruction callbacks are invoked for prototypes only if the bean class implements DisposableBean.",
+            "ru": "Колбэки уничтожения вызываются для prototype-бинов только если класс реализует DisposableBean."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Initialization callbacks are skipped as well: the container just instantiates a prototype and hands it over without any post-processing.",
+            "ru": "Колбэки инициализации тоже пропускаются: контейнер просто создаёт prototype и отдаёт его без какой-либо пост-обработки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The container keeps weak references to prototype instances and destroys them when they become unreachable.",
+            "ru": "Контейнер хранит слабые ссылки на prototype-экземпляры и уничтожает их, когда те становятся недостижимыми."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Spring configures and assembles a prototype, applies all post-processors and initialization callbacks, and then forgets about it - so configured destruction callbacks are never called. If a prototype holds an expensive resource, use a custom BeanPostProcessor that keeps references, or close it explicitly in client code.",
+        "ru": "Spring настраивает и собирает prototype, применяет все post-processor'ы и колбэки инициализации, а затем «забывает» о нём — поэтому настроенные колбэки уничтожения не вызываются никогда. Если prototype держит дорогой ресурс, используйте собственный BeanPostProcessor, хранящий ссылки, либо закрывайте его явно в клиентском коде."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/beans/factory-scopes.html#beans-factory-scopes-prototype"
+      ]
+    },
+    {
+      "id": "spring.bean-lifecycle.003",
+      "section": "bean-lifecycle",
+      "difficulty": "easy",
+      "text": {
+        "en": "A singleton bean is created eagerly at startup and declares a constructor parameter whose type is a request-scoped bean, declared without any scoped proxy. What happens?",
+        "ru": "Синглтон создаётся при старте и объявляет параметр конструктора типа request-scoped бина, объявленного без scoped-прокси. Что произойдёт?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It works: Spring silently injects a proxy for any bean whose scope is shorter than the injection target's scope.",
+            "ru": "Всё работает: Spring незаметно подставляет прокси для любого бина, чей скоуп короче скоупа целевой точки инъекции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It works, but only because the container re-resolves the injected reference on every method call, looking the current request-scoped instance up in the RequestScope registry.",
+            "ru": "Всё работает, но только потому что контейнер заново разрешает внедрённую ссылку на каждом вызове метода, каждый раз находя текущий request-scoped экземпляр в реестре RequestScope."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The singleton receives null and the container logs a warning; the dependency is filled in on the first HTTP request.",
+            "ru": "Синглтон получает null, а контейнер пишет предупреждение в лог; зависимость будет подставлена при первом HTTP-запросе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Startup fails: creating the request-scoped bean outside of a request throws an IllegalStateException about no thread-bound request being found.",
+            "ru": "Старт падает: создание request-scoped бина вне запроса приводит к IllegalStateException о том, что не найден привязанный к потоку запрос."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Startup succeeds and the singleton is silently downgraded to request scope, so a new singleton is created per request.",
+            "ru": "Старт проходит успешно, а синглтон неявно понижается до request-скоупа, поэтому на каждый запрос создаётся новый экземпляр."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Without a scoped proxy the container has to resolve the actual request-scoped instance at injection time, and at startup there is no request bound to the thread. Declaring the bean with @RequestScope (which defaults to a TARGET_CLASS scoped proxy) or with proxyMode = ScopedProxyMode.TARGET_CLASS injects a proxy that resolves the current instance per call.",
+        "ru": "Без scoped-прокси контейнер обязан получить реальный request-scoped экземпляр в момент инъекции, а на старте к потоку не привязан ни один запрос. Объявление бина через @RequestScope (там по умолчанию scoped-прокси TARGET_CLASS) или с proxyMode = ScopedProxyMode.TARGET_CLASS внедряет прокси, который на каждом вызове находит актуальный экземпляр."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/beans/factory-scopes.html#beans-factory-scopes-other-injection"
+      ]
+    },
+    {
+      "id": "spring.bean-lifecycle.004",
+      "section": "bean-lifecycle",
+      "difficulty": "medium",
+      "text": {
+        "en": "A session-scoped bean class implements no interface and must be injected into a singleton service. Which declaration is correct?",
+        "ru": "Класс session-scoped бина не реализует интерфейсов, и его нужно внедрить в синглтон-сервис. Какое объявление корректно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "@Scope(value = \"session\", proxyMode = ScopedProxyMode.TARGET_CLASS)",
+            "ru": "@Scope(value = \"session\", proxyMode = ScopedProxyMode.TARGET_CLASS)"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "@Scope(value = \"session\", proxyMode = ScopedProxyMode.INTERFACES)",
+            "ru": "@Scope(value = \"session\", proxyMode = ScopedProxyMode.INTERFACES)"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@Scope(value = \"session\", proxyMode = ScopedProxyMode.DEFAULT)",
+            "ru": "@Scope(value = \"session\", proxyMode = ScopedProxyMode.DEFAULT)"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@Scope(\"session\") on the class plus @Lazy on the injection point in the singleton",
+            "ru": "@Scope(\"session\") на классе плюс @Lazy в точке инъекции внутри синглтона"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@SessionScope placed on the @Autowired field of the singleton instead of on the bean class",
+            "ru": "@SessionScope, поставленный на @Autowired-поле синглтона вместо класса бина"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "TARGET_CLASS creates a CGLIB subclass proxy, which is the only option when the target has no interface; INTERFACES would fail because a JDK dynamic proxy needs at least one interface, and DEFAULT means \"no proxy\". @Lazy creates a proxy that resolves the target once, so the singleton would keep one session's instance forever, and @Scope-family annotations describe the bean definition, not the injection point.",
+        "ru": "TARGET_CLASS создаёт CGLIB-прокси через наследование — единственный вариант, когда у цели нет интерфейса; INTERFACES не сработает, так как JDK-прокси нужен хотя бы один интерфейс, а DEFAULT означает «без прокси». @Lazy создаёт прокси, который разрешает цель один раз, поэтому синглтон навсегда сохранит экземпляр одной сессии, а аннотации семейства @Scope описывают определение бина, а не точку инъекции."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/beans/factory-scopes.html#beans-factory-scopes-other-injection",
+        "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/ScopedProxyMode.html"
+      ]
+    },
+    {
+      "id": "spring.bean-lifecycle.005",
+      "section": "bean-lifecycle",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about destruction of a singleton bean is TRUE?",
+        "ru": "Какое утверждение об уничтожении синглтон-бина верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "DisposableBean.destroy() runs before @PreDestroy, mirroring the fact that afterPropertiesSet() runs before @PostConstruct.",
+            "ru": "DisposableBean.destroy() выполняется раньше @PreDestroy, симметрично тому, что afterPropertiesSet() выполняется раньше @PostConstruct."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only the most specific configuration is used: a configured destroyMethod suppresses @PreDestroy and DisposableBean.destroy().",
+            "ru": "Используется только самая конкретная настройка: заданный destroyMethod подавляет @PreDestroy и DisposableBean.destroy()."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Destruction callbacks are guaranteed to run on JVM exit even if the context is never closed and no shutdown hook is registered.",
+            "ru": "Колбэки уничтожения гарантированно выполнятся при завершении JVM, даже если контекст никогда не закрывался и shutdown hook не регистрировался."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@PreDestroy runs first, then DisposableBean.destroy(), then the destroyMethod configured on the bean definition.",
+            "ru": "Сначала выполняется @PreDestroy, затем DisposableBean.destroy(), затем destroyMethod, заданный в определении бина."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Beans are destroyed in the same order in which they were created, so a bean is destroyed before the beans that depend on it.",
+            "ru": "Бины уничтожаются в том же порядке, в каком создавались, поэтому бин уничтожается раньше зависящих от него бинов."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "DisposableBeanAdapter invokes the @PreDestroy methods first, then DisposableBean.destroy(), then the custom destroy method - the same annotation, interface, custom-method sequence that initialization follows, so afterPropertiesSet() never precedes @PostConstruct either. Destruction only happens if close() is called or a shutdown hook is registered, and dependent beans are destroyed before the beans they depend on.",
+        "ru": "DisposableBeanAdapter сначала вызывает методы с @PreDestroy, затем DisposableBean.destroy(), затем пользовательский destroy-метод — та же последовательность «аннотация, интерфейс, свой метод», что и при инициализации, поэтому afterPropertiesSet() тоже никогда не идёт раньше @PostConstruct. Уничтожение происходит только при вызове close() или при зарегистрированном shutdown hook, а зависимые бины уничтожаются раньше тех, от которых они зависят."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/beans/factory-nature.html#beans-factory-lifecycle-combined-effects",
+        "https://docs.spring.io/spring-framework/reference/core/beans/factory-scopes.html"
+      ]
+    },
+    {
+      "id": "spring.bean-lifecycle.006",
+      "section": "bean-lifecycle",
+      "difficulty": "hard",
+      "text": {
+        "en": "The class below is not annotated in any way and does not implement AutoCloseable. What is printed when ctx.close() is called?",
+        "ru": "Класс ниже не помечен никакими аннотациями и не реализует AutoCloseable. Что будет выведено при вызове ctx.close()?"
+      },
+      "code": "public class CacheClient {\n    public void close() { System.out.println(\"closed\"); }\n}\n\n@Configuration\nclass Cfg {\n    @Bean\n    CacheClient cacheClient() { return new CacheClient(); }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "Nothing - destroy-method inference must be enabled explicitly with @Bean(destroyMethod = \"close\").",
+            "ru": "Ничего — автоопределение destroy-метода нужно включать явно через @Bean(destroyMethod = \"close\")."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "closed - @Bean infers a destroy method by default and calls a public no-arg close() (or shutdown()) if the bean exposes one.",
+            "ru": "closed — @Bean по умолчанию определяет destroy-метод автоматически и вызывает публичный close() (или shutdown()) без аргументов, если такой есть у бина."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Nothing - inference applies only to classes implementing AutoCloseable, Closeable or DisposableBean.",
+            "ru": "Ничего — автоопределение работает только для классов, реализующих AutoCloseable, Closeable или DisposableBean."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing - destroy-method inference was removed in Spring Framework 6 in favour of an explicit destroyMethod attribute.",
+            "ru": "Ничего — автоопределение destroy-метода убрали в Spring Framework 6 в пользу явного атрибута destroyMethod."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "closed is printed twice: once by the inferred destroy method and once by the container's fallback DisposableBean handling.",
+            "ru": "closed выведется дважды: один раз автоопределённым destroy-методом и один раз резервной обработкой DisposableBean в контейнере."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The default value of @Bean(destroyMethod) is AbstractBeanDefinition.INFER_METHOD, so the container looks for a public no-arg close() and, failing that, shutdown() on the bean class - no interface is needed. This inference is a frequent surprise with third-party types; it can be switched off with @Bean(destroyMethod = \"\").",
+        "ru": "Значение @Bean(destroyMethod) по умолчанию — AbstractBeanDefinition.INFER_METHOD, поэтому контейнер ищет у класса публичный close() без аргументов, а если его нет — shutdown(); интерфейс при этом не требуется. Такое автоопределение часто становится неприятной неожиданностью для сторонних типов; отключается оно через @Bean(destroyMethod = \"\")."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Bean.html",
+        "https://docs.spring.io/spring-framework/reference/core/beans/java/bean-annotation.html"
+      ]
+    },
+    {
+      "id": "spring.configuration.001",
+      "section": "configuration",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about the stereotype annotations @Component, @Service, @Repository and @Controller is TRUE?",
+        "ru": "Какое утверждение о стереотипных аннотациях @Component, @Service, @Repository и @Controller верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "@Service makes all public methods of the class transactional, which is why service classes rarely need @Transactional.",
+            "ru": "@Service делает все публичные методы класса транзакционными, поэтому сервисным классам редко нужен @Transactional."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The stereotype determines the default scope: @Controller beans are request-scoped, the others are singletons.",
+            "ru": "Стереотип определяет скоуп по умолчанию: бины с @Controller имеют скоуп request, остальные — singleton."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@Repository must be placed on Spring Data repository interfaces, otherwise they are not detected and no implementation is generated.",
+            "ru": "@Repository обязателен на интерфейсах репозиториев Spring Data, иначе они не будут обнаружены и реализация не будет сгенерирована."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@Component classes are only registered if they are also listed in an @Import; component scanning alone registers nothing.",
+            "ru": "Классы с @Component регистрируются только если они также перечислены в @Import; одно сканирование компонентов ничего не регистрирует."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "All three specialisations are meta-annotated with @Component, and @Repository also enables persistence exception translation.",
+            "ru": "Все три специализации мета-аннотированы @Component, а @Repository дополнительно включает трансляцию исключений персистентности."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The specialised stereotypes are semantic markers built on @Component, so all of them are picked up by component scanning; @Repository is the one with real extra behaviour, because PersistenceExceptionTranslationPostProcessor proxies such beans to translate provider-specific exceptions. Transaction management is never implied by @Service - it always requires @Transactional or equivalent configuration.",
+        "ru": "Специализированные стереотипы — это семантические маркеры, построенные на @Component, поэтому все они подхватываются сканированием компонентов; реальное дополнительное поведение есть только у @Repository, так как PersistenceExceptionTranslationPostProcessor проксирует такие бины для перевода исключений конкретного провайдера. @Service никогда не подразумевает управление транзакциями — для него всегда нужен @Transactional или эквивалентная настройка."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/beans/classpath-scanning.html",
+        "https://docs.spring.io/spring-framework/reference/data-access/orm/general.html"
+      ]
+    },
+    {
+      "id": "spring.configuration.002",
+      "section": "configuration",
+      "difficulty": "easy",
+      "text": {
+        "en": "A @Configuration class located in package com.acme.app is annotated with a bare @ComponentScan (no attributes). What is scanned?",
+        "ru": "Класс @Configuration находится в пакете com.acme.app и помечен «пустым» @ComponentScan (без атрибутов). Что будет просканировано?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Only the package of the declaring class; sub-packages must be listed explicitly.",
+            "ru": "Только пакет объявляющего класса; подпакеты нужно перечислять явно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The whole classpath, which is why scanning is slow in large applications.",
+            "ru": "Весь classpath — именно поэтому сканирование медленно работает в больших приложениях."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The package of the declaring class and all of its sub-packages.",
+            "ru": "Пакет класса, где объявлена аннотация, и все его подпакеты."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Nothing: basePackages or basePackageClasses is mandatory and an empty @ComponentScan fails at startup.",
+            "ru": "Ничего: basePackages или basePackageClasses обязателен, и пустой @ComponentScan приводит к ошибке при старте."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only the packages of the classes that are explicitly registered with the context before refresh().",
+            "ru": "Только пакеты тех классов, которые явно зарегистрированы в контексте до вызова refresh()."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "When neither basePackages nor basePackageClasses is given, the package of the annotated class is used as the base package and scanning is recursive. Using basePackageClasses with a type-safe marker class is the recommended alternative to string package names, because it survives refactoring.",
+        "ru": "Если не заданы ни basePackages, ни basePackageClasses, базовым пакетом считается пакет аннотированного класса, и сканирование идёт рекурсивно. Вместо строковых имён пакетов рекомендуется basePackageClasses с типобезопасным маркерным классом — он не ломается при рефакторинге."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/beans/classpath-scanning.html",
+        "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/ComponentScan.html"
+      ]
+    },
+    {
+      "id": "spring.configuration.003",
+      "section": "configuration",
+      "difficulty": "medium",
+      "text": {
+        "en": "The Dep constructor prints \"dep\". How many times is \"dep\" printed while the context starts, and how many Dep instances exist?",
+        "ru": "Конструктор Dep печатает \"dep\". Сколько раз будет напечатано \"dep\" при старте контекста и сколько экземпляров Dep существует?"
+      },
+      "code": "@Configuration(proxyBeanMethods = false)\nclass Cfg {\n    @Bean\n    Dep dep() { return new Dep(); }\n\n    @Bean\n    Service service() { return new Service(dep()); }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "Once, and there is one instance: the container intercepts inter-bean method calls in both full and lite mode.",
+            "ru": "Один раз, и существует один экземпляр: контейнер перехватывает вызовы между @Bean-методами и в full-, и в lite-режиме."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Once, and there is one instance: proxyBeanMethods = false only skips the CGLIB subclass for the configuration class, inter-bean references still go through the container.",
+            "ru": "Один раз, и существует один экземпляр: proxyBeanMethods = false лишь отключает CGLIB-наследника для конфигурационного класса, а обращения между бинами всё равно идут через контейнер."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Twice, and there are two Dep instances: in lite mode the dep() call is an ordinary method call, so Service does not receive the dep bean.",
+            "ru": "Дважды, и существуют два экземпляра Dep: в lite-режиме вызов dep() — обычный вызов метода, поэтому Service получает не тот Dep, который является бином."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Once, because Dep is a singleton and its constructor can only ever run one time per container.",
+            "ru": "Один раз, потому что Dep — синглтон, и его конструктор в рамках контейнера может выполниться только однажды."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Twice, and startup then fails with a duplicate bean definition error for dep.",
+            "ru": "Дважды, после чего старт падает с ошибкой о дублирующемся определении бина dep."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "With proxyBeanMethods = false the configuration class is not subclassed by CGLIB, so @Bean methods behave as plain factory methods and inter-bean references are not supported: dep() inside service() simply constructs a new object. Declaring service(Dep dep) with the dependency as a method parameter is the correct way to keep lite mode and still get the singleton.",
+        "ru": "При proxyBeanMethods = false конфигурационный класс не наследуется через CGLIB, поэтому @Bean-методы работают как обычные фабричные методы, а обращения между бинами не поддерживаются: dep() внутри service() просто создаёт новый объект. Правильный способ сохранить lite-режим и всё же получить синглтон — объявить service(Dep dep), передав зависимость параметром метода."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Bean.html",
+        "https://docs.spring.io/spring-framework/reference/core/beans/java/basic-concepts.html"
+      ]
+    },
+    {
+      "id": "spring.configuration.004",
+      "section": "configuration",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about @Import is TRUE?",
+        "ru": "Какое утверждение об @Import верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It also accepts plain component classes, ImportSelector implementations and ImportBeanDefinitionRegistrar implementations.",
+            "ru": "Он также принимает обычные классы-компоненты, реализации ImportSelector и реализации ImportBeanDefinitionRegistrar."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It accepts only classes annotated with @Configuration; any other class listed there is rejected with an exception at startup.",
+            "ru": "Он принимает только классы, помеченные @Configuration; любой другой класс в списке отклоняется с исключением при старте."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is a shortcut for @ComponentScan over the package of the imported class.",
+            "ru": "Это сокращение для @ComponentScan по пакету импортируемого класса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ImportSelector implementations are created by the container, so they can declare @Autowired dependencies on other beans.",
+            "ru": "Реализации ImportSelector создаются контейнером, поэтому они могут объявлять @Autowired-зависимости на другие бины."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "XML bean definitions can also be pulled in with @Import; @ImportResource exists only for backwards compatibility with Spring 3.",
+            "ru": "XML-описания бинов тоже можно подключить через @Import; @ImportResource существует лишь для совместимости со Spring 3."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Since Spring 4.2 @Import handles regular component classes in addition to configuration classes, selectors and registrars - this is the mechanism behind most @EnableXxx annotations. Selectors and registrars are instantiated very early, before the bean factory is populated, so they cannot use @Autowired and must rely on the Aware callbacks (EnvironmentAware, BeanFactoryAware, ResourceLoaderAware); XML resources are imported with @ImportResource.",
+        "ru": "С версии Spring 4.2 @Import обрабатывает обычные классы-компоненты наряду с конфигурационными классами, селекторами и регистраторами — именно на этом механизме построено большинство аннотаций @EnableXxx. Селекторы и регистраторы создаются очень рано, до заполнения bean factory, поэтому @Autowired в них не работает и приходится использовать Aware-колбэки (EnvironmentAware, BeanFactoryAware, ResourceLoaderAware); XML-ресурсы подключаются через @ImportResource."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/beans/java/composing-configuration-classes.html",
+        "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html"
+      ]
+    },
+    {
+      "id": "spring.configuration.005",
+      "section": "configuration",
+      "difficulty": "medium",
+      "text": {
+        "en": "You must scan com.acme and register only classes annotated with the custom annotation @Handler, and nothing else - ordinary @Component or @Service classes in that package must be ignored. Which configuration does that?",
+        "ru": "Нужно просканировать com.acme и зарегистрировать только классы, помеченные собственной аннотацией @Handler, и ничего больше — обычные классы с @Component или @Service в этом пакете должны игнорироваться. Какая конфигурация это делает?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "@ComponentScan(basePackages = \"com.acme\", includeFilters = @Filter(type = FilterType.ANNOTATION, classes = Handler.class))",
+            "ru": "@ComponentScan(basePackages = \"com.acme\", includeFilters = @Filter(type = FilterType.ANNOTATION, classes = Handler.class))"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@ComponentScan(basePackages = \"com.acme\", excludeFilters = @Filter(type = FilterType.ANNOTATION, classes = Component.class))",
+            "ru": "@ComponentScan(basePackages = \"com.acme\", excludeFilters = @Filter(type = FilterType.ANNOTATION, classes = Component.class))"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@ComponentScan(basePackages = \"com.acme\", useDefaultFilters = false, includeFilters = @Filter(type = FilterType.CUSTOM, classes = Handler.class))",
+            "ru": "@ComponentScan(basePackages = \"com.acme\", useDefaultFilters = false, includeFilters = @Filter(type = FilterType.CUSTOM, classes = Handler.class))"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Meta-annotate @Handler with @Component and keep the default @ComponentScan(basePackages = \"com.acme\")",
+            "ru": "Пометить @Handler мета-аннотацией @Component и оставить @ComponentScan(basePackages = \"com.acme\") без фильтров"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@ComponentScan(basePackages = \"com.acme\", useDefaultFilters = false, includeFilters = @Filter(type = FilterType.ANNOTATION, classes = Handler.class))",
+            "ru": "@ComponentScan(basePackages = \"com.acme\", useDefaultFilters = false, includeFilters = @Filter(type = FilterType.ANNOTATION, classes = Handler.class))"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Include filters are additive, so the default filters that detect @Component and its specialisations must be switched off with useDefaultFilters = false. FilterType.CUSTOM expects a TypeFilter implementation rather than an annotation type, and excluding @Component would also exclude any @Handler that is itself meta-annotated with @Component.",
+        "ru": "include-фильтры работают в дополнение к стандартным, поэтому фильтры по умолчанию, находящие @Component и его специализации, нужно отключить через useDefaultFilters = false. FilterType.CUSTOM ожидает реализацию TypeFilter, а не тип аннотации, а исключение @Component заодно отсекло бы и те @Handler, которые сами мета-аннотированы @Component."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/beans/classpath-scanning.html#beans-scanning-filters",
+        "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/ComponentScan.Filter.html"
+      ]
+    },
+    {
+      "id": "spring.configuration.006",
+      "section": "configuration",
+      "difficulty": "hard",
+      "text": {
+        "en": "app.properties on the classpath contains server.port=8081. The JVM is started with -Dserver.port=9090 and the OS environment also defines server.port=7070. In a plain AnnotationConfigApplicationContext, what value is injected?",
+        "ru": "Файл app.properties в classpath содержит server.port=8081. JVM запущена с -Dserver.port=9090, а в переменных окружения ОС тоже задан server.port=7070. Какое значение будет внедрено в обычном AnnotationConfigApplicationContext?"
+      },
+      "code": "@Configuration\n@PropertySource(\"classpath:app.properties\")\nclass Cfg {\n    @Value(\"${server.port}\")\n    int port;\n}",
+      "options": [
+        {
+          "text": {
+            "en": "8081 - a source added by @PropertySource is placed at the front of the list and therefore overrides system properties.",
+            "ru": "8081 — источник, добавленный через @PropertySource, ставится в начало списка и поэтому переопределяет системные свойства."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "9090 - JVM system properties are consulted before OS environment variables, and both come before sources added by @PropertySource.",
+            "ru": "9090 — системные свойства JVM просматриваются раньше переменных окружения ОС, и оба источника идут раньше добавленных через @PropertySource."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "7070 - OS environment variables always have the highest precedence in StandardEnvironment.",
+            "ru": "7070 — переменные окружения ОС всегда имеют высший приоритет в StandardEnvironment."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "8081 - @Value resolves placeholders only against the sources declared by @PropertySource; system properties are reachable only through Environment.getProperty.",
+            "ru": "8081 — @Value разрешает плейсхолдеры только по источникам, объявленным в @PropertySource; системные свойства доступны лишь через Environment.getProperty."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The field stays 0, because @Value on a field of a @Configuration class is not processed at all.",
+            "ru": "Поле остаётся равным 0, потому что @Value на поле класса @Configuration вообще не обрабатывается."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "StandardEnvironment registers systemProperties before systemEnvironment, and @PropertySource locations are appended after both, so the first source that contains the key wins: -D beats the environment variable, which beats the properties file. Duplicate keys across sources are normal - MutablePropertySources is an ordered list, not a set of unique keys.",
+        "ru": "StandardEnvironment регистрирует systemProperties раньше systemEnvironment, а источники из @PropertySource добавляются после обоих, поэтому побеждает первый источник, где найден ключ: -D сильнее переменной окружения, а та сильнее файла свойств. Дубликаты ключей в разных источниках — норма: MutablePropertySources это упорядоченный список, а не набор уникальных ключей."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/beans/environment.html",
+        "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/env/StandardEnvironment.html"
+      ]
+    },
+    {
+      "id": "spring.aop.001",
+      "section": "aop",
+      "difficulty": "easy",
+      "text": {
+        "en": "A @Service class implements exactly one interface, an aspect matches its methods, and the application runs on Spring Boot 3.x with default settings. What kind of proxy is created?",
+        "ru": "Класс с @Service реализует ровно один интерфейс, аспект попадает на его методы, приложение работает на Spring Boot 3.x с настройками по умолчанию. Какой прокси будет создан?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A JDK dynamic proxy, because the target implements an interface and interface-based proxying is always preferred.",
+            "ru": "JDK-прокси, потому что цель реализует интерфейс, а проксирование по интерфейсу всегда предпочтительнее."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A CGLIB proxy only if @EnableAspectJAutoProxy(proxyTargetClass = true) is declared explicitly; otherwise a JDK proxy.",
+            "ru": "CGLIB-прокси только если явно объявлен @EnableAspectJAutoProxy(proxyTargetClass = true); иначе JDK-прокси."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A JDK dynamic proxy: the Spring Boot default applies only when the target class implements no interface at all.",
+            "ru": "JDK-прокси: значение по умолчанию из Spring Boot действует только тогда, когда целевой класс вообще не реализует интерфейсов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A CGLIB subclass proxy, because Spring Boot sets spring.aop.proxy-target-class to true by default.",
+            "ru": "CGLIB-прокси через наследование, потому что Spring Boot по умолчанию выставляет spring.aop.proxy-target-class в true."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A JDK dynamic proxy unless the class or one of the advised methods is declared final.",
+            "ru": "JDK-прокси, если только сам класс или один из перехватываемых методов не объявлен final."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Plain Spring Framework picks a JDK dynamic proxy when the target implements at least one interface, but Spring Boot has flipped spring.aop.proxy-target-class to true since 2.0, so CGLIB is used even for interface-implementing beans. That default also wins over an explicit @EnableAspectJAutoProxy(proxyTargetClass = false), which is a well-known source of confusion.",
+        "ru": "Чистый Spring Framework выбирает JDK-прокси, если у цели есть хотя бы один интерфейс, но Spring Boot начиная с версии 2.0 выставляет spring.aop.proxy-target-class в true, поэтому CGLIB применяется даже к бинам с интерфейсами. Этот дефолт перебивает и явный @EnableAspectJAutoProxy(proxyTargetClass = false) — известный источник путаницы."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/reference/features/aop.html",
+        "https://docs.spring.io/spring-framework/reference/core/aop/proxying.html"
+      ]
+    },
+    {
+      "id": "spring.aop.002",
+      "section": "aop",
+      "difficulty": "easy",
+      "text": {
+        "en": "An @Around aspect advises every method annotated with @Audited. How many times does the advice run when a caller invokes placeAll with a list of three orders?",
+        "ru": "Аспект с @Around перехватывает каждый метод, помеченный @Audited. Сколько раз выполнится совет, если вызвать placeAll со списком из трёх заказов?"
+      },
+      "code": "@Service\npublic class OrderService {\n\n    public void placeAll(List<Order> orders) {\n        orders.forEach(this::place);\n    }\n\n    @Audited\n    public void place(Order order) { /* ... */ }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "Zero times: the calls to place go through this, not through the proxy, so the interceptor chain is never entered.",
+            "ru": "Ноль раз: вызовы place идут через this, а не через прокси, поэтому цепочка перехватчиков вообще не задействуется."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Three times: the advice is bound to the annotated method, so every invocation of it is intercepted.",
+            "ru": "Три раза: совет привязан к аннотированному методу, поэтому перехватывается каждый его вызов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Once: the proxy intercepts the outermost call and the advice sees placeAll as the join point.",
+            "ru": "Один раз: прокси перехватывает самый внешний вызов, и совет получает placeAll в качестве точки соединения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Three times when the bean is proxied with CGLIB, because a subclass proxy also intercepts internal calls, and zero times when a JDK dynamic proxy is used instead.",
+            "ru": "Три раза, если бин проксирован через CGLIB, потому что прокси-наследник перехватывает и внутренние вызовы, и ноль раз, если вместо него используется JDK-прокси."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Four times: once for placeAll and once for each place invocation.",
+            "ru": "Четыре раза: один раз для placeAll и по одному на каждый вызов place."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Spring AOP is proxy-based, so only calls arriving from outside through the proxy reference are advised; a self-invocation such as this::place bypasses it entirely - and this is exactly the same limitation that makes self-invoked @Transactional methods non-transactional. CGLIB does not change that, because the proxy delegates to a separate target instance whose this is the raw object.",
+        "ru": "Spring AOP основан на прокси, поэтому перехватываются только вызовы, приходящие извне через ссылку на прокси; самовызов вида this::place полностью его обходит — это то же самое ограничение, из-за которого самовызванные @Transactional-методы оказываются нетранзакционными. CGLIB ничего не меняет, поскольку прокси делегирует отдельному целевому объекту, у которого this — «сырой» объект."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/aop/proxying.html",
+        "https://docs.spring.io/spring-framework/reference/core/aop-api/proxying-class.html"
+      ]
+    },
+    {
+      "id": "spring.aop.003",
+      "section": "aop",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which pointcut expression matches all public methods of any class in com.acme.service and its sub-packages, for any return type and any arguments?",
+        "ru": "Какое выражение pointcut соответствует всем публичным методам любого класса в com.acme.service и его подпакетах, с любым типом возврата и любыми аргументами?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "execution(public * com.acme.service.*.*(..))",
+            "ru": "execution(public * com.acme.service.*.*(..))"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "execution(* com.acme.service..*.*(..))",
+            "ru": "execution(* com.acme.service..*.*(..))"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@within(com.acme.service..*)",
+            "ru": "@within(com.acme.service..*)"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "execution(public * com.acme.service..*.*(..))",
+            "ru": "execution(public * com.acme.service..*.*(..))"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "bean(com.acme.service.*)",
+            "ru": "bean(com.acme.service.*)"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The double dot in com.acme.service..* means \"this package and any sub-package\", while a single dot restricts matching to types declared directly in com.acme.service. Omitting the public modifier would also match protected and package-private methods, @within expects an annotation type rather than a package pattern, and bean() matches Spring bean names, not packages.",
+        "ru": "Две точки в com.acme.service..* означают «этот пакет и любые подпакеты», а одна точка ограничивает совпадение типами, объявленными непосредственно в com.acme.service. Без модификатора public выражение захватило бы также protected- и package-private-методы, @within ожидает тип аннотации, а не шаблон пакета, а bean() сопоставляет имена бинов Spring, а не пакеты."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/aop/ataspectj/pointcuts.html"
+      ]
+    },
+    {
+      "id": "spring.aop.004",
+      "section": "aop",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about the limitations of Spring AOP proxies is TRUE?",
+        "ru": "Какое утверждение об ограничениях прокси в Spring AOP верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "CGLIB proxies can advise private methods, because the generated proxy is a subclass of the target and shares its package.",
+            "ru": "CGLIB-прокси может перехватывать приватные методы, потому что сгенерированный прокси — наследник цели и находится в том же пакете."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Private, static and final methods can never be advised, and a final class cannot be proxied by CGLIB at all.",
+            "ru": "Приватные, статические и final-методы перехватить нельзя никогда, а final-класс CGLIB вообще не может проксировать."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A JDK dynamic proxy can advise any public method of the target class, including methods that are not declared in any of its interfaces.",
+            "ru": "JDK-прокси может перехватывать любой публичный метод целевого класса, включая методы, не объявленные ни в одном его интерфейсе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Since Spring Framework 6 CGLIB can advise final methods by attaching a JVM instrumentation agent at startup.",
+            "ru": "Начиная со Spring Framework 6 CGLIB может перехватывать final-методы, подключая при старте JVM-агент инструментирования."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "CGLIB requires the target class to declare a no-argument constructor; classes with only a dependency-taking constructor cannot be proxied.",
+            "ru": "CGLIB требует, чтобы у целевого класса был конструктор без аргументов; классы только с конструктором, принимающим зависимости, проксировать нельзя."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "CGLIB proxies work by overriding methods, so anything that cannot be overridden - private, static or final methods, and final classes - is invisible to the advice; a JDK proxy only sees methods declared in the proxied interfaces. CGLIB proxy instances are created through Objenesis, so the target no longer needs a no-argument constructor.",
+        "ru": "CGLIB-прокси работает через переопределение методов, поэтому всё, что переопределить нельзя — приватные, статические и final-методы, а также final-классы, — для совета невидимо; JDK-прокси видит только методы, объявленные в проксируемых интерфейсах. Экземпляры CGLIB-прокси создаются через Objenesis, поэтому конструктор без аргументов у цели больше не требуется."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/aop/proxying.html",
+        "https://docs.spring.io/spring-framework/reference/core/aop-api/proxying-class.html"
+      ]
+    },
+    {
+      "id": "spring.aop.005",
+      "section": "aop",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about @Around advice and ProceedingJoinPoint is TRUE?",
+        "ru": "Какое утверждение о совете @Around и ProceedingJoinPoint верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "proceed() may be called at most once per invocation; a second call throws IllegalStateException.",
+            "ru": "proceed() можно вызвать не более одного раза за вызов; второй вызов приведёт к IllegalStateException."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@Around advice cannot change the arguments passed to the target method; for that a separate @Before advice is required.",
+            "ru": "Совет @Around не может изменить аргументы, передаваемые целевому методу; для этого нужен отдельный совет @Before."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The value returned by the @Around method is ignored; the caller always receives whatever proceed() returned.",
+            "ru": "Значение, возвращённое методом @Around, игнорируется: вызывающий код всегда получает то, что вернул proceed()."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@Around advice must be declared void, because the return value of the target method is delivered to @AfterReturning instead.",
+            "ru": "Совет @Around обязан быть void, потому что возвращаемое значение целевого метода передаётся вместо этого в @AfterReturning."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "If the advice never calls proceed(), the target method is not executed, and whatever the advice returns becomes the caller's result.",
+            "ru": "Если совет не вызовет proceed(), целевой метод не выполнится, а результатом для вызывающего станет то, что вернёт сам совет."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "@Around advice fully owns the invocation: skipping proceed() short-circuits the call and the advice's own return value is what the caller sees, while proceed(Object[]) can both replace the arguments and be invoked several times, which is what makes retry and caching aspects possible. The reference documentation requires the first parameter to be declared as ProceedingJoinPoint, because only that type exposes proceed().",
+        "ru": "Совет @Around полностью владеет вызовом: если не вызвать proceed(), целевой метод не выполняется, а вызывающий получает то, что вернул сам совет; при этом proceed(Object[]) позволяет и подменить аргументы, и вызвать цель несколько раз — именно поэтому возможны аспекты retry и кэширования. Справочная документация требует объявлять первый параметр как ProceedingJoinPoint, потому что только этот тип предоставляет proceed()."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/aop/ataspectj/advice.html",
+        "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/aspectj/lang/ProceedingJoinPoint.html"
+      ]
+    },
+    {
+      "id": "spring.aop.006",
+      "section": "aop",
+      "difficulty": "hard",
+      "text": {
+        "en": "Svc.run() prints X and returns normally. With Spring Framework 5.2.7 or newer, what is printed when run() is called through the proxy?",
+        "ru": "Метод Svc.run() печатает X и завершается нормально. Что будет выведено при вызове run() через прокси на Spring Framework 5.2.7 или новее?"
+      },
+      "code": "@Aspect\n@Component\npublic class TraceAspect {\n\n    @Before(\"execution(* com.acme.Svc.run(..))\")\n    public void before() { System.out.print(\"B\"); }\n\n    @After(\"execution(* com.acme.Svc.run(..))\")\n    public void after() { System.out.print(\"A\"); }\n\n    @AfterReturning(\"execution(* com.acme.Svc.run(..))\")\n    public void afterReturning() { System.out.print(\"R\"); }\n\n    @Around(\"execution(* com.acme.Svc.run(..))\")\n    public Object around(ProceedingJoinPoint pjp) throws Throwable {\n        System.out.print(\"[\");\n        Object result = pjp.proceed();\n        System.out.print(\"]\");\n        return result;\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "[BXAR]",
+            "ru": "[BXAR]"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "B[XRA]",
+            "ru": "B[XRA]"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "[BXRA]",
+            "ru": "[BXRA]"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "[BXR]A",
+            "ru": "[BXR]A"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The order is not deterministic unless every advice method is annotated with @Order.",
+            "ru": "Порядок не детерминирован, пока каждый метод-совет не помечен аннотацией @Order."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Within one aspect, precedence is decided by advice type in the order @Around, @Before, @After, @AfterReturning, @AfterThrowing, and the highest-precedence advice is the outermost link of the interceptor chain. So @Around opens, @Before runs, the target prints X, then unwinding goes inside-out: @AfterReturning, then @After, then the tail of @Around. @Order is only honoured at aspect level, not on individual advice methods.",
+        "ru": "Внутри одного аспекта приоритет определяется типом совета в порядке @Around, @Before, @After, @AfterReturning, @AfterThrowing, и совет с наивысшим приоритетом становится самым внешним звеном цепочки перехватчиков. Поэтому @Around открывает вызов, срабатывает @Before, цель печатает X, а раскрутка идёт изнутри наружу: @AfterReturning, затем @After, затем хвост @Around. @Order учитывается только на уровне аспекта, а не на отдельных методах-советах."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/core/aop/ataspectj/advice.html#aop-ataspectj-advice-ordering"
+      ]
+    },
+    {
+      "id": "spring.spring-mvc.001",
+      "section": "spring-mvc",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which sequence correctly describes how DispatcherServlet handles a request to an annotated controller?",
+        "ru": "Какая последовательность верно описывает обработку запроса к аннотированному контроллеру в DispatcherServlet?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "DispatcherServlet resolves and calls the annotated controller method directly; the HandlerAdapter abstraction exists only to keep supporting legacy implementations of the Controller interface.",
+            "ru": "DispatcherServlet сам находит и вызывает метод аннотированного контроллера напрямую; абстракция HandlerAdapter нужна только для того, чтобы продолжать поддерживать старые реализации интерфейса Controller."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A HandlerAdapter selects the handler by URL, then a HandlerMapping invokes it with the resolved arguments.",
+            "ru": "HandlerAdapter выбирает обработчик по URL, а затем HandlerMapping вызывает его с разрешёнными аргументами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A HandlerMapping selects the handler, a HandlerAdapter invokes it, the return value is processed, and a ViewResolver is consulted only if a view name came back.",
+            "ru": "HandlerMapping выбирает обработчик, HandlerAdapter его вызывает, возвращённое значение обрабатывается, и ViewResolver задействуется только если вернулось имя представления."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "ViewResolvers run before the handler so that the negotiated content type is known when the handler builds the model.",
+            "ru": "ViewResolver'ы выполняются до обработчика, чтобы к моменту построения модели уже был известен согласованный content type."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "HandlerExceptionResolvers are consulted first for every request; they delegate to the HandlerMapping when no exception is pending.",
+            "ru": "Для каждого запроса сначала опрашиваются HandlerExceptionResolver'ы; при отсутствии исключения они делегируют работу HandlerMapping."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "DispatcherServlet is a front controller that delegates to pluggable strategies: mapping first, then adaptation and invocation, then result handling and optional view resolution; HandlerExceptionResolvers only come into play when the handler throws. The HandlerAdapter abstraction is what lets annotated controllers, functional endpoints and HttpRequestHandlers coexist behind one servlet.",
+        "ru": "DispatcherServlet — это front controller, который делегирует работу подключаемым стратегиям: сначала сопоставление, затем адаптация и вызов, затем обработка результата и, при необходимости, разрешение представления; HandlerExceptionResolver'ы вступают в дело лишь тогда, когда обработчик бросил исключение. Именно абстракция HandlerAdapter позволяет аннотированным контроллерам, функциональным эндпоинтам и HttpRequestHandler'ам сосуществовать за одним сервлетом."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-servlet.html",
+        "https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-servlet/special-bean-types.html"
+      ]
+    },
+    {
+      "id": "spring.spring-mvc.002",
+      "section": "spring-mvc",
+      "difficulty": "easy",
+      "text": {
+        "en": "The handler below is called as GET /orders with no query string and no @ExceptionHandler anywhere. What does the client get?",
+        "ru": "Обработчик ниже вызывается как GET /orders без query-строки, и никаких @ExceptionHandler в приложении нет. Что получит клиент?"
+      },
+      "code": "@GetMapping(\"/orders\")\npublic List<Order> list(@RequestParam int page) {\n    return service.page(page);\n}",
+      "options": [
+        {
+          "text": {
+            "en": "400 Bad Request - a @RequestParam is required by default, so MissingServletRequestParameterException is raised.",
+            "ru": "400 Bad Request — @RequestParam по умолчанию обязателен, поэтому возникает MissingServletRequestParameterException."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "200 OK with page = 0, because int cannot be null and Spring falls back to the primitive default.",
+            "ru": "200 OK с page = 0, потому что int не может быть null и Spring подставляет значение примитива по умолчанию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "500 Internal Server Error, because Spring tries to convert null to int and fails with IllegalArgumentException.",
+            "ru": "500 Internal Server Error, потому что Spring пытается преобразовать null в int и падает с IllegalArgumentException."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "404 Not Found, because the missing parameter makes the request not match the mapping.",
+            "ru": "404 Not Found, потому что из-за отсутствующего параметра запрос не подходит под маппинг."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "400 Bad Request, but only if the controller class is annotated with @Validated; otherwise page is silently 0.",
+            "ru": "400 Bad Request, но только если класс контроллера помечен @Validated; иначе page молча станет 0."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "@RequestParam has required = true by default, and a missing required parameter is reported as MissingServletRequestParameterException, which the default exception handling maps to 400. Declaring a default (@RequestParam(defaultValue = \"0\")) or an Integer with required = false is the way to make it optional - a primitive with required = false would still fail on the null conversion.",
+        "ru": "У @RequestParam по умолчанию required = true, и отсутствие обязательного параметра приводит к MissingServletRequestParameterException, которое стандартная обработка исключений превращает в 400. Чтобы сделать параметр необязательным, задают defaultValue (@RequestParam(defaultValue = \"0\")) или используют Integer с required = false — примитив с required = false всё равно упал бы на преобразовании null."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-controller/ann-methods/requestparam.html",
+        "https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-ann-rest-exceptions.html"
+      ]
+    },
+    {
+      "id": "spring.spring-mvc.003",
+      "section": "spring-mvc",
+      "difficulty": "medium",
+      "text": {
+        "en": "What does the client receive from GET /report?",
+        "ru": "Что получит клиент в ответ на GET /report?"
+      },
+      "code": "@Controller\npublic class ReportController {\n\n    @GetMapping(\"/report\")\n    public String report() {\n        return \"summary\";\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "The body summary with Content-Type text/plain, because in Spring MVC a String return value is always written straight to the response body, regardless of any annotations.",
+            "ru": "Тело summary с Content-Type text/plain, потому что в Spring MVC возвращаемое значение типа String всегда пишется прямо в тело ответа, независимо от аннотаций."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The JSON string \"summary\", because Jackson is on the classpath and converts any String return value.",
+            "ru": "JSON-строка \"summary\", потому что Jackson есть в classpath и преобразует любое возвращённое значение String."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A 302 redirect to /summary, since a bare String return value is interpreted as a redirect target.",
+            "ru": "Редирект 302 на /summary, поскольку простая строка в return трактуется как цель редиректа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "406 Not Acceptable, because the mapping declares no produces attribute and content negotiation therefore finds no acceptable representation.",
+            "ru": "406 Not Acceptable, потому что в маппинге не объявлен атрибут produces и согласование содержимого не находит подходящего представления."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing useful: \"summary\" is treated as a logical view name and handed to the ViewResolvers, so without a matching view the request fails.",
+            "ru": "Ничего полезного: \"summary\" трактуется как логическое имя представления и передаётся ViewResolver'ам, поэтому без подходящего представления запрос завершится ошибкой."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "In a @Controller without @ResponseBody a String return value is a view name, so the DispatcherServlet asks the ViewResolvers for a view called summary. Writing the value to the body requires @ResponseBody on the method or @RestController on the class, which is @Controller plus @ResponseBody.",
+        "ru": "В @Controller без @ResponseBody возвращённая String — это имя представления, поэтому DispatcherServlet запрашивает у ViewResolver'ов представление summary. Чтобы значение попало в тело ответа, нужен @ResponseBody на методе или @RestController на классе, который представляет собой @Controller плюс @ResponseBody."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-controller/ann-methods/return-types.html",
+        "https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-controller/ann-responsebody.html"
+      ]
+    },
+    {
+      "id": "spring.spring-mvc.004",
+      "section": "spring-mvc",
+      "difficulty": "medium",
+      "text": {
+        "en": "UserDto declares @NotBlank on its email field, the incoming JSON has an empty email, the method has no BindingResult parameter and the application declares no @ExceptionHandler. What happens?",
+        "ru": "В UserDto поле email помечено @NotBlank, во входящем JSON email пустой, у метода нет параметра BindingResult, и в приложении нет ни одного @ExceptionHandler. Что произойдёт?"
+      },
+      "code": "@PostMapping(\"/users\")\npublic ResponseEntity<Void> create(@Valid @RequestBody UserDto dto) {\n    service.create(dto);\n    return ResponseEntity.noContent().build();\n}",
+      "options": [
+        {
+          "text": {
+            "en": "ConstraintViolationException is thrown by the validator and, having no handler, results in 500 Internal Server Error.",
+            "ru": "Валидатор бросает ConstraintViolationException, и, поскольку обработчика нет, клиент получает 500 Internal Server Error."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "MethodArgumentNotValidException is thrown before the method body runs, and Spring MVC's default handling turns it into 400 Bad Request.",
+            "ru": "До выполнения тела метода бросается MethodArgumentNotValidException, и стандартная обработка Spring MVC превращает его в 400 Bad Request."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The method body runs with the invalid dto; validation errors are only reported if the code inspects them.",
+            "ru": "Тело метода выполняется с невалидным dto; ошибки валидации проявятся только если код сам их проверит."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "422 Unprocessable Entity, which is the status Spring MVC uses for bean validation failures on a request body.",
+            "ru": "422 Unprocessable Entity — именно этот статус Spring MVC использует для ошибок bean validation в теле запроса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "500 Internal Server Error, because @Valid needs a LocalValidatorFactoryBean to be declared explicitly.",
+            "ru": "500 Internal Server Error, потому что для @Valid нужно явно объявить бин LocalValidatorFactoryBean."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "For an argument annotated with @Valid or @Validated, the RequestResponseBodyMethodProcessor validates after conversion and, when no BindingResult follows the argument, raises MethodArgumentNotValidException, which the default resolvers map to 400. ConstraintViolationException is what you get from method-level validation (@Validated on the class with constraints on @RequestParam or path variables), and it is not mapped to 400 out of the box.",
+        "ru": "Для аргумента с @Valid или @Validated RequestResponseBodyMethodProcessor выполняет валидацию после конвертации и, если сразу за аргументом нет BindingResult, бросает MethodArgumentNotValidException, которое стандартные resolver'ы отображают в 400. ConstraintViolationException возникает при валидации на уровне методов (@Validated на классе плюс ограничения на @RequestParam или path-переменных) и по умолчанию в 400 не отображается."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-controller/ann-validation.html",
+        "https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-ann-rest-exceptions.html"
+      ]
+    },
+    {
+      "id": "spring.spring-mvc.005",
+      "section": "spring-mvc",
+      "difficulty": "medium",
+      "text": {
+        "en": "A controller declares an @ExceptionHandler(IllegalStateException.class) method, and a @ControllerAdvice declares @ExceptionHandler(RuntimeException.class). The controller throws IllegalStateException. Which statement is TRUE?",
+        "ru": "В контроллере объявлен метод @ExceptionHandler(IllegalStateException.class), а в @ControllerAdvice — @ExceptionHandler(RuntimeException.class). Контроллер бросает IllegalStateException. Какое утверждение верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The @ControllerAdvice handler wins because it is registered globally and therefore has higher precedence.",
+            "ru": "Побеждает обработчик из @ControllerAdvice, потому что он зарегистрирован глобально и имеет более высокий приоритет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The most specific exception type wins across all candidates regardless of where it is declared, so locality never matters.",
+            "ru": "Побеждает самый специфичный тип исключения среди всех кандидатов, независимо от места объявления, поэтому «локальность» не важна."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both handlers run: the local one produces the response and the global one is invoked afterwards for logging.",
+            "ru": "Сработают оба обработчика: локальный формирует ответ, а глобальный вызывается после него для логирования."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The controller-local handler wins: handlers declared in the controller itself are searched before any @ControllerAdvice bean.",
+            "ru": "Побеждает локальный обработчик контроллера: обработчики, объявленные в самом контроллере, ищутся раньше любого бина @ControllerAdvice."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Startup fails with an ambiguity error, because two handler methods can both handle IllegalStateException.",
+            "ru": "Старт падает с ошибкой неоднозначности, потому что IllegalStateException могут обработать два метода."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "ExceptionHandlerExceptionResolver first looks for a matching @ExceptionHandler in the controller class itself and only then walks the @ControllerAdvice beans, which are ordered by @Order or Ordered. Most-specific matching applies within one class, but it never overrides that locality rule, and only one handler method ever handles a given exception.",
+        "ru": "ExceptionHandlerExceptionResolver сначала ищет подходящий @ExceptionHandler в самом классе контроллера и только потом проходит по бинам @ControllerAdvice, упорядоченным через @Order или Ordered. Выбор наиболее специфичного типа работает внутри одного класса, но никогда не отменяет правило приоритета локального обработчика, и исключение обрабатывает всегда только один метод."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-ann-rest-exceptions.html",
+        "https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-controller/ann-advice.html"
+      ]
+    },
+    {
+      "id": "spring.spring-mvc.006",
+      "section": "spring-mvc",
+      "difficulty": "hard",
+      "text": {
+        "en": "Only Jackson for JSON is on the classpath - there is no XML converter. The client sends Content-Type: application/json and Accept: application/xml. What does it get?",
+        "ru": "В classpath есть только Jackson для JSON — XML-конвертера нет. Клиент отправляет Content-Type: application/json и Accept: application/xml. Что он получит?"
+      },
+      "code": "@RestController\nclass EchoApi {\n\n    @PostMapping(path = \"/echo\", consumes = \"application/json\", produces = \"application/xml\")\n    public Payload echo(@RequestBody Payload payload) {\n        return payload;\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "406 Not Acceptable: no HttpMessageConverter can write application/xml, so HttpMediaTypeNotAcceptableException is raised.",
+            "ru": "406 Not Acceptable: ни один HttpMessageConverter не может записать application/xml, поэтому возникает HttpMediaTypeNotAcceptableException."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "415 Unsupported Media Type, because the converter set does not cover the media types declared on the mapping.",
+            "ru": "415 Unsupported Media Type, потому что набор конвертеров не покрывает media-типы, объявленные в маппинге."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "200 OK with a JSON body: Jackson is used as a fallback when the requested representation is unavailable.",
+            "ru": "200 OK с телом в JSON: Jackson используется как резервный вариант, когда запрошенное представление недоступно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "500 Internal Server Error with HttpMessageNotWritableException, since serialisation of the return value fails.",
+            "ru": "500 Internal Server Error с HttpMessageNotWritableException, поскольку сериализация возвращаемого значения не удалась."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "200 OK with an empty body, because the return value is dropped when no converter matches the Accept header.",
+            "ru": "200 OK с пустым телом, потому что возвращаемое значение отбрасывается, если ни один конвертер не подходит под заголовок Accept."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The produces condition is matched against Accept, so the handler is selected; then AbstractMessageConverterMethodProcessor computes the producible media types and, finding no converter able to write application/xml, throws HttpMediaTypeNotAcceptableException, which maps to 406. A 415 would come from the consumes side, when the request's Content-Type does not match.",
+        "ru": "Условие produces сопоставляется с заголовком Accept, поэтому обработчик выбирается; затем AbstractMessageConverterMethodProcessor вычисляет допустимые media-типы и, не найдя конвертера, умеющего писать application/xml, бросает HttpMediaTypeNotAcceptableException, которое отображается в 406. Ответ 415 пришёл бы со стороны consumes — когда Content-Type запроса не подходит."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-controller/ann-requestmapping.html",
+        "https://docs.spring.io/spring-framework/reference/integration/rest-clients.html"
+      ]
+    },
+    {
+      "id": "spring.transactions.001",
+      "section": "transactions",
+      "difficulty": "easy",
+      "text": {
+        "en": "The method below is called through the proxy and throws IOException. What happens to the row saved before the throw?",
+        "ru": "Метод ниже вызывается через прокси и бросает IOException. Что произойдёт со строкой, сохранённой до выброса исключения?"
+      },
+      "code": "@Transactional\npublic void exportReport(Report report) throws IOException {\n    reportRepository.save(report);\n    throw new IOException(\"disk full\");\n}",
+      "options": [
+        {
+          "text": {
+            "en": "It is rolled back: any exception thrown out of a @Transactional method marks the transaction rollback-only.",
+            "ru": "Она будет откачена: любое исключение, вылетевшее из @Transactional-метода, помечает транзакцию как rollback-only."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is rolled back, because IOException is not listed in noRollbackFor.",
+            "ru": "Она будет откачена, потому что IOException не перечислен в noRollbackFor."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is committed, but the caller receives UnexpectedRollbackException instead of the original IOException.",
+            "ru": "Она будет зафиксирована, но вызывающий получит UnexpectedRollbackException вместо исходного IOException."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is committed: by default only RuntimeException and Error mark the transaction for rollback, checked exceptions do not.",
+            "ru": "Она будет зафиксирована: по умолчанию только RuntimeException и Error помечают транзакцию на откат, проверяемые исключения — нет."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It depends on the transaction manager: JpaTransactionManager rolls back on any exception, DataSourceTransactionManager commits.",
+            "ru": "Зависит от менеджера транзакций: JpaTransactionManager откатывает при любом исключении, а DataSourceTransactionManager фиксирует."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Spring's default rollback rule mirrors EJB semantics: unchecked exceptions and errors trigger rollback, checked exceptions let the transaction commit. To roll back on a checked exception you must say so explicitly, e.g. @Transactional(rollbackFor = IOException.class).",
+        "ru": "Правило откатов по умолчанию в Spring повторяет семантику EJB: непроверяемые исключения и ошибки вызывают откат, а проверяемые позволяют транзакции зафиксироваться. Чтобы откатывать на проверяемом исключении, это нужно указать явно, например @Transactional(rollbackFor = IOException.class)."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/rolling-back.html",
+        "https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html"
+      ]
+    },
+    {
+      "id": "spring.transactions.002",
+      "section": "transactions",
+      "difficulty": "easy",
+      "text": {
+        "en": "importAll is called from outside the bean. In what transactional context do the saveOne calls run?",
+        "ru": "Метод importAll вызывается извне бина. В каком транзакционном контексте выполняются вызовы saveOne?"
+      },
+      "code": "@Service\npublic class UserService {\n\n    public void importAll(List<User> users) {\n        users.forEach(this::saveOne);\n    }\n\n    @Transactional\n    public void saveOne(User user) {\n        userRepository.save(user);\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "Each saveOne call runs in its own transaction, because @Transactional is declared on the method being invoked.",
+            "ru": "Каждый вызов saveOne выполняется в своей транзакции, потому что @Transactional объявлен на вызываемом методе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "In none: the self-invocation does not pass through the proxy, so no transaction is started and each save runs on its own.",
+            "ru": "Ни в каком: самовызов не проходит через прокси, поэтому транзакция не начинается и каждый save выполняется сам по себе."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "All saveOne calls join a single transaction that the proxy opens around importAll.",
+            "ru": "Все вызовы saveOne присоединяются к одной транзакции, которую прокси открывает вокруг importAll."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A transaction is opened for the first saveOne call only, and the remaining calls join it because it is still bound to the thread.",
+            "ru": "Транзакция открывается только для первого вызова saveOne, а остальные вызовы присоединяются к ней, поскольку она всё ещё связана с потоком."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Each call is transactional when the bean is proxied by CGLIB, and non-transactional with a JDK dynamic proxy.",
+            "ru": "Каждый вызов транзакционен, если бин проксирован через CGLIB, и нетранзакционен при JDK-прокси."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "In the default proxy mode only external calls arriving through the proxy are intercepted, so this::saveOne is a plain Java call and the annotation has no effect. Fixes are to move saveOne to another bean, inject a self-reference, or switch to AdviceMode.ASPECTJ weaving - the proxy type makes no difference.",
+        "ru": "В режиме прокси по умолчанию перехватываются только внешние вызовы, приходящие через прокси, поэтому this::saveOne — обычный Java-вызов, и аннотация не действует. Лечится это переносом saveOne в другой бин, инъекцией ссылки на самого себя или переходом на вплетение AdviceMode.ASPECTJ — тип прокси здесь ни при чём."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html",
+        "https://docs.spring.io/spring-framework/reference/core/aop/proxying.html"
+      ]
+    },
+    {
+      "id": "spring.transactions.003",
+      "section": "transactions",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about transaction propagation is TRUE?",
+        "ru": "Какое утверждение о распространении транзакций (propagation) верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "NESTED starts a second physical transaction on a separate connection, which is why it can commit independently of the outer one and is fully supported by JTA transaction managers.",
+            "ru": "NESTED начинает вторую физическую транзакцию на отдельном соединении, поэтому она может фиксироваться независимо от внешней и полностью поддерживается JTA-менеджерами транзакций."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "REQUIRES_NEW reuses the current connection and only creates a savepoint, so rolling it back never affects the outer work.",
+            "ru": "REQUIRES_NEW переиспользует текущее соединение и лишь создаёт savepoint, поэтому её откат никогда не затрагивает внешнюю работу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "MANDATORY starts a new transaction when none is active, which makes it a safe default for repository methods.",
+            "ru": "MANDATORY начинает новую транзакцию, если активной нет, поэтому это безопасное значение по умолчанию для методов репозитория."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "NOT_SUPPORTED throws IllegalTransactionStateException when it is called inside an active transaction.",
+            "ru": "NOT_SUPPORTED бросает IllegalTransactionStateException, если вызывается внутри активной транзакции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "REQUIRES_NEW suspends the outer transaction and starts a physically new one, while NESTED works inside the existing transaction using a JDBC savepoint.",
+            "ru": "REQUIRES_NEW приостанавливает внешнюю транзакцию и начинает физически новую, а NESTED работает внутри существующей транзакции через JDBC savepoint."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "REQUIRES_NEW really suspends the outer transaction and obtains its own connection, so its commit or rollback is independent; NESTED only sets a savepoint and is supported by DataSourceTransactionManager, not by JTA managers. MANDATORY requires an existing transaction and throws IllegalTransactionStateException otherwise, while NOT_SUPPORTED suspends the current transaction instead of failing - failing on an active transaction is what NEVER does.",
+        "ru": "REQUIRES_NEW действительно приостанавливает внешнюю транзакцию и берёт собственное соединение, поэтому её commit или rollback независимы; NESTED лишь ставит savepoint и поддерживается DataSourceTransactionManager, но не JTA-менеджерами. MANDATORY требует уже существующей транзакции и иначе бросает IllegalTransactionStateException, а NOT_SUPPORTED приостанавливает текущую транзакцию, а не падает — падает при активной транзакции NEVER."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/tx-propagation.html",
+        "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/annotation/Propagation.html"
+      ]
+    },
+    {
+      "id": "spring.transactions.004",
+      "section": "transactions",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which anomaly is still possible at isolation level REPEATABLE_READ but prevented by SERIALIZABLE?",
+        "ru": "Какая аномалия всё ещё возможна на уровне изоляции REPEATABLE_READ, но исключается на SERIALIZABLE?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A dirty read: reading a row that another transaction has modified but not yet committed.",
+            "ru": "Грязное чтение: чтение строки, изменённой другой транзакцией, но ещё не зафиксированной."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A non-repeatable read: reading the same row twice inside one transaction and seeing different values because another transaction committed an update in between.",
+            "ru": "Неповторяющееся чтение: чтение одной и той же строки дважды внутри одной транзакции даёт разные значения, потому что между чтениями другая транзакция зафиксировала изменение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A phantom read: re-running the same range query sees extra rows inserted and committed by another transaction.",
+            "ru": "Фантомное чтение: повторное выполнение того же диапазонного запроса возвращает дополнительные строки, вставленные и зафиксированные другой транзакцией."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A deadlock between two transactions that update the same rows in different order.",
+            "ru": "Взаимная блокировка двух транзакций, обновляющих одни и те же строки в разном порядке."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A lost update where the later of two concurrent writers overwrites the earlier value.",
+            "ru": "Потерянное обновление, когда более поздний из двух конкурентных писателей перезаписывает предыдущее значение."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The standard ladder is: READ_UNCOMMITTED allows dirty, non-repeatable and phantom reads; READ_COMMITTED removes dirty reads; REPEATABLE_READ additionally removes non-repeatable reads; only SERIALIZABLE removes phantoms. Deadlocks are a concurrency-control side effect, not an isolation anomaly, and Isolation.DEFAULT simply delegates to the database default (READ_COMMITTED on PostgreSQL and Oracle, REPEATABLE_READ on MySQL InnoDB).",
+        "ru": "Стандартная лестница такова: READ_UNCOMMITTED допускает грязные, неповторяющиеся и фантомные чтения; READ_COMMITTED убирает грязные; REPEATABLE_READ дополнительно убирает неповторяющиеся; и только SERIALIZABLE убирает фантомы. Взаимные блокировки — побочный эффект управления конкурентностью, а не аномалия изоляции, а Isolation.DEFAULT просто делегирует уровню по умолчанию у базы (READ_COMMITTED в PostgreSQL и Oracle, REPEATABLE_READ в MySQL InnoDB)."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/annotation/Isolation.html",
+        "https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html"
+      ]
+    },
+    {
+      "id": "spring.transactions.005",
+      "section": "transactions",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about @Transactional attributes and the transaction infrastructure is TRUE?",
+        "ru": "Какое утверждение об атрибутах @Transactional и инфраструктуре транзакций верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "timeout defaults to 30 seconds, after which the transaction manager marks the transaction rollback-only.",
+            "ru": "timeout по умолчанию равен 30 секундам, после чего менеджер транзакций помечает транзакцию как rollback-only."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An application may declare only one PlatformTransactionManager bean; several transaction managers require separate ApplicationContexts.",
+            "ru": "В приложении можно объявить только один бин PlatformTransactionManager; несколько менеджеров транзакций требуют отдельных ApplicationContext."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "readOnly = true is a hint: Hibernate switches the flush mode to MANUAL so dirty checking is skipped, but it does not by itself make every write fail.",
+            "ru": "readOnly = true — это подсказка: Hibernate переключает flush mode в MANUAL, пропуская dirty checking, но само по себе это не заставляет любую запись падать."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A callback registered through TransactionSynchronizationManager.registerSynchronization still runs inside the transaction in afterCompletion, so it can safely write to the database.",
+            "ru": "Колбэк, зарегистрированный через TransactionSynchronizationManager.registerSynchronization, в afterCompletion всё ещё выполняется внутри транзакции, поэтому может безопасно писать в базу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The isolation attribute of an inner method with propagation REQUIRED is applied to the joined transaction, overriding the outer setting.",
+            "ru": "Атрибут isolation внутреннего метода с propagation REQUIRED применяется к присоединённой транзакции и переопределяет настройку внешнего метода."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "readOnly is propagated as a hint to the resource: Hibernate sets FlushMode.MANUAL and some drivers or replicas optimise on it, but plain JDBC writes may still succeed. The default timeout is TransactionDefinition.TIMEOUT_DEFAULT (-1), meaning \"whatever the transaction system uses\"; several transaction managers may coexist and are selected with @Transactional(transactionManager = \"...\"); afterCompletion runs after commit or rollback, outside the transaction; and a participating REQUIRED transaction cannot change the isolation level of the one it joins.",
+        "ru": "readOnly передаётся ресурсу как подсказка: Hibernate выставляет FlushMode.MANUAL, а некоторые драйверы и реплики на это оптимизируются, но запись через обычный JDBC вполне может пройти. Значение timeout по умолчанию — TransactionDefinition.TIMEOUT_DEFAULT (-1), то есть «как настроено в транзакционной системе»; несколько менеджеров транзакций могут сосуществовать и выбираются через @Transactional(transactionManager = \"...\"); afterCompletion выполняется после commit или rollback, вне транзакции; а присоединяющаяся транзакция с REQUIRED не может изменить уровень изоляции той, к которой присоединилась."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html",
+        "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/support/TransactionSynchronization.html"
+      ]
+    },
+    {
+      "id": "spring.transactions.006",
+      "section": "transactions",
+      "difficulty": "hard",
+      "text": {
+        "en": "Both beans use default propagation and run() is called from outside. What is the outcome?",
+        "ru": "Оба бина используют propagation по умолчанию, а run() вызывается извне. Каков будет результат?"
+      },
+      "code": "@Service\nclass Outer {\n    @Autowired Inner inner;\n    @Autowired AuditRepository audit;\n\n    @Transactional\n    public void run() {\n        try {\n            inner.doWork();\n        } catch (IllegalStateException ignored) {\n            // swallowed on purpose\n        }\n        audit.save(new Audit(\"done\"));\n    }\n}\n\n@Service\nclass Inner {\n    @Transactional\n    public void doWork() {\n        throw new IllegalStateException(\"boom\");\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "Nothing is persisted and run() fails with UnexpectedRollbackException: the inner method joined the same transaction and marked it rollback-only.",
+            "ru": "Ничего не сохранится, а run() упадёт с UnexpectedRollbackException: внутренний метод присоединился к той же транзакции и пометил её как rollback-only."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The audit row is committed: catching the exception prevents the rollback, because the rollback-only flag is set only when an exception actually reaches the interceptor of the outer method.",
+            "ru": "Строка audit будет зафиксирована: перехват исключения предотвращает откат, потому что флаг rollback-only выставляется только тогда, когда исключение реально доходит до перехватчика внешнего метода."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only the work done by the inner method is rolled back; the audit row is committed in the outer transaction.",
+            "ru": "Откатится только работа внутреннего метода; строка audit будет зафиксирована во внешней транзакции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "IllegalStateException propagates to the caller of run(), because a rollback rethrows the original exception.",
+            "ru": "IllegalStateException дойдёт до вызывающего run(), потому что при откате исходное исключение выбрасывается заново."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The audit row is committed, and Spring logs a warning that a participating transaction was marked rollback-only.",
+            "ru": "Строка audit будет зафиксирована, а Spring лишь запишет предупреждение о том, что присоединившаяся транзакция была помечена rollback-only."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "With REQUIRED the inner method participates in the outer physical transaction, so its interceptor can only set the global rollback-only flag; swallowing the exception does not clear it. When the outer method returns, the transaction manager sees the flag, rolls the whole transaction back and reports it as UnexpectedRollbackException. Making doWork REQUIRES_NEW (or letting the outer method fail fast) is the usual fix.",
+        "ru": "При REQUIRED внутренний метод участвует во внешней физической транзакции, поэтому его перехватчик может лишь выставить глобальный флаг rollback-only; проглатывание исключения этот флаг не снимает. Когда внешний метод возвращает управление, менеджер транзакций видит флаг, откатывает всю транзакцию и сообщает об этом через UnexpectedRollbackException. Обычное решение — сделать doWork REQUIRES_NEW либо не глушить исключение во внешнем методе."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/rolling-back.html",
+        "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/UnexpectedRollbackException.html"
+      ]
+    },
+    {
+      "id": "spring.testing.001",
+      "section": "testing",
+      "difficulty": "easy",
+      "text": {
+        "en": "Which statement about ApplicationContext caching in the Spring TestContext framework is TRUE?",
+        "ru": "Какое утверждение о кэшировании ApplicationContext в Spring TestContext framework верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A fresh ApplicationContext is built for every test class, which is why integration test suites are slow.",
+            "ru": "Для каждого тестового класса собирается новый ApplicationContext — именно поэтому интеграционные тесты медленные."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A fresh ApplicationContext is built for every test method to guarantee isolation between tests.",
+            "ru": "Для каждого тестового метода создаётся новый ApplicationContext, чтобы гарантировать изоляцию тестов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The context is cached only within one test class; sharing it between classes requires an explicit @ContextHierarchy declaration.",
+            "ru": "Контекст кэшируется только внутри одного тестового класса; чтобы делить его между классами, нужна явная декларация @ContextHierarchy."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Caching is off by default and is enabled by annotating the test class with @DirtiesContext.",
+            "ru": "Кэширование по умолчанию выключено и включается аннотацией @DirtiesContext на тестовом классе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Contexts are cached across test classes, keyed by the merged context configuration, with a default maximum of 32 and LRU eviction.",
+            "ru": "Контексты кэшируются между тестовыми классами, ключом служит объединённая конфигурация контекста, размер кэша по умолчанию — 32 с вытеснением по LRU."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The framework caches contexts in a static, JVM-wide cache keyed by locations, classes, active profiles, property sources, context customizers and so on, with a default maximum size of 32 (spring.test.context.cache.maxSize) and LRU eviction. @DirtiesContext does the opposite of enabling caching: it closes the context and removes it from the cache.",
+        "ru": "Фреймворк кэширует контексты в статическом кэше на всю JVM, ключом которого служат locations, classes, активные профили, property source'ы, context customizer'ы и так далее; размер по умолчанию — 32 (spring.test.context.cache.maxSize), вытеснение по LRU. @DirtiesContext делает обратное: закрывает контекст и убирает его из кэша."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/testing/testcontext-framework/ctx-management/caching.html"
+      ]
+    },
+    {
+      "id": "spring.testing.002",
+      "section": "testing",
+      "difficulty": "easy",
+      "text": {
+        "en": "How does Mockito's @Mock differ from a Spring bean-override annotation such as @MockitoBean (formerly @MockBean)?",
+        "ru": "Чем @Mock из Mockito отличается от аннотации подмены бина в Spring, например @MockitoBean (ранее @MockBean)?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "They are synonyms; the Spring annotation exists only to avoid the extra @ExtendWith(MockitoExtension.class) declaration.",
+            "ru": "Это синонимы; аннотация Spring существует лишь для того, чтобы не объявлять дополнительно @ExtendWith(MockitoExtension.class)."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@Mock only creates a mock for the test instance; the bean-override annotation also puts it into the ApplicationContext.",
+            "ru": "@Mock лишь создаёт мок для экземпляра теста; аннотация подмены бина ещё и помещает его в ApplicationContext."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "@Mock also replaces the bean in the context as soon as the test class is annotated with @SpringBootTest.",
+            "ru": "@Mock тоже подменяет бин в контексте, как только тестовый класс помечен @SpringBootTest."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The bean-override annotation requires @ExtendWith(MockitoExtension.class) on the test class to initialise the mocks.",
+            "ru": "Аннотации подмены бина требуется @ExtendWith(MockitoExtension.class) на тестовом классе, чтобы инициализировать моки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Mocks created by the bean-override annotation keep their stubbing between test methods unless @DirtiesContext is used.",
+            "ru": "Моки, созданные аннотацией подмены бина, сохраняют свои заглушки между тестовыми методами, если не использовать @DirtiesContext."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "@Mock is pure Mockito: it produces an object that you have to wire in yourself. The Spring bean-override annotations hook into the TestContext framework, put the mock into the context so that other beans get it injected, and reset it automatically after each test method.",
+        "ru": "@Mock — это чистый Mockito: он создаёт объект, который вы должны подключить сами. Аннотации подмены бина в Spring встраиваются в TestContext framework, помещают мок в контекст, чтобы его получили другие бины, и автоматически сбрасывают его после каждого тестового метода."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/testing/annotations/integration-spring/annotation-mockitobean.html",
+        "https://docs.spring.io/spring-framework/reference/testing/testcontext-framework/bean-overriding.html"
+      ]
+    },
+    {
+      "id": "spring.testing.003",
+      "section": "testing",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about bean overriding in tests on Spring Framework 6.2 / Spring Boot 3.4 and later is TRUE?",
+        "ru": "Какое утверждение о подмене бинов в тестах на Spring Framework 6.2 / Spring Boot 3.4 и новее верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "@MockitoBean is a Spring Boot annotation and therefore requires the spring-boot-test dependency.",
+            "ru": "@MockitoBean — это аннотация Spring Boot, поэтому для неё нужна зависимость spring-boot-test."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@MockBean was removed outright in Spring Boot 3.4, so existing tests fail to compile after the upgrade.",
+            "ru": "@MockBean полностью удалён в Spring Boot 3.4, поэтому существующие тесты после обновления перестают компилироваться."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@MockitoBean works only in tests annotated with @SpringBootTest; plain @ContextConfiguration tests must keep using @MockBean.",
+            "ru": "@MockitoBean работает только в тестах с @SpringBootTest; тесты с обычным @ContextConfiguration должны и дальше использовать @MockBean."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Spring Boot's @MockBean and @SpyBean are deprecated in favour of Spring Framework's @MockitoBean and @MockitoSpyBean.",
+            "ru": "@MockBean и @SpyBean из Spring Boot объявлены устаревшими в пользу @MockitoBean и @MockitoSpyBean из Spring Framework."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "@TestBean is the Mockito-based replacement for @MockBean and creates a mock from the declared field type.",
+            "ru": "@TestBean — это замена @MockBean на базе Mockito, создающая мок по типу объявленного поля."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Spring Framework 6.2 moved bean overriding into the core test module, and Spring Boot 3.4 deprecated its own @MockBean and @SpyBean in favour of @MockitoBean and @MockitoSpyBean, which work in any TestContext-based test. @TestBean also belongs to that new mechanism but has nothing to do with Mockito: it replaces the bean with the value returned by a static factory method in the test class.",
+        "ru": "В Spring Framework 6.2 механизм подмены бинов перенесли в базовый тестовый модуль, а Spring Boot 3.4 объявил устаревшими свои @MockBean и @SpyBean в пользу @MockitoBean и @MockitoSpyBean, которые работают в любом тесте на TestContext. @TestBean тоже относится к новому механизму, но к Mockito отношения не имеет: он подменяет бин значением, которое возвращает статический фабричный метод в тестовом классе."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/testing/testcontext-framework/bean-overriding.html",
+        "https://docs.spring.io/spring-boot/api/java/org/springframework/boot/test/mock/mockito/MockBean.html"
+      ]
+    },
+    {
+      "id": "spring.testing.004",
+      "section": "testing",
+      "difficulty": "medium",
+      "text": {
+        "en": "What happens to the inserted row after the test method finishes?",
+        "ru": "Что произойдёт со вставленной строкой после завершения тестового метода?"
+      },
+      "code": "@SpringJUnitConfig(AppConfig.class)\n@Transactional\nclass UserRepositoryTests {\n\n    @Autowired UserRepository repository;\n\n    @Test\n    void insertsUser() {\n        repository.save(new User(\"alice\"));\n        assertEquals(1, repository.count());\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "Each test method runs in its own transaction which is rolled back at the end, so the row disappears; @Commit switches that to a commit.",
+            "ru": "Каждый тестовый метод выполняется в своей транзакции, которая в конце откатывается, поэтому строка исчезает; переключить на фиксацию можно через @Commit."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is committed: test-managed transactions commit by default and @Rollback must be added to discard the changes.",
+            "ru": "Она будет зафиксирована: транзакции, управляемые тестом, по умолчанию фиксируются, и для отката нужно добавить @Rollback."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The whole class runs inside a single transaction that is rolled back only after the last test method.",
+            "ru": "Весь класс выполняется в одной транзакции, которая откатывается только после последнего тестового метода."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The rollback happens only if the test method throws an exception; a test that passes always commits, which is why @Rollback exists as an explicit opt-in.",
+            "ru": "Откат происходит только если тестовый метод бросил исключение; успешно пройденный тест всегда фиксирует изменения — именно поэтому @Rollback существует как явное включение отката."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Writes made from any thread during the test are rolled back too, because the transaction is bound to the ApplicationContext.",
+            "ru": "Записи, сделанные во время теста из любого потока, тоже откатываются, потому что транзакция привязана к ApplicationContext."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The TestContext framework starts a transaction before each test method and rolls it back afterwards, regardless of whether the test passed; @Commit or @Rollback(false) changes that per method or per class. The transaction state is bound to the current thread via a ThreadLocal, so anything executed on another thread - an @Async call or a preemptive timeout - runs outside it and its writes really are committed.",
+        "ru": "TestContext framework начинает транзакцию перед каждым тестовым методом и откатывает её после, независимо от того, прошёл тест или нет; изменить это на уровне метода или класса можно через @Commit или @Rollback(false). Состояние транзакции привязано к текущему потоку через ThreadLocal, поэтому всё, что выполняется в другом потоке — @Async-вызов или preemptive timeout — идёт вне транзакции, и такие записи действительно фиксируются."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/testing/testcontext-framework/tx.html",
+        "https://docs.spring.io/spring-framework/reference/testing/annotations/integration-spring/annotation-rollback.html"
+      ]
+    },
+    {
+      "id": "spring.testing.005",
+      "section": "testing",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about MockMvc is TRUE?",
+        "ru": "Какое утверждение о MockMvc верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It starts an embedded servlet container on a random port and sends real HTTP requests to it.",
+            "ru": "Он запускает встроенный контейнер сервлетов на случайном порту и отправляет к нему настоящие HTTP-запросы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It bypasses the DispatcherServlet and invokes the controller method directly, which is why controller advice is not applied.",
+            "ru": "Он обходит DispatcherServlet и вызывает метод контроллера напрямую, поэтому controller advice не применяется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Servlet filters are never part of a MockMvc test, so filter-based concerns such as security have to be tested separately.",
+            "ru": "Сервлет-фильтры никогда не участвуют в тестах с MockMvc, поэтому связанные с фильтрами задачи вроде безопасности приходится тестировать отдельно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It drives the real Spring MVC infrastructure without starting a servlet container or opening a network socket.",
+            "ru": "Он прогоняет запрос через настоящую инфраструктуру Spring MVC, не запуская контейнер сервлетов и не открывая сетевой сокет."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It always loads the full application context, so a real database is required for any MockMvc test.",
+            "ru": "Он всегда поднимает полный контекст приложения, поэтому для любого теста с MockMvc нужна реальная база данных."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "MockMvc runs the DispatcherServlet against the Servlet API mocks from spring-test, so mappings, converters, validation and @ControllerAdvice all behave as in production while no socket is involved - that is what distinguishes it from a @SpringBootTest(webEnvironment = RANDOM_PORT) test with TestRestTemplate. Filters can be registered explicitly with standaloneSetup or picked up from the web application context.",
+        "ru": "MockMvc запускает DispatcherServlet поверх мок-объектов Servlet API из spring-test, поэтому маппинги, конвертеры, валидация и @ControllerAdvice ведут себя как в продакшене, но сокет не задействован — именно этим он отличается от теста @SpringBootTest(webEnvironment = RANDOM_PORT) с TestRestTemplate. Фильтры можно зарегистрировать явно через standaloneSetup или взять из web-контекста приложения."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/testing/mockmvc.html",
+        "https://docs.spring.io/spring-framework/reference/testing/spring-mvc-test-framework.html"
+      ]
+    },
+    {
+      "id": "spring.testing.006",
+      "section": "testing",
+      "difficulty": "hard",
+      "text": {
+        "en": "Both test classes reference the same configuration class. How many ApplicationContexts does the TestContext framework build for this pair?",
+        "ru": "Оба тестовых класса ссылаются на один и тот же конфигурационный класс. Сколько ApplicationContext построит TestContext framework для этой пары?"
+      },
+      "code": "@SpringJUnitConfig(AppConfig.class)\nclass PlainTests { }\n\n@SpringJUnitConfig(AppConfig.class)\n@TestPropertySource(properties = \"feature.enabled=true\")\nclass FeatureTests { }",
+      "options": [
+        {
+          "text": {
+            "en": "One: @TestPropertySource just adds properties to the Environment of the already cached context.",
+            "ru": "Один: @TestPropertySource просто добавляет свойства в Environment уже закэшированного контекста."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Two, and both are cached: inline properties from @TestPropertySource are part of the context cache key.",
+            "ru": "Два, и оба кэшируются: inline-свойства из @TestPropertySource входят в ключ кэша контекста."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Two, but the second one is not cached, because inline properties make a context non-cacheable.",
+            "ru": "Два, но второй не кэшируется, потому что inline-свойства делают контекст некэшируемым."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "One per test class in every case, so the number of contexts always equals the number of test classes.",
+            "ru": "По одному на каждый тестовый класс в любом случае, поэтому число контекстов всегда равно числу тестовых классов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Two only if @DirtiesContext is also present; otherwise the cached context is reused and the inline property is ignored.",
+            "ru": "Два только при наличии @DirtiesContext; иначе переиспользуется закэшированный контекст, а inline-свойство игнорируется."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The cache key is the merged context configuration, which includes propertySourceProperties from @TestPropertySource, active profiles, context customizers and bean overrides. Any difference produces a separate cached context - which is why sprinkling slightly different @TestPropertySource or @MockitoBean declarations across a suite quietly multiplies context startups.",
+        "ru": "Ключом кэша служит объединённая конфигурация контекста, в которую входят propertySourceProperties из @TestPropertySource, активные профили, context customizer'ы и подмены бинов. Любое различие порождает отдельный кэшированный контекст — поэтому слегка разные @TestPropertySource или @MockitoBean, рассыпанные по набору тестов, незаметно множат количество запусков контекста."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/testing/testcontext-framework/ctx-management/caching.html",
+        "https://docs.spring.io/spring-framework/reference/testing/testcontext-framework/ctx-management/property-sources.html"
+      ]
+    }
+  ]
+}
