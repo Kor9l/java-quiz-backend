@@ -1,0 +1,44 @@
+# Render blueprint. Create the service once via "New > Blueprint" pointing at this repo;
+# afterwards every setting below is managed from here, not from the dashboard.
+#
+# The database lives on Neon, not on Render: Render's free Postgres is deleted after 30 days.
+# Values marked `sync: false` are entered by hand in the dashboard and never stored in git.
+services:
+  - type: web
+    name: java-quiz-backend
+    runtime: docker
+    plan: free
+    region: frankfurt
+    branch: master
+    # GitHub Actions triggers the deploy through a deploy hook, but only after the build
+    # passes. Letting Render also watch the branch would deploy broken commits in parallel.
+    autoDeploy: false
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /actuator/health
+    envVars:
+      # Neon connection string, e.g.
+      # jdbc:postgresql://ep-xxx.eu-central-1.aws.neon.tech/javaquiz?sslmode=require
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      # Password for the seeded admin account. Without it the migration generates a random
+      # one and prints it to the log once.
+      - key: ADMIN_INITIAL_PASSWORD
+        sync: false
+      # https://<pages-project>.pages.dev
+      - key: CORS_ORIGINS
+        sync: false
+      - key: APP_FRONTEND_URL
+        sync: false
+      # This service's own URL — Google redirects back here after sign-in.
+      - key: APP_PUBLIC_URL
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false

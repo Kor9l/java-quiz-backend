@@ -9,4 +9,6 @@ WORKDIR /app
 RUN apk add --no-cache wget
 COPY --from=build /src/target/java-quiz-backend.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+# Free hosting tiers give the container 512 MB. The JVM default of 25% would leave a heap
+# too small for the Flyway content migration.
+ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75.0", "-jar", "/app/app.jar"]
