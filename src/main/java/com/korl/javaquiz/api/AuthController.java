@@ -1,7 +1,6 @@
 package com.korl.javaquiz.api;
 
 import com.korl.javaquiz.api.dto.AuthResponse;
-import com.korl.javaquiz.api.dto.GoogleLoginRequest;
 import com.korl.javaquiz.api.dto.LoginRequest;
 import com.korl.javaquiz.api.dto.RegisterRequest;
 import com.korl.javaquiz.api.dto.UserDto;
@@ -40,11 +39,6 @@ public class AuthController {
     @GetMapping("/providers")
     public Map<String, Object> providers() {
         return authService.providers();
-    }
-
-    @PostMapping("/google")
-    public AuthResponse google(@RequestBody(required = false) GoogleLoginRequest request) {
-        return authService.googleLogin(request == null ? new GoogleLoginRequest() : request);
     }
 
     @GetMapping("/me")
