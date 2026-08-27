@@ -24,12 +24,43 @@ Spring Boot REST API + PostgreSQL for the Java Quiz web app.
 | POST | `/api/stats/reset` | user |
 | POST | `/api/progress/{topic}/{section}/read\|unread` | user |
 | POST | `/api/progress/reset` | user |
+| GET | `/api/practice` | user, tracks with progress |
+| GET | `/api/practice/tracks/{track}` | user, difficulties with progress |
+| GET | `/api/practice/tracks/{track}/{difficulty}` | user, task list |
+| GET | `/api/practice/tasks/{id}` | user, statement, dataset schema, expected result |
+| POST | `/api/practice/tasks/{id}/check` | user, parse only |
+| POST | `/api/practice/tasks/{id}/run` | user, run and grade |
 | GET | `/api/admin/users` | **ADMIN** |
 | PATCH | `/api/admin/users/{id}/role` | **ADMIN** |
 
 Default admin after Flyway: `admin@javaquiz.local` / `admin123`.
 
 Content (5 topics, 246 questions, 41 articles) is loaded by Flyway Java migration `V2__LoadContent` from `src/main/resources/content/`. Java is used because Spring questions contain `${...}` placeholders that SQL scripts would interpolate.
+
+## Practice (SQL)
+
+Exercises the learner solves by writing a query that is then executed, rather than by picking
+an option. 24 tasks over two datasets, split into easy / medium / hard, loaded by
+`V5__LoadPractice` from `src/main/resources/content/practice/sql.json`.
+
+**Grading is by result, not by text.** Every task ships a reference solution; a submission is
+correct when its result set matches what the reference produces. Column labels are ignored,
+row order only counts when the task asked for an order, and numeric values are compared as
+decimals so `COUNT(*)` and `SUM(1)` agree. Two learners can arrive through a join, a subquery
+or a window function and both pass.
+
+A submission runs in a **throwaway in-memory H2 database** (`MODE=PostgreSQL`), built from the
+dataset's DDL and dropped when the attempt ends. Two rings keep it harmless:
+
+1. `SqlGuard` rejects anything that is not a single read-only statement, before execution.
+2. The statement runs as a database user holding nothing but `SELECT` grants, so `INSERT`,
+   `DROP`, `CREATE ALIAS`, `FILE_READ` and `CSVREAD` are refused by the engine itself.
+
+Plus a query timeout, a row cap and a length cap — all under `app.practice` in
+`application.yml`, overridable with `PRACTICE_*` environment variables.
+
+`SqlPracticeContentTest` runs every bundled reference solution at build time, so a task whose
+SQL no longer works fails the build rather than a learner's session.
 
 ## Local run (without Docker)
 

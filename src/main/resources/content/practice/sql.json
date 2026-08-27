@@ -1,0 +1,650 @@
+{
+  "schemaVersion": 1,
+  "track": "sql",
+  "datasets": [
+    {
+      "id": "shop",
+      "order": 1,
+      "title": { "en": "Online shop", "ru": "Интернет-магазин" },
+      "description": {
+        "en": "Customers, a product catalogue, orders and their line items. Line items keep the price actually charged, which may differ from the current catalogue price.",
+        "ru": "Покупатели, каталог товаров, заказы и позиции в них. В позициях хранится цена, по которой товар реально продан — она может отличаться от текущей цены в каталоге."
+      },
+      "setup": [
+        "CREATE TABLE customers (id INT PRIMARY KEY, name VARCHAR(60) NOT NULL, city VARCHAR(60) NOT NULL, country VARCHAR(60) NOT NULL, signed_up_on DATE NOT NULL)",
+        "INSERT INTO customers VALUES (1, 'Anna Kalnina', 'Riga', 'Latvia', DATE '2022-03-14'), (2, 'Bruno Vitols', 'Riga', 'Latvia', DATE '2022-07-02'), (3, 'Clara Novak', 'Prague', 'Czechia', DATE '2023-01-20'), (4, 'Dmitri Orlov', 'Vilnius', 'Lithuania', DATE '2023-02-11'), (5, 'Elena Popa', 'Bucharest', 'Romania', DATE '2023-05-30'), (6, 'Felix Braun', 'Berlin', 'Germany', DATE '2023-06-18'), (7, 'Greta Salm', 'Tallinn', 'Estonia', DATE '2023-09-05'), (8, 'Hugo Marek', 'Prague', 'Czechia', DATE '2024-01-08'), (9, 'Ines Duarte', 'Lisbon', 'Portugal', DATE '2024-02-27'), (10, 'Jonas Petrauskas', 'Vilnius', 'Lithuania', DATE '2024-04-12')",
+        "CREATE TABLE products (id INT PRIMARY KEY, name VARCHAR(60) NOT NULL, category VARCHAR(40) NOT NULL, price NUMERIC(10,2) NOT NULL, discontinued BOOLEAN NOT NULL)",
+        "INSERT INTO products VALUES (1, 'Mechanical keyboard', 'peripherals', 89.90, FALSE), (2, 'Wireless mouse', 'peripherals', 24.50, FALSE), (3, '27-inch monitor', 'displays', 219.00, FALSE), (4, '34-inch ultrawide', 'displays', 449.00, FALSE), (5, 'USB-C hub', 'accessories', 39.90, FALSE), (6, 'Laptop stand', 'accessories', 34.00, FALSE), (7, 'Noise-cancelling headset', 'audio', 129.00, FALSE), (8, 'Desk microphone', 'audio', 74.50, FALSE), (9, 'Webcam 1080p', 'video', 59.00, TRUE), (10, 'Webcam 4K', 'video', 149.00, FALSE), (11, 'Ergonomic chair', 'furniture', 329.00, FALSE), (12, 'Standing desk', 'furniture', 529.00, FALSE), (13, 'Thunderbolt dock', 'networking', 199.00, FALSE), (14, 'Keyboard wrist rest', 'peripherals', 19.00, FALSE)",
+        "CREATE TABLE orders (id INT PRIMARY KEY, customer_id INT NOT NULL REFERENCES customers (id), placed_on DATE NOT NULL, status VARCHAR(20) NOT NULL, shipped_on DATE)",
+        "INSERT INTO orders VALUES (101, 1, DATE '2024-01-05', 'shipped', DATE '2024-01-08'), (102, 2, DATE '2024-01-09', 'shipped', DATE '2024-01-12'), (103, 1, DATE '2024-01-11', 'cancelled', NULL), (104, 3, DATE '2024-02-02', 'shipped', DATE '2024-02-06'), (105, 4, DATE '2024-02-14', 'shipped', DATE '2024-02-16'), (106, 1, DATE '2024-02-20', 'shipped', DATE '2024-02-23'), (107, 5, DATE '2024-03-03', 'pending', NULL), (108, 2, DATE '2024-03-08', 'shipped', DATE '2024-03-11'), (109, 6, DATE '2024-03-19', 'shipped', DATE '2024-03-22'), (110, 3, DATE '2024-03-25', 'shipped', DATE '2024-03-28'), (111, 1, DATE '2024-04-02', 'shipped', DATE '2024-04-05'), (112, 8, DATE '2024-04-07', 'pending', NULL), (113, 4, DATE '2024-04-15', 'shipped', DATE '2024-04-18'), (114, 5, DATE '2024-04-21', 'cancelled', NULL), (115, 6, DATE '2024-05-06', 'shipped', DATE '2024-05-09'), (116, 2, DATE '2024-05-13', 'shipped', DATE '2024-05-15'), (117, 8, DATE '2024-05-24', 'shipped', DATE '2024-05-28'), (118, 3, DATE '2024-06-01', 'shipped', DATE '2024-06-04'), (119, 1, DATE '2024-06-09', 'pending', NULL), (120, 4, DATE '2024-06-17', 'shipped', DATE '2024-06-20'), (121, 3, DATE '2024-06-05', 'shipped', DATE '2024-06-08')",
+        "CREATE TABLE order_items (order_id INT NOT NULL REFERENCES orders (id), product_id INT NOT NULL REFERENCES products (id), quantity INT NOT NULL, unit_price NUMERIC(10,2) NOT NULL, PRIMARY KEY (order_id, product_id))",
+        "INSERT INTO order_items VALUES (101, 1, 1, 89.90), (101, 2, 2, 24.50), (102, 3, 1, 219.00), (103, 7, 1, 129.00), (104, 5, 2, 39.90), (104, 6, 1, 34.00), (105, 4, 1, 449.00), (105, 2, 1, 24.50), (106, 7, 1, 119.00), (106, 8, 1, 74.50), (107, 11, 1, 329.00), (108, 1, 2, 84.90), (108, 5, 1, 39.90), (109, 3, 2, 219.00), (110, 10, 1, 149.00), (110, 2, 1, 24.50), (109, 13, 1, 199.00), (111, 6, 3, 34.00), (111, 14, 2, 19.00), (112, 4, 1, 449.00), (113, 7, 1, 129.00), (113, 1, 1, 89.90), (114, 3, 1, 219.00), (115, 11, 2, 319.00), (115, 6, 1, 34.00), (116, 8, 1, 74.50), (116, 2, 2, 24.50), (117, 10, 1, 149.00), (117, 5, 1, 39.90), (118, 1, 1, 89.90), (118, 7, 1, 129.00), (118, 2, 1, 24.50), (119, 3, 1, 219.00), (120, 4, 1, 429.00), (120, 5, 2, 39.90), (121, 8, 1, 74.50), (121, 2, 1, 24.50)"
+      ]
+    },
+    {
+      "id": "hr",
+      "order": 2,
+      "title": { "en": "Staff directory", "ru": "Штат компании" },
+      "description": {
+        "en": "Departments and employees. An employee may report to another employee, and one has not been assigned a department yet — so nullable columns are part of the exercise.",
+        "ru": "Отделы и сотрудники. Сотрудник может подчиняться другому сотруднику, а один пока не привязан к отделу — работа с NULL здесь часть задания."
+      },
+      "setup": [
+        "CREATE TABLE departments (id INT PRIMARY KEY, name VARCHAR(40) NOT NULL, location VARCHAR(40) NOT NULL)",
+        "INSERT INTO departments VALUES (1, 'Engineering', 'Riga'), (2, 'Sales', 'Berlin'), (3, 'Support', 'Vilnius'), (4, 'Finance', 'Riga')",
+        "CREATE TABLE employees (id INT PRIMARY KEY, name VARCHAR(60) NOT NULL, department_id INT REFERENCES departments (id), manager_id INT REFERENCES employees (id), salary NUMERIC(10,2) NOT NULL, hired_on DATE NOT NULL)",
+        "INSERT INTO employees VALUES (1, 'Marta Ozola', 1, NULL, 7200.00, DATE '2019-02-01'), (2, 'Peteris Zarins', 1, 1, 5400.00, DATE '2020-05-11'), (3, 'Sofia Ilves', 1, 1, 5900.00, DATE '2020-09-23'), (4, 'Toms Berzins', 1, 2, 4100.00, DATE '2022-03-07'), (5, 'Nina Kaur', 1, 2, 3900.00, DATE '2023-01-16'), (6, 'Oskar Lind', 2, 1, 5100.00, DATE '2021-04-19'), (7, 'Paula Mora', 2, 6, 3600.00, DATE '2022-08-01'), (8, 'Rikards Egle', 2, 6, 3600.00, DATE '2023-06-12'), (9, 'Sanna Virta', 3, 1, 4300.00, DATE '2021-11-02'), (10, 'Timo Rand', 3, 9, 3200.00, DATE '2023-03-27'), (11, 'Ulla Kask', 4, 1, 4800.00, DATE '2022-01-10'), (12, 'Viktor Adam', NULL, NULL, 3000.00, DATE '2024-05-02')"
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "sql-easy-01",
+      "dataset": "shop",
+      "difficulty": "easy",
+      "order": 1,
+      "orderMatters": true,
+      "title": { "en": "Price list for one category", "ru": "Прайс-лист одной категории" },
+      "statement": {
+        "en": "Return the name and price of every product in the `peripherals` category, most expensive first.",
+        "ru": "Верните название и цену всех товаров категории `peripherals`, начиная с самого дорогого."
+      },
+      "hint": {
+        "en": "A WHERE clause picks the rows, ORDER BY ... DESC decides the order they come back in.",
+        "ru": "WHERE отбирает строки, ORDER BY ... DESC задаёт порядок, в котором они вернутся."
+      },
+      "starter": "SELECT name, price\nFROM products\nWHERE ",
+      "solution": "SELECT name, price FROM products WHERE category = 'peripherals' ORDER BY price DESC",
+      "explanation": {
+        "en": "String comparison in SQL is case-sensitive in PostgreSQL, so the category has to be spelled exactly as stored. ORDER BY defaults to ascending, which is why DESC has to be spelled out.",
+        "ru": "Сравнение строк в PostgreSQL регистрозависимо, поэтому категорию нужно написать ровно так, как она хранится. ORDER BY по умолчанию сортирует по возрастанию — поэтому DESC нужно указать явно."
+      },
+      "sources": [
+        { "title": "PostgreSQL: SELECT", "url": "https://www.postgresql.org/docs/current/sql-select.html" },
+        { "title": "SQLZoo: SELECT basics", "url": "https://sqlzoo.net/wiki/SELECT_basics" }
+      ]
+    },
+    {
+      "id": "sql-easy-02",
+      "dataset": "shop",
+      "difficulty": "easy",
+      "order": 2,
+      "orderMatters": true,
+      "title": { "en": "Customers in one country", "ru": "Покупатели из одной страны" },
+      "statement": {
+        "en": "Return the name and city of every customer from Czechia, sorted by name.",
+        "ru": "Верните имя и город всех покупателей из Czechia, отсортировав по имени."
+      },
+      "hint": {
+        "en": "One filter, one sort — nothing else is needed.",
+        "ru": "Один фильтр и одна сортировка — больше ничего не нужно."
+      },
+      "starter": "SELECT name, city\nFROM customers\n",
+      "solution": "SELECT name, city FROM customers WHERE country = 'Czechia' ORDER BY name",
+      "explanation": {
+        "en": "The two rows could be found by eye here, but the same query keeps working when the table grows — which is the whole point of writing the filter instead of the answer.",
+        "ru": "Здесь обе строки видно глазами, но тот же запрос продолжит работать, когда таблица вырастет — ради этого фильтр и пишут вместо готового ответа."
+      },
+      "sources": [
+        { "title": "PostgreSQL: WHERE", "url": "https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-WHERE" }
+      ]
+    },
+    {
+      "id": "sql-easy-03",
+      "dataset": "shop",
+      "difficulty": "easy",
+      "order": 3,
+      "orderMatters": true,
+      "title": { "en": "Countries we ship to", "ru": "Страны, куда мы возим" },
+      "statement": {
+        "en": "Return each country that appears in the customer list exactly once, in alphabetical order.",
+        "ru": "Верните каждую страну из списка покупателей ровно один раз, по алфавиту."
+      },
+      "hint": {
+        "en": "DISTINCT removes duplicate rows; GROUP BY would work too.",
+        "ru": "DISTINCT убирает дубликаты строк; GROUP BY тоже подойдёт."
+      },
+      "starter": "SELECT ",
+      "solution": "SELECT DISTINCT country FROM customers ORDER BY country",
+      "explanation": {
+        "en": "DISTINCT applies to the whole row, not to a single column — with two columns selected it would keep every distinct pair.",
+        "ru": "DISTINCT действует на всю строку, а не на отдельный столбец — при двух выбранных столбцах останутся все уникальные пары."
+      },
+      "sources": [
+        { "title": "PostgreSQL: DISTINCT", "url": "https://www.postgresql.org/docs/current/sql-select.html#SQL-DISTINCT" }
+      ]
+    },
+    {
+      "id": "sql-easy-04",
+      "dataset": "shop",
+      "difficulty": "easy",
+      "order": 4,
+      "orderMatters": false,
+      "title": { "en": "Orders per status", "ru": "Заказы по статусам" },
+      "statement": {
+        "en": "Return every order status together with how many orders currently have it. Any row order is accepted.",
+        "ru": "Верните каждый статус заказа и количество заказов с этим статусом. Порядок строк любой."
+      },
+      "hint": {
+        "en": "GROUP BY collapses rows that share a value; COUNT(*) counts the rows in each group.",
+        "ru": "GROUP BY схлопывает строки с одинаковым значением; COUNT(*) считает строки в каждой группе."
+      },
+      "starter": "SELECT status, COUNT(*)\nFROM orders\n",
+      "solution": "SELECT status, COUNT(*) FROM orders GROUP BY status",
+      "explanation": {
+        "en": "Every column in the SELECT list must either be grouped by or wrapped in an aggregate — that rule is what makes GROUP BY queries either work or fail loudly.",
+        "ru": "Каждый столбец в SELECT должен быть либо в GROUP BY, либо внутри агрегата — именно это правило и определяет, заработает запрос с GROUP BY или упадёт с ошибкой."
+      },
+      "sources": [
+        { "title": "PostgreSQL: GROUP BY", "url": "https://www.postgresql.org/docs/current/tutorial-agg.html" },
+        { "title": "SQLZoo: SUM and COUNT", "url": "https://sqlzoo.net/wiki/SUM_and_COUNT" }
+      ]
+    },
+    {
+      "id": "sql-easy-05",
+      "dataset": "shop",
+      "difficulty": "easy",
+      "order": 5,
+      "orderMatters": true,
+      "title": { "en": "Affordable and still sold", "ru": "Недорогие и ещё в продаже" },
+      "statement": {
+        "en": "Return the name, category and price of products cheaper than 100 that have not been discontinued. Sort by price, cheapest first.",
+        "ru": "Верните название, категорию и цену товаров дешевле 100, которые ещё не сняты с продажи. Отсортируйте по цене, начиная с самой низкой."
+      },
+      "hint": {
+        "en": "`discontinued` is already a boolean — comparing it to something is optional.",
+        "ru": "`discontinued` уже логический тип — сравнивать его с чем-либо необязательно."
+      },
+      "starter": "SELECT name, category, price\nFROM products\nWHERE ",
+      "solution": "SELECT name, category, price FROM products WHERE price < 100 AND NOT discontinued ORDER BY price",
+      "explanation": {
+        "en": "`NOT discontinued`, `discontinued = FALSE` and `discontinued IS FALSE` agree here because the column is NOT NULL. Were nulls allowed, only the IS form would keep them out reliably.",
+        "ru": "`NOT discontinued`, `discontinued = FALSE` и `discontinued IS FALSE` здесь совпадают, потому что столбец NOT NULL. Если бы NULL допускались, надёжно отсёк бы их только вариант с IS."
+      },
+      "sources": [
+        { "title": "PostgreSQL: Comparison operators", "url": "https://www.postgresql.org/docs/current/functions-comparison.html" }
+      ]
+    },
+    {
+      "id": "sql-easy-06",
+      "dataset": "shop",
+      "difficulty": "easy",
+      "order": 6,
+      "orderMatters": true,
+      "title": { "en": "Nothing has shipped yet", "ru": "Ещё не отгружено" },
+      "statement": {
+        "en": "Return the id, order date and status of every order with no shipping date, oldest first.",
+        "ru": "Верните id, дату заказа и статус всех заказов без даты отгрузки, начиная с самого раннего."
+      },
+      "hint": {
+        "en": "Nothing equals NULL, not even NULL. There is a dedicated operator for it.",
+        "ru": "Ничто не равно NULL — даже сам NULL. Для этой проверки есть отдельный оператор."
+      },
+      "starter": "SELECT id, placed_on, status\nFROM orders\nWHERE shipped_on ",
+      "solution": "SELECT id, placed_on, status FROM orders WHERE shipped_on IS NULL ORDER BY placed_on",
+      "explanation": {
+        "en": "`shipped_on = NULL` is not an error, which is what makes it dangerous: it evaluates to NULL, the WHERE clause treats that as not-true, and the query silently returns nothing.",
+        "ru": "`shipped_on = NULL` не ошибка — и этим опасно: выражение даёт NULL, WHERE считает это не-истиной, и запрос молча возвращает пустой результат."
+      },
+      "sources": [
+        { "title": "PostgreSQL: NULL comparison", "url": "https://www.postgresql.org/docs/current/functions-comparison.html" }
+      ]
+    },
+    {
+      "id": "sql-easy-07",
+      "dataset": "hr",
+      "difficulty": "easy",
+      "order": 7,
+      "orderMatters": true,
+      "title": { "en": "Hired during one year", "ru": "Приняты за один год" },
+      "statement": {
+        "en": "Return the name and hire date of everyone hired during 2023, earliest first.",
+        "ru": "Верните имя и дату приёма всех, кого наняли в 2023 году, начиная с самой ранней."
+      },
+      "hint": {
+        "en": "A date range with BETWEEN works; so does pulling the year out of the date.",
+        "ru": "Подойдёт диапазон дат через BETWEEN — или извлечение года из даты."
+      },
+      "starter": "SELECT name, hired_on\nFROM employees\nWHERE ",
+      "solution": "SELECT name, hired_on FROM employees WHERE hired_on BETWEEN DATE '2023-01-01' AND DATE '2023-12-31' ORDER BY hired_on",
+      "explanation": {
+        "en": "`EXTRACT(YEAR FROM hired_on) = 2023` returns the same rows, but wrapping the column in a function stops an index on it from being used — on a real table the range form is the one that scales.",
+        "ru": "`EXTRACT(YEAR FROM hired_on) = 2023` вернёт те же строки, но столбец, обёрнутый в функцию, не даст воспользоваться индексом — на реальной таблице масштабируется именно вариант с диапазоном."
+      },
+      "sources": [
+        { "title": "PostgreSQL: Date/time functions", "url": "https://www.postgresql.org/docs/current/functions-datetime.html" }
+      ]
+    },
+    {
+      "id": "sql-easy-08",
+      "dataset": "hr",
+      "difficulty": "easy",
+      "order": 8,
+      "orderMatters": false,
+      "title": { "en": "Payroll at a glance", "ru": "Зарплаты одной строкой" },
+      "statement": {
+        "en": "Return a single row with four values: how many employees there are, the lowest salary, the highest salary, and the average salary rounded to two decimals.",
+        "ru": "Верните одну строку из четырёх значений: сколько сотрудников, минимальная зарплата, максимальная зарплата и средняя зарплата, округлённая до двух знаков."
+      },
+      "hint": {
+        "en": "Aggregates with no GROUP BY collapse the whole table into one row.",
+        "ru": "Агрегаты без GROUP BY схлопывают всю таблицу в одну строку."
+      },
+      "starter": "SELECT COUNT(*), ",
+      "solution": "SELECT COUNT(*), MIN(salary), MAX(salary), ROUND(AVG(salary), 2) FROM employees",
+      "explanation": {
+        "en": "AVG over a NUMERIC column keeps more decimals than anyone wants to read, so rounding is part of the answer rather than presentation. Note that AVG ignores NULLs while COUNT(*) does not.",
+        "ru": "AVG по NUMERIC оставляет больше знаков, чем кто-либо готов читать, поэтому округление — часть ответа, а не оформления. Обратите внимание: AVG игнорирует NULL, а COUNT(*) — нет."
+      },
+      "sources": [
+        { "title": "PostgreSQL: Aggregate functions", "url": "https://www.postgresql.org/docs/current/functions-aggregate.html" }
+      ]
+    },
+    {
+      "id": "sql-medium-01",
+      "dataset": "shop",
+      "difficulty": "medium",
+      "order": 1,
+      "orderMatters": true,
+      "title": { "en": "What each order was worth", "ru": "Сумма каждого заказа" },
+      "statement": {
+        "en": "For every shipped order return its id and its total, where the total is the sum of quantity multiplied by unit price across its line items. Sort by order id.",
+        "ru": "Для каждого отгруженного заказа верните его id и сумму — сумму произведений количества на цену позиции по всем строкам заказа. Отсортируйте по id заказа."
+      },
+      "hint": {
+        "en": "Join the two tables, group by the order, and aggregate the product of the two columns.",
+        "ru": "Соедините две таблицы, сгруппируйте по заказу и агрегируйте произведение двух столбцов."
+      },
+      "starter": "SELECT o.id, SUM(...)\nFROM orders o\nJOIN order_items i ON ",
+      "solution": "SELECT o.id, SUM(i.quantity * i.unit_price) FROM orders o JOIN order_items i ON i.order_id = o.id WHERE o.status = 'shipped' GROUP BY o.id ORDER BY o.id",
+      "explanation": {
+        "en": "The multiplication happens per line item and only then gets summed — `SUM(quantity) * SUM(unit_price)` is a different and wrong number. The line item price is used rather than the catalogue price, because that is what the customer was actually charged.",
+        "ru": "Умножение выполняется по каждой позиции и только потом суммируется — `SUM(quantity) * SUM(unit_price)` даст другое, неверное число. Берётся цена позиции, а не каталога: именно её заплатил покупатель."
+      },
+      "sources": [
+        { "title": "PostgreSQL: JOIN", "url": "https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-JOIN" },
+        { "title": "PostgreSQL Exercises: joins and subqueries", "url": "https://pgexercises.com/questions/joins/" }
+      ]
+    },
+    {
+      "id": "sql-medium-02",
+      "dataset": "shop",
+      "difficulty": "medium",
+      "order": 2,
+      "orderMatters": true,
+      "title": { "en": "Three best customers", "ru": "Три лучших покупателя" },
+      "statement": {
+        "en": "Return the three customers who spent the most on shipped orders: their name and their total spend, highest first.",
+        "ru": "Верните трёх покупателей, потративших больше всех на отгруженные заказы: имя и общую сумму, начиная с наибольшей."
+      },
+      "hint": {
+        "en": "Three tables, one GROUP BY, and a limit on how many rows come back.",
+        "ru": "Три таблицы, один GROUP BY и ограничение на количество возвращаемых строк."
+      },
+      "starter": "SELECT c.name, SUM(i.quantity * i.unit_price)\nFROM customers c\n",
+      "solution": "SELECT c.name, SUM(i.quantity * i.unit_price) AS spend FROM customers c JOIN orders o ON o.customer_id = c.id JOIN order_items i ON i.order_id = o.id WHERE o.status = 'shipped' GROUP BY c.id, c.name ORDER BY spend DESC LIMIT 3",
+      "explanation": {
+        "en": "Grouping by `c.id, c.name` rather than by name alone keeps two customers with the same name apart. LIMIT without ORDER BY would give an arbitrary three rows.",
+        "ru": "Группировка по `c.id, c.name`, а не только по имени, не склеит двух тёзок. LIMIT без ORDER BY вернул бы произвольные три строки."
+      },
+      "sources": [
+        { "title": "PostgreSQL: LIMIT and OFFSET", "url": "https://www.postgresql.org/docs/current/queries-limit.html" }
+      ]
+    },
+    {
+      "id": "sql-medium-03",
+      "dataset": "shop",
+      "difficulty": "medium",
+      "order": 3,
+      "orderMatters": false,
+      "title": { "en": "Categories worth calling categories", "ru": "Категории, достойные называться категориями" },
+      "statement": {
+        "en": "Return each category that holds at least two products, together with how many products it holds. Any row order is accepted.",
+        "ru": "Верните каждую категорию, в которой не меньше двух товаров, и количество товаров в ней. Порядок строк любой."
+      },
+      "hint": {
+        "en": "WHERE filters rows before grouping; you need the clause that filters groups after it.",
+        "ru": "WHERE фильтрует строки до группировки; нужен тот оператор, что фильтрует группы после неё."
+      },
+      "starter": "SELECT category, COUNT(*)\nFROM products\nGROUP BY category\n",
+      "solution": "SELECT category, COUNT(*) FROM products GROUP BY category HAVING COUNT(*) >= 2",
+      "explanation": {
+        "en": "HAVING runs after the grouping, so it can see aggregate values. `WHERE COUNT(*) >= 2` is rejected outright, because at WHERE time the groups do not exist yet.",
+        "ru": "HAVING выполняется после группировки и поэтому видит агрегаты. `WHERE COUNT(*) >= 2` будет отвергнут сразу: на этапе WHERE групп ещё не существует."
+      },
+      "sources": [
+        { "title": "PostgreSQL: HAVING", "url": "https://www.postgresql.org/docs/current/tutorial-agg.html" }
+      ]
+    },
+    {
+      "id": "sql-medium-04",
+      "dataset": "shop",
+      "difficulty": "medium",
+      "order": 4,
+      "orderMatters": true,
+      "title": { "en": "Signed up, never ordered", "ru": "Зарегистрировались, но не заказали" },
+      "statement": {
+        "en": "Return the name and sign-up date of customers who have never placed an order, sorted by name.",
+        "ru": "Верните имя и дату регистрации покупателей, ни разу не оформивших заказ, отсортировав по имени."
+      },
+      "hint": {
+        "en": "Either keep the unmatched rows of an outer join, or ask whether a matching row exists at all.",
+        "ru": "Либо оставьте несопоставленные строки внешнего соединения, либо спросите, существует ли подходящая строка вообще."
+      },
+      "starter": "SELECT c.name, c.signed_up_on\nFROM customers c\n",
+      "solution": "SELECT c.name, c.signed_up_on FROM customers c WHERE NOT EXISTS (SELECT 1 FROM orders o WHERE o.customer_id = c.id) ORDER BY c.name",
+      "explanation": {
+        "en": "`LEFT JOIN orders o ON ... WHERE o.id IS NULL` returns exactly the same rows. NOT IN is the third option and the one to be careful with: if the subquery ever yields a NULL, NOT IN returns nothing at all.",
+        "ru": "`LEFT JOIN orders o ON ... WHERE o.id IS NULL` вернёт ровно те же строки. NOT IN — третий вариант, и с ним нужно быть осторожным: если подзапрос выдаст хоть один NULL, NOT IN не вернёт ничего."
+      },
+      "sources": [
+        { "title": "PostgreSQL: EXISTS", "url": "https://www.postgresql.org/docs/current/functions-subquery.html" },
+        { "title": "SQLZoo: Using NULL", "url": "https://sqlzoo.net/wiki/Using_Null" }
+      ]
+    },
+    {
+      "id": "sql-medium-05",
+      "dataset": "shop",
+      "difficulty": "medium",
+      "order": 5,
+      "orderMatters": true,
+      "title": { "en": "Never sold once", "ru": "Ни разу не продано" },
+      "statement": {
+        "en": "Return the name and category of products that appear in no order at all, sorted by name.",
+        "ru": "Верните название и категорию товаров, не встречающихся ни в одном заказе, отсортировав по названию."
+      },
+      "hint": {
+        "en": "The same shape as the previous task, pointed at a different pair of tables.",
+        "ru": "Та же конструкция, что и в предыдущей задаче, но для другой пары таблиц."
+      },
+      "starter": "SELECT p.name, p.category\nFROM products p\n",
+      "solution": "SELECT p.name, p.category FROM products p WHERE NOT EXISTS (SELECT 1 FROM order_items i WHERE i.product_id = p.id) ORDER BY p.name",
+      "explanation": {
+        "en": "Note that one of the two answers is discontinued and one is not — 'never sold' and 'no longer sold' are different questions, and the data is arranged so that mixing them up shows.",
+        "ru": "Обратите внимание: один из двух ответов снят с продажи, а другой нет — «ни разу не продан» и «больше не продаётся» это разные вопросы, и данные подобраны так, что подмена сразу видна."
+      },
+      "sources": [
+        { "title": "PostgreSQL: Subquery expressions", "url": "https://www.postgresql.org/docs/current/functions-subquery.html" }
+      ]
+    },
+    {
+      "id": "sql-medium-06",
+      "dataset": "shop",
+      "difficulty": "medium",
+      "order": 6,
+      "orderMatters": true,
+      "title": { "en": "Revenue month by month", "ru": "Выручка по месяцам" },
+      "statement": {
+        "en": "For shipped orders, return the month the order was placed in as text formatted `YYYY-MM`, and the revenue for that month. Sort by month.",
+        "ru": "По отгруженным заказам верните месяц оформления в виде текста формата `YYYY-MM` и выручку за этот месяц. Отсортируйте по месяцу."
+      },
+      "hint": {
+        "en": "TO_CHAR turns a date into text with the pattern you give it, and you can group by that text. Beware that `month` is a reserved word — the alias needs to be something else.",
+        "ru": "TO_CHAR превращает дату в текст по заданному шаблону, и по этому тексту можно группировать. Учтите, что `month` — зарезервированное слово, псевдоним нужен другой."
+      },
+      "starter": "SELECT TO_CHAR(o.placed_on, 'YYYY-MM') AS sales_month, SUM(...)\nFROM orders o\n",
+      "solution": "SELECT TO_CHAR(o.placed_on, 'YYYY-MM') AS sales_month, SUM(i.quantity * i.unit_price) AS revenue FROM orders o JOIN order_items i ON i.order_id = o.id WHERE o.status = 'shipped' GROUP BY TO_CHAR(o.placed_on, 'YYYY-MM') ORDER BY sales_month",
+      "explanation": {
+        "en": "`YYYY-MM` sorts correctly as plain text because the fields go from largest to smallest and are zero-padded. A format like `MM-YYYY` would put every December before every January.",
+        "ru": "`YYYY-MM` корректно сортируется как обычный текст, потому что поля идут от большего к меньшему и дополнены нулями. Формат вида `MM-YYYY` поставил бы все декабри перед всеми январями."
+      },
+      "sources": [
+        { "title": "PostgreSQL: Data type formatting", "url": "https://www.postgresql.org/docs/current/functions-formatting.html" }
+      ]
+    },
+    {
+      "id": "sql-medium-07",
+      "dataset": "hr",
+      "difficulty": "medium",
+      "order": 7,
+      "orderMatters": true,
+      "title": { "en": "Above their department average", "ru": "Выше среднего по отделу" },
+      "statement": {
+        "en": "Return the name and salary of every employee who earns more than the average salary of their own department, highest salary first.",
+        "ru": "Верните имя и зарплату каждого сотрудника, который получает больше средней зарплаты по своему отделу, начиная с наибольшей."
+      },
+      "hint": {
+        "en": "The average has to be recomputed per employee, against their department — a subquery that refers to the outer row can do that.",
+        "ru": "Среднее нужно считать для каждого сотрудника по его отделу — это умеет подзапрос, ссылающийся на внешнюю строку."
+      },
+      "starter": "SELECT e.name, e.salary\nFROM employees e\nWHERE e.salary > (\n  SELECT ...\n)",
+      "solution": "SELECT e.name, e.salary FROM employees e WHERE e.salary > (SELECT AVG(x.salary) FROM employees x WHERE x.department_id = e.department_id) ORDER BY e.salary DESC",
+      "explanation": {
+        "en": "The employee with no department drops out on their own: `x.department_id = e.department_id` is NULL rather than true when both sides are NULL, so the subquery finds no rows and the comparison is never satisfied.",
+        "ru": "Сотрудник без отдела отсеивается сам: при NULL с обеих сторон `x.department_id = e.department_id` даёт NULL, а не истину, подзапрос не находит строк и сравнение никогда не выполняется."
+      },
+      "sources": [
+        { "title": "PostgreSQL: Correlated subqueries", "url": "https://www.postgresql.org/docs/current/sql-expressions.html#SQL-SYNTAX-SCALAR-SUBQUERIES" },
+        { "title": "SQLZoo: Nested SELECT", "url": "https://sqlzoo.net/wiki/Nested_SELECT" }
+      ]
+    },
+    {
+      "id": "sql-medium-08",
+      "dataset": "hr",
+      "difficulty": "medium",
+      "order": 8,
+      "orderMatters": true,
+      "title": { "en": "Everyone and their manager", "ru": "Каждый и его руководитель" },
+      "statement": {
+        "en": "Return every employee's name next to their manager's name, sorted by employee name. People with no manager must still appear, with an empty manager.",
+        "ru": "Верните имя каждого сотрудника рядом с именем его руководителя, отсортировав по имени сотрудника. Сотрудники без руководителя должны остаться в результате с пустым руководителем."
+      },
+      "hint": {
+        "en": "One table, joined to itself under two different aliases.",
+        "ru": "Одна таблица, соединённая сама с собой под двумя разными псевдонимами."
+      },
+      "starter": "SELECT e.name AS employee, m.name AS manager\nFROM employees e\n",
+      "solution": "SELECT e.name AS employee, m.name AS manager FROM employees e LEFT JOIN employees m ON m.id = e.manager_id ORDER BY e.name",
+      "explanation": {
+        "en": "An inner join would quietly drop the two people at the top of the tree. The aliases are what make a self-join readable: without them there is no way to say which side of the join a column came from.",
+        "ru": "Внутреннее соединение молча потеряло бы двух человек с вершины дерева. Псевдонимы — то, что делает самосоединение читаемым: без них нельзя указать, с какой стороны соединения взят столбец."
+      },
+      "sources": [
+        { "title": "PostgreSQL: Joined tables", "url": "https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-JOIN" },
+        { "title": "SQLZoo: Self join", "url": "https://sqlzoo.net/wiki/Self_join" }
+      ]
+    },
+    {
+      "id": "sql-medium-09",
+      "dataset": "hr",
+      "difficulty": "medium",
+      "order": 9,
+      "orderMatters": false,
+      "title": { "en": "Second highest salary", "ru": "Вторая по величине зарплата" },
+      "statement": {
+        "en": "Return a single value: the second highest distinct salary in the company.",
+        "ru": "Верните одно значение — вторую по величине уникальную зарплату в компании."
+      },
+      "hint": {
+        "en": "Sort the distinct salaries downwards, then skip the first one.",
+        "ru": "Отсортируйте уникальные зарплаты по убыванию и пропустите первую."
+      },
+      "starter": "SELECT DISTINCT salary\nFROM employees\n",
+      "solution": "SELECT DISTINCT salary FROM employees ORDER BY salary DESC LIMIT 1 OFFSET 1",
+      "explanation": {
+        "en": "The word distinct is doing real work: two employees share a salary in this data, so a plain OFFSET without DISTINCT could return the top salary twice. DENSE_RANK() = 2 is the window-function answer to the same question.",
+        "ru": "Слово «уникальную» здесь не для красоты: в этих данных два сотрудника получают одинаково, поэтому OFFSET без DISTINCT мог бы вернуть максимальную зарплату повторно. Тот же вопрос через оконные функции решается как DENSE_RANK() = 2."
+      },
+      "sources": [
+        { "title": "PostgreSQL: LIMIT and OFFSET", "url": "https://www.postgresql.org/docs/current/queries-limit.html" }
+      ]
+    },
+    {
+      "id": "sql-hard-01",
+      "dataset": "shop",
+      "difficulty": "hard",
+      "order": 1,
+      "orderMatters": true,
+      "title": { "en": "Two best sellers per category", "ru": "Два лидера в каждой категории" },
+      "statement": {
+        "en": "For shipped orders, return the two highest-revenue products of each category: category, product name and revenue. Sort by category, then by revenue descending.",
+        "ru": "По отгруженным заказам верните два товара с наибольшей выручкой в каждой категории: категорию, название товара и выручку. Отсортируйте по категории, затем по убыванию выручки."
+      },
+      "hint": {
+        "en": "Number the rows within each category first, then keep the first two — which takes two steps, because a window function cannot be used in WHERE.",
+        "ru": "Сначала пронумеруйте строки внутри каждой категории, потом оставьте первые две — это два шага, потому что оконную функцию нельзя использовать в WHERE."
+      },
+      "starter": "WITH revenue AS (\n  SELECT ...\n)\nSELECT ...\nFROM revenue\n",
+      "solution": "WITH revenue AS (SELECT p.category AS category, p.name AS name, SUM(i.quantity * i.unit_price) AS revenue FROM products p JOIN order_items i ON i.product_id = p.id JOIN orders o ON o.id = i.order_id WHERE o.status = 'shipped' GROUP BY p.category, p.name), ranked AS (SELECT category, name, revenue, ROW_NUMBER() OVER (PARTITION BY category ORDER BY revenue DESC) AS rn FROM revenue) SELECT category, name, revenue FROM ranked WHERE rn <= 2 ORDER BY category, revenue DESC",
+      "explanation": {
+        "en": "Window functions are evaluated after WHERE, so the ranking has to be computed in one query and filtered in another — a CTE or a subquery, either works. ROW_NUMBER breaks ties arbitrarily; RANK would return three rows for a tied second place.",
+        "ru": "Оконные функции вычисляются после WHERE, поэтому ранг считается в одном запросе, а фильтруется в другом — подойдёт и CTE, и подзапрос. ROW_NUMBER разрывает ничьи произвольно; RANK при ничьей за второе место вернул бы три строки."
+      },
+      "sources": [
+        { "title": "PostgreSQL: Window functions", "url": "https://www.postgresql.org/docs/current/tutorial-window.html" },
+        { "title": "PostgreSQL: WITH queries", "url": "https://www.postgresql.org/docs/current/queries-with.html" }
+      ]
+    },
+    {
+      "id": "sql-hard-02",
+      "dataset": "shop",
+      "difficulty": "hard",
+      "order": 2,
+      "orderMatters": true,
+      "title": { "en": "Revenue running total", "ru": "Нарастающий итог выручки" },
+      "statement": {
+        "en": "For shipped orders, return one row per order date: the date, the revenue booked on that date, and the running total of revenue up to and including it. Sort by date.",
+        "ru": "По отгруженным заказам верните по строке на каждую дату заказа: дату, выручку за эту дату и нарастающий итог выручки по эту дату включительно. Отсортируйте по дате."
+      },
+      "hint": {
+        "en": "Aggregate per day first; a window function can then sum an aggregate along the ordered days.",
+        "ru": "Сначала агрегируйте по дням; затем оконная функция может просуммировать агрегат вдоль упорядоченных дней."
+      },
+      "starter": "SELECT o.placed_on, SUM(...), SUM(SUM(...)) OVER (...)\nFROM orders o\n",
+      "solution": "SELECT o.placed_on AS order_day, SUM(i.quantity * i.unit_price) AS revenue, SUM(SUM(i.quantity * i.unit_price)) OVER (ORDER BY o.placed_on) AS running_total FROM orders o JOIN order_items i ON i.order_id = o.id WHERE o.status = 'shipped' GROUP BY o.placed_on ORDER BY o.placed_on",
+      "explanation": {
+        "en": "`SUM(SUM(...)) OVER (...)` looks like a mistake and is not: the inner SUM aggregates within the day, the window then runs over the already-grouped rows. An OVER clause with ORDER BY and no frame defaults to everything from the start up to the current row.",
+        "ru": "`SUM(SUM(...)) OVER (...)` выглядит опечаткой, но таковой не является: внутренний SUM агрегирует внутри дня, а окно проходит уже по сгруппированным строкам. OVER с ORDER BY и без указания рамки по умолчанию берёт всё от начала до текущей строки."
+      },
+      "sources": [
+        { "title": "PostgreSQL: Window function calls", "url": "https://www.postgresql.org/docs/current/sql-expressions.html#SYNTAX-WINDOW-FUNCTIONS" }
+      ]
+    },
+    {
+      "id": "sql-hard-03",
+      "dataset": "shop",
+      "difficulty": "hard",
+      "order": 3,
+      "orderMatters": true,
+      "title": { "en": "How last month compares", "ru": "Сравнение с прошлым месяцем" },
+      "statement": {
+        "en": "For shipped orders, return per month: the month as `YYYY-MM`, its revenue, the previous month's revenue, and the difference between the two. The first month has no previous month — leave those two values empty. Sort by month.",
+        "ru": "По отгруженным заказам верните для каждого месяца: месяц в формате `YYYY-MM`, его выручку, выручку предыдущего месяца и разницу между ними. У первого месяца предыдущего нет — оставьте эти два значения пустыми. Отсортируйте по месяцу."
+      },
+      "hint": {
+        "en": "LAG reaches back to the previous row of the ordered window.",
+        "ru": "LAG заглядывает в предыдущую строку упорядоченного окна."
+      },
+      "starter": "WITH monthly AS (\n  SELECT ...\n)\nSELECT ...\nFROM monthly\n",
+      "solution": "WITH monthly AS (SELECT TO_CHAR(o.placed_on, 'YYYY-MM') AS sales_month, SUM(i.quantity * i.unit_price) AS revenue FROM orders o JOIN order_items i ON i.order_id = o.id WHERE o.status = 'shipped' GROUP BY TO_CHAR(o.placed_on, 'YYYY-MM')) SELECT sales_month, revenue, LAG(revenue) OVER (ORDER BY sales_month) AS previous_revenue, revenue - LAG(revenue) OVER (ORDER BY sales_month) AS revenue_change FROM monthly ORDER BY sales_month",
+      "explanation": {
+        "en": "Arithmetic on a NULL yields NULL, which is why the first month's difference comes out empty without any special handling. `LAG(revenue, 1, 0)` would substitute a zero instead — a different claim about the data, and usually the wrong one.",
+        "ru": "Арифметика с NULL даёт NULL — поэтому разница за первый месяц оказывается пустой сама собой, без отдельной обработки. `LAG(revenue, 1, 0)` подставил бы ноль — это уже другое утверждение о данных, и обычно неверное."
+      },
+      "sources": [
+        { "title": "PostgreSQL: Window functions", "url": "https://www.postgresql.org/docs/current/functions-window.html" }
+      ]
+    },
+    {
+      "id": "sql-hard-04",
+      "dataset": "hr",
+      "difficulty": "hard",
+      "order": 4,
+      "orderMatters": true,
+      "title": { "en": "Everyone below one person", "ru": "Все, кто под одним человеком" },
+      "statement": {
+        "en": "Return everybody who reports to Marta Ozola directly or through a chain of managers: their name and how many steps away from her they are, with direct reports at 1. Sort by that distance, then by name.",
+        "ru": "Верните всех, кто подчиняется Marta Ozola напрямую или через цепочку руководителей: имя и на сколько шагов человек от неё отстоит, у прямых подчинённых — 1. Отсортируйте по этому расстоянию, затем по имени."
+      },
+      "hint": {
+        "en": "A recursive CTE has two halves joined by UNION ALL: where the walk starts, and how it takes one more step. Name its columns in the WITH clause — `WITH RECURSIVE reports (id, name, depth) AS ...` — since the engine needs them declared up front.",
+        "ru": "Рекурсивный CTE состоит из двух частей, соединённых UNION ALL: откуда начинается обход и как делается следующий шаг. Перечислите его столбцы прямо в WITH — `WITH RECURSIVE reports (id, name, depth) AS ...`: движку нужны их имена заранее."
+      },
+      "starter": "WITH RECURSIVE reports (id, name, depth) AS (\n  SELECT ...\n  UNION ALL\n  SELECT ...\n)\nSELECT ...\n",
+      "solution": "WITH RECURSIVE reports (id, name, depth) AS (SELECT e.id, e.name, 1 FROM employees e WHERE e.manager_id = (SELECT id FROM employees WHERE name = 'Marta Ozola') UNION ALL SELECT e.id, e.name, r.depth + 1 FROM employees e JOIN reports r ON e.manager_id = r.id) SELECT name, depth FROM reports ORDER BY depth, name",
+      "explanation": {
+        "en": "The first branch runs once and seeds the result; the second keeps re-running against whatever the previous pass produced, until a pass produces nothing. Because the data is a tree, the walk terminates on its own — a cycle would loop forever unless the path is tracked and checked.",
+        "ru": "Первая ветвь выполняется один раз и задаёт стартовые строки; вторая повторяется по результатам предыдущего прохода, пока очередной проход не окажется пустым. Данные — дерево, поэтому обход завершается сам; при наличии цикла он крутился бы вечно, если не отслеживать пройденный путь."
+      },
+      "sources": [
+        { "title": "PostgreSQL: Recursive queries", "url": "https://www.postgresql.org/docs/current/queries-with.html#QUERIES-WITH-RECURSIVE" }
+      ]
+    },
+    {
+      "id": "sql-hard-05",
+      "dataset": "hr",
+      "difficulty": "hard",
+      "order": 5,
+      "orderMatters": true,
+      "title": { "en": "Median salary per department", "ru": "Медианная зарплата по отделам" },
+      "statement": {
+        "en": "For each department that has at least one employee, return the department name and the median salary in it, sorted by department name.",
+        "ru": "Для каждого отдела, где есть хотя бы один сотрудник, верните название отдела и медианную зарплату в нём, отсортировав по названию отдела."
+      },
+      "hint": {
+        "en": "Median is an ordered-set aggregate: the value goes in front, the ordering goes in a WITHIN GROUP clause.",
+        "ru": "Медиана — это агрегат над упорядоченным множеством: значение указывается впереди, а сортировка — в блоке WITHIN GROUP."
+      },
+      "starter": "SELECT d.name, PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY ...)\nFROM departments d\n",
+      "solution": "SELECT d.name, PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY e.salary) AS median_salary FROM departments d JOIN employees e ON e.department_id = d.id GROUP BY d.name ORDER BY d.name",
+      "explanation": {
+        "en": "Median is not an average: for the department with an even number of employees the two middle salaries get interpolated, and PERCENTILE_DISC would instead pick one of them outright. An inner join is what excludes the department nobody works in.",
+        "ru": "Медиана — не среднее: в отделе с чётным числом сотрудников две средние зарплаты интерполируются, тогда как PERCENTILE_DISC выбрал бы одну из них целиком. Внутреннее соединение как раз и отсекает отдел, в котором никто не работает."
+      },
+      "sources": [
+        { "title": "PostgreSQL: Ordered-set aggregates", "url": "https://www.postgresql.org/docs/current/functions-aggregate.html#FUNCTIONS-ORDEREDSET-TABLE" }
+      ]
+    },
+    {
+      "id": "sql-hard-06",
+      "dataset": "shop",
+      "difficulty": "hard",
+      "order": 6,
+      "orderMatters": true,
+      "title": { "en": "Share of total revenue", "ru": "Доля в общей выручке" },
+      "statement": {
+        "en": "For shipped orders, return per category: the category, its revenue, and its share of the total revenue as a percentage rounded to one decimal. Sort by revenue descending.",
+        "ru": "По отгруженным заказам верните для каждой категории: категорию, её выручку и её долю в общей выручке в процентах, округлённую до одного знака. Отсортируйте по убыванию выручки."
+      },
+      "hint": {
+        "en": "An OVER clause with empty parentheses spans every row of the result, which is exactly the total you need to divide by.",
+        "ru": "OVER с пустыми скобками охватывает все строки результата — это и есть тот итог, на который нужно делить."
+      },
+      "starter": "SELECT p.category, SUM(...), ROUND(... * 100.0 / SUM(SUM(...)) OVER (), 1)\nFROM products p\n",
+      "solution": "SELECT p.category AS category, SUM(i.quantity * i.unit_price) AS revenue, ROUND(SUM(i.quantity * i.unit_price) * 100.0 / SUM(SUM(i.quantity * i.unit_price)) OVER (), 1) AS share FROM products p JOIN order_items i ON i.product_id = p.id JOIN orders o ON o.id = i.order_id WHERE o.status = 'shipped' GROUP BY p.category ORDER BY revenue DESC",
+      "explanation": {
+        "en": "The alternative is a subquery computing the total separately, which reads the tables a second time. The window form gets the total from rows that have already been grouped, in one pass.",
+        "ru": "Альтернатива — отдельный подзапрос для итога, который читает таблицы второй раз. Оконный вариант берёт итог из уже сгруппированных строк за один проход."
+      },
+      "sources": [
+        { "title": "PostgreSQL: Window functions", "url": "https://www.postgresql.org/docs/current/tutorial-window.html" }
+      ]
+    },
+    {
+      "id": "sql-hard-07",
+      "dataset": "shop",
+      "difficulty": "hard",
+      "order": 7,
+      "orderMatters": true,
+      "title": { "en": "Two orders in one week", "ru": "Два заказа за неделю" },
+      "statement": {
+        "en": "Return the name of every customer who placed two orders seven days apart or less, counting all orders whatever their status. List each customer once, sorted by name.",
+        "ru": "Верните имя каждого покупателя, у которого два заказа отстоят друг от друга не более чем на семь дней, считая все заказы независимо от статуса. Каждого покупателя выведите один раз, отсортировав по имени."
+      },
+      "hint": {
+        "en": "Put each customer's orders in date order and compare each one with the one before it. Express the seven days as `INTERVAL '7' DAY` and add it to a date, rather than subtracting one date from another.",
+        "ru": "Расположите заказы каждого покупателя по дате и сравните каждый с предыдущим. Семь дней задайте через `INTERVAL '7' DAY` и прибавьте к дате, а не вычитайте одну дату из другой."
+      },
+      "starter": "WITH gaps AS (\n  SELECT ...\n         LAG(o.placed_on) OVER (PARTITION BY ... ORDER BY ...) AS previous_order\n  FROM orders o\n)\nSELECT ...\n",
+      "solution": "WITH gaps AS (SELECT o.customer_id AS customer_id, o.placed_on AS placed_on, LAG(o.placed_on) OVER (PARTITION BY o.customer_id ORDER BY o.placed_on) AS previous_order FROM orders o) SELECT DISTINCT c.name FROM gaps g JOIN customers c ON c.id = g.customer_id WHERE g.previous_order IS NOT NULL AND g.placed_on <= g.previous_order + INTERVAL '7' DAY ORDER BY c.name",
+      "explanation": {
+        "en": "PARTITION BY restarts the window for each customer, so the first order of one customer is never compared with the last order of another. Date arithmetic is where dialects part ways: PostgreSQL lets you subtract two dates and get a plain number of days, while the standard form used here — adding an interval — behaves the same everywhere.",
+        "ru": "PARTITION BY перезапускает окно для каждого покупателя, поэтому первый заказ одного никогда не сравнивается с последним заказом другого. Арифметика дат — как раз то место, где диалекты расходятся: PostgreSQL позволяет вычесть одну дату из другой и получить обычное число дней, тогда как использованная здесь стандартная форма со сложением с интервалом ведёт себя одинаково везде."
+      },
+      "sources": [
+        { "title": "PostgreSQL: Window functions", "url": "https://www.postgresql.org/docs/current/functions-window.html" },
+        { "title": "PostgreSQL: Date/time operators", "url": "https://www.postgresql.org/docs/current/functions-datetime.html" }
+      ]
+    }
+  ]
+}
