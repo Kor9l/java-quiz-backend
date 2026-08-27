@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,10 +49,12 @@ public class Question {
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderBy("optionIndex ASC")
+    @BatchSize(size = 256)
     private List<QuestionOption> options = new ArrayList<>();
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderBy("sortOrder ASC")
+    @BatchSize(size = 256)
     private List<QuestionSource> sources = new ArrayList<>();
 
     public String getId() {

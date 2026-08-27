@@ -10,13 +10,19 @@ import java.util.Optional;
 public interface QuestionRepository extends JpaRepository<Question, String> {
 
     @Override
-    @EntityGraph(attributePaths = {"options", "sources"})
+    // Only one List can be join-fetched per query (MultipleBagFetchException);
+    // sources come from the @BatchSize select on Question.
+    @EntityGraph(attributePaths = {"options"})
     Optional<Question> findById(String id);
 
-    @EntityGraph(attributePaths = {"options", "sources"})
+    // Only one List can be join-fetched per query (MultipleBagFetchException);
+    // sources come from the @BatchSize select on Question.
+    @EntityGraph(attributePaths = {"options"})
     List<Question> findByTopicIdIn(Collection<String> topicIds);
 
-    @EntityGraph(attributePaths = {"options", "sources"})
+    // Only one List can be join-fetched per query (MultipleBagFetchException);
+    // sources come from the @BatchSize select on Question.
+    @EntityGraph(attributePaths = {"options"})
     List<Question> findByTopicIdAndSectionId(String topicId, String sectionId);
 
     long countByTopicId(String topicId);

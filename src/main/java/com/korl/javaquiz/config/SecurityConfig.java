@@ -1,6 +1,7 @@
 package com.korl.javaquiz.config;
 
 import com.korl.javaquiz.security.JwtAuthFilter;
+import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -39,6 +40,9 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // Without this, an unhandled exception is forwarded to /error, blocked,
+                        // and the client sees a misleading 403 instead of the real failure.
+                        .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/providers", "/api/auth/google")
                         .permitAll()
