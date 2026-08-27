@@ -1,8 +1,10 @@
 package com.korl.javaquiz.api;
 
 import com.korl.javaquiz.api.dto.UserDto;
+import com.korl.javaquiz.api.error.ApiException;
 import com.korl.javaquiz.domain.Role;
 import com.korl.javaquiz.service.AdminService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +33,13 @@ public class AdminController {
 
     @PatchMapping("/users/{id}/role")
     public UserDto changeRole(@PathVariable UUID id, @RequestBody Map<String, String> body) {
-        Role role = Role.valueOf(body.get("role"));
+        String requested = body == null ? null : body.get("role");
+        Role role;
+        try {
+            role = Role.valueOf(String.valueOf(requested).trim().toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Unknown role: " + requested);
+        }
         return adminService.changeRole(id, role);
     }
 }

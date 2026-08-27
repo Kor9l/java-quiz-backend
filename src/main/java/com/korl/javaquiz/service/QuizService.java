@@ -10,6 +10,8 @@ import com.korl.javaquiz.domain.QuizSessionEntity;
 import com.korl.javaquiz.domain.QuizSessionRepository;
 import com.korl.javaquiz.domain.Topic;
 import com.korl.javaquiz.domain.TopicRepository;
+import com.korl.javaquiz.domain.TopicSection;
+import com.korl.javaquiz.domain.TopicSectionRepository;
 import com.korl.javaquiz.domain.UserSettingsEntity;
 import com.korl.javaquiz.domain.UserSettingsRepository;
 import com.korl.javaquiz.domain.UserStatsEntity;
@@ -27,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,6 +44,7 @@ public class QuizService {
 
     private final QuestionRepository questions;
     private final TopicRepository topics;
+    private final TopicSectionRepository sections;
     private final QuizSessionRepository sessions;
     private final UserSettingsRepository settings;
     private final UserStatsRepository stats;
@@ -49,11 +53,13 @@ public class QuizService {
     public QuizService(
             QuestionRepository questions,
             TopicRepository topics,
+            TopicSectionRepository sections,
             QuizSessionRepository sessions,
             UserSettingsRepository settings,
             UserStatsRepository stats) {
         this.questions = questions;
         this.topics = topics;
+        this.sections = sections;
         this.sessions = sessions;
         this.settings = settings;
         this.stats = stats;
@@ -147,16 +153,8 @@ public class QuizService {
             state.getWeakSectionKeys().add(question.sectionKey());
         }
 
-        UserStatsEntity statsEntity = stats.findById(userId).orElseGet(() -> {
-            UserStatsEntity created = new UserStatsEntity();
-            created.setUserId(userId);
-            created.setPayload(new StatsPayload());
-            return created;
-        });
+        UserStatsEntity statsEntity = statsEntity(userId);
         StatsPayload payload = statsEntity.getPayload();
-        if (payload == null) {
-            payload = new StatsPayload();
-        }
         payload.record(question, correct, elapsed, state.getStreak());
         statsEntity.setPayload(payload);
         stats.save(statsEntity);
@@ -180,13 +178,9 @@ public class QuizService {
         StatsPayload statsPayload = stats.findById(userId).map(UserStatsEntity::getPayload).orElseGet(StatsPayload::new);
         List<Question> pool = loadPool(state.getConfig());
         QuestionPicker picker = new QuestionPicker(random);
-        String previousId = state.getCurrentQuestionId();
+        // nextQuestion refills with the current id, which already keeps a fresh deck from
+        // repeating the question just answered; asking twice here would double askedCount.
         nextQuestion(state, pool, picker, statsPayload);
-        if (previousId != null && previousId.equals(state.getCurrentQuestionId()) && pool.size() > 1
-                && state.getStage() != QuizStage.FINISHED) {
-            refillDeck(state, pool, picker, statsPayload, previousId);
-            nextQuestion(state, pool, picker, statsPayload);
-        }
         applyState(entity, state);
         sessions.save(entity);
         return toView(entity, loadQuestion(state.getCurrentQuestionId()));
@@ -217,7 +211,7 @@ public class QuizService {
         entity.setFinished(true);
         entity.setFinishedAt(Instant.now());
         if (state.getAnsweredCount() > 0) {
-            UserStatsEntity statsEntity = stats.findById(userId).orElseThrow();
+            UserStatsEntity statsEntity = statsEntity(userId);
             StatsPayload payload = statsEntity.getPayload();
             StatsPayload.SessionRecord record = new StatsPayload.SessionRecord();
             record.startedAt = state.getStartedAt();
@@ -234,6 +228,20 @@ public class QuizService {
         }
         applyState(entity, state);
         sessions.save(entity);
+    }
+
+    /** Stats row for the user, created on the fly so a missing row cannot fail a quiz action. */
+    private UserStatsEntity statsEntity(UUID userId) {
+        UserStatsEntity entity = stats.findById(userId).orElseGet(() -> {
+            UserStatsEntity created = new UserStatsEntity();
+            created.setUserId(userId);
+            created.setPayload(new StatsPayload());
+            return created;
+        });
+        if (entity.getPayload() == null) {
+            entity.setPayload(new StatsPayload());
+        }
+        return entity;
     }
 
     private void nextQuestion(QuizSessionState state, List<Question> pool, QuestionPicker picker, StatsPayload statsPayload) {
@@ -387,6 +395,9 @@ public class QuizService {
         view.put("showExplanation", state.isShowExplanation());
         view.put("weakSectionKeys", new ArrayList<>(state.getWeakSectionKeys()));
         view.put("empty", state.getPoolIds().isEmpty());
+        if (state.getStage() == QuizStage.FINISHED && !state.getWeakSectionKeys().isEmpty()) {
+            view.put("weakSections", weakSections(state.getWeakSectionKeys()));
+        }
 
         if (question != null && state.getStage() != QuizStage.FINISHED) {
             Map<String, Object> q = new LinkedHashMap<>();
@@ -432,6 +443,30 @@ public class QuizService {
             view.put("question", q);
         }
         return view;
+    }
+
+    /** Weak sections with their titles, so the summary can offer readable "re-read this" links. */
+    private List<Map<String, Object>> weakSections(Collection<String> keys) {
+        List<Map<String, Object>> rows = new ArrayList<>();
+        for (String key : keys) {
+            int slash = key.indexOf('/');
+            String topicId = slash < 0 ? key : key.substring(0, slash);
+            String sectionId = slash < 0 ? "" : key.substring(slash + 1);
+            Topic topic = topics.findById(topicId).orElse(null);
+            TopicSection section = sections.findById(new TopicSection.Id(topicId, sectionId)).orElse(null);
+            Map<String, Object> row = new LinkedHashMap<>();
+            row.put("key", key);
+            row.put("topicId", topicId);
+            row.put("sectionId", sectionId);
+            row.put("topicName", topic == null
+                    ? LocalizedTextDto.of(topicId, topicId)
+                    : LocalizedTextDto.of(topic.getNameEn(), topic.getNameRu()));
+            row.put("sectionTitle", section == null
+                    ? LocalizedTextDto.of(sectionId, sectionId)
+                    : LocalizedTextDto.of(section.getTitleEn(), section.getTitleRu()));
+            rows.add(row);
+        }
+        return rows;
     }
 
     public static class QuizStartRequest {

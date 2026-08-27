@@ -1,5 +1,6 @@
 package com.korl.javaquiz.service;
 
+import com.korl.javaquiz.api.dto.SettingsRequest;
 import com.korl.javaquiz.api.error.ApiException;
 import com.korl.javaquiz.domain.TopicSection;
 import com.korl.javaquiz.domain.TopicSectionRepository;
@@ -46,7 +47,7 @@ public class UserStateService {
     }
 
     @Transactional
-    public SettingsPayload saveSettings(UUID userId, SettingsPayload incoming) {
+    public SettingsPayload saveSettings(UUID userId, SettingsRequest incoming) {
         UserSettingsEntity entity = settings.findById(userId)
                 .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Settings not found"));
         SettingsPayload payload = entity.getPayload() == null ? new SettingsPayload() : entity.getPayload();
@@ -56,12 +57,25 @@ public class UserStateService {
         if (incoming.selectedTopics != null) {
             payload.setSelectedTopics(incoming.selectedTopics);
         }
-        payload.questionCount = incoming.normalizedQuestionCount();
-        payload.infiniteMode = incoming.infiniteMode;
-        payload.shuffleOptions = incoming.shuffleOptions;
-        payload.smartSelection = incoming.smartSelection;
-        payload.showExplanation = incoming.showExplanation;
-        payload.darkTheme = incoming.darkTheme;
+        if (incoming.questionCount != null) {
+            payload.questionCount = Math.max(SettingsPayload.MIN_COUNT,
+                    Math.min(SettingsPayload.MAX_COUNT, incoming.questionCount));
+        }
+        if (incoming.infiniteMode != null) {
+            payload.infiniteMode = incoming.infiniteMode;
+        }
+        if (incoming.shuffleOptions != null) {
+            payload.shuffleOptions = incoming.shuffleOptions;
+        }
+        if (incoming.smartSelection != null) {
+            payload.smartSelection = incoming.smartSelection;
+        }
+        if (incoming.showExplanation != null) {
+            payload.showExplanation = incoming.showExplanation;
+        }
+        if (incoming.darkTheme != null) {
+            payload.darkTheme = incoming.darkTheme;
+        }
         entity.setPayload(payload);
         settings.save(entity);
         return payload;
