@@ -37,6 +37,8 @@ app:
     expiration-ms: ${JWT_EXPIRATION_MS:86400000}
   cors:
     origins: ${CORS_ORIGINS:http://localhost:5173,http://localhost:80,http://localhost}
+  frontend-url: ${APP_FRONTEND_URL:http://localhost}
+  public-url: ${APP_PUBLIC_URL:http://localhost:8080}
   google:
     client-id: ${GOOGLE_CLIENT_ID:}
     client-secret: ${GOOGLE_CLIENT_SECRET:}

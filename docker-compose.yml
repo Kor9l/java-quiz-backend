@@ -30,6 +30,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: javaquiz
       JWT_SECRET: ${JWT_SECRET:-change-me-in-production-use-a-long-secret-32+}
       CORS_ORIGINS: http://localhost,http://127.0.0.1,http://localhost:80
+      APP_FRONTEND_URL: ${APP_FRONTEND_URL:-http://localhost}
+      APP_PUBLIC_URL: ${APP_PUBLIC_URL:-http://localhost:8080}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
     healthcheck:

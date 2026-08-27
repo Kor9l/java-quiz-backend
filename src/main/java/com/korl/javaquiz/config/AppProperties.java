@@ -11,6 +11,8 @@ public class AppProperties {
     private final Jwt jwt = new Jwt();
     private final Cors cors = new Cors();
     private final Google google = new Google();
+    private String frontendUrl = "http://localhost";
+    private String publicUrl = "http://localhost:8080";
 
     public Jwt getJwt() {
         return jwt;
@@ -22,6 +24,24 @@ public class AppProperties {
 
     public Google getGoogle() {
         return google;
+    }
+
+    /** Base URL of the UI, where the OAuth2 flow hands the JWT back to the browser. */
+    public String getFrontendUrl() {
+        return frontendUrl;
+    }
+
+    public void setFrontendUrl(String frontendUrl) {
+        this.frontendUrl = frontendUrl;
+    }
+
+    /** Base URL this backend is reachable at from the browser; must match the Google redirect URI host. */
+    public String getPublicUrl() {
+        return publicUrl;
+    }
+
+    public void setPublicUrl(String publicUrl) {
+        this.publicUrl = publicUrl;
     }
 
     public static class Jwt {
