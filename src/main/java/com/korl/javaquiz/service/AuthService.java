@@ -1,7 +1,6 @@
 package com.korl.javaquiz.service;
 
 import com.korl.javaquiz.api.dto.AuthResponse;
-import com.korl.javaquiz.api.dto.GoogleLoginRequest;
 import com.korl.javaquiz.api.dto.LoginRequest;
 import com.korl.javaquiz.api.dto.RegisterRequest;
 import com.korl.javaquiz.api.dto.UserDto;
@@ -109,12 +108,6 @@ public class AuthService {
     private String googleAuthorizationUrl() {
         String base = properties.getPublicUrl() == null ? "" : properties.getPublicUrl().replaceAll("/+$", "");
         return base + "/oauth2/authorization/" + GoogleOAuthConfig.REGISTRATION_ID;
-    }
-
-    public AuthResponse googleLogin(GoogleLoginRequest request) {
-        throw new ApiException(
-                HttpStatus.NOT_IMPLEMENTED,
-                "Use the redirect flow: GET /oauth2/authorization/google.");
     }
 
     /**

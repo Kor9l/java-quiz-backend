@@ -12,4 +12,6 @@ public interface AppUserRepository extends JpaRepository<AppUser, UUID> {
     Optional<AppUser> findByGoogleId(String googleId);
 
     boolean existsByEmailIgnoreCase(String email);
+
+    long countByRole(Role role);
 }

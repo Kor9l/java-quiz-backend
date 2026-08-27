@@ -44,7 +44,7 @@ public class SecurityConfig {
                         // and the client sees a misleading 403 instead of the real failure.
                         .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/providers", "/api/auth/google")
+                        .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/providers")
                         .permitAll()
                         .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")

@@ -14,7 +14,9 @@ services:
       timeout: 5s
       retries: 10
     ports:
-      - "5432:5432"
+      # Host port is configurable: a local PostgreSQL often already owns 5432.
+      # Only the host side matters; the backend always reaches the container on 5432.
+      - "${POSTGRES_PORT:-5432}:5432"
 
   backend:
     build:

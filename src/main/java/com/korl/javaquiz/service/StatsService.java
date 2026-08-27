@@ -87,6 +87,8 @@ public class StatsService {
 
         List<Map<String, Object>> weakest = payload.sections.entrySet().stream()
                 .filter(entry -> entry.getValue().answered >= WEAK_MIN_ANSWERS)
+                // A section answered perfectly is not weak, however many answers it has.
+                .filter(entry -> entry.getValue().accuracy() < 1.0)
                 .sorted(Comparator.comparingDouble((Map.Entry<String, StatsPayload.SectionCounter> e) -> e.getValue().accuracy())
                         .thenComparing(e -> -e.getValue().answered))
                 .limit(WEAK_LIMIT)

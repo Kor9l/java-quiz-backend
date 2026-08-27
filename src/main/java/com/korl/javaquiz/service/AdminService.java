@@ -48,6 +48,10 @@ public class AdminService {
     public UserDto changeRole(UUID userId, Role role) {
         AppUser user = users.findById(userId)
                 .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "User not found"));
+        // There is no way back from an admin-less instance: nobody could grant the role again.
+        if (user.getRole() == Role.ADMIN && role != Role.ADMIN && users.countByRole(Role.ADMIN) <= 1) {
+            throw new ApiException(HttpStatus.CONFLICT, "Cannot demote the last remaining admin");
+        }
         user.setRole(role);
         users.save(user);
         return UserDto.from(user);

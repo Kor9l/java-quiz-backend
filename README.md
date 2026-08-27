@@ -10,8 +10,9 @@ Spring Boot REST API + PostgreSQL for the Java Quiz web app.
 |---|---|---|
 | POST | `/api/auth/register` | public, email + password |
 | POST | `/api/auth/login` | public |
-| GET | `/api/auth/providers` | public, Google stub status |
-| POST | `/api/auth/google` | public, **501 stub** |
+| GET | `/api/auth/providers` | public, which sign-in methods are enabled |
+| GET | `/oauth2/authorization/google` | public, starts Google sign-in |
+| GET | `/login/oauth2/code/google` | public, Google callback |
 | GET | `/api/auth/me` | user |
 | GET | `/api/topics` | user, with personal read-state |
 | GET | `/api/materials/{topicId}/{sectionId}` | user |
@@ -63,4 +64,29 @@ docker compose down        # stop
 docker compose down -v     # stop and wipe the database volume
 ```
 
-Google Sign-In: set `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` when you implement token verification. Until then `POST /api/auth/google` returns 501.
+## Google Sign-In
+
+Put the credentials from the Google console in `.env` next to `docker-compose.yml` (gitignored):
+
+```
+GOOGLE_CLIENT_ID=...apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=...
+```
+
+Authorised redirect URI in the Google console must be exactly:
+
+```
+http://localhost:8080/login/oauth2/code/google
+```
+
+The flow is the standard authorization code grant: the UI sends the browser to
+`/oauth2/authorization/google`, Google calls the backend back, and the backend issues the app JWT
+and redirects to `APP_FRONTEND_URL/auth/callback#token=…`. An account with a matching email is
+linked rather than duplicated, so password login keeps working. Without credentials the button
+stays disabled and `/api/auth/providers` reports Google as unavailable.
+
+Extra environment variables: `APP_FRONTEND_URL` (default `http://localhost`) and `APP_PUBLIC_URL`
+(default `http://localhost:8080`) — the latter must match the host in the redirect URI.
+
+If a local PostgreSQL already owns port 5432, set `POSTGRES_PORT` in `.env` (e.g. `POSTGRES_PORT=15432`);
+only the host port changes, the backend still reaches the container on 5432.

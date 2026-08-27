@@ -1,5 +1,6 @@
 package com.korl.javaquiz.api;
 
+import com.korl.javaquiz.api.dto.SettingsRequest;
 import com.korl.javaquiz.security.UserPrincipal;
 import com.korl.javaquiz.service.StatsService;
 import com.korl.javaquiz.service.UserStateService;
@@ -37,7 +38,7 @@ public class UserStateController {
     @PutMapping("/settings")
     public SettingsPayload saveSettings(
             @AuthenticationPrincipal UserPrincipal principal,
-            @RequestBody SettingsPayload payload) {
+            @RequestBody SettingsRequest payload) {
         return userStateService.saveSettings(principal.getId(), payload);
     }
 
