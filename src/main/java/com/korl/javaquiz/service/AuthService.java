@@ -7,6 +7,7 @@ import com.korl.javaquiz.api.dto.RegisterRequest;
 import com.korl.javaquiz.api.dto.UserDto;
 import com.korl.javaquiz.api.error.ApiException;
 import com.korl.javaquiz.config.AppProperties;
+import com.korl.javaquiz.config.GoogleOAuthConfig;
 import com.korl.javaquiz.domain.AppUser;
 import com.korl.javaquiz.domain.AppUserRepository;
 import com.korl.javaquiz.domain.AuthProvider;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -89,20 +91,71 @@ public class AuthService {
     }
 
     public Map<String, Object> providers() {
-        return Map.of(
-                "email", true,
-                "google", Map.of(
-                        "enabled", false,
-                        "configured", properties.getGoogle().isConfigured(),
-                        "message", "Google Sign-In is a stub. Set GOOGLE_CLIENT_ID and implement token verification to enable it."
-                )
-        );
+        boolean configured = properties.getGoogle().isConfigured();
+        Map<String, Object> google = new LinkedHashMap<>();
+        google.put("enabled", configured);
+        google.put("configured", configured);
+        if (configured) {
+            google.put("authorizationUrl", googleAuthorizationUrl());
+            google.put("message", "");
+        } else {
+            google.put("authorizationUrl", null);
+            google.put("message", "Google Sign-In is disabled. Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to enable it.");
+        }
+        return Map.of("email", true, "google", google);
+    }
+
+    /** Absolute URL because the UI is served from another origin than this backend. */
+    private String googleAuthorizationUrl() {
+        String base = properties.getPublicUrl() == null ? "" : properties.getPublicUrl().replaceAll("/+$", "");
+        return base + "/oauth2/authorization/" + GoogleOAuthConfig.REGISTRATION_ID;
     }
 
     public AuthResponse googleLogin(GoogleLoginRequest request) {
         throw new ApiException(
                 HttpStatus.NOT_IMPLEMENTED,
-                "Google Sign-In is not implemented yet. Configure GOOGLE_CLIENT_ID and wire token verification.");
+                "Use the redirect flow: GET /oauth2/authorization/google.");
+    }
+
+    /**
+     * Finds or creates the local account behind a verified Google identity and returns a JWT.
+     * An existing email account with the same address is linked rather than duplicated, so
+     * the user keeps their progress and can still sign in with a password.
+     */
+    @Transactional
+    public String loginWithGoogle(String googleId, String email, String name) {
+        if (googleId == null || googleId.isBlank()) {
+            throw new ApiException(HttpStatus.UNAUTHORIZED, "Google account has no subject id");
+        }
+        String normalizedEmail = email == null ? null : email.trim().toLowerCase();
+        AppUser user = users.findByGoogleId(googleId).orElse(null);
+
+        if (user == null && normalizedEmail != null) {
+            user = users.findByEmailIgnoreCase(normalizedEmail).orElse(null);
+            if (user != null) {
+                user.setGoogleId(googleId);
+                users.save(user);
+            }
+        }
+
+        if (user == null) {
+            if (normalizedEmail == null) {
+                throw new ApiException(HttpStatus.UNAUTHORIZED, "Google account has no email");
+            }
+            user = new AppUser();
+            user.setId(UUID.randomUUID());
+            user.setEmail(normalizedEmail);
+            user.setPasswordHash(null);
+            user.setDisplayName(displayName(name, normalizedEmail));
+            user.setRole(Role.USER);
+            user.setAuthProvider(AuthProvider.GOOGLE);
+            user.setGoogleId(googleId);
+            user.setCreatedAt(Instant.now());
+            users.save(user);
+            createUserState(user.getId());
+        }
+
+        return jwtService.createToken(user.getId(), user.getEmail(), user.getRole());
     }
 
     @Transactional(readOnly = true)
