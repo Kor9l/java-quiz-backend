@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "topic": {
+    "id": "sql",
+    "order": 6,
+    "name": {
+      "en": "SQL",
+      "ru": "SQL"
+    },
+    "sections": [
+      {
+        "id": "select-filter",
+        "order": 1,
+        "title": {
+          "en": "Selecting and filtering",
+          "ru": "Выборка и фильтрация"
+        }
+      },
+      {
+        "id": "null-logic",
+        "order": 2,
+        "title": {
+          "en": "NULL and three-valued logic",
+          "ru": "NULL и трёхзначная логика"
+        }
+      },
+      {
+        "id": "joins",
+        "order": 3,
+        "title": {
+          "en": "Joins",
+          "ru": "Соединения таблиц"
+        }
+      },
+      {
+        "id": "aggregation",
+        "order": 4,
+        "title": {
+          "en": "Aggregation and grouping",
+          "ru": "Агрегация и группировка"
+        }
+      },
+      {
+        "id": "subqueries-cte",
+        "order": 5,
+        "title": {
+          "en": "Subqueries and CTEs",
+          "ru": "Подзапросы и CTE"
+        }
+      },
+      {
+        "id": "window-functions",
+        "order": 6,
+        "title": {
+          "en": "Window functions",
+          "ru": "Оконные функции"
+        }
+      },
+      {
+        "id": "types-dates",
+        "order": 7,
+        "title": {
+          "en": "Types, dates and text",
+          "ru": "Типы, даты и текст"
+        }
+      },
+      {
+        "id": "schema-indexes",
+        "order": 8,
+        "title": {
+          "en": "Schema, constraints and indexes",
+          "ru": "Схема, ограничения и индексы"
+        }
+      }
+    ]
+  }
+}

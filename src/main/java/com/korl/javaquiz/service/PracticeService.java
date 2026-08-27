@@ -199,6 +199,9 @@ public class PracticeService {
         dto.put("order", task.getSortOrder());
         dto.put("title", LocalizedTextDto.of(task.getTitleEn(), task.getTitleRu()));
         dto.put("datasetId", task.getDatasetId());
+        // The study section this exercise drills, so a stuck learner can go and read about it.
+        dto.put("material", task.getSectionId() == null ? null : Map.of(
+                "topicId", task.getTopicId(), "sectionId", task.getSectionId()));
         dto.put("orderMatters", task.isOrderMatters());
         dto.put("solved", state != null && state.isSolved());
         dto.put("attempts", state == null ? 0 : state.getAttempts());

@@ -1,0 +1,2578 @@
+{
+  "schemaVersion": 1,
+  "topic": "sql",
+  "questions": [
+    {
+      "id": "sql.select-filter.001",
+      "section": "select-filter",
+      "difficulty": "easy",
+      "text": {
+        "en": "Why is the first statement rejected while the second one runs?",
+        "ru": "Почему первый запрос отвергается, а второй выполняется?"
+      },
+      "code": "SELECT price * 1.21 AS gross FROM products WHERE gross > 100;\nSELECT price * 1.21 AS gross FROM products ORDER BY gross;",
+      "options": [
+        {
+          "text": {
+            "en": "SELECT is evaluated after WHERE and before ORDER BY, so the alias does not exist yet when WHERE runs.",
+            "ru": "SELECT вычисляется после WHERE и до ORDER BY, поэтому во время выполнения WHERE псевдонима ещё не существует."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "WHERE only accepts column references, never expressions of any kind.",
+            "ru": "WHERE принимает только ссылки на столбцы и никогда — какие-либо выражения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Aliases are only visible in the query that defines them if it has no FROM clause.",
+            "ru": "Псевдонимы видны в определяющем их запросе, только если в нём нет FROM."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The multiplication produces a numeric type that WHERE cannot compare against an integer.",
+            "ru": "Умножение даёт числовой тип, который WHERE не может сравнить с целым числом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "PostgreSQL requires an explicit CAST before an alias can be used in a predicate.",
+            "ru": "PostgreSQL требует явного CAST, прежде чем псевдоним можно использовать в условии."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Clauses are logically evaluated FROM, WHERE, GROUP BY, HAVING, SELECT, DISTINCT, ORDER BY, LIMIT. The output columns come into existence at SELECT, which is why ORDER BY can name them and WHERE cannot. To filter on a computed value, repeat the expression or wrap the query.",
+        "ru": "Логический порядок вычисления: FROM, WHERE, GROUP BY, HAVING, SELECT, DISTINCT, ORDER BY, LIMIT. Выходные столбцы возникают на этапе SELECT — поэтому ORDER BY может обращаться к ним по имени, а WHERE нет. Чтобы отфильтровать по вычисленному значению, повторите выражение или оберните запрос."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/sql-select.html",
+        "https://www.postgresql.org/docs/current/queries.html"
+      ]
+    },
+    {
+      "id": "sql.select-filter.002",
+      "section": "select-filter",
+      "difficulty": "easy",
+      "text": {
+        "en": "What does `SELECT * FROM orders LIMIT 10` guarantee about which rows come back?",
+        "ru": "Что гарантирует `SELECT * FROM orders LIMIT 10` относительно того, какие строки вернутся?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The ten rows with the lowest primary key values.",
+            "ru": "Десять строк с наименьшими значениями первичного ключа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing — without ORDER BY the engine may return any ten rows, and the choice can change between runs.",
+            "ru": "Ничего — без ORDER BY движок вправе вернуть любые десять строк, и выбор может меняться от запуска к запуску."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The ten most recently inserted rows.",
+            "ru": "Десять последних вставленных строк."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The ten rows in physical storage order, which is stable for a given table.",
+            "ru": "Десять строк в порядке физического хранения, который для таблицы стабилен."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The ten oldest rows, since PostgreSQL keeps an implicit insertion order.",
+            "ru": "Десять самых старых строк, поскольку PostgreSQL хранит неявный порядок вставки."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "LIMIT keeps a prefix of whatever order the rows arrived in, and that order is an implementation detail — it typically looks stable in testing and changes the day an index is added or the table is vacuumed. The same trap operates one level down: if the ORDER BY has ties, rows within a tie may come back in any order, so a reproducible top-N needs a tie-break key.",
+        "ru": "LIMIT оставляет начало того порядка, в котором строки пришли, а этот порядок — деталь реализации: обычно он выглядит стабильным на тестах и меняется в день, когда добавят индекс или выполнят vacuum. Та же ловушка работает этажом ниже: если в ORDER BY есть равные значения, строки внутри такой группы могут вернуться в любом порядке, поэтому воспроизводимому топ-N нужен вторичный ключ."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/queries-limit.html",
+        "https://www.postgresql.org/docs/current/sql-select.html"
+      ]
+    },
+    {
+      "id": "sql.select-filter.003",
+      "section": "select-filter",
+      "difficulty": "medium",
+      "text": {
+        "en": "`created_at` is a `timestamp`. What does this predicate quietly get wrong?",
+        "ru": "`created_at` имеет тип `timestamp`. Что это условие тихо делает неверно?"
+      },
+      "code": "WHERE created_at BETWEEN '2024-01-01' AND '2024-01-31'",
+      "options": [
+        {
+          "text": {
+            "en": "It drops 1 January, because BETWEEN excludes its lower bound.",
+            "ru": "Оно теряет 1 января, потому что BETWEEN не включает нижнюю границу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing — BETWEEN is inclusive on both ends and covers the whole month.",
+            "ru": "Ничего — BETWEEN включает обе границы и покрывает весь месяц."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It drops almost the whole of 31 January, because the range ends at midnight on that date.",
+            "ru": "Оно теряет почти всё 31 января, потому что диапазон заканчивается в полночь этой даты."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It compares text to a timestamp, so the rows are ordered lexicographically.",
+            "ru": "Оно сравнивает текст с timestamp, поэтому строки упорядочиваются лексикографически."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It returns an error, because BETWEEN cannot be applied to timestamp columns.",
+            "ru": "Оно вернёт ошибку, потому что BETWEEN неприменим к столбцам типа timestamp."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`'2024-01-31'` becomes `2024-01-31 00:00:00`, so anything later that day falls outside. BETWEEN is inclusive, but inclusive of midnight is not inclusive of the day. The half-open form `>= '2024-01-01' AND < '2024-02-01'` is correct for both date and timestamp columns, which is why it is worth making the default.",
+        "ru": "`'2024-01-31'` превращается в `2024-01-31 00:00:00`, поэтому всё, что произошло позже в этот день, оказывается за границей. BETWEEN включает границы, но включить полночь — не то же самое, что включить день. Полуоткрытая форма `>= '2024-01-01' AND < '2024-02-01'` верна и для date, и для timestamp — поэтому её стоит сделать вариантом по умолчанию."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/datatype-datetime.html",
+        "https://www.postgresql.org/docs/current/sql-select.html"
+      ]
+    },
+    {
+      "id": "sql.select-filter.004",
+      "section": "select-filter",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which rows does this WHERE clause keep?",
+        "ru": "Какие строки сохранит это условие WHERE?"
+      },
+      "code": "WHERE status = 'cancelled' AND total > 100 OR status = 'pending'",
+      "options": [
+        {
+          "text": {
+            "en": "Orders over 100 that are either cancelled or pending.",
+            "ru": "Заказы дороже 100, которые либо отменены, либо ожидают."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Pending orders over 100 only, because AND is applied last.",
+            "ru": "Только ожидающие заказы дороже 100, поскольку AND применяется последним."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing, because an order cannot be cancelled and pending at once.",
+            "ru": "Ничего, поскольку заказ не может быть одновременно отменён и ожидать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Cancelled orders over 100, plus every pending order regardless of total.",
+            "ru": "Отменённые заказы дороже 100 плюс все ожидающие заказы независимо от суммы."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "All orders — mixing AND with OR makes the predicate always true.",
+            "ru": "Все заказы — смешение AND и OR делает условие всегда истинным."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "AND binds tighter than OR, so this parses as `(status = 'cancelled' AND total > 100) OR status = 'pending'`. That is rarely what the author meant. Parenthesise whenever the two appear together: the parentheses cost nothing and spare every future reader from having to remember the precedence rule.",
+        "ru": "AND связывает сильнее, чем OR, поэтому разбирается это как `(status = 'cancelled' AND total > 100) OR status = 'pending'`. Автор редко имеет в виду именно это. Ставьте скобки везде, где они встречаются вместе: скобки ничего не стоят и избавляют всех будущих читателей от необходимости помнить приоритет."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/sql-select.html",
+        "https://www.postgresql.org/docs/current/queries.html"
+      ]
+    },
+    {
+      "id": "sql.select-filter.005",
+      "section": "select-filter",
+      "difficulty": "medium",
+      "text": {
+        "en": "What does `SELECT DISTINCT country, city FROM customers` return?",
+        "ru": "Что вернёт `SELECT DISTINCT country, city FROM customers`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "One row per distinct country, with an arbitrary city for each.",
+            "ru": "По одной строке на каждую уникальную страну с произвольным городом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Distinct countries and, separately, distinct cities in two independent columns.",
+            "ru": "Уникальные страны и отдельно уникальные города в двух независимых столбцах."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The same as `SELECT country, city`, because DISTINCT only applies to the first column.",
+            "ru": "То же, что `SELECT country, city`, поскольку DISTINCT относится только к первому столбцу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An error, because DISTINCT accepts exactly one column.",
+            "ru": "Ошибку, поскольку DISTINCT принимает ровно один столбец."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Every distinct country-and-city pair, so one country may appear on several rows.",
+            "ru": "Все уникальные пары «страна и город», поэтому одна страна может встретиться в нескольких строках."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "DISTINCT applies to the whole output row, not to the column that happens to follow it. To get one row per country you need GROUP BY together with a decision about which city to show — or PostgreSQL's `DISTINCT ON (country)`, which picks one row per country according to the ORDER BY.",
+        "ru": "DISTINCT относится ко всей выходной строке, а не к столбцу, который случайно идёт следом. Чтобы получить по строке на страну, нужен GROUP BY и решение о том, какой город показывать, — либо специфичный для PostgreSQL `DISTINCT ON (country)`, выбирающий по одной строке на страну согласно ORDER BY."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/sql-select.html"
+      ]
+    },
+    {
+      "id": "sql.select-filter.006",
+      "section": "select-filter",
+      "difficulty": "hard",
+      "text": {
+        "en": "A listing paginates with `ORDER BY created_at DESC LIMIT 20 OFFSET 100000` and page loads get slower the deeper users go. Why, and what is the usual fix?",
+        "ru": "Список листается через `ORDER BY created_at DESC LIMIT 20 OFFSET 100000`, и чем глубже уходит пользователь, тем медленнее грузится страница. Почему и что обычно с этим делают?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "OFFSET still has to produce and discard every skipped row; remembering the last row seen and asking for what follows it keeps the cost constant.",
+            "ru": "OFFSET всё равно вынужден сформировать и отбросить каждую пропущенную строку; запоминание последней увиденной строки и запрос того, что идёт за ней, удерживает стоимость постоянной."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "OFFSET disables the index on created_at, so adding a second index on the primary key restores the speed.",
+            "ru": "OFFSET отключает индекс по created_at, поэтому второй индекс по первичному ключу вернёт скорость."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Large OFFSET values overflow the planner's row estimate; raising work_mem removes the problem.",
+            "ru": "Большие значения OFFSET переполняют оценку строк планировщиком; увеличение work_mem снимает проблему."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The result set is materialised on the client, so switching to a server-side cursor is the only option.",
+            "ru": "Результат материализуется на клиенте, поэтому единственный выход — серверный курсор."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "DESC ordering cannot use an index, so the fix is to sort ascending and reverse in the application.",
+            "ru": "Сортировка DESC не может использовать индекс, поэтому нужно сортировать по возрастанию и переворачивать в приложении."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "OFFSET is defined as 'skip these rows', and skipping means producing them first. Page 5000 therefore costs 5000 pages of work. Keyset pagination — `WHERE (created_at, id) < (:last_created_at, :last_id) ORDER BY created_at DESC, id DESC LIMIT 20` — turns each page into an index seek. The tie-break column is not optional: without it, rows sharing a timestamp can be skipped or repeated across pages.",
+        "ru": "OFFSET определён как «пропустить эти строки», а пропустить — значит сначала их получить. Поэтому 5000-я страница стоит как 5000 страниц работы. Keyset-пагинация — `WHERE (created_at, id) < (:last_created_at, :last_id) ORDER BY created_at DESC, id DESC LIMIT 20` — превращает каждую страницу в поиск по индексу. Столбец для разрыва ничьих здесь не роскошь: без него строки с одинаковой меткой времени могут потеряться или повториться между страницами."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/queries-limit.html",
+        "https://www.postgresql.org/docs/current/indexes.html"
+      ]
+    },
+    {
+      "id": "sql.null-logic.001",
+      "section": "null-logic",
+      "difficulty": "easy",
+      "text": {
+        "en": "An orders table has 20 rows, 5 of which have `shipped_on` set to NULL. How many rows does `SELECT * FROM orders WHERE shipped_on = NULL` return?",
+        "ru": "В таблице заказов 20 строк, у 5 из них `shipped_on` равен NULL. Сколько строк вернёт `SELECT * FROM orders WHERE shipped_on = NULL`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Five — the comparison matches exactly the rows whose value is NULL.",
+            "ru": "Пять — сравнение находит ровно те строки, где значение равно NULL."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "None — the comparison evaluates to unknown for every row, and WHERE keeps only rows where it is true.",
+            "ru": "Ни одной — сравнение для каждой строки даёт «неизвестно», а WHERE сохраняет только строки, где оно истинно."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Fifteen — the comparison matches the rows that do have a value.",
+            "ru": "Пятнадцать — сравнение находит строки, у которых значение есть."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Twenty — a comparison against NULL is ignored and the filter drops out.",
+            "ru": "Двадцать — сравнение с NULL игнорируется, и фильтр отбрасывается."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It raises an error, because NULL is not a valid operand for `=`.",
+            "ru": "Будет ошибка, поскольку NULL не является допустимым операндом для `=`."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "NULL means 'unknown', and asking whether an unknown value equals another unknown value yields unknown rather than true. What makes this dangerous is that it is not an error: the query succeeds and returns an empty result, which looks like 'no such data' rather than 'wrong operator'. `IS NULL` is the test that works.",
+        "ru": "NULL означает «неизвестно», и вопрос, равно ли неизвестное значение другому неизвестному, даёт «неизвестно», а не истину. Опасно здесь то, что это не ошибка: запрос отрабатывает и возвращает пустой результат, который выглядит как «таких данных нет», а не как «не тот оператор». Работает проверка `IS NULL`."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/functions-comparison.html"
+      ]
+    },
+    {
+      "id": "sql.null-logic.002",
+      "section": "null-logic",
+      "difficulty": "easy",
+      "text": {
+        "en": "After a LEFT JOIN from books to loans, what does `COUNT(*)` report for a book that has never been borrowed?",
+        "ru": "После LEFT JOIN от книг к выдачам что вернёт `COUNT(*)` для книги, которую ни разу не брали?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "0, because COUNT(*) skips rows whose joined columns are all NULL.",
+            "ru": "0, потому что COUNT(*) пропускает строки, у которых все присоединённые столбцы пусты."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "NULL, because counting over an empty group yields NULL.",
+            "ru": "NULL, потому что подсчёт по пустой группе даёт NULL."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "1, because the outer join still produces one row for it — `COUNT(l.id)` is what reports 0.",
+            "ru": "1, потому что внешнее соединение всё равно даёт для неё одну строку; ноль вернёт `COUNT(l.id)`."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "0, and `COUNT(l.id)` would report 1 instead.",
+            "ru": "0, а `COUNT(l.id)` вернул бы 1."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The book does not appear in the result at all after grouping.",
+            "ru": "После группировки книга вообще не попадёт в результат."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A LEFT JOIN manufactures one row of NULLs for an unmatched left row, so the group is not empty — it holds exactly one row. `COUNT(*)` counts rows and reports 1; `COUNT(l.id)` counts non-null values and reports 0. This is the single most common reason a 'books never borrowed' report shows ones instead of zeros.",
+        "ru": "LEFT JOIN изготавливает одну строку из NULL-ов для несопоставленной левой строки, поэтому группа не пуста — в ней ровно одна строка. `COUNT(*)` считает строки и вернёт 1, `COUNT(l.id)` считает непустые значения и вернёт 0. Это самая частая причина, по которой отчёт «книги, которые не брали» показывает единицы вместо нулей."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/functions-aggregate.html",
+        "https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-JOIN"
+      ]
+    },
+    {
+      "id": "sql.null-logic.003",
+      "section": "null-logic",
+      "difficulty": "medium",
+      "text": {
+        "en": "`order_items.product_id` is nullable and one row has NULL in it. What does this query return?",
+        "ru": "`order_items.product_id` допускает NULL, и в одной строке он равен NULL. Что вернёт этот запрос?"
+      },
+      "code": "SELECT * FROM products p\nWHERE p.id NOT IN (SELECT product_id FROM order_items);",
+      "options": [
+        {
+          "text": {
+            "en": "The products that were never ordered, with the NULL simply ignored.",
+            "ru": "Товары, которые ни разу не заказывали, а NULL просто игнорируется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Every product, because NOT IN against a set containing NULL is always true.",
+            "ru": "Все товары, поскольку NOT IN по множеству с NULL всегда истинно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An error stating that the subquery produced a NULL value.",
+            "ru": "Ошибку о том, что подзапрос вернул значение NULL."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "No rows at all, because the NULL turns the expanded chain of inequalities into unknown.",
+            "ru": "Ни одной строки: NULL превращает развёрнутую цепочку неравенств в «неизвестно»."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The products that were never ordered, plus one extra row for the NULL.",
+            "ru": "Товары, которые ни разу не заказывали, плюс одна лишняя строка для NULL."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`id NOT IN (1, 2, NULL)` expands to `id <> 1 AND id <> 2 AND id <> NULL`. The last term is unknown for every row, and `true AND unknown` is unknown, so no row is ever kept. There is no error and no warning — the report simply comes back empty. `NOT EXISTS` has no equivalent behaviour, which is why it is the safer default for an anti-join.",
+        "ru": "`id NOT IN (1, 2, NULL)` разворачивается в `id <> 1 AND id <> 2 AND id <> NULL`. Последнее слагаемое для любой строки неизвестно, а `истина AND неизвестно` — неизвестно, поэтому ни одна строка не сохраняется. Ни ошибки, ни предупреждения: отчёт просто приходит пустым. У `NOT EXISTS` такого поведения нет — поэтому для анти-соединения он безопаснее по умолчанию."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/functions-subquery.html",
+        "https://www.postgresql.org/docs/current/functions-comparison.html"
+      ]
+    },
+    {
+      "id": "sql.null-logic.004",
+      "section": "null-logic",
+      "difficulty": "medium",
+      "text": {
+        "en": "A table has `CHECK (quantity > 0)` and `quantity` is nullable. Is a row with `quantity = NULL` accepted?",
+        "ru": "В таблице есть `CHECK (quantity > 0)`, и `quantity` допускает NULL. Примет ли база строку с `quantity = NULL`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "No — the condition is not true, so the constraint rejects the row.",
+            "ru": "Нет — условие не истинно, поэтому ограничение отвергает строку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "No — a CHECK constraint implies NOT NULL on every column it mentions.",
+            "ru": "Нет — CHECK неявно подразумевает NOT NULL для каждого упомянутого столбца."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Yes, but only if the column has a DEFAULT that satisfies the condition.",
+            "ru": "Да, но только если у столбца есть DEFAULT, удовлетворяющий условию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It depends on the transaction isolation level.",
+            "ru": "Зависит от уровня изоляции транзакции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Yes — a CHECK rejects a row only when the condition is false, and unknown is not false.",
+            "ru": "Да — CHECK отвергает строку, только если условие ложно, а «неизвестно» ложью не является."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "This is the mirror image of WHERE. A WHERE clause keeps a row only when the predicate is true, so unknown behaves like false; a CHECK rejects a row only when the predicate is false, so unknown behaves like true. The same expression therefore filters a row out of a query and still lets it into the table. When a check has to apply to every row, add NOT NULL alongside it.",
+        "ru": "Это зеркальное отражение WHERE. WHERE сохраняет строку, только если условие истинно, поэтому «неизвестно» ведёт себя как ложь; CHECK отвергает строку, только если условие ложно, поэтому «неизвестно» ведёт себя как истина. Одно и то же выражение отсеет строку из запроса и при этом пропустит её в таблицу. Если проверка должна действовать на все строки, добавьте рядом NOT NULL."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/ddl-constraints.html",
+        "https://www.postgresql.org/docs/current/functions-comparison.html"
+      ]
+    },
+    {
+      "id": "sql.null-logic.005",
+      "section": "null-logic",
+      "difficulty": "medium",
+      "text": {
+        "en": "A column is declared `email VARCHAR(255) UNIQUE` and is nullable. How many rows may hold NULL in it?",
+        "ru": "Столбец объявлен как `email VARCHAR(255) UNIQUE` и допускает NULL. Сколько строк могут содержать в нём NULL?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Any number — two nulls are not equal to each other, so they do not count as duplicates.",
+            "ru": "Сколько угодно — два NULL не равны друг другу, поэтому дубликатами не считаются."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Exactly one, because UNIQUE treats all nulls as the same value.",
+            "ru": "Ровно одна, поскольку UNIQUE считает все NULL одним и тем же значением."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "None — a UNIQUE column implicitly forbids nulls.",
+            "ru": "Ни одной — уникальный столбец неявно запрещает NULL."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Any number, but only if the constraint is declared as a partial index.",
+            "ru": "Сколько угодно, но только если ограничение объявлено частичным индексом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Exactly one per transaction; more become visible only after commit.",
+            "ru": "Ровно одна на транзакцию; больше становятся видны только после фиксации."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "UNIQUE follows the comparison rules, and NULL is never equal to NULL, so duplicates cannot be detected among them. This surprises people because GROUP BY does the opposite and gathers all nulls into a single group. If you need at most one row without a value, `CREATE UNIQUE INDEX ... ON t ((email IS NULL)) WHERE email IS NULL` expresses that explicitly.",
+        "ru": "UNIQUE следует правилам сравнения, а NULL никогда не равен NULL, поэтому дубликаты среди них обнаружить невозможно. Это удивляет, потому что GROUP BY поступает наоборот и собирает все NULL в одну группу. Если нужно не более одной строки без значения, это явно выражается через `CREATE UNIQUE INDEX ... ON t ((email IS NULL)) WHERE email IS NULL`."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/ddl-constraints.html",
+        "https://www.postgresql.org/docs/current/indexes-unique.html"
+      ]
+    },
+    {
+      "id": "sql.null-logic.006",
+      "section": "null-logic",
+      "difficulty": "hard",
+      "text": {
+        "en": "You need to find rows where two nullable columns differ, counting 'one is null and the other is not' as a difference and 'both null' as equal. Which predicate does that?",
+        "ru": "Нужно найти строки, где два допускающих NULL столбца различаются, считая «один пуст, другой нет» различием, а «оба пусты» — совпадением. Какое условие это делает?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "`a <> b`",
+            "ru": "`a <> b`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`a IS DISTINCT FROM b`",
+            "ru": "`a IS DISTINCT FROM b`"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "`NOT (a = b)`",
+            "ru": "`NOT (a = b)`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`COALESCE(a, b) IS NOT NULL`",
+            "ru": "`COALESCE(a, b) IS NOT NULL`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`a <> b OR a IS NULL OR b IS NULL`",
+            "ru": "`a <> b OR a IS NULL OR b IS NULL`"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`IS DISTINCT FROM` is the null-aware inequality: it treats NULL as an ordinary value for the purposes of the comparison, so null-versus-value is a difference and null-versus-null is not. Both `a <> b` and `NOT (a = b)` return unknown as soon as either side is null, so the row is dropped. The last option looks close but wrongly reports a difference when both are null.",
+        "ru": "`IS DISTINCT FROM` — это неравенство, знающее про NULL: для целей сравнения оно относится к NULL как к обычному значению, поэтому «пусто против значения» — различие, а «пусто против пусто» — нет. И `a <> b`, и `NOT (a = b)` дают «неизвестно», как только одна из сторон пуста, и строка отбрасывается. Последний вариант похож на правильный, но ошибочно сообщает о различии, когда пусты оба."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/functions-comparison.html"
+      ]
+    },
+    {
+      "id": "sql.joins.001",
+      "section": "joins",
+      "difficulty": "easy",
+      "text": {
+        "en": "What does a LEFT JOIN return for a left-hand row with no matching row on the right?",
+        "ru": "Что вернёт LEFT JOIN для левой строки, у которой нет соответствия справа?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The row is dropped, exactly as an inner join would drop it.",
+            "ru": "Строка отбрасывается — ровно так же, как её отбросило бы внутреннее соединение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The row is kept and the right-hand columns take their column defaults.",
+            "ru": "Строка сохраняется, а столбцы правой таблицы получают значения по умолчанию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The row is kept, with every right-hand column filled in as NULL.",
+            "ru": "Строка сохраняется, а все столбцы правой таблицы заполняются NULL."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The row is duplicated once for every row in the right-hand table.",
+            "ru": "Строка дублируется по разу на каждую строку правой таблицы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The query fails unless the right-hand columns are declared nullable.",
+            "ru": "Запрос упадёт, если столбцы правой таблицы не объявлены допускающими NULL."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "'Left' names the side whose rows are preserved. The invented NULLs are the reason two things follow: a filter on a right-hand column belongs in ON rather than WHERE, and counting those rows needs `COUNT(right.id)` rather than `COUNT(*)`.",
+        "ru": "«Левое» указывает на сторону, чьи строки сохраняются. Из придуманных NULL-ов следуют две вещи: фильтр по столбцу правой таблицы должен стоять в ON, а не в WHERE, и для подсчёта таких строк нужен `COUNT(правая.id)`, а не `COUNT(*)`."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-JOIN"
+      ]
+    },
+    {
+      "id": "sql.joins.002",
+      "section": "joins",
+      "difficulty": "medium",
+      "text": {
+        "en": "How do these two queries differ?",
+        "ru": "Чем различаются эти два запроса?"
+      },
+      "code": "FROM customers c LEFT JOIN orders o\n  ON o.customer_id = c.id AND o.placed_on >= DATE '2024-01-01'\n\nFROM customers c LEFT JOIN orders o ON o.customer_id = c.id\nWHERE o.placed_on >= DATE '2024-01-01'",
+      "options": [
+        {
+          "text": {
+            "en": "They are equivalent; the planner rewrites one into the other.",
+            "ru": "Они эквивалентны: планировщик переписывает один в другой."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The first returns only customers who ordered in 2024; the second returns every customer.",
+            "ru": "Первый вернёт только заказывавших в 2024 году, второй — всех покупателей."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The first is invalid, because an outer join's ON clause accepts only equality conditions.",
+            "ru": "Первый некорректен: блок ON внешнего соединения принимает только условия равенства."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The first returns every customer; the second returns only those who ordered in 2024, because WHERE discards the invented NULL rows.",
+            "ru": "Первый вернёт всех покупателей, второй — только заказывавших в 2024 году, потому что WHERE отбрасывает придуманные NULL-строки."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "They differ only in performance, not in the rows returned.",
+            "ru": "Они различаются только производительностью, но не набором строк."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "For an inner join it makes no difference where the condition sits. For an outer join it decides the meaning: ON is applied while pairing rows, so unmatched left rows survive with NULLs; WHERE is applied afterwards, and `NULL >= date` is unknown, so those rows are thrown straight back out. The second query is an inner join in disguise.",
+        "ru": "Для внутреннего соединения безразлично, где стоит условие. Для внешнего оно определяет смысл: ON применяется во время сопоставления строк, поэтому несопоставленные левые строки выживают с NULL-ами; WHERE применяется после, а `NULL >= дата` даёт «неизвестно», и эти строки тут же выбрасываются. Второй запрос — внутреннее соединение в маскировке."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-JOIN"
+      ]
+    },
+    {
+      "id": "sql.joins.003",
+      "section": "joins",
+      "difficulty": "medium",
+      "text": {
+        "en": "An order has 3 line items and 2 shipments. Joining orders to both tables and taking `SUM(i.quantity)` gives what?",
+        "ru": "У заказа 3 позиции и 2 отгрузки. Соединение заказа с обеими таблицами и `SUM(i.quantity)` даст что?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The correct quantity — SUM automatically deduplicates identical rows.",
+            "ru": "Верное количество — SUM автоматически убирает одинаковые строки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Three times the real quantity, because there are three line items.",
+            "ru": "Утроенное реальное количество, поскольку позиций три."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "NULL, because the two joins conflict and produce no matching rows.",
+            "ru": "NULL, поскольку два соединения конфликтуют и не дают совпадающих строк."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The correct quantity, provided both joins use the same foreign key column.",
+            "ru": "Верное количество, если оба соединения используют один и тот же внешний ключ."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Twice the real quantity, because the join produces 6 rows and each line item is counted once per shipment.",
+            "ru": "Удвоенное реальное количество: соединение даёт 6 строк, и каждая позиция считается по разу на отгрузку."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Two independent one-to-many joins multiply: 3 × 2 = 6 rows, so every line item appears twice and the sum doubles. `SUM(DISTINCT ...)` is not the fix — it would also collapse two genuinely identical line items. Aggregate each branch on its own, in a CTE or subquery, and join the already-collapsed results. A useful review heuristic: two independent one-to-many joins plus a SUM means the SUM is wrong until proven otherwise.",
+        "ru": "Два независимых соединения один-ко-многим перемножаются: 3 × 2 = 6 строк, поэтому каждая позиция встречается дважды и сумма удваивается. `SUM(DISTINCT ...)` проблему не решает — он заодно склеит две действительно одинаковые позиции. Агрегируйте каждую ветку отдельно, в CTE или подзапросе, и соединяйте уже схлопнутые результаты. Полезная эвристика для ревью: два независимых соединения один-ко-многим плюс SUM означают, что SUM неверна, пока не доказано обратное."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-JOIN",
+        "https://www.postgresql.org/docs/current/functions-aggregate.html"
+      ]
+    },
+    {
+      "id": "sql.joins.004",
+      "section": "joins",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which of these anti-joins is safe regardless of whether the subquery column contains nulls?",
+        "ru": "Какое из этих анти-соединений безопасно независимо от того, есть ли NULL в столбце подзапроса?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "`WHERE NOT EXISTS (SELECT 1 FROM orders o WHERE o.customer_id = c.id)`",
+            "ru": "`WHERE NOT EXISTS (SELECT 1 FROM orders o WHERE o.customer_id = c.id)`"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "`WHERE c.id NOT IN (SELECT customer_id FROM orders)`",
+            "ru": "`WHERE c.id NOT IN (SELECT customer_id FROM orders)`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`WHERE c.id <> ALL (SELECT customer_id FROM orders)`",
+            "ru": "`WHERE c.id <> ALL (SELECT customer_id FROM orders)`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`WHERE NOT (c.id IN (SELECT customer_id FROM orders))`",
+            "ru": "`WHERE NOT (c.id IN (SELECT customer_id FROM orders))`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "All four behave identically, so any of them will do.",
+            "ru": "Все четыре ведут себя одинаково, поэтому подойдёт любое."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "NOT EXISTS asks only whether a matching row exists, so nulls in the subquery are irrelevant. The other three are all spellings of NOT IN — `<> ALL` is its definition, and `NOT (x IN ...)` is the same expression negated — and every one of them returns no rows at all if the subquery yields a single null. A LEFT JOIN with `WHERE o.id IS NULL` is the other safe form.",
+        "ru": "NOT EXISTS спрашивает лишь о существовании соответствующей строки, поэтому NULL в подзапросе неважны. Остальные три — записи одного и того же NOT IN: `<> ALL` является его определением, а `NOT (x IN ...)` — тем же выражением с отрицанием, — и каждая из них не вернёт ни одной строки, если подзапрос выдаст хоть один NULL. Второй безопасный вариант — LEFT JOIN с `WHERE o.id IS NULL`."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/functions-subquery.html",
+        "https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-JOIN"
+      ]
+    },
+    {
+      "id": "sql.joins.005",
+      "section": "joins",
+      "difficulty": "medium",
+      "text": {
+        "en": "Why does reading a manager hierarchy require aliases on both sides of the join?",
+        "ru": "Почему для чтения иерархии руководителей нужны псевдонимы с обеих сторон соединения?"
+      },
+      "code": "SELECT e.name, m.name AS manager\nFROM employees e\nLEFT JOIN employees m ON m.id = e.manager_id",
+      "options": [
+        {
+          "text": {
+            "en": "Aliases are what tell the planner to use an index on the manager column.",
+            "ru": "Псевдонимы сообщают планировщику, что нужно использовать индекс по столбцу руководителя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both sides are the same table, so without aliases there is no way to say which side a column refers to.",
+            "ru": "Обе стороны — одна и та же таблица, поэтому без псевдонимов невозможно указать, к какой стороне относится столбец."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A self-join is only permitted on a table that has an alias declared in its definition.",
+            "ru": "Самосоединение допустимо только для таблицы, у которой псевдоним объявлен в её определении."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Without aliases the join would recurse indefinitely down the hierarchy.",
+            "ru": "Без псевдонимов соединение бесконечно рекурсировало бы вниз по иерархии."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Aliases prevent the two copies of the table from locking each other.",
+            "ru": "Псевдонимы не дают двум копиям таблицы заблокировать друг друга."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A self-join is an ordinary join whose two inputs happen to be the same table; the aliases give each input a distinct name so `e.name` and `m.name` are unambiguous. Note the LEFT: an inner join would silently drop the person at the top of the tree, who has no manager. A self-join reaches exactly one level — for the whole chain you need a recursive CTE.",
+        "ru": "Самосоединение — обычное соединение, у которого обе стороны оказались одной таблицей; псевдонимы дают каждой стороне своё имя, чтобы `e.name` и `m.name` были однозначны. Обратите внимание на LEFT: внутреннее соединение молча потеряло бы человека с вершины дерева, у которого руководителя нет. Самосоединение достаёт ровно один уровень — для всей цепочки нужен рекурсивный CTE."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-JOIN"
+      ]
+    },
+    {
+      "id": "sql.joins.006",
+      "section": "joins",
+      "difficulty": "hard",
+      "text": {
+        "en": "Why is `NATURAL JOIN` discouraged in production code?",
+        "ru": "Почему `NATURAL JOIN` не рекомендуют в продакшен-коде?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It always performs a cross join first and filters afterwards, which is slower.",
+            "ru": "Он всегда сначала делает перекрёстное соединение и фильтрует потом, что медленнее."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It cannot use indexes, because the join columns are resolved at runtime.",
+            "ru": "Он не может использовать индексы, поскольку столбцы соединения определяются во время выполнения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It joins on every pair of identically named columns, so adding a column to both tables later silently changes what the query means.",
+            "ru": "Он соединяет по всем парам одноимённых столбцов, поэтому добавленный позже в обе таблицы столбец тихо меняет смысл запроса."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is not supported by PostgreSQL and exists only in the SQL standard.",
+            "ru": "Он не поддерживается PostgreSQL и существует только в стандарте SQL."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It silently converts every join into an outer join when a column is nullable.",
+            "ru": "Он тихо превращает любое соединение во внешнее, если столбец допускает NULL."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The join condition is not written down anywhere — it is derived from whatever names the two tables currently share. The day somebody adds `created_at` or `updated_by` to both, the query starts joining on that too and quietly returns fewer rows, with no error and no diff in the query text to point at. `USING (customer_id)` keeps the brevity while naming the columns explicitly; an explicit ON is clearer still.",
+        "ru": "Условие соединения нигде не записано — оно выводится из тех имён, которые в данный момент есть у обеих таблиц. В день, когда кто-нибудь добавит в обе `created_at` или `updated_by`, запрос начнёт соединять и по ним и тихо станет возвращать меньше строк — без ошибки и без изменений в тексте запроса, на которые можно было бы указать. `USING (customer_id)` сохраняет краткость, называя столбцы явно; явный ON ещё понятнее."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-JOIN"
+      ]
+    },
+    {
+      "id": "sql.aggregation.001",
+      "section": "aggregation",
+      "difficulty": "easy",
+      "text": {
+        "en": "Why is `WHERE COUNT(*) > 2` rejected while `HAVING COUNT(*) > 2` works?",
+        "ru": "Почему `WHERE COUNT(*) > 2` отвергается, а `HAVING COUNT(*) > 2` работает?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "WHERE accepts only column references, while HAVING accepts arbitrary expressions.",
+            "ru": "WHERE принимает только ссылки на столбцы, а HAVING — произвольные выражения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "COUNT returns a bigint, which WHERE cannot compare against an integer literal.",
+            "ru": "COUNT возвращает bigint, который WHERE не может сравнить с целочисленным литералом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "HAVING is simply the modern spelling of WHERE, and older engines reject the old one.",
+            "ru": "HAVING — просто современная запись WHERE, и старые движки отвергают устаревшую."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "WHERE runs before GROUP BY, when no groups exist yet; HAVING runs after and can see aggregates.",
+            "ru": "WHERE выполняется до GROUP BY, когда групп ещё нет; HAVING выполняется после и видит агрегаты."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "WHERE is applied per partition, so an aggregate over the whole table is out of scope.",
+            "ru": "WHERE применяется к каждой партиции, поэтому агрегат по всей таблице ему недоступен."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The logical order is FROM, WHERE, GROUP BY, HAVING, SELECT. At WHERE time the rows are still individual, so there is nothing for COUNT to count. The practical corollary runs the other way too: when a condition could go in either clause, put it in WHERE, because discarding rows before grouping is strictly less work.",
+        "ru": "Логический порядок: FROM, WHERE, GROUP BY, HAVING, SELECT. На этапе WHERE строки ещё поодиночке, поэтому COUNT нечего считать. Практическое следствие работает и в обратную сторону: если условие можно поставить в любой из двух блоков, ставьте в WHERE — отбросить строки до группировки заведомо дешевле."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-GROUP",
+        "https://www.postgresql.org/docs/current/functions-aggregate.html"
+      ]
+    },
+    {
+      "id": "sql.aggregation.002",
+      "section": "aggregation",
+      "difficulty": "easy",
+      "text": {
+        "en": "A department has no employees. What does `SUM(salary)` return for it after a LEFT JOIN and GROUP BY?",
+        "ru": "В отделе нет сотрудников. Что вернёт для него `SUM(salary)` после LEFT JOIN и GROUP BY?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "0, because SUM treats an empty input as an empty total.",
+            "ru": "0, поскольку SUM трактует пустой вход как нулевой итог."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "0, matching what COUNT returns for the same group.",
+            "ru": "0 — так же, как COUNT для той же группы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An error, because the group contains no summable rows.",
+            "ru": "Ошибку, поскольку в группе нет строк, которые можно просуммировать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The department is excluded from the result entirely.",
+            "ru": "Отдел полностью исключается из результата."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "NULL — SUM over no values is NULL, so it needs COALESCE to read as zero.",
+            "ru": "NULL — SUM по отсутствующим значениям даёт NULL, поэтому для нуля нужен COALESCE."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "COUNT and SUM disagree about empty input: COUNT returns 0, SUM returns NULL. That is consistent with NULL meaning 'unknown' rather than 'nothing', but it makes reports look broken, so `COALESCE(SUM(salary), 0)` is the standard wrapper wherever a group may be empty.",
+        "ru": "COUNT и SUM по-разному относятся к пустому входу: COUNT вернёт 0, SUM — NULL. Это согласуется с трактовкой NULL как «неизвестно», а не «ничего», но отчёты из-за этого выглядят сломанными, поэтому `COALESCE(SUM(salary), 0)` — стандартная обёртка везде, где группа может оказаться пустой."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/functions-aggregate.html",
+        "https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-JOIN"
+      ]
+    },
+    {
+      "id": "sql.aggregation.003",
+      "section": "aggregation",
+      "difficulty": "medium",
+      "text": {
+        "en": "Why is grouping customers by `c.id, c.name` safer than grouping by `c.name` alone?",
+        "ru": "Почему группировать покупателей по `c.id, c.name` безопаснее, чем только по `c.name`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Two customers who share a name would be merged into one row, with no error and no warning.",
+            "ru": "Двух покупателей с одинаковым именем склеит в одну строку — без ошибки и без предупреждения."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Grouping by a text column is rejected by PostgreSQL unless a collation is specified.",
+            "ru": "Группировка по текстовому столбцу отвергается PostgreSQL без указания правила сортировки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only an indexed column may appear in GROUP BY.",
+            "ru": "В GROUP BY может присутствовать только проиндексированный столбец."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Grouping by name produces the rows in an undefined order.",
+            "ru": "Группировка по имени даёт строки в неопределённом порядке."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "There is no difference; the planner treats the two as equivalent.",
+            "ru": "Разницы нет: планировщик считает эти варианты эквивалентными."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Grouping merges rows that share the grouping value, so any accidental collision in that value silently merges two real entities. The id is unique by construction and the name is not. PostgreSQL will even let you write `GROUP BY c.id` alone and still select `c.name`, because grouping by a primary key makes the rest of the table's columns functionally dependent on it — a convenience worth knowing but not worth relying on across engines.",
+        "ru": "Группировка склеивает строки с одинаковым значением ключа группировки, поэтому любое случайное совпадение этого значения молча объединяет две разные сущности. Идентификатор уникален по построению, имя — нет. PostgreSQL даже позволит написать просто `GROUP BY c.id` и при этом выбрать `c.name`, поскольку группировка по первичному ключу делает остальные столбцы таблицы функционально зависимыми от него, — удобство, о котором стоит знать, но на которое не стоит полагаться в разных движках."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-GROUP"
+      ]
+    },
+    {
+      "id": "sql.aggregation.004",
+      "section": "aggregation",
+      "difficulty": "medium",
+      "text": {
+        "en": "A customer bought three keyboards in three separate orders. Which expression reports that they shopped in one category, not three?",
+        "ru": "Покупатель взял три клавиатуры в трёх разных заказах. Какое выражение покажет, что он покупал в одной категории, а не в трёх?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "`COUNT(p.category)`",
+            "ru": "`COUNT(p.category)`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`COUNT(DISTINCT p.category)`",
+            "ru": "`COUNT(DISTINCT p.category)`"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "`COUNT(*)`",
+            "ru": "`COUNT(*)`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`DISTINCT COUNT(p.category)`",
+            "ru": "`DISTINCT COUNT(p.category)`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`COUNT(p.category) / COUNT(*)`",
+            "ru": "`COUNT(p.category) / COUNT(*)`"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The join produces one row per purchase, so counting rows or counting non-null category values both give three. `COUNT(DISTINCT ...)` counts how many different values appear, which is the question actually being asked. `DISTINCT COUNT(...)` is not valid syntax in this position — DISTINCT belongs inside the aggregate's parentheses.",
+        "ru": "Соединение даёт по строке на покупку, поэтому и подсчёт строк, и подсчёт непустых значений категории дадут три. `COUNT(DISTINCT ...)` считает, сколько различных значений встретилось, — а спрашивают именно об этом. `DISTINCT COUNT(...)` в этой позиции синтаксически некорректен: DISTINCT ставится внутрь скобок агрегата."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/functions-aggregate.html"
+      ]
+    },
+    {
+      "id": "sql.aggregation.005",
+      "section": "aggregation",
+      "difficulty": "medium",
+      "text": {
+        "en": "What does this SELECT list produce?",
+        "ru": "Что даст этот список SELECT?"
+      },
+      "code": "SELECT c.name,\n       COUNT(*) FILTER (WHERE o.status = 'shipped')   AS shipped,\n       COUNT(*) FILTER (WHERE o.status = 'pending')   AS pending,\n       COUNT(*) FILTER (WHERE o.status = 'cancelled') AS cancelled\nFROM customers c JOIN orders o ON o.customer_id = c.id\nGROUP BY c.id, c.name",
+      "options": [
+        {
+          "text": {
+            "en": "Three rows per customer, one for each status.",
+            "ru": "По три строки на покупателя — по одной на каждый статус."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "One row per customer, but every count equals the total number of their orders.",
+            "ru": "По строке на покупателя, но каждый счётчик равен общему числу его заказов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "One row per customer with three counts side by side — a pivot of the status column into columns.",
+            "ru": "По строке на покупателя с тремя счётчиками рядом — разворот столбца статуса в столбцы."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "An error, because FILTER may only be used with SUM.",
+            "ru": "Ошибку, поскольку FILTER допустим только с SUM."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "One row per customer, with NULL in any count whose condition matched no rows.",
+            "ru": "По строке на покупателя, где счётчик без совпадений равен NULL."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`FILTER (WHERE ...)` restricts an aggregate to a subset of its group's rows, so three counts over the same group can each look at different rows. This is the standard way to pivot values into columns. Note that a count with no matching rows is 0, not NULL — COUNT is the aggregate that has a sensible empty answer.",
+        "ru": "`FILTER (WHERE ...)` ограничивает агрегат подмножеством строк своей группы, поэтому три счётчика по одной группе могут смотреть на разные строки. Это стандартный способ развернуть значения в столбцы. Обратите внимание: счётчик без совпадений даст 0, а не NULL, — COUNT как раз тот агрегат, у которого есть осмысленный ответ на пустоту."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/functions-aggregate.html"
+      ]
+    },
+    {
+      "id": "sql.aggregation.006",
+      "section": "aggregation",
+      "difficulty": "hard",
+      "text": {
+        "en": "`salary` is nullable for some employees. When does `AVG(salary)` differ from `SUM(salary) / COUNT(*)`?",
+        "ru": "У части сотрудников `salary` не заполнена. Когда `AVG(salary)` отличается от `SUM(salary) / COUNT(*)`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Never — the two expressions are defined to be equivalent.",
+            "ru": "Никогда — эти выражения по определению эквивалентны."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only when the column is an integer type, because of integer division.",
+            "ru": "Только для целочисленного типа столбца — из-за целочисленного деления."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only when the group contains a single row.",
+            "ru": "Только когда в группе одна строка."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whenever any salary is null, because AVG divides by the count of non-null values while COUNT(*) counts all rows.",
+            "ru": "Всегда, когда хоть одна зарплата пуста: AVG делит на количество непустых значений, а COUNT(*) считает все строки."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Whenever the query also contains a GROUP BY clause.",
+            "ru": "Всегда, когда в запросе есть GROUP BY."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Aggregates skip nulls, so AVG is `SUM(salary) / COUNT(salary)` — the divisor counts rows that actually have a salary. Dividing by `COUNT(*)` instead treats a missing salary as a zero, which is a different and usually wrong claim about the data. If zero really is the intended reading, say so explicitly with `AVG(COALESCE(salary, 0))`.",
+        "ru": "Агрегаты пропускают NULL, поэтому AVG — это `SUM(salary) / COUNT(salary)`, где делитель считает строки, у которых зарплата есть. Деление на `COUNT(*)` трактует отсутствующую зарплату как ноль — это другое и обычно неверное утверждение о данных. Если ноль действительно имелся в виду, скажите это явно: `AVG(COALESCE(salary, 0))`."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/functions-aggregate.html"
+      ]
+    },
+    {
+      "id": "sql.subqueries-cte.001",
+      "section": "subqueries-cte",
+      "difficulty": "easy",
+      "text": {
+        "en": "Why is `SELECT 1` the idiomatic body of an EXISTS subquery?",
+        "ru": "Почему `SELECT 1` — идиоматичное тело подзапроса в EXISTS?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "`SELECT 1` is faster because it stops the subquery after the first row; `SELECT *` scans all of them.",
+            "ru": "`SELECT 1` быстрее, потому что останавливает подзапрос после первой строки, а `SELECT *` перебирает все."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "EXISTS requires its subquery to return exactly one column.",
+            "ru": "EXISTS требует, чтобы подзапрос возвращал ровно один столбец."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It prevents the subquery's column names from colliding with the outer query's.",
+            "ru": "Это не даёт именам столбцов подзапроса столкнуться с именами внешнего запроса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It forces the planner to use a semi-join instead of a nested loop.",
+            "ru": "Это заставляет планировщик выбрать полусоединение вместо вложенного цикла."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "EXISTS only tests whether the set is non-empty, so the selected value is never read.",
+            "ru": "EXISTS проверяет лишь непустоту множества, поэтому выбранное значение никогда не читается."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "EXISTS is a boolean test on emptiness, so the select list is irrelevant — `SELECT 1`, `SELECT *` and `SELECT NULL` behave identically and the planner stops at the first matching row in every case. `SELECT 1` is convention, signalling to the reader that the value is deliberately unused.",
+        "ru": "EXISTS — булева проверка на непустоту, поэтому список выборки не имеет значения: `SELECT 1`, `SELECT *` и `SELECT NULL` ведут себя одинаково, и планировщик в любом случае останавливается на первой подходящей строке. `SELECT 1` — соглашение, сообщающее читателю, что значение намеренно не используется."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/functions-subquery.html"
+      ]
+    },
+    {
+      "id": "sql.subqueries-cte.002",
+      "section": "subqueries-cte",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which statement about this query is correct?",
+        "ru": "Какое утверждение об этом запросе верно?"
+      },
+      "code": "SELECT e.name\nFROM employees e\nWHERE e.salary > (SELECT AVG(x.salary) FROM employees x\n                  WHERE x.department_id = e.department_id)",
+      "options": [
+        {
+          "text": {
+            "en": "It is correlated: the inner average is recomputed for each employee's own department.",
+            "ru": "Он коррелированный: внутреннее среднее пересчитывается для отдела каждого сотрудника."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The inner query runs once and compares every employee to the company-wide average.",
+            "ru": "Внутренний запрос выполняется один раз и сравнивает всех со средним по компании."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is invalid, because the inner query may not reference the outer alias.",
+            "ru": "Он некорректен: внутренний запрос не вправе ссылаться на внешний псевдоним."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An employee whose department is null is compared against the average of all null-department employees.",
+            "ru": "Сотрудник без отдела сравнивается со средним по всем сотрудникам без отдела."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It returns one row per department rather than one per employee.",
+            "ru": "Он вернёт по строке на отдел, а не на сотрудника."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Referring to `e.department_id` inside the subquery makes it correlated, so conceptually it is evaluated per outer row. Worth noticing: an employee whose department is null drops out silently, because `x.department_id = e.department_id` is unknown when both are null, the inner query finds nothing, AVG over nothing is NULL, and the comparison is never true. 'Per outer row' is the semantics, not the plan — engines routinely rewrite this into a single grouped scan.",
+        "ru": "Ссылка на `e.department_id` внутри подзапроса делает его коррелированным, поэтому по смыслу он вычисляется для каждой внешней строки. Стоит заметить: сотрудник без отдела отсеивается молча, потому что при двух NULL `x.department_id = e.department_id` даёт «неизвестно», внутренний запрос ничего не находит, AVG по пустому множеству даёт NULL и сравнение никогда не истинно. «На каждую внешнюю строку» — это семантика, а не план: движки регулярно переписывают такое в один сгруппированный проход."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/functions-subquery.html"
+      ]
+    },
+    {
+      "id": "sql.subqueries-cte.003",
+      "section": "subqueries-cte",
+      "difficulty": "medium",
+      "text": {
+        "en": "Why does averaging per-order totals require a CTE or subquery rather than `AVG(SUM(...))`?",
+        "ru": "Почему усреднение сумм заказов требует CTE или подзапроса, а не `AVG(SUM(...))`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "AVG cannot accept a numeric argument produced by SUM.",
+            "ru": "AVG не принимает числовой аргумент, полученный из SUM."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An aggregate collapses rows once, so a second collapse needs a second query to collapse.",
+            "ru": "Агрегат схлопывает строки один раз, поэтому второму схлопыванию нужен второй запрос."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Nested aggregates are allowed, but only inside a HAVING clause.",
+            "ru": "Вложенные агрегаты допустимы, но только внутри HAVING."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It works fine; the CTE is purely a readability choice.",
+            "ru": "Так тоже работает; CTE — исключительно вопрос читаемости."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nested aggregates are allowed only when both use the same GROUP BY key.",
+            "ru": "Вложенные агрегаты допустимы, только если оба используют один и тот же ключ GROUP BY."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Each level of aggregation corresponds to one grouping step, and one query has one GROUP BY. Summing line items into an order total is the first step; averaging those totals across a customer is the second, and it needs its own query to group over. A CTE and a subquery in FROM are interchangeable here — the CTE just reads better.",
+        "ru": "Каждый уровень агрегации соответствует одному шагу группировки, а в одном запросе один GROUP BY. Суммирование позиций в сумму заказа — первый шаг; усреднение этих сумм по покупателю — второй, и ему нужен собственный запрос, по которому группировать. CTE и подзапрос в FROM здесь взаимозаменяемы — CTE просто читается лучше."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/queries-with.html",
+        "https://www.postgresql.org/docs/current/functions-aggregate.html"
+      ]
+    },
+    {
+      "id": "sql.subqueries-cte.004",
+      "section": "subqueries-cte",
+      "difficulty": "medium",
+      "text": {
+        "en": "In modern PostgreSQL, how is a CTE referenced exactly once treated by the planner?",
+        "ru": "Как современный PostgreSQL обрабатывает CTE, на который ссылаются ровно один раз?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It is always materialised into a temporary result first, as it was before version 12.",
+            "ru": "Он всегда сначала материализуется во временный результат, как и до версии 12."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is rewritten into a temporary table that persists for the session.",
+            "ru": "Он переписывается во временную таблицу, живущую до конца сессии."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is inlined into the main query like a subquery, unless MATERIALIZED is specified.",
+            "ru": "Он вклеивается в основной запрос как подзапрос, если не указано MATERIALIZED."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is evaluated once per row of the outer query, like a correlated subquery.",
+            "ru": "Он вычисляется по разу на каждую строку внешнего запроса, как коррелированный подзапрос."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is inlined only when it contains no aggregates or joins.",
+            "ru": "Он вклеивается, только если не содержит агрегатов и соединений."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Before PostgreSQL 12 every CTE was an optimisation fence: it was computed in full whether or not that helped, which meant a filter in the outer query could not be pushed down into it. Since 12, a CTE used once and free of side effects is folded in like a subquery. `MATERIALIZED` and `NOT MATERIALIZED` let you force either behaviour when you know better than the planner — occasionally useful for an expensive CTE referenced several times.",
+        "ru": "До PostgreSQL 12 каждый CTE был барьером оптимизации: он вычислялся целиком независимо от того, помогало это или нет, а значит фильтр из внешнего запроса нельзя было протолкнуть внутрь. Начиная с 12, CTE, использованный один раз и без побочных эффектов, вклеивается как подзапрос. `MATERIALIZED` и `NOT MATERIALIZED` позволяют потребовать любое поведение, когда вы знаете лучше планировщика, — иногда это полезно для дорогого CTE, к которому обращаются несколько раз."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/queries-with.html"
+      ]
+    },
+    {
+      "id": "sql.subqueries-cte.005",
+      "section": "subqueries-cte",
+      "difficulty": "medium",
+      "text": {
+        "en": "What ends the recursion in a `WITH RECURSIVE` query?",
+        "ru": "Что завершает рекурсию в запросе `WITH RECURSIVE`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A depth limit that PostgreSQL applies automatically.",
+            "ru": "Ограничение глубины, которое PostgreSQL применяет автоматически."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The LIMIT clause of the outer query.",
+            "ru": "Блок LIMIT внешнего запроса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A mandatory termination predicate in the recursive branch's WHERE clause.",
+            "ru": "Обязательное условие остановки в WHERE рекурсивной ветви."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A pass of the recursive branch that produces no new rows.",
+            "ru": "Проход рекурсивной ветви, не давший новых строк."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Reaching a row whose recursive column is NULL.",
+            "ru": "Достижение строки, у которой рекурсивный столбец равен NULL."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The seed runs once, then the recursive branch runs repeatedly against whatever the previous pass produced, and it stops when a pass adds nothing. Over a tree that always happens. Over a graph containing a cycle it never does, and the query runs until it exhausts memory — so on data where a cycle is possible, carry the visited path along as an array and exclude ids already in it.",
+        "ru": "Стартовая ветвь выполняется один раз, затем рекурсивная повторяется по результатам предыдущего прохода и останавливается, когда очередной проход ничего не добавил. На дереве это происходит всегда. На графе с циклом — никогда, и запрос работает, пока не исчерпает память, — поэтому на данных, где цикл возможен, протаскивайте пройденный путь массивом и исключайте уже встреченные идентификаторы."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/queries-with.html"
+      ]
+    },
+    {
+      "id": "sql.subqueries-cte.006",
+      "section": "subqueries-cte",
+      "difficulty": "hard",
+      "text": {
+        "en": "A scalar subquery in a comparison returns two rows at runtime. What happens?",
+        "ru": "Скалярный подзапрос в сравнении вернул во время выполнения две строки. Что произойдёт?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The first row is used and the rest are discarded.",
+            "ru": "Будет использована первая строка, остальные отброшены."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The comparison becomes true if any returned row satisfies it, like ANY.",
+            "ru": "Сравнение станет истинным, если ему удовлетворяет любая из строк, как при ANY."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The comparison yields NULL and the row is filtered out.",
+            "ru": "Сравнение даст NULL, и строка будет отфильтрована."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The statement is rejected at parse time, before any data is read.",
+            "ru": "Запрос будет отвергнут при разборе, до чтения данных."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The query fails with a runtime error — the problem cannot be caught when the statement is planned.",
+            "ru": "Запрос упадёт с ошибкой во время выполнения — на этапе планирования такую проблему поймать нельзя."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A scalar subquery is contractually one row and one column, and the row count depends on the data, so nothing can be verified until it runs. That makes it a latent failure: the query works in development against a small dataset and fails in production the day a second matching row appears. When more than one row is genuinely possible, `= ANY (...)`, `IN (...)` or an explicit aggregate say so up front.",
+        "ru": "Скалярный подзапрос по контракту даёт одну строку и один столбец, а количество строк зависит от данных, поэтому до выполнения проверить нечего. Это отложенный сбой: запрос работает на маленьком наборе при разработке и падает в продакшене в тот день, когда появляется вторая подходящая строка. Если несколько строк действительно возможны, `= ANY (...)`, `IN (...)` или явный агрегат говорят об этом заранее."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/functions-subquery.html"
+      ]
+    },
+    {
+      "id": "sql.window-functions.001",
+      "section": "window-functions",
+      "difficulty": "easy",
+      "text": {
+        "en": "What is the essential difference between `AVG(salary) OVER (PARTITION BY department_id)` and `AVG(salary)` with `GROUP BY department_id`?",
+        "ru": "В чём принципиальная разница между `AVG(salary) OVER (PARTITION BY department_id)` и `AVG(salary)` с `GROUP BY department_id`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The window keeps every input row and attaches the average to each; GROUP BY collapses each department to one row.",
+            "ru": "Окно сохраняет все входные строки и приписывает среднее каждой; GROUP BY схлопывает каждый отдел в одну строку."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The window computes the average over the whole table, ignoring the partition.",
+            "ru": "Окно считает среднее по всей таблице, игнорируя разбиение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "They are equivalent; PARTITION BY is an alias for GROUP BY.",
+            "ru": "Они эквивалентны: PARTITION BY — синоним GROUP BY."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The window version cannot be combined with other columns in the SELECT list.",
+            "ru": "Оконный вариант нельзя сочетать с другими столбцами в списке SELECT."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The window version rounds its result while GROUP BY does not.",
+            "ru": "Оконный вариант округляет результат, а GROUP BY — нет."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "That is the whole point of window functions: compute across related rows without losing the rows. It is what makes 'show every order next to that customer's average order' a single query rather than a self-join against a grouped subquery.",
+        "ru": "В этом и вся суть оконных функций: считать по связанным строкам, не теряя сами строки. Именно поэтому «показать каждый заказ рядом со средним чеком этого покупателя» — один запрос, а не самосоединение со сгруппированным подзапросом."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/tutorial-window.html"
+      ]
+    },
+    {
+      "id": "sql.window-functions.002",
+      "section": "window-functions",
+      "difficulty": "medium",
+      "text": {
+        "en": "Why is `WHERE ROW_NUMBER() OVER (PARTITION BY category ORDER BY price DESC) <= 2` rejected?",
+        "ru": "Почему `WHERE ROW_NUMBER() OVER (PARTITION BY category ORDER BY price DESC) <= 2` отвергается?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "ROW_NUMBER may only appear in the ORDER BY clause.",
+            "ru": "ROW_NUMBER допустим только в блоке ORDER BY."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Window functions are evaluated after WHERE, so the ranking does not exist yet when the filter runs.",
+            "ru": "Оконные функции вычисляются после WHERE, поэтому на момент фильтрации ранга ещё не существует."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A window function needs a GROUP BY in the same query before it can be filtered.",
+            "ru": "Оконной функции нужен GROUP BY в том же запросе, прежде чем по ней можно фильтровать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "PARTITION BY and WHERE cannot appear in the same query.",
+            "ru": "PARTITION BY и WHERE не могут находиться в одном запросе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ROW_NUMBER returns bigint, which cannot be compared with an integer literal.",
+            "ru": "ROW_NUMBER возвращает bigint, который нельзя сравнить с целочисленным литералом."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The evaluation order is FROM, WHERE, GROUP BY, HAVING, window functions, SELECT, ORDER BY. Compute the ranking in one query and filter in the query that wraps it — a CTE or a subquery. That two-step shape is the standard answer to every top-N-per-group question.",
+        "ru": "Порядок вычисления: FROM, WHERE, GROUP BY, HAVING, оконные функции, SELECT, ORDER BY. Вычислите ранг в одном запросе и фильтруйте в том, который его оборачивает, — в CTE или подзапросе. Эта двухшаговая форма и есть стандартный ответ на любой вопрос «первые N в каждой группе»."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/sql-expressions.html#SYNTAX-WINDOW-FUNCTIONS",
+        "https://www.postgresql.org/docs/current/tutorial-window.html"
+      ]
+    },
+    {
+      "id": "sql.window-functions.003",
+      "section": "window-functions",
+      "difficulty": "medium",
+      "text": {
+        "en": "Salaries in a department are 5000, 4000, 4000, 3000. What does RANK assign to the 3000 row, and what does DENSE_RANK assign?",
+        "ru": "Зарплаты в отделе: 5000, 4000, 4000, 3000. Какой ранг присвоит строке с 3000 функция RANK, а какой — DENSE_RANK?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "RANK gives 3, DENSE_RANK gives 4.",
+            "ru": "RANK даст 3, DENSE_RANK даст 4."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both give 4.",
+            "ru": "Обе дадут 4."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "RANK gives 4, DENSE_RANK gives 3.",
+            "ru": "RANK даст 4, DENSE_RANK даст 3."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Both give 3.",
+            "ru": "Обе дадут 3."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "RANK gives 4 and DENSE_RANK gives 4, while ROW_NUMBER gives 3.",
+            "ru": "RANK даст 4 и DENSE_RANK даст 4, а ROW_NUMBER — 3."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The two 4000 rows both rank 2. RANK then resumes at the position the next row actually occupies, leaving a gap at 3; DENSE_RANK counts distinct values and gives 3. ROW_NUMBER refuses to tie at all and hands out 1, 2, 3, 4 — which means it picks arbitrarily between the two equal salaries unless the OVER clause has a tie-break key.",
+        "ru": "Обе строки с 4000 получают ранг 2. Дальше RANK продолжает с той позиции, которую строка фактически занимает, оставляя пропуск на 3; DENSE_RANK считает различные значения и даёт 3. ROW_NUMBER делиться вовсе отказывается и раздаёт 1, 2, 3, 4 — а значит, выбирает между двумя равными зарплатами произвольно, если в OVER нет вторичного ключа."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/functions-window.html"
+      ]
+    },
+    {
+      "id": "sql.window-functions.004",
+      "section": "window-functions",
+      "difficulty": "hard",
+      "text": {
+        "en": "Several orders share the same date. Why does a running total written as `SUM(total) OVER (ORDER BY placed_on)` jump past all of them at once?",
+        "ru": "У нескольких заказов совпадает дата. Почему нарастающий итог `SUM(total) OVER (ORDER BY placed_on)` перепрыгивает через все них разом?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The default frame is ROWS-based, and ROWS ignores duplicate ordering values.",
+            "ru": "Рамка по умолчанию основана на ROWS, а ROWS игнорирует повторяющиеся значения сортировки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "SUM deduplicates equal values within a window frame.",
+            "ru": "SUM убирает дубликаты одинаковых значений внутри рамки окна."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The rows are processed in parallel, so their order within a date is undefined.",
+            "ru": "Строки обрабатываются параллельно, поэтому их порядок внутри даты не определён."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The default frame is RANGE-based, and RANGE treats rows equal under the ORDER BY as a single unit.",
+            "ru": "Рамка по умолчанию основана на RANGE, а RANGE считает равные по ORDER BY строки одной единицей."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "An ORDER BY inside OVER is ignored when the column contains duplicates.",
+            "ru": "ORDER BY внутри OVER игнорируется, если в столбце есть дубликаты."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "With an ORDER BY and no explicit frame, the default is `RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW`, and RANGE includes every peer of the current row — all rows equal under the ordering. Each of three orders on the same day therefore shows the total after all three. If you want a strict row-by-row accumulation, either say `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW` or add a unique tie-break key to the ordering.",
+        "ru": "При наличии ORDER BY и отсутствии явной рамки по умолчанию действует `RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW`, а RANGE включает всех «соседей» текущей строки — все строки, равные ей по сортировке. Поэтому каждый из трёх заказов одного дня показывает итог уже после всех трёх. Если нужно строгое построчное накопление, укажите `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW` или добавьте в сортировку уникальный вторичный ключ."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/sql-expressions.html#SYNTAX-WINDOW-FUNCTIONS"
+      ]
+    },
+    {
+      "id": "sql.window-functions.005",
+      "section": "window-functions",
+      "difficulty": "hard",
+      "text": {
+        "en": "`LAST_VALUE(price) OVER (PARTITION BY category ORDER BY price)` returns the current row's price rather than the highest. Why?",
+        "ru": "`LAST_VALUE(price) OVER (PARTITION BY category ORDER BY price)` возвращает цену текущей строки, а не максимальную. Почему?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "LAST_VALUE ignores its ORDER BY and reads the partition in physical order.",
+            "ru": "LAST_VALUE игнорирует свой ORDER BY и читает партицию в физическом порядке."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "LAST_VALUE requires DESC ordering to reach the end of the partition.",
+            "ru": "LAST_VALUE требует сортировки DESC, чтобы добраться до конца партиции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "PARTITION BY resets the frame after every row.",
+            "ru": "PARTITION BY сбрасывает рамку после каждой строки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "LAST_VALUE is not a window function and cannot take an OVER clause.",
+            "ru": "LAST_VALUE не является оконной функцией и не принимает блок OVER."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The default frame ends at the current row, so the last row of the frame is the current row.",
+            "ru": "Рамка по умолчанию заканчивается на текущей строке, поэтому последняя строка рамки — текущая."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The default frame runs from the start of the partition to the current row, and LAST_VALUE faithfully returns the last row of that frame. Spell the frame out — `ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING` — to make it mean what its name suggests. FIRST_VALUE happens to work by accident under the default frame, which is exactly why LAST_VALUE catches people: the pair looks symmetric and is not.",
+        "ru": "Рамка по умолчанию идёт от начала партиции до текущей строки, и LAST_VALUE честно возвращает последнюю строку этой рамки. Задайте рамку явно — `ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING`, — чтобы функция означала то, что написано в её названии. FIRST_VALUE при рамке по умолчанию работает как надо по случайности, и именно поэтому на LAST_VALUE попадаются: пара выглядит симметричной, но таковой не является."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/sql-expressions.html#SYNTAX-WINDOW-FUNCTIONS",
+        "https://www.postgresql.org/docs/current/functions-window.html"
+      ]
+    },
+    {
+      "id": "sql.window-functions.006",
+      "section": "window-functions",
+      "difficulty": "medium",
+      "text": {
+        "en": "What does `LAG(revenue)` return for the first row of each partition, and what does `revenue - LAG(revenue)` give there?",
+        "ru": "Что вернёт `LAG(revenue)` для первой строки каждой партиции и что даст там `revenue - LAG(revenue)`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "NULL, and the subtraction is therefore NULL as well.",
+            "ru": "NULL — и вычитание, соответственно, тоже даёт NULL."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "0, and the subtraction gives the revenue itself.",
+            "ru": "0 — и вычитание даёт саму выручку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The last row of the previous partition, and the subtraction crosses the partition boundary.",
+            "ru": "Последнюю строку предыдущей партиции — и вычитание пересекает границу партиций."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The same row's revenue, so the subtraction gives 0.",
+            "ru": "Выручку той же строки, поэтому вычитание даёт 0."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An error, because there is no preceding row to read.",
+            "ru": "Ошибку, поскольку предыдущей строки для чтения нет."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "PARTITION BY restarts the window, so the first row of a partition genuinely has no predecessor and LAG returns NULL. Arithmetic on NULL yields NULL, which is usually exactly right — the change for the first period is unknown, not zero. `LAG(revenue, 1, 0)` substitutes a zero instead, and that is a different claim: it says the previous period had no revenue rather than that there was no previous period.",
+        "ru": "PARTITION BY перезапускает окно, поэтому у первой строки партиции действительно нет предшественника и LAG возвращает NULL. Арифметика с NULL даёт NULL — и обычно это ровно то, что нужно: изменение для первого периода неизвестно, а не равно нулю. `LAG(revenue, 1, 0)` подставит ноль, а это другое утверждение: что в предыдущем периоде не было выручки, а не что предыдущего периода не было."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/functions-window.html"
+      ]
+    },
+    {
+      "id": "sql.types-dates.001",
+      "section": "types-dates",
+      "difficulty": "easy",
+      "text": {
+        "en": "Why should a monetary amount be stored as NUMERIC rather than DOUBLE PRECISION?",
+        "ru": "Почему денежную сумму хранят в NUMERIC, а не в DOUBLE PRECISION?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "NUMERIC is faster for addition, which dominates financial workloads.",
+            "ru": "NUMERIC быстрее складывает, а сложение преобладает в финансовых задачах."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "NUMERIC is exact decimal arithmetic; binary floating point cannot represent values like 0.1 exactly, so sums drift.",
+            "ru": "NUMERIC — точная десятичная арифметика; двоичная плавающая точка не представляет 0.1 точно, поэтому суммы уплывают."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "DOUBLE PRECISION cannot store more than six significant digits.",
+            "ru": "DOUBLE PRECISION не хранит больше шести значащих цифр."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "NUMERIC automatically applies the correct currency rounding rules.",
+            "ru": "NUMERIC автоматически применяет правильные правила округления валюты."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "DOUBLE PRECISION cannot be indexed, so filtering on amounts would be slow.",
+            "ru": "DOUBLE PRECISION нельзя проиндексировать, поэтому фильтрация по суммам была бы медленной."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Binary floating point stores the nearest representable binary fraction, and 0.1 is not one. The error is tiny per value and accumulates over a sum, so totals end up a cent off and equality comparisons fail for no visible reason. NUMERIC trades speed for exactness, and that trade is almost always right for money. Speed is the real cost, not precision limits.",
+        "ru": "Двоичная плавающая точка хранит ближайшую представимую двоичную дробь, а 0.1 к таким не относится. Погрешность на одном значении крошечная и накапливается при суммировании, поэтому итоги расходятся на копейку, а сравнения на равенство отказывают без видимой причины. NUMERIC меняет скорость на точность, и для денег этот обмен почти всегда правильный. Настоящая цена — именно скорость, а не ограничения точности."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/datatype-numeric.html"
+      ]
+    },
+    {
+      "id": "sql.types-dates.002",
+      "section": "types-dates",
+      "difficulty": "easy",
+      "text": {
+        "en": "`total` and `count` are both INTEGER columns. What does `SELECT total / count * 100` compute?",
+        "ru": "`total` и `count` — целочисленные столбцы. Что вычислит `SELECT total / count * 100`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The correct percentage — PostgreSQL promotes the division to numeric automatically.",
+            "ru": "Верный процент — PostgreSQL автоматически повышает деление до numeric."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An error, because integers cannot be divided in a SELECT list.",
+            "ru": "Ошибку, поскольку целые числа нельзя делить в списке SELECT."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Integer division first, so the fractional part is lost before the multiplication ever happens.",
+            "ru": "Сначала целочисленное деление, поэтому дробная часть теряется ещё до умножения."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The correct percentage, because multiplication binds tighter than division.",
+            "ru": "Верный процент, поскольку умножение связывает сильнее деления."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "NULL whenever count is smaller than total.",
+            "ru": "NULL всякий раз, когда count меньше total."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Dividing two integers yields an integer, so 7/10 is 0 and multiplying by 100 gives 0 rather than 70. Multiply first, or make one operand numeric: `total * 100.0 / count`. This is the single most common source of percentage columns full of zeros.",
+        "ru": "Деление двух целых даёт целое, поэтому 7/10 — это 0, и умножение на 100 даёт 0, а не 70. Умножайте раньше или сделайте один операнд числом с дробной частью: `total * 100.0 / count`. Это самая частая причина столбцов с процентами, заполненных нулями."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/datatype-numeric.html"
+      ]
+    },
+    {
+      "id": "sql.types-dates.003",
+      "section": "types-dates",
+      "difficulty": "medium",
+      "text": {
+        "en": "What does PostgreSQL actually store in a `timestamptz` column?",
+        "ru": "Что PostgreSQL на самом деле хранит в столбце типа `timestamptz`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The local time together with the name of the zone it was written in.",
+            "ru": "Локальное время вместе с названием пояса, в котором оно было записано."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The local time together with a numeric UTC offset.",
+            "ru": "Локальное время вместе с числовым смещением от UTC."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The same thing as `timestamp`, with the zone kept in a separate system column.",
+            "ru": "То же, что `timestamp`, а пояс хранится в отдельном системном столбце."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A point in time normalised to UTC; the session's time zone is applied only on input and output.",
+            "ru": "Момент времени, приведённый к UTC; часовой пояс сессии применяется только на входе и выходе."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Local time in the zone configured on the server at insertion time.",
+            "ru": "Локальное время в поясе, настроенном на сервере в момент вставки."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Despite the name, no zone is stored — the value is an instant. That is what you want for anything that happened: a login, an order, a log line. Plain `timestamp` records what a clock read with no instant attached, which is right for a wall-clock intention like an alarm at 07:00 local time wherever the user is. Choosing the wrong one produces bugs that only appear across a DST boundary.",
+        "ru": "Вопреки названию, пояс не сохраняется — хранится момент времени. Именно он нужен для всего, что произошло: вход в систему, заказ, строка лога. Обычный `timestamp` фиксирует показания часов без привязки к моменту, и это правильно для намерения по настенным часам — будильник на 07:00 по местному времени, где бы пользователь ни был. Неверный выбор даёт ошибки, проявляющиеся только на переходе на летнее время."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/datatype-datetime.html"
+      ]
+    },
+    {
+      "id": "sql.types-dates.004",
+      "section": "types-dates",
+      "difficulty": "medium",
+      "text": {
+        "en": "Which expression groups orders by month and sorts correctly as plain text?",
+        "ru": "Какое выражение группирует заказы по месяцам и корректно сортируется как обычный текст?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "`TO_CHAR(placed_on, 'MM-YYYY')`",
+            "ru": "`TO_CHAR(placed_on, 'MM-YYYY')`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`EXTRACT(MONTH FROM placed_on)`",
+            "ru": "`EXTRACT(MONTH FROM placed_on)`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`TO_CHAR(placed_on, 'Mon YYYY')`",
+            "ru": "`TO_CHAR(placed_on, 'Mon YYYY')`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`CAST(placed_on AS VARCHAR)`",
+            "ru": "`CAST(placed_on AS VARCHAR)`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`TO_CHAR(placed_on, 'YYYY-MM')`",
+            "ru": "`TO_CHAR(placed_on, 'YYYY-MM')`"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "`YYYY-MM` sorts correctly as text because its fields run from largest to smallest and are zero-padded — the same reason ISO date order is worth defaulting to. `MM-YYYY` puts every December before every January; `Mon YYYY` sorts alphabetically, so April leads; `EXTRACT(MONTH ...)` throws the year away and merges January 2023 with January 2024. `DATE_TRUNC('month', placed_on)` is the other good answer when you need to keep the date type for later arithmetic.",
+        "ru": "`YYYY-MM` правильно сортируется как текст, потому что поля идут от большего к меньшему и дополнены нулями, — по той же причине порядок по ISO стоит держать по умолчанию. `MM-YYYY` поставит все декабри перед всеми январями; `Mon YYYY` сортируется по алфавиту, и первым окажется April; `EXTRACT(MONTH ...)` выбрасывает год и склеивает январь 2023 с январём 2024. Второй хороший ответ — `DATE_TRUNC('month', placed_on)`, когда нужно сохранить тип даты для дальнейшей арифметики."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/functions-formatting.html",
+        "https://www.postgresql.org/docs/current/functions-datetime.html"
+      ]
+    },
+    {
+      "id": "sql.types-dates.005",
+      "section": "types-dates",
+      "difficulty": "medium",
+      "text": {
+        "en": "`name` is NULL for one row. What does `'Hello, ' || name` produce for it, and what does `CONCAT('Hello, ', name)`?",
+        "ru": "У одной строки `name` равен NULL. Что даст для неё `'Hello, ' || name` и что даст `CONCAT('Hello, ', name)`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "`||` gives NULL; CONCAT treats the null as an empty string and gives `Hello, `.",
+            "ru": "`||` даст NULL; CONCAT считает NULL пустой строкой и даст `Hello, `."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Both give NULL.",
+            "ru": "Оба дадут NULL."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both give `Hello, `.",
+            "ru": "Оба дадут `Hello, `."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`||` gives `Hello, ` and CONCAT gives NULL.",
+            "ru": "`||` даст `Hello, `, а CONCAT — NULL."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both raise an error, because a null cannot be concatenated.",
+            "ru": "Оба выдадут ошибку, поскольку NULL нельзя склеить со строкой."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The `||` operator follows the usual rule that an operation on an unknown value is unknown, so one null swallows the whole expression. CONCAT deliberately breaks that rule and skips nulls, which is convenient for building display strings and misleading if you were relying on the null to propagate. `COALESCE(name, 'friend')` makes the intent explicit either way.",
+        "ru": "Оператор `||` следует обычному правилу: операция с неизвестным значением даёт неизвестное, поэтому один NULL поглощает всё выражение. CONCAT намеренно нарушает это правило и пропускает NULL — удобно для сборки отображаемых строк и обманчиво, если вы рассчитывали на распространение NULL. `COALESCE(name, 'friend')` в любом случае делает намерение явным."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/functions-string.html"
+      ]
+    },
+    {
+      "id": "sql.types-dates.006",
+      "section": "types-dates",
+      "difficulty": "hard",
+      "text": {
+        "en": "Why does `WHERE LOWER(email) = 'a@b.c'` fail to use an ordinary index on `email`, and what fixes it?",
+        "ru": "Почему `WHERE LOWER(email) = 'a@b.c'` не задействует обычный индекс по `email` и что это исправляет?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The index is unusable because the comparison value is a literal; a bind parameter would fix it.",
+            "ru": "Индекс неприменим, потому что сравнивается с литералом; помог бы параметр запроса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The index stores the original values, not their lower-cased form; an index on the expression `LOWER(email)` restores it.",
+            "ru": "Индекс хранит исходные значения, а не приведённые к нижнему регистру; помогает индекс по выражению `LOWER(email)`."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "LOWER is not immutable, so PostgreSQL refuses to use any index with it; there is no fix.",
+            "ru": "LOWER не является immutable, поэтому PostgreSQL отказывается использовать с ней индексы; исправить нельзя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The column needs a case-insensitive collation, which is the only supported solution.",
+            "ru": "Столбцу нужно регистронезависимое правило сортировки — единственное поддерживаемое решение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It does use the index; the planner rewrites LOWER out of the predicate automatically.",
+            "ru": "Индекс используется: планировщик автоматически убирает LOWER из условия."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A B-tree index is sorted by the stored values, so it can answer questions about `email` but not about a function of it. `CREATE INDEX ON users (LOWER(email))` stores the computed values and makes the predicate fast. Predicates that let an index be used are called sargable, and the general recipe is to keep the column bare on one side of the comparison — the same reason `WHERE EXTRACT(YEAR FROM d) = 2024` should be rewritten as a date range.",
+        "ru": "B-tree-индекс отсортирован по хранимым значениям, поэтому отвечает на вопросы про `email`, но не про функцию от него. `CREATE INDEX ON users (LOWER(email))` хранит вычисленные значения и делает условие быстрым. Условия, позволяющие задействовать индекс, называют sargable, и общий рецепт — оставить столбец «голым» по одну сторону сравнения. По той же причине `WHERE EXTRACT(YEAR FROM d) = 2024` стоит переписать диапазоном дат."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/indexes-expressional.html",
+        "https://www.postgresql.org/docs/current/indexes.html"
+      ]
+    },
+    {
+      "id": "sql.schema-indexes.001",
+      "section": "schema-indexes",
+      "difficulty": "easy",
+      "text": {
+        "en": "What is the practical argument for a foreign key constraint over enforcing the same rule in application code?",
+        "ru": "Каков практический аргумент в пользу внешнего ключа против той же проверки в коде приложения?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A foreign key makes joins on that column faster by creating an index automatically.",
+            "ru": "Внешний ключ ускоряет соединения по этому столбцу, автоматически создавая индекс."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Application checks cannot express referential integrity at all.",
+            "ru": "Проверки в приложении вообще не способны выразить ссылочную целостность."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The database enforces it for every writer, including migrations and scripts that never go through the application.",
+            "ru": "База соблюдает его для любого пишущего, включая миграции и скрипты, которые не проходят через приложение."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A foreign key removes the need to handle the error case in the application.",
+            "ru": "Внешний ключ избавляет от необходимости обрабатывать ошибочный случай в приложении."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Foreign keys are cheaper at write time than an application-level lookup.",
+            "ru": "Внешние ключи дешевле при записи, чем проверка на уровне приложения."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Application code guards the paths that go through the application. The constraint guards everything, including the one-off fix somebody runs at 2 a.m. Note the trap in the second option: a foreign key does *not* create an index on the referencing column, and without one, deleting a parent row has to scan the child table — that index is worth adding by hand.",
+        "ru": "Код приложения защищает те пути, что проходят через приложение. Ограничение защищает всё, включая разовую правку, которую кто-то запустит в два часа ночи. Обратите внимание на ловушку во втором варианте: внешний ключ *не* создаёт индекс по ссылающемуся столбцу, а без него удаление родительской строки вынуждено перебирать дочернюю таблицу, — этот индекс стоит добавить руками."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/ddl-constraints.html",
+        "https://www.postgresql.org/docs/current/indexes.html"
+      ]
+    },
+    {
+      "id": "sql.schema-indexes.002",
+      "section": "schema-indexes",
+      "difficulty": "medium",
+      "text": {
+        "en": "An index exists on `(customer_id, placed_on)`. Which of these queries can use it?",
+        "ru": "Есть индекс по `(customer_id, placed_on)`. Какой из запросов сможет его использовать?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "`WHERE placed_on >= DATE '2024-01-01'`",
+            "ru": "`WHERE placed_on >= DATE '2024-01-01'`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`WHERE placed_on = DATE '2024-01-01' AND status = 'shipped'`",
+            "ru": "`WHERE placed_on = DATE '2024-01-01' AND status = 'shipped'`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`WHERE EXTRACT(YEAR FROM placed_on) = 2024`",
+            "ru": "`WHERE EXTRACT(YEAR FROM placed_on) = 2024`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`WHERE customer_id = 5 AND placed_on >= DATE '2024-01-01'`",
+            "ru": "`WHERE customer_id = 5 AND placed_on >= DATE '2024-01-01'`"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "None of them — a two-column index only serves queries filtering on both columns with equality.",
+            "ru": "Никакой — двухстолбцовый индекс обслуживает только запросы с равенством по обоим столбцам."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A composite index is sorted by the first column, then the second within it, exactly like a phone book by surname then first name. That serves a filter on the leading column, or on the leading column plus the next, but not on the second alone — you cannot find every Maria without reading the whole book. The last option overstates the rule: a range on the trailing column is fine, it just stops any further columns from being used as index conditions.",
+        "ru": "Составной индекс отсортирован по первому столбцу, а внутри него — по второму, ровно как телефонная книга по фамилии, а затем по имени. Это обслуживает фильтр по ведущему столбцу или по ведущему плюс следующий, но не по второму в одиночку: всех Марий не найти, не прочитав книгу целиком. Последний вариант правило преувеличивает: диапазон по последнему столбцу допустим, он лишь не даёт использовать как условия индекса столбцы после него."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/indexes.html"
+      ]
+    },
+    {
+      "id": "sql.schema-indexes.003",
+      "section": "schema-indexes",
+      "difficulty": "medium",
+      "text": {
+        "en": "In `EXPLAIN ANALYZE` output, which discrepancy most often points at the real problem?",
+        "ru": "Какое расхождение в выводе `EXPLAIN ANALYZE` чаще всего указывает на настоящую проблему?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The presence of any sequential scan, which should always be replaced by an index scan.",
+            "ru": "Наличие любого последовательного сканирования — его всегда следует заменить сканированием по индексу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A total cost above 1000, which is the threshold for an unacceptable query.",
+            "ru": "Итоговая стоимость выше 1000 — порог неприемлемого запроса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The number of plan nodes, since deeper plans are always slower.",
+            "ru": "Количество узлов плана: чем глубже план, тем он медленнее."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Any use of a hash join, which indicates a missing index.",
+            "ru": "Любое использование хеш-соединения — признак отсутствующего индекса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A large gap between estimated and actual row counts, which means the planner chose its strategy on bad information.",
+            "ru": "Большой разрыв между ожидаемым и фактическим числом строк: планировщик выбирал стратегию по неверным сведениям."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The planner picks join strategies from estimates. When it expects 10 rows and meets 100 000, it may have chosen a nested loop that now runs a hundred thousand times, and the fix is statistics — ANALYZE, or extended statistics on correlated columns — rather than rewriting the SQL. A sequential scan is not a defect in itself: reading a small table end to end beats jumping through an index, and the planner knows that. The shape to worry about is a large sequential scan on the inner side of a nested loop.",
+        "ru": "Планировщик выбирает стратегии соединения по оценкам. Когда он рассчитывает на 10 строк, а встречает 100 000, он мог выбрать вложенный цикл, который теперь выполняется сто тысяч раз, — и лечится это статистикой (ANALYZE или расширенная статистика по коррелирующим столбцам), а не переписыванием SQL. Последовательное сканирование само по себе не дефект: прочитать небольшую таблицу целиком быстрее, чем прыгать по индексу, и планировщик это знает. Беспокоиться стоит о большом последовательном сканировании на внутренней стороне вложенного цикла."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/using-explain.html"
+      ]
+    },
+    {
+      "id": "sql.schema-indexes.004",
+      "section": "schema-indexes",
+      "difficulty": "medium",
+      "text": {
+        "en": "A page loads a list of 200 orders and then issues one query per order to fetch its customer. Which fix addresses the actual problem?",
+        "ru": "Страница загружает список из 200 заказов, а затем выполняет по запросу на каждый, чтобы получить покупателя. Что действительно решает проблему?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Fetch the customers in one query — a join or an `IN (...)` — because the cost is the number of round trips, not the speed of each.",
+            "ru": "Получить покупателей одним запросом — соединением или через `IN (...)`, — потому что цена здесь в количестве round trip, а не в скорости каждого."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Add an index on `customers.id`, which will make the 200 lookups fast enough.",
+            "ru": "Добавить индекс по `customers.id` — тогда 200 обращений станут достаточно быстрыми."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Increase the connection pool size so the queries can run in parallel.",
+            "ru": "Увеличить пул соединений, чтобы запросы выполнялись параллельно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Wrap the 200 queries in a single transaction to amortise the overhead.",
+            "ru": "Обернуть 200 запросов в одну транзакцию, чтобы амортизировать накладные расходы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Add a covering index on `orders` so the customer data comes from the index.",
+            "ru": "Добавить покрывающий индекс по `orders`, чтобы данные покупателя брались из индекса."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "This is the N+1 pattern, and it is a query-shape problem rather than an indexing one. `customers.id` is already the primary key, so each lookup is about as fast as it can be — 200 fast queries still cost 200 round trips, and latency dominates. Solve it with a join, an `IN (...)` over the collected ids, or the ORM's batch-fetch setting.",
+        "ru": "Это шаблон N+1, и проблема здесь в форме запросов, а не в индексах. `customers.id` и так первичный ключ, поэтому каждое обращение уже почти максимально быстрое: 200 быстрых запросов всё равно стоят 200 round trip, и решает задержка. Лечится соединением, конструкцией `IN (...)` по собранным идентификаторам или настройкой пакетной загрузки в ORM."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/indexes.html",
+        "https://www.postgresql.org/docs/current/performance-tips.html"
+      ]
+    },
+    {
+      "id": "sql.schema-indexes.005",
+      "section": "schema-indexes",
+      "difficulty": "medium",
+      "text": {
+        "en": "Why is `PRIMARY KEY (order_id, product_id)` a good choice for an order-items table?",
+        "ru": "Почему `PRIMARY KEY (order_id, product_id)` — удачный выбор для таблицы позиций заказа?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Composite keys are always faster to join than a surrogate integer key.",
+            "ru": "Составные ключи всегда соединяются быстрее суррогатного целочисленного ключа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It states and enforces that a product appears at most once per order, turning a business rule into a guarantee.",
+            "ru": "Он утверждает и обеспечивает, что товар встречается в заказе не более одного раза, превращая бизнес-правило в гарантию."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It removes the need for foreign keys on either column.",
+            "ru": "Он избавляет от необходимости во внешних ключах по обоим столбцам."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "PostgreSQL requires a composite key on any table with two foreign keys.",
+            "ru": "PostgreSQL требует составного ключа для любой таблицы с двумя внешними ключами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It guarantees the rows are physically stored in order id sequence.",
+            "ru": "Он гарантирует физическое хранение строк в порядке идентификаторов заказа."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The key expresses the rule rather than just identifying the row: a duplicate line for the same product becomes impossible instead of merely unlikely. The trade-off is real though — if the rule ever changes, say to allow the same product at two different prices in one order, the key has to change with it, and every table referencing it too. A surrogate key plus a UNIQUE constraint keeps the guarantee while making that change cheaper.",
+        "ru": "Такой ключ выражает правило, а не просто идентифицирует строку: дублирующая позиция по тому же товару становится невозможной, а не просто маловероятной. Компромисс, впрочем, реален: если правило изменится — скажем, позволят один товар по двум разным ценам в одном заказе, — придётся менять и ключ, и все ссылающиеся на него таблицы. Суррогатный ключ плюс ограничение UNIQUE сохраняют гарантию и удешевляют такое изменение."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/ddl-constraints.html"
+      ]
+    },
+    {
+      "id": "sql.schema-indexes.006",
+      "section": "schema-indexes",
+      "difficulty": "hard",
+      "text": {
+        "en": "Which statement about adding an index is accurate?",
+        "ru": "Какое утверждение о добавлении индекса верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It is free at write time; the cost is only disk space.",
+            "ru": "При записи он бесплатен; цена — только место на диске."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "More indexes always improve read performance, so indexing every column is a safe default.",
+            "ru": "Больше индексов всегда улучшает чтение, поэтому индексировать все столбцы — безопасное умолчание."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It speeds up matching reads and slows every write to the table, so each index should earn its place.",
+            "ru": "Он ускоряет подходящие чтения и замедляет каждую запись в таблицу, поэтому каждый индекс должен себя оправдывать."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "An index on a column makes `LIKE '%text%'` fast on that column.",
+            "ru": "Индекс по столбцу ускоряет `LIKE '%text%'` по этому столбцу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Once created, an index never needs maintenance from the database.",
+            "ru": "После создания индекс больше не требует обслуживания со стороны базы."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Every INSERT, UPDATE and DELETE has to maintain every index on the table, so indexes are a read-write trade rather than free speed. A B-tree also cannot help a leading wildcard — `LIKE '%text%'` has no prefix to seek on, and that case needs a trigram index or full-text search instead. Unused indexes are worth hunting down: `pg_stat_user_indexes` shows which ones are never scanned.",
+        "ru": "Каждый INSERT, UPDATE и DELETE обязан поддерживать все индексы таблицы, поэтому индекс — это обмен между чтением и записью, а не бесплатная скорость. B-tree к тому же бесполезен при ведущем `%`: у `LIKE '%text%'` нет префикса для поиска, и здесь нужен триграммный индекс или полнотекстовый поиск. Неиспользуемые индексы стоит выискивать: `pg_stat_user_indexes` показывает, к каким из них не обращались ни разу."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/indexes.html"
+      ]
+    }
+  ]
+}

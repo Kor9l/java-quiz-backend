@@ -35,13 +35,31 @@ Spring Boot REST API + PostgreSQL for the Java Quiz web app.
 
 Default admin after Flyway: `admin@javaquiz.local` / `admin123`.
 
-Content (5 topics, 246 questions, 41 articles) is loaded by Flyway Java migration `V2__LoadContent` from `src/main/resources/content/`. Java is used because Spring questions contain `${...}` placeholders that SQL scripts would interpolate.
+Content is 6 topics, 49 article sections and 294 quiz questions, all bilingual, loaded from
+`src/main/resources/content/` by Flyway **Java** migrations — Java rather than SQL scripts
+because Spring questions contain `${...}` placeholders that Flyway would interpolate.
 
-## Practice (SQL)
+| Migration | Loads | From |
+|---|---|---|
+| `V2__LoadContent` | Java Core, Spring, Spring Boot, Hibernate, Kafka | `content/topics.json`, `content/materials/`, `content/questions/` |
+| `V5__LoadPractice` | SQL practice datasets and exercises | `content/practice/sql.json` |
+| `V6__LoadSqlTopic` | the SQL topic: sections, articles, quiz questions | `content/sql/` |
+
+SQL lives in its own directory rather than in the shared files because V2 has already run
+everywhere; adding a topic to `topics.json` would load it on a fresh database and skip it on
+an existing one.
+
+## SQL
+
+SQL is a topic like the others — 8 sections of study material and 48 quiz questions — plus a
+practice track, and the three are cross-linked: an article offers the exercises that drill it,
+and every exercise links back to the section it belongs to.
+
+### Practice
 
 Exercises the learner solves by writing a query that is then executed, rather than by picking
-an option. 24 tasks over two datasets, split into easy / medium / hard, loaded by
-`V5__LoadPractice` from `src/main/resources/content/practice/sql.json`.
+an option. 54 tasks over three datasets (a shop, a staff directory and a lending library),
+split into easy / medium / hard.
 
 **Grading is by result, not by text.** Every task ships a reference solution; a submission is
 correct when its result set matches what the reference produces. Column labels are ignored,
@@ -60,7 +78,9 @@ Plus a query timeout, a row cap and a length cap — all under `app.practice` in
 `application.yml`, overridable with `PRACTICE_*` environment variables.
 
 `SqlPracticeContentTest` runs every bundled reference solution at build time, so a task whose
-SQL no longer works fails the build rather than a learner's session.
+SQL no longer works fails the build rather than a learner's session. `SqlTopicContentTest`
+does the same for the articles and questions V6 loads, since that migration only gets to fail
+once, against a real database.
 
 ## Local run (without Docker)
 

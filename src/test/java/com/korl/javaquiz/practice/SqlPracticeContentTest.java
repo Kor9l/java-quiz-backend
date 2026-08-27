@@ -75,6 +75,26 @@ class SqlPracticeContentTest {
         }
     }
 
+    /** A task pointing at a section that does not exist would render a dead link. */
+    @Test
+    void everyTaskPointsAtARealStudySection() throws Exception {
+        JsonNode topic;
+        try (InputStream in = SqlPracticeContentTest.class.getResourceAsStream("/content/sql/topic.json")) {
+            assertThat(in).describedAs("bundled SQL topic definition").isNotNull();
+            topic = new ObjectMapper().readTree(in).get("topic");
+        }
+        Set<String> sectionIds = new HashSet<>();
+        topic.get("sections").forEach(section -> sectionIds.add(section.get("id").asText()));
+
+        for (JsonNode task : tasks()) {
+            String id = task.get("id").asText();
+            assertThat(task.path("topic").asText()).describedAs("topic of %s", id)
+                    .isEqualTo(topic.get("id").asText());
+            assertThat(sectionIds).describedAs("section of %s", id)
+                    .contains(task.path("section").asText());
+        }
+    }
+
     @Test
     void everyDifficultyHasTasks() {
         for (String difficulty : DIFFICULTIES) {

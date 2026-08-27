@@ -42,6 +42,13 @@ public class PracticeTask {
     @Column(name = "sort_order", nullable = false)
     private int sortOrder;
 
+    /** Study material section this exercise drills, so learners can go and read about it. */
+    @Column(name = "topic_id")
+    private String topicId;
+
+    @Column(name = "section_id")
+    private String sectionId;
+
     @Column(name = "title_en", nullable = false)
     private String titleEn;
 
@@ -100,6 +107,14 @@ public class PracticeTask {
 
     public int getSortOrder() {
         return sortOrder;
+    }
+
+    public String getTopicId() {
+        return topicId;
+    }
+
+    public String getSectionId() {
+        return sectionId;
     }
 
     public String getTitleEn() {

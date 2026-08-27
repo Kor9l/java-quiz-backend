@@ -25,6 +25,10 @@ CREATE TABLE practice_tasks (
     dataset_id VARCHAR(64) NOT NULL REFERENCES practice_datasets (id),
     difficulty VARCHAR(16) NOT NULL,
     sort_order INT NOT NULL,
+    -- The study material section this exercise drills, so a stuck learner can go and read
+    -- about it. Nullable: an exercise does not have to belong to a section.
+    topic_id VARCHAR(64),
+    section_id VARCHAR(64),
     title_en TEXT NOT NULL,
     title_ru TEXT NOT NULL,
     statement_en TEXT NOT NULL,

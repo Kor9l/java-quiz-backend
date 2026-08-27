@@ -61,10 +61,10 @@ public class V5__LoadPractice extends BaseJavaMigration {
 
     private void loadTasks(Connection conn, JsonNode root, String track) throws Exception {
         try (PreparedStatement taskPs = conn.prepareStatement(
-                "INSERT INTO practice_tasks (id, track, dataset_id, difficulty, sort_order, title_en, title_ru, "
-                        + "statement_en, statement_ru, hint_en, hint_ru, starter_sql, solution_sql, order_matters, "
-                        + "explanation_en, explanation_ru) "
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                "INSERT INTO practice_tasks (id, track, dataset_id, difficulty, sort_order, topic_id, section_id, "
+                        + "title_en, title_ru, statement_en, statement_ru, hint_en, hint_ru, starter_sql, "
+                        + "solution_sql, order_matters, explanation_en, explanation_ru) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
              PreparedStatement sourcePs = conn.prepareStatement(
                      "INSERT INTO practice_task_sources (task_id, sort_order, title, url) VALUES (?, ?, ?, ?)")) {
             for (JsonNode task : root.get("tasks")) {
@@ -74,17 +74,19 @@ public class V5__LoadPractice extends BaseJavaMigration {
                 taskPs.setString(3, task.get("dataset").asText());
                 taskPs.setString(4, task.get("difficulty").asText().toUpperCase());
                 taskPs.setInt(5, task.get("order").asInt());
-                taskPs.setString(6, task.get("title").get("en").asText());
-                taskPs.setString(7, task.get("title").get("ru").asText());
-                taskPs.setString(8, task.get("statement").get("en").asText());
-                taskPs.setString(9, task.get("statement").get("ru").asText());
-                setNullable(taskPs, 10, task.path("hint").path("en"));
-                setNullable(taskPs, 11, task.path("hint").path("ru"));
-                setNullable(taskPs, 12, task.path("starter"));
-                taskPs.setString(13, task.get("solution").asText());
-                taskPs.setBoolean(14, task.get("orderMatters").asBoolean());
-                taskPs.setString(15, task.get("explanation").get("en").asText());
-                taskPs.setString(16, task.get("explanation").get("ru").asText());
+                setNullable(taskPs, 6, task.path("topic"));
+                setNullable(taskPs, 7, task.path("section"));
+                taskPs.setString(8, task.get("title").get("en").asText());
+                taskPs.setString(9, task.get("title").get("ru").asText());
+                taskPs.setString(10, task.get("statement").get("en").asText());
+                taskPs.setString(11, task.get("statement").get("ru").asText());
+                setNullable(taskPs, 12, task.path("hint").path("en"));
+                setNullable(taskPs, 13, task.path("hint").path("ru"));
+                setNullable(taskPs, 14, task.path("starter"));
+                taskPs.setString(15, task.get("solution").asText());
+                taskPs.setBoolean(16, task.get("orderMatters").asBoolean());
+                taskPs.setString(17, task.get("explanation").get("en").asText());
+                taskPs.setString(18, task.get("explanation").get("ru").asText());
                 taskPs.addBatch();
 
                 JsonNode sources = task.get("sources");
