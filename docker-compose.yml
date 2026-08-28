@@ -27,9 +27,9 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/javaquiz
-      SPRING_DATASOURCE_USERNAME: javaquiz
-      SPRING_DATASOURCE_PASSWORD: javaquiz
+      DB_URL: jdbc:postgresql://postgres:5432/javaquiz
+      DB_USERNAME: javaquiz
+      DB_PASSWORD: javaquiz
       JWT_SECRET: ${JWT_SECRET:-change-me-in-production-use-a-long-secret-32+}
       ADMIN_INITIAL_PASSWORD: ${ADMIN_INITIAL_PASSWORD:-admin123}
       CORS_ORIGINS: http://localhost,http://127.0.0.1,http://localhost:80
@@ -39,10 +39,10 @@ services:
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:8080/actuator/health"]
-      interval: 10s
+      interval: 5s
       timeout: 5s
       retries: 12
-      start_period: 40s
+      start_period: 10s
     ports:
       - "8080:8080"
 

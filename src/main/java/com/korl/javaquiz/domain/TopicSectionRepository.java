@@ -1,12 +1,32 @@
 package com.korl.javaquiz.domain;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface TopicSectionRepository extends JpaRepository<TopicSection, TopicSection.Id> {
+@ApplicationScoped
+public class TopicSectionRepository {
 
-    List<TopicSection> findByIdTopicIdOrderBySortOrderAsc(String topicId);
+    @Inject
+    EntityManager em;
 
-    List<TopicSection> findAllByOrderBySortOrderAsc();
+    public Optional<TopicSection> findById(TopicSection.Id id) {
+        return Optional.ofNullable(em.find(TopicSection.class, id));
+    }
+
+    public List<TopicSection> findByIdTopicIdOrderBySortOrderAsc(String topicId) {
+        return em.createQuery(
+                        "select s from TopicSection s where s.id.topicId = :topicId order by s.sortOrder asc",
+                        TopicSection.class)
+                .setParameter("topicId", topicId)
+                .getResultList();
+    }
+
+    public List<TopicSection> findAllByOrderBySortOrderAsc() {
+        return em.createQuery("select s from TopicSection s order by s.sortOrder asc", TopicSection.class)
+                .getResultList();
+    }
 }

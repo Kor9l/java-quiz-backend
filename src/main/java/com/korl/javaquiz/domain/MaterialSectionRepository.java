@@ -1,12 +1,24 @@
 package com.korl.javaquiz.domain;
 
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 
 import java.util.Optional;
 
-public interface MaterialSectionRepository extends JpaRepository<MaterialSection, TopicSection.Id> {
+@ApplicationScoped
+public class MaterialSectionRepository {
 
-    @EntityGraph(attributePaths = "sources")
-    Optional<MaterialSection> findWithSourcesById(TopicSection.Id id);
+    @Inject
+    EntityManager em;
+
+    /** Sources are fetched along with the article, which always renders them. */
+    public Optional<MaterialSection> findWithSourcesById(TopicSection.Id id) {
+        return em.createQuery(
+                        "select m from MaterialSection m left join fetch m.sources where m.id = :id",
+                        MaterialSection.class)
+                .setParameter("id", id)
+                .getResultStream()
+                .findFirst();
+    }
 }

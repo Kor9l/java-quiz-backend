@@ -18,9 +18,9 @@ import com.korl.javaquiz.domain.UserStatsRepository;
 import com.korl.javaquiz.api.error.ApiException;
 import com.korl.javaquiz.userstate.ProgressPayload;
 import com.korl.javaquiz.userstate.StatsPayload;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.core.Response.Status;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@Service
+@ApplicationScoped
 public class ContentService {
 
     private final TopicRepository topics;
@@ -56,7 +56,7 @@ public class ContentService {
         this.stats = stats;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Map<String, Object>> listTopics(UUID userId) {
         ProgressPayload progressPayload = progressPayload(userId);
         StatsPayload statsPayload = statsPayload(userId);
@@ -97,13 +97,13 @@ public class ContentService {
         return result;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Map<String, Object> material(UUID userId, String topicId, String sectionId) {
         TopicSection.Id id = new TopicSection.Id(topicId, sectionId);
         MaterialSection material = materials.findWithSourcesById(id)
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Material not found"));
+                .orElseThrow(() -> new ApiException(Status.NOT_FOUND, "Material not found"));
         TopicSection section = sections.findById(id)
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Section not found"));
+                .orElseThrow(() -> new ApiException(Status.NOT_FOUND, "Section not found"));
         ProgressPayload progressPayload = progressPayload(userId);
         StatsPayload statsPayload = statsPayload(userId);
         ReadState state = readState(progressPayload, statsPayload, topicId, sectionId);

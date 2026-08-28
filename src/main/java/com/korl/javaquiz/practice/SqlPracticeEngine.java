@@ -1,6 +1,6 @@
 package com.korl.javaquiz.practice;
 
-import org.springframework.stereotype.Component;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  * <p>Only the last stage decides correctness, which is the point — two learners can reach the
  * same rows through a join, a subquery or a window function and both are right.
  */
-@Component
+@ApplicationScoped
 public class SqlPracticeEngine {
 
     /** Concurrent sandboxes allowed process-wide; each one is a live in-memory database. */

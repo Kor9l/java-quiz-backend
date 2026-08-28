@@ -1,19 +1,21 @@
 package com.korl.javaquiz.config;
 
 import com.korl.javaquiz.practice.SandboxLimits;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Produces;
+import jakarta.inject.Singleton;
 
-@Configuration
+@ApplicationScoped
 public class PracticeConfig {
 
-    @Bean
-    public SandboxLimits sandboxLimits(AppProperties properties) {
-        AppProperties.Practice practice = properties.getPractice();
+    @Produces
+    @Singleton
+    public SandboxLimits sandboxLimits(AppConfig config) {
+        AppConfig.Practice practice = config.practice();
         return new SandboxLimits(
-                practice.getQueryTimeoutSeconds(),
-                practice.getMaxRows(),
-                practice.getMaxSqlLength(),
-                practice.getPreviewRows());
+                practice.queryTimeoutSeconds(),
+                practice.maxRows(),
+                practice.maxSqlLength(),
+                practice.previewRows());
     }
 }
