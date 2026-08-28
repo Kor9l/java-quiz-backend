@@ -1,8 +1,23 @@
 package com.korl.javaquiz.domain;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 
+import java.util.Optional;
 import java.util.UUID;
 
-public interface UserProgressRepository extends JpaRepository<UserProgressEntity, UUID> {
+@ApplicationScoped
+public class UserProgressRepository {
+
+    @Inject
+    EntityManager em;
+
+    public Optional<UserProgressEntity> findById(UUID userId) {
+        return Optional.ofNullable(em.find(UserProgressEntity.class, userId));
+    }
+
+    public UserProgressEntity save(UserProgressEntity entity) {
+        return em.merge(entity);
+    }
 }

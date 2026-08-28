@@ -1,17 +1,17 @@
 package com.korl.javaquiz.api.error;
 
-import org.springframework.http.HttpStatus;
+import jakarta.ws.rs.core.Response.Status;
 
 public class ApiException extends RuntimeException {
 
-    private final HttpStatus status;
+    private final Status status;
 
-    public ApiException(HttpStatus status, String message) {
+    public ApiException(Status status, String message) {
         super(message);
         this.status = status;
     }
 
-    public HttpStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 }

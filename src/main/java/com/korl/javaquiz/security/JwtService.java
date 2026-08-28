@@ -1,11 +1,11 @@
 package com.korl.javaquiz.security;
 
-import com.korl.javaquiz.config.AppProperties;
+import com.korl.javaquiz.config.AppConfig;
 import com.korl.javaquiz.domain.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.stereotype.Service;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -13,18 +13,18 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
-@Service
+@ApplicationScoped
 public class JwtService {
 
-    private final AppProperties properties;
+    private final AppConfig config;
 
-    public JwtService(AppProperties properties) {
-        this.properties = properties;
+    public JwtService(AppConfig config) {
+        this.config = config;
     }
 
     public String createToken(UUID userId, String email, Role role) {
         Instant now = Instant.now();
-        Instant exp = now.plusMillis(properties.getJwt().getExpirationMs());
+        Instant exp = now.plusMillis(config.jwt().expirationMs());
         return Jwts.builder()
                 .subject(userId.toString())
                 .claim("email", email)
@@ -44,7 +44,7 @@ public class JwtService {
     }
 
     private SecretKey key() {
-        byte[] bytes = properties.getJwt().getSecret().getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = config.jwt().secret().getBytes(StandardCharsets.UTF_8);
         if (bytes.length < 32) {
             byte[] padded = new byte[32];
             System.arraycopy(bytes, 0, padded, 0, bytes.length);

@@ -22,9 +22,9 @@ import com.korl.javaquiz.quiz.QuizSessionState;
 import com.korl.javaquiz.quiz.QuizStage;
 import com.korl.javaquiz.userstate.SettingsPayload;
 import com.korl.javaquiz.userstate.StatsPayload;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.core.Response.Status;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -39,7 +39,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@Service
+@ApplicationScoped
 public class QuizService {
 
     private final QuestionRepository questions;
@@ -97,10 +97,10 @@ public class QuizService {
         return toView(entity, currentQuestion(state, pool));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Map<String, Object> current(UUID userId) {
         QuizSessionEntity entity = sessions.findFirstByUserIdAndFinishedFalseOrderByStartedAtDesc(userId)
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "No active quiz"));
+                .orElseThrow(() -> new ApiException(Status.NOT_FOUND, "No active quiz"));
         return toView(entity, loadQuestion(entity.getPayload().getCurrentQuestionId()));
     }
 
@@ -109,7 +109,7 @@ public class QuizService {
         QuizSessionEntity entity = loadOwned(userId, sessionId);
         QuizSessionState state = entity.getPayload();
         if (state.getStage() != QuizStage.QUESTION_ONLY || state.getCurrentQuestionId() == null) {
-            throw new ApiException(HttpStatus.CONFLICT, "Cannot reveal answers now");
+            throw new ApiException(Status.CONFLICT, "Cannot reveal answers now");
         }
         state.setStage(QuizStage.OPTIONS_REVEALED);
         applyState(entity, state);
@@ -122,18 +122,18 @@ public class QuizService {
         QuizSessionEntity entity = loadOwned(userId, sessionId);
         QuizSessionState state = entity.getPayload();
         if (state.getStage() != QuizStage.OPTIONS_REVEALED) {
-            throw new ApiException(HttpStatus.CONFLICT, "Cannot answer now");
+            throw new ApiException(Status.CONFLICT, "Cannot answer now");
         }
         List<Integer> order = state.getDisplayOptionIndexes();
         if (displayIndex < 0 || displayIndex >= order.size()) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "Invalid option");
+            throw new ApiException(Status.BAD_REQUEST, "Invalid option");
         }
         Question question = loadQuestion(state.getCurrentQuestionId());
         int originalIndex = order.get(displayIndex);
         QuestionOption chosen = question.getOptions().stream()
                 .filter(option -> option.getOptionIndex() == originalIndex)
                 .findFirst()
-                .orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Invalid option"));
+                .orElseThrow(() -> new ApiException(Status.BAD_REQUEST, "Invalid option"));
 
         long elapsed = 0;
         if (state.getQuestionShownAt() != null) {
@@ -169,7 +169,7 @@ public class QuizService {
         QuizSessionEntity entity = loadOwned(userId, sessionId);
         QuizSessionState state = entity.getPayload();
         if (state.getStage() != QuizStage.ANSWERED) {
-            throw new ApiException(HttpStatus.CONFLICT, "Cannot advance now");
+            throw new ApiException(Status.CONFLICT, "Cannot advance now");
         }
         if (!state.getConfig().isInfinite() && state.getAskedCount() >= state.targetCount()) {
             finish(entity, state, userId);
@@ -362,9 +362,9 @@ public class QuizService {
 
     private QuizSessionEntity loadOwned(UUID userId, UUID sessionId) {
         QuizSessionEntity entity = sessions.findById(sessionId)
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Quiz session not found"));
+                .orElseThrow(() -> new ApiException(Status.NOT_FOUND, "Quiz session not found"));
         if (!entity.getUserId().equals(userId)) {
-            throw new ApiException(HttpStatus.FORBIDDEN, "Quiz session not found");
+            throw new ApiException(Status.FORBIDDEN, "Quiz session not found");
         }
         return entity;
     }

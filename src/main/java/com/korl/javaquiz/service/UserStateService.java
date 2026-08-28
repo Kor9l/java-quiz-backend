@@ -13,14 +13,14 @@ import com.korl.javaquiz.domain.UserStatsRepository;
 import com.korl.javaquiz.userstate.ProgressPayload;
 import com.korl.javaquiz.userstate.SettingsPayload;
 import com.korl.javaquiz.userstate.StatsPayload;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.core.Response.Status;
 
 import java.time.Instant;
 import java.util.UUID;
 
-@Service
+@ApplicationScoped
 public class UserStateService {
 
     private final UserSettingsRepository settings;
@@ -39,7 +39,7 @@ public class UserStateService {
         this.sections = sections;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public SettingsPayload getSettings(UUID userId) {
         return settings.findById(userId)
                 .map(UserSettingsEntity::getPayload)
@@ -49,7 +49,7 @@ public class UserStateService {
     @Transactional
     public SettingsPayload saveSettings(UUID userId, SettingsRequest incoming) {
         UserSettingsEntity entity = settings.findById(userId)
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Settings not found"));
+                .orElseThrow(() -> new ApiException(Status.NOT_FOUND, "Settings not found"));
         SettingsPayload payload = entity.getPayload() == null ? new SettingsPayload() : entity.getPayload();
         if (incoming.language != null) {
             payload.language = incoming.language;
@@ -84,9 +84,9 @@ public class UserStateService {
     @Transactional
     public void markRead(UUID userId, String topicId, String sectionId) {
         sections.findById(new TopicSection.Id(topicId, sectionId))
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Section not found"));
+                .orElseThrow(() -> new ApiException(Status.NOT_FOUND, "Section not found"));
         UserProgressEntity entity = progress.findById(userId)
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Progress not found"));
+                .orElseThrow(() -> new ApiException(Status.NOT_FOUND, "Progress not found"));
         ProgressPayload payload = entity.getPayload() == null ? new ProgressPayload() : entity.getPayload();
         StatsPayload statsPayload = stats.findById(userId).map(UserStatsEntity::getPayload).orElseGet(StatsPayload::new);
         StatsPayload.SectionCounter counter = statsPayload.sections.get(topicId + "/" + sectionId);
@@ -99,7 +99,7 @@ public class UserStateService {
     @Transactional
     public void markUnread(UUID userId, String topicId, String sectionId) {
         UserProgressEntity entity = progress.findById(userId)
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Progress not found"));
+                .orElseThrow(() -> new ApiException(Status.NOT_FOUND, "Progress not found"));
         ProgressPayload payload = entity.getPayload() == null ? new ProgressPayload() : entity.getPayload();
         payload.markUnread(topicId, sectionId);
         entity.setPayload(payload);
@@ -109,7 +109,7 @@ public class UserStateService {
     @Transactional
     public void resetProgress(UUID userId) {
         UserProgressEntity entity = progress.findById(userId)
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Progress not found"));
+                .orElseThrow(() -> new ApiException(Status.NOT_FOUND, "Progress not found"));
         entity.setPayload(new ProgressPayload());
         progress.save(entity);
     }

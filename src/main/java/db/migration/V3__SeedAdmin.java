@@ -1,10 +1,10 @@
 package db.migration;
 
+import com.korl.javaquiz.security.PasswordHasher;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
 import org.flywaydb.core.api.migration.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.PreparedStatement;
 import java.util.UUID;
@@ -16,7 +16,9 @@ public class V3__SeedAdmin extends BaseJavaMigration {
 
     @Override
     public void migrate(Context context) throws Exception {
-        String hash = new BCryptPasswordEncoder().encode(adminPassword());
+        // Flyway instantiates this class itself, so the hasher is called statically rather
+        // than injected — a @Inject field here would simply stay null.
+        String hash = PasswordHasher.hash(adminPassword());
         try (PreparedStatement userPs = context.getConnection().prepareStatement(
                 "INSERT INTO users (id, email, password_hash, display_name, role, auth_provider) VALUES (?, ?, ?, ?, ?, ?)");
              PreparedStatement settingsPs = context.getConnection().prepareStatement(

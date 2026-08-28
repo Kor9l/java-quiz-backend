@@ -18,11 +18,15 @@ services:
     envVars:
       # Neon connection string, e.g.
       # jdbc:postgresql://ep-xxx.eu-central-1.aws.neon.tech/javaquiz?sslmode=require
-      - key: SPRING_DATASOURCE_URL
+      #
+      # Renamed from SPRING_DATASOURCE_* when the service moved off Spring. A service already
+      # deployed with the old names keeps booting — the app still reads them as a fallback —
+      # but the dashboard asks for these three on the next blueprint sync.
+      - key: DB_URL
         sync: false
-      - key: SPRING_DATASOURCE_USERNAME
+      - key: DB_USERNAME
         sync: false
-      - key: SPRING_DATASOURCE_PASSWORD
+      - key: DB_PASSWORD
         sync: false
       - key: JWT_SECRET
         generateValue: true

@@ -1,12 +1,12 @@
 package com.korl.javaquiz.service;
 
+import com.korl.javaquiz.api.GoogleOAuthResource;
 import com.korl.javaquiz.api.dto.AuthResponse;
 import com.korl.javaquiz.api.dto.LoginRequest;
 import com.korl.javaquiz.api.dto.RegisterRequest;
 import com.korl.javaquiz.api.dto.UserDto;
 import com.korl.javaquiz.api.error.ApiException;
-import com.korl.javaquiz.config.AppProperties;
-import com.korl.javaquiz.config.GoogleOAuthConfig;
+import com.korl.javaquiz.config.AppConfig;
 import com.korl.javaquiz.domain.AppUser;
 import com.korl.javaquiz.domain.AppUserRepository;
 import com.korl.javaquiz.domain.AuthProvider;
@@ -18,57 +18,57 @@ import com.korl.javaquiz.domain.UserSettingsRepository;
 import com.korl.javaquiz.domain.UserStatsEntity;
 import com.korl.javaquiz.domain.UserStatsRepository;
 import com.korl.javaquiz.security.JwtService;
+import com.korl.javaquiz.security.PasswordHasher;
 import com.korl.javaquiz.userstate.ProgressPayload;
 import com.korl.javaquiz.userstate.SettingsPayload;
 import com.korl.javaquiz.userstate.StatsPayload;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.core.Response.Status;
 
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Service
+@ApplicationScoped
 public class AuthService {
 
     private final AppUserRepository users;
     private final UserSettingsRepository settings;
     private final UserStatsRepository stats;
     private final UserProgressRepository progress;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordHasher passwordHasher;
     private final JwtService jwtService;
-    private final AppProperties properties;
+    private final AppConfig config;
 
     public AuthService(
             AppUserRepository users,
             UserSettingsRepository settings,
             UserStatsRepository stats,
             UserProgressRepository progress,
-            PasswordEncoder passwordEncoder,
+            PasswordHasher passwordHasher,
             JwtService jwtService,
-            AppProperties properties) {
+            AppConfig config) {
         this.users = users;
         this.settings = settings;
         this.stats = stats;
         this.progress = progress;
-        this.passwordEncoder = passwordEncoder;
+        this.passwordHasher = passwordHasher;
         this.jwtService = jwtService;
-        this.properties = properties;
+        this.config = config;
     }
 
     @Transactional
     public AuthResponse register(RegisterRequest request) {
         String email = request.email.trim().toLowerCase();
         if (users.existsByEmailIgnoreCase(email)) {
-            throw new ApiException(HttpStatus.CONFLICT, "Email is already registered");
+            throw new ApiException(Status.CONFLICT, "Email is already registered");
         }
         AppUser user = new AppUser();
         user.setId(UUID.randomUUID());
         user.setEmail(email);
-        user.setPasswordHash(passwordEncoder.encode(request.password));
+        user.setPasswordHash(passwordHasher.encode(request.password));
         user.setDisplayName(displayName(request.displayName, email));
         user.setRole(Role.USER);
         user.setAuthProvider(AuthProvider.EMAIL);
@@ -78,19 +78,19 @@ public class AuthService {
         return tokenResponse(user);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public AuthResponse login(LoginRequest request) {
         AppUser user = users.findByEmailIgnoreCase(request.email.trim())
-                .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Invalid email or password"));
+                .orElseThrow(() -> new ApiException(Status.UNAUTHORIZED, "Invalid email or password"));
         if (user.getAuthProvider() != AuthProvider.EMAIL || user.getPasswordHash() == null
-                || !passwordEncoder.matches(request.password, user.getPasswordHash())) {
-            throw new ApiException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
+                || !passwordHasher.matches(request.password, user.getPasswordHash())) {
+            throw new ApiException(Status.UNAUTHORIZED, "Invalid email or password");
         }
         return tokenResponse(user);
     }
 
     public Map<String, Object> providers() {
-        boolean configured = properties.getGoogle().isConfigured();
+        boolean configured = config.google().isConfigured();
         Map<String, Object> google = new LinkedHashMap<>();
         google.put("enabled", configured);
         google.put("configured", configured);
@@ -106,8 +106,8 @@ public class AuthService {
 
     /** Absolute URL because the UI is served from another origin than this backend. */
     private String googleAuthorizationUrl() {
-        String base = properties.getPublicUrl() == null ? "" : properties.getPublicUrl().replaceAll("/+$", "");
-        return base + "/oauth2/authorization/" + GoogleOAuthConfig.REGISTRATION_ID;
+        String base = config.publicUrl() == null ? "" : config.publicUrl().replaceAll("/+$", "");
+        return base + "/oauth2/authorization/" + GoogleOAuthResource.PROVIDER;
     }
 
     /**
@@ -118,7 +118,7 @@ public class AuthService {
     @Transactional
     public String loginWithGoogle(String googleId, String email, String name) {
         if (googleId == null || googleId.isBlank()) {
-            throw new ApiException(HttpStatus.UNAUTHORIZED, "Google account has no subject id");
+            throw new ApiException(Status.UNAUTHORIZED, "Google account has no subject id");
         }
         String normalizedEmail = email == null ? null : email.trim().toLowerCase();
         AppUser user = users.findByGoogleId(googleId).orElse(null);
@@ -133,7 +133,7 @@ public class AuthService {
 
         if (user == null) {
             if (normalizedEmail == null) {
-                throw new ApiException(HttpStatus.UNAUTHORIZED, "Google account has no email");
+                throw new ApiException(Status.UNAUTHORIZED, "Google account has no email");
             }
             user = new AppUser();
             user.setId(UUID.randomUUID());
@@ -151,10 +151,10 @@ public class AuthService {
         return jwtService.createToken(user.getId(), user.getEmail(), user.getRole());
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public UserDto me(UUID userId) {
         AppUser user = users.findById(userId)
-                .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "User not found"));
+                .orElseThrow(() -> new ApiException(Status.UNAUTHORIZED, "User not found"));
         return UserDto.from(user);
     }
 

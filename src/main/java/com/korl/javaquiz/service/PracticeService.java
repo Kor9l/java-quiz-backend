@@ -16,9 +16,9 @@ import com.korl.javaquiz.practice.SqlPracticeEngine;
 import com.korl.javaquiz.practice.SqlSubmissionException;
 import com.korl.javaquiz.practice.SubmissionOutcome;
 import com.korl.javaquiz.practice.TaskSpec;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.core.Response.Status;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  * The practice section: hands-on exercises the learner solves by writing code that is then
  * run, rather than by picking an option.
  */
-@Service
+@ApplicationScoped
 public class PracticeService {
 
     private final PracticeTaskRepository tasks;
@@ -53,7 +53,7 @@ public class PracticeService {
     }
 
     /** The tracks available and how far the user has got in each. */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Map<String, Object>> listTracks(UUID userId) {
         Map<String, PracticeProgressEntity> solved = progressByTask(userId);
         List<Map<String, Object>> result = new ArrayList<>();
@@ -64,16 +64,16 @@ public class PracticeService {
     }
 
     /** One track broken down by difficulty, which is the level the UI navigates at. */
-    @Transactional(readOnly = true)
+    @Transactional
     public Map<String, Object> track(UUID userId, String track) {
         List<PracticeTask> trackTasks = tasks.findByTrackOrderByDifficultyAscSortOrderAsc(track);
         if (trackTasks.isEmpty()) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "Unknown practice track: " + track);
+            throw new ApiException(Status.NOT_FOUND, "Unknown practice track: " + track);
         }
         return trackSummary(track, trackTasks, progressByTask(userId));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Map<String, Object>> listTasks(UUID userId, String track, Difficulty difficulty) {
         Map<String, PracticeProgressEntity> byTask = progressByTask(userId);
         return tasks.findByTrackAndDifficultyOrderBySortOrderAsc(track, difficulty).stream()
@@ -85,7 +85,7 @@ public class PracticeService {
      * Everything needed to attempt one task: the statement, the shape of the dataset, the
      * result being aimed at, and whatever the learner last submitted.
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public Map<String, Object> task(UUID userId, String taskId) {
         PracticeTask task = requireTask(taskId);
         PracticeDataset dataset = requireDataset(task.getDatasetId());
@@ -109,7 +109,7 @@ public class PracticeService {
     }
 
     /** Parses a submission without running it and without touching the user's record. */
-    @Transactional(readOnly = true)
+    @Transactional
     public Map<String, Object> check(String taskId, String sql) {
         PracticeTask task = requireTask(taskId);
         TaskSpec spec = spec(task, requireDataset(task.getDatasetId()));
@@ -274,12 +274,12 @@ public class PracticeService {
 
     private PracticeTask requireTask(String taskId) {
         return tasks.findById(taskId)
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Unknown practice task: " + taskId));
+                .orElseThrow(() -> new ApiException(Status.NOT_FOUND, "Unknown practice task: " + taskId));
     }
 
     private PracticeDataset requireDataset(String datasetId) {
         return datasets.findById(datasetId)
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Unknown dataset: " + datasetId));
+                .orElseThrow(() -> new ApiException(Status.NOT_FOUND, "Unknown dataset: " + datasetId));
     }
 
     @FunctionalInterface

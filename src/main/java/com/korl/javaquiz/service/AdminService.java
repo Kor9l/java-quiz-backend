@@ -7,9 +7,9 @@ import com.korl.javaquiz.domain.AppUserRepository;
 import com.korl.javaquiz.domain.Role;
 import com.korl.javaquiz.domain.UserStatsEntity;
 import com.korl.javaquiz.domain.UserStatsRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.core.Response.Status;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@Service
+@ApplicationScoped
 public class AdminService {
 
     private final AppUserRepository users;
@@ -28,7 +28,7 @@ public class AdminService {
         this.stats = stats;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Map<String, Object>> listUsers() {
         List<Map<String, Object>> result = new ArrayList<>();
         for (AppUser user : users.findAll()) {
@@ -47,10 +47,10 @@ public class AdminService {
     @Transactional
     public UserDto changeRole(UUID userId, Role role) {
         AppUser user = users.findById(userId)
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "User not found"));
+                .orElseThrow(() -> new ApiException(Status.NOT_FOUND, "User not found"));
         // There is no way back from an admin-less instance: nobody could grant the role again.
         if (user.getRole() == Role.ADMIN && role != Role.ADMIN && users.countByRole(Role.ADMIN) <= 1) {
-            throw new ApiException(HttpStatus.CONFLICT, "Cannot demote the last remaining admin");
+            throw new ApiException(Status.CONFLICT, "Cannot demote the last remaining admin");
         }
         user.setRole(role);
         users.save(user);

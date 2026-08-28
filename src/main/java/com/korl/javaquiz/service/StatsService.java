@@ -10,9 +10,9 @@ import com.korl.javaquiz.domain.TopicSectionRepository;
 import com.korl.javaquiz.domain.UserStatsEntity;
 import com.korl.javaquiz.domain.UserStatsRepository;
 import com.korl.javaquiz.userstate.StatsPayload;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.core.Response.Status;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@Service
+@ApplicationScoped
 public class StatsService {
 
     private static final int WEAK_MIN_ANSWERS = 3;
@@ -44,7 +44,7 @@ public class StatsService {
         this.questions = questions;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Map<String, Object> get(UUID userId) {
         StatsPayload payload = stats.findById(userId)
                 .map(UserStatsEntity::getPayload)
@@ -124,7 +124,7 @@ public class StatsService {
     @Transactional
     public void reset(UUID userId) {
         UserStatsEntity entity = stats.findById(userId)
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Stats not found"));
+                .orElseThrow(() -> new ApiException(Status.NOT_FOUND, "Stats not found"));
         entity.setPayload(new StatsPayload());
         stats.save(entity);
     }
