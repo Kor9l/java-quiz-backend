@@ -27,9 +27,9 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      DB_URL: jdbc:postgresql://postgres:5432/javaquiz
-      DB_USERNAME: javaquiz
-      DB_PASSWORD: javaquiz
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/javaquiz
+      SPRING_DATASOURCE_USERNAME: javaquiz
+      SPRING_DATASOURCE_PASSWORD: javaquiz
       JWT_SECRET: ${JWT_SECRET:-change-me-in-production-use-a-long-secret-32+}
       ADMIN_INITIAL_PASSWORD: ${ADMIN_INITIAL_PASSWORD:-admin123}
       CORS_ORIGINS: http://localhost,http://127.0.0.1,http://localhost:80

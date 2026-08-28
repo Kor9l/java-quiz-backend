@@ -19,14 +19,14 @@ services:
       # Neon connection string, e.g.
       # jdbc:postgresql://ep-xxx.eu-central-1.aws.neon.tech/javaquiz?sslmode=require
       #
-      # Renamed from SPRING_DATASOURCE_* when the service moved off Spring. A service already
-      # deployed with the old names keeps booting — the app still reads them as a fallback —
-      # but the dashboard asks for these three on the next blueprint sync.
-      - key: DB_URL
+      # Still named for Spring after the move off it. Renaming a `sync: false` key here does not
+      # carry the value over: the blueprint would create the new key empty on its next sync, and
+      # an empty key is not an absent one, so no default or fallback in the app would cover it.
+      - key: SPRING_DATASOURCE_URL
         sync: false
-      - key: DB_USERNAME
+      - key: SPRING_DATASOURCE_USERNAME
         sync: false
-      - key: DB_PASSWORD
+      - key: SPRING_DATASOURCE_PASSWORD
         sync: false
       - key: JWT_SECRET
         generateValue: true
