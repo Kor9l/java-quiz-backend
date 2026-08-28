@@ -11,6 +11,7 @@ public class AppProperties {
     private final Jwt jwt = new Jwt();
     private final Cors cors = new Cors();
     private final Google google = new Google();
+    private final Practice practice = new Practice();
     private String frontendUrl = "http://localhost";
     private String publicUrl = "http://localhost:8080";
 
@@ -24,6 +25,10 @@ public class AppProperties {
 
     public Google getGoogle() {
         return google;
+    }
+
+    public Practice getPractice() {
+        return practice;
     }
 
     /** Base URL of the UI, where the OAuth2 flow hands the JWT back to the browser. */
@@ -99,6 +104,46 @@ public class AppProperties {
 
         public boolean isConfigured() {
             return clientId != null && !clientId.isBlank();
+        }
+    }
+
+    /** Limits applied to SQL written by learners in the practice section. */
+    public static class Practice {
+        private int queryTimeoutSeconds = 5;
+        private int maxRows = 500;
+        private int maxSqlLength = 4000;
+        private int previewRows = 50;
+
+        public int getQueryTimeoutSeconds() {
+            return queryTimeoutSeconds;
+        }
+
+        public void setQueryTimeoutSeconds(int queryTimeoutSeconds) {
+            this.queryTimeoutSeconds = queryTimeoutSeconds;
+        }
+
+        public int getMaxRows() {
+            return maxRows;
+        }
+
+        public void setMaxRows(int maxRows) {
+            this.maxRows = maxRows;
+        }
+
+        public int getMaxSqlLength() {
+            return maxSqlLength;
+        }
+
+        public void setMaxSqlLength(int maxSqlLength) {
+            this.maxSqlLength = maxSqlLength;
+        }
+
+        public int getPreviewRows() {
+            return previewRows;
+        }
+
+        public void setPreviewRows(int previewRows) {
+            this.previewRows = previewRows;
         }
     }
 }

@@ -42,3 +42,8 @@ app:
   google:
     client-id: ${GOOGLE_CLIENT_ID:}
     client-secret: ${GOOGLE_CLIENT_SECRET:}
+  practice:
+    query-timeout-seconds: ${PRACTICE_QUERY_TIMEOUT_SECONDS:5}
+    max-rows: ${PRACTICE_MAX_ROWS:500}
+    max-sql-length: ${PRACTICE_MAX_SQL_LENGTH:4000}
+    preview-rows: ${PRACTICE_PREVIEW_ROWS:50}

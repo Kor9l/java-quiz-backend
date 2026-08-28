@@ -4,6 +4,7 @@ import com.korl.javaquiz.api.dto.LocalizedTextDto;
 import com.korl.javaquiz.domain.MaterialSection;
 import com.korl.javaquiz.domain.MaterialSectionRepository;
 import com.korl.javaquiz.domain.MaterialSource;
+import com.korl.javaquiz.domain.PracticeTaskRepository;
 import com.korl.javaquiz.domain.QuestionRepository;
 import com.korl.javaquiz.domain.ReadState;
 import com.korl.javaquiz.domain.Topic;
@@ -34,6 +35,7 @@ public class ContentService {
     private final TopicSectionRepository sections;
     private final QuestionRepository questions;
     private final MaterialSectionRepository materials;
+    private final PracticeTaskRepository practiceTasks;
     private final UserProgressRepository progress;
     private final UserStatsRepository stats;
 
@@ -42,12 +44,14 @@ public class ContentService {
             TopicSectionRepository sections,
             QuestionRepository questions,
             MaterialSectionRepository materials,
+            PracticeTaskRepository practiceTasks,
             UserProgressRepository progress,
             UserStatsRepository stats) {
         this.topics = topics;
         this.sections = sections;
         this.questions = questions;
         this.materials = materials;
+        this.practiceTasks = practiceTasks;
         this.progress = progress;
         this.stats = stats;
     }
@@ -122,6 +126,11 @@ public class ContentService {
         dto.put("readAt", progressPayload.readAt(topicId, sectionId));
         dto.put("wrongSinceRead", wrongSince);
         dto.put("questionCount", questions.countByTopicIdAndSectionId(topicId, sectionId));
+        // Hands-on exercises drilling this very section, so the article can send the reader
+        // straight to them instead of leaving the two halves of the topic unconnected.
+        List<String> tracks = practiceTasks.findTracksForSection(topicId, sectionId);
+        dto.put("practiceTrack", tracks.isEmpty() ? null : tracks.get(0));
+        dto.put("practiceTaskCount", practiceTasks.countByTopicIdAndSectionId(topicId, sectionId));
         return dto;
     }
 

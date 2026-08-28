@@ -24,6 +24,12 @@ Spring Boot REST API + PostgreSQL for the Java Quiz web app.
 | POST | `/api/stats/reset` | user |
 | POST | `/api/progress/{topic}/{section}/read\|unread` | user |
 | POST | `/api/progress/reset` | user |
+| GET | `/api/practice` | user, tracks with progress |
+| GET | `/api/practice/tracks/{track}` | user, difficulties with progress |
+| GET | `/api/practice/tracks/{track}/{difficulty}` | user, task list |
+| GET | `/api/practice/tasks/{id}` | user, statement, dataset schema, expected result |
+| POST | `/api/practice/tasks/{id}/check` | user, parse only |
+| POST | `/api/practice/tasks/{id}/run` | user, run and grade |
 | GET | `/api/admin/users` | **ADMIN** |
 | PATCH | `/api/admin/users/{id}/role` | **ADMIN** |
 
@@ -31,7 +37,52 @@ Default admin after Flyway: `admin@javaquiz.local`, password taken from `ADMIN_I
 (`admin123` under `docker compose`). Without that variable the migration generates a random
 password and writes it to the log once — a fixed default would be an open door on a public host.
 
-Content (5 topics, 246 questions, 41 articles) is loaded by Flyway Java migration `V2__LoadContent` from `src/main/resources/content/`. Java is used because Spring questions contain `${...}` placeholders that SQL scripts would interpolate.
+Content is 6 topics, 49 article sections and 294 quiz questions, all bilingual, loaded from
+`src/main/resources/content/` by Flyway **Java** migrations — Java rather than SQL scripts
+because Spring questions contain `${...}` placeholders that Flyway would interpolate.
+
+| Migration | Loads | From |
+|---|---|---|
+| `V2__LoadContent` | Java Core, Spring, Spring Boot, Hibernate, Kafka | `content/topics.json`, `content/materials/`, `content/questions/` |
+| `V5__LoadPractice` | SQL practice datasets and exercises | `content/practice/sql.json` |
+| `V6__LoadSqlTopic` | the SQL topic: sections, articles, quiz questions | `content/sql/` |
+
+SQL lives in its own directory rather than in the shared files because V2 has already run
+everywhere; adding a topic to `topics.json` would load it on a fresh database and skip it on
+an existing one.
+
+## SQL
+
+SQL is a topic like the others — 8 sections of study material and 48 quiz questions — plus a
+practice track, and the three are cross-linked: an article offers the exercises that drill it,
+and every exercise links back to the section it belongs to.
+
+### Practice
+
+Exercises the learner solves by writing a query that is then executed, rather than by picking
+an option. 54 tasks over three datasets (a shop, a staff directory and a lending library),
+split into easy / medium / hard.
+
+**Grading is by result, not by text.** Every task ships a reference solution; a submission is
+correct when its result set matches what the reference produces. Column labels are ignored,
+row order only counts when the task asked for an order, and numeric values are compared as
+decimals so `COUNT(*)` and `SUM(1)` agree. Two learners can arrive through a join, a subquery
+or a window function and both pass.
+
+A submission runs in a **throwaway in-memory H2 database** (`MODE=PostgreSQL`), built from the
+dataset's DDL and dropped when the attempt ends. Two rings keep it harmless:
+
+1. `SqlGuard` rejects anything that is not a single read-only statement, before execution.
+2. The statement runs as a database user holding nothing but `SELECT` grants, so `INSERT`,
+   `DROP`, `CREATE ALIAS`, `FILE_READ` and `CSVREAD` are refused by the engine itself.
+
+Plus a query timeout, a row cap and a length cap — all under `app.practice` in
+`application.yml`, overridable with `PRACTICE_*` environment variables.
+
+`SqlPracticeContentTest` runs every bundled reference solution at build time, so a task whose
+SQL no longer works fails the build rather than a learner's session. `SqlTopicContentTest`
+does the same for the articles and questions V6 loads, since that migration only gets to fail
+once, against a real database.
 
 ## Local run (without Docker)
 
