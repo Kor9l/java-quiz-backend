@@ -34,16 +34,23 @@ services:
       # one and prints it to the log once.
       - key: ADMIN_INITIAL_PASSWORD
         sync: false
-      # The UI's own Render static site, e.g. https://java-quiz-frontend.onrender.com — its
-      # blueprint lives in the frontend repo. Both keys hold that same origin: one lets the
-      # browser call this API cross-origin, the other is where Google sign-in hands the token back.
+      # The UI's own Render static site — its blueprint lives in the frontend repo, which names
+      # the site `java-quiz-frontend`. Both keys hold that same origin: one lets the browser call
+      # this API cross-origin, the other is where Google sign-in hands the token back.
+      #
+      # These are origins a browser already sees, so there is nothing to hide and no reason to
+      # keep them behind `sync: false` — the frontend repo makes the same call for VITE_API_BASE
+      # and says why: a value that cannot go missing removes a whole failure mode. Here that
+      # failure mode is a 403 with an empty body on every cross-origin call, because Quarkus'
+      # CORS filter rejects an origin that is not in the list, and nothing in the logs of either
+      # service says which origin was refused. No trailing slash: the match is exact.
       - key: CORS_ORIGINS
-        sync: false
+        value: https://java-quiz-frontend.onrender.com
       - key: APP_FRONTEND_URL
-        sync: false
+        value: https://java-quiz-frontend.onrender.com
       # This service's own URL — Google redirects back here after sign-in.
       - key: APP_PUBLIC_URL
-        sync: false
+        value: https://java-quiz-backend.onrender.com
       - key: GOOGLE_CLIENT_ID
         sync: false
       - key: GOOGLE_CLIENT_SECRET
