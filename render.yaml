@@ -34,7 +34,9 @@ services:
       # one and prints it to the log once.
       - key: ADMIN_INITIAL_PASSWORD
         sync: false
-      # https://<pages-project>.pages.dev
+      # The UI's own Render static site, e.g. https://java-quiz-frontend.onrender.com — its
+      # blueprint lives in the frontend repo. Both keys hold that same origin: one lets the
+      # browser call this API cross-origin, the other is where Google sign-in hands the token back.
       - key: CORS_ORIGINS
         sync: false
       - key: APP_FRONTEND_URL
