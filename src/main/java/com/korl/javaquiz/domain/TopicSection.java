@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
 import java.io.Serializable;
@@ -24,6 +26,10 @@ public class TopicSection {
 
     @Column(name = "title_ru", nullable = false)
     private String titleRu;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Level level;
 
     public Id getId() {
         return id;
@@ -47,6 +53,10 @@ public class TopicSection {
 
     public String getTitleRu() {
         return titleRu;
+    }
+
+    public Level getLevel() {
+        return level;
     }
 
     @Embeddable

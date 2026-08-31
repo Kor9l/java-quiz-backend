@@ -54,6 +54,9 @@ public class UserStateService {
         if (incoming.language != null) {
             payload.language = incoming.language;
         }
+        if (incoming.level != null) {
+            payload.level = incoming.level;
+        }
         if (incoming.selectedTopics != null) {
             payload.setSelectedTopics(incoming.selectedTopics);
         }

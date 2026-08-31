@@ -1,5 +1,6 @@
 package com.korl.javaquiz.quiz;
 
+import com.korl.javaquiz.domain.Level;
 import com.korl.javaquiz.domain.Question;
 import com.korl.javaquiz.userstate.StatsPayload;
 
@@ -14,9 +15,11 @@ public class QuestionPicker {
     static final double RECENT_MISS_BONUS = 2.0;
 
     private final Random random;
+    private final Level track;
 
-    public QuestionPicker(Random random) {
+    public QuestionPicker(Random random, Level track) {
         this.random = random;
+        this.track = Level.orMiddle(track);
     }
 
     public List<Question> pick(List<Question> pool, int count, boolean smart, StatsPayload stats) {
@@ -45,16 +48,17 @@ public class QuestionPicker {
     }
 
     double weightOf(Question question, StatsPayload stats) {
+        double scale = question.getDifficulty().weight() * question.getLevel().weightIn(track);
         StatsPayload.QuestionCounter counter = stats.questions.get(question.getId());
         if (counter == null || counter.answered == 0) {
-            return UNSEEN_WEIGHT * question.getDifficulty().weight();
+            return UNSEEN_WEIGHT * scale;
         }
         double wrongRate = 1.0 - counter.accuracy();
         double weight = MASTERED_WEIGHT + 2.5 * wrongRate;
         if (!counter.lastCorrect) {
             weight += RECENT_MISS_BONUS;
         }
-        return weight * question.getDifficulty().weight();
+        return weight * scale;
     }
 
     private int sampleIndex(List<Double> weights) {

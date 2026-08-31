@@ -1,6 +1,7 @@
 package com.korl.javaquiz.userstate;
 
 import com.korl.javaquiz.domain.Language;
+import com.korl.javaquiz.domain.Level;
 import com.korl.javaquiz.domain.Topic;
 
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ public class SettingsPayload {
     public static final int MAX_COUNT = 500;
 
     public Language language = Language.RU;
+    // Absent from payloads written before V7; the field default is what makes those middle.
+    public Level level = Level.MIDDLE;
     public List<String> selectedTopics = new ArrayList<>();
     public int questionCount = 20;
     public boolean infiniteMode;

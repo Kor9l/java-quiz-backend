@@ -1,5 +1,7 @@
 package com.korl.javaquiz.quiz;
 
+import com.korl.javaquiz.domain.Level;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +9,7 @@ public class QuizConfig {
 
     private List<String> topicIds = new ArrayList<>();
     private String sectionId;
+    private Level level = Level.MIDDLE;
     private int targetCount;
     private boolean infinite;
     private boolean shuffleOptions;
@@ -26,6 +29,14 @@ public class QuizConfig {
 
     public void setSectionId(String sectionId) {
         this.sectionId = sectionId;
+    }
+
+    public Level getLevel() {
+        return level;
+    }
+
+    public void setLevel(Level level) {
+        this.level = Level.orMiddle(level);
     }
 
     public int getTargetCount() {

@@ -25,20 +25,27 @@ public class QuestionRepository {
                 .findFirst();
     }
 
-    public List<Question> findByTopicIdIn(Collection<String> topicIds) {
-        if (topicIds == null || topicIds.isEmpty()) {
+    public List<Question> findByTopicIdInAndLevelIn(Collection<String> topicIds, Collection<Level> levels) {
+        if (topicIds == null || topicIds.isEmpty() || levels == null || levels.isEmpty()) {
             return List.of();
         }
-        return em.createQuery(WITH_OPTIONS + " where q.topicId in :topicIds", Question.class)
+        return em.createQuery(WITH_OPTIONS + " where q.topicId in :topicIds and q.level in :levels", Question.class)
                 .setParameter("topicIds", topicIds)
+                .setParameter("levels", levels)
                 .getResultList();
     }
 
-    public List<Question> findByTopicIdAndSectionId(String topicId, String sectionId) {
+    public List<Question> findByTopicIdAndSectionIdAndLevelIn(
+            String topicId, String sectionId, Collection<Level> levels) {
+        if (levels == null || levels.isEmpty()) {
+            return List.of();
+        }
         return em.createQuery(
-                        WITH_OPTIONS + " where q.topicId = :topicId and q.sectionId = :sectionId", Question.class)
+                        WITH_OPTIONS + " where q.topicId = :topicId and q.sectionId = :sectionId "
+                                + "and q.level in :levels", Question.class)
                 .setParameter("topicId", topicId)
                 .setParameter("sectionId", sectionId)
+                .setParameter("levels", levels)
                 .getResultList();
     }
 

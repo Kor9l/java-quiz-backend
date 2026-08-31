@@ -62,10 +62,29 @@ because Spring questions contain `${...}` placeholders that Flyway would interpo
 | `V2__LoadContent` | Java Core, Spring, Spring Boot, Hibernate, Kafka | `content/topics.json`, `content/materials/`, `content/questions/` |
 | `V5__LoadPractice` | SQL practice datasets and exercises | `content/practice/sql.json` |
 | `V6__LoadSqlTopic` | the SQL topic: sections, articles, quiz questions | `content/sql/` |
+| `V7__levels` | the `level` column on questions and sections | — |
 
 SQL lives in its own directory rather than in the shared files because V2 has already run
 everywhere; adding a topic to `topics.json` would load it on a fresh database and skip it on
 an existing one.
+
+## Levels
+
+Every question and section carries a career `level` — `JUNIOR`, `MIDDLE` or `SENIOR` — next to
+the `difficulty` a question already had. The two are orthogonal: difficulty says how tricky a
+question is, level says who is expected to know the material at all. Everything loaded before
+V7 was written for a middle-level reader and is tagged `MIDDLE`.
+
+Levels are cumulative. A track draws on its own level and every level below it, so
+fundamentals stay in the senior pool instead of vanishing from it, and `QuestionPicker` then
+halves the weight of each level below the track — same level ×1, one below ×0.5, two below
+×0.25. A senior session therefore leans senior while still revisiting basics, and a junior
+session is never diluted because nothing sits below it.
+
+The track comes from `level` in `/api/settings`, and `POST /api/quiz/start` accepts a `level`
+of its own to override it for a single session. Sections report their level in `/api/topics`
+and `/api/materials/...` but are never filtered out of them: labelling a section that is above
+the reader is useful, hiding it would also hide progress they already have on it.
 
 ## SQL
 

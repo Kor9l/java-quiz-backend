@@ -2,6 +2,7 @@ package com.korl.javaquiz.service;
 
 import com.korl.javaquiz.api.dto.LocalizedTextDto;
 import com.korl.javaquiz.api.error.ApiException;
+import com.korl.javaquiz.domain.Level;
 import com.korl.javaquiz.domain.Question;
 import com.korl.javaquiz.domain.QuestionOption;
 import com.korl.javaquiz.domain.QuestionRepository;
@@ -84,7 +85,7 @@ public class QuizService {
         state.setStartedAt(Instant.now());
         state.setShowExplanation(settingsPayload.showExplanation);
 
-        QuestionPicker picker = new QuestionPicker(random);
+        QuestionPicker picker = new QuestionPicker(random, config.getLevel());
         refillDeck(state, pool, picker, statsPayload, null);
         nextQuestion(state, pool, picker, statsPayload);
 
@@ -177,7 +178,7 @@ public class QuizService {
         }
         StatsPayload statsPayload = stats.findById(userId).map(UserStatsEntity::getPayload).orElseGet(StatsPayload::new);
         List<Question> pool = loadPool(state.getConfig());
-        QuestionPicker picker = new QuestionPicker(random);
+        QuestionPicker picker = new QuestionPicker(random, state.getConfig().getLevel());
         // nextQuestion refills with the current id, which already keeps a fresh deck from
         // repeating the question just answered; asking twice here would double askedCount.
         nextQuestion(state, pool, picker, statsPayload);
@@ -314,6 +315,7 @@ public class QuizService {
         QuizConfig config = new QuizConfig();
         config.setShuffleOptions(settingsPayload.shuffleOptions);
         config.setSmartSelection(settingsPayload.smartSelection);
+        config.setLevel(request != null && request.level != null ? request.level : settingsPayload.level);
         List<Topic> catalog = topics.findAllByOrderBySortOrderAsc();
         if (request != null && request.sectionId != null && !request.sectionId.isBlank()
                 && request.topicIds != null && request.topicIds.size() == 1) {
@@ -337,10 +339,12 @@ public class QuizService {
     }
 
     private List<Question> loadPool(QuizConfig config) {
+        List<Level> levels = config.getLevel().andBelow();
         if (config.getSectionId() != null && config.getTopicIds().size() == 1) {
-            return questions.findByTopicIdAndSectionId(config.getTopicIds().get(0), config.getSectionId());
+            return questions.findByTopicIdAndSectionIdAndLevelIn(
+                    config.getTopicIds().get(0), config.getSectionId(), levels);
         }
-        return questions.findByTopicIdIn(config.getTopicIds());
+        return questions.findByTopicIdInAndLevelIn(config.getTopicIds(), levels);
     }
 
     private Question currentQuestion(QuizSessionState state, List<Question> pool) {
@@ -474,5 +478,7 @@ public class QuizService {
         public String sectionId;
         public Integer targetCount;
         public Boolean infinite;
+        /** Overrides the saved level for one session, the way topicIds and targetCount do. */
+        public Level level;
     }
 }
