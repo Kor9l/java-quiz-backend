@@ -1,6 +1,7 @@
 package com.korl.javaquiz.api.dto;
 
 import com.korl.javaquiz.domain.Language;
+import com.korl.javaquiz.domain.Level;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
 public class SettingsRequest {
 
     public Language language;
+    public Level level;
     public List<String> selectedTopics;
     public Integer questionCount;
     public Boolean infiniteMode;

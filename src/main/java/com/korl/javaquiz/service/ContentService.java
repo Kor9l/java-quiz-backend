@@ -78,6 +78,9 @@ public class ContentService {
                 sectionDto.put("id", section.sectionId());
                 sectionDto.put("order", section.getSortOrder());
                 sectionDto.put("title", LocalizedTextDto.of(section.getTitleEn(), section.getTitleRu()));
+                // Reported, not filtered: a section above the reader's level is worth labelling,
+                // but hiding it would also hide progress they may already have on it.
+                sectionDto.put("level", section.getLevel().name());
                 sectionDto.put("readState", state.name());
                 sectionDto.put("questionCount", questions.countByTopicIdAndSectionId(topic.getId(), section.sectionId()));
                 sectionDtos.add(sectionDto);
@@ -118,6 +121,7 @@ public class ContentService {
         dto.put("topicId", topicId);
         dto.put("sectionId", sectionId);
         dto.put("title", LocalizedTextDto.of(section.getTitleEn(), section.getTitleRu()));
+        dto.put("level", section.getLevel().name());
         dto.put("estimatedMinutes", material.getEstimatedMinutes());
         dto.put("summary", LocalizedTextDto.of(material.getSummaryEn(), material.getSummaryRu()));
         dto.put("body", LocalizedTextDto.of(material.getBodyEn(), material.getBodyRu()));

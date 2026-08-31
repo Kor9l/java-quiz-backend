@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 2,
+  "topic": {
+    "id": "java-concurrency",
+    "order": 7,
+    "name": {
+      "en": "Java Concurrency",
+      "ru": "Многопоточность в Java"
+    },
+    "sections": [
+      {
+        "id": "threads-lifecycle",
+        "order": 1,
+        "level": "junior",
+        "title": {
+          "en": "Threads and their lifecycle",
+          "ru": "Потоки и их жизненный цикл"
+        }
+      },
+      {
+        "id": "shared-state-races",
+        "order": 2,
+        "level": "junior",
+        "title": {
+          "en": "Shared state and race conditions",
+          "ru": "Общее состояние и состояния гонки"
+        }
+      },
+      {
+        "id": "synchronized-monitor",
+        "order": 3,
+        "level": "junior",
+        "title": {
+          "en": "synchronized, monitors and wait/notify",
+          "ru": "synchronized, монитор и wait/notify"
+        }
+      },
+      {
+        "id": "memory-model",
+        "order": 4,
+        "level": "middle",
+        "title": {
+          "en": "The Java memory model",
+          "ru": "Модель памяти Java (JMM)"
+        }
+      },
+      {
+        "id": "locks",
+        "order": 5,
+        "level": "middle",
+        "title": {
+          "en": "Explicit locks and conditions",
+          "ru": "Явные блокировки и условия"
+        }
+      },
+      {
+        "id": "concurrent-collections",
+        "order": 6,
+        "level": "middle",
+        "title": {
+          "en": "Thread-safe collections",
+          "ru": "Потокобезопасные коллекции"
+        }
+      },
+      {
+        "id": "thread-pools",
+        "order": 7,
+        "level": "middle",
+        "title": {
+          "en": "Thread pools and executors",
+          "ru": "Пулы потоков и Executor"
+        }
+      },
+      {
+        "id": "completable-future",
+        "order": 8,
+        "level": "middle",
+        "title": {
+          "en": "CompletableFuture and async composition",
+          "ru": "CompletableFuture и композиция асинхронных вызовов"
+        }
+      },
+      {
+        "id": "virtual-threads",
+        "order": 9,
+        "level": "middle",
+        "title": {
+          "en": "Virtual threads and structured concurrency",
+          "ru": "Виртуальные потоки и structured concurrency"
+        }
+      },
+      {
+        "id": "atomics-cas",
+        "order": 10,
+        "level": "senior",
+        "title": {
+          "en": "Atomics, CAS and contention",
+          "ru": "Атомарные типы, CAS и конкуренция"
+        }
+      },
+      {
+        "id": "fork-join",
+        "order": 11,
+        "level": "senior",
+        "title": {
+          "en": "Fork/Join and parallel streams",
+          "ru": "Fork/Join и параллельные стримы"
+        }
+      },
+      {
+        "id": "diagnostics",
+        "order": 12,
+        "level": "senior",
+        "title": {
+          "en": "Diagnosing concurrency bugs",
+          "ru": "Диагностика конкурентных багов"
+        }
+      }
+    ]
+  }
+}

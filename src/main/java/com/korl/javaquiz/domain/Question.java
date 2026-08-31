@@ -32,6 +32,10 @@ public class Question {
     @Column(nullable = false)
     private Difficulty difficulty;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Level level;
+
     @Column(name = "text_en", nullable = false)
     private String textEn;
 
@@ -75,6 +79,10 @@ public class Question {
 
     public Difficulty getDifficulty() {
         return difficulty;
+    }
+
+    public Level getLevel() {
+        return level;
     }
 
     public String getTextEn() {
