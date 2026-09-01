@@ -9,6 +9,7 @@ import com.korl.javaquiz.domain.WordGroup;
 import com.korl.javaquiz.domain.WordGroupType;
 import com.korl.javaquiz.domain.WordRepository;
 import com.korl.javaquiz.english.ParsedWordLine;
+import com.korl.javaquiz.english.WordImportError;
 import com.korl.javaquiz.english.WordImportResult;
 import com.korl.javaquiz.english.WordLineParseException;
 import com.korl.javaquiz.english.WordLineParser;
@@ -180,7 +181,7 @@ public class WordService {
                         line.markedNew(), now));
                 result.countImported();
             } catch (WordLineParseException e) {
-                result.addError(i + 1, e.getMessage());
+                result.addError(i + 1, e.getCode());
             }
         }
     }
@@ -200,7 +201,7 @@ public class WordService {
                 continue;
             }
             if (text == null || translation == null) {
-                result.addError(i + 1, "Word and translation are required");
+                result.addError(i + 1, WordImportError.MISSING_FIELDS);
                 continue;
             }
             words.save(new Word(groupId, order++, text, translation, example, false, now));
