@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 /**
  * The parser is the only part of a bulk import a learner can get wrong, so the shapes their
@@ -72,21 +72,25 @@ class WordLineParserTest {
         assertThat(WordLineParser.parseLine(null)).isEmpty();
     }
 
+    /**
+     * The code is what the UI translates, so it is the part worth pinning — the message beside
+     * it only ever reaches a log.
+     */
     @Test
     void rejectsALineWithoutASeparator() {
-        assertThatThrownBy(() -> WordLineParser.parseLine("just some words"))
-                .isInstanceOf(WordLineParseException.class)
-                .hasMessageContaining("dash");
+        assertThat(codeOf("just some words")).isEqualTo(WordImportError.MISSING_SEPARATOR);
     }
 
     @Test
     void rejectsAnEmptySide() {
-        assertThatThrownBy(() -> WordLineParser.parseLine("ongoing — "))
-                .isInstanceOf(WordLineParseException.class)
-                .hasMessageContaining("Empty");
-        assertThatThrownBy(() -> WordLineParser.parseLine(" — текущий"))
-                .isInstanceOf(WordLineParseException.class)
-                .hasMessageContaining("Empty");
+        assertThat(codeOf("ongoing — ")).isEqualTo(WordImportError.EMPTY_SIDE);
+        assertThat(codeOf(" — текущий")).isEqualTo(WordImportError.EMPTY_SIDE);
+    }
+
+    private static WordImportError codeOf(String line) {
+        Throwable thrown = catchThrowable(() -> WordLineParser.parseLine(line));
+        assertThat(thrown).describedAs(line).isInstanceOf(WordLineParseException.class);
+        return ((WordLineParseException) thrown).getCode();
     }
 
     private static ParsedWordLine parse(String line) {

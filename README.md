@@ -221,9 +221,28 @@ way rather than quietly changed during a port.
 
 A line that will not parse is **reported and skipped**, not fatal — the usual paste has a stray
 line or two in it, and re-pasting the other forty is not a fix. The response says how many landed
-and names the rest by line number. A run that imports nothing and reports nothing means the payload
-was empty, and answers 400 rather than a cheerful `imported: 0`; if it was about to create a group,
-the transaction takes that back with it.
+and names the rest by line number:
+
+```json
+{"groupId": "…", "groupTitle": "Idioms 9", "imported": 3,
+ "errors": [{"line": 4, "code": "MISSING_SEPARATOR"}]}
+```
+
+| code | the line had |
+|---|---|
+| `MISSING_SEPARATOR` | no em or en dash, so there is no telling where the English stops |
+| `EMPTY_SIDE` | a dash with nothing on one side of it |
+| `MISSING_FIELDS` | (typed rows) neither a word nor its translation |
+
+A code rather than a sentence, unlike the validation messages under
+[Notes on the port](#notes-on-the-port). Those are read by whoever is calling the endpoint; these
+reach a learner mid-paste, on a screen the UI has already translated around them — and only the UI
+knows which language that is, so the wording lives there and the reason travels as a name. Adding
+a code is a UI change too: an unknown one renders as the bare code rather than as nothing.
+
+A run that imports nothing and reports nothing means the payload was empty, and answers 400 rather
+than a cheerful `imported: 0`; if it was about to create a group, the transaction takes that back
+with it.
 
 `WordLineParserTest` pins the accepted shapes and `EnglishWordsContentTest` guards the bundled
 corpus, on the same reasoning as the other content tests: `V10` only gets one attempt against a
