@@ -9,11 +9,14 @@ import com.korl.javaquiz.domain.PracticeProgressEntity;
 import com.korl.javaquiz.domain.PracticeProgressRepository;
 import com.korl.javaquiz.domain.PracticeTask;
 import com.korl.javaquiz.domain.PracticeTaskRepository;
+import com.korl.javaquiz.practice.CompileDiagnostic;
+import com.korl.javaquiz.practice.JavaPracticeEngine;
+import com.korl.javaquiz.practice.JavaTaskSpec;
+import com.korl.javaquiz.practice.PracticeSubmissionException;
 import com.korl.javaquiz.practice.ResultComparator;
 import com.korl.javaquiz.practice.ResultTable;
 import com.korl.javaquiz.practice.SchemaInfo;
 import com.korl.javaquiz.practice.SqlPracticeEngine;
-import com.korl.javaquiz.practice.SqlSubmissionException;
 import com.korl.javaquiz.practice.SubmissionOutcome;
 import com.korl.javaquiz.practice.TaskSpec;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -32,24 +35,33 @@ import java.util.stream.Collectors;
 /**
  * The practice section: hands-on exercises the learner solves by writing code that is then
  * run, rather than by picking an option.
+ *
+ * <p>Two tracks share everything except grading. Navigation, progress, difficulty and the link
+ * back to the study material are written once here; which engine a submission goes to is the
+ * one thing that follows from the task's track.
  */
 @ApplicationScoped
 public class PracticeService {
+
+    static final String JAVA_TRACK = "java";
 
     private final PracticeTaskRepository tasks;
     private final PracticeDatasetRepository datasets;
     private final PracticeProgressRepository progress;
     private final SqlPracticeEngine engine;
+    private final JavaPracticeEngine javaEngine;
 
     public PracticeService(
             PracticeTaskRepository tasks,
             PracticeDatasetRepository datasets,
             PracticeProgressRepository progress,
-            SqlPracticeEngine engine) {
+            SqlPracticeEngine engine,
+            JavaPracticeEngine javaEngine) {
         this.tasks = tasks;
         this.datasets = datasets;
         this.progress = progress;
         this.engine = engine;
+        this.javaEngine = javaEngine;
     }
 
     /** The tracks available and how far the user has got in each. */
@@ -88,7 +100,6 @@ public class PracticeService {
     @Transactional
     public Map<String, Object> task(UUID userId, String taskId) {
         PracticeTask task = requireTask(taskId);
-        PracticeDataset dataset = requireDataset(task.getDatasetId());
         PracticeProgressEntity state = progress
                 .findById(new PracticeProgressEntity.Id(userId, taskId))
                 .orElse(null);
@@ -96,10 +107,21 @@ public class PracticeService {
         Map<String, Object> dto = new LinkedHashMap<>(taskSummary(task, state));
         dto.put("statement", LocalizedTextDto.of(task.getStatementEn(), task.getStatementRu()));
         dto.put("hint", LocalizedTextDto.of(task.getHintEn(), task.getHintRu()));
-        dto.put("starterSql", task.getStarterSql());
-        dto.put("lastSql", state == null ? null : state.getLastSql());
-        dto.put("dataset", datasetDto(dataset));
-        dto.put("expected", tableDto(engine.expectedResult(spec(task, dataset)).preview(engine.limits().previewRows())));
+        if (isJava(task)) {
+            dto.put("className", task.getClassName());
+            dto.put("starterCode", task.getStarterCode());
+            dto.put("lastCode", state == null ? null : state.getLastSubmission());
+            // The cases are the specification, so they are shown rather than held back.
+            dto.put("cases", casesDto(task));
+            dto.put("expected", tableDto(javaEngine.expectedResult(javaSpec(task))));
+        } else {
+            PracticeDataset dataset = requireDataset(task.getDatasetId());
+            dto.put("starterSql", task.getStarterSql());
+            dto.put("lastSql", state == null ? null : state.getLastSubmission());
+            dto.put("dataset", datasetDto(dataset));
+            dto.put("expected",
+                    tableDto(engine.expectedResult(spec(task, dataset)).preview(engine.limits().previewRows())));
+        }
         // Held back until they get there, the same way the quiz reveals an explanation only
         // once the question has been answered.
         if (state != null && state.isSolved()) {
@@ -108,21 +130,35 @@ public class PracticeService {
         return dto;
     }
 
-    /** Parses a submission without running it and without touching the user's record. */
+    /**
+     * Checks a submission without running it and without touching the user's record. On the SQL
+     * track that means parsing it, on the Java track compiling it — the same question asked of
+     * two languages.
+     */
     @Transactional
-    public Map<String, Object> check(String taskId, String sql) {
+    public Map<String, Object> check(String taskId, String submission) {
         PracticeTask task = requireTask(taskId);
+        if (isJava(task)) {
+            JavaTaskSpec spec = javaSpec(task);
+            return graded(task, () -> javaEngine.checkCompilation(spec, submission), false);
+        }
         TaskSpec spec = spec(task, requireDataset(task.getDatasetId()));
-        return graded(task, () -> engine.checkSyntax(spec, sql), false);
+        return graded(task, () -> engine.checkSyntax(spec, submission), false);
     }
 
     /** Runs a submission, grades it against the reference result, and records the attempt. */
     @Transactional
-    public Map<String, Object> run(UUID userId, String taskId, String sql) {
+    public Map<String, Object> run(UUID userId, String taskId, String submission) {
         PracticeTask task = requireTask(taskId);
-        TaskSpec spec = spec(task, requireDataset(task.getDatasetId()));
-        Map<String, Object> response = graded(task, () -> engine.grade(spec, sql), true);
-        record(userId, taskId, sql, Boolean.TRUE.equals(response.get("passed")));
+        Map<String, Object> response;
+        if (isJava(task)) {
+            JavaTaskSpec spec = javaSpec(task);
+            response = graded(task, () -> javaEngine.grade(spec, submission), true);
+        } else {
+            TaskSpec spec = spec(task, requireDataset(task.getDatasetId()));
+            response = graded(task, () -> engine.grade(spec, submission), true);
+        }
+        record(userId, taskId, submission, Boolean.TRUE.equals(response.get("passed")));
         return response;
     }
 
@@ -135,7 +171,7 @@ public class PracticeService {
         SubmissionOutcome outcome;
         try {
             outcome = grading.run();
-        } catch (SqlSubmissionException e) {
+        } catch (PracticeSubmissionException e) {
             Map<String, Object> failure = new LinkedHashMap<>();
             failure.put("status", e.getStatus().name());
             failure.put("passed", false);
@@ -152,17 +188,21 @@ public class PracticeService {
         dto.put("result", tableDto(outcome.result()));
         dto.put("expected", tableDto(outcome.expected()));
         dto.put("comparison", comparisonDto(outcome.comparison()));
+        // Present on both tracks, empty on the SQL one, so that a client does not have to know
+        // which track it is looking at to read the response.
+        dto.put("diagnostics", outcome.diagnostics().stream().map(PracticeService::diagnosticDto).toList());
+        dto.put("output", outcome.output());
         if (revealOnPass && outcome.passed()) {
             dto.put("explanation", LocalizedTextDto.of(task.getExplanationEn(), task.getExplanationRu()));
         }
         return dto;
     }
 
-    private void record(UUID userId, String taskId, String sql, boolean passed) {
+    private void record(UUID userId, String taskId, String submission, boolean passed) {
         PracticeProgressEntity state = progress
                 .findById(new PracticeProgressEntity.Id(userId, taskId))
                 .orElseGet(() -> new PracticeProgressEntity(userId, taskId));
-        state.record(sql, passed, Instant.now());
+        state.record(submission, passed, Instant.now());
         progress.save(state);
     }
 
@@ -267,9 +307,41 @@ public class PracticeService {
                 .collect(Collectors.toMap(PracticeProgressEntity::taskId, state -> state));
     }
 
+    private static Map<String, Object> diagnosticDto(CompileDiagnostic diagnostic) {
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("severity", diagnostic.severity());
+        dto.put("line", diagnostic.line());
+        dto.put("column", diagnostic.column());
+        dto.put("message", diagnostic.message());
+        dto.put("inSubmission", diagnostic.inSubmission());
+        return dto;
+    }
+
+    /** The calls a Java task is graded by, which are part of the statement rather than hidden. */
+    private static List<Map<String, Object>> casesDto(PracticeTask task) {
+        return task.getCases().stream()
+                .map(current -> Map.<String, Object>of(
+                        "label", current.getLabel(), "expression", current.getExpression()))
+                .toList();
+    }
+
+    private static boolean isJava(PracticeTask task) {
+        return JAVA_TRACK.equals(task.getTrack());
+    }
+
     private TaskSpec spec(PracticeTask task, PracticeDataset dataset) {
         return new TaskSpec(
                 task.getId(), dataset.getSetupStatements(), task.getSolutionSql(), task.isOrderMatters());
+    }
+
+    private JavaTaskSpec javaSpec(PracticeTask task) {
+        return new JavaTaskSpec(
+                task.getId(),
+                task.getClassName(),
+                task.getSolutionCode(),
+                task.getCases().stream()
+                        .map(current -> new JavaTaskSpec.Case(current.getLabel(), current.getExpression()))
+                        .toList());
     }
 
     private PracticeTask requireTask(String taskId) {

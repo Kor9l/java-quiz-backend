@@ -31,7 +31,11 @@ public class PracticeProgressEntity {
     @Column(name = "last_attempt_at")
     private Instant lastAttemptAt;
 
-    /** The last thing they submitted, so reopening a task restores their work. */
+    /**
+      * The last thing they submitted, so reopening a task restores their work. The column keeps
+      * its SQL-era name: the Java track stores its source here too, and renaming it would move
+      * a deployed column for nothing.
+      */
     @Column(name = "last_sql")
     private String lastSql;
 
@@ -70,10 +74,15 @@ public class PracticeProgressEntity {
         return lastSql;
     }
 
+    /** The same value under a name that does not claim a track. */
+    public String getLastSubmission() {
+        return lastSql;
+    }
+
     /** Records one graded submission. The solved flag and its timestamp only ever latch on. */
-    public void record(String sql, boolean passed, Instant at) {
+    public void record(String submission, boolean passed, Instant at) {
         attempts++;
-        lastSql = sql;
+        lastSql = submission;
         lastAttemptAt = at;
         if (passed && !solved) {
             solved = true;
