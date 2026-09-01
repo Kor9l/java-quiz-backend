@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HexFormat;
 import java.util.List;
 
@@ -77,6 +78,11 @@ public record ResultTable(List<String> columns, List<List<Object>> rows, boolean
         if (value instanceof byte[] bytes) {
             return HexFormat.of().formatHex(bytes);
         }
+        // Only the Java track produces these; an array's own toString is its identity hash,
+        // which would make every run differ from every other one.
+        if (value.getClass().isArray()) {
+            return arrayToString(value);
+        }
         if (value instanceof String text) {
             // CHAR columns come back space-padded to their declared width; that padding is an
             // artefact of the storage type, not something the learner got wrong.
@@ -100,6 +106,34 @@ public record ResultTable(List<String> columns, List<List<Object>> rows, boolean
         }
         BigDecimal rounded = decimal.setScale(COMPARISON_SCALE, RoundingMode.HALF_UP);
         return rounded.signum() == 0 ? "0" : rounded.stripTrailingZeros().toPlainString();
+    }
+
+    private static String arrayToString(Object array) {
+        if (array instanceof Object[] objects) {
+            return Arrays.deepToString(objects);
+        }
+        if (array instanceof int[] a) {
+            return Arrays.toString(a);
+        }
+        if (array instanceof long[] a) {
+            return Arrays.toString(a);
+        }
+        if (array instanceof double[] a) {
+            return Arrays.toString(a);
+        }
+        if (array instanceof char[] a) {
+            return Arrays.toString(a);
+        }
+        if (array instanceof boolean[] a) {
+            return Arrays.toString(a);
+        }
+        if (array instanceof short[] a) {
+            return Arrays.toString(a);
+        }
+        if (array instanceof float[] a) {
+            return Arrays.toString(a);
+        }
+        return array.toString();
     }
 
     private static String stripTrailing(String text) {

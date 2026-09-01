@@ -34,22 +34,22 @@ public final class SqlGuard {
 
     public static void check(String sql, int maxLength) {
         if (sql == null || sql.isBlank()) {
-            throw new SqlSubmissionException(SubmissionStatus.POLICY_ERROR, "practice.error.empty", null);
+            throw new PracticeSubmissionException(SubmissionStatus.POLICY_ERROR, "practice.error.empty", null);
         }
         if (sql.length() > maxLength) {
-            throw new SqlSubmissionException(
+            throw new PracticeSubmissionException(
                     SubmissionStatus.POLICY_ERROR, "practice.error.tooLong", "limit=" + maxLength);
         }
         String masked = SqlText.mask(sql);
         if (SqlText.hasMultipleStatements(masked)) {
-            throw new SqlSubmissionException(SubmissionStatus.POLICY_ERROR, "practice.error.multipleStatements", null);
+            throw new PracticeSubmissionException(SubmissionStatus.POLICY_ERROR, "practice.error.multipleStatements", null);
         }
         String keyword = SqlText.leadingKeyword(masked);
         if (keyword.isEmpty()) {
-            throw new SqlSubmissionException(SubmissionStatus.POLICY_ERROR, "practice.error.empty", null);
+            throw new PracticeSubmissionException(SubmissionStatus.POLICY_ERROR, "practice.error.empty", null);
         }
         if (REFUSED_LEADING.contains(keyword)) {
-            throw new SqlSubmissionException(SubmissionStatus.POLICY_ERROR, "practice.error.notAQuery", keyword);
+            throw new PracticeSubmissionException(SubmissionStatus.POLICY_ERROR, "practice.error.notAQuery", keyword);
         }
     }
 }

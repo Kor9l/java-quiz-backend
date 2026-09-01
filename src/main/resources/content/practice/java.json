@@ -1,0 +1,1018 @@
+{
+  "schemaVersion": 1,
+  "track": "java",
+  "tasks": [
+    {
+      "id": "java-easy-01",
+      "difficulty": "easy",
+      "order": 1,
+      "topic": "java-core",
+      "section": "strings",
+      "className": "Solution",
+      "title": {
+        "en": "Reverse a string",
+        "ru": "Перевернуть строку"
+      },
+      "statement": {
+        "en": "Return the characters of the given text in the opposite order. An empty string reverses to an empty string.",
+        "ru": "Верните символы переданного текста в обратном порядке. Пустая строка переворачивается в пустую."
+      },
+      "hint": {
+        "en": "StringBuilder has a reverse() of its own, but writing the loop once is worth more here.",
+        "ru": "У StringBuilder есть собственный reverse(), но один раз написать цикл здесь полезнее."
+      },
+      "starter": "public class Solution {\n\n    public static String reverse(String text) {\n        // TODO: return the characters of text in the opposite order\n        return text;\n    }\n}\n",
+      "solution": "public class Solution {\n\n    public static String reverse(String text) {\n        StringBuilder reversed = new StringBuilder(text.length());\n        for (int i = text.length() - 1; i >= 0; i--) {\n            reversed.append(text.charAt(i));\n        }\n        return reversed.toString();\n    }\n}\n",
+      "cases": [
+        {
+          "label": "reverse(\"java\")",
+          "expression": "Solution.reverse(\"java\")"
+        },
+        {
+          "label": "reverse(\"\")",
+          "expression": "Solution.reverse(\"\")"
+        },
+        {
+          "label": "reverse(\"a\")",
+          "expression": "Solution.reverse(\"a\")"
+        },
+        {
+          "label": "reverse(\"Hello, world\")",
+          "expression": "Solution.reverse(\"Hello, world\")"
+        }
+      ],
+      "explanation": {
+        "en": "Strings are immutable, so building the answer character by character with a String would allocate a new one on every step. StringBuilder is the mutable buffer that exists for exactly this, and giving it the final length up front saves it a resize.",
+        "ru": "Строки неизменяемы, поэтому сборка ответа по символу через String создавала бы новый объект на каждом шаге. StringBuilder — изменяемый буфер именно для этого, а если сразу задать итоговую длину, он обойдётся без расширения."
+      },
+      "sources": [
+        {
+          "title": "String (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html"
+        },
+        {
+          "title": "StringBuilder (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuilder.html"
+        }
+      ]
+    },
+    {
+      "id": "java-easy-02",
+      "difficulty": "easy",
+      "order": 2,
+      "topic": "java-core",
+      "section": "strings",
+      "className": "Solution",
+      "title": {
+        "en": "Count the vowels",
+        "ru": "Посчитать гласные"
+      },
+      "statement": {
+        "en": "Count how many English vowels (a, e, i, o, u) the text contains, in either case.",
+        "ru": "Посчитайте, сколько английских гласных (a, e, i, o, u) содержит текст, в любом регистре."
+      },
+      "hint": {
+        "en": "Lower-case the character once and compare against a String of vowels with indexOf.",
+        "ru": "Приведите символ к нижнему регистру и сравните со строкой гласных через indexOf."
+      },
+      "starter": "public class Solution {\n\n    public static int countVowels(String text) {\n        // TODO: count a, e, i, o and u, upper case included\n        return 0;\n    }\n}\n",
+      "solution": "public class Solution {\n\n    private static final String VOWELS = \"aeiou\";\n\n    public static int countVowels(String text) {\n        int count = 0;\n        for (int i = 0; i < text.length(); i++) {\n            if (VOWELS.indexOf(Character.toLowerCase(text.charAt(i))) >= 0) {\n                count++;\n            }\n        }\n        return count;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "countVowels(\"java\")",
+          "expression": "Solution.countVowels(\"java\")"
+        },
+        {
+          "label": "countVowels(\"RHYTHM\")",
+          "expression": "Solution.countVowels(\"RHYTHM\")"
+        },
+        {
+          "label": "countVowels(\"AeIoU\")",
+          "expression": "Solution.countVowels(\"AeIoU\")"
+        },
+        {
+          "label": "countVowels(\"\")",
+          "expression": "Solution.countVowels(\"\")"
+        }
+      ],
+      "explanation": {
+        "en": "Holding the vowels in one String and asking indexOf turns five comparisons into one call, and normalising the case once means the check does not have to be written twice.",
+        "ru": "Хранение гласных в одной строке и вызов indexOf превращают пять сравнений в одно, а однократное приведение регистра избавляет от дублирования проверки."
+      },
+      "sources": [
+        {
+          "title": "Character (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Character.html"
+        },
+        {
+          "title": "String.indexOf (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#indexOf(int)"
+        }
+      ]
+    },
+    {
+      "id": "java-easy-03",
+      "difficulty": "easy",
+      "order": 3,
+      "topic": "java-core",
+      "section": "oop-basics",
+      "className": "Solution",
+      "title": {
+        "en": "A rectangle with a factory method",
+        "ru": "Прямоугольник с фабричным методом"
+      },
+      "statement": {
+        "en": "Write a Solution with a public constructor taking width and height, instance methods area() and perimeter(), and a static square(int side) that returns a Solution whose sides are equal.",
+        "ru": "Напишите Solution с публичным конструктором, принимающим ширину и высоту, методами экземпляра area() и perimeter() и статическим square(int side), который возвращает Solution с равными сторонами."
+      },
+      "hint": {
+        "en": "square() does not need its own logic: it can hand its argument to the constructor twice.",
+        "ru": "square() не нужна собственная логика: он может дважды передать аргумент в конструктор."
+      },
+      "starter": "public class Solution {\n\n    public Solution(int width, int height) {\n        // TODO: keep the sides\n    }\n\n    public static Solution square(int side) {\n        // TODO: return a rectangle with equal sides\n        return null;\n    }\n\n    public int area() {\n        return 0;\n    }\n\n    public int perimeter() {\n        return 0;\n    }\n}\n",
+      "solution": "public class Solution {\n\n    private final int width;\n    private final int height;\n\n    public Solution(int width, int height) {\n        this.width = width;\n        this.height = height;\n    }\n\n    public static Solution square(int side) {\n        return new Solution(side, side);\n    }\n\n    public int area() {\n        return width * height;\n    }\n\n    public int perimeter() {\n        return 2 * (width + height);\n    }\n}\n",
+      "cases": [
+        {
+          "label": "new Solution(3, 4).area()",
+          "expression": "new Solution(3, 4).area()"
+        },
+        {
+          "label": "new Solution(3, 4).perimeter()",
+          "expression": "new Solution(3, 4).perimeter()"
+        },
+        {
+          "label": "square(5).area()",
+          "expression": "Solution.square(5).area()"
+        },
+        {
+          "label": "square(5).perimeter()",
+          "expression": "Solution.square(5).perimeter()"
+        },
+        {
+          "label": "new Solution(0, 7).area()",
+          "expression": "new Solution(0, 7).area()"
+        }
+      ],
+      "explanation": {
+        "en": "The fields are final and set once, which is what makes the object safe to hand around: nothing can change a rectangle out from under its owner. The static factory is the other half — it names an intent the constructor cannot, and it delegates rather than repeating the assignment.",
+        "ru": "Поля final и задаются один раз — именно это делает объект безопасным для передачи: никто не изменит прямоугольник за спиной владельца. Статическая фабрика — вторая половина: она называет намерение, которое конструктор выразить не может, и делегирует вместо повторения присваиваний."
+      },
+      "sources": [
+        {
+          "title": "Classes and Objects",
+          "url": "https://dev.java/learn/classes-objects/"
+        },
+        {
+          "title": "Objects (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Objects.html"
+        }
+      ]
+    },
+    {
+      "id": "java-easy-04",
+      "difficulty": "easy",
+      "order": 4,
+      "topic": "java-core",
+      "section": "collections",
+      "className": "Solution",
+      "title": {
+        "en": "The largest number in a list",
+        "ru": "Наибольшее число в списке"
+      },
+      "statement": {
+        "en": "Return the largest element of the list. For an empty list throw an IllegalArgumentException with the message \"empty\".",
+        "ru": "Верните наибольший элемент списка. Для пустого списка выбросьте IllegalArgumentException с сообщением \"empty\"."
+      },
+      "hint": {
+        "en": "Start from the first element rather than from Integer.MIN_VALUE, and the empty case is already handled.",
+        "ru": "Начните с первого элемента, а не с Integer.MIN_VALUE, и случай пустого списка окажется уже обработан."
+      },
+      "starter": "import java.util.List;\n\npublic class Solution {\n\n    public static int max(List<Integer> numbers) {\n        // TODO: return the largest, or throw for an empty list\n        return 0;\n    }\n}\n",
+      "solution": "import java.util.List;\n\npublic class Solution {\n\n    public static int max(List<Integer> numbers) {\n        if (numbers.isEmpty()) {\n            throw new IllegalArgumentException(\"empty\");\n        }\n        int largest = numbers.get(0);\n        for (int number : numbers) {\n            if (number > largest) {\n                largest = number;\n            }\n        }\n        return largest;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "max([3, 9, 2])",
+          "expression": "Solution.max(List.of(3, 9, 2))"
+        },
+        {
+          "label": "max([-5])",
+          "expression": "Solution.max(List.of(-5))"
+        },
+        {
+          "label": "max([7, 7, 7])",
+          "expression": "Solution.max(List.of(7, 7, 7))"
+        },
+        {
+          "label": "max([]) throws",
+          "expression": "attempt(() -> Solution.max(List.of()))"
+        }
+      ],
+      "explanation": {
+        "en": "Seeding the running maximum with the first element instead of a sentinel keeps the method honest about lists of negative numbers, and forces the empty case to be answered deliberately rather than by returning a number nobody asked for.",
+        "ru": "Инициализация максимума первым элементом вместо «сторожевого» значения оставляет метод честным на списках из отрицательных чисел и заставляет осознанно ответить на пустой список, а не возвращать число, которого никто не просил."
+      },
+      "sources": [
+        {
+          "title": "List (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html"
+        },
+        {
+          "title": "The Collections Framework",
+          "url": "https://dev.java/learn/collections-framework/"
+        }
+      ]
+    },
+    {
+      "id": "java-easy-05",
+      "difficulty": "easy",
+      "order": 5,
+      "topic": "java-core",
+      "section": "strings",
+      "className": "Solution",
+      "title": {
+        "en": "Palindrome, ignoring punctuation",
+        "ru": "Палиндром без учёта знаков"
+      },
+      "statement": {
+        "en": "Report whether the text reads the same forwards and backwards, counting only letters and digits and ignoring case.",
+        "ru": "Определите, читается ли текст одинаково в обе стороны, учитывая только буквы и цифры и игнорируя регистр."
+      },
+      "hint": {
+        "en": "Two indexes walking towards each other skip the characters that do not count, without building a cleaned-up copy first.",
+        "ru": "Два индекса, идущие навстречу друг другу, пропускают неподходящие символы, не создавая предварительно очищенную копию."
+      },
+      "starter": "public class Solution {\n\n    public static boolean isPalindrome(String text) {\n        // TODO: compare letters and digits only, ignoring case\n        return false;\n    }\n}\n",
+      "solution": "public class Solution {\n\n    public static boolean isPalindrome(String text) {\n        int left = 0;\n        int right = text.length() - 1;\n        while (left < right) {\n            if (!Character.isLetterOrDigit(text.charAt(left))) {\n                left++;\n            } else if (!Character.isLetterOrDigit(text.charAt(right))) {\n                right--;\n            } else if (Character.toLowerCase(text.charAt(left)) != Character.toLowerCase(text.charAt(right))) {\n                return false;\n            } else {\n                left++;\n                right--;\n            }\n        }\n        return true;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "isPalindrome(\"A man, a plan, a canal: Panama\")",
+          "expression": "Solution.isPalindrome(\"A man, a plan, a canal: Panama\")"
+        },
+        {
+          "label": "isPalindrome(\"java\")",
+          "expression": "Solution.isPalindrome(\"java\")"
+        },
+        {
+          "label": "isPalindrome(\"\")",
+          "expression": "Solution.isPalindrome(\"\")"
+        },
+        {
+          "label": "isPalindrome(\"Ab_ba\")",
+          "expression": "Solution.isPalindrome(\"Ab_ba\")"
+        },
+        {
+          "label": "isPalindrome(\"12321\")",
+          "expression": "Solution.isPalindrome(\"12321\")"
+        }
+      ],
+      "explanation": {
+        "en": "Walking from both ends decides the answer as soon as one pair disagrees, and never allocates: the cleaned-up string most first attempts build is a copy the comparison does not need.",
+        "ru": "Проход с обоих концов даёт ответ, как только одна пара не совпала, и ничего не выделяет: очищенная строка, которую строит большинство первых попыток, — копия, не нужная для сравнения."
+      },
+      "sources": [
+        {
+          "title": "Character.isLetterOrDigit",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Character.html#isLetterOrDigit(char)"
+        },
+        {
+          "title": "String (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html"
+        }
+      ]
+    },
+    {
+      "id": "java-easy-06",
+      "difficulty": "easy",
+      "order": 6,
+      "topic": "java-core",
+      "section": "collections",
+      "className": "Solution",
+      "title": {
+        "en": "Count how often each word appears",
+        "ru": "Посчитать повторы слов"
+      },
+      "statement": {
+        "en": "Return a map from each word to the number of times it appears in the list. Any Map implementation will do.",
+        "ru": "Верните отображение каждого слова в число его вхождений в список. Подойдёт любая реализация Map."
+      },
+      "hint": {
+        "en": "Map.merge does the whole update in one call: an absent key takes the value, a present one goes through the function.",
+        "ru": "Map.merge делает всё обновление одним вызовом: отсутствующий ключ получает значение, существующий проходит через функцию."
+      },
+      "starter": "import java.util.List;\nimport java.util.Map;\n\npublic class Solution {\n\n    public static Map<String, Integer> count(List<String> words) {\n        // TODO: return each word mapped to how often it occurs\n        return Map.of();\n    }\n}\n",
+      "solution": "import java.util.HashMap;\nimport java.util.List;\nimport java.util.Map;\n\npublic class Solution {\n\n    public static Map<String, Integer> count(List<String> words) {\n        Map<String, Integer> counts = new HashMap<>();\n        for (String word : words) {\n            counts.merge(word, 1, Integer::sum);\n        }\n        return counts;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "count([\"a\", \"b\", \"a\"])",
+          "expression": "new TreeMap<>(Solution.count(List.of(\"a\", \"b\", \"a\")))"
+        },
+        {
+          "label": "count([])",
+          "expression": "new TreeMap<>(Solution.count(List.of()))"
+        },
+        {
+          "label": "count([\"x\", \"x\", \"x\"])",
+          "expression": "new TreeMap<>(Solution.count(List.of(\"x\", \"x\", \"x\")))"
+        }
+      ],
+      "explanation": {
+        "en": "merge(key, 1, Integer::sum) is the whole loop body: it inserts 1 for a key that is not there and applies the function when it is, which is the case a get-check-put version usually gets wrong. The cases wrap the answer in a TreeMap so that the check is about content rather than about which Map you happened to return.",
+        "ru": "merge(key, 1, Integer::sum) — это всё тело цикла: он вставляет 1 для отсутствующего ключа и применяет функцию для существующего, а именно на этом обычно ошибается вариант с get-проверка-put. Проверки оборачивают ответ в TreeMap, чтобы сравнивалось содержимое, а не то, какую Map вы вернули."
+      },
+      "sources": [
+        {
+          "title": "Map.merge (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#merge(K,V,java.util.function.BiFunction)"
+        },
+        {
+          "title": "The Collections Framework",
+          "url": "https://dev.java/learn/collections-framework/"
+        }
+      ]
+    },
+    {
+      "id": "java-medium-01",
+      "difficulty": "medium",
+      "order": 1,
+      "topic": "java-core",
+      "section": "streams-lambdas",
+      "className": "Solution",
+      "title": {
+        "en": "Group words by length",
+        "ru": "Сгруппировать слова по длине"
+      },
+      "statement": {
+        "en": "Return a map from word length to the words of that length, in the order they appear in the input. Use the Stream API.",
+        "ru": "Верните отображение длины слова в слова этой длины, в порядке их появления во входных данных. Используйте Stream API."
+      },
+      "hint": {
+        "en": "Collectors.groupingBy takes the classifier; the downstream collector defaults to a list.",
+        "ru": "Collectors.groupingBy принимает классификатор; нижестоящий коллектор по умолчанию — список."
+      },
+      "starter": "import java.util.List;\nimport java.util.Map;\n\npublic class Solution {\n\n    public static Map<Integer, List<String>> groupByLength(List<String> words) {\n        // TODO: group the words by their length\n        return Map.of();\n    }\n}\n",
+      "solution": "import java.util.List;\nimport java.util.Map;\nimport java.util.stream.Collectors;\n\npublic class Solution {\n\n    public static Map<Integer, List<String>> groupByLength(List<String> words) {\n        return words.stream().collect(Collectors.groupingBy(String::length));\n    }\n}\n",
+      "cases": [
+        {
+          "label": "groupByLength([\"a\", \"bb\", \"cc\", \"ddd\"])",
+          "expression": "new TreeMap<>(Solution.groupByLength(List.of(\"a\", \"bb\", \"cc\", \"ddd\")))"
+        },
+        {
+          "label": "groupByLength([])",
+          "expression": "new TreeMap<>(Solution.groupByLength(List.of()))"
+        },
+        {
+          "label": "groupByLength([\"one\", \"two\"])",
+          "expression": "new TreeMap<>(Solution.groupByLength(List.of(\"one\", \"two\")))"
+        }
+      ],
+      "explanation": {
+        "en": "groupingBy is the collector that replaces the whole compute-if-absent loop, and its single-argument form already collects each group into a List in encounter order. The classifier is a method reference because that is all it is: a function from element to key.",
+        "ru": "groupingBy — коллектор, заменяющий весь цикл с computeIfAbsent, и его однопараметрическая форма уже собирает каждую группу в List в порядке встречи. Классификатор записан ссылкой на метод, потому что это ровно она и есть: функция из элемента в ключ."
+      },
+      "sources": [
+        {
+          "title": "Collectors.groupingBy",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Collectors.html#groupingBy(java.util.function.Function)"
+        },
+        {
+          "title": "Streams",
+          "url": "https://dev.java/learn/api/streams/"
+        }
+      ]
+    },
+    {
+      "id": "java-medium-02",
+      "difficulty": "medium",
+      "order": 2,
+      "topic": "java-core",
+      "section": "equals-hashcode",
+      "className": "Solution",
+      "title": {
+        "en": "equals and hashCode that agree",
+        "ru": "Согласованные equals и hashCode"
+      },
+      "statement": {
+        "en": "Write a Solution holding two ints x and y, with a public constructor and an equals and hashCode pair that treat two points with the same coordinates as equal.",
+        "ru": "Напишите Solution, хранящий два int — x и y, — с публичным конструктором и парой equals и hashCode, считающей равными две точки с одинаковыми координатами."
+      },
+      "hint": {
+        "en": "Objects.hash covers hashCode; equals has to handle null and a different class before it compares anything.",
+        "ru": "Objects.hash закрывает hashCode; equals обязан обработать null и другой класс до того, как что-то сравнивать."
+      },
+      "starter": "public class Solution {\n\n    private final int x;\n    private final int y;\n\n    public Solution(int x, int y) {\n        this.x = x;\n        this.y = y;\n    }\n\n    // TODO: override equals and hashCode so that equal coordinates mean equal points\n}\n",
+      "solution": "import java.util.Objects;\n\npublic class Solution {\n\n    private final int x;\n    private final int y;\n\n    public Solution(int x, int y) {\n        this.x = x;\n        this.y = y;\n    }\n\n    @Override\n    public boolean equals(Object other) {\n        if (this == other) {\n            return true;\n        }\n        if (!(other instanceof Solution point)) {\n            return false;\n        }\n        return x == point.x && y == point.y;\n    }\n\n    @Override\n    public int hashCode() {\n        return Objects.hash(x, y);\n    }\n}\n",
+      "cases": [
+        {
+          "label": "equal coordinates",
+          "expression": "new Solution(1, 2).equals(new Solution(1, 2))"
+        },
+        {
+          "label": "swapped coordinates",
+          "expression": "new Solution(1, 2).equals(new Solution(2, 1))"
+        },
+        {
+          "label": "compared with null",
+          "expression": "new Solution(1, 2).equals(null)"
+        },
+        {
+          "label": "compared with a String",
+          "expression": "new Solution(1, 2).equals(\"1,2\")"
+        },
+        {
+          "label": "hash codes agree",
+          "expression": "new Solution(1, 2).hashCode() == new Solution(1, 2).hashCode()"
+        },
+        {
+          "label": "duplicates collapse in a HashSet",
+          "expression": "new HashSet<>(List.of(new Solution(1, 2), new Solution(1, 2))).size()"
+        }
+      ],
+      "explanation": {
+        "en": "The HashSet case is the one that matters: a class that overrides equals without hashCode looks correct until it meets a hash-based collection, where two equal points end up in different buckets and both survive. The instanceof pattern also answers null in the same test, since null is not an instance of anything.",
+        "ru": "Главная проверка — с HashSet: класс, переопределивший equals без hashCode, выглядит правильным ровно до встречи с хеш-коллекцией, где две равные точки попадают в разные корзины и обе выживают. Шаблон instanceof заодно закрывает null: null не является экземпляром ничего."
+      },
+      "sources": [
+        {
+          "title": "Object.equals (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)"
+        },
+        {
+          "title": "Objects.hash (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Objects.html#hash(java.lang.Object...)"
+        }
+      ]
+    },
+    {
+      "id": "java-medium-03",
+      "difficulty": "medium",
+      "order": 3,
+      "topic": "java-core",
+      "section": "collections",
+      "className": "Solution",
+      "title": {
+        "en": "Merge two sorted arrays",
+        "ru": "Слить два отсортированных массива"
+      },
+      "statement": {
+        "en": "Both arrays are already sorted ascending. Return one sorted array holding every element of both, duplicates included.",
+        "ru": "Оба массива уже отсортированы по возрастанию. Верните один отсортированный массив со всеми элементами обоих, включая дубликаты."
+      },
+      "hint": {
+        "en": "One index per input and one pass. Sorting the concatenation works but throws away what the inputs already tell you.",
+        "ru": "По индексу на каждый вход и один проход. Отсортировать конкатенацию можно, но это выбрасывает то, что входные данные уже сообщают."
+      },
+      "starter": "public class Solution {\n\n    public static int[] merge(int[] left, int[] right) {\n        // TODO: return one ascending array holding both inputs\n        return new int[0];\n    }\n}\n",
+      "solution": "public class Solution {\n\n    public static int[] merge(int[] left, int[] right) {\n        int[] merged = new int[left.length + right.length];\n        int i = 0;\n        int j = 0;\n        for (int at = 0; at < merged.length; at++) {\n            boolean takeLeft = j >= right.length || (i < left.length && left[i] <= right[j]);\n            merged[at] = takeLeft ? left[i++] : right[j++];\n        }\n        return merged;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "merge([1, 3, 5], [2, 4])",
+          "expression": "Solution.merge(new int[] {1, 3, 5}, new int[] {2, 4})"
+        },
+        {
+          "label": "merge([], [1, 2])",
+          "expression": "Solution.merge(new int[] {}, new int[] {1, 2})"
+        },
+        {
+          "label": "merge([1, 1], [1])",
+          "expression": "Solution.merge(new int[] {1, 1}, new int[] {1})"
+        },
+        {
+          "label": "merge([], [])",
+          "expression": "Solution.merge(new int[] {}, new int[] {})"
+        },
+        {
+          "label": "merge([9], [-1, 0])",
+          "expression": "Solution.merge(new int[] {9}, new int[] {-1, 0})"
+        }
+      ],
+      "explanation": {
+        "en": "The result array is allocated once at its final size, because that size is known before the merge starts. Choosing the side with a single boolean keeps the exhausted-input cases in the same expression as the comparison, instead of in two clean-up loops after it.",
+        "ru": "Итоговый массив выделяется один раз сразу нужного размера, потому что размер известен до начала слияния. Выбор стороны одним boolean оставляет случаи исчерпанного входа в том же выражении, что и сравнение, вместо двух добивающих циклов после него."
+      },
+      "sources": [
+        {
+          "title": "Arrays (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Arrays.html"
+        },
+        {
+          "title": "Arrays and Utilities",
+          "url": "https://dev.java/learn/language-basics/arrays/"
+        }
+      ]
+    },
+    {
+      "id": "java-medium-04",
+      "difficulty": "medium",
+      "order": 4,
+      "topic": "java-core",
+      "section": "exceptions",
+      "className": "Solution",
+      "title": {
+        "en": "Fail with something the caller can read",
+        "ru": "Ошибка, понятная вызывающему"
+      },
+      "statement": {
+        "en": "Parse the text as a positive int. For anything that is not a number throw an IllegalArgumentException with the message \"not a number: \" followed by the text, and for zero or a negative number throw one with \"not positive: \" followed by the value.",
+        "ru": "Разберите текст как положительное int. Для всего, что не является числом, выбросьте IllegalArgumentException с сообщением \"not a number: \" и текстом, а для нуля или отрицательного числа — с \"not positive: \" и значением."
+      },
+      "hint": {
+        "en": "Integer.parseInt throws NumberFormatException; catching it is how you replace its message with yours.",
+        "ru": "Integer.parseInt выбрасывает NumberFormatException; перехват — способ заменить его сообщение своим."
+      },
+      "starter": "public class Solution {\n\n    public static int parsePositive(String text) {\n        // TODO: parse, and throw IllegalArgumentException with the required message\n        return 0;\n    }\n}\n",
+      "solution": "public class Solution {\n\n    public static int parsePositive(String text) {\n        int value;\n        try {\n            value = Integer.parseInt(text);\n        } catch (NumberFormatException notANumber) {\n            throw new IllegalArgumentException(\"not a number: \" + text, notANumber);\n        }\n        if (value <= 0) {\n            throw new IllegalArgumentException(\"not positive: \" + value);\n        }\n        return value;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "parsePositive(\"42\")",
+          "expression": "Solution.parsePositive(\"42\")"
+        },
+        {
+          "label": "parsePositive(\"1\")",
+          "expression": "Solution.parsePositive(\"1\")"
+        },
+        {
+          "label": "parsePositive(\"abc\")",
+          "expression": "attempt(() -> Solution.parsePositive(\"abc\"))"
+        },
+        {
+          "label": "parsePositive(\"0\")",
+          "expression": "attempt(() -> Solution.parsePositive(\"0\"))"
+        },
+        {
+          "label": "parsePositive(\"-7\")",
+          "expression": "attempt(() -> Solution.parsePositive(\"-7\"))"
+        },
+        {
+          "label": "parsePositive(\"\")",
+          "expression": "attempt(() -> Solution.parsePositive(\"\"))"
+        }
+      ],
+      "explanation": {
+        "en": "Two failures that mean different things get two different messages, which is the whole job: \"For input string: abc\" tells the caller what the parser saw, not what this method wanted. Passing the original exception as the cause keeps the stack trace that led there, so replacing the message costs nothing.",
+        "ru": "Две ошибки с разным смыслом получают два разных сообщения — в этом вся работа: \"For input string: abc\" сообщает, что увидел парсер, а не чего хотел этот метод. Передача исходного исключения как причины сохраняет приведший сюда стектрейс, так что замена сообщения ничего не стоит."
+      },
+      "sources": [
+        {
+          "title": "Exceptions",
+          "url": "https://dev.java/learn/exceptions/"
+        },
+        {
+          "title": "IllegalArgumentException",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html"
+        }
+      ]
+    },
+    {
+      "id": "java-medium-05",
+      "difficulty": "medium",
+      "order": 5,
+      "topic": "java-core",
+      "section": "generics",
+      "className": "Solution",
+      "title": {
+        "en": "A max that works for anything comparable",
+        "ru": "Максимум для любого сравнимого типа"
+      },
+      "statement": {
+        "en": "Write a generic max(List<T>) that returns the largest element of any list whose elements compare with each other. Throw an IllegalArgumentException with the message \"empty\" for an empty list.",
+        "ru": "Напишите обобщённый max(List<T>), возвращающий наибольший элемент любого списка, элементы которого сравнимы между собой. Для пустого списка выбросьте IllegalArgumentException с сообщением \"empty\"."
+      },
+      "hint": {
+        "en": "The bound is T extends Comparable<T>: without it the compiler has no reason to believe two elements can be compared.",
+        "ru": "Ограничение — T extends Comparable<T>: без него у компилятора нет оснований считать, что два элемента можно сравнить."
+      },
+      "starter": "import java.util.List;\n\npublic class Solution {\n\n    public static Object max(List<?> items) {\n        // TODO: make this generic and return the largest element\n        return null;\n    }\n}\n",
+      "solution": "import java.util.List;\n\npublic class Solution {\n\n    public static <T extends Comparable<T>> T max(List<T> items) {\n        if (items.isEmpty()) {\n            throw new IllegalArgumentException(\"empty\");\n        }\n        T largest = items.get(0);\n        for (T item : items) {\n            if (item.compareTo(largest) > 0) {\n                largest = item;\n            }\n        }\n        return largest;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "max([3, 9, 2])",
+          "expression": "Solution.max(List.of(3, 9, 2))"
+        },
+        {
+          "label": "max([\"pear\", \"apple\", \"fig\"])",
+          "expression": "Solution.max(List.of(\"pear\", \"apple\", \"fig\"))"
+        },
+        {
+          "label": "max([2.5, 2.75])",
+          "expression": "Solution.max(List.of(2.5, 2.75))"
+        },
+        {
+          "label": "max([]) throws",
+          "expression": "attempt(() -> Solution.max(List.<Integer>of()))"
+        }
+      ],
+      "explanation": {
+        "en": "The type parameter is what lets one method serve integers, strings and anything else that implements Comparable, and it is what makes the return type useful — a List<String> comes back as a String rather than as an Object needing a cast. The bound is not decoration: it is the only reason compareTo is callable inside the loop.",
+        "ru": "Параметр типа позволяет одному методу обслуживать числа, строки и всё остальное, реализующее Comparable, и делает полезным возвращаемый тип — из List<String> приходит String, а не Object, требующий приведения. Ограничение здесь не украшение: только благодаря ему внутри цикла доступен compareTo."
+      },
+      "sources": [
+        {
+          "title": "Generics",
+          "url": "https://dev.java/learn/generics/"
+        },
+        {
+          "title": "Comparable (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html"
+        }
+      ]
+    },
+    {
+      "id": "java-medium-06",
+      "difficulty": "medium",
+      "order": 6,
+      "topic": "java-core",
+      "section": "streams-lambdas",
+      "className": "Solution",
+      "title": {
+        "en": "Average length of the long words",
+        "ru": "Средняя длина длинных слов"
+      },
+      "statement": {
+        "en": "Return the average length of the words longer than three characters, as a double. Return 0.0 when no word qualifies. Use the Stream API.",
+        "ru": "Верните среднюю длину слов длиннее трёх символов как double. Верните 0.0, если подходящих слов нет. Используйте Stream API."
+      },
+      "hint": {
+        "en": "mapToInt gives an IntStream, whose average() returns an OptionalDouble — and orElse is how the empty case gets its answer.",
+        "ru": "mapToInt даёт IntStream, чей average() возвращает OptionalDouble, а orElse — способ ответить на пустой случай."
+      },
+      "starter": "import java.util.List;\n\npublic class Solution {\n\n    public static double averageLength(List<String> words) {\n        // TODO: average the lengths of the words longer than three characters\n        return 0.0;\n    }\n}\n",
+      "solution": "import java.util.List;\n\npublic class Solution {\n\n    public static double averageLength(List<String> words) {\n        return words.stream()\n                .filter(word -> word.length() > 3)\n                .mapToInt(String::length)\n                .average()\n                .orElse(0.0);\n    }\n}\n",
+      "cases": [
+        {
+          "label": "averageLength([\"a\", \"four\", \"seven!!\"])",
+          "expression": "Solution.averageLength(List.of(\"a\", \"four\", \"seven!!\"))"
+        },
+        {
+          "label": "averageLength([\"a\", \"bb\"])",
+          "expression": "Solution.averageLength(List.of(\"a\", \"bb\"))"
+        },
+        {
+          "label": "averageLength([])",
+          "expression": "Solution.averageLength(List.of())"
+        },
+        {
+          "label": "averageLength([\"exact\"])",
+          "expression": "Solution.averageLength(List.of(\"exact\"))"
+        }
+      ],
+      "explanation": {
+        "en": "mapToInt leaves the boxing behind, so average() is arithmetic on ints rather than on Integer objects. It hands back an OptionalDouble because there is no average of nothing, and orElse is where the task decides what nothing means — which is a decision, not a formality.",
+        "ru": "mapToInt избавляет от упаковки, поэтому average() считает по int, а не по объектам Integer. Он возвращает OptionalDouble, потому что среднего у пустоты не бывает, и orElse — место, где задача решает, что значит «пусто». Это решение, а не формальность."
+      },
+      "sources": [
+        {
+          "title": "IntStream (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/IntStream.html"
+        },
+        {
+          "title": "Streams",
+          "url": "https://dev.java/learn/api/streams/"
+        }
+      ]
+    },
+    {
+      "id": "java-hard-01",
+      "difficulty": "hard",
+      "order": 1,
+      "topic": "java-core",
+      "section": "collections",
+      "className": "Solution",
+      "title": {
+        "en": "A cache that forgets the least recently used",
+        "ru": "Кэш, забывающий давно не использованное"
+      },
+      "statement": {
+        "en": "Write a fixed-capacity cache. put(key, value) returns the cache itself so calls can be chained, get(key) returns the value or -1 when it is absent, and keys() returns the keys from least to most recently used. Both put and get count as a use, and a put over capacity evicts the least recently used key.",
+        "ru": "Напишите кэш фиксированной ёмкости. put(key, value) возвращает сам кэш, чтобы вызовы можно было цеплять, get(key) возвращает значение или -1, если ключа нет, а keys() возвращает ключи от давно использованного к недавнему. И put, и get считаются использованием, а put сверх ёмкости вытесняет наименее недавно использованный ключ."
+      },
+      "hint": {
+        "en": "LinkedHashMap has an access-order constructor and a removeEldestEntry hook. Both are there for exactly this.",
+        "ru": "У LinkedHashMap есть конструктор с порядком доступа и хук removeEldestEntry. Оба здесь ровно для этого."
+      },
+      "starter": "import java.util.List;\n\npublic class Solution {\n\n    public Solution(int capacity) {\n        // TODO: keep the capacity and the entries\n    }\n\n    public Solution put(String key, int value) {\n        // TODO: store, evict if needed, and return this\n        return this;\n    }\n\n    public int get(String key) {\n        // TODO: return the value, or -1\n        return -1;\n    }\n\n    public List<String> keys() {\n        // TODO: least recently used first\n        return List.of();\n    }\n}\n",
+      "solution": "import java.util.ArrayList;\nimport java.util.LinkedHashMap;\nimport java.util.List;\nimport java.util.Map;\n\npublic class Solution {\n\n    private final Map<String, Integer> entries;\n\n    public Solution(int capacity) {\n        this.entries = new LinkedHashMap<>(16, 0.75f, true) {\n            @Override\n            protected boolean removeEldestEntry(Map.Entry<String, Integer> eldest) {\n                return size() > capacity;\n            }\n        };\n    }\n\n    public Solution put(String key, int value) {\n        entries.put(key, value);\n        return this;\n    }\n\n    public int get(String key) {\n        return entries.getOrDefault(key, -1);\n    }\n\n    public List<String> keys() {\n        return new ArrayList<>(entries.keySet());\n    }\n}\n",
+      "cases": [
+        {
+          "label": "three puts into a cache of two",
+          "expression": "new Solution(2).put(\"a\", 1).put(\"b\", 2).put(\"c\", 3).keys()"
+        },
+        {
+          "label": "a get renews the oldest key",
+          "expression": "new Solution(2).put(\"a\", 1).put(\"b\", 2).put(\"a\", 1).put(\"c\", 3).keys()"
+        },
+        {
+          "label": "evicted key is gone",
+          "expression": "new Solution(2).put(\"a\", 1).put(\"b\", 2).put(\"c\", 3).get(\"a\")"
+        },
+        {
+          "label": "surviving key keeps its value",
+          "expression": "new Solution(2).put(\"a\", 1).put(\"b\", 2).put(\"c\", 3).get(\"c\")"
+        },
+        {
+          "label": "nothing evicted below capacity",
+          "expression": "new Solution(3).put(\"a\", 1).put(\"b\", 2).keys()"
+        }
+      ],
+      "explanation": {
+        "en": "The third constructor argument switches LinkedHashMap from insertion order to access order, which is what makes a get count as a use; removeEldestEntry is called after every insertion and is the whole eviction policy. Writing the list and the ordering by hand is a day's work and a week's bugs — the collection already models this.",
+        "ru": "Третий аргумент конструктора переключает LinkedHashMap с порядка вставки на порядок доступа — именно поэтому get считается использованием; removeEldestEntry вызывается после каждой вставки и представляет собой всю политику вытеснения. Писать список и порядок вручную — день работы и неделя багов: коллекция это уже моделирует."
+      },
+      "sources": [
+        {
+          "title": "LinkedHashMap (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedHashMap.html"
+        },
+        {
+          "title": "removeEldestEntry",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedHashMap.html#removeEldestEntry(java.util.Map.Entry)"
+        }
+      ]
+    },
+    {
+      "id": "java-hard-02",
+      "difficulty": "hard",
+      "order": 2,
+      "topic": "java-core",
+      "section": "strings",
+      "className": "Solution",
+      "title": {
+        "en": "The most frequent words",
+        "ru": "Самые частые слова"
+      },
+      "statement": {
+        "en": "Split the text on spaces, lower-case every word, and return the limit most frequent ones: most frequent first, and alphabetically among words appearing equally often.",
+        "ru": "Разбейте текст по пробелам, приведите слова к нижнему регистру и верните limit самых частых: сначала самые частые, а среди одинаково частых — по алфавиту."
+      },
+      "hint": {
+        "en": "Comparator.comparing for the count, reversed, then thenComparing for the word.",
+        "ru": "Comparator.comparing по счётчику, reversed, затем thenComparing по слову."
+      },
+      "starter": "import java.util.List;\n\npublic class Solution {\n\n    public static List<String> topWords(String text, int limit) {\n        // TODO: most frequent first, ties broken alphabetically\n        return List.of();\n    }\n}\n",
+      "solution": "import java.util.Comparator;\nimport java.util.List;\nimport java.util.Map;\nimport java.util.stream.Collectors;\nimport java.util.stream.Stream;\n\npublic class Solution {\n\n    public static List<String> topWords(String text, int limit) {\n        Map<String, Long> counts = Stream.of(text.toLowerCase().split(\" \"))\n                .filter(word -> !word.isEmpty())\n                .collect(Collectors.groupingBy(word -> word, Collectors.counting()));\n        return counts.entrySet().stream()\n                .sorted(Map.Entry.<String, Long>comparingByValue().reversed()\n                        .thenComparing(Map.Entry.comparingByKey()))\n                .limit(limit)\n                .map(Map.Entry::getKey)\n                .collect(Collectors.toList());\n    }\n}\n",
+      "cases": [
+        {
+          "label": "top 2 of a repetitive line",
+          "expression": "Solution.topWords(\"the cat the dog the bird cat\", 2)"
+        },
+        {
+          "label": "ties broken alphabetically",
+          "expression": "Solution.topWords(\"b a c\", 3)"
+        },
+        {
+          "label": "case is ignored",
+          "expression": "Solution.topWords(\"Java java JAVA spring\", 1)"
+        },
+        {
+          "label": "limit larger than the vocabulary",
+          "expression": "Solution.topWords(\"one two\", 10)"
+        },
+        {
+          "label": "empty text",
+          "expression": "Solution.topWords(\"\", 3)"
+        }
+      ],
+      "explanation": {
+        "en": "The comparator is the task. Sorting by count alone leaves words of equal frequency in whatever order the map iterated, which differs between runs and between Map implementations — the alphabetical tie-break is what makes the answer a function of the input rather than of the hashing.",
+        "ru": "Компаратор здесь и есть задача. Сортировка только по счётчику оставляет одинаково частые слова в том порядке, в каком их отдала map, а он различается между запусками и реализациями Map: алфавитное разрешение ничьей делает ответ функцией входа, а не хеширования."
+      },
+      "sources": [
+        {
+          "title": "Comparator (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Comparator.html"
+        },
+        {
+          "title": "Collectors.counting",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Collectors.html#counting()"
+        }
+      ]
+    },
+    {
+      "id": "java-hard-03",
+      "difficulty": "hard",
+      "order": 3,
+      "topic": "java-core",
+      "section": "generics",
+      "className": "Solution",
+      "title": {
+        "en": "Wildcards that accept what they should",
+        "ru": "Wildcards, принимающие что нужно"
+      },
+      "statement": {
+        "en": "Write filter(source, predicate) returning a new List of the elements the predicate accepts. It must accept a Collection of any subtype of T and a Predicate over any supertype of T.",
+        "ru": "Напишите filter(source, predicate), возвращающий новый List из элементов, принятых предикатом. Метод должен принимать Collection любого подтипа T и Predicate любого надтипа T."
+      },
+      "hint": {
+        "en": "Producer extends, consumer super: the collection produces elements, the predicate consumes them.",
+        "ru": "Producer extends, consumer super: коллекция производит элементы, предикат их потребляет."
+      },
+      "starter": "import java.util.Collection;\nimport java.util.List;\nimport java.util.function.Predicate;\n\npublic class Solution {\n\n    public static <T> List<T> filter(Collection<T> source, Predicate<T> predicate) {\n        // TODO: widen the signature with wildcards, then filter\n        return List.of();\n    }\n}\n",
+      "solution": "import java.util.ArrayList;\nimport java.util.Collection;\nimport java.util.List;\nimport java.util.function.Predicate;\n\npublic class Solution {\n\n    public static <T> List<T> filter(Collection<? extends T> source, Predicate<? super T> predicate) {\n        List<T> kept = new ArrayList<>();\n        for (T element : source) {\n            if (predicate.test(element)) {\n                kept.add(element);\n            }\n        }\n        return kept;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "even numbers",
+          "expression": "Solution.filter(List.of(1, 2, 3, 4), n -> n % 2 == 0)"
+        },
+        {
+          "label": "a Predicate<Object> over a List<String>",
+          "expression": "Solution.<String>filter(List.of(\"a\", \"bb\"), (Object any) -> any.toString().length() > 1)"
+        },
+        {
+          "label": "nothing matches",
+          "expression": "Solution.filter(List.of(1, 3), n -> n % 2 == 0)"
+        },
+        {
+          "label": "empty source",
+          "expression": "Solution.filter(List.<Integer>of(), n -> true)"
+        },
+        {
+          "label": "a Set as the source",
+          "expression": "Solution.filter(new TreeSet<>(List.of(3, 1, 2)), n -> n > 1)"
+        }
+      ],
+      "explanation": {
+        "en": "The second case is the one the narrow signature fails: a Predicate<Object> can perfectly well judge strings, and only ? super T says so. ? extends T on the source is what lets a List<Integer> be filtered as a List<Number>, and the two together are why this reads as one method instead of an overload per shape.",
+        "ru": "Второй случай — тот, на котором узкая сигнатура падает: Predicate<Object> вполне способен оценивать строки, и сказать об этом может только ? super T. ? extends T на источнике позволяет фильтровать List<Integer> как List<Number>, а вместе они и делают это одним методом вместо перегрузки на каждую форму."
+      },
+      "sources": [
+        {
+          "title": "Wildcards",
+          "url": "https://dev.java/learn/generics/wildcards/"
+        },
+        {
+          "title": "Predicate (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html"
+        }
+      ]
+    },
+    {
+      "id": "java-hard-04",
+      "difficulty": "hard",
+      "order": 4,
+      "topic": "java-core",
+      "section": "streams-lambdas",
+      "className": "Solution",
+      "title": {
+        "en": "Total each category across lines",
+        "ru": "Сумма по категориям"
+      },
+      "statement": {
+        "en": "Every line looks like \"category:1,2,3\". Return a map from category to the sum of its numbers, adding up lines that repeat a category. Ignore a line without a colon.",
+        "ru": "Каждая строка выглядит как \"category:1,2,3\". Верните отображение категории в сумму её чисел, складывая строки с повторяющейся категорией. Строку без двоеточия игнорируйте."
+      },
+      "hint": {
+        "en": "Split once with a limit of 2, then flatMap the amounts. Collectors.groupingBy takes a downstream collector for the summing.",
+        "ru": "Разделите один раз с лимитом 2, затем flatMap по суммам. Collectors.groupingBy принимает нижестоящий коллектор для суммирования."
+      },
+      "starter": "import java.util.List;\nimport java.util.Map;\n\npublic class Solution {\n\n    public static Map<String, Integer> totalByCategory(List<String> lines) {\n        // TODO: sum the numbers of every line, by category\n        return Map.of();\n    }\n}\n",
+      "solution": "import java.util.List;\nimport java.util.Map;\nimport java.util.stream.Collectors;\nimport java.util.stream.Stream;\n\npublic class Solution {\n\n    public static Map<String, Integer> totalByCategory(List<String> lines) {\n        return lines.stream()\n                .map(line -> line.split(\":\", 2))\n                .filter(parts -> parts.length == 2)\n                .collect(Collectors.groupingBy(\n                        parts -> parts[0],\n                        Collectors.summingInt(parts -> sum(parts[1]))));\n    }\n\n    private static int sum(String amounts) {\n        return Stream.of(amounts.split(\",\"))\n                .filter(amount -> !amount.isEmpty())\n                .mapToInt(Integer::parseInt)\n                .sum();\n    }\n}\n",
+      "cases": [
+        {
+          "label": "two categories",
+          "expression": "new TreeMap<>(Solution.totalByCategory(List.of(\"food:3,4\", \"tech:10\")))"
+        },
+        {
+          "label": "a category repeated across lines",
+          "expression": "new TreeMap<>(Solution.totalByCategory(List.of(\"food:3\", \"food:4,5\")))"
+        },
+        {
+          "label": "a malformed line is ignored",
+          "expression": "new TreeMap<>(Solution.totalByCategory(List.of(\"food:1\", \"nonsense\")))"
+        },
+        {
+          "label": "an empty amount list",
+          "expression": "new TreeMap<>(Solution.totalByCategory(List.of(\"food:\")))"
+        },
+        {
+          "label": "no lines at all",
+          "expression": "new TreeMap<>(Solution.totalByCategory(List.of()))"
+        }
+      ],
+      "explanation": {
+        "en": "groupingBy with a downstream collector is what turns \"group, then reduce each group\" into one pass: summingInt receives the elements of each group and never materialises the lists that the single-argument form would build. Splitting with a limit of 2 keeps a colon inside the data from being read as a second separator.",
+        "ru": "groupingBy с нижестоящим коллектором превращает «сгруппировать, потом свернуть каждую группу» в один проход: summingInt получает элементы группы и не материализует списки, которые построила бы однопараметрическая форма. Разделение с лимитом 2 не даёт двоеточию внутри данных стать вторым разделителем."
+      },
+      "sources": [
+        {
+          "title": "Collectors (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Collectors.html"
+        },
+        {
+          "title": "String.split",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#split(java.lang.String,int)"
+        }
+      ]
+    },
+    {
+      "id": "java-hard-05",
+      "difficulty": "hard",
+      "order": 5,
+      "topic": "java-core",
+      "section": "oop-basics",
+      "className": "Solution",
+      "title": {
+        "en": "Multiply two matrices",
+        "ru": "Перемножить две матрицы"
+      },
+      "statement": {
+        "en": "Multiply the two matrices and return the result. Throw an IllegalArgumentException with the message \"shape\" when the width of the left one does not match the height of the right one.",
+        "ru": "Перемножьте две матрицы и верните результат. Выбросьте IllegalArgumentException с сообщением \"shape\", если ширина левой не совпадает с высотой правой."
+      },
+      "hint": {
+        "en": "The result is left.length rows by right[0].length columns, and each cell is a dot product along the shared dimension.",
+        "ru": "Результат — left.length строк на right[0].length столбцов, а каждая ячейка — скалярное произведение по общему измерению."
+      },
+      "starter": "public class Solution {\n\n    public static int[][] multiply(int[][] left, int[][] right) {\n        // TODO: multiply, or throw when the shapes do not line up\n        return new int[0][0];\n    }\n}\n",
+      "solution": "public class Solution {\n\n    public static int[][] multiply(int[][] left, int[][] right) {\n        if (left.length == 0 || right.length == 0 || left[0].length != right.length) {\n            throw new IllegalArgumentException(\"shape\");\n        }\n        int rows = left.length;\n        int columns = right[0].length;\n        int shared = right.length;\n        int[][] product = new int[rows][columns];\n        for (int row = 0; row < rows; row++) {\n            for (int column = 0; column < columns; column++) {\n                int cell = 0;\n                for (int k = 0; k < shared; k++) {\n                    cell += left[row][k] * right[k][column];\n                }\n                product[row][column] = cell;\n            }\n        }\n        return product;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "2x2 by 2x2",
+          "expression": "Solution.multiply(new int[][] {{1, 2}, {3, 4}}, new int[][] {{5, 6}, {7, 8}})"
+        },
+        {
+          "label": "2x3 by 3x1",
+          "expression": "Solution.multiply(new int[][] {{1, 2, 3}, {4, 5, 6}}, new int[][] {{1}, {0}, {2}})"
+        },
+        {
+          "label": "multiplying by the identity",
+          "expression": "Solution.multiply(new int[][] {{2, 0}, {1, 3}}, new int[][] {{1, 0}, {0, 1}})"
+        },
+        {
+          "label": "mismatched shapes throw",
+          "expression": "attempt(() -> Solution.multiply(new int[][] {{1, 2}}, new int[][] {{1, 2}}))"
+        }
+      ],
+      "explanation": {
+        "en": "The three dimensions are read out and named before the loops start, because the version that indexes right.length and right[0].length inside the innermost loop is where the off-by-one lives. Checking the shape first also means the loops can be written without wondering what an empty matrix does to them.",
+        "ru": "Три измерения считываются и именуются до начала циклов, потому что вариант, обращающийся к right.length и right[0].length внутри самого вложенного цикла, — это и есть место, где живёт ошибка на единицу. Проверка формы в начале позволяет писать циклы, не гадая, что с ними сделает пустая матрица."
+      },
+      "sources": [
+        {
+          "title": "Arrays (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Arrays.html"
+        },
+        {
+          "title": "Arrays and Utilities",
+          "url": "https://dev.java/learn/language-basics/arrays/"
+        }
+      ]
+    },
+    {
+      "id": "java-hard-06",
+      "difficulty": "hard",
+      "order": 6,
+      "topic": "java-core",
+      "section": "equals-hashcode",
+      "className": "Solution",
+      "title": {
+        "en": "Natural order that is not the obvious one",
+        "ru": "Естественный порядок, но не очевидный"
+      },
+      "statement": {
+        "en": "Write a Solution holding a name and a score, with a public constructor taking both, a toString of \"name:score\", and a natural order that puts the higher score first and breaks ties by name alphabetically.",
+        "ru": "Напишите Solution с именем и баллом, публичным конструктором для обоих, toString вида \"name:score\" и естественным порядком, ставящим больший балл первым и разрешающим ничьи по алфавиту."
+      },
+      "hint": {
+        "en": "Implement Comparable<Solution>, and let Comparator.comparingInt(...).reversed().thenComparing(...) build the comparison instead of writing the branches.",
+        "ru": "Реализуйте Comparable<Solution> и постройте сравнение через Comparator.comparingInt(...).reversed().thenComparing(...) вместо ветвлений."
+      },
+      "starter": "public class Solution {\n\n    private final String name;\n    private final int score;\n\n    public Solution(String name, int score) {\n        this.name = name;\n        this.score = score;\n    }\n\n    @Override\n    public String toString() {\n        return name + \":\" + score;\n    }\n\n    // TODO: implement Comparable<Solution>: higher score first, then name\n}\n",
+      "solution": "import java.util.Comparator;\n\npublic class Solution implements Comparable<Solution> {\n\n    private static final Comparator<Solution> ORDER = Comparator\n            .comparingInt(Solution::score).reversed()\n            .thenComparing(Solution::name);\n\n    private final String name;\n    private final int score;\n\n    public Solution(String name, int score) {\n        this.name = name;\n        this.score = score;\n    }\n\n    public String name() {\n        return name;\n    }\n\n    public int score() {\n        return score;\n    }\n\n    @Override\n    public int compareTo(Solution other) {\n        return ORDER.compare(this, other);\n    }\n\n    @Override\n    public String toString() {\n        return name + \":\" + score;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "sorted by score, then name",
+          "expression": "List.of(new Solution(\"ann\", 5), new Solution(\"bob\", 9), new Solution(\"amy\", 9)).stream().sorted().map(Object::toString).collect(Collectors.toList())"
+        },
+        {
+          "label": "a single element",
+          "expression": "List.of(new Solution(\"solo\", 1)).stream().sorted().map(Object::toString).collect(Collectors.toList())"
+        },
+        {
+          "label": "every score the same",
+          "expression": "List.of(new Solution(\"c\", 2), new Solution(\"a\", 2), new Solution(\"b\", 2)).stream().sorted().map(Object::toString).collect(Collectors.toList())"
+        },
+        {
+          "label": "compareTo of two equal-ranking entries",
+          "expression": "new Solution(\"a\", 1).compareTo(new Solution(\"a\", 1))"
+        },
+        {
+          "label": "higher score sorts first",
+          "expression": "new Solution(\"z\", 9).compareTo(new Solution(\"a\", 1)) < 0"
+        }
+      ],
+      "explanation": {
+        "en": "Building the order once as a Comparator constant and delegating compareTo to it keeps the rule in one readable line, where the hand-written version is three branches and a subtraction that overflows. Note what natural order costs: sorted() with no argument now means this rule everywhere, so it has to be the one the class is really about.",
+        "ru": "Порядок, построенный один раз как константа-Comparator, к которой обращается compareTo, держит правило в одной читаемой строке, тогда как ручной вариант — три ветки и вычитание с переполнением. Обратите внимание, чего стоит естественный порядок: sorted() без аргументов теперь означает это правило везде, поэтому оно должно быть тем, о чём класс на самом деле."
+      },
+      "sources": [
+        {
+          "title": "Comparable (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html"
+        },
+        {
+          "title": "Comparator.thenComparing",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Comparator.html#thenComparing(java.util.function.Function)"
+        }
+      ]
+    }
+  ]
+}
