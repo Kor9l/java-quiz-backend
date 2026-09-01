@@ -77,13 +77,22 @@ public class QuizService {
                 .map(UserStatsEntity::getPayload)
                 .orElseGet(StatsPayload::new);
 
-        QuizConfig config = resolveConfig(request, settingsPayload);
+        // Kept unexpanded: empty means "every topic", and saving it as the ids that exist today
+        // would quietly exclude any topic added later.
+        List<String> chosenTopics = request != null && request.topicIds != null
+                ? new ArrayList<>(request.topicIds)
+                : new ArrayList<>(settingsPayload.selectedTopics);
+        QuizConfig config = resolveConfig(request, settingsPayload, chosenTopics);
+        boolean showExplanation = request != null && request.showExplanation != null
+                ? request.showExplanation
+                : settingsPayload.showExplanation;
+        rememberSetup(userId, config, chosenTopics, showExplanation);
         List<Question> pool = loadPool(config);
         QuizSessionState state = new QuizSessionState();
         state.setConfig(config);
         state.setPoolIds(pool.stream().map(Question::getId).toList());
         state.setStartedAt(Instant.now());
-        state.setShowExplanation(settingsPayload.showExplanation);
+        state.setShowExplanation(showExplanation);
 
         QuestionPicker picker = new QuestionPicker(random, config.getLevel());
         refillDeck(state, pool, picker, statsPayload, null);
@@ -231,6 +240,52 @@ public class QuizService {
         sessions.save(entity);
     }
 
+    /**
+     * The setup step is the only place topics, count and level are chosen, so the round that
+     * uses them writes them back and the step opens on them next time.
+     *
+     * <p>Skipped for a single-section round — that one is started from an article, to drill the
+     * thing just read, and is not the learner saying "this is my quiz from now on".
+     */
+    private void rememberSetup(UUID userId, QuizConfig config, List<String> chosenTopics, boolean showExplanation) {
+        if (config.getSectionId() != null) {
+            return;
+        }
+        UserSettingsEntity entity = settings.findById(userId).orElse(null);
+        if (entity == null) {
+            return;
+        }
+        SettingsPayload payload = entity.getPayload() == null ? new SettingsPayload() : entity.getPayload();
+        payload.setSelectedTopics(chosenTopics);
+        payload.questionCount = config.getTargetCount();
+        payload.infiniteMode = config.isInfinite();
+        payload.level = config.getLevel();
+        payload.shuffleOptions = config.isShuffleOptions();
+        payload.smartSelection = config.isSmartSelection();
+        payload.showExplanation = showExplanation;
+        entity.setPayload(payload);
+        settings.save(entity);
+    }
+
+    /** What the setup step opens on: the choice this learner made last time. */
+    @Transactional
+    public Map<String, Object> setup(UUID userId) {
+        SettingsPayload payload = settings.findById(userId)
+                .map(UserSettingsEntity::getPayload)
+                .orElseGet(SettingsPayload::new);
+        Map<String, Object> dto = new LinkedHashMap<>();
+        // The saved list, not effectiveTopics: an empty selection means "all", and the step
+        // shows that as nothing ticked rather than as everything ticked.
+        dto.put("topicIds", new ArrayList<>(payload.selectedTopics));
+        dto.put("questionCount", payload.normalizedQuestionCount());
+        dto.put("infinite", payload.infiniteMode);
+        dto.put("level", payload.level.name());
+        dto.put("shuffleOptions", payload.shuffleOptions);
+        dto.put("smartSelection", payload.smartSelection);
+        dto.put("showExplanation", payload.showExplanation);
+        return dto;
+    }
+
     /** Stats row for the user, created on the fly so a missing row cannot fail a quiz action. */
     private UserStatsEntity statsEntity(UUID userId) {
         UserStatsEntity entity = stats.findById(userId).orElseGet(() -> {
@@ -311,10 +366,15 @@ public class QuizService {
         return indexes;
     }
 
-    private QuizConfig resolveConfig(QuizStartRequest request, SettingsPayload settingsPayload) {
+    private QuizConfig resolveConfig(QuizStartRequest request, SettingsPayload settingsPayload,
+                                     List<String> chosenTopics) {
         QuizConfig config = new QuizConfig();
-        config.setShuffleOptions(settingsPayload.shuffleOptions);
-        config.setSmartSelection(settingsPayload.smartSelection);
+        config.setShuffleOptions(request != null && request.shuffleOptions != null
+                ? request.shuffleOptions
+                : settingsPayload.shuffleOptions);
+        config.setSmartSelection(request != null && request.smartSelection != null
+                ? request.smartSelection
+                : settingsPayload.smartSelection);
         config.setLevel(request != null && request.level != null ? request.level : settingsPayload.level);
         List<Topic> catalog = topics.findAllByOrderBySortOrderAsc();
         if (request != null && request.sectionId != null && !request.sectionId.isBlank()
@@ -325,10 +385,7 @@ public class QuizService {
             config.setInfinite(false);
             return config;
         }
-        List<String> topicIds = request != null && request.topicIds != null && !request.topicIds.isEmpty()
-                ? request.topicIds
-                : settingsPayload.effectiveTopics(catalog);
-        config.setTopicIds(topicIds);
+        config.setTopicIds(SettingsPayload.effectiveTopics(catalog, chosenTopics));
         config.setTargetCount(request != null && request.targetCount != null
                 ? Math.max(1, Math.min(500, request.targetCount))
                 : settingsPayload.normalizedQuestionCount());
@@ -473,6 +530,10 @@ public class QuizService {
         return rows;
     }
 
+    /**
+     * Body of {@code POST /api/quiz/start} — the setup step, all of it optional. Anything left
+     * out falls back to what was saved the last time a round was started.
+     */
     public static class QuizStartRequest {
         public List<String> topicIds;
         public String sectionId;
@@ -480,5 +541,8 @@ public class QuizService {
         public Boolean infinite;
         /** Overrides the saved level for one session, the way topicIds and targetCount do. */
         public Level level;
+        public Boolean shuffleOptions;
+        public Boolean smartSelection;
+        public Boolean showExplanation;
     }
 }
