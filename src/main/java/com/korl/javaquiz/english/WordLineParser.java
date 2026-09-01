@@ -51,10 +51,12 @@ public final class WordLineParser {
             String text = payload.substring(0, at).strip();
             String translation = payload.substring(at + separator.length()).strip();
             if (text.isEmpty() || translation.isEmpty()) {
-                throw new WordLineParseException("Empty English or translation side");
+                throw new WordLineParseException(WordImportError.EMPTY_SIDE,
+                        "Empty English or translation side");
             }
             return Optional.of(new ParsedWordLine(text, translation, markedNew));
         }
-        throw new WordLineParseException("Missing em/en dash between English and translation");
+        throw new WordLineParseException(WordImportError.MISSING_SEPARATOR,
+                "Missing em/en dash between English and translation");
     }
 }

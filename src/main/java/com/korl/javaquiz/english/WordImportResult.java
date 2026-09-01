@@ -9,22 +9,29 @@ import java.util.List;
  */
 public class WordImportResult {
 
-    private final List<String> errors = new ArrayList<>();
+    private final List<LineError> errors = new ArrayList<>();
     private int imported;
 
     public void countImported() {
         imported++;
     }
 
-    public void addError(int lineNumber, String message) {
-        errors.add("Line " + lineNumber + ": " + message);
+    public void addError(int line, WordImportError code) {
+        errors.add(new LineError(line, code));
     }
 
     public int getImported() {
         return imported;
     }
 
-    public List<String> getErrors() {
+    public List<LineError> getErrors() {
         return List.copyOf(errors);
+    }
+
+    /**
+     * One rejected line: which one, and what was wrong with it. The line number is 1-based, so
+     * it matches what the learner is looking at.
+     */
+    public record LineError(int line, WordImportError code) {
     }
 }
