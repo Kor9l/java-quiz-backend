@@ -81,6 +81,7 @@ because Spring questions contain `${...}` placeholders that Flyway would interpo
 | `V7__levels` | the `level` column on questions and sections | — |
 | `V8__LoadJavaConcurrencyTopic` | the Java Concurrency topic: sections, articles, quiz questions | `content/java-concurrency/` |
 | `V10__LoadWords` | the English vocabulary: 8 groups, 462 words | `content/english/words.json` |
+| `V12__LoadWords2026Part2` | one more English group: "2026 part 2 words", 42 words | `content/english/words-2026-part-2.json` |
 
 SQL and Java Concurrency live in their own directories rather than in the shared files because
 V2 has already run everywhere; adding a topic to `topics.json` would load it on a fresh database
@@ -169,6 +170,13 @@ its live database had accumulated since — the two overlap by ten words and are
 No group repeats a word, and `EnglishWordsContentTest` keeps it that way; the same word in two
 groups was left alone, since a word belonging to two lessons is deliberate. `part_of_speech` and
 `difficulty` came over empty in every single row and were not carried into the schema.
+
+A ninth group, `2026 part 2 words`, ships separately as `content/english/words-2026-part-2.json`
+and is loaded by `V12__LoadWords2026Part2` — 42 phrases condensed from a lesson handout, with the
+phrase itself as the entry, the sentence it was shown in kept as the example where it helps, and
+the grammar notes left behind. It is a file of its own for the same reason a new topic is: V10 has
+already run everywhere, so a group appended to `words.json` would load on a fresh database and be
+missing on an existing one.
 
 **Every seeded group is PUBLIC.** Four of the eight were one learner's private groups in the old
 app, but that app numbered its users and this one identifies them by UUID, so there is nobody here
