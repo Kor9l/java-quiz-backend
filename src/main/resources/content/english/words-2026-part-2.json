@@ -1,0 +1,190 @@
+{
+  "groups": [
+    {
+      "code": "seed-2026-part-2",
+      "order": 8,
+      "title": "2026 part 2 words",
+      "words": [
+        {
+          "text": "to suffer from",
+          "translation": "страдать от (social anxiety — социальной тревожности)"
+        },
+        {
+          "text": "an answer to",
+          "translation": "ответ на (вопрос)"
+        },
+        {
+          "text": "to smile at smb",
+          "translation": "улыбаться кому-либо"
+        },
+        {
+          "text": "to decide on",
+          "translation": "определиться с (a new tactic — новой тактикой)"
+        },
+        {
+          "text": "to stand for",
+          "translation": "означать (об аббревиатуре)",
+          "example": "What does ZTC stand for?"
+        },
+        {
+          "text": "to frown",
+          "translation": "хмуриться"
+        },
+        {
+          "text": "to mutter",
+          "translation": "бормотать"
+        },
+        {
+          "text": "to carry on (doing smth)",
+          "translation": "продолжать (делать что-либо)"
+        },
+        {
+          "text": "to call smb over",
+          "translation": "подзывать кого-либо"
+        },
+        {
+          "text": "a bunch of flowers",
+          "translation": "букет цветов"
+        },
+        {
+          "text": "to board a bus",
+          "translation": "садиться в автобус (= to get on a bus)"
+        },
+        {
+          "text": "in desperation",
+          "translation": "в отчаянии"
+        },
+        {
+          "text": "to make a comment",
+          "translation": "прокомментировать"
+        },
+        {
+          "text": "a soft drink",
+          "translation": "безалкогольный напиток"
+        },
+        {
+          "text": "to stick out of a bag",
+          "translation": "торчать из сумки"
+        },
+        {
+          "text": "to blow smb away",
+          "translation": "поразить, сильно впечатлить (в хорошем смысле)",
+          "example": "It blew me away."
+        },
+        {
+          "text": "to jump to conclusions",
+          "translation": "делать поспешные выводы"
+        },
+        {
+          "text": "That would be telling!",
+          "translation": "А вот это секрет! / Не скажу!"
+        },
+        {
+          "text": "a sly wink",
+          "translation": "хитрое подмигивание"
+        },
+        {
+          "text": "to get an insight into",
+          "translation": "лучше понять (внутренний мир других людей)"
+        },
+        {
+          "text": "infinite",
+          "translation": "бесконечный"
+        },
+        {
+          "text": "it makes my day",
+          "translation": "это поднимает мне настроение, делает мой день лучше",
+          "example": "When people smile at me, it makes my day. You too?"
+        },
+        {
+          "text": "My battery's dead.",
+          "translation": "У меня разрядился телефон."
+        },
+        {
+          "text": "a coincidence",
+          "translation": "совпадение"
+        },
+        {
+          "text": "first off",
+          "translation": "во-первых, для начала"
+        },
+        {
+          "text": "to slip one's mind",
+          "translation": "вылететь из головы",
+          "example": "It slipped my mind."
+        },
+        {
+          "text": "to be supposed to",
+          "translation": "должен был (по плану или договорённости)",
+          "example": "I was supposed to work on it yesterday."
+        },
+        {
+          "text": "to dash",
+          "translation": "помчаться, метнуться",
+          "example": "to dash back to your desk"
+        },
+        {
+          "text": "to get hold of",
+          "translation": "достать, раздобыть (the figures — цифры)"
+        },
+        {
+          "text": "in five seconds flat",
+          "translation": "ровно за пять секунд, в мгновение ока (in + [время] + flat)",
+          "example": "I'll be there in five minutes flat."
+        },
+        {
+          "text": "I nearly died laughing.",
+          "translation": "Я чуть не умер от смеха."
+        },
+        {
+          "text": "hilarious",
+          "translation": "уморительный"
+        },
+        {
+          "text": "to crack smb up",
+          "translation": "рассмешить, довести до смеха (informal)",
+          "example": "It cracked me up."
+        },
+        {
+          "text": "It's freezing.",
+          "translation": "Очень холодно. / Дубак."
+        },
+        {
+          "text": "a cold snap",
+          "translation": "внезапное похолодание",
+          "example": "This cold snap is going to last the whole week."
+        },
+        {
+          "text": "winter blues",
+          "translation": "зимняя хандра"
+        },
+        {
+          "text": "It's absolutely boiling.",
+          "translation": "Жара невыносимая."
+        },
+        {
+          "text": "to be snowed under (with work)",
+          "translation": "быть заваленным работой"
+        },
+        {
+          "text": "relentless",
+          "translation": "непрекращающийся, неослабевающий",
+          "example": "The pressure now was relentless."
+        },
+        {
+          "text": "a ton of",
+          "translation": "куча, масса (чего-либо)",
+          "example": "I've got a ton of emails to write."
+        },
+        {
+          "text": "to get on with the job in hand",
+          "translation": "продолжить делать текущую работу"
+        },
+        {
+          "text": "Catch you later.",
+          "translation": "Увидимся позже."
+        }
+      ]
+    }
+  ]
+}

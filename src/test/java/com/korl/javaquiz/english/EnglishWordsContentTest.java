@@ -14,26 +14,47 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Guards the bundled vocabulary. The Flyway migration that loads it only ever gets one attempt
+ * Guards the bundled vocabulary. The Flyway migrations that load it only ever get one attempt
  * against a real database, so a malformed entry has to fail here instead of on a deploy.
+ *
+ * <p>Every bundled file is checked together, since they all land in the same two tables: a code
+ * repeated across files would break the unique constraint on {@code word_groups.code} exactly as
+ * one repeated inside a file would.
  */
 class EnglishWordsContentTest {
 
-    private static JsonNode root;
+    private static final String CORPUS = "/content/english/words.json";
+    private static final String PART_TWO = "/content/english/words-2026-part-2.json";
+
+    private static JsonNode corpus;
+    private static JsonNode partTwo;
 
     @BeforeAll
     static void load() throws Exception {
-        try (InputStream in = EnglishWordsContentTest.class.getResourceAsStream("/content/english/words.json")) {
-            assertThat(in).describedAs("bundled English vocabulary").isNotNull();
-            root = new ObjectMapper().readTree(in);
+        corpus = read(CORPUS);
+        partTwo = read(PART_TWO);
+    }
+
+    private static JsonNode read(String resource) throws Exception {
+        try (InputStream in = EnglishWordsContentTest.class.getResourceAsStream(resource)) {
+            assertThat(in).describedAs("bundled vocabulary %s", resource).isNotNull();
+            return new ObjectMapper().readTree(in);
         }
+    }
+
+    /** Every group of every bundled file, which is what the migrations insert between them. */
+    private static List<JsonNode> allGroups() {
+        List<JsonNode> groups = new ArrayList<>();
+        corpus.get("groups").forEach(groups::add);
+        partTwo.get("groups").forEach(groups::add);
+        return groups;
     }
 
     @Test
     void groupsAreCodedAndOrderedUniquely() {
         Set<String> codes = new HashSet<>();
         Set<Integer> orders = new HashSet<>();
-        for (JsonNode group : root.get("groups")) {
+        for (JsonNode group : allGroups()) {
             String code = group.path("code").asText(null);
             assertThat(code).describedAs("group code").isNotBlank();
             assertThat(codes.add(code)).describedAs("duplicate group code %s", code).isTrue();
@@ -47,7 +68,7 @@ class EnglishWordsContentTest {
     @Test
     void everyWordHasBothSides() {
         List<String> problems = new ArrayList<>();
-        for (JsonNode group : root.get("groups")) {
+        for (JsonNode group : allGroups()) {
             String code = group.path("code").asText();
             for (JsonNode word : group.get("words")) {
                 String text = word.path("text").asText("");
@@ -65,7 +86,7 @@ class EnglishWordsContentTest {
     @Test
     void noGroupRepeatsAWord() {
         List<String> duplicates = new ArrayList<>();
-        for (JsonNode group : root.get("groups")) {
+        for (JsonNode group : allGroups()) {
             Set<String> seen = new HashSet<>();
             for (JsonNode word : group.get("words")) {
                 String text = word.path("text").asText("").toLowerCase();
@@ -79,7 +100,7 @@ class EnglishWordsContentTest {
 
     @Test
     void answerCountsAreNeverNegative() {
-        for (JsonNode group : root.get("groups")) {
+        for (JsonNode group : allGroups()) {
             for (JsonNode word : group.get("words")) {
                 assertThat(word.path("correct").asInt(0))
                         .describedAs("correct count of %s", word.path("text").asText()).isNotNegative();
@@ -93,10 +114,20 @@ class EnglishWordsContentTest {
     @Test
     void carriesTheWholeImportedCorpus() {
         int words = 0;
-        for (JsonNode group : root.get("groups")) {
+        for (JsonNode group : corpus.get("groups")) {
             words += group.get("words").size();
         }
-        assertThat(root.get("groups")).hasSize(8);
+        assertThat(corpus.get("groups")).hasSize(8);
         assertThat(words).isEqualTo(462);
+    }
+
+    /** The handout V14 loads: one group, and every row of it. */
+    @Test
+    void carriesTheTwentyTwentySixHandout() {
+        assertThat(partTwo.get("groups")).hasSize(1);
+        JsonNode group = partTwo.get("groups").get(0);
+        assertThat(group.path("code").asText()).isEqualTo("seed-2026-part-2");
+        assertThat(group.path("title").asText()).isEqualTo("2026 part 2 words");
+        assertThat(group.get("words")).hasSize(42);
     }
 }
