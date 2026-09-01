@@ -74,7 +74,7 @@ public class SqlPracticeEngine {
         SqlGuard.check(sql, limits.maxSqlLength());
         return withSandbox(task, sandbox -> {
             sandbox.checkSyntax(sql);
-            return new SubmissionOutcome(
+            return SubmissionOutcome.of(
                     SubmissionStatus.PASSED, null, null, null, null, null, elapsedMs(started));
         });
     }
@@ -89,7 +89,7 @@ public class SqlPracticeEngine {
             ResultTable actual = sandbox.runSubmission(sql);
             ResultComparator.Comparison comparison =
                     ResultComparator.compare(expected, actual, task.orderMatters());
-            return new SubmissionOutcome(
+            return SubmissionOutcome.of(
                     comparison.matched() ? SubmissionStatus.PASSED : SubmissionStatus.WRONG_RESULT,
                     comparison.reasonKey(),
                     null,
@@ -122,10 +122,10 @@ public class SqlPracticeEngine {
             acquired = slots.tryAcquire(SLOT_WAIT_SECONDS, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new SqlSubmissionException(SubmissionStatus.RUNTIME_ERROR, "practice.error.busy", null);
+            throw new PracticeSubmissionException(SubmissionStatus.RUNTIME_ERROR, "practice.error.busy", null);
         }
         if (!acquired) {
-            throw new SqlSubmissionException(SubmissionStatus.RUNTIME_ERROR, "practice.error.busy", null);
+            throw new PracticeSubmissionException(SubmissionStatus.RUNTIME_ERROR, "practice.error.busy", null);
         }
         try (SqlSandbox sandbox = SqlSandbox.create(task.setupStatements(), limits)) {
             return work.apply(sandbox);

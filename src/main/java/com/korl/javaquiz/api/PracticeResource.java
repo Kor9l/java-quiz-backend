@@ -1,6 +1,6 @@
 package com.korl.javaquiz.api;
 
-import com.korl.javaquiz.api.dto.SqlSubmissionRequest;
+import com.korl.javaquiz.api.dto.PracticeSubmissionRequest;
 import com.korl.javaquiz.api.error.ApiException;
 import com.korl.javaquiz.domain.Difficulty;
 import com.korl.javaquiz.security.CurrentUser;
@@ -57,13 +57,16 @@ public class PracticeResource {
         return practiceService.task(currentUser.id(), taskId);
     }
 
-    /** Parses a submission and reports what is wrong with it, without running it. */
+    /**
+      * Reports what is wrong with a submission without running it: parsed on the SQL track,
+      * compiled on the Java one.
+      */
     @POST
     @Path("/tasks/{taskId}/check")
     @Consumes(MediaType.APPLICATION_JSON)
     public Map<String, Object> check(@PathParam("taskId") String taskId,
-                                     @Valid SqlSubmissionRequest request) {
-        return practiceService.check(taskId, request.sql);
+                                     @Valid PracticeSubmissionRequest request) {
+        return practiceService.check(taskId, request.submission());
     }
 
     /** Runs a submission against the sandbox and grades it. */
@@ -71,8 +74,8 @@ public class PracticeResource {
     @Path("/tasks/{taskId}/run")
     @Consumes(MediaType.APPLICATION_JSON)
     public Map<String, Object> run(@PathParam("taskId") String taskId,
-                                   @Valid SqlSubmissionRequest request) {
-        return practiceService.run(currentUser.id(), taskId, request.sql);
+                                   @Valid PracticeSubmissionRequest request) {
+        return practiceService.run(currentUser.id(), taskId, request.submission());
     }
 
     private static Difficulty parseDifficulty(String value) {

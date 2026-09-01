@@ -17,9 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * One hands-on exercise. Correctness is defined by {@link #getSolutionSql()}: whatever rows
- * the reference answer produces are the rows a submission has to produce, however it gets
- * there.
+ * One hands-on exercise, on either track. Correctness is defined by the reference answer —
+ * {@link #getSolutionSql()} on the SQL track, {@link #getSolutionCode()} on the Java one:
+ * whatever the reference produces is what a submission has to produce, however it gets there.
+ *
+ * <p>Which half of the columns is filled follows from {@link #getTrack()}, and the two halves
+ * are exclusive. Sharing the table is what lets tracks, difficulties, progress, sources and
+ * the link back to the study material be written once instead of once per track.
  */
 @Entity
 @Table(name = "practice_tasks")
@@ -28,11 +32,12 @@ public class PracticeTask {
     @Id
     private String id;
 
-    /** Which practice track this belongs to, e.g. {@code sql}. */
+    /** Which practice track this belongs to: {@code sql} or {@code java}. */
     @Column(nullable = false)
     private String track;
 
-    @Column(name = "dataset_id", nullable = false)
+    /** The dataset queried. SQL track only. */
+    @Column(name = "dataset_id")
     private String datasetId;
 
     @Enumerated(EnumType.STRING)
@@ -67,16 +72,29 @@ public class PracticeTask {
     @Column(name = "hint_ru")
     private String hintRu;
 
-    /** Prefilled into the editor to get the learner past the blank page. */
+    /** Prefilled into the editor to get the learner past the blank page. SQL track only. */
     @Column(name = "starter_sql")
     private String starterSql;
 
-    @Column(name = "solution_sql", nullable = false)
+    @Column(name = "solution_sql")
     private String solutionSql;
 
-    /** True when the statement asked for a specific row order, making it part of the answer. */
+    /**
+     * True when the statement asked for a specific row order, making it part of the answer.
+     * SQL track only: on the Java track the cases are always compared in order.
+     */
     @Column(name = "order_matters", nullable = false)
     private boolean orderMatters;
+
+    /** The top-level class a submission has to declare. Java track only. */
+    @Column(name = "class_name")
+    private String className;
+
+    @Column(name = "starter_code")
+    private String starterCode;
+
+    @Column(name = "solution_code")
+    private String solutionCode;
 
     @Column(name = "explanation_en", nullable = false)
     private String explanationEn;
@@ -88,6 +106,12 @@ public class PracticeTask {
     @CollectionTable(name = "practice_task_sources", joinColumns = @JoinColumn(name = "task_id"))
     @OrderColumn(name = "sort_order")
     private List<Source> sources = new ArrayList<>();
+
+    /** The calls made against a submission, and the whole of what is graded. Java track only. */
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "practice_task_cases", joinColumns = @JoinColumn(name = "task_id"))
+    @OrderColumn(name = "sort_order")
+    private List<Case> cases = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -161,8 +185,46 @@ public class PracticeTask {
         return explanationRu;
     }
 
+    public String getClassName() {
+        return className;
+    }
+
+    public String getStarterCode() {
+        return starterCode;
+    }
+
+    public String getSolutionCode() {
+        return solutionCode;
+    }
+
     public List<Source> getSources() {
         return sources;
+    }
+
+    public List<Case> getCases() {
+        return cases;
+    }
+
+    /**
+     * One call made against a submission on the Java track. The expression is compiled into a
+     * generated harness, so it is bundled content and never anything a user supplied.
+     */
+    @Embeddable
+    public static class Case {
+
+        @Column(nullable = false)
+        private String label;
+
+        @Column(nullable = false)
+        private String expression;
+
+        public String getLabel() {
+            return label;
+        }
+
+        public String getExpression() {
+            return expression;
+        }
     }
 
     @Embeddable

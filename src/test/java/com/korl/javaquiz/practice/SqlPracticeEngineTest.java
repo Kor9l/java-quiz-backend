@@ -99,7 +99,7 @@ class SqlPracticeEngineTest {
         TaskSpec spec = task("syntax", "SELECT name FROM customers", false);
 
         assertThatThrownBy(() -> engine.grade(spec, "SELEC name FROM customers"))
-                .isInstanceOfSatisfying(SqlSubmissionException.class,
+                .isInstanceOfSatisfying(PracticeSubmissionException.class,
                         e -> assertThat(e.getStatus()).isEqualTo(SubmissionStatus.SYNTAX_ERROR));
     }
 
@@ -108,7 +108,7 @@ class SqlPracticeEngineTest {
         TaskSpec spec = task("unknown-column", "SELECT name FROM customers", false);
 
         assertThatThrownBy(() -> engine.grade(spec, "SELECT nam FROM customers"))
-                .isInstanceOfSatisfying(SqlSubmissionException.class, e -> {
+                .isInstanceOfSatisfying(PracticeSubmissionException.class, e -> {
                     assertThat(e.getStatus()).isEqualTo(SubmissionStatus.SYNTAX_ERROR);
                     assertThat(e.getDetail()).contains("nam");
                 });
@@ -121,7 +121,7 @@ class SqlPracticeEngineTest {
         assertThat(engine.checkSyntax(spec, "SELECT name FROM customers WHERE city = 'Riga'").status())
                 .isEqualTo(SubmissionStatus.PASSED);
         assertThatThrownBy(() -> engine.checkSyntax(spec, "SELECT * FROM nope"))
-                .isInstanceOfSatisfying(SqlSubmissionException.class,
+                .isInstanceOfSatisfying(PracticeSubmissionException.class,
                         e -> assertThat(e.getStatus()).isEqualTo(SubmissionStatus.SYNTAX_ERROR));
     }
 
@@ -138,7 +138,7 @@ class SqlPracticeEngineTest {
                 "  ")) {
             assertThatThrownBy(() -> engine.grade(spec, sql))
                     .describedAs(sql)
-                    .isInstanceOfSatisfying(SqlSubmissionException.class,
+                    .isInstanceOfSatisfying(PracticeSubmissionException.class,
                             e -> assertThat(e.getStatus()).isEqualTo(SubmissionStatus.POLICY_ERROR));
         }
     }
@@ -148,7 +148,7 @@ class SqlPracticeEngineTest {
         TaskSpec spec = task("file-access", "SELECT name FROM customers", false);
 
         assertThatThrownBy(() -> engine.grade(spec, "SELECT FILE_READ('/etc/passwd')"))
-                .isInstanceOfSatisfying(SqlSubmissionException.class,
+                .isInstanceOfSatisfying(PracticeSubmissionException.class,
                         e -> assertThat(e.getStatus()).isEqualTo(SubmissionStatus.POLICY_ERROR));
     }
 
@@ -168,7 +168,7 @@ class SqlPracticeEngineTest {
 
         assertThatThrownBy(() -> impatient.grade(spec,
                 "SELECT COUNT(*) FROM system_range(1, 200000000) a, system_range(1, 50) b"))
-                .isInstanceOfSatisfying(SqlSubmissionException.class,
+                .isInstanceOfSatisfying(PracticeSubmissionException.class,
                         e -> assertThat(e.getStatus()).isEqualTo(SubmissionStatus.TIMEOUT));
     }
 
@@ -178,7 +178,7 @@ class SqlPracticeEngineTest {
 
         assertThatThrownBy(() -> strict.grade(task("long", "SELECT 1", false),
                 "SELECT name, city FROM customers WHERE city = 'Riga'"))
-                .isInstanceOfSatisfying(SqlSubmissionException.class,
+                .isInstanceOfSatisfying(PracticeSubmissionException.class,
                         e -> assertThat(e.getStatus()).isEqualTo(SubmissionStatus.POLICY_ERROR));
     }
 

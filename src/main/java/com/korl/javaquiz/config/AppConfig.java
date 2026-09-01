@@ -56,7 +56,7 @@ public interface AppConfig {
         }
     }
 
-    /** Limits applied to SQL written by learners in the practice section. */
+    /** Limits applied to what learners write in the practice section. */
     interface Practice {
         @WithDefault("5")
         int queryTimeoutSeconds();
@@ -69,5 +69,21 @@ public interface AppConfig {
 
         @WithDefault("50")
         int previewRows();
+
+        Java java();
+
+        /** The Java track, which compiles and runs rather than querying. */
+        interface Java {
+            /** Covers every case of one task together, not each case on its own. */
+            @WithDefault("5")
+            int runTimeoutSeconds();
+
+            /** Generous next to the SQL cap: a class is longer than a query. */
+            @WithDefault("20000")
+            int maxSourceLength();
+
+            @WithDefault("8000")
+            int maxOutputBytes();
+        }
     }
 }

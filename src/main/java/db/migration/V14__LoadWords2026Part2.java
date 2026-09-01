@@ -23,7 +23,7 @@ import java.util.UUID;
  * sentence it was shown in — with the sentence carried over as the example where it earns its
  * place, and the grammar notes left in the handout.
  */
-public class V12__LoadWords2026Part2 extends BaseJavaMigration {
+public class V14__LoadWords2026Part2 extends BaseJavaMigration {
 
     private static final String RESOURCE = "/content/english/words-2026-part-2.json";
 

@@ -168,7 +168,7 @@ public final class SqlSandbox implements AutoCloseable {
         }
     }
 
-    private SqlSubmissionException toSubmissionException(SQLException e, SubmissionStatus fallback) {
+    private PracticeSubmissionException toSubmissionException(SQLException e, SubmissionStatus fallback) {
         SubmissionStatus status = classify(e, fallback);
         String key = switch (status) {
             case TIMEOUT -> "practice.error.timeout";
@@ -176,7 +176,7 @@ public final class SqlSandbox implements AutoCloseable {
             case POLICY_ERROR -> "practice.error.notAQuery";
             default -> "practice.error.runtime";
         };
-        return new SqlSubmissionException(status, key, cleanMessage(e));
+        return new PracticeSubmissionException(status, key, cleanMessage(e));
     }
 
     private static SubmissionStatus classify(SQLException e, SubmissionStatus fallback) {

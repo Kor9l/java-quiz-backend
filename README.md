@@ -50,7 +50,7 @@ URIs — so the frontend needed no change. Two behaviours did change on purpose,
 | GET | `/api/practice/tracks/{track}` | user, difficulties with progress |
 | GET | `/api/practice/tracks/{track}/{difficulty}` | user, task list |
 | GET | `/api/practice/tasks/{id}` | user, statement, dataset schema, expected result |
-| POST | `/api/practice/tasks/{id}/check` | user, parse only |
+| POST | `/api/practice/tasks/{id}/check` | user, parse (SQL) or compile (Java), without running |
 | POST | `/api/practice/tasks/{id}/run` | user, run and grade |
 | GET | `/api/modules` | user, the post-login choice with per-module counts |
 | GET | `/api/english/groups` | user, groups they may see, with word counts |
@@ -81,7 +81,8 @@ because Spring questions contain `${...}` placeholders that Flyway would interpo
 | `V7__levels` | the `level` column on questions and sections | — |
 | `V8__LoadJavaConcurrencyTopic` | the Java Concurrency topic: sections, articles, quiz questions | `content/java-concurrency/` |
 | `V10__LoadWords` | the English vocabulary: 8 groups, 462 words | `content/english/words.json` |
-| `V12__LoadWords2026Part2` | one more English group: "2026 part 2 words", 42 words | `content/english/words-2026-part-2.json` |
+| `V13__LoadJavaPractice` | Java practice exercises | `content/practice/java.json` |
+| `V14__LoadWords2026Part2` | one more English group: "2026 part 2 words", 42 words | `content/english/words-2026-part-2.json` |
 
 SQL and Java Concurrency live in their own directories rather than in the shared files because
 V2 has already run everywhere; adding a topic to `topics.json` would load it on a fresh database
@@ -150,6 +151,94 @@ SQL no longer works fails the build rather than a learner's session. `SqlTopicCo
 does the same for the articles and questions V6 loads, since that migration only gets to fail
 once, against a real database.
 
+The second practice track is [Java](#java-practice), which grades the same way and sits behind
+the same two endpoints.
+
+## Java practice
+
+The same idea carried into a compiled language: 18 exercises the learner solves by writing a
+class that is then **compiled and run**, six each at easy / medium / hard, drawn from seven Java
+Core sections and cross-linked with them the way the SQL ones are.
+
+Where a SQL task is a dataset plus a reference query, a Java task is a class plus the **cases**
+called against it — each case a Java expression like `Solution.reverse("java")`. The cases are
+shown to the learner rather than hidden: they are the specification.
+
+**Grading is by result, not by text**, exactly as on the SQL track. The reference solution is
+compiled and run first, its answer for each case is what a submission is compared against, and a
+loop, a stream and a recursion that all return the same values are all correct. The comparison
+reuses `ResultComparator`: cases become rows, so a wrong answer comes back pointing at the first
+case that differs.
+
+`POST /check` compiles without running, which is the whole answer for a learner who only wants
+to know whether it builds. `POST /run` compiles, runs and grades. Both return `diagnostics` —
+severity, line, column, message — and `run` also returns `output`, one entry per case, holding
+whatever the submission printed.
+
+### Three rings
+
+Submitted code is arbitrary code, and the sandbox is `SandboxPolicy`: an allowlist of nine
+`java.*` packages, minus the classes inside them that are refused anyway, plus the members that
+are allowed on a class too useful to refuse whole. `System.out` is that case — `System.exit` is
+why it cannot simply be allowed. Threads are refused outright: a thread a submission starts
+outlives the attempt that started it.
+
+The policy is enforced three times, each ring covering what the one outside it can miss.
+
+1. `JavaGuard` reads the source: length, a package declaration, an import of a refused package.
+   Cheap, and there for the message rather than the protection.
+2. `ClassFileGuard` walks the **compiled constant pool**, which is where a class writes down
+   every other class it names and every member it calls. A fully-qualified name, a string trick
+   or a comment all collapse to the same entries by the time the compiler is finished, so this
+   catches what reading the source cannot.
+3. `SandboxClassLoader` re-checks every class as it is actually resolved, with the platform
+   loader as its parent rather than the application's. A reference the parser misread ends as a
+   `ClassNotFoundException` instead of as a loaded class — and the application's own classes are
+   not reachable at all.
+
+A loader per attempt, thrown away with it: a static field a submission sets does not outlive the
+submission that set it.
+
+### What the timeout can and cannot do
+
+A run that overruns is interrupted, and interruption is cooperative — a submission spinning in a
+tight loop that never blocks does not observe it. Java has no safe way to stop such a thread, so
+the sandbox abandons it as a daemon and counts it; after four the track reports itself busy
+rather than filling the process with spinning threads. Heap is the gap this leaves: a submission
+that allocates until the JVM gives up is caught as a runtime error, not prevented.
+
+`System.out` is captured by a stream installed on first use that routes **by thread** — an
+attempt's writes go to that attempt's buffer, every other thread's to the stream that was there
+before. Swapping `System.out` per attempt was the alternative, and it would mean either
+serialising every submission or handing one learner another's output. Installation is lazy
+rather than at boot, which is after the log manager has taken its own reference, so application
+logging never goes through it.
+
+### The compiler
+
+ECJ, bundled as a dependency and loaded through the `javax.tools` service interface, rather than
+the JDK's own. The runtime image is `eclipse-temurin:17-jre`, and on a JRE
+`ToolProvider.getSystemJavaCompiler()` returns null — there is no `jdk.compiler` module to find,
+and switching to a JDK image is the larger change for 3 MB. It also means the error message a
+learner reads is the one the build tested against, on every machine this runs on.
+
+Compilation is in memory, with an **empty class path**: submitted code sees the JVM's own
+`java.*` and nothing else. The submission is compiled as itself rather than wrapped in
+scaffolding, so line 7 of a diagnostic is line 7 of the learner's editor. The generated harness
+holding the cases is a separate unit, and an error in *it* means something else — the submission
+compiled, but does not have the shape the cases call for — which is reported under its own
+message key, without a line number the learner has no way to look at.
+
+Limits live under `app.practice.java` in `application.properties`, overridable with
+`PRACTICE_JAVA_*` environment variables: a run timeout covering all of a task's cases together,
+a source length cap and an output cap.
+
+`JavaPracticeContentTest` compiles and runs every bundled reference solution at build time and
+grades it against its own cases, so a task whose solution or cases have drifted fails the build
+rather than a learner's session. It also asserts that no starter already passes. A starter is
+allowed not to compile — the wildcard exercise starts from a signature too narrow for its own
+cases, and that is the lesson — but it may never be the answer.
+
 ## English
 
 A vocabulary trainer, merged in from the standalone
@@ -172,7 +261,7 @@ groups was left alone, since a word belonging to two lessons is deliberate. `par
 `difficulty` came over empty in every single row and were not carried into the schema.
 
 A ninth group, `2026 part 2 words`, ships separately as `content/english/words-2026-part-2.json`
-and is loaded by `V12__LoadWords2026Part2` — 42 phrases condensed from a lesson handout, with the
+and is loaded by `V14__LoadWords2026Part2` — 42 phrases condensed from a lesson handout, with the
 phrase itself as the entry, the sentence it was shown in kept as the example where it helps, and
 the grammar notes left behind. It is a file of its own for the same reason a new topic is: V10 has
 already run everywhere, so a group appended to `words.json` would load on a fresh database and be

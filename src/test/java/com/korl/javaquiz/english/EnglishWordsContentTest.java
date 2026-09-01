@@ -121,7 +121,7 @@ class EnglishWordsContentTest {
         assertThat(words).isEqualTo(462);
     }
 
-    /** The handout V12 loads: one group, and every row of it. */
+    /** The handout V14 loads: one group, and every row of it. */
     @Test
     void carriesTheTwentyTwentySixHandout() {
         assertThat(partTwo.get("groups")).hasSize(1);
