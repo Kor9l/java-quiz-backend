@@ -39,6 +39,11 @@ public class WordGroupRepository {
                 .findFirst();
     }
 
+    /** No access check: for callers that already established the caller may see this group. */
+    public Optional<WordGroup> findById(UUID groupId) {
+        return Optional.ofNullable(em.find(WordGroup.class, groupId));
+    }
+
     public WordGroup save(WordGroup group) {
         return em.merge(group);
     }

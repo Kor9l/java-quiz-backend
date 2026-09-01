@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -18,6 +19,11 @@ public class WordRepository {
 
     @Inject
     EntityManager em;
+
+    /** No access check: for callers holding a word id that already passed one. */
+    public Optional<Word> findById(UUID wordId) {
+        return Optional.ofNullable(em.find(Word.class, wordId));
+    }
 
     public Optional<Word> findAccessibleById(UUID userId, UUID wordId) {
         return em.createQuery(
@@ -52,6 +58,36 @@ public class WordRepository {
                 .setParameter("userId", userId)
                 .getResultStream()
                 .collect(Collectors.toMap(row -> (UUID) row[0], row -> (Long) row[1]));
+    }
+
+    /** The pool a quiz round draws on: accessible words, narrowed to the chosen groups. */
+    public List<Word> findAccessibleInGroups(UUID userId, Collection<UUID> groupIds) {
+        if (groupIds == null || groupIds.isEmpty()) {
+            return findAccessible(userId);
+        }
+        return em.createQuery(
+                        "select w from Word w where " + IN_ACCESSIBLE_GROUP + " and w.groupId in :groupIds "
+                                + "order by w.sortOrder, w.text",
+                        Word.class)
+                .setParameter("userId", userId)
+                .setParameter("groupIds", groupIds)
+                .getResultList();
+    }
+
+    /**
+     * Just the translations, for drawing the wrong options of a question. A projection rather
+     * than whole rows: a round asks for these on every question and never needs the entities.
+     */
+    public List<String> findAccessibleTranslations(UUID userId) {
+        return em.createQuery("select w.translation from Word w where " + IN_ACCESSIBLE_GROUP, String.class)
+                .setParameter("userId", userId)
+                .getResultList();
+    }
+
+    public List<String> findAccessibleTexts(UUID userId) {
+        return em.createQuery("select w.text from Word w where " + IN_ACCESSIBLE_GROUP, String.class)
+                .setParameter("userId", userId)
+                .getResultList();
     }
 
     public long countAccessible(UUID userId) {

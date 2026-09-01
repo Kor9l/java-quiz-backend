@@ -27,6 +27,13 @@ public class QuizResource {
         this.currentUser = currentUser;
     }
 
+    /** What the setup step opens on — the choice this learner made last time. */
+    @GET
+    @Path("/setup")
+    public Map<String, Object> setup() {
+        return quizService.setup(currentUser.id());
+    }
+
     @POST
     @Path("/start")
     @Consumes(MediaType.APPLICATION_JSON)
