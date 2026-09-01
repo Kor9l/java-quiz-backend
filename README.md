@@ -4,6 +4,12 @@ Quarkus REST API + PostgreSQL for the Java Quiz web app.
 
 **Stack:** Java 17, Quarkus 3.34, Jakarta REST, Hibernate ORM, Flyway, PostgreSQL, JWT.
 
+Two modules sit behind the sign-in and the learner picks one: **Backend**, the Java / Spring / SQL
+material, quiz and exercises this started as, and **English**, the vocabulary trainer merged in
+from [english-words-learning-app](https://github.com/Kor9l/english-words-learning-app).
+`GET /api/modules` is what that choice reads; the English half is described under
+[English](#english).
+
 Ported off Spring Boot for start-up time: the free Render instance sleeps after 15 minutes and
 pays the boot cost on the next visitor. Same machine, same database, same content migrations
 already applied:
@@ -13,7 +19,7 @@ already applied:
 | Spring Boot 3.3 | 7.2 – 7.9 s | ~420 MB |
 | Quarkus 3.34, JVM | **2.13 s** | **~265 MB** |
 
-A cold boot that also runs all six migrations against an empty database takes 3.0 s. The memory
+A cold boot that also runs every migration against an empty database takes 3.0 s. The memory
 halving matters as much as the seconds: the free tier caps the container at 512 MB.
 
 Nothing about the HTTP contract moved — same paths, same JSON, same JWTs, same Google redirect
@@ -46,6 +52,16 @@ URIs — so the frontend needed no change. Two behaviours did change on purpose,
 | GET | `/api/practice/tasks/{id}` | user, statement, dataset schema, expected result |
 | POST | `/api/practice/tasks/{id}/check` | user, parse only |
 | POST | `/api/practice/tasks/{id}/run` | user, run and grade |
+| GET | `/api/modules` | user, the post-login choice with per-module counts |
+| GET | `/api/english/groups` | user, groups they may see, with word counts |
+| GET | `/api/english/words` | user, the whole vocabulary, already grouped |
+| GET | `/api/english/groups/{id}` | user, one group with its words |
+| POST | `/api/english/groups` | user, creates a personal group |
+| PATCH/DELETE | `/api/english/groups/{id}` | owner, or **ADMIN** on a shared group |
+| POST | `/api/english/groups/{id}/words` | owner, or **ADMIN** on a shared group |
+| PUT/DELETE | `/api/english/words/{id}` | owner, or **ADMIN** on a shared group |
+| POST | `/api/english/words/import` | user, bulk add from pasted text or typed rows |
+| POST | `/api/english/words/{id}/favorite` | user, toggles, personal |
 | GET | `/api/admin/users` | **ADMIN** |
 | PATCH | `/api/admin/users/{id}/role` | **ADMIN** |
 
@@ -64,6 +80,7 @@ because Spring questions contain `${...}` placeholders that Flyway would interpo
 | `V6__LoadSqlTopic` | the SQL topic: sections, articles, quiz questions | `content/sql/` |
 | `V7__levels` | the `level` column on questions and sections | — |
 | `V8__LoadJavaConcurrencyTopic` | the Java Concurrency topic: sections, articles, quiz questions | `content/java-concurrency/` |
+| `V10__LoadWords` | the English vocabulary: 8 groups, 462 words | `content/english/words.json` |
 
 SQL and Java Concurrency live in their own directories rather than in the shared files because
 V2 has already run everywhere; adding a topic to `topics.json` would load it on a fresh database
@@ -131,6 +148,86 @@ Plus a query timeout, a row cap and a length cap — all under `app.practice` in
 SQL no longer works fails the build rather than a learner's session. `SqlTopicContentTest`
 does the same for the articles and questions V6 loads, since that migration only gets to fail
 once, against a real database.
+
+## English
+
+A vocabulary trainer, merged in from the standalone
+[english-words-learning-app](https://github.com/Kor9l/english-words-learning-app). That app was
+Spring Boot with Thymeleaf pages; what came across is the data and the word management, rewritten
+as REST against the schema and conventions already here. Its learning quiz, statistics screens and
+its own user table stayed behind — this app already has accounts, and the drilling loop was not
+part of the move.
+
+It is a module rather than a topic: no sections, no levels, no `topics.json` entry, and none of
+its tables touch the ones above. `/api/modules` is the only place the two meet.
+
+### The words
+
+462 words in 8 groups, in `content/english/words.json` and loaded by `V10__LoadWords`. Two sources
+went into that file: the 234-word seed the old app shipped as `data/words.json`, and the 228 rows
+its live database had accumulated since — the two overlap by ten words and are otherwise separate.
+No group repeats a word, and `EnglishWordsContentTest` keeps it that way; the same word in two
+groups was left alone, since a word belonging to two lessons is deliberate. `part_of_speech` and
+`difficulty` came over empty in every single row and were not carried into the schema.
+
+**Every seeded group is PUBLIC.** Four of the eight were one learner's private groups in the old
+app, but that app numbered its users and this one identifies them by UUID, so there is nobody here
+to hand them back to. Shipping them as content is what keeps them reachable; anything a learner
+adds from now on is PERSONAL and theirs alone.
+
+### Groups and who may touch them
+
+One distinction carries the whole module. A group is either PUBLIC — shipped, or curated by an
+admin — or PERSONAL, created by one learner from their own text.
+
+| | reads | edits |
+|---|---|---|
+| PUBLIC | everybody | admins |
+| PERSONAL | its owner | its owner |
+
+A group the caller may not read answers **404, not 403**: telling an outsider that someone else's
+group exists is already more than they should learn. A group they may read but not write answers
+403.
+
+Favourites are the exception to the shared/private split — they hang off `(user_id, word_id)`, so
+one learner stars a word in a shared group without the others seeing it. The `correct_count` and
+`incorrect_count` on a word are the opposite: they came over from the old app as single global
+numbers, and nothing writes to them here, since the drilling loop that would is not part of this
+move.
+
+### Bulk import
+
+`POST /api/english/words/import` takes either a pasted list or typed rows, into an existing group
+or a new personal one named on the spot:
+
+```json
+{"mode": "TEXT", "newGroupTitle": "Idioms 9", "text": "1 to go global — выйти на мировой уровень"}
+{"mode": "TABLE", "groupId": "…", "rows": [{"text": "compassion", "translation": "сострадание"}]}
+```
+
+The text format is the old app's, unchanged: one word per line, English and translation split by
+an **em or en dash** — a plain hyphen is not a separator, because too many entries contain one. A
+leading number is a list marker and is dropped, and a `*` after it flags a word as newly met:
+
+```
+1 definitive — окончательный
+5 * to fade away — угасать
+ongoing — текущий
+```
+
+The number may be decimal (`1.2 word`) but must not be followed by a bare dot: `1. word` keeps the
+`1.` as part of the English side. That is how the app this came from behaved, and it was left that
+way rather than quietly changed during a port.
+
+A line that will not parse is **reported and skipped**, not fatal — the usual paste has a stray
+line or two in it, and re-pasting the other forty is not a fix. The response says how many landed
+and names the rest by line number. A run that imports nothing and reports nothing means the payload
+was empty, and answers 400 rather than a cheerful `imported: 0`; if it was about to create a group,
+the transaction takes that back with it.
+
+`WordLineParserTest` pins the accepted shapes and `EnglishWordsContentTest` guards the bundled
+corpus, on the same reasoning as the other content tests: `V10` only gets one attempt against a
+real database.
 
 ## Local run (without Docker)
 

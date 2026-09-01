@@ -1,0 +1,2578 @@
+{
+  "groups": [
+    {
+      "code": "seed-legacy",
+      "order": 0,
+      "title": "старые",
+      "words": [
+        {
+          "text": "a business angel",
+          "translation": "бизнес-ангел",
+          "correct": 3
+        },
+        {
+          "text": "to go global",
+          "translation": "выйти на мировой уровень",
+          "correct": 1
+        },
+        {
+          "text": "a start-up",
+          "translation": "стартап",
+          "correct": 3
+        },
+        {
+          "text": "a pop-up",
+          "translation": "лавка",
+          "correct": 1
+        },
+        {
+          "text": "to take over",
+          "translation": "взять под контроль, принимать на себя",
+          "correct": 2
+        },
+        {
+          "text": "a gap in the market",
+          "translation": "ниша на рынке",
+          "correct": 3
+        },
+        {
+          "text": "a would-be entrepreneur",
+          "translation": "будущий/потенциальный предприниматель",
+          "correct": 3
+        },
+        {
+          "text": "return on investment",
+          "translation": "отдача от инвестиций",
+          "correct": 3
+        },
+        {
+          "text": "to turn over",
+          "translation": "иметь оборот",
+          "correct": 2,
+          "incorrect": 1
+        },
+        {
+          "text": "financial backing",
+          "translation": "финансовая поддержка",
+          "correct": 1
+        },
+        {
+          "text": "a temporary outlet",
+          "translation": "временная торговая точка",
+          "correct": 1,
+          "incorrect": 1
+        },
+        {
+          "text": "a start-up capital",
+          "translation": "стартовый капитал",
+          "correct": 5
+        },
+        {
+          "text": "a venture capitalist",
+          "translation": "инвестор (специализированная фирма (или",
+          "correct": 5,
+          "incorrect": 1
+        },
+        {
+          "text": "a bank loan",
+          "translation": "банковский кредит",
+          "correct": 4
+        },
+        {
+          "text": "financial estimates",
+          "translation": "финансовые сметы/расчеты",
+          "correct": 1
+        },
+        {
+          "text": "a downside to",
+          "translation": "недостаток",
+          "correct": 3
+        },
+        {
+          "text": "collapsible",
+          "translation": "складной",
+          "correct": 3,
+          "incorrect": 1
+        },
+        {
+          "text": "a collapsible chair/bicycle",
+          "translation": "складной стул/велосипед",
+          "correct": 3
+        },
+        {
+          "text": "a collapsible bed",
+          "translation": "складная кровать",
+          "correct": 3
+        },
+        {
+          "text": "a niche [nɪʃ]",
+          "translation": "ниша",
+          "correct": 4
+        },
+        {
+          "text": "at a fraction of",
+          "translation": "за долю от, за малую часть от",
+          "correct": 6
+        },
+        {
+          "text": "a mark-up",
+          "translation": "наценка",
+          "correct": 3,
+          "incorrect": 1
+        },
+        {
+          "text": "outrageous",
+          "translation": "возмутительный",
+          "correct": 3
+        },
+        {
+          "text": "viable ['vaɪəbl]",
+          "translation": "жизнеспособный (=capable of working",
+          "correct": 1
+        },
+        {
+          "text": "to work out a business plan",
+          "translation": "разработать бизнес-план",
+          "correct": 6
+        },
+        {
+          "text": "to start out",
+          "translation": "начинать",
+          "correct": 2
+        },
+        {
+          "text": "get/have on board «",
+          "translation": "взять на борт», присоединиться",
+          "correct": 3
+        },
+        {
+          "text": "to set up stalls",
+          "translation": "устанавливать киоски/лавки",
+          "correct": 3
+        },
+        {
+          "text": "to generate interest",
+          "translation": "зд. давать проценты",
+          "correct": 2
+        },
+        {
+          "text": "a sound business model",
+          "translation": "надежная бизнес-модель",
+          "correct": 2
+        },
+        {
+          "text": "sound -",
+          "translation": "прочный",
+          "correct": 3
+        },
+        {
+          "text": "to work out the stages and timings",
+          "translation": "разработать этапы и временные рамки",
+          "correct": 2
+        },
+        {
+          "text": "upfront planning",
+          "translation": "предварительное",
+          "correct": 2
+        },
+        {
+          "text": "set / extend a deadline",
+          "translation": "установить / продлить дедлайн",
+          "correct": 2
+        },
+        {
+          "text": "to set up project milestones",
+          "translation": "определить ключевые этапы проекта",
+          "correct": 1
+        },
+        {
+          "text": "to set goals",
+          "translation": "ставить цели",
+          "correct": 5
+        },
+        {
+          "text": "a set of goals",
+          "translation": "набор целей",
+          "correct": 3,
+          "incorrect": 1
+        },
+        {
+          "text": "clearly defined (project goal)",
+          "translation": "четко сформулированная цель проекта",
+          "correct": 3
+        },
+        {
+          "text": "to have a clear vision of (a project)",
+          "translation": "иметь четкое представление",
+          "correct": 4
+        },
+        {
+          "text": "from the outset",
+          "translation": "с самого начала",
+          "correct": 2
+        },
+        {
+          "text": "outset ['autset] –",
+          "translation": "начало",
+          "correct": 6
+        },
+        {
+          "text": "at the outset of –",
+          "translation": "в начале",
+          "correct": 6
+        },
+        {
+          "text": "a scenario [səˈnærioʊ]",
+          "translation": "сценарий, план действий",
+          "correct": 3
+        },
+        {
+          "text": "to pivot to an alternate [ɔːl'tɜːnət] plan",
+          "translation": "переключиться на запасной план",
+          "correct": 3
+        },
+        {
+          "text": "to have a contingency plan in place",
+          "translation": "иметь план на случай непредвиденных",
+          "correct": 2
+        },
+        {
+          "text": "the course of action",
+          "translation": "план  действий",
+          "correct": 3,
+          "incorrect": 1
+        },
+        {
+          "text": "to pre-determine",
+          "translation": "предопределить",
+          "correct": 3
+        },
+        {
+          "text": "foresight",
+          "translation": "предвидение, дальновидность",
+          "correct": 4
+        },
+        {
+          "text": "overkill",
+          "translation": "перегиб",
+          "correct": 5
+        },
+        {
+          "text": "be assigned to",
+          "translation": "быть назначенным на",
+          "correct": 1
+        },
+        {
+          "text": "to hinge on [hɪnʤ]",
+          "translation": "зависеть от",
+          "correct": 4
+        },
+        {
+          "text": "to break into manageable chunks",
+          "translation": "разбить на выполнимые части",
+          "correct": 4
+        },
+        {
+          "text": "halfway through (the project)",
+          "translation": "в середине выполнения проекта",
+          "correct": 2
+        },
+        {
+          "text": "the key checkpoints",
+          "translation": "основные этапы проверки",
+          "correct": 4
+        },
+        {
+          "text": "to keep the momentum strong",
+          "translation": "сохранять высокий темп",
+          "correct": 4
+        },
+        {
+          "text": "to gain momentum –",
+          "translation": "набирать движущую силу",
+          "correct": 2
+        },
+        {
+          "text": "to navigate challenges smoothly",
+          "translation": "плавно преодолевать сложности",
+          "correct": 1
+        },
+        {
+          "text": "a snag popped up",
+          "translation": "возникла небольшая проблема",
+          "correct": 1
+        },
+        {
+          "text": "a snag –",
+          "translation": "задержка, помеха",
+          "correct": 4
+        },
+        {
+          "text": "to map out potential risks",
+          "translation": "наметить возможные риски",
+          "correct": 6
+        },
+        {
+          "text": "life’s been extremely hectic.",
+          "translation": "у меня была очень активная",
+          "correct": 1,
+          "incorrect": 1
+        },
+        {
+          "text": "i got a transfer.",
+          "translation": "Меня перевели .",
+          "correct": 2
+        },
+        {
+          "text": "things have been tough in the it field.",
+          "translation": "В ИТ-сфере было тяжело.",
+          "correct": 2
+        },
+        {
+          "text": "reputable ['repjətəbl]",
+          "translation": "уважаемый, авторитетный",
+          "correct": 3
+        },
+        {
+          "text": "a college reunion",
+          "translation": "встреча выпускников колледжа",
+          "correct": 1
+        },
+        {
+          "text": "let’s chat about that over dinner.",
+          "translation": "Давай поговорим об этом за ужином.",
+          "correct": 1
+        },
+        {
+          "text": "to take a day’s leave (=a day off)",
+          "translation": "взять выходной",
+          "correct": 1
+        },
+        {
+          "text": "could you stand in for me?",
+          "translation": "Ты можешь заменить меня?",
+          "correct": 2
+        },
+        {
+          "text": "stock taking = stocktaking -",
+          "translation": "инвентаризация,",
+          "correct": 2
+        },
+        {
+          "text": "on-call (shift)",
+          "translation": "смена «по вызову», дежурная смена",
+          "correct": 1
+        },
+        {
+          "text": "can i ask a favour?",
+          "translation": "Могу я попросить об одолжении?"
+        },
+        {
+          "text": "to oversee a project",
+          "translation": "руководить проектом"
+        },
+        {
+          "text": "(at) short notice",
+          "translation": "позднее предупреждение (=to be very near the",
+          "correct": 1
+        },
+        {
+          "text": "to hand/give in one’s notice",
+          "translation": "подать заявление на увольнение",
+          "correct": 1
+        },
+        {
+          "text": "to be on sick leave",
+          "translation": "быть на больничном",
+          "correct": 2
+        },
+        {
+          "text": "a solicitor",
+          "translation": "солиситор, адвокат",
+          "correct": 3
+        },
+        {
+          "text": "ongoing",
+          "translation": "происходящий в настоящее время (=continuing;"
+        },
+        {
+          "text": "kitchen appliances",
+          "translation": "кухонная техника"
+        },
+        {
+          "text": "a cooker",
+          "translation": "плита",
+          "correct": 1
+        },
+        {
+          "text": "a spare part",
+          "translation": "запасная часть",
+          "correct": 3
+        },
+        {
+          "text": "mass-market products",
+          "translation": "продукты для массового рынка"
+        },
+        {
+          "text": "specialist products",
+          "translation": "специализированные продукты",
+          "correct": 1
+        },
+        {
+          "text": "niche and individualized products",
+          "translation": "нишевые и индивидуализированные продукты",
+          "correct": 3
+        },
+        {
+          "text": "similarly",
+          "translation": "так же, подобным образом",
+          "correct": 1
+        },
+        {
+          "text": "to overtake",
+          "translation": "перегнать",
+          "correct": 1
+        },
+        {
+          "text": "notorious [nəu'tɔːrɪəs]",
+          "translation": "пользующийся дурной славой"
+        },
+        {
+          "text": "willingness",
+          "translation": "готовность, желание, охота",
+          "incorrect": 1
+        },
+        {
+          "text": "a notion",
+          "translation": "понятие, представление",
+          "correct": 4
+        },
+        {
+          "text": "to come hand-in-hand with",
+          "translation": "идти рука об руку с",
+          "correct": 1
+        },
+        {
+          "text": "inherent [ɪn'herənt]",
+          "translation": "неотъемлемый, присущий",
+          "correct": 2
+        },
+        {
+          "text": "to take an entrepreneurial leap «",
+          "translation": "совершить предпринимательский рывок»",
+          "correct": 1
+        },
+        {
+          "text": "a gut reaction",
+          "translation": "инстинктивная реакция",
+          "correct": 3
+        },
+        {
+          "text": "an ecosystem of investors",
+          "translation": "сообщество инвесторов (=a community of people",
+          "correct": 2
+        },
+        {
+          "text": "equity",
+          "translation": "доля",
+          "incorrect": 1
+        },
+        {
+          "text": "crowdfunding",
+          "translation": "краудфандинг (=the practice of funding a project",
+          "correct": 1
+        },
+        {
+          "text": "with strings",
+          "translation": "с условиями",
+          "correct": 2
+        },
+        {
+          "text": "pivot ['pɪvət] 1)",
+          "translation": "ключевой момент (первичное значение слова 2) вращать",
+          "correct": 1
+        },
+        {
+          "text": "to pull the plug on this",
+          "translation": "покончить с этим",
+          "correct": 1
+        },
+        {
+          "text": "to envision",
+          "translation": "представлять себе, предвидеть",
+          "correct": 1
+        },
+        {
+          "text": "integrity",
+          "translation": "принципиальность, добросовестность,"
+        },
+        {
+          "text": "hindsight ['haɪndsaɪt]",
+          "translation": "взгляд в прошлое, ретроспективный взгляд",
+          "correct": 2
+        },
+        {
+          "text": "with / in hindsight",
+          "translation": "оглядываясь на прошлое",
+          "correct": 1
+        },
+        {
+          "text": "to create a dent in the world",
+          "translation": "оставить след в мире (=affect or change the world",
+          "correct": 1
+        },
+        {
+          "text": "enjoy the ride",
+          "translation": "зд. перен. «наслаждаться ездой»",
+          "correct": 2
+        },
+        {
+          "text": "the lone hero, the lone cowboy",
+          "translation": "зд. «бизнесмен-одиночка» (=smn who always"
+        },
+        {
+          "text": "roll up your sleeves",
+          "translation": "засучить рукава",
+          "correct": 1
+        },
+        {
+          "text": "on a sound/secure/firm/strong footing:",
+          "translation": "на прочной / надежной / твердой / прочной",
+          "correct": 1
+        },
+        {
+          "text": "grit",
+          "translation": "твёрдость характера, выдержка, стойкость"
+        },
+        {
+          "text": "a pop-up «",
+          "translation": "поп-ап», лавка"
+        }
+      ]
+    },
+    {
+      "code": "seed-march-26",
+      "order": 1,
+      "title": "март 26",
+      "words": [
+        {
+          "text": "to take personal responsibility",
+          "translation": "взять на себя личную ответственность",
+          "correct": 2
+        },
+        {
+          "text": "to hold a meeting",
+          "translation": "провести встречу",
+          "correct": 1
+        },
+        {
+          "text": "to catch up on",
+          "translation": "обсудить"
+        },
+        {
+          "text": "to share what’s on your mind",
+          "translation": "высказаться"
+        },
+        {
+          "text": "to offload (nasty jobs onto absent colleagues)",
+          "translation": "свалить на отсутствующих коллег",
+          "correct": 2
+        },
+        {
+          "text": "to reschedule missed deadlines",
+          "translation": "перенести пропущенные дедлайны",
+          "correct": 1
+        },
+        {
+          "text": "to postpone (put off) decisions",
+          "translation": "откладывать решения",
+          "correct": 1
+        },
+        {
+          "text": "a buzzword",
+          "translation": "модное словечко"
+        },
+        {
+          "text": "face time",
+          "translation": "время для личного общения"
+        },
+        {
+          "text": "exit strategy",
+          "translation": "стратегия выхода",
+          "correct": 3
+        },
+        {
+          "text": "a change of mindset",
+          "translation": "смена мышления",
+          "correct": 1
+        },
+        {
+          "text": "core competencies (of a company)",
+          "translation": "ключевые компетенции",
+          "correct": 2
+        },
+        {
+          "text": "paradigm shift",
+          "translation": "смена парадигмы"
+        },
+        {
+          "text": "to be proactive",
+          "translation": "быть проактивным",
+          "correct": 1
+        },
+        {
+          "text": "to synergize",
+          "translation": "взаимодействовать",
+          "correct": 2
+        },
+        {
+          "text": "to think outside the box",
+          "translation": "мыслить нестандартно",
+          "correct": 2
+        },
+        {
+          "text": "to drill down",
+          "translation": "углубляться",
+          "correct": 1
+        },
+        {
+          "text": "to get buy-in from sb",
+          "translation": "получить поддержку",
+          "correct": 1
+        },
+        {
+          "text": "to take sth to the next level",
+          "translation": "вывести на новый уровень",
+          "correct": 2
+        },
+        {
+          "text": "to do a reality check",
+          "translation": "трезво оценить ситуацию"
+        },
+        {
+          "text": "the bottom line",
+          "translation": "суть/итог",
+          "correct": 1
+        },
+        {
+          "text": "to look at the big picture",
+          "translation": "посмотреть на картину в целом",
+          "correct": 1
+        },
+        {
+          "text": "to benchmark",
+          "translation": "проводить бенчмаркинг"
+        },
+        {
+          "text": "to ramp up",
+          "translation": "наращивать объемы",
+          "correct": 1
+        },
+        {
+          "text": "to empower",
+          "translation": "наделять полномочиями",
+          "correct": 1
+        },
+        {
+          "text": "balance sheets",
+          "translation": "бухгалтерские балансы"
+        },
+        {
+          "text": "staff appraisals",
+          "translation": "оценка работы сотрудников"
+        },
+        {
+          "text": "profit margins",
+          "translation": "рентабельность"
+        },
+        {
+          "text": "sales projections",
+          "translation": "прогнозы продаж",
+          "correct": 3
+        },
+        {
+          "text": "cost cutting",
+          "translation": "сокращение расходов"
+        },
+        {
+          "text": "salary reviews",
+          "translation": "пересмотр зарплат",
+          "correct": 1
+        },
+        {
+          "text": "price settings",
+          "translation": "ценообразование",
+          "correct": 1
+        },
+        {
+          "text": "the latest figures",
+          "translation": "последние данные",
+          "correct": 2
+        },
+        {
+          "text": "to upskill",
+          "translation": "повышать квалификацию"
+        },
+        {
+          "text": "input on sth",
+          "translation": "мнение по поводу чего-либо",
+          "correct": 1
+        },
+        {
+          "text": "let’s get the ball rolling.",
+          "translation": "Давайте начнем!"
+        },
+        {
+          "text": "the division is about to go under.",
+          "translation": "Подразделение вот-вот обанкротится."
+        },
+        {
+          "text": "we need to figure out how to turn it around.",
+          "translation": "Нам нужно понять, как исправить ситуацию.",
+          "correct": 2
+        },
+        {
+          "text": "fire away, kelly.",
+          "translation": "Жги, Келли."
+        },
+        {
+          "text": "i don’t think we’re quite with you.",
+          "translation": "Мы не совсем понимаем вашу мысль.",
+          "correct": 2
+        },
+        {
+          "text": "change begins at the grassroots (in an organization).",
+          "translation": "Перемены начинаются с «низов»."
+        },
+        {
+          "text": "vague",
+          "translation": "расплывчатый",
+          "correct": 1
+        },
+        {
+          "text": "market-driven (organisation)",
+          "translation": "рыночно-ориентированная организация",
+          "correct": 2
+        },
+        {
+          "text": "to consolidate",
+          "translation": "консолидировать",
+          "correct": 1
+        },
+        {
+          "text": "an assembly plant",
+          "translation": "сборочный цех",
+          "correct": 1
+        },
+        {
+          "text": "to fail dismally",
+          "translation": "потерпеть сокрушительный провал",
+          "correct": 1
+        },
+        {
+          "text": "to fail to meet expectations",
+          "translation": "не оправдать ожиданий"
+        },
+        {
+          "text": "to make a loss",
+          "translation": "терпеть убытки",
+          "correct": 2
+        },
+        {
+          "text": "buoyant (market)",
+          "translation": "оживленный рынок"
+        },
+        {
+          "text": "to go by the figures",
+          "translation": "ориентироваться на цифры"
+        },
+        {
+          "text": "be overstaffed",
+          "translation": "иметь раздутый штат"
+        },
+        {
+          "text": "to raise a point",
+          "translation": "поднять вопрос"
+        },
+        {
+          "text": "to look for excuses",
+          "translation": "искать оправдания",
+          "correct": 2
+        },
+        {
+          "text": "to clone the technology",
+          "translation": "скопировать технологию"
+        },
+        {
+          "text": "to leave innovation to companies like sony",
+          "translation": "оставить инновации компаниям, как Sony"
+        },
+        {
+          "text": "that brings us on to our main business.",
+          "translation": "Это подводит нас к основному вопросу.",
+          "correct": 1
+        },
+        {
+          "text": "in my view, …",
+          "translation": "На мой взгляд, ..."
+        },
+        {
+          "text": "we won’t be able to finalize anything today.",
+          "translation": "Сегодня нам не удастся ничего утвердить.",
+          "correct": 2
+        },
+        {
+          "text": "a query",
+          "translation": "запрос / вопрос"
+        },
+        {
+          "text": "a discrepancy",
+          "translation": "несоответствие"
+        },
+        {
+          "text": "to break bad news",
+          "translation": "сообщить плохие новости",
+          "correct": 1
+        },
+        {
+          "text": "disappointing figures",
+          "translation": "неутешительные показатели",
+          "correct": 2
+        },
+        {
+          "text": "to fall short of projections",
+          "translation": "не оправдать прогнозов",
+          "correct": 1
+        },
+        {
+          "text": "to miss the target",
+          "translation": "не достичь цели",
+          "correct": 2
+        },
+        {
+          "text": "to run at a loss",
+          "translation": "работать в убыток",
+          "correct": 1
+        },
+        {
+          "text": "to phase sth out",
+          "translation": "постепенно сворачивать",
+          "incorrect": 1
+        },
+        {
+          "text": "to oppose sth",
+          "translation": "выступать против чего-то",
+          "correct": 1
+        },
+        {
+          "text": "to slide into debt",
+          "translation": "влезать в долги",
+          "correct": 1
+        },
+        {
+          "text": "overseas distributors",
+          "translation": "зарубежные дистрибьюторы"
+        },
+        {
+          "text": "inflated prices",
+          "translation": "завышенные цены",
+          "correct": 1
+        },
+        {
+          "text": "volatile markets",
+          "translation": "нестабильные рынки",
+          "correct": 1
+        },
+        {
+          "text": "even if we decided to do that…",
+          "translation": "Даже если бы мы решили это сделать…",
+          "correct": 1
+        },
+        {
+          "text": "if only it was that simple.",
+          "translation": "Если бы всё было так просто.",
+          "correct": 1
+        },
+        {
+          "text": "we’re not really in a position to invest",
+          "translation": "Мы сейчас не в том положении, чтобы инвестировать."
+        },
+        {
+          "text": "to earn three times the average rate",
+          "translation": "зарабатывать в три раза больше среднего уровня",
+          "correct": 1
+        },
+        {
+          "text": "twice as much",
+          "translation": "в два раза больше"
+        },
+        {
+          "text": "a 20% overspend",
+          "translation": "перерасход на 20%",
+          "correct": 1
+        },
+        {
+          "text": "kate is going to fill us in on…",
+          "translation": "Кейт введет нас в курс дела.",
+          "correct": 1
+        },
+        {
+          "text": "we’ve got 75 minutes.",
+          "translation": "У нас есть 75 минут.",
+          "correct": 1
+        },
+        {
+          "text": "it’s no good (going on about pay rises).",
+          "translation": "Бесполезно ."
+        },
+        {
+          "text": "hang on a second.",
+          "translation": "Погоди секунду."
+        },
+        {
+          "text": "unless things pick up considerably",
+          "translation": "если только ситуация значительно не улучшится"
+        },
+        {
+          "text": "we’re barely breaking even on some of our product lines.",
+          "translation": "Мы едва выходим в ноль по некоторым линейкам продуктов.",
+          "correct": 1
+        },
+        {
+          "text": "to fall to an all time low",
+          "translation": "упасть до исторического минимума",
+          "correct": 1
+        },
+        {
+          "text": "basically, the position is this: …",
+          "translation": "Вкратце, ситуация/положение дел таково: …",
+          "correct": 1
+        },
+        {
+          "text": "we’re not in the position to (take on another project, are we?)",
+          "translation": "Мы не в том положении, чтобы",
+          "correct": 1
+        },
+        {
+          "text": "jan, what’s your position on this?",
+          "translation": "Ян, какова твоя позиция по этому вопросу?",
+          "correct": 2
+        },
+        {
+          "text": "it’s not just a question of software.",
+          "translation": "Дело не только в ПО.",
+          "correct": 1
+        },
+        {
+          "text": "it’s also a question of hardware.",
+          "translation": "Это также вопрос железа."
+        },
+        {
+          "text": "that’s out of the question.",
+          "translation": "Об этом не может быть и речи. / Это исключено."
+        },
+        {
+          "text": "one option would obviously be to (cut our prices).",
+          "translation": "Одним из очевидных вариантов было бы .",
+          "correct": 1
+        },
+        {
+          "text": "that’s no longer an option.",
+          "translation": "Этот вариант больше не рассматривается."
+        },
+        {
+          "text": "we have no option, but to…",
+          "translation": "У нас нет другого выбора, кроме как…",
+          "correct": 1
+        },
+        {
+          "text": "there’s no easy answer to this, but how about (voluntary redundancy?)",
+          "translation": "Простого решения здесь нет, но как насчет",
+          "correct": 1
+        },
+        {
+          "text": "i don’t think that’s the answer, but maybe we could…",
+          "translation": "Не думаю, что это выход/решение, но, возможно, мы могли бы…",
+          "correct": 1
+        },
+        {
+          "text": "let’s not make a problem out of this.",
+          "translation": "Давай не будем делать из этого проблему.",
+          "correct": 1
+        },
+        {
+          "text": "i’ve no problem with that.",
+          "translation": "Я не против этого. / У меня с этим нет проблем."
+        },
+        {
+          "text": "that’s not our problem, is it?",
+          "translation": "Это не наша проблема, не так ли?",
+          "correct": 1
+        },
+        {
+          "text": "i’ll get straight to the point: …",
+          "translation": "Перейду сразу к делу/сути: …",
+          "correct": 1
+        },
+        {
+          "text": "i agree with you. but the point is…",
+          "translation": "Я согласен с тобой. Но суть в том, что…",
+          "correct": 2
+        },
+        {
+          "text": "that’s beside the point.",
+          "translation": "Это не относится к делу.",
+          "correct": 1
+        },
+        {
+          "text": "we’ll deal with that situation if and when it arises.",
+          "translation": "Мы разберемся с этой ситуацией, если и когда она возникнет.",
+          "correct": 2
+        },
+        {
+          "text": "what this situation calls for is calm and careful planning.",
+          "translation": "Что в этой ситуации необходимо, так это спокойное и тщательное планирование.",
+          "correct": 1
+        },
+        {
+          "text": "the fact is, …",
+          "translation": "Дело в том, что…"
+        },
+        {
+          "text": "as a matter of fact, …",
+          "translation": "Вообще-то… / На самом деле…"
+        },
+        {
+          "text": "the fact remains (we’re losing our technological lead).",
+          "translation": "Факт остается фактом .",
+          "correct": 1
+        },
+        {
+          "text": "that’s a matter of opinion. (=i disagree.)",
+          "translation": "Это спорный вопрос. / Это лишь вопрос личного мнения.",
+          "correct": 1
+        },
+        {
+          "text": "i think that raises a different question. (=that’s irrelevant!)",
+          "translation": "Я думаю, это поднимает другой вопрос.",
+          "correct": 1
+        },
+        {
+          "text": "yes, but look at it from my point of view. (=what about me?)",
+          "translation": "Да, но посмотри на это с моей точки зрения."
+        },
+        {
+          "text": "actually, that might not be a bad point. (=good point!)",
+          "translation": "Вообще-то, это может быть неплохим замечанием/аргументом.",
+          "correct": 1
+        },
+        {
+          "text": "that’s not an option.",
+          "translation": "Это не вариант."
+        },
+        {
+          "text": "what gave you that idea? (=you’re wrong!)",
+          "translation": "С чего ты это взял?",
+          "correct": 1
+        },
+        {
+          "text": "to work out some kinks –",
+          "translation": "устранить шероховатости / мелкие проблемы"
+        },
+        {
+          "text": "to make headway –",
+          "translation": "продвинуться вперед / добиться прогресса / делать успехи"
+        },
+        {
+          "text": "to be back at it",
+          "translation": "снова за работу",
+          "correct": 1
+        },
+        {
+          "text": "to be back in the swing of things",
+          "translation": "вернуться в привычное русло"
+        },
+        {
+          "text": "to brush up on a skill",
+          "translation": "освежить знания, подтянуть навык",
+          "correct": 1
+        },
+        {
+          "text": "the same old, same old",
+          "translation": "Всё по-старому / Всё то же самое"
+        },
+        {
+          "text": "to roll up your sleeves",
+          "translation": "засучить рукава",
+          "correct": 1
+        },
+        {
+          "text": "to get down to business",
+          "translation": "приступить к делу",
+          "incorrect": 1
+        },
+        {
+          "text": "to go the extra mile",
+          "translation": "делать всё возможное и невозможное",
+          "correct": 2
+        },
+        {
+          "text": "to pull up socks",
+          "translation": "взяться за ум",
+          "correct": 2
+        },
+        {
+          "text": "to pull your weight",
+          "translation": "делать свою часть работы"
+        },
+        {
+          "text": "the daily grind",
+          "translation": "ежедневная рутина"
+        },
+        {
+          "text": "to keep your nose to grindstone",
+          "translation": "усердно работать"
+        }
+      ]
+    },
+    {
+      "code": "seed-ai-interview-1803",
+      "order": 2,
+      "title": "ai interview words 18.03",
+      "words": [
+        {
+          "text": "definitive",
+          "translation": "имеющий решающее значение",
+          "correct": 3,
+          "incorrect": 0
+        },
+        {
+          "text": "sluggish",
+          "translation": "вялый / медлительный / застойный",
+          "correct": 3,
+          "incorrect": 0
+        },
+        {
+          "text": "to fade away",
+          "translation": "угасать",
+          "correct": 3,
+          "incorrect": 0
+        },
+        {
+          "text": "all over the place",
+          "translation": "повсюду, разбросано",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "to detract",
+          "translation": "умалять, уменьшать",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "affinity (for/with/between)",
+          "translation": "близость / родство / влечение",
+          "correct": 1,
+          "incorrect": 1
+        },
+        {
+          "text": "an uptick (in)",
+          "translation": "небольшой рост / подъем",
+          "correct": 2,
+          "incorrect": 0
+        },
+        {
+          "text": "first and foremost",
+          "translation": "прежде всего",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "change north of 25%",
+          "translation": "изменение более чем на 25%",
+          "correct": 3,
+          "incorrect": 0
+        },
+        {
+          "text": "AI literacy",
+          "translation": "грамотность в сфере ИИ",
+          "correct": 2,
+          "incorrect": 0
+        },
+        {
+          "text": "to familiarize yourself with (these tools)",
+          "translation": "ознакомиться с (этими инструментами)",
+          "correct": 2,
+          "incorrect": 0
+        },
+        {
+          "text": "compassion",
+          "translation": "сострадание, сочувствие",
+          "correct": 4,
+          "incorrect": 0
+        },
+        {
+          "text": "mired in",
+          "translation": "погрязший в (проблемах/рутине)",
+          "correct": 2,
+          "incorrect": 0
+        },
+        {
+          "text": "work settings",
+          "translation": "рабочая обстановка",
+          "correct": 3,
+          "incorrect": 0
+        },
+        {
+          "text": "to galvanize (people to have sth done)",
+          "translation": "побуждать (людей сделать что-то)",
+          "correct": 2,
+          "incorrect": 0
+        },
+        {
+          "text": "a misnomer",
+          "translation": "неправильное название, неподходящий термин",
+          "correct": 2,
+          "incorrect": 0
+        },
+        {
+          "text": "to jump on a call",
+          "translation": "созвониться (обычно быстро)",
+          "correct": 3,
+          "incorrect": 0
+        },
+        {
+          "text": "LinkedIn feed",
+          "translation": "лента в LinkedIn",
+          "correct": 3,
+          "incorrect": 0
+        },
+        {
+          "text": "to showcase (your identity)",
+          "translation": "демонстрировать / раскрывать (свою индивидуальность)",
+          "correct": 5,
+          "incorrect": 0
+        },
+        {
+          "text": "to stem from",
+          "translation": "происходить из",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "come at it (from a perspective)",
+          "translation": "подходить к вопросу (с какой-то позиции)",
+          "correct": 7,
+          "incorrect": 2
+        },
+        {
+          "text": "a gazillion likes",
+          "translation": "триллион лайков (огромное количество)",
+          "correct": 2,
+          "incorrect": 0
+        },
+        {
+          "text": "to learn from",
+          "translation": "учиться у (кого-то/чего-то)",
+          "correct": 3,
+          "incorrect": 0
+        },
+        {
+          "text": "buttoned up",
+          "translation": "сдержанный / официальный / безупречно подготовленный",
+          "correct": 3,
+          "incorrect": 1
+        },
+        {
+          "text": "to drop out of college",
+          "translation": "бросить колледж/университет",
+          "correct": 3,
+          "incorrect": 0
+        },
+        {
+          "text": "to have a mixed view on",
+          "translation": "иметь неоднозначное мнение о чем-то",
+          "correct": 2,
+          "incorrect": 0
+        },
+        {
+          "text": "underemployed",
+          "translation": "работающий на должности ниже своей квалификации",
+          "correct": 3,
+          "incorrect": 0
+        },
+        {
+          "text": "to outpace",
+          "translation": "опережать, обгонять",
+          "correct": 2,
+          "incorrect": 0
+        },
+        {
+          "text": "to bet on (college)",
+          "translation": "делать ставку на (колледж)",
+          "correct": 3,
+          "incorrect": 0
+        },
+        {
+          "text": "mandate",
+          "translation": "обязывать, приказывать",
+          "correct": 4,
+          "incorrect": 0
+        },
+        {
+          "text": "uncertainty",
+          "translation": "неопределенность",
+          "correct": 4,
+          "incorrect": 0
+        },
+        {
+          "text": "to leverage",
+          "translation": "эффективно использовать",
+          "correct": 6,
+          "incorrect": 1
+        },
+        {
+          "text": "at the end of the day",
+          "translation": "в конечном счете",
+          "correct": 4,
+          "incorrect": 2
+        },
+        {
+          "text": "hyperfocused on (AI skills)",
+          "translation": "максимально сосредоточен на (навыках ИИ)",
+          "correct": 3,
+          "incorrect": 0
+        },
+        {
+          "text": "to dismiss (the human skills)",
+          "translation": "не принимать во внимание (человеческие навыки)",
+          "correct": 2,
+          "incorrect": 0
+        },
+        {
+          "text": "to master skills",
+          "translation": "осваивать навыки в совершенстве",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "fortunate",
+          "translation": "удачливый",
+          "correct": 4,
+          "incorrect": 0
+        },
+        {
+          "text": "to bring sth to the forefront",
+          "translation": "вывести что-либо на передний план",
+          "correct": 5,
+          "incorrect": 0
+        },
+        {
+          "text": "ultimately",
+          "translation": "в конечном счете",
+          "correct": 6,
+          "incorrect": 1
+        },
+        {
+          "text": "tasks automatable by AI",
+          "translation": "задачи, которые можно автоматизировать с помощью ИИ",
+          "correct": 5,
+          "incorrect": 0
+        },
+        {
+          "text": "to future-proof (yourself)",
+          "translation": "обеспечить себе надежное будущее",
+          "correct": 3,
+          "incorrect": 0
+        },
+        {
+          "text": "to think through",
+          "translation": "продумать / обдумать до конца",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "I am nowhere close to going so far as to say college isn't worth it",
+          "translation": "Я даже близко не готов зайти так далеко, чтобы утверждать...",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "to double down on",
+          "translation": "удвоить усилия",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "to be caught off guard",
+          "translation": "быть застигнутым врасплох",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "off the charts",
+          "translation": "зашкаливать",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "to play catch-up",
+          "translation": "пытаться наверстать упущенное",
+          "example": "пытаться наверстать упущенное (=to try to reach the  same level as a competitor) Regulators are still playing catch-up with the rapid pace of AI development.",
+          "correct": 2,
+          "incorrect": 0
+        },
+        {
+          "text": "to bridge the gap",
+          "translation": "преодолеть разрыв",
+          "example": "преодолеть разрыв (=to connect two different things  or to reduce the difference) This new feature helps to bridge the gap between expert users and beginners.",
+          "correct": 2,
+          "incorrect": 0
+        }
+      ]
+    },
+    {
+      "code": "shared-workplace-collab",
+      "order": 3,
+      "title": "Сотрудничество в компании",
+      "words": [
+        {
+          "text": "collaborative environment",
+          "translation": "коллаборативная среда",
+          "example": "Our office is a collaborative environment where designers and coders sit together.",
+          "correct": 2
+        },
+        {
+          "text": "open-door policy",
+          "translation": "политика открытых дверей",
+          "example": "Thanks to our open-door policy, I can talk to the CEO whenever I have a concern.",
+          "correct": 3
+        },
+        {
+          "text": "employee well-being",
+          "translation": "благополучие сотрудников",
+          "example": "The company invested in gym memberships to improve employee well-being.",
+          "correct": 4
+        },
+        {
+          "text": "to take initiative",
+          "translation": "проявлять инициативу",
+          "example": "Don't wait for instructions; you need to take initiative on this project.",
+          "correct": 1
+        },
+        {
+          "text": "conflict resolution",
+          "translation": "разрешение конфликтов",
+          "example": "HR is training managers in conflict resolution to handle office disputes.",
+          "correct": 2
+        },
+        {
+          "text": "to foster teamwork",
+          "translation": "способствовать командной работе",
+          "example": "Team-building retreats help foster teamwork across departments.",
+          "correct": 4,
+          "incorrect": 1
+        },
+        {
+          "text": "team-building retreats",
+          "translation": "корпоративные выезды",
+          "example": "Our department is planning a series of team-building retreats.",
+          "correct": 2
+        },
+        {
+          "text": "transparent communication",
+          "translation": "прозрачная коммуникация",
+          "example": "We need transparent communication regarding the upcoming budget cuts.",
+          "correct": 4
+        },
+        {
+          "text": "upcoming",
+          "translation": "предстоящий",
+          "example": "We need to finalize the presentation for the upcoming conference next Tuesday.",
+          "correct": 4
+        },
+        {
+          "text": "ongoing",
+          "translation": "текущий",
+          "example": "The ongoing project requires weekly status updates.",
+          "correct": 2
+        },
+        {
+          "text": "to align with company goals",
+          "translation": "соответствовать целям компании",
+          "example": "Ensure your actions align with company goals.",
+          "correct": 2
+        },
+        {
+          "text": "career progression",
+          "translation": "карьерный рост",
+          "example": "Regular training is essential for steady career progression.",
+          "correct": 2
+        },
+        {
+          "text": "performance review",
+          "translation": "аттестация",
+          "example": "During my performance review, we discussed my strengths and weaknesses.",
+          "correct": 3
+        },
+        {
+          "text": "to upskill / to reskill",
+          "translation": "повысить квалификацию / переобучиться",
+          "example": "The IT team needs to upskill to handle the new cloud infrastructure.",
+          "correct": 4
+        },
+        {
+          "text": "continuous improvement",
+          "translation": "непрерывное улучшение",
+          "example": "We focus on continuous improvement of our processes.",
+          "correct": 2
+        },
+        {
+          "text": "to enhance",
+          "translation": "улучшать",
+          "example": "The training enhanced our chances of winning the contract.",
+          "correct": 3
+        },
+        {
+          "text": "results-driven culture",
+          "translation": "культура результативности",
+          "example": "In our results-driven culture, we care more about output than hours worked.",
+          "correct": 2
+        },
+        {
+          "text": "to empower employees",
+          "translation": "расширять полномочия",
+          "example": "We empower employees by letting them choose their own project tools.",
+          "correct": 3
+        },
+        {
+          "text": "to lead by example",
+          "translation": "вести примером",
+          "example": "Managers should lead by example by arriving on time.",
+          "correct": 3
+        },
+        {
+          "text": "to delegate effectively",
+          "translation": "делегировать эффективно",
+          "example": "To grow the business, you must learn to delegate effectively.",
+          "correct": 4
+        },
+        {
+          "text": "to micromanage",
+          "translation": "микроменеджить",
+          "example": "I can't do my job if you micromanage every email I send.",
+          "correct": 1
+        },
+        {
+          "text": "to provide direction",
+          "translation": "направлять",
+          "example": "The new mentor will provide direction for your career development.",
+          "correct": 2
+        },
+        {
+          "text": "zero-tolerance policy",
+          "translation": "политика нулевой терпимости",
+          "example": "The firm has a zero-tolerance policy toward harassment.",
+          "correct": 2
+        },
+        {
+          "text": "professional integrity",
+          "translation": "деловая этика",
+          "example": "She maintained her professional integrity by refusing to falsify the data.",
+          "correct": 2
+        },
+        {
+          "text": "to embrace innovation",
+          "translation": "принимать инновации",
+          "example": "We must embrace innovation in AI to stay competitive.",
+          "correct": 5
+        },
+        {
+          "text": "agile mindset",
+          "translation": "гибкое мышление",
+          "example": "An agile mindset allows us to adapt when market conditions change.",
+          "correct": 1
+        },
+        {
+          "text": "to navigate uncertainty",
+          "translation": "справляться с неопределённостью",
+          "example": "Strong leaders help teams navigate uncertainty during a merger.",
+          "correct": 2,
+          "incorrect": 1
+        },
+        {
+          "text": "to drive change",
+          "translation": "стимулировать перемены",
+          "example": "The new COO was hired to drive change within the company.",
+          "correct": 4,
+          "incorrect": 1
+        },
+        {
+          "text": "to buy into",
+          "translation": "поверить в идею",
+          "example": "The staff won't work hard unless they buy into the new vision.",
+          "correct": 6
+        },
+        {
+          "text": "to get buy-in",
+          "translation": "получить поддержку",
+          "example": "We need buy-in from IT before we launch the new software.",
+          "correct": 3,
+          "incorrect": 1
+        },
+        {
+          "text": "silo mentality",
+          "translation": "бункерное мышление",
+          "example": "Silo mentality stops departments from sharing information.",
+          "correct": 1
+        },
+        {
+          "text": "to spearhead",
+          "translation": "возглавлять",
+          "example": "She was chosen to spearhead the launch of our European branch.",
+          "correct": 2
+        },
+        {
+          "text": "rapport",
+          "translation": "взаимопонимание",
+          "example": "It's important to build rapport with clients early on.",
+          "correct": 7,
+          "incorrect": 1
+        },
+        {
+          "text": "red tape",
+          "translation": "волокита",
+          "example": "We lost the contract because there was too much red tape in approvals.",
+          "correct": 3
+        },
+        {
+          "text": "to streamline",
+          "translation": "оптимизировать",
+          "example": "We need to streamline the hiring process to fill roles faster.",
+          "correct": 3
+        },
+        {
+          "text": "presenteeism",
+          "translation": "презентеизм",
+          "example": "Presenteeism: people stay late to look busy, not to work.",
+          "correct": 2
+        },
+        {
+          "text": "to incentivize",
+          "translation": "стимулировать",
+          "example": "We incentivize the sales team with monthly bonuses.",
+          "correct": 4,
+          "incorrect": 2
+        },
+        {
+          "text": "bottom-up approach",
+          "translation": "подход снизу вверх",
+          "example": "Our strategy used a bottom-up approach, incorporating ideas from interns.",
+          "correct": 1
+        },
+        {
+          "text": "onboarding",
+          "translation": "онбординг",
+          "example": "Our onboarding program helps new hires in their first week.",
+          "correct": 2
+        },
+        {
+          "text": "bandwidth",
+          "translation": "запас времени / сил",
+          "example": "I don't have the bandwidth to take on another project right now.",
+          "correct": 2
+        },
+        {
+          "text": "deliverables",
+          "translation": "результаты работ",
+          "example": "The client expects all deliverables by Friday afternoon.",
+          "correct": 1
+        },
+        {
+          "text": "tangible",
+          "translation": "материальный",
+          "example": "Tangible benefits include salary; intangible ones include culture.",
+          "correct": 4
+        },
+        {
+          "text": "intangible",
+          "translation": "нематериальный",
+          "example": "Intangible benefits, like a supportive culture, are valuable.",
+          "correct": 3
+        },
+        {
+          "text": "to pivot",
+          "translation": "сменить курс / стратегию",
+          "example": "The startup had to pivot when the app wasn't selling.",
+          "correct": 1
+        },
+        {
+          "text": "bottleneck",
+          "translation": "узкое место",
+          "example": "The legal department is a bottleneck in contract signing.",
+          "correct": 3,
+          "incorrect": 1
+        },
+        {
+          "text": "friction",
+          "translation": "разногласия",
+          "example": "There is friction between the engineering and design teams.",
+          "correct": 2
+        },
+        {
+          "text": "to deep work",
+          "translation": "глубокая работа",
+          "example": "I block out two hours each morning to deep work on my coding.",
+          "correct": 3
+        },
+        {
+          "text": "to block out",
+          "translation": "забронировать время",
+          "example": "I block out two hours every morning for focused work.",
+          "correct": 3
+        },
+        {
+          "text": "lead time",
+          "translation": "срок выполнения",
+          "example": "The lead time for manufacturing these parts is six weeks.",
+          "correct": 4
+        },
+        {
+          "text": "low-hanging fruit",
+          "translation": "лёгкая победа",
+          "example": "Let's identify the low-hanging fruit for this quarter.",
+          "correct": 2
+        },
+        {
+          "text": "to yield quick results",
+          "translation": "быстро дать результат",
+          "example": "The new strategy began to yield quick results within the first week.",
+          "correct": 4
+        },
+        {
+          "text": "to move the needle",
+          "translation": "сдвинуть ситуацию",
+          "example": "We need a big campaign to move the needle, not small tweaks.",
+          "correct": 4
+        },
+        {
+          "text": "retention",
+          "translation": "удержание",
+          "example": "The company is focusing on employee retention to keep their best talent.",
+          "correct": 3
+        },
+        {
+          "text": "to retain",
+          "translation": "удерживать",
+          "example": "Strong culture helps retain top performers.",
+          "correct": 1
+        },
+        {
+          "text": "to skyrocket",
+          "translation": "стремительно расти",
+          "example": "Demand for electric cars is expected to skyrocket this decade.",
+          "correct": 1
+        },
+        {
+          "text": "threat",
+          "translation": "угроза",
+          "example": "Cyberattacks pose a major threat to national security.",
+          "correct": 2
+        },
+        {
+          "text": "to threaten",
+          "translation": "угрожать",
+          "example": "Cyberattacks threaten our private data.",
+          "correct": 2
+        },
+        {
+          "text": "to provide a perspective on",
+          "translation": "дать взгляд на",
+          "example": "The documentary provides a new perspective on climate change.",
+          "correct": 6
+        },
+        {
+          "text": "species",
+          "translation": "вид",
+          "example": "The biologist discovered a new species of colorful butterfly.",
+          "correct": 4
+        },
+        {
+          "text": "to outthink",
+          "translation": "перехитрить",
+          "example": "In chess, you must outthink your opponent three moves ahead.",
+          "correct": 5
+        },
+        {
+          "text": "obsolete",
+          "translation": "устаревший",
+          "example": "New technology often makes older software obsolete.",
+          "correct": 4
+        },
+        {
+          "text": "somber",
+          "translation": "мрачный",
+          "example": "The mood at the meeting was somber after the budget cuts.",
+          "correct": 2
+        },
+        {
+          "text": "realm",
+          "translation": "сфера",
+          "example": "The discovery was a breakthrough in the realm of quantum physics.",
+          "correct": 1
+        },
+        {
+          "text": "vulnerable",
+          "translation": "уязвимый",
+          "example": "Without a firewall, your computer is vulnerable to viruses.",
+          "correct": 5
+        },
+        {
+          "text": "to mimic",
+          "translation": "подражать",
+          "example": "AI can now mimic human speech patterns with high accuracy.",
+          "correct": 3
+        },
+        {
+          "text": "to ban",
+          "translation": "запрещать",
+          "example": "The city decided to ban single-use plastics to reduce pollution.",
+          "correct": 2
+        },
+        {
+          "text": "fast-paced",
+          "translation": "в быстром темпе",
+          "example": "Working in a fast-paced environment requires strong time management.",
+          "correct": 1
+        },
+        {
+          "text": "for the sake of",
+          "translation": "ради",
+          "example": "They moved to the countryside for the sake of their children's health.",
+          "correct": 6
+        },
+        {
+          "text": "What stuck with me was",
+          "translation": "Что мне запомнилось, так это",
+          "example": "We talked for an hour, but what stuck with me was his comment about the future of work.",
+          "correct": 1
+        },
+        {
+          "text": "The reason I want to flag this is because",
+          "translation": "Я хочу отметить это, потому что",
+          "example": "The reason I want to flag this is because if we miss this deadline, the whole project stalls.",
+          "correct": 2
+        },
+        {
+          "text": "shortly thereafter",
+          "translation": "вскоре после этого",
+          "example": "The company announced the merger, and shortly thereafter, the CEO resigned.",
+          "correct": 2
+        },
+        {
+          "text": "cognitive debt",
+          "translation": "когнитивный долг",
+          "example": "By skipping documentation now, you create cognitive debt for the team next year.",
+          "correct": 2
+        },
+        {
+          "text": "Here's what unsettled me the most",
+          "translation": "Вот что меня больше всего встревожило",
+          "example": "I read the report, and here's what unsettled me the most: the speed of the melting ice.",
+          "correct": 7,
+          "incorrect": 1
+        },
+        {
+          "text": "to stress out about",
+          "translation": "нервничать из-за",
+          "example": "There is no need to stress out about the presentation; you know the material.",
+          "correct": 3
+        },
+        {
+          "text": "to come to the fore",
+          "translation": "выйти на первый план",
+          "example": "In times of crisis, the need for strong leadership comes to the fore.",
+          "correct": 3
+        },
+        {
+          "text": "cocky",
+          "translation": "самоуверенный",
+          "example": "He's talented, but too cocky to take advice from mentors.",
+          "correct": 5,
+          "incorrect": 1
+        },
+        {
+          "text": "salient",
+          "translation": "ключевой",
+          "example": "The most salient point of her argument was that the current law is outdated.",
+          "correct": 3
+        },
+        {
+          "text": "to put safety standards on",
+          "translation": "ввести стандарты безопасности для",
+          "example": "Governments are racing to put safety standards on AI before it becomes too powerful to regulate.",
+          "correct": 3
+        },
+        {
+          "text": "out of the blue",
+          "translation": "ни с того ни с сего",
+          "example": "Out of the blue, the client changed all requirements.",
+          "correct": 4
+        },
+        {
+          "text": "to do a trial",
+          "translation": "провести тест",
+          "example": "Before committing to the full package, we'll do a 30-day trial.",
+          "correct": 1
+        },
+        {
+          "text": "suicidal ideation",
+          "translation": "суицидальные мысли",
+          "example": "The study examined the link between social media use and suicidal ideation in teenagers.",
+          "correct": 1
+        },
+        {
+          "text": "in the last few months",
+          "translation": "за последние несколько месяцев",
+          "example": "In the last few months, we've seen a broad political coalition in the US.",
+          "correct": 2
+        },
+        {
+          "text": "to take a firm hold of the steering wheel",
+          "translation": "крепко взять руль в свои руки",
+          "example": "It's time for the manager to take a firm hold of the steering wheel and guide the team.",
+          "correct": 2
+        },
+        {
+          "text": "a no-brainer",
+          "translation": "очевидный выбор",
+          "example": "Getting insurance at that price was a no-brainer.",
+          "correct": 2
+        },
+        {
+          "text": "in place",
+          "translation": "внедрено",
+          "example": "All necessary security measures are already in place.",
+          "correct": 5
+        },
+        {
+          "text": "a crutch",
+          "translation": "костыль",
+          "example": "He uses his notes as a crutch instead of learning the speech.",
+          "correct": 2
+        },
+        {
+          "text": "to be leaning towards",
+          "translation": "склоняться к",
+          "example": "I haven't signed yet, but I'm leaning towards accepting the offer.",
+          "correct": 6,
+          "incorrect": 2
+        },
+        {
+          "text": "to come up with strategy",
+          "translation": "разработать стратегию",
+          "example": "We need to sit down and come up with strategy for the upcoming budget cuts.",
+          "correct": 1
+        },
+        {
+          "text": "delusional",
+          "translation": "оторванный от реальности",
+          "example": "He thinks he can win the marathon without training, which is delusional.",
+          "correct": 5,
+          "incorrect": 2
+        },
+        {
+          "text": "to withdraw from",
+          "translation": "уйти из",
+          "example": "I decided to withdraw from social media for a month to focus on my mental health.",
+          "correct": 5,
+          "incorrect": 1
+        },
+        {
+          "text": "to double down on",
+          "translation": "удвоить усилия",
+          "example": "Instead of apologizing, the company decided to double down on their controversial policy.",
+          "correct": 1
+        },
+        {
+          "text": "to be caught off guard",
+          "translation": "быть застигнутым врасплох",
+          "example": "The sudden change in the law caught most tech companies off guard.",
+          "correct": 1
+        },
+        {
+          "text": "a slippery slope",
+          "translation": "скользкая дорожка",
+          "example": "I know it's just one skipped gym day, but for me it's a slippery slope.",
+          "correct": 1
+        },
+        {
+          "text": "off the charts",
+          "translation": "зашкаливать",
+          "example": "The level of anxiety regarding AI safety is currently off the charts.",
+          "correct": 3
+        },
+        {
+          "text": "to play catch-up",
+          "translation": "наверстывать упущенное",
+          "example": "Regulators are still playing catch-up with the rapid pace of AI development.",
+          "correct": 6,
+          "incorrect": 1
+        },
+        {
+          "text": "to bridge the gap",
+          "translation": "сократить разрыв",
+          "example": "This feature helps bridge the gap between expert users and beginners.",
+          "correct": 3
+        }
+      ]
+    },
+    {
+      "code": "shared-text-010426",
+      "order": 4,
+      "title": "words from text 01.04.26",
+      "words": [
+        {
+          "text": "high-rise buildings",
+          "translation": "высотные здания",
+          "example": "Big cities look alike: high-rise buildings, asphalt, and crowds.",
+          "correct": 7
+        },
+        {
+          "text": "asphalt",
+          "translation": "асфальт",
+          "example": "High-rise buildings, asphalt, and crowds of passersby.",
+          "correct": 4
+        },
+        {
+          "text": "passersby",
+          "translation": "прохожие",
+          "example": "Crowds of indifferent passersby hurrying on their way.",
+          "correct": 3
+        },
+        {
+          "text": "City dwellers",
+          "translation": "горожане",
+          "example": "City dwellers seem preoccupied and detached.",
+          "correct": 6
+        },
+        {
+          "text": "preoccupied",
+          "translation": "занятый своим",
+          "example": "They seem preoccupied and do not look around.",
+          "correct": 6,
+          "incorrect": 1
+        },
+        {
+          "text": "detached",
+          "translation": "отстранённый",
+          "example": "City dwellers seem preoccupied and detached.",
+          "correct": 3,
+          "incorrect": 1
+        },
+        {
+          "text": "with outstretched hands",
+          "translation": "с протянутыми руками",
+          "example": "Beggars pressed against the walls with outstretched hands.",
+          "correct": 4
+        },
+        {
+          "text": "set out to",
+          "translation": "взяться за",
+          "example": "The designer set out to cure this urban indifference.",
+          "correct": 6
+        },
+        {
+          "text": "onlookers",
+          "translation": "зрители",
+          "example": "Crowds of curious onlookers with cameras gathered around.",
+          "correct": 3
+        },
+        {
+          "text": "outdated",
+          "translation": "устаревший",
+          "example": "Outdated phone booths were given a second life.",
+          "correct": 5
+        },
+        {
+          "text": "dozens of times more cats",
+          "translation": "в десятки раз больше кошек",
+          "example": "There are dozens of times more cats here than people.",
+          "correct": 4,
+          "incorrect": 1
+        },
+        {
+          "text": "took over",
+          "translation": "захватили",
+          "example": "The cats multiplied and eventually took over the island.",
+          "correct": 6
+        },
+        {
+          "text": "residents",
+          "translation": "жители",
+          "example": "Only about 20 permanent residents remain.",
+          "correct": 3
+        },
+        {
+          "text": "furry inhabitants",
+          "translation": "мохнатые обитатели",
+          "example": "Tourists help support the island's furry inhabitants.",
+          "correct": 7
+        },
+        {
+          "text": "a newly built residential complex",
+          "translation": "новый жилой комплекс",
+          "example": "The house stood in the middle of a newly built residential complex.",
+          "correct": 4
+        },
+        {
+          "text": "fortress",
+          "translation": "крепость",
+          "example": "The house stood like a true fortress.",
+          "correct": 4
+        },
+        {
+          "text": "developers",
+          "translation": "застройщики",
+          "example": "The owner refused to sell it to developers.",
+          "correct": 4
+        },
+        {
+          "text": "double the price",
+          "translation": "удвоенная цена",
+          "example": "They offered double the price, but she refused.",
+          "correct": 3
+        },
+        {
+          "text": "resolve",
+          "translation": "решимость",
+          "example": "Neither threats nor pressure could break her resolve.",
+          "correct": 3
+        },
+        {
+          "text": "spiraled out of control",
+          "translation": "вышло из-под контроля",
+          "example": "The situation spiraled out of control: windows were smashed.",
+          "correct": 5
+        },
+        {
+          "text": "arson",
+          "translation": "поджог",
+          "example": "Unknown individuals even attempted arson.",
+          "correct": 9,
+          "incorrect": 1
+        },
+        {
+          "text": "give in",
+          "translation": "уступить",
+          "example": "But the woman did not give in.",
+          "correct": 4
+        },
+        {
+          "text": "far beyond the neighborhood",
+          "translation": "далеко за пределы района",
+          "example": "The story became known far beyond the neighborhood.",
+          "correct": 5
+        },
+        {
+          "text": "to stand their ground",
+          "translation": "стоять на своём",
+          "example": "It is hard to defeat someone determined to stand their ground.",
+          "correct": 3
+        },
+        {
+          "text": "demolished",
+          "translation": "снесли",
+          "example": "On September 20, 2023, the house was finally demolished.",
+          "correct": 5
+        },
+        {
+          "text": "a plot of land",
+          "translation": "земельный участок",
+          "example": "A new house was built on a plot of land she chose.",
+          "correct": 3
+        }
+      ]
+    },
+    {
+      "code": "seed-shifting-the-balance-1204",
+      "order": 5,
+      "title": "Shifting the Balance 12.04",
+      "words": [
+        {
+          "text": "it is estimated that",
+          "translation": "подсчитано, что",
+          "correct": 10,
+          "incorrect": 1
+        },
+        {
+          "text": "shift workers",
+          "translation": "сменный работник",
+          "correct": 3,
+          "incorrect": 0
+        },
+        {
+          "text": "to do shift work = to work shifts",
+          "translation": "работать посменно",
+          "correct": 5,
+          "incorrect": 0
+        },
+        {
+          "text": "make up 17 %",
+          "translation": "составлять 17%",
+          "correct": 11,
+          "incorrect": 1
+        },
+        {
+          "text": "workforce",
+          "translation": "рабочая сила",
+          "correct": 6,
+          "incorrect": 0
+        },
+        {
+          "text": "to accommodate (the new culture)",
+          "translation": "обеспечить, обслужить",
+          "correct": 12,
+          "incorrect": 1
+        },
+        {
+          "text": "to be forced into early retirement",
+          "translation": "быть вынужденным рано уйти на пенсию",
+          "correct": 5,
+          "incorrect": 0
+        },
+        {
+          "text": "to be linked to a range of health problems",
+          "translation": "быть связанным с разными проблемами со здоровьем",
+          "correct": 6,
+          "incorrect": 0
+        },
+        {
+          "text": "sunlight deprivation to deprive of",
+          "translation": "недостаток солнечного света",
+          "example": "лишать чего-то You cannot deprive me of my rights.",
+          "correct": 6,
+          "incorrect": 0
+        },
+        {
+          "text": "ill-health",
+          "translation": "нездоровье",
+          "correct": 7,
+          "incorrect": 0
+        },
+        {
+          "text": "to snack = to have a snack",
+          "translation": "перекусить",
+          "correct": 8,
+          "incorrect": 0
+        },
+        {
+          "text": "to eat square meals",
+          "translation": "хорошо питаться",
+          "example": "square meal – a substantial, satisfying, and balanced meal",
+          "correct": 9,
+          "incorrect": 0
+        },
+        {
+          "text": "to be high in fat and caffeine",
+          "translation": "содержать большое количество жиров и  кофеина",
+          "example": "['kæfiːn]",
+          "correct": 6,
+          "incorrect": 0
+        },
+        {
+          "text": "to get daily allowance of vitamins",
+          "translation": "получать ежедневную норму витаминов",
+          "correct": 7,
+          "incorrect": 0
+        },
+        {
+          "text": "extended hours workers",
+          "translation": "сотрудники, работающие сверх нормы",
+          "correct": 8,
+          "incorrect": 0
+        },
+        {
+          "text": "due to health problems",
+          "translation": "из-за проблем со здоровьем",
+          "correct": 6,
+          "incorrect": 0
+        },
+        {
+          "text": "to work irregular or extended hours",
+          "translation": "работать в разные или увеличенные часы",
+          "correct": 4,
+          "incorrect": 0
+        },
+        {
+          "text": "to do domestic chores",
+          "translation": "заниматься домашними обязанностями",
+          "example": "[ʧɔː]",
+          "correct": 4,
+          "incorrect": 0
+        },
+        {
+          "text": "a long night’s work",
+          "translation": "длительная работа ночью",
+          "correct": 9,
+          "incorrect": 0
+        },
+        {
+          "text": "to schedule shifts to allow sufficient breaks",
+          "translation": "планировать смены с достаточными перерывами",
+          "correct": 5,
+          "incorrect": 0
+        },
+        {
+          "text": "to simulate daylight",
+          "translation": "симулировать дневной свет",
+          "correct": 6,
+          "incorrect": 0
+        },
+        {
+          "text": "to feel fresh throughout the shift",
+          "translation": "чувствовать себя свежим на протяжении смены",
+          "correct": 8,
+          "incorrect": 0
+        },
+        {
+          "text": "alert [ə'lɜːt]",
+          "translation": "бдительный",
+          "example": "able to think in a clear and intelligent way",
+          "correct": 8,
+          "incorrect": 0
+        },
+        {
+          "text": "a vending machine",
+          "translation": "торговый автомат",
+          "correct": 5,
+          "incorrect": 0
+        },
+        {
+          "text": "to benefit from regular exercise (training)",
+          "translation": "получать выгоду от регулярных упражнений (тренировок)",
+          "correct": 8,
+          "incorrect": 0
+        },
+        {
+          "text": "to revive tired limbs [lɪm] and mind",
+          "translation": "оживить уставшие конечности и разум",
+          "correct": 4,
+          "incorrect": 0
+        },
+        {
+          "text": "to cope with",
+          "translation": "справиться с",
+          "correct": 7,
+          "incorrect": 0
+        },
+        {
+          "text": "inevitable changes",
+          "translation": "неизбежные перемены",
+          "correct": 6,
+          "incorrect": 0
+        },
+        {
+          "text": "a return on the investment",
+          "translation": "прибыль от инвестиций",
+          "correct": 8,
+          "incorrect": 0
+        }
+      ]
+    },
+    {
+      "code": "seed-idioms-8",
+      "order": 6,
+      "title": "Idioms 8",
+      "words": [
+        {
+          "text": "to work out some kinks",
+          "translation": "устранить шероховатости",
+          "correct": 2,
+          "incorrect": 0
+        },
+        {
+          "text": "to make headway",
+          "translation": "продвинуться вперед",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "out of the box",
+          "translation": "работать из коробки",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "hit a plateau",
+          "translation": "достичь плато (график)",
+          "correct": 3,
+          "incorrect": 0
+        },
+        {
+          "text": "to be back at it",
+          "translation": "снова за работу",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "to be back in the swing of things",
+          "translation": "вернуться в привычное русло",
+          "correct": 2,
+          "incorrect": 0
+        },
+        {
+          "text": "to brush up on a skill",
+          "translation": "освежить знания, подтянуть навык",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "The same old, same old",
+          "translation": "Всё по-старому",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "to roll up your sleeves",
+          "translation": "засучить рукава",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "to get down to business",
+          "translation": "приступить к делу",
+          "correct": 2,
+          "incorrect": 0
+        },
+        {
+          "text": "to go the extra mile",
+          "translation": "делать всё возможное и невозможное",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "to pull up your socks",
+          "translation": "взяться за ум; начать работать усерднее",
+          "correct": 2,
+          "incorrect": 0
+        },
+        {
+          "text": "to pull your weight",
+          "translation": "делать свою часть работы",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "to stay ahead of the game",
+          "translation": "быть на шаг впереди",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "the daily grind",
+          "translation": "ежедневная рутина",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "to keep your nose to the grindstone",
+          "translation": "усердно работать",
+          "correct": 2,
+          "incorrect": 0
+        },
+        {
+          "text": "to get into a groove",
+          "translation": "поймать рабочий ритм",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "(to do sth) like clockwork",
+          "translation": "делать что-то как по часам",
+          "example": "(=to do something with  perfect regularity; always on time): She sends her weekly update like clockwork.",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "to do it in your sleep",
+          "translation": "делать с закрытыми глазами",
+          "correct": 2,
+          "incorrect": 0
+        },
+        {
+          "text": "second nature",
+          "translation": "вторая натура, привычка – вторая натура",
+          "example": "For him, switching  between languages is second nature. After years of practice, driving became second  nature to her. https://www.youtube.com/watch?v=J4yhfUq88N0",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "a \"rinse and repeat\" task",
+          "translation": "однотипная работа",
+          "correct": 2,
+          "incorrect": 0
+        },
+        {
+          "text": "(to do sth) day in, day out",
+          "translation": "делать изо дня в день",
+          "correct": 2,
+          "incorrect": 0
+        },
+        {
+          "text": "effective",
+          "translation": "результативный",
+          "example": "This medicine is effective against headaches",
+          "correct": 3,
+          "incorrect": 0
+        },
+        {
+          "text": "efficient",
+          "translation": "эффективный, экономичный, продуктивный",
+          "example": "(works in a way that saves  time, energy, or money; efficient = did it waste little?",
+          "correct": 3,
+          "incorrect": 0
+        },
+        {
+          "text": "to rack your brain(s)",
+          "translation": "ломать (напрягать) голову",
+          "correct": 1,
+          "incorrect": 0
+        },
+        {
+          "text": "to pick someone’s brain(s) on/about sth",
+          "translation": "узнать чье-то мнение",
+          "correct": 1,
+          "incorrect": 0
+        }
+      ]
+    },
+    {
+      "code": "seed-additional-words",
+      "order": 7,
+      "title": "additional words",
+      "words": [
+        {
+          "text": "to run into a person",
+          "translation": "наткнуться на человека",
+          "correct": 0,
+          "incorrect": 0
+        },
+        {
+          "text": "expert in/on",
+          "translation": "эксперт в области",
+          "example": "an expert in AI technologies",
+          "correct": 0,
+          "incorrect": 0
+        },
+        {
+          "text": "every once in a while",
+          "translation": "время от времени",
+          "correct": 0,
+          "incorrect": 0
+        }
+      ]
+    }
+  ]
+}
