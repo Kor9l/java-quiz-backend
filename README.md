@@ -38,7 +38,8 @@ URIs — so the frontend needed no change. Two behaviours did change on purpose,
 | GET | `/api/auth/me` | user |
 | GET | `/api/topics` | user, with personal read-state; `?module=` picks backend or english |
 | GET | `/api/materials/{topicId}/{sectionId}` | user |
-| POST | `/api/quiz/start` | user |
+| GET | `/api/quiz/setup` | user, last round's setup; `?module=` picks backend or english |
+| POST | `/api/quiz/start` | user, `module` picks the ladder and the course catalogue |
 | GET | `/api/quiz/current` | user |
 | POST | `/api/quiz/{id}/reveal\|answer\|advance\|quit` | user |
 | GET/PUT | `/api/settings` | user |
@@ -84,6 +85,7 @@ because Spring questions contain `${...}` placeholders that Flyway would interpo
 | `V13__LoadJavaPractice` | Java practice exercises | `content/practice/java.json` |
 | `V14__LoadWords2026Part2` | one more English group: "2026 part 2 words", 42 words | `content/english/words-2026-part-2.json` |
 | `V15__grammar_module` | the `module` column on topics and `area` on sections | — |
+| `V16__LoadGrammarBase` | the base English grammar course: 14 sections, articles, 84 questions | `content/english/grammar/base/` |
 
 SQL and Java Concurrency live in their own directories rather than in the shared files because
 V2 has already run everywhere; adding a topic to `topics.json` would load it on a fresh database
@@ -107,11 +109,11 @@ as sitting below `SENIOR` and a senior track would pull grammar into its pool. A
 wrong ladder falls back to its module's default, because it would otherwise match nothing and
 turn the round into an empty one, which reads as missing content rather than as a bug.
 
-Levels are cumulative within their own ladder. A track draws on its own level and every level below it, so
-fundamentals stay in the senior pool instead of vanishing from it, and `QuestionPicker` then
-halves the weight of each level below the track — same level ×1, one below ×0.5, two below
-×0.25. A senior session therefore leans senior while still revisiting basics, and a junior
-session is never diluted because nothing sits below it.
+Levels are cumulative within their own ladder. A track draws on its own level and every level
+below it, so fundamentals stay in the senior pool instead of vanishing from it, and
+`QuestionPicker` then halves the weight of each level below the track — same level ×1, one below
+×0.5, two below ×0.25. A senior session therefore leans senior while still revisiting basics, and
+a junior session is never diluted because nothing sits below it.
 
 The track comes from `level` in `/api/settings`, and `POST /api/quiz/start` accepts a `level`
 of its own to override it for a single session. Sections report their level in `/api/topics`
@@ -267,9 +269,30 @@ exactly the shape the backend material has. `/api/modules` reports the choice as
 the English module, `words` and `grammar`, and `GET /api/topics?module=english` lists the grammar
 courses. What keeps the two apart is one column: `topics.module`. Without it the grammar courses
 would show up in the backend's topic list, in its "all topics" quiz pool and as empty rows in its
-stats breakdown. The plan for filling it in is
-[docs/ENGLISH_GRAMMAR_ROADMAP.md](docs/ENGLISH_GRAMMAR_ROADMAP.md); the schema is in place and
-the content is not written yet, so the grammar half currently answers with an empty list.
+stats breakdown.
+
+### Grammar
+
+Three courses are planned, one per level; the first is loaded. `grammar-base` is 14 sections of
+A1–A2 material with 84 quiz questions, in `content/english/grammar/base/` and loaded by
+`V16__LoadGrammarBase`. The remaining two are in
+[docs/ENGLISH_GRAMMAR_ROADMAP.md](docs/ENGLISH_GRAMMAR_ROADMAP.md) along with the practice track
+that follows them.
+
+A course runs one level end to end, so every section and question in `grammar-base` is `BASE`.
+That is what makes it readable as a course rather than a filtered view, and the cumulative track
+still works because a `PRO` round draws on all three courses at once rather than on three levels
+inside one of them. Each section also carries an `area` — `tenses`, `articles`, `modals` — which
+keeps the other cut, every conditional across all three levels, reachable later without moving
+content.
+
+The quiz needs no endpoint of its own: `POST /api/quiz/start` takes `module: "english"` with the
+course ids, and everything after it — reveal, answer, advance, stats, read state — is the machinery
+the backend topics already use. The two modules remember their setup separately, though, and they
+have to: `grammarLevel` and `selectedGrammarCourses` sit beside the backend's `level` and
+`selectedTopics` in the settings payload, because one shared slot would have a grammar round
+writing `BASE` over a learner's chosen `SENIOR`. `GET /api/quiz/setup?module=english` reads the
+grammar side of it.
 
 ### The words
 

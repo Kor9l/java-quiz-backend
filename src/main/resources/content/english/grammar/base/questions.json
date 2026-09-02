@@ -1,0 +1,4649 @@
+{
+  "schemaVersion": 3,
+  "topic": "grammar-base",
+  "questions": [
+    {
+      "id": "grammar-base.word-order-basics.001",
+      "section": "word-order-basics",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Do",
+            "ru": "Do"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Are",
+            "ru": "Are"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Does",
+            "ru": "Does"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Is",
+            "ru": "Is"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Did",
+            "ru": "Did"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`live` is an ordinary verb in the present, and the subject is `you`, so the auxiliary is `do`. `Are` would be needed only if there were no other verb; `does` belongs to he/she/it.",
+        "ru": "`live` — обычный глагол в настоящем времени, подлежащее `you`, поэтому вспомогательный — `do`. `Are` понадобилось бы, только если бы другого глагола не было; `does` относится к he/she/it."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/word-order-and-focus",
+        "https://learnenglish.britishcouncil.org/grammar/verbs/questions-and-negatives"
+      ],
+      "code": "___ you live in Riga?"
+    },
+    {
+      "id": "grammar-base.word-order-basics.002",
+      "section": "word-order-basics",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Which sentence is correct?",
+        "ru": "Какое предложение правильное?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "There is cold today.",
+            "ru": "There is cold today."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is cold today.",
+            "ru": "It is cold today."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Is cold today.",
+            "ru": "Is cold today."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Cold today.",
+            "ru": "Cold today."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It cold today.",
+            "ru": "It cold today."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "English never drops the subject or the verb `be`. Russian `Холодно` needs both filled in: `it` is a placeholder that means nothing, and `is` is the verb Russian leaves out in the present.",
+        "ru": "Английский не выбрасывает ни подлежащее, ни глагол `be`. Русскому «Холодно» нужно заполнить оба места: `it` — пустая заглушка, а `is` — тот глагол, который русский в настоящем времени опускает."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/word-order-and-focus",
+        "https://dictionary.cambridge.org/grammar/british-grammar/be"
+      ]
+    },
+    {
+      "id": "grammar-base.word-order-basics.003",
+      "section": "word-order-basics",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Who is live",
+            "ru": "Who is live"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Who living",
+            "ru": "Who living"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Who lives",
+            "ru": "Who lives"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Who does live",
+            "ru": "Who does live"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Who do live",
+            "ru": "Who do live"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "When the question word is itself the subject, there is nothing to invert, so the order stays as in a statement and no `do` appears. Compare `Where **does he** live?`, where `he` is the subject.",
+        "ru": "Когда вопросительное слово само является подлежащим, переставлять нечего: порядок остаётся как в утверждении и `do` не появляется. Сравните `Where **does he** live?`, где подлежащее — `he`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/questions-wh-questions",
+        "https://dictionary.cambridge.org/grammar/british-grammar/word-order-and-focus"
+      ],
+      "code": "___ here?"
+    },
+    {
+      "id": "grammar-base.word-order-basics.004",
+      "section": "word-order-basics",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Which sentence is wrong?",
+        "ru": "В каком предложении ошибка?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "I like this film a lot.",
+            "ru": "I like this film a lot."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "She often watches films.",
+            "ru": "She often watches films."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I like this film very much.",
+            "ru": "I like this film very much."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I like very much this film.",
+            "ru": "I like very much this film."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "I really like this film.",
+            "ru": "I really like this film."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Nothing may sit between a verb and its object. `very much` has to go after `this film`, or be replaced by an adverb that is allowed in front of the verb, like `really`.",
+        "ru": "Между глаголом и его дополнением не встаёт ничего. `very much` должно уйти после `this film` — либо заменяется наречием, которому перед глаголом стоять можно, например `really`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/word-order-and-focus",
+        "https://dictionary.cambridge.org/grammar/british-grammar/adverbs"
+      ]
+    },
+    {
+      "id": "grammar-base.word-order-basics.005",
+      "section": "word-order-basics",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "didn't never",
+            "ru": "didn't never"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "not never",
+            "ru": "not never"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "never not",
+            "ru": "never not"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "don't never",
+            "ru": "don't never"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "never",
+            "ru": "never"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "English negates once. Russian stacks negatives — `никогда никому ничего не` — but `never` already carries the negation here, so adding `didn't` would be a second one.",
+        "ru": "Английский отрицает один раз. Русский копит отрицания — «никогда никому ничего не», — но здесь отрицание уже несёт `never`, и `didn't` было бы вторым."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/word-order-and-focus",
+        "https://dictionary.cambridge.org/grammar/british-grammar/negation"
+      ],
+      "code": "I ___ told anyone anything."
+    },
+    {
+      "id": "grammar-base.word-order-basics.006",
+      "section": "word-order-basics",
+      "difficulty": "hard",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "badly in the park yesterday",
+            "ru": "badly in the park yesterday"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "yesterday in the park badly",
+            "ru": "yesterday in the park badly"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "in the park badly yesterday",
+            "ru": "in the park badly yesterday"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "yesterday badly in the park",
+            "ru": "yesterday badly in the park"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "in the park yesterday badly",
+            "ru": "in the park yesterday badly"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "After the object the default order is manner, then place, then time — `badly`, `in the park`, `yesterday`. Time can be moved to the front of the sentence for emphasis, but not into the middle.",
+        "ru": "После дополнения порядок по умолчанию — образ действия, место, время: `badly`, `in the park`, `yesterday`. Время можно вынести в начало предложения для акцента, но не в середину."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/word-order-and-focus",
+        "https://dictionary.cambridge.org/grammar/british-grammar/adverbs-types"
+      ],
+      "code": "We played football ___."
+    },
+    {
+      "id": "grammar-base.to-be-have-got.001",
+      "section": "to-be-have-got",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "was being",
+            "ru": "was being"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "am",
+            "ru": "am"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "have",
+            "ru": "have"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "have got",
+            "ru": "have got"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "is",
+            "ru": "is"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Age uses `be` in English, not `have`. `I have 30 years` is a direct translation of the Russian pattern and does not work.",
+        "ru": "Возраст в английском выражается через `be`, а не `have`. `I have 30 years` — прямой перевод русской конструкции, и он не работает."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/be",
+        "https://learnenglish.britishcouncil.org/grammar/verbs/be"
+      ],
+      "code": "I ___ 30 years old."
+    },
+    {
+      "id": "grammar-base.to-be-have-got.002",
+      "section": "to-be-have-got",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "They are",
+            "ru": "They are"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Have",
+            "ru": "Have"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "There are",
+            "ru": "There are"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "There is",
+            "ru": "There is"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is",
+            "ru": "It is"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`there is/are` announces that something exists, and it agrees with what follows — `two books` is plural, so `there are`. `It is` would describe a thing already known.",
+        "ru": "`there is/are` сообщает о существовании чего-то и согласуется с тем, что идёт после: `two books` — множественное число, значит `there are`. `It is` описывало бы уже известный предмет."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/there-is-there-are",
+        "https://dictionary.cambridge.org/grammar/british-grammar/be"
+      ],
+      "code": "___ two books on the table."
+    },
+    {
+      "id": "grammar-base.to-be-have-got.003",
+      "section": "to-be-have-got",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Have you",
+            "ru": "Have you"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Are you got",
+            "ru": "Are you got"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Do you got",
+            "ru": "Do you got"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Have you got",
+            "ru": "Have you got"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Do you have got",
+            "ru": "Do you have got"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "With `have got` the auxiliary is `have`, so it inverts by itself and needs no `do`. The alternative is plain `have`, which has no auxiliary and therefore does need one: `Do you have a car?`",
+        "ru": "У `have got` вспомогательный — `have`, он переставляется сам и `do` ему не нужен. Альтернатива — простое `have`, у которого вспомогательного нет, поэтому он как раз нужен: `Do you have a car?`"
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/have-got-and-have"
+      ],
+      "code": "___ a car?"
+    },
+    {
+      "id": "grammar-base.to-be-have-got.004",
+      "section": "to-be-have-got",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Which sentence is wrong?",
+        "ru": "В каком предложении ошибка?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "I've got two sisters.",
+            "ru": "I've got two sisters."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "She's having a shower.",
+            "ru": "She's having a shower."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "We had a good time.",
+            "ru": "We had a good time."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I have breakfast at eight.",
+            "ru": "I have breakfast at eight."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I've got breakfast at eight.",
+            "ru": "I've got breakfast at eight."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "`have got` covers possession and relationships only. When `have` means an action — having breakfast, a shower, a good time — `got` is impossible.",
+        "ru": "`have got` покрывает только обладание и родство. Когда `have` означает действие — завтракать, принимать душ, хорошо проводить время, — `got` невозможен."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/have-got-and-have"
+      ]
+    },
+    {
+      "id": "grammar-base.to-be-have-got.005",
+      "section": "to-be-have-got",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "There's",
+            "ru": "There's"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It's",
+            "ru": "It's"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "There has",
+            "ru": "There has"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That's there",
+            "ru": "That's there"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It has",
+            "ru": "It has"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The sentence introduces the shop, so it needs `there is`. The second `there` means \"in that place\" and is a different word — both can appear together without redundancy.",
+        "ru": "Предложение вводит магазин, поэтому нужен `there is`. Второе `there` означает «там» и является другим словом — оба могут стоять вместе без всякой тавтологии."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/there-is-there-are"
+      ],
+      "code": "___ a shop over there."
+    },
+    {
+      "id": "grammar-base.to-be-have-got.006",
+      "section": "to-be-have-got",
+      "difficulty": "hard",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "have had",
+            "ru": "have had"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "had",
+            "ru": "had"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "had got",
+            "ru": "had got"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "have got",
+            "ru": "have got"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "was having",
+            "ru": "was having"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`have got` exists only in the present; its past is plain `had`. There is no `had got` meaning possession, and `was having` would make owning a car into an activity in progress.",
+        "ru": "`have got` существует только в настоящем времени; его прошедшее — простое `had`. Никакого `had got` в значении «имел» нет, а `was having` превратило бы владение машиной в длящееся занятие."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/have-got-and-have",
+        "https://dictionary.cambridge.org/grammar/british-grammar/past-simple-i-worked"
+      ],
+      "code": "I ___ a car last year, but I sold it."
+    },
+    {
+      "id": "grammar-base.nouns-plurals.001",
+      "section": "nouns-plurals",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "child",
+            "ru": "child"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "childes",
+            "ru": "childes"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "children",
+            "ru": "children"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "childs",
+            "ru": "childs"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "childrens",
+            "ru": "childrens"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`child` has the irregular plural `children`. It is already plural, so it never takes another `-s`.",
+        "ru": "У `child` нерегулярное множественное — `children`. Это уже множественное число, поэтому второе `-s` к нему не добавляется."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/nouns-form",
+        "https://dictionary.cambridge.org/grammar/british-grammar/nouns-countable-and-uncountable"
+      ],
+      "code": "There are three ___ in the garden."
+    },
+    {
+      "id": "grammar-base.nouns-plurals.002",
+      "section": "nouns-plurals",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "are",
+            "ru": "are"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "have been",
+            "ru": "have been"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "has been being",
+            "ru": "has been being"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "was",
+            "ru": "was"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "were",
+            "ru": "were"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`advice` is uncountable in English, so it takes a singular verb and has no plural form. This is one of the words the two languages disagree on — Russian «советы» is countable.",
+        "ru": "`advice` в английском неисчисляемо, поэтому берёт глагол в единственном числе и множественного не имеет. Это одно из слов, по которым языки расходятся: русские «советы» исчисляемы."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/nouns-countable-and-uncountable",
+        "https://learnenglish.britishcouncil.org/grammar/nouns/countable-and-uncountable-nouns"
+      ],
+      "code": "Her advice ___ very useful."
+    },
+    {
+      "id": "grammar-base.nouns-plurals.003",
+      "section": "nouns-plurals",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Which sentence is wrong?",
+        "ru": "В каком предложении ошибка?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "I need a piece of information.",
+            "ru": "I need a piece of information."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The information is useful.",
+            "ru": "The information is useful."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "There isn't much information.",
+            "ru": "There isn't much information."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I need some information.",
+            "ru": "I need some information."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I need an information.",
+            "ru": "I need an information."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "`information` is uncountable, and `a/an` means \"one\", so the two cannot combine. To count it you count a portion: `a piece of information`.",
+        "ru": "`information` неисчисляемо, а `a/an` означает «один», поэтому вместе они не сочетаются. Чтобы посчитать, считают порцию: `a piece of information`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/nouns-countable-and-uncountable"
+      ]
+    },
+    {
+      "id": "grammar-base.nouns-plurals.004",
+      "section": "nouns-plurals",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "are",
+            "ru": "are"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "is",
+            "ru": "is"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "was",
+            "ru": "was"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "has been",
+            "ru": "has been"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "be",
+            "ru": "be"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`trousers` exists only in the plural, like `jeans`, `glasses` and `scissors`, so the verb is plural. To count them you need `a pair of`: `two pairs of trousers`.",
+        "ru": "`trousers` существует только во множественном — как `jeans`, `glasses`, `scissors`, — поэтому глагол множественный. Чтобы посчитать, нужен `a pair of`: `two pairs of trousers`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/nouns-form",
+        "https://dictionary.cambridge.org/grammar/british-grammar/nouns-countable-and-uncountable"
+      ],
+      "code": "My trousers ___ dirty."
+    },
+    {
+      "id": "grammar-base.nouns-plurals.005",
+      "section": "nouns-plurals",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "aren't",
+            "ru": "aren't"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "is",
+            "ru": "is"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "are",
+            "ru": "are"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "were",
+            "ru": "were"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "have been",
+            "ru": "have been"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`news` ends in `-s` but is uncountable and singular. The ending is misleading — it is not a plural of anything.",
+        "ru": "`news` кончается на `-s`, но неисчисляемо и единственно. Окончание обманчиво: это не множественное число от чего-либо."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/nouns-countable-and-uncountable"
+      ],
+      "code": "The news ___ bad today."
+    },
+    {
+      "id": "grammar-base.nouns-plurals.006",
+      "section": "nouns-plurals",
+      "difficulty": "hard",
+      "level": "base",
+      "text": {
+        "en": "Which sentence is correct?",
+        "ru": "Какое предложение правильное?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Her hair are blonde.",
+            "ru": "Her hair are blonde."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I need a hair cut for my hairs.",
+            "ru": "I need a hair cut for my hairs."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "There are two hairs in my soup.",
+            "ru": "There are two hairs in my soup."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "My hairs are long.",
+            "ru": "My hairs are long."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I washed my hairs.",
+            "ru": "I washed my hairs."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`hair` is uncountable as the stuff on your head — `My hair **is** long` — and countable as individual strands, which is the sense that allows `two hairs`.",
+        "ru": "`hair` неисчисляемо как то, что растёт на голове — `My hair **is** long`, — и исчисляемо как отдельные волоски; именно это значение и допускает `two hairs`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/nouns-countable-and-uncountable"
+      ]
+    },
+    {
+      "id": "grammar-base.articles-base.001",
+      "section": "articles-base",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "an",
+            "ru": "an"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "-",
+            "ru": "— (без артикля)"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "some",
+            "ru": "some"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "a",
+            "ru": "a"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "the",
+            "ru": "the"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Professions take `a/an` — the sentence says what kind of person she is. Russian omits the article here, and that habit is the source of most `I am student` errors.",
+        "ru": "Профессии берут `a/an` — предложение сообщает, кто она по занятию. Русский здесь артикль опускает, и именно эта привычка даёт большинство ошибок вида `I am student`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/articles-a-an-and-the",
+        "https://learnenglish.britishcouncil.org/grammar/nouns/articles"
+      ],
+      "code": "She is ___ teacher."
+    },
+    {
+      "id": "grammar-base.articles-base.002",
+      "section": "articles-base",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "a",
+            "ru": "a"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "the",
+            "ru": "the"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "-",
+            "ru": "— (без артикля)"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "one of",
+            "ru": "one of"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "an",
+            "ru": "an"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "`an` goes before a vowel *sound*, and the `h` in `hour` is silent. The spelling does not decide it — compare `a university`, which starts with a \"yu\" sound.",
+        "ru": "`an` ставится перед гласным *звуком*, а `h` в `hour` не читается. Решает не написание — сравните `a university`, которое начинается со звука «ю»."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/articles-a-an-and-the"
+      ],
+      "code": "I waited for ___ hour."
+    },
+    {
+      "id": "grammar-base.articles-base.003",
+      "section": "articles-base",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Books",
+            "ru": "Books"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The books",
+            "ru": "The books"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A books",
+            "ru": "A books"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The book",
+            "ru": "The book"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A book",
+            "ru": "A book"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A bare plural means the category in general, which is what \"books are expensive\" says. `The books` would point at particular books both speakers can identify.",
+        "ru": "Множественное число без артикля означает категорию вообще — именно это и говорит «книги дорогие». `The books` указывало бы на конкретные книги, известные обоим собеседникам."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/articles-a-an-and-the"
+      ],
+      "code": "___ are expensive these days."
+    },
+    {
+      "id": "grammar-base.articles-base.004",
+      "section": "articles-base",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "What does the sentence mean?",
+        "ru": "Что означает это предложение?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "She owns the hospital.",
+            "ru": "Она владеет больницей."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "She is ill and being treated there.",
+            "ru": "Она болеет и лечится там."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "She is visiting someone there.",
+            "ru": "Она пришла кого-то навестить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "She works there as a doctor.",
+            "ru": "Она работает там врачом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "She is standing inside the building.",
+            "ru": "Она стоит внутри здания."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Without an article, `hospital`, `school`, `bed` and `work` name the activity rather than the building. `She's at **the** hospital` would put her at the place, perhaps visiting.",
+        "ru": "Без артикля `hospital`, `school`, `bed`, `work` называют занятие, а не здание. `She's at **the** hospital` поместило бы её в это место — например, навестить кого-то."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/articles-a-an-and-the",
+        "https://dictionary.cambridge.org/grammar/british-grammar/articles-a-an-and-the"
+      ],
+      "code": "She's in hospital."
+    },
+    {
+      "id": "grammar-base.articles-base.005",
+      "section": "articles-base",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "-",
+            "ru": "— (без артикля)"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "This a",
+            "ru": "This a"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The",
+            "ru": "The"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A",
+            "ru": "A"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An",
+            "ru": "An"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The book has already been mentioned, so the listener can now identify which one — that is exactly what `the` signals. The first mention took `a`.",
+        "ru": "Книга уже упомянута, и слушатель теперь может понять, о какой речь, — именно это и сообщает `the`. При первом упоминании стоял `a`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/articles-a-an-and-the"
+      ],
+      "code": "I bought a book yesterday. ___ book was expensive."
+    },
+    {
+      "id": "grammar-base.articles-base.006",
+      "section": "articles-base",
+      "difficulty": "hard",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "the ... a",
+            "ru": "the … a"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "a ... the",
+            "ru": "a … the"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "- ... -",
+            "ru": "— … —"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "the ... the",
+            "ru": "the … the"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "a ... a",
+            "ru": "a … a"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Both nouns are identifiable from the situation: there is one door being talked about and one floor we are standing on. `the` covers \"obvious from the context\" as well as \"mentioned before\".",
+        "ru": "Оба существительных опознаются из ситуации: речь об одной двери и об одном полу, на котором мы стоим. `the` покрывает и «очевидно из контекста», а не только «упомянуто раньше»."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/articles-a-an-and-the"
+      ],
+      "code": "Please close ___ door and put it on ___ floor."
+    },
+    {
+      "id": "grammar-base.pronouns-possessives.001",
+      "section": "pronouns-possessives",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "I",
+            "ru": "I"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "my",
+            "ru": "my"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "mine",
+            "ru": "mine"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "myself",
+            "ru": "myself"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "me",
+            "ru": "me"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "After a preposition English uses the object form, so `for me`. `I` is the subject form and goes before a verb.",
+        "ru": "После предлога английский ставит форму дополнения, поэтому `for me`. `I` — форма подлежащего, она идёт перед глаголом."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/pronouns-personal-i-me-you-him-it-they"
+      ],
+      "code": "This is a present for ___."
+    },
+    {
+      "id": "grammar-base.pronouns-possessives.002",
+      "section": "pronouns-possessives",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "mine",
+            "ru": "mine"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "my",
+            "ru": "my"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "me",
+            "ru": "me"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "my one",
+            "ru": "my one"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "mine book",
+            "ru": "mine book"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`mine` is the form that stands alone, with no noun after it; `my` is the form that goes before a noun. `This is mine book` mixes the two.",
+        "ru": "`mine` — форма, стоящая самостоятельно, без существительного после себя; `my` — форма перед существительным. `This is mine book` смешивает обе."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/possession-apostrophe-s-of",
+        "https://dictionary.cambridge.org/grammar/british-grammar/pronouns-personal-i-me-you-him-it-they"
+      ],
+      "code": "This book is ___."
+    },
+    {
+      "id": "grammar-base.pronouns-possessives.003",
+      "section": "pronouns-possessives",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Which sentence is wrong?",
+        "ru": "В каком предложении ошибка?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The dog is looking for its bone.",
+            "ru": "The dog is looking for its bone."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The dog is looking for it's bone.",
+            "ru": "The dog is looking for it's bone."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It's a nice dog.",
+            "ru": "It's a nice dog."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Its tail is short.",
+            "ru": "Its tail is short."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It's raining.",
+            "ru": "It's raining."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`it's` is only ever `it is`. The possessive is `its`, with no apostrophe — the opposite of the rule for nouns, which is why it catches people out.",
+        "ru": "`it's` — это всегда и только `it is`. Притяжательное — `its`, без апострофа: правило прямо противоположно тому, что действует у существительных, поэтому на нём и спотыкаются."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/possession-apostrophe-s-of"
+      ]
+    },
+    {
+      "id": "grammar-base.pronouns-possessives.004",
+      "section": "pronouns-possessives",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "my",
+            "ru": "my"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "mine",
+            "ru": "mine"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "-",
+            "ru": "— (ничего не нужно)"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "myself",
+            "ru": "myself"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "me",
+            "ru": "me"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`feel` is not reflexive in English, unlike its Russian counterpart. `I feel bad` is right; `I feel myself bad` means something quite different and is best avoided.",
+        "ru": "`feel` в английском не возвратный, в отличие от русского соответствия. `I feel bad` — правильно; `I feel myself bad` означает совсем другое, и так лучше не говорить."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/pronouns-reflexive-myself-themselves",
+        "https://dictionary.cambridge.org/grammar/british-grammar/pronouns-personal-i-me-you-him-it-they"
+      ],
+      "code": "I don't feel ___ well today."
+    },
+    {
+      "id": "grammar-base.pronouns-possessives.005",
+      "section": "pronouns-possessives",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The childrens",
+            "ru": "The childrens"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The children",
+            "ru": "The children"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The child's",
+            "ru": "The child's"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The children's",
+            "ru": "The children's"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The childrens'",
+            "ru": "The childrens'"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`children` is an irregular plural that does not end in `-s`, so it takes a full `'s`. The apostrophe goes after the `s` only when the plural already ends in one: `the boys' dogs`.",
+        "ru": "`children` — нерегулярное множественное, не оканчивающееся на `-s`, поэтому берёт полное `'s`. Апостроф ставится после `s` только когда множественное и так на него кончается: `the boys' dogs`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/possession-apostrophe-s-of"
+      ],
+      "code": "___ toys are all over the floor."
+    },
+    {
+      "id": "grammar-base.pronouns-possessives.006",
+      "section": "pronouns-possessives",
+      "difficulty": "hard",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "This",
+            "ru": "This"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That",
+            "ru": "That"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "This one",
+            "ru": "This one"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Those one",
+            "ru": "Those one"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "These",
+            "ru": "These"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "`this/that` are singular and `these/those` plural, so they must agree with the noun. `This books` is the mistake this pair prevents — unlike an adjective, a demonstrative does carry number.",
+        "ru": "`this/that` — единственного числа, `these/those` — множественного, поэтому они обязаны согласоваться с существительным. `This books` — как раз та ошибка, которую эта пара предотвращает: в отличие от прилагательного, указательное местоимение число несёт."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/this-that-these-those"
+      ],
+      "code": "___ books are on the shelf."
+    },
+    {
+      "id": "grammar-base.present-simple.001",
+      "section": "present-simple",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "goes",
+            "ru": "goes"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "go",
+            "ru": "go"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "gos",
+            "ru": "gos"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "is go",
+            "ru": "is go"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "going",
+            "ru": "going"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Third person singular adds `-s`, and a verb ending in `-o` takes `-es`: `go/goes`. The same happens to `do/does` and `watch/watches`.",
+        "ru": "Третье лицо единственного числа добавляет `-s`, а глагол на `-o` берёт `-es`: `go/goes`. То же происходит с `do/does` и `watch/watches`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-simple-i-work",
+        "https://learnenglish.britishcouncil.org/grammar/verbs/verb-tenses/present-simple"
+      ],
+      "code": "She ___ to work by bus."
+    },
+    {
+      "id": "grammar-base.present-simple.002",
+      "section": "present-simple",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Which sentence is wrong?",
+        "ru": "В каком предложении ошибка?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Does she work here?",
+            "ru": "Does she work here?"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Does she works here?",
+            "ru": "Does she works here?"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Do they work here?",
+            "ru": "Do they work here?"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "She doesn't work here.",
+            "ru": "She doesn't work here."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Is she working here?",
+            "ru": "Is she working here?"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Once `does` carries the tense, the main verb goes back to its plain form. Marking the tense twice is the commonest error in this tense.",
+        "ru": "Как только время берёт на себя `does`, смысловой глагол возвращается в исходную форму. Пометить время дважды — самая частая ошибка в этом времени."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-simple-i-work"
+      ]
+    },
+    {
+      "id": "grammar-base.present-simple.003",
+      "section": "present-simple",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "am know",
+            "ru": "am know"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "is knowing",
+            "ru": "is knowing"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "know",
+            "ru": "know"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "am knowing",
+            "ru": "am knowing"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "knows",
+            "ru": "knows"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`know` is a state verb, so it stays in the simple even when it is about this very moment. State verbs are the reason \"Present Simple is not about now\" needs a caveat.",
+        "ru": "`know` — глагол состояния, поэтому он остаётся в простом времени даже когда речь про сию минуту. Именно из-за глаголов состояния к утверждению «Present Simple не про сейчас» нужна оговорка."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/verbs-state-verbs",
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-simple-i-work"
+      ],
+      "code": "I ___ the answer."
+    },
+    {
+      "id": "grammar-base.present-simple.004",
+      "section": "present-simple",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "always be",
+            "ru": "always be"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "be always",
+            "ru": "be always"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "is being always",
+            "ru": "is being always"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "is always",
+            "ru": "is always"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "always is",
+            "ru": "always is"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Adverbs of frequency go before the main verb but *after* `be`. That split is the whole rule: `I always drink coffee`, but `I am always late`.",
+        "ru": "Наречия частоты идут перед смысловым глаголом, но *после* `be`. В этом делении и всё правило: `I always drink coffee`, но `I am always late`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-simple-i-work",
+        "https://dictionary.cambridge.org/grammar/british-grammar/adverbs-types"
+      ],
+      "code": "She ___ late for meetings."
+    },
+    {
+      "id": "grammar-base.present-simple.005",
+      "section": "present-simple",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "What does the sentence mean?",
+        "ru": "Что означает это предложение?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The speaker has just decided this.",
+            "ru": "Говорящий только что это решил."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is leaving right now.",
+            "ru": "Он отъезжает прямо сейчас."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It usually leaves at six but not tomorrow.",
+            "ru": "Обычно уходит в шесть, но не завтра."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The sentence is wrong - it needs `will leave`.",
+            "ru": "Предложение неверно — нужно `will leave`."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is scheduled to leave at six.",
+            "ru": "По расписанию он уходит в шесть."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A present tense used for the future is how English states a timetable: the schedule is treated as a standing fact. `will leave` would sound like a prediction rather than a timetable.",
+        "ru": "Настоящее время о будущем — это способ сообщить расписание: график считается устойчивым фактом. `will leave` звучало бы как предсказание, а не как расписание."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-simple-i-work",
+        "https://dictionary.cambridge.org/grammar/british-grammar/future"
+      ],
+      "code": "The train leaves at six tomorrow."
+    },
+    {
+      "id": "grammar-base.present-simple.006",
+      "section": "present-simple",
+      "difficulty": "hard",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "is tasting",
+            "ru": "is tasting"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "tastes",
+            "ru": "tastes"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "is taste",
+            "ru": "is taste"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "taste",
+            "ru": "taste"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "has taste",
+            "ru": "has taste"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`taste` is a state verb when it describes a quality — `The soup tastes good` — but an action verb when somebody actively tastes something, and in that meaning the continuous is right.",
+        "ru": "`taste` — глагол состояния, когда описывает свойство: `The soup tastes good`. Но когда кто-то активно пробует, это глагол действия, и в этом значении continuous уместен."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/verbs-state-verbs",
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-continuous-i-am-working"
+      ],
+      "code": "The chef ___ the soup to check the salt."
+    },
+    {
+      "id": "grammar-base.present-continuous.001",
+      "section": "present-continuous",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "does drive",
+            "ru": "does drive"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "is driving",
+            "ru": "is driving"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "drives",
+            "ru": "drives"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "driving",
+            "ru": "driving"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "is drive",
+            "ru": "is drive"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Something in progress at this moment takes `be` + `-ing`. Dropping the `is` is the error Russian speakers make most here, because Russian has no auxiliary to drop.",
+        "ru": "То, что происходит в данный момент, требует `be` + `-ing`. Потеря `is` — самая частая здесь ошибка у русскоговорящих: в русском нет вспомогательного глагола, который можно потерять."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-continuous-i-am-working",
+        "https://learnenglish.britishcouncil.org/grammar/verbs/verb-tenses/present-continuous"
+      ],
+      "code": "Don't call her - she ___."
+    },
+    {
+      "id": "grammar-base.present-continuous.002",
+      "section": "present-continuous",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "sits",
+            "ru": "sits"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "is sitting",
+            "ru": "is sitting"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "are sitting",
+            "ru": "are sitting"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "are siting",
+            "ru": "are siting"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "sitting",
+            "ru": "sitting"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "One stressed vowel plus one consonant doubles the consonant before `-ing`: `sit/sitting`, `run/running`. And the subject is plural, so the auxiliary is `are`.",
+        "ru": "Одна гласная под ударением плюс одна согласная — согласная удваивается перед `-ing`: `sit/sitting`, `run/running`. А подлежащее множественное, поэтому вспомогательный — `are`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-continuous-i-am-working"
+      ],
+      "code": "They ___ in the garden right now."
+    },
+    {
+      "id": "grammar-base.present-continuous.003",
+      "section": "present-continuous",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "What does the sentence mean?",
+        "ru": "Что означает это предложение?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "I already speak Spanish well.",
+            "ru": "Я уже хорошо говорю по-испански."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I learn Spanish every day without exception.",
+            "ru": "Я учу испанский каждый день без исключений."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I intend to start learning Spanish.",
+            "ru": "Я собираюсь начать учить испанский."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is an ongoing activity, not necessarily happening this second.",
+            "ru": "Это длящееся занятие, не обязательно происходящее в эту секунду."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "I am in a Spanish lesson at this moment.",
+            "ru": "Я прямо сейчас на уроке испанского."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The continuous also covers \"around now\" — a stretch of time that includes the present. The sentence stays true while you are asleep.",
+        "ru": "Continuous покрывает и «около сейчас» — отрезок времени, включающий настоящий момент. Предложение остаётся верным и пока вы спите."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-continuous-i-am-working"
+      ],
+      "code": "I'm learning Spanish."
+    },
+    {
+      "id": "grammar-base.present-continuous.004",
+      "section": "present-continuous",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "work",
+            "ru": "work"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "worked",
+            "ru": "worked"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "do work",
+            "ru": "do work"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "am work",
+            "ru": "am work"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "am working",
+            "ru": "am working"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A temporary situation takes the continuous; `I work in a bank` would state it as your settled job. The second half of the sentence is what forces the choice.",
+        "ru": "Временное положение дел берёт continuous; `I work in a bank` сообщало бы о работе как об установившейся. Выбор навязывает вторая половина предложения."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-continuous-i-am-working",
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-simple-i-work"
+      ],
+      "code": "I ___ in a bank, but only until I find something better."
+    },
+    {
+      "id": "grammar-base.present-continuous.005",
+      "section": "present-continuous",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "What does the sentence mean?",
+        "ru": "Что означает это предложение?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The speaker is annoyed - it happens too often.",
+            "ru": "Говорящий раздражён: это случается слишком часто."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is a neutral statement of a habit.",
+            "ru": "Это нейтральное сообщение о привычке."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "He is looking for his keys right now.",
+            "ru": "Он ищет ключи прямо сейчас."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "He has lost them permanently.",
+            "ru": "Он потерял их окончательно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The sentence is wrong - `always` needs the simple.",
+            "ru": "Предложение неверно — с `always` нужен simple."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`always` with the continuous stops being neutral and becomes a complaint. `He always loses his keys` is the neutral version.",
+        "ru": "`always` с continuous перестаёт быть нейтральным и превращается в жалобу. Нейтральный вариант — `He always loses his keys`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-continuous-i-am-working"
+      ],
+      "code": "He is always losing his keys."
+    },
+    {
+      "id": "grammar-base.present-continuous.006",
+      "section": "present-continuous",
+      "difficulty": "hard",
+      "level": "base",
+      "text": {
+        "en": "Which sentence is wrong?",
+        "ru": "В каком предложении ошибка?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "I'm thinking about your offer.",
+            "ru": "I'm thinking about your offer."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Are you understanding me?",
+            "ru": "Are you understanding me?"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "She's having lunch.",
+            "ru": "She's having lunch."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "This book belongs to me.",
+            "ru": "This book belongs to me."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I'm tasting the soup.",
+            "ru": "I'm tasting the soup."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`understand` is a state verb with no action meaning, so it has no continuous at all: `Do you understand?` The others all have genuine action senses.",
+        "ru": "`understand` — глагол состояния без деятельного значения, поэтому continuous у него нет вовсе: `Do you understand?` У остальных настоящие деятельные значения есть."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/verbs-state-verbs"
+      ]
+    },
+    {
+      "id": "grammar-base.past-simple.001",
+      "section": "past-simple",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "did saw",
+            "ru": "did saw"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "was seeing",
+            "ru": "was seeing"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "saw",
+            "ru": "saw"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "seen",
+            "ru": "seen"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "see",
+            "ru": "see"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`see` is irregular: `see/saw/seen`. `seen` is the third form and needs an auxiliary; on its own the past is `saw`.",
+        "ru": "`see` — нерегулярный: `see/saw/seen`. `seen` — третья форма, ей нужен вспомогательный глагол; сама по себе форма прошедшего — `saw`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/past-simple-i-worked"
+      ],
+      "code": "I ___ her yesterday."
+    },
+    {
+      "id": "grammar-base.past-simple.002",
+      "section": "past-simple",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Was",
+            "ru": "Was"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Have",
+            "ru": "Have"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Were",
+            "ru": "Were"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Did",
+            "ru": "Did"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Do",
+            "ru": "Do"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`did` carries the past in questions, and the main verb then stays in its plain form — `Did you call?`, never `Did you called?`",
+        "ru": "В вопросе прошедшее время несёт `did`, а смысловой глагол остаётся в исходной форме: `Did you call?`, но не `Did you called?`"
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/past-simple-i-worked"
+      ],
+      "code": "___ you call your mother?"
+    },
+    {
+      "id": "grammar-base.past-simple.003",
+      "section": "past-simple",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Which sentence is wrong?",
+        "ru": "В каком предложении ошибка?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "She wasn't there.",
+            "ru": "She wasn't there."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "They weren't late.",
+            "ru": "They weren't late."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "He didn't stop.",
+            "ru": "He didn't stop."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "She didn't go.",
+            "ru": "She didn't go."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "She didn't went.",
+            "ru": "She didn't went."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "`didn't` already marks the past, so `go` returns to its plain form. `be` is the exception that needs no auxiliary at all: `wasn't`, `weren't`.",
+        "ru": "`didn't` уже помечает прошедшее, поэтому `go` возвращается в исходную форму. `be` — исключение, которому вспомогательный не нужен вовсе: `wasn't`, `weren't`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/past-simple-i-worked"
+      ]
+    },
+    {
+      "id": "grammar-base.past-simple.004",
+      "section": "past-simple",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "bought",
+            "ru": "bought"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "buyed",
+            "ru": "buyed"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "did bought",
+            "ru": "did bought"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "have bought",
+            "ru": "have bought"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "buy",
+            "ru": "buy"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`buy` is irregular — `buy/bought`. And `last week` is a finished past time, which rules out `have bought`: a stated past time forces Past Simple.",
+        "ru": "`buy` нерегулярный — `buy/bought`. А `last week` — законченное прошедшее время, что исключает `have bought`: названное прошедшее время требует Past Simple."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/past-simple-i-worked"
+      ],
+      "code": "They ___ the tickets last week."
+    },
+    {
+      "id": "grammar-base.past-simple.005",
+      "section": "past-simple",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "What does the sentence mean?",
+        "ru": "Что означает это предложение?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "I used something to smoke with.",
+            "ru": "Я чем-то пользовался, чтобы курить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I smoked in the past but not now.",
+            "ru": "Раньше курил, а сейчас нет."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "I am used to smoking.",
+            "ru": "Я привык курить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I started smoking recently.",
+            "ru": "Я недавно начал курить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I smoke sometimes.",
+            "ru": "Иногда курю."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`used to` states explicitly that a habit or state is over. Its question and negative run through `did`, and the `d` drops: `Did you use to smoke?`",
+        "ru": "`used to` прямо сообщает, что привычка или состояние закончились. Вопрос и отрицание идут через `did`, и `d` при этом исчезает: `Did you use to smoke?`"
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/used-to",
+        "https://dictionary.cambridge.org/grammar/british-grammar/past-simple-i-worked"
+      ],
+      "code": "I used to smoke."
+    },
+    {
+      "id": "grammar-base.past-simple.006",
+      "section": "past-simple",
+      "difficulty": "hard",
+      "level": "base",
+      "text": {
+        "en": "Which sentence is correct?",
+        "ru": "Какое предложение правильное?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "She would be a teacher before.",
+            "ru": "She would be a teacher before."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "We would have a car in 1990.",
+            "ru": "We would have a car in 1990."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Every summer we would go to the lake.",
+            "ru": "Every summer we would go to the lake."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "I would live in Riga as a child.",
+            "ru": "I would live in Riga as a child."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I would know him well back then.",
+            "ru": "I would know him well back then."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`would` expresses a repeated past *action*, but not a past state. `live`, `know`, `be` and `have` are states, so those need `used to` — `I used to live in Riga`.",
+        "ru": "`would` выражает повторяющееся прошлое *действие*, но не прошлое состояние. `live`, `know`, `be`, `have` — состояния, поэтому там нужен `used to`: `I used to live in Riga`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/used-to",
+        "https://dictionary.cambridge.org/grammar/british-grammar/past-simple-i-worked"
+      ]
+    },
+    {
+      "id": "grammar-base.past-continuous.001",
+      "section": "past-continuous",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "were reading",
+            "ru": "were reading"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "am reading",
+            "ru": "am reading"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "did read",
+            "ru": "did read"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "was reading",
+            "ru": "was reading"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "read",
+            "ru": "read"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The longer action that was already in progress goes in the continuous; the short event that interrupts it goes in the simple. And `I` takes `was`.",
+        "ru": "Более длинное действие, которое уже шло, стоит в continuous; короткое событие, прерывающее его, — в simple. А с `I` идёт `was`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/past-continuous-i-was-working",
+        "https://learnenglish.britishcouncil.org/grammar/verbs/verb-tenses/past-continuous"
+      ],
+      "code": "I ___ when the phone rang."
+    },
+    {
+      "id": "grammar-base.past-continuous.002",
+      "section": "past-continuous",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "was watching",
+            "ru": "was watching"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "watching",
+            "ru": "watching"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "were watch",
+            "ru": "were watch"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "did watching",
+            "ru": "did watching"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "were watching",
+            "ru": "were watching"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "`they` takes `were`; `was` goes with I/he/she/it. No `did` appears anywhere — `be` inverts and negates on its own.",
+        "ru": "С `they` идёт `were`; `was` — с I/he/she/it. Никакого `did` здесь нет: `be` сам переставляется и сам отрицается."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/past-continuous-i-was-working"
+      ],
+      "code": "They ___ TV all evening."
+    },
+    {
+      "id": "grammar-base.past-continuous.003",
+      "section": "past-continuous",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "What does the sentence mean?",
+        "ru": "Что означает это предложение?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "She had started cooking before I got there.",
+            "ru": "Она начала готовить до моего прихода."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "She started cooking after I got there.",
+            "ru": "Она начала готовить после моего прихода."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "We started cooking together.",
+            "ru": "Мы начали готовить вместе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "She finished cooking as I arrived.",
+            "ru": "Она закончила готовить в момент моего прихода."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "She cooks whenever I arrive.",
+            "ru": "Она готовит всякий раз, когда я прихожу."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The continuous means the cooking was already under way at the moment of arrival. `When I arrived, she cooked` would reverse it — the arrival first, then the cooking.",
+        "ru": "Continuous означает, что готовка уже шла в момент прихода. `When I arrived, she cooked` перевернуло бы порядок: сначала приход, потом готовка."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/past-continuous-i-was-working"
+      ],
+      "code": "When I arrived, she was cooking."
+    },
+    {
+      "id": "grammar-base.past-continuous.004",
+      "section": "past-continuous",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Since",
+            "ru": "Since"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "While",
+            "ru": "While"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "During",
+            "ru": "During"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When did",
+            "ru": "When did"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Until",
+            "ru": "Until"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`while` introduces the longer action in the continuous; `when` usually introduces the short event in the simple. `during` is a preposition and takes a noun, not a clause.",
+        "ru": "`while` вводит длинное действие в continuous; `when` обычно вводит короткое событие в simple. `during` — предлог, он берёт существительное, а не придаточное."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/past-continuous-i-was-working",
+        "https://dictionary.cambridge.org/grammar/british-grammar/when"
+      ],
+      "code": "___ I was walking home, I met Anna."
+    },
+    {
+      "id": "grammar-base.past-continuous.005",
+      "section": "past-continuous",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Which sentence is wrong?",
+        "ru": "В каком предложении ошибка?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "She was always arriving late.",
+            "ru": "She was always arriving late."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I was living in Riga at the time.",
+            "ru": "I was living in Riga at the time."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I was knowing the answer.",
+            "ru": "I was knowing the answer."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It was raining hard.",
+            "ru": "It was raining hard."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "He was driving and talking.",
+            "ru": "He was driving and talking."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "State verbs refuse the continuous in the past exactly as in the present: `I knew the answer`. `live` is not a state verb in this sense — a temporary stay is fine in the continuous.",
+        "ru": "Глаголы состояния не берут continuous в прошедшем так же, как и в настоящем: `I knew the answer`. `live` в этом смысле глаголом состояния не является — временное пребывание в continuous нормально."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/past-continuous-i-was-working",
+        "https://dictionary.cambridge.org/grammar/british-grammar/verbs-state-verbs"
+      ]
+    },
+    {
+      "id": "grammar-base.past-continuous.006",
+      "section": "past-continuous",
+      "difficulty": "hard",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "have",
+            "ru": "have"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "having",
+            "ru": "having"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "did have",
+            "ru": "did have"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "had",
+            "ru": "had"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "was having",
+            "ru": "was having"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A sequence of completed actions stays in the simple — each one finished before the next began. The continuous would describe a background, which is not what a sequence needs.",
+        "ru": "Цепочка завершённых действий остаётся в simple: каждое закончилось прежде, чем началось следующее. Continuous описывал бы фон, а цепочке это не нужно."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/past-continuous-i-was-working",
+        "https://dictionary.cambridge.org/grammar/british-grammar/past-simple-i-worked"
+      ],
+      "code": "I got up, ___ breakfast and left."
+    },
+    {
+      "id": "grammar-base.future-base.001",
+      "section": "future-base",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "I'm going to",
+            "ru": "I'm going to"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I answer",
+            "ru": "I answer"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I'm answering",
+            "ru": "I'm answering"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I answer will",
+            "ru": "I answer will"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I'll",
+            "ru": "I'll"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A decision made at the moment of speaking takes `will`. `going to` would say the intention existed before the phone rang.",
+        "ru": "Решение, принятое в момент речи, берёт `will`. `going to` сообщало бы, что намерение существовало ещё до звонка."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/future",
+        "https://dictionary.cambridge.org/grammar/british-grammar/will"
+      ],
+      "code": "The phone's ringing. - OK, ___ answer it."
+    },
+    {
+      "id": "grammar-base.future-base.002",
+      "section": "future-base",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "is going to",
+            "ru": "is going to"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "will",
+            "ru": "will"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "rains",
+            "ru": "rains"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "is raining",
+            "ru": "is raining"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "will be",
+            "ru": "will be"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A prediction based on evidence you can point at takes `going to`. `I think it will rain` would be an opinion with no clouds required.",
+        "ru": "Предсказание по видимым признакам берёт `going to`. `I think it will rain` было бы мнением, для которого никакие тучи не нужны."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/future"
+      ],
+      "code": "Look at those clouds! It ___ rain."
+    },
+    {
+      "id": "grammar-base.future-base.003",
+      "section": "future-base",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "will have arrived",
+            "ru": "will have arrived"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "arrive",
+            "ru": "arrive"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "will arrive",
+            "ru": "will arrive"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "am arriving",
+            "ru": "am arriving"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "arrived",
+            "ru": "arrived"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "No `will` in a time clause: after `when, if, as soon as, before, after, until, unless` English uses a present tense even though the meaning is future. The future is marked once, in the main clause.",
+        "ru": "В придаточном времени `will` не ставится: после `when, if, as soon as, before, after, until, unless` английский берёт настоящее время, хотя смысл будущий. Будущее помечается один раз — в главной части."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/future",
+        "https://learnenglish.britishcouncil.org/grammar/verbs/verb-tenses/talking-about-the-future"
+      ],
+      "code": "I'll call you when I ___."
+    },
+    {
+      "id": "grammar-base.future-base.004",
+      "section": "future-base",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "meets",
+            "ru": "meets"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "will be met",
+            "ru": "will be met"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "'m meeting",
+            "ru": "'m meeting"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "meet",
+            "ru": "meet"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "will meet",
+            "ru": "will meet"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A fixed arrangement — agreed, with a time and another person — takes the present continuous. `will` would sound like a decision being made right now.",
+        "ru": "Назначенная договорённость — согласованная, со временем и с другим человеком — берёт present continuous. `will` звучало бы как решение, принимаемое прямо сейчас."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/future"
+      ],
+      "code": "I ___ Anna at six - we agreed yesterday."
+    },
+    {
+      "id": "grammar-base.future-base.005",
+      "section": "future-base",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "What does the sentence mean?",
+        "ru": "Что означает это предложение?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It is a timetabled event.",
+            "ru": "Это событие по расписанию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The speaker is studying medicine at the moment.",
+            "ru": "Говорящий сейчас учится на медика."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is a prediction about someone else.",
+            "ru": "Это предсказание о другом человеке."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The decision was made before this conversation.",
+            "ru": "Решение было принято до этого разговора."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The speaker is deciding right now.",
+            "ru": "Говорящий решает прямо сейчас."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`going to` reports an intention that already exists. That is the whole contrast with `will`, which announces a decision as it is taken.",
+        "ru": "`going to` сообщает о намерении, которое уже существует. В этом и всё противопоставление с `will`, который объявляет решение в момент его принятия."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/future"
+      ],
+      "code": "I'm going to study medicine."
+    },
+    {
+      "id": "grammar-base.future-base.006",
+      "section": "future-base",
+      "difficulty": "hard",
+      "level": "base",
+      "text": {
+        "en": "Which sentence is wrong?",
+        "ru": "В каком предложении ошибка?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The film starts at eight.",
+            "ru": "The film starts at eight."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Wait until she comes back.",
+            "ru": "Wait until she comes back."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I'll be back in ten minutes.",
+            "ru": "I'll be back in ten minutes."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "If it rains, we'll stay in.",
+            "ru": "If it rains, we'll stay in."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "If it will rain, we'll stay in.",
+            "ru": "If it will rain, we'll stay in."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "`if` introduces a conditional clause, and those take a present tense in English. The `will` belongs in the main clause only — it is already there in `we'll stay in`.",
+        "ru": "`if` вводит условное придаточное, а такие в английском берут настоящее время. `will` место только в главной части — там он уже и есть, в `we'll stay in`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/future"
+      ]
+    },
+    {
+      "id": "grammar-base.modals-base.001",
+      "section": "modals-base",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Which sentence is wrong?",
+        "ru": "В каком предложении ошибка?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "She cans swim.",
+            "ru": "She cans swim."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Can she swim?",
+            "ru": "Can she swim?"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "She can't swim.",
+            "ru": "She can't swim."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "She could swim as a child.",
+            "ru": "She could swim as a child."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "She can swim.",
+            "ru": "She can swim."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Modal verbs take no `-s` in the third person. They also take no `do` in questions and no `to` after them — one closed set of rules for the whole group.",
+        "ru": "Модальные глаголы не берут `-s` в третьем лице. Они же не берут `do` в вопросе и `to` после себя — один закрытый набор правил на всю группу."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/modality-introduction",
+        "https://dictionary.cambridge.org/grammar/british-grammar/can"
+      ]
+    },
+    {
+      "id": "grammar-base.modals-base.002",
+      "section": "modals-base",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "do should",
+            "ru": "do should"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "should",
+            "ru": "should"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "should to",
+            "ru": "should to"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "shoulds",
+            "ru": "shoulds"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "are should",
+            "ru": "are should"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Advice takes `should`, followed by the plain verb with no `to`. The one modal that keeps its `to` is `ought to`.",
+        "ru": "Совет выражается через `should`, за которым идёт глагол в исходной форме без `to`. Единственный модальный, сохраняющий `to`, — `ought to`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/modality-introduction",
+        "https://learnenglish.britishcouncil.org/grammar/verbs/modal-verbs"
+      ],
+      "code": "You ___ see a doctor about that cough."
+    },
+    {
+      "id": "grammar-base.modals-base.003",
+      "section": "modals-base",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "What does the sentence mean?",
+        "ru": "Что означает это предложение?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "You are expected to come.",
+            "ru": "От тебя ждут, что ты придёшь."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "You had no chance to come.",
+            "ru": "У тебя не было возможности прийти."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is not necessary, but you may if you want.",
+            "ru": "Это не обязательно, но можешь прийти, если хочешь."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "You are forbidden to come.",
+            "ru": "Тебе запрещено приходить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "You must stay away.",
+            "ru": "Ты должен держаться подальше."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`don't have to` means \"not necessary\"; `mustn't` means \"forbidden\". They are opposites, not two ways of saying the same thing — mixing them up reverses the instruction.",
+        "ru": "`don't have to` означает «не обязательно», а `mustn't` — «запрещено». Это противоположности, а не два способа сказать одно и то же: спутать их значит вывернуть указание наизнанку."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/modality-introduction"
+      ],
+      "code": "You don't have to come."
+    },
+    {
+      "id": "grammar-base.modals-base.004",
+      "section": "modals-base",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "must",
+            "ru": "must"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "must to",
+            "ru": "must to"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "did must",
+            "ru": "did must"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "had to",
+            "ru": "had to"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "musted",
+            "ru": "musted"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`must` has no past form of its own, so `have to` covers it: `had to`. The same borrowing happens in the future — `I'll have to leave early`.",
+        "ru": "У `must` нет своей формы прошедшего времени, поэтому её закрывает `have to`: `had to`. То же заимствование происходит и в будущем: `I'll have to leave early`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/modality-introduction"
+      ],
+      "code": "I ___ leave early yesterday."
+    },
+    {
+      "id": "grammar-base.modals-base.005",
+      "section": "modals-base",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "can",
+            "ru": "can"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "could",
+            "ru": "could"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "can to",
+            "ru": "can to"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "will can",
+            "ru": "will can"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "be able to",
+            "ru": "be able to"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Two modals cannot stand in a row, so `will can` is impossible and the future of `can` has to be borrowed from `be able to`.",
+        "ru": "Два модальных глагола подряд стоять не могут, поэтому `will can` невозможен, и будущее от `can` приходится занимать у `be able to`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/can",
+        "https://dictionary.cambridge.org/grammar/british-grammar/modality-introduction"
+      ],
+      "code": "I'll ___ swim by the end of the summer."
+    },
+    {
+      "id": "grammar-base.modals-base.006",
+      "section": "modals-base",
+      "difficulty": "hard",
+      "level": "base",
+      "text": {
+        "en": "What does the sentence mean?",
+        "ru": "Что означает это предложение?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The speaker imposes the necessity on themselves.",
+            "ru": "Говорящий налагает необходимость на себя сам."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Someone else has ordered it.",
+            "ru": "Это приказал кто-то другой."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The rules require it.",
+            "ru": "Так требуют правила."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is not necessary at all.",
+            "ru": "Это вовсе не обязательно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is forbidden to finish it.",
+            "ru": "Заканчивать это запрещено."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "In the present `must` and `have to` are often interchangeable, but the pressure differs: `must` comes from the speaker, `have to` from circumstances or someone else.",
+        "ru": "В настоящем времени `must` и `have to` часто взаимозаменяемы, но давление разное: `must` идёт от говорящего, `have to` — от обстоятельств или другого человека."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/modality-introduction"
+      ],
+      "code": "I must finish this tonight."
+    },
+    {
+      "id": "grammar-base.adjectives-comparison.001",
+      "section": "adjectives-comparison",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "more red",
+            "ru": "more red"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "red",
+            "ru": "red"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "reds",
+            "ru": "reds"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "red's",
+            "ru": "red's"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "redes",
+            "ru": "redes"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "An English adjective has exactly one form. It never takes a plural and never changes for gender, however many nouns follow it.",
+        "ru": "У английского прилагательного ровно одна форма. Оно не имеет множественного числа и не меняется по родам, сколько бы существительных за ним ни шло."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/adjectives"
+      ],
+      "code": "I bought two ___ cars."
+    },
+    {
+      "id": "grammar-base.adjectives-comparison.002",
+      "section": "adjectives-comparison",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "better",
+            "ru": "better"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "best",
+            "ru": "best"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "well",
+            "ru": "well"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "good",
+            "ru": "good"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "goodly",
+            "ru": "goodly"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`sings` is a verb, so it needs an adverb, and the adverb of `good` is the irregular `well`. `She is a good singer` uses the adjective because it describes a noun.",
+        "ru": "`sings` — глагол, поэтому нужно наречие, а наречие от `good` — нерегулярное `well`. В `She is a good singer` стоит прилагательное, потому что оно описывает существительное."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/adverbs",
+        "https://dictionary.cambridge.org/grammar/british-grammar/adjectives"
+      ],
+      "code": "She sings very ___."
+    },
+    {
+      "id": "grammar-base.adjectives-comparison.003",
+      "section": "adjectives-comparison",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Which sentence is wrong?",
+        "ru": "В каком предложении ошибка?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "This is the cheapest one.",
+            "ru": "This is the cheapest one."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "This is as cheap as that.",
+            "ru": "This is as cheap as that."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "This is cheaper than that.",
+            "ru": "This is cheaper than that."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "This is more cheaper than that.",
+            "ru": "This is more cheaper than that."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "This is more expensive than that.",
+            "ru": "This is more expensive than that."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The comparative is marked once. `cheap` is one syllable so it takes `-er`, and adding `more` on top is a second marker — the same error as `more better`.",
+        "ru": "Сравнительная степень помечается один раз. `cheap` — один слог, значит берёт `-er`, а добавленное сверху `more` — второй показатель. Та же ошибка, что `more better`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/comparison-adjectives-as-as-bigger-than"
+      ]
+    },
+    {
+      "id": "grammar-base.adjectives-comparison.004",
+      "section": "adjectives-comparison",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "hot enough",
+            "ru": "hot enough"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "enough hot",
+            "ru": "enough hot"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "too much hot",
+            "ru": "too much hot"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "so hot as",
+            "ru": "so hot as"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "too hot",
+            "ru": "too hot"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "`too` goes before the adjective and means more than you want; `enough` goes after it and means as much as you need. `enough hot` puts them the wrong way round.",
+        "ru": "`too` ставится перед прилагательным и означает «больше, чем нужно»; `enough` — после и означает «столько, сколько нужно». `enough hot` меняет их местами."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/comparison-adjectives-as-as-bigger-than",
+        "https://dictionary.cambridge.org/grammar/british-grammar/adjectives"
+      ],
+      "code": "This coffee is ___ - I can't drink it."
+    },
+    {
+      "id": "grammar-base.adjectives-comparison.005",
+      "section": "adjectives-comparison",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "What does the sentence mean?",
+        "ru": "Что означает это предложение?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "I do almost no work.",
+            "ru": "Я почти не работаю."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "I work a lot.",
+            "ru": "Я много работаю."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I work with difficulty.",
+            "ru": "Я работаю с трудом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I work physically.",
+            "ru": "Я занят физическим трудом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I have just started working.",
+            "ru": "Я только что начал работать."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`hardly` is not the adverb of `hard` — it is a near-negative. `I work hard` means the opposite, and confusing the two says something you did not mean.",
+        "ru": "`hardly` — не наречие от `hard`, а почти-отрицание. `I work hard` означает противоположное, и путаница между ними заставляет сказать не то, что задумано."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/adverbs"
+      ],
+      "code": "I hardly work."
+    },
+    {
+      "id": "grammar-base.adjectives-comparison.006",
+      "section": "adjectives-comparison",
+      "difficulty": "hard",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "an old big wooden",
+            "ru": "an old big wooden"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "a big old wooden",
+            "ru": "a big old wooden"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "a wooden old big",
+            "ru": "a wooden old big"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "an old wooden big",
+            "ru": "an old wooden big"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "a wooden big old",
+            "ru": "a wooden big old"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Stacked adjectives follow a fixed order — opinion, size, age, shape, colour, origin, material, purpose. Size before age before material gives `big old wooden`.",
+        "ru": "Нагромождённые прилагательные идут в закреплённом порядке: оценка, размер, возраст, форма, цвет, происхождение, материал, назначение. Размер перед возрастом перед материалом даёт `big old wooden`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/adjectives"
+      ],
+      "code": "She bought ___ table."
+    },
+    {
+      "id": "grammar-base.prepositions-base.001",
+      "section": "prepositions-base",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "to",
+            "ru": "to"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "by the",
+            "ru": "by the"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "on",
+            "ru": "on"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "in",
+            "ru": "in"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "at",
+            "ru": "at"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Days and dates take `on`. The pattern runs by precision: `at` for a clock time, `on` for a day, `in` for anything longer.",
+        "ru": "Дни и даты берут `on`. Схема идёт по точности: `at` для времени по часам, `on` для дня, `in` для всего, что длиннее."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/prepositions-of-time"
+      ],
+      "code": "I'll see you ___ Monday."
+    },
+    {
+      "id": "grammar-base.prepositions-base.002",
+      "section": "prepositions-base",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "at home",
+            "ru": "at home"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "in home",
+            "ru": "in home"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "on home",
+            "ru": "on home"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "home",
+            "ru": "home"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "to home",
+            "ru": "to home"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`home` takes no preposition after a verb of movement. `at home` exists but means being there, not going there.",
+        "ru": "После глагола движения `home` не берёт предлога. `at home` существует, но означает «быть дома», а не «идти домой»."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/prepositions-of-place"
+      ],
+      "code": "I'm going ___."
+    },
+    {
+      "id": "grammar-base.prepositions-base.003",
+      "section": "prepositions-base",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "to",
+            "ru": "to"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "in",
+            "ru": "in"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "on",
+            "ru": "on"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "into",
+            "ru": "into"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "at",
+            "ru": "at"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "`arrive` never takes `to`. It takes `at` for a point like a station and `in` for a large area like a city: `arrive in Riga`.",
+        "ru": "`arrive` никогда не берёт `to`. С точкой вроде станции идёт `at`, с большой территорией вроде города — `in`: `arrive in Riga`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/prepositions-of-place"
+      ],
+      "code": "We arrived ___ the station at six."
+    },
+    {
+      "id": "grammar-base.prepositions-base.004",
+      "section": "prepositions-base",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "-",
+            "ru": "— (без предлога)"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "on",
+            "ru": "on"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "in",
+            "ru": "in"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "at",
+            "ru": "at"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "by",
+            "ru": "by"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "No preposition goes before `next`, `last`, `this` or `every`. `on next week` is the error this rule prevents.",
+        "ru": "Перед `next`, `last`, `this`, `every` предлог не ставится. `on next week` — как раз та ошибка, от которой спасает это правило."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/prepositions-of-time"
+      ],
+      "code": "I'll see you ___ next week."
+    },
+    {
+      "id": "grammar-base.prepositions-base.005",
+      "section": "prepositions-base",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "What does the sentence mean?",
+        "ru": "Что означает это предложение?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "At the end of the journey.",
+            "ru": "В конце поездки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Early enough, with room to spare.",
+            "ru": "Достаточно рано, с запасом."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Exactly at the arranged time.",
+            "ru": "Точно в назначенное время."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Late, but only slightly.",
+            "ru": "С небольшим опозданием."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "At the very last second.",
+            "ru": "В самую последнюю секунду."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`in time` means early enough; `on time` means punctually, at the arranged moment. The pair looks interchangeable and is not.",
+        "ru": "`in time` означает «достаточно рано», `on time` — «точно в назначенное время». Пара выглядит взаимозаменяемой, но таковой не является."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/prepositions-of-time"
+      ],
+      "code": "We got there in time."
+    },
+    {
+      "id": "grammar-base.prepositions-base.006",
+      "section": "prepositions-base",
+      "difficulty": "hard",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "to",
+            "ru": "to"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "by in",
+            "ru": "by in"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "at",
+            "ru": "at"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "in",
+            "ru": "in"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "on",
+            "ru": "on"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A street corner is a point, so it takes `at`. A corner of a room is an enclosed space and takes `in` — same noun, different preposition, different picture.",
+        "ru": "Угол улицы — это точка, поэтому `at`. Угол комнаты — замкнутое пространство, и там `in`: то же существительное, другой предлог, другая картинка."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/prepositions-of-place"
+      ],
+      "code": "She was waiting ___ the corner of the street."
+    },
+    {
+      "id": "grammar-base.quantifiers-base.001",
+      "section": "quantifiers-base",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "many",
+            "ru": "many"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "a few",
+            "ru": "a few"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "an",
+            "ru": "an"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "any",
+            "ru": "any"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "some",
+            "ru": "some"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`any` is the form for questions and negatives; `some` belongs in positive statements. `many` and `a few` are ruled out anyway, because `money` is uncountable.",
+        "ru": "`any` — форма для вопросов и отрицаний; `some` место в утверждениях. `many` и `a few` исключены и так, потому что `money` неисчисляемо."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/some-and-any",
+        "https://dictionary.cambridge.org/grammar/british-grammar/quantifiers"
+      ],
+      "code": "Do you have ___ money?"
+    },
+    {
+      "id": "grammar-base.quantifiers-base.002",
+      "section": "quantifiers-base",
+      "difficulty": "easy",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "many",
+            "ru": "many"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "a lot",
+            "ru": "a lot"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "few",
+            "ru": "few"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "plenty",
+            "ru": "plenty"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "much",
+            "ru": "much"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "`much` goes with uncountable nouns and `many` with countable plurals. `time` is uncountable here, so `how much`.",
+        "ru": "`much` идёт с неисчисляемыми, `many` — с исчисляемыми во множественном. `time` здесь неисчисляемо, значит `how much`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/quantifiers"
+      ],
+      "code": "How ___ time do we have?"
+    },
+    {
+      "id": "grammar-base.quantifiers-base.003",
+      "section": "quantifiers-base",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "What does the sentence mean?",
+        "ru": "Что означает это предложение?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Not many - the speaker sounds negative about it.",
+            "ru": "Мало — говорящий подаёт это как нехватку."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Several - the speaker is content.",
+            "ru": "Несколько — говорящего это устраивает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Exactly two or three.",
+            "ru": "Ровно двое-трое."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A great many.",
+            "ru": "Очень много."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "None at all.",
+            "ru": "Совсем никого."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Dropping the `a` changes the attitude, not the amount: `a few friends` is positive, `few friends` is close to a complaint. The same split works for `a little` and `little`.",
+        "ru": "Потеря `a` меняет не количество, а отношение: `a few friends` звучит положительно, `few friends` — почти жалоба. То же деление работает для `a little` и `little`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/few-a-few-little-a-little"
+      ],
+      "code": "I have few friends here."
+    },
+    {
+      "id": "grammar-base.quantifiers-base.004",
+      "section": "quantifiers-base",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "much",
+            "ru": "much"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "some",
+            "ru": "some"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "any",
+            "ru": "any"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "many",
+            "ru": "many"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "a few",
+            "ru": "a few"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`some` appears in questions when the question is an offer or a request and a yes is expected. That is the main exception to the some/any rule.",
+        "ru": "`some` появляется в вопросе, когда вопрос является предложением или просьбой и ожидается «да». Это главное исключение из правила some/any."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/some-and-any"
+      ],
+      "code": "Would you like ___ coffee?"
+    },
+    {
+      "id": "grammar-base.quantifiers-base.005",
+      "section": "quantifiers-base",
+      "difficulty": "medium",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "having",
+            "ru": "having"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "were",
+            "ru": "were"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "has",
+            "ru": "has"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "have",
+            "ru": "have"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "are having",
+            "ru": "are having"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`every` and `each` take a singular noun and a singular verb, even though the meaning feels plural — which is exactly why this one trips people up.",
+        "ru": "`every` и `each` берут существительное и глагол в единственном числе, хотя смысл ощущается множественным, — именно поэтому на этом и спотыкаются."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/quantifiers"
+      ],
+      "code": "Every student ___ a book."
+    },
+    {
+      "id": "grammar-base.quantifiers-base.006",
+      "section": "quantifiers-base",
+      "difficulty": "hard",
+      "level": "base",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "was",
+            "ru": "was"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "has been",
+            "ru": "has been"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "be",
+            "ru": "be"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "are",
+            "ru": "are"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "is",
+            "ru": "is"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "With `a lot of` the verb agrees with the noun that follows, not with `lot`. `people` is plural, so `are`; compare `A lot of time **was** wasted`, where `time` is uncountable.",
+        "ru": "При `a lot of` глагол согласуется с существительным после него, а не с `lot`. `people` множественное, поэтому `are`; сравните `A lot of time **was** wasted`, где `time` неисчисляемо."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/quantifiers"
+      ],
+      "code": "A lot of people ___ waiting outside."
+    }
+  ]
+}
