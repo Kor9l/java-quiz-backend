@@ -25,8 +25,14 @@ public class TopicSectionRepository {
                 .getResultList();
     }
 
-    public List<TopicSection> findAllByOrderBySortOrderAsc() {
-        return em.createQuery("select s from TopicSection s order by s.sortOrder asc", TopicSection.class)
+    /** Module-scoped for the same reason as {@link TopicRepository#findByModuleOrderBySortOrderAsc}. */
+    public List<TopicSection> findByModuleOrderBySortOrderAsc(LearningModule module) {
+        return em.createQuery(
+                        "select s from TopicSection s where s.id.topicId in "
+                                + "(select t.id from Topic t where t.module = :module) "
+                                + "order by s.sortOrder asc",
+                        TopicSection.class)
+                .setParameter("module", module)
                 .getResultList();
     }
 }

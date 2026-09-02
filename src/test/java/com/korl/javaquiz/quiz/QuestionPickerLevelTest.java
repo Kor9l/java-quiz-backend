@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 
 /**
  * The level filter on the pool decides what a track may see; this weighting decides what it
@@ -59,6 +60,32 @@ class QuestionPickerLevelTest {
         // Weights are 4:1, so roughly 800 of 1000. The bounds only pin the tilt and the fact
         // that junior material still surfaces.
         assertThat(seniorPicks).isBetween(700, 900);
+    }
+
+    /**
+     * The picker is told a track, not a module, and it never needs to know one: the damping is
+     * a property of the ladder the two levels share. This is what makes one picker serve both.
+     */
+    @Test
+    void anEnglishTrackIsDampedOnTheEnglishLadder() {
+        QuestionPicker picker = new QuestionPicker(new Random(1), Level.PRO);
+        double pro = picker.weightOf(question("p", Difficulty.MEDIUM, Level.PRO), NO_HISTORY);
+        double intermediate = picker.weightOf(question("i", Difficulty.MEDIUM, Level.INTERMEDIATE), NO_HISTORY);
+        double base = picker.weightOf(question("b", Difficulty.MEDIUM, Level.BASE), NO_HISTORY);
+
+        assertThat(pro).isEqualTo(QuestionPicker.UNSEEN_WEIGHT * Difficulty.MEDIUM.weight());
+        assertThat(intermediate).isEqualTo(pro * 0.5);
+        assertThat(base).isEqualTo(pro * 0.25);
+    }
+
+    /**
+     * A track is required rather than defaulted. The old fallback was middle, which is a
+     * backend level: an English round that lost its track would have kept working with every
+     * question weighted the same, and nothing would have said so.
+     */
+    @Test
+    void aMissingTrackIsRejectedRatherThanDefaulted() {
+        assertThatNullPointerException().isThrownBy(() -> new QuestionPicker(new Random(1), null));
     }
 
     @Test

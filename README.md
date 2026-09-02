@@ -36,7 +36,7 @@ URIs — so the frontend needed no change. Two behaviours did change on purpose,
 | GET | `/oauth2/authorization/google` | public, starts Google sign-in |
 | GET | `/login/oauth2/code/google` | public, Google callback |
 | GET | `/api/auth/me` | user |
-| GET | `/api/topics` | user, with personal read-state |
+| GET | `/api/topics` | user, with personal read-state; `?module=` picks backend or english |
 | GET | `/api/materials/{topicId}/{sectionId}` | user |
 | POST | `/api/quiz/start` | user |
 | GET | `/api/quiz/current` | user |
@@ -52,7 +52,7 @@ URIs — so the frontend needed no change. Two behaviours did change on purpose,
 | GET | `/api/practice/tasks/{id}` | user, statement, dataset schema, expected result |
 | POST | `/api/practice/tasks/{id}/check` | user, parse (SQL) or compile (Java), without running |
 | POST | `/api/practice/tasks/{id}/run` | user, run and grade |
-| GET | `/api/modules` | user, the post-login choice with per-module counts |
+| GET | `/api/modules` | user, the post-login choice with per-module counts and sections |
 | GET | `/api/english/groups` | user, groups they may see, with word counts |
 | GET | `/api/english/words` | user, the whole vocabulary, already grouped |
 | GET | `/api/english/groups/{id}` | user, one group with its words |
@@ -83,6 +83,7 @@ because Spring questions contain `${...}` placeholders that Flyway would interpo
 | `V10__LoadWords` | the English vocabulary: 8 groups, 462 words | `content/english/words.json` |
 | `V13__LoadJavaPractice` | Java practice exercises | `content/practice/java.json` |
 | `V14__LoadWords2026Part2` | one more English group: "2026 part 2 words", 42 words | `content/english/words-2026-part-2.json` |
+| `V15__grammar_module` | the `module` column on topics and `area` on sections | — |
 
 SQL and Java Concurrency live in their own directories rather than in the shared files because
 V2 has already run everywhere; adding a topic to `topics.json` would load it on a fresh database
@@ -91,12 +92,22 @@ Java migration, guarded by a content test that runs at build time.
 
 ## Levels
 
-Every question and section carries a career `level` — `JUNIOR`, `MIDDLE` or `SENIOR` — next to
-the `difficulty` a question already had. The two are orthogonal: difficulty says how tricky a
-question is, level says who is expected to know the material at all. Everything loaded before
-V7 was written for a middle-level reader and is tagged `MIDDLE`.
+Every question and section carries a `level` next to the `difficulty` a question already had.
+The two are orthogonal: difficulty says how tricky a question is, level says who is expected to
+know the material at all. Everything loaded before V7 was written for a middle-level reader and
+is tagged `MIDDLE`.
 
-Levels are cumulative. A track draws on its own level and every level below it, so
+There are two ladders, one per module, in the same enum and the same column: `JUNIOR` /
+`MIDDLE` / `SENIOR` for the backend material, graded by career level, and `BASE` /
+`INTERMEDIATE` / `PRO` for English grammar, graded by command of the language. Different words
+because they measure different things — "junior English" means nothing — but the same shape,
+which is what lets one enum, one column and one `QuestionPicker` serve both. The rung is a field
+rather than `ordinal()`, and that is what keeps the ladders apart: by ordinal, `BASE` would count
+as sitting below `SENIOR` and a senior track would pull grammar into its pool. A level from the
+wrong ladder falls back to its module's default, because it would otherwise match nothing and
+turn the round into an empty one, which reads as missing content rather than as a bug.
+
+Levels are cumulative within their own ladder. A track draws on its own level and every level below it, so
 fundamentals stay in the senior pool instead of vanishing from it, and `QuestionPicker` then
 halves the weight of each level below the track — same level ×1, one below ×0.5, two below
 ×0.25. A senior session therefore leans senior while still revisiting basics, and a junior
@@ -248,8 +259,17 @@ as REST against the schema and conventions already here. Its learning quiz, stat
 its own user table stayed behind — this app already has accounts, and the drilling loop was not
 part of the move.
 
-It is a module rather than a topic: no sections, no levels, no `topics.json` entry, and none of
-its tables touch the ones above. `/api/modules` is the only place the two meet.
+The words are a module rather than a topic: no sections, no levels, no `topics.json` entry, and
+none of their tables touch the ones above.
+
+English now has a second half beside them — **grammar** — and that one *is* made of topics, of
+exactly the shape the backend material has. `/api/modules` reports the choice as `sections` on
+the English module, `words` and `grammar`, and `GET /api/topics?module=english` lists the grammar
+courses. What keeps the two apart is one column: `topics.module`. Without it the grammar courses
+would show up in the backend's topic list, in its "all topics" quiz pool and as empty rows in its
+stats breakdown. The plan for filling it in is
+[docs/ENGLISH_GRAMMAR_ROADMAP.md](docs/ENGLISH_GRAMMAR_ROADMAP.md); the schema is in place and
+the content is not written yet, so the grammar half currently answers with an empty list.
 
 ### The words
 
