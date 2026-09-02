@@ -36,14 +36,7 @@ public record CompileDiagnostic(String severity, long line, long column, String 
         return "ERROR".equals(severity);
     }
 
-    /**
-     * Strips the leading file/line banner ECJ puts in front of the wording. The position is
-     * already carried in its own fields, and repeating it inside the text reads as noise.
-     */
     private static String clean(String message) {
-        if (message == null) {
-            return "";
-        }
-        return message.replaceAll("(?m)^.*\\.java:\\d+:\\s*", "").trim();
+        return message == null ? "" : message.trim();
     }
 }

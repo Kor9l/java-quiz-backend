@@ -4,7 +4,13 @@ COPY pom.xml .
 COPY src src
 RUN mvn -q -DskipTests package
 
-FROM eclipse-temurin:17-jre-alpine
+# A JDK rather than a JRE, and not by accident: the Java practice track compiles
+# submissions at runtime through ToolProvider.getSystemJavaCompiler(), which is null without
+# the jdk.compiler module. The check below is what turns a wrong base image into a failed
+# build instead of a practice track that 500s on every task.
+FROM eclipse-temurin:17-jdk-alpine
+RUN java --list-modules | grep -q '^jdk.compiler@' \
+    || { echo "This image has no jdk.compiler; the practice sandbox cannot compile."; exit 1; }
 WORKDIR /app
 # Quarkus fast-jar: four directories rather than one uber-jar. Copied biggest-and-stablest
 # first, so a code-only change only rebuilds the last two layers.

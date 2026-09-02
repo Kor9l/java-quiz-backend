@@ -6,22 +6,29 @@ import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
+import javax.tools.ToolProvider;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.ServiceLoader;
 
 /**
  * Compiles submitted source in memory and hands back either the bytecode or the diagnostics.
  *
- * <p>The compiler is ECJ, loaded through the {@code javax.tools} service interface, rather than
- * the JDK's own. Two reasons, in order of how much they matter here. The runtime image is
- * {@code eclipse-temurin:17-jre}, and on a JRE {@code ToolProvider.getSystemJavaCompiler()}
- * returns null — there is no {@code jdk.compiler} module to find, and switching to a JDK image
- * is the larger change. And a bundled compiler means the error message a learner reads is the
- * one the build tested against, on every machine this runs on.
+ * <p>The compiler is the JDK's own, reached through {@link ToolProvider}. That makes the
+ * runtime image a hard requirement rather than a detail: {@code getSystemJavaCompiler()}
+ * returns null on a JRE, so the Dockerfile runs on {@code eclipse-temurin:17-jdk-alpine} and
+ * asserts at build time that {@code jdk.compiler} is there.
+ *
+ * <p>It was ECJ, bundled as a dependency, precisely so that a JRE would do — and that was
+ * wrong twice over. ECJ's {@code javax.tools} bridge reads compilation units from the file
+ * system and refuses a {@link JavaFileObject} with no file behind it, so it could never have
+ * compiled anything here. And it was never reached in testing: on a JDK,
+ * {@code ServiceLoader} enumerates the {@code jdk.compiler} module's provider before any on
+ * the class path, so every test ran on javac while only production would have run on ECJ.
+ * Asking for one compiler by name is what keeps the tested path and the deployed path the
+ * same one.
  *
  * <p>The class path is emptied before compiling, so submitted code sees the JVM's own
  * {@code java.*} and the units handed to it, and does not see this application at all.
@@ -38,8 +45,8 @@ final class SourceCompiler {
             // Nothing here declares an annotation processor, and discovery would be one more
             // way for the class path to matter.
             "-proc:none",
-            // Warnings are dropped on purpose: ECJ's defaults flag raw types, boxing and
-            // missing serialVersionUID, none of which is what a learner got wrong.
+            // Warnings are dropped on purpose: bootclasspath and deprecation notes are about
+            // the way this compiles, not about what a learner got wrong.
             "-nowarn");
 
     /** Errors before warnings, then in source order, so the top of the list is where to start. */
@@ -53,13 +60,26 @@ final class SourceCompiler {
     }
 
     /**
+     * The compiler this JVM offers, or a failure naming what is missing. Called on the first
+     * submission rather than at boot, so a misconfigured runtime shows up as a broken practice
+     * track instead of a service that will not start.
+     */
+    static JavaCompiler compiler() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        if (compiler == null) {
+            throw new IllegalStateException(
+                    "No system Java compiler: this JVM has no jdk.compiler module. The Java "
+                            + "practice track needs a JDK at runtime, not a JRE.");
+        }
+        return compiler;
+    }
+
+    /**
      * @param sources compilation units, the learner's own first
      * @return the outcome, whose {@link Result#succeeded()} says whether the bytecode is usable
      */
     static Result compile(List<MemorySources.Source> sources) {
-        JavaCompiler compiler = ServiceLoader.load(JavaCompiler.class, SourceCompiler.class.getClassLoader())
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("No javax.tools.JavaCompiler on the class path"));
+        JavaCompiler compiler = compiler();
         DiagnosticCollector<JavaFileObject> collected = new DiagnosticCollector<>();
         StandardJavaFileManager standard = compiler.getStandardFileManager(collected, null, null);
         try (MemorySources.Manager files = new MemorySources.Manager(standard)) {

@@ -2,6 +2,7 @@ package com.korl.javaquiz.practice;
 
 import org.junit.jupiter.api.Test;
 
+import javax.tools.ToolProvider;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,6 +33,20 @@ class JavaPracticeEngineTest {
                 new JavaTaskSpec.Case("sum({1, 2, 3})", "Solution.sum(new int[] {1, 2, 3})"),
                 new JavaTaskSpec.Case("sum({})", "Solution.sum(new int[] {})"),
                 new JavaTaskSpec.Case("sum({-4, 4})", "Solution.sum(new int[] {-4, 4})")));
+    }
+
+    /**
+     * The one thing the Java track requires of the machine it runs on, asserted rather than
+     * assumed. It went unnoticed once: the code asked ServiceLoader for "a" compiler and got
+     * javac from the jdk.compiler module in every test, so the bundled compiler it would have
+     * fallen back to in production was never exercised — and did not work. The Dockerfile
+     * makes the same assertion about the runtime image.
+     */
+    @Test
+    void theRuntimeHasToOfferACompiler() {
+        assertThat(ToolProvider.getSystemJavaCompiler())
+                .describedAs("system Java compiler; the runtime image has to be a JDK, not a JRE")
+                .isNotNull();
     }
 
     @Test
