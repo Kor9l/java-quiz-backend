@@ -376,7 +376,9 @@ public class QuizService {
                 ? request.smartSelection
                 : settingsPayload.smartSelection);
         config.setLevel(request != null && request.level != null ? request.level : settingsPayload.level);
-        List<Topic> catalog = topics.findAllByOrderBySortOrderAsc();
+        // Scoped by the round's own module, which is what keeps an empty selection meaning
+        // "every topic of this module" rather than every topic in the database.
+        List<Topic> catalog = topics.findByModuleOrderBySortOrderAsc(config.getModule());
         if (request != null && request.sectionId != null && !request.sectionId.isBlank()
                 && request.topicIds != null && request.topicIds.size() == 1) {
             config.setTopicIds(request.topicIds);

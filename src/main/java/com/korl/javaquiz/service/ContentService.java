@@ -1,6 +1,7 @@
 package com.korl.javaquiz.service;
 
 import com.korl.javaquiz.api.dto.LocalizedTextDto;
+import com.korl.javaquiz.domain.LearningModule;
 import com.korl.javaquiz.domain.MaterialSection;
 import com.korl.javaquiz.domain.MaterialSectionRepository;
 import com.korl.javaquiz.domain.MaterialSource;
@@ -56,12 +57,17 @@ public class ContentService {
         this.stats = stats;
     }
 
+    /**
+     * The topics of one module, with this learner's read state. Scoped rather than filtered by
+     * the caller: the two modules are navigated by separate screens, and a screen that had to
+     * remember to drop the other module's topics would eventually forget.
+     */
     @Transactional
-    public List<Map<String, Object>> listTopics(UUID userId) {
+    public List<Map<String, Object>> listTopics(UUID userId, LearningModule module) {
         ProgressPayload progressPayload = progressPayload(userId);
         StatsPayload statsPayload = statsPayload(userId);
         List<Map<String, Object>> result = new ArrayList<>();
-        for (Topic topic : topics.findAllByOrderBySortOrderAsc()) {
+        for (Topic topic : topics.findByModuleOrderBySortOrderAsc(module)) {
             List<TopicSection> topicSections = sections.findByIdTopicIdOrderBySortOrderAsc(topic.getId());
             int unread = 0;
             int read = 0;
@@ -81,12 +87,15 @@ public class ContentService {
                 // Reported, not filtered: a section above the reader's level is worth labelling,
                 // but hiding it would also hide progress they may already have on it.
                 sectionDto.put("level", section.getLevel().name());
+                // Null for backend sections, which are grouped by their topic already.
+                sectionDto.put("area", section.getArea());
                 sectionDto.put("readState", state.name());
                 sectionDto.put("questionCount", questions.countByTopicIdAndSectionId(topic.getId(), section.sectionId()));
                 sectionDtos.add(sectionDto);
             }
             Map<String, Object> dto = new LinkedHashMap<>();
             dto.put("id", topic.getId());
+            dto.put("module", topic.getModule().name());
             dto.put("order", topic.getSortOrder());
             dto.put("name", LocalizedTextDto.of(topic.getNameEn(), topic.getNameRu()));
             dto.put("questionCount", questions.countByTopicId(topic.getId()));
@@ -122,6 +131,7 @@ public class ContentService {
         dto.put("sectionId", sectionId);
         dto.put("title", LocalizedTextDto.of(section.getTitleEn(), section.getTitleRu()));
         dto.put("level", section.getLevel().name());
+        dto.put("area", section.getArea());
         dto.put("estimatedMinutes", material.getEstimatedMinutes());
         dto.put("summary", LocalizedTextDto.of(material.getSummaryEn(), material.getSummaryRu()));
         dto.put("body", LocalizedTextDto.of(material.getBodyEn(), material.getBodyRu()));

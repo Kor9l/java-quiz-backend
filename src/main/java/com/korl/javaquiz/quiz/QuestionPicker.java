@@ -6,6 +6,7 @@ import com.korl.javaquiz.userstate.StatsPayload;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class QuestionPicker {
@@ -17,9 +18,15 @@ public class QuestionPicker {
     private final Random random;
     private final Level track;
 
+    /**
+     * The track must be given. It used to fall back to middle, which is a backend level and
+     * would silently un-damp an English round; and there is nothing to fall back to here
+     * anyway, since the default depends on a module the picker is not told about.
+     * {@link QuizConfig} resolves the level before this is ever constructed.
+     */
     public QuestionPicker(Random random, Level track) {
         this.random = random;
-        this.track = Level.orMiddle(track);
+        this.track = Objects.requireNonNull(track, "track");
     }
 
     public List<Question> pick(List<Question> pool, int count, boolean smart, StatsPayload stats) {

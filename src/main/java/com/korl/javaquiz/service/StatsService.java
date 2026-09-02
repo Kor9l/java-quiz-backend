@@ -2,6 +2,7 @@ package com.korl.javaquiz.service;
 
 import com.korl.javaquiz.api.dto.LocalizedTextDto;
 import com.korl.javaquiz.api.error.ApiException;
+import com.korl.javaquiz.domain.LearningModule;
 import com.korl.javaquiz.domain.QuestionRepository;
 import com.korl.javaquiz.domain.Topic;
 import com.korl.javaquiz.domain.TopicRepository;
@@ -49,7 +50,7 @@ public class StatsService {
         StatsPayload payload = stats.findById(userId)
                 .map(UserStatsEntity::getPayload)
                 .orElseGet(StatsPayload::new);
-        long bankSize = questions.count();
+        long bankSize = questions.countByModule(LearningModule.BACKEND);
 
         Map<String, Object> overall = new LinkedHashMap<>();
         overall.put("totalAnswered", payload.totalAnswered);
@@ -63,8 +64,13 @@ public class StatsService {
         overall.put("firstAnswerAt", payload.firstAnswerAt);
         overall.put("lastAnswerAt", payload.lastAnswerAt);
 
+        // Backend only, and the whole breakdown with it. The counters are keyed by topic and
+        // section for both modules, but the rows are built from the catalog rather than from
+        // the counters, so an unscoped catalog would grow a row per grammar course here — empty
+        // rows on a screen that never asked about grammar. Grammar gets its own reading of this
+        // when it has content to report; then the module becomes a parameter.
         Map<String, Topic> topicById = new LinkedHashMap<>();
-        for (Topic topic : topics.findAllByOrderBySortOrderAsc()) {
+        for (Topic topic : topics.findByModuleOrderBySortOrderAsc(LearningModule.BACKEND)) {
             topicById.put(topic.getId(), topic);
         }
 
@@ -81,7 +87,7 @@ public class StatsService {
         }
 
         Map<String, TopicSection> sectionByKey = new LinkedHashMap<>();
-        for (TopicSection section : sections.findAllByOrderBySortOrderAsc()) {
+        for (TopicSection section : sections.findByModuleOrderBySortOrderAsc(LearningModule.BACKEND)) {
             sectionByKey.put(section.topicId() + "/" + section.sectionId(), section);
         }
 

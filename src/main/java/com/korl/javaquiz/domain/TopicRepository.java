@@ -17,7 +17,17 @@ public class TopicRepository {
         return Optional.ofNullable(em.find(Topic.class, id));
     }
 
-    public List<Topic> findAllByOrderBySortOrderAsc() {
-        return em.createQuery("select t from Topic t order by t.sortOrder asc", Topic.class).getResultList();
+    /**
+     * Always scoped by module, and there is deliberately no unscoped variant: a list of every
+     * topic is never the right answer to any question this app asks, and having one available
+     * is how grammar courses would end up in the backend's topic list, its "all topics" quiz
+     * and its stats breakdown.
+     */
+    public List<Topic> findByModuleOrderBySortOrderAsc(LearningModule module) {
+        return em.createQuery(
+                        "select t from Topic t where t.module = :module order by t.sortOrder asc",
+                        Topic.class)
+                .setParameter("module", module)
+                .getResultList();
     }
 }

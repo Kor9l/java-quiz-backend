@@ -31,6 +31,17 @@ public class TopicSection {
     @Column(nullable = false)
     private Level level;
 
+    /**
+     * The area of grammar the section drills — tenses, articles, modals, syntax. Null for
+     * backend sections, which are already grouped by the topic they sit in.
+     *
+     * <p>A grammar course runs one level end to end, in teaching order, so the level is what
+     * the courses are cut by. This is the other cut — every conditional across all three
+     * levels — kept possible without moving content later.
+     */
+    @Column
+    private String area;
+
     public Id getId() {
         return id;
     }
@@ -57,6 +68,10 @@ public class TopicSection {
 
     public Level getLevel() {
         return level;
+    }
+
+    public String getArea() {
+        return area;
     }
 
     @Embeddable

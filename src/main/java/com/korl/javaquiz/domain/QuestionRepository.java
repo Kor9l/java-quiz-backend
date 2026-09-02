@@ -49,8 +49,18 @@ public class QuestionRepository {
                 .getResultList();
     }
 
-    public long count() {
-        return em.createQuery("select count(q) from Question q", Long.class).getSingleResult();
+    /**
+     * The size of one module's question bank. Via the topic, because a question is placed by
+     * its section and the module lives on the topic — the alternative, a second discriminator
+     * on the question, would be one more thing every content migration has to remember.
+     */
+    public long countByModule(LearningModule module) {
+        return em.createQuery(
+                        "select count(q) from Question q where q.topicId in "
+                                + "(select t.id from Topic t where t.module = :module)",
+                        Long.class)
+                .setParameter("module", module)
+                .getSingleResult();
     }
 
     public long countByTopicId(String topicId) {

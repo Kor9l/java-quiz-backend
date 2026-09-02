@@ -1,5 +1,6 @@
 package com.korl.javaquiz.quiz;
 
+import com.korl.javaquiz.domain.LearningModule;
 import com.korl.javaquiz.domain.Level;
 
 import java.util.ArrayList;
@@ -9,6 +10,10 @@ public class QuizConfig {
 
     private List<String> topicIds = new ArrayList<>();
     private String sectionId;
+    // Absent from session payloads written before the module split; the field default is what
+    // makes those rounds backend ones, the same way the level field default made pre-V7
+    // payloads middle.
+    private LearningModule module = LearningModule.BACKEND;
     private Level level = Level.MIDDLE;
     private int targetCount;
     private boolean infinite;
@@ -31,12 +36,26 @@ public class QuizConfig {
         this.sectionId = sectionId;
     }
 
+    public LearningModule getModule() {
+        return module;
+    }
+
+    /**
+     * Setting the module re-resolves the level, so the two cannot end up describing different
+     * ladders whichever order they arrive in — a round configured {@code ENGLISH} while still
+     * holding {@code MIDDLE} would query a pool that cannot match and come out empty.
+     */
+    public void setModule(LearningModule module) {
+        this.module = module == null ? LearningModule.BACKEND : module;
+        this.level = Level.orDefault(this.module, this.level);
+    }
+
     public Level getLevel() {
         return level;
     }
 
     public void setLevel(Level level) {
-        this.level = Level.orMiddle(level);
+        this.level = Level.orDefault(module, level);
     }
 
     public int getTargetCount() {
