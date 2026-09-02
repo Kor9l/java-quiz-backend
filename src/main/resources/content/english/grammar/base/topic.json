@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 3,
+  "topic": {
+    "id": "grammar-base",
+    "module": "english",
+    "order": 1,
+    "name": {
+      "en": "Grammar: base",
+      "ru": "Грамматика: база"
+    },
+    "sections": [
+      {
+        "id": "word-order-basics",
+        "order": 1,
+        "level": "base",
+        "area": "syntax",
+        "title": {
+          "en": "Word order, questions and negatives",
+          "ru": "Порядок слов, вопросы и отрицания"
+        }
+      },
+      {
+        "id": "to-be-have-got",
+        "order": 2,
+        "level": "base",
+        "area": "verbs",
+        "title": {
+          "en": "to be, have got, there is",
+          "ru": "to be, have got, there is"
+        }
+      },
+      {
+        "id": "nouns-plurals",
+        "order": 3,
+        "level": "base",
+        "area": "nouns",
+        "title": {
+          "en": "Nouns: plurals, countable and uncountable",
+          "ru": "Существительные: число, исчисляемость"
+        }
+      },
+      {
+        "id": "articles-base",
+        "order": 4,
+        "level": "base",
+        "area": "articles",
+        "title": {
+          "en": "Articles: a, an, the and none",
+          "ru": "Артикли: a, an, the и нулевой"
+        }
+      },
+      {
+        "id": "pronouns-possessives",
+        "order": 5,
+        "level": "base",
+        "area": "pronouns",
+        "title": {
+          "en": "Pronouns, possessives and this/that",
+          "ru": "Местоимения, притяжательность и this/that"
+        }
+      },
+      {
+        "id": "present-simple",
+        "order": 6,
+        "level": "base",
+        "area": "tenses",
+        "title": {
+          "en": "Present Simple",
+          "ru": "Present Simple"
+        }
+      },
+      {
+        "id": "present-continuous",
+        "order": 7,
+        "level": "base",
+        "area": "tenses",
+        "title": {
+          "en": "Present Continuous, and which present to use",
+          "ru": "Present Continuous и выбор между настоящими"
+        }
+      },
+      {
+        "id": "past-simple",
+        "order": 8,
+        "level": "base",
+        "area": "tenses",
+        "title": {
+          "en": "Past Simple",
+          "ru": "Past Simple"
+        }
+      },
+      {
+        "id": "past-continuous",
+        "order": 9,
+        "level": "base",
+        "area": "tenses",
+        "title": {
+          "en": "Past Continuous, when and while",
+          "ru": "Past Continuous, when и while"
+        }
+      },
+      {
+        "id": "future-base",
+        "order": 10,
+        "level": "base",
+        "area": "tenses",
+        "title": {
+          "en": "Talking about the future",
+          "ru": "Как говорить о будущем"
+        }
+      },
+      {
+        "id": "modals-base",
+        "order": 11,
+        "level": "base",
+        "area": "modals",
+        "title": {
+          "en": "Modals: can, must, should, have to",
+          "ru": "Модальные: can, must, should, have to"
+        }
+      },
+      {
+        "id": "adjectives-comparison",
+        "order": 12,
+        "level": "base",
+        "area": "adjectives",
+        "title": {
+          "en": "Adjectives, adverbs and comparison",
+          "ru": "Прилагательные, наречия и сравнение"
+        }
+      },
+      {
+        "id": "prepositions-base",
+        "order": 13,
+        "level": "base",
+        "area": "prepositions",
+        "title": {
+          "en": "Prepositions of time and place",
+          "ru": "Предлоги времени и места"
+        }
+      },
+      {
+        "id": "quantifiers-base",
+        "order": 14,
+        "level": "base",
+        "area": "quantifiers",
+        "title": {
+          "en": "some, any, much, many, a few",
+          "ru": "some, any, much, many, a few"
+        }
+      }
+    ]
+  }
+}

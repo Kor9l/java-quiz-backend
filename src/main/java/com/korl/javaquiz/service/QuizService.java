@@ -2,6 +2,7 @@ package com.korl.javaquiz.service;
 
 import com.korl.javaquiz.api.dto.LocalizedTextDto;
 import com.korl.javaquiz.api.error.ApiException;
+import com.korl.javaquiz.domain.LearningModule;
 import com.korl.javaquiz.domain.Level;
 import com.korl.javaquiz.domain.Question;
 import com.korl.javaquiz.domain.QuestionOption;
@@ -77,12 +78,13 @@ public class QuizService {
                 .map(UserStatsEntity::getPayload)
                 .orElseGet(StatsPayload::new);
 
+        LearningModule module = requestedModule(request);
         // Kept unexpanded: empty means "every topic", and saving it as the ids that exist today
         // would quietly exclude any topic added later.
         List<String> chosenTopics = request != null && request.topicIds != null
                 ? new ArrayList<>(request.topicIds)
-                : new ArrayList<>(settingsPayload.selectedTopics);
-        QuizConfig config = resolveConfig(request, settingsPayload, chosenTopics);
+                : settingsPayload.selectionFor(module);
+        QuizConfig config = resolveConfig(request, settingsPayload, chosenTopics, module);
         boolean showExplanation = request != null && request.showExplanation != null
                 ? request.showExplanation
                 : settingsPayload.showExplanation;
@@ -256,10 +258,8 @@ public class QuizService {
             return;
         }
         SettingsPayload payload = entity.getPayload() == null ? new SettingsPayload() : entity.getPayload();
-        payload.setSelectedTopics(chosenTopics);
-        payload.questionCount = config.getTargetCount();
-        payload.infiniteMode = config.isInfinite();
-        payload.level = config.getLevel();
+        payload.rememberFor(config.getModule(), chosenTopics, config.getTargetCount(),
+                config.isInfinite(), config.getLevel());
         payload.shuffleOptions = config.isShuffleOptions();
         payload.smartSelection = config.isSmartSelection();
         payload.showExplanation = showExplanation;
@@ -267,19 +267,20 @@ public class QuizService {
         settings.save(entity);
     }
 
-    /** What the setup step opens on: the choice this learner made last time. */
+    /** What the setup step opens on: the choice this learner made last time, in this module. */
     @Transactional
-    public Map<String, Object> setup(UUID userId) {
+    public Map<String, Object> setup(UUID userId, LearningModule module) {
         SettingsPayload payload = settings.findById(userId)
                 .map(UserSettingsEntity::getPayload)
                 .orElseGet(SettingsPayload::new);
         Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("module", module.name());
         // The saved list, not effectiveTopics: an empty selection means "all", and the step
         // shows that as nothing ticked rather than as everything ticked.
-        dto.put("topicIds", new ArrayList<>(payload.selectedTopics));
-        dto.put("questionCount", payload.normalizedQuestionCount());
-        dto.put("infinite", payload.infiniteMode);
-        dto.put("level", payload.level.name());
+        dto.put("topicIds", payload.selectionFor(module));
+        dto.put("questionCount", payload.questionCountFor(module));
+        dto.put("infinite", payload.infiniteFor(module));
+        dto.put("level", payload.levelFor(module).name());
         dto.put("shuffleOptions", payload.shuffleOptions);
         dto.put("smartSelection", payload.smartSelection);
         dto.put("showExplanation", payload.showExplanation);
@@ -367,15 +368,19 @@ public class QuizService {
     }
 
     private QuizConfig resolveConfig(QuizStartRequest request, SettingsPayload settingsPayload,
-                                     List<String> chosenTopics) {
+                                     List<String> chosenTopics, LearningModule module) {
         QuizConfig config = new QuizConfig();
+        // Before the level, so the level is resolved against the right ladder.
+        config.setModule(module);
         config.setShuffleOptions(request != null && request.shuffleOptions != null
                 ? request.shuffleOptions
                 : settingsPayload.shuffleOptions);
         config.setSmartSelection(request != null && request.smartSelection != null
                 ? request.smartSelection
                 : settingsPayload.smartSelection);
-        config.setLevel(request != null && request.level != null ? request.level : settingsPayload.level);
+        config.setLevel(request != null && request.level != null
+                ? request.level
+                : settingsPayload.levelFor(module));
         // Scoped by the round's own module, which is what keeps an empty selection meaning
         // "every topic of this module" rather than every topic in the database.
         List<Topic> catalog = topics.findByModuleOrderBySortOrderAsc(config.getModule());
@@ -390,10 +395,10 @@ public class QuizService {
         config.setTopicIds(SettingsPayload.effectiveTopics(catalog, chosenTopics));
         config.setTargetCount(request != null && request.targetCount != null
                 ? Math.max(1, Math.min(500, request.targetCount))
-                : settingsPayload.normalizedQuestionCount());
+                : settingsPayload.questionCountFor(module));
         config.setInfinite(request != null && request.infinite != null
                 ? request.infinite
-                : settingsPayload.infiniteMode);
+                : settingsPayload.infiniteFor(module));
         return config;
     }
 
@@ -532,11 +537,20 @@ public class QuizService {
         return rows;
     }
 
+    private static LearningModule requestedModule(QuizStartRequest request) {
+        return request == null || request.module == null ? LearningModule.BACKEND : request.module;
+    }
+
     /**
      * Body of {@code POST /api/quiz/start} — the setup step, all of it optional. Anything left
      * out falls back to what was saved the last time a round was started.
      */
     public static class QuizStartRequest {
+        /**
+         * Which module the round is over. Absent means backend, which is what every caller
+         * written before grammar existed meant by leaving it out.
+         */
+        public LearningModule module;
         public List<String> topicIds;
         public String sectionId;
         public Integer targetCount;

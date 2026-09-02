@@ -9,6 +9,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
 import java.util.Map;
@@ -27,11 +28,14 @@ public class QuizResource {
         this.currentUser = currentUser;
     }
 
-    /** What the setup step opens on — the choice this learner made last time. */
+    /**
+     * What the setup step opens on — the choice this learner made last time, in this module.
+     * The two modules remember separately, so the grammar step never opens on a backend track.
+     */
     @GET
     @Path("/setup")
-    public Map<String, Object> setup() {
-        return quizService.setup(currentUser.id());
+    public Map<String, Object> setup(@QueryParam("module") String module) {
+        return quizService.setup(currentUser.id(), ModuleParam.orBackend(module));
     }
 
     @POST

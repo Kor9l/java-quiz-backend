@@ -1,6 +1,7 @@
 package com.korl.javaquiz.userstate;
 
 import com.korl.javaquiz.domain.Language;
+import com.korl.javaquiz.domain.LearningModule;
 import com.korl.javaquiz.domain.Level;
 import com.korl.javaquiz.domain.Topic;
 import com.korl.javaquiz.english.TranslationDirection;
@@ -23,6 +24,15 @@ public class SettingsPayload {
     public List<String> selectedTopics = new ArrayList<>();
     public int questionCount = 20;
     public boolean infiniteMode;
+
+    // The grammar quiz keeps its own setup, and it has to: level, chosen courses and count all
+    // mean different things on the two ladders, and a single slot would have a grammar round
+    // writing BASE over a backend learner's chosen SENIOR — silently, on the next round they
+    // start. Same shape as the word-quiz fields below, for the same reason.
+    public Level grammarLevel = Level.BASE;
+    public List<String> selectedGrammarCourses = new ArrayList<>();
+    public int grammarQuestionCount = 20;
+    public boolean grammarInfiniteMode;
     public boolean shuffleOptions = true;
     public boolean smartSelection = true;
     public boolean showExplanation = true;
@@ -39,6 +49,43 @@ public class SettingsPayload {
 
     public boolean allTopics() {
         return selectedTopics == null || selectedTopics.isEmpty();
+    }
+
+    /** The saved level for one module's ladder, guarded against a value off the other one. */
+    public Level levelFor(LearningModule module) {
+        return module == LearningModule.ENGLISH
+                ? Level.orDefault(module, grammarLevel)
+                : Level.orDefault(module, level);
+    }
+
+    public List<String> selectionFor(LearningModule module) {
+        List<String> selection = module == LearningModule.ENGLISH ? selectedGrammarCourses : selectedTopics;
+        return selection == null ? new ArrayList<>() : new ArrayList<>(selection);
+    }
+
+    public int questionCountFor(LearningModule module) {
+        int count = module == LearningModule.ENGLISH ? grammarQuestionCount : questionCount;
+        return Math.max(MIN_COUNT, Math.min(MAX_COUNT, count));
+    }
+
+    public boolean infiniteFor(LearningModule module) {
+        return module == LearningModule.ENGLISH ? grammarInfiniteMode : infiniteMode;
+    }
+
+    /** Writes a finished round's setup back into its own module's slots, never the other's. */
+    public void rememberFor(LearningModule module, List<String> courses, int count, boolean infinite,
+                            Level chosenLevel) {
+        if (module == LearningModule.ENGLISH) {
+            selectedGrammarCourses = new ArrayList<>(new LinkedHashSet<>(courses));
+            grammarQuestionCount = count;
+            grammarInfiniteMode = infinite;
+            grammarLevel = chosenLevel;
+        } else {
+            setSelectedTopics(courses);
+            questionCount = count;
+            infiniteMode = infinite;
+            level = chosenLevel;
+        }
     }
 
     public List<String> effectiveTopics(List<Topic> catalog) {
