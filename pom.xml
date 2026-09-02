@@ -19,7 +19,6 @@
     <surefire-plugin.version>3.5.2</surefire-plugin.version>
     <jjwt.version>0.12.6</jjwt.version>
     <h2.version>2.2.224</h2.version>
-    <ecj.version>3.42.0</ecj.version>
     <bcrypt.version>0.10.2</bcrypt.version>
     <assertj.version>3.27.7</assertj.version>
   </properties>
@@ -106,17 +105,6 @@
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <version>${h2.version}</version>
-    </dependency>
-
-    <!-- The compiler behind the Java practice sandbox. A bundled compiler rather than the
-         JDK's own, because the runtime image is a JRE: `ToolProvider.getSystemJavaCompiler()`
-         returns null there, and swapping the image for a JDK would cost more than these 3 MB.
-         It also makes a learner's error message the same one the build tested against, rather
-         than whatever javac the host happens to ship. -->
-    <dependency>
-      <groupId>org.eclipse.jdt</groupId>
-      <artifactId>ecj</artifactId>
-      <version>${ecj.version}</version>
     </dependency>
 
     <dependency>

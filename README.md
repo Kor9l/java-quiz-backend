@@ -229,11 +229,26 @@ logging never goes through it.
 
 ### The compiler
 
-ECJ, bundled as a dependency and loaded through the `javax.tools` service interface, rather than
-the JDK's own. The runtime image is `eclipse-temurin:17-jre`, and on a JRE
-`ToolProvider.getSystemJavaCompiler()` returns null — there is no `jdk.compiler` module to find,
-and switching to a JDK image is the larger change for 3 MB. It also means the error message a
-learner reads is the one the build tested against, on every machine this runs on.
+The JDK's own, asked for by name through `ToolProvider.getSystemJavaCompiler()`. That makes the
+runtime image part of the contract: the Dockerfile runs on `eclipse-temurin:17-jdk-alpine` and
+**asserts at build time** that `jdk.compiler` is present, because a JRE would give back null and
+every task would 500.
+
+It was ECJ, bundled as a dependency so that a JRE would do, and that was wrong twice over.
+
+ECJ's `javax.tools` bridge reads compilation units from the file system: hand it a
+`JavaFileObject` with nothing behind it and it answers `File /Solution.java is missing`,
+whatever the object returns from `getCharContent`. It could never have compiled anything here.
+
+And nothing caught that, because ECJ was never what ran. The code asked `ServiceLoader` for *a*
+`JavaCompiler` and took the first, and on a JDK the `jdk.compiler` module's provider is
+enumerated before anything on the class path — so all 265 tests ran on javac, and only the
+deployed JRE would ever have reached the bundled compiler. Two paths, one of them tested. Asking
+for one compiler by name is what keeps the tested path and the deployed path the same.
+
+The cost of the correction is a base image that goes from 184 MB to 336 MB. It buys back the
+3 MB the dependency saved and then some, and it changes nothing about resident memory — nothing
+of `jdk.compiler` is loaded until the first submission compiles.
 
 Compilation is in memory, with an **empty class path**: submitted code sees the JVM's own
 `java.*` and nothing else. The submission is compiled as itself rather than wrapped in
