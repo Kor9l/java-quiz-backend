@@ -1,5 +1,7 @@
 package com.korl.javaquiz.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -33,5 +35,26 @@ public enum LearningModule {
         return Arrays.stream(values())
                 .filter(module -> module.name().equalsIgnoreCase(trimmed))
                 .findFirst();
+    }
+
+    /**
+     * The same reading, for the module inside a JSON request body — {@code POST /api/quiz/start}
+     * carries it there rather than as a query parameter.
+     *
+     * <p>Without this, Jackson matches enum constants exactly, so the {@code english} the UI
+     * sends everywhere else was rejected in the body alone. That rejection happens in the body
+     * reader, before any resource method runs, so it never reached an exception mapper: the
+     * grammar round failed on a 400 with no message in it at all.
+     *
+     * <p>Blank is null rather than an error — an absent module and an empty one both mean "not
+     * given", and {@code requestedModule} is what turns that into backend.
+     */
+    @JsonCreator
+    static LearningModule fromJson(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+        return parse(value).orElseThrow(
+                () -> new IllegalArgumentException("Unknown module: " + value));
     }
 }
