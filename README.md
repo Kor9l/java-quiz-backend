@@ -70,6 +70,15 @@ Default admin after Flyway: `admin@javaquiz.local`, password taken from `ADMIN_I
 (`admin123` under `docker compose`). Without that variable the migration generates a random
 password and writes it to the log once — a fixed default would be an open door on a public host.
 
+`V18__admin_korianko` adds a second admin, `korianko@gmail.com`, so the shared content can be
+curated from a real account rather than the seeded one. It promotes the account if it is already
+there and seeds it if it is not — a migration runs once, and this account arrives through Google
+sign-in, so an `UPDATE` alone could land before the account exists and leave nothing behind. The
+seeded row has no password and no `google_id`; `loginWithGoogle` looks an account up by email
+before creating one, so the first sign-in links the Google identity to this row and keeps `ADMIN`
+instead of making a second `USER` account beside it. Both paths leave everything but the role
+alone.
+
 Content is 7 topics, 61 article sections and 366 quiz questions, all bilingual, loaded from
 `src/main/resources/content/` by Flyway **Java** migrations — Java rather than SQL scripts
 because Spring questions contain `${...}` placeholders that Flyway would interpolate.
@@ -87,6 +96,7 @@ because Spring questions contain `${...}` placeholders that Flyway would interpo
 | `V15__grammar_module` | the `module` column on topics and `area` on sections | — |
 | `V16__LoadGrammarBase` | the base English grammar course: 14 sections, articles, 84 questions | `content/english/grammar/base/` |
 | `V17__ExtendWords2026Part2` | 44 more words into that same group, taking it to 86 | `content/english/words-2026-part-2-extra.json` |
+| `V18__admin_korianko` | a second admin account | — |
 
 SQL and Java Concurrency live in their own directories rather than in the shared files because
 V2 has already run everywhere; adding a topic to `topics.json` would load it on a fresh database
