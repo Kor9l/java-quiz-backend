@@ -12,8 +12,11 @@ import java.util.List;
  * @param expected    the reference result, so the learner can see the target
  * @param comparison  how the two differ, null when the submission never ran
  * @param durationMs  wall-clock time spent building the sandbox and running the submission
- * @param diagnostics compiler messages; always empty on the SQL track
- * @param output      what the submission printed, one entry per case; empty on the SQL track
+ * @param diagnostics compiler messages; always empty on the SQL and grammar tracks
+ * @param output      what the submission printed, one entry per case; empty on the SQL and
+ *                    grammar tracks
+ * @param blanks      how each blank of a grammar exercise was answered; empty on the tracks
+ *                    that have no blanks
  */
 public record SubmissionOutcome(
         SubmissionStatus status,
@@ -24,9 +27,10 @@ public record SubmissionOutcome(
         ResultComparator.Comparison comparison,
         long durationMs,
         List<CompileDiagnostic> diagnostics,
-        List<String> output) {
+        List<String> output,
+        List<BlankOutcome> blanks) {
 
-    /** An outcome from a track that has no compiler and captures no output. */
+    /** An outcome from a track that has no compiler, captures no output and has no blanks. */
     public static SubmissionOutcome of(
             SubmissionStatus status,
             String messageKey,
@@ -36,7 +40,8 @@ public record SubmissionOutcome(
             ResultComparator.Comparison comparison,
             long durationMs) {
         return new SubmissionOutcome(
-                status, messageKey, detail, result, expected, comparison, durationMs, List.of(), List.of());
+                status, messageKey, detail, result, expected, comparison, durationMs,
+                List.of(), List.of(), List.of());
     }
 
     public boolean passed() {

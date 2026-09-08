@@ -72,6 +72,8 @@ public interface AppConfig {
 
         Java java();
 
+        Grammar grammar();
+
         /** The Java track, which compiles and runs rather than querying. */
         interface Java {
             /** Covers every case of one task together, not each case on its own. */
@@ -84,6 +86,16 @@ public interface AppConfig {
 
             @WithDefault("8000")
             int maxOutputBytes();
+        }
+
+        /**
+         * The grammar track, which runs nothing at all — so it has one limit rather than
+         * three: no sandbox to time out and no output to cap.
+         */
+        interface Grammar {
+            /** A sentence, not a document. Tight on purpose: anything longer is not an answer. */
+            @WithDefault("600")
+            int maxAnswerLength();
         }
     }
 }

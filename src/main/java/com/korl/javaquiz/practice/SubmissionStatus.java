@@ -9,7 +9,10 @@ public enum SubmissionStatus {
     WRONG_RESULT,
     /** Rejected before execution: not a single read-only query, or forbidden Java. */
     POLICY_ERROR,
-    /** The parser refused the statement, or it referenced something that does not exist. */
+    /**
+     * The parser refused the statement, or it referenced something that does not exist. On the
+     * grammar track: the answer was not built from the words the exercise handed out.
+     */
     SYNTAX_ERROR,
     /** Java only: the source did not compile. The diagnostics say why. */
     COMPILE_ERROR,

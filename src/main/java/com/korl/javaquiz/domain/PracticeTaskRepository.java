@@ -41,6 +41,12 @@ public class PracticeTaskRepository {
                 .getResultList();
     }
 
+    public long countByTrack(String track) {
+        return em.createQuery("select count(t) from PracticeTask t where t.track = :track", Long.class)
+                .setParameter("track", track)
+                .getSingleResult();
+    }
+
     public List<String> findTracks() {
         return em.createQuery("select distinct t.track from PracticeTask t order by t.track", String.class)
                 .getResultList();

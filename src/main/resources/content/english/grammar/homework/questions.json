@@ -1,0 +1,342 @@
+{
+  "schemaVersion": 3,
+  "topic": "grammar-homework",
+  "questions": [
+    {
+      "id": "grammar-homework.questions-direct-indirect.001",
+      "section": "questions-direct-indirect",
+      "difficulty": "easy",
+      "level": "intermediate",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "where the sports centre is",
+            "ru": "where the sports centre is"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "where is the sports centre",
+            "ru": "where is the sports centre"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "where does the sports centre",
+            "ru": "where does the sports centre"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "where the sports centre",
+            "ru": "where the sports centre"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "where is sports centre",
+            "ru": "where is sports centre"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "After `Could you tell me` the question becomes a clause, and a clause keeps statement order: the subject `the sports centre` comes before the verb `is`. The inversion `where is` belongs to a direct question, and this sentence has already used its inversion on `Could you`.",
+        "ru": "После `Could you tell me` вопрос превращается в придаточное, а в придаточном порядок утвердительный: подлежащее `the sports centre` стоит перед глаголом `is`. Инверсия `where is` бывает только в прямом вопросе, а здесь инверсия уже израсходована на `Could you`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/questions-wh-questions",
+        "https://dictionary.cambridge.org/grammar/british-grammar/word-order-and-focus"
+      ],
+      "code": "Could you tell me ___?"
+    },
+    {
+      "id": "grammar-homework.questions-direct-indirect.002",
+      "section": "questions-direct-indirect",
+      "difficulty": "easy",
+      "level": "intermediate",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "if",
+            "ru": "if"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "that",
+            "ru": "that"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "is",
+            "ru": "is"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "does",
+            "ru": "does"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "what",
+            "ru": "what"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A yes/no question has no question word to carry it inside, so `if` - or `whether` - stands in for one. `that` would introduce a statement rather than a question, and the clause after it already has its verb, so neither `is` nor `does` has anywhere to go.",
+        "ru": "У вопроса без вопросительного слова нет ничего, что перенесло бы его внутрь, поэтому за это отвечает `if` или `whether`. `that` вводило бы утверждение, а не вопрос; в придаточном уже есть свой глагол, так что ни `is`, ни `does` вставить некуда."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/questions-wh-questions",
+        "https://learnenglish.britishcouncil.org/grammar/verbs/questions-and-negatives"
+      ],
+      "code": "Can you tell me ___ the Black Horse restaurant is near here?"
+    },
+    {
+      "id": "grammar-homework.questions-direct-indirect.003",
+      "section": "questions-direct-indirect",
+      "difficulty": "medium",
+      "level": "intermediate",
+      "text": {
+        "en": "Which sentence is correct?",
+        "ru": "Какое предложение верное?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "What made you decide to join it?",
+            "ru": "What made you decide to join it?"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "What did make you decide to join it?",
+            "ru": "What did make you decide to join it?"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "What did made you decide to join it?",
+            "ru": "What did made you decide to join it?"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "What has made you to decide to join it?",
+            "ru": "What has made you to decide to join it?"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "What made you to decide to join it?",
+            "ru": "What made you to decide to join it?"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`What` is the subject here - it is the thing that did the making - so there is nothing to swap and no auxiliary to add. `make` also takes a bare infinitive, which is why `decide` and not `to decide`. Compare `What did you decide?`, where `what` is the object and the auxiliary is back.",
+        "ru": "`What` здесь подлежащее - именно оно заставило, - поэтому менять местами нечего и вспомогательный глагол не нужен. Кроме того, после `make` идёт инфинитив без `to`, отсюда `decide`, а не `to decide`. Сравните `What did you decide?`, где `what` - дополнение, и вспомогательный глагол возвращается."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/questions-wh-questions",
+        "https://dictionary.cambridge.org/grammar/british-grammar/word-order-and-focus"
+      ],
+      "code": null
+    },
+    {
+      "id": "grammar-homework.questions-direct-indirect.004",
+      "section": "questions-direct-indirect",
+      "difficulty": "medium",
+      "level": "intermediate",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "does your daughter go to",
+            "ru": "does your daughter go to"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "your daughter goes to",
+            "ru": "your daughter goes to"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "does your daughter go",
+            "ru": "does your daughter go"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "to does your daughter go",
+            "ru": "to does your daughter go"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "does go your daughter to",
+            "ru": "does go your daughter to"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "You `go to` a school, and the preposition stays where the verb left it - at the end - rather than travelling to the front with `which school`. The question is direct, so `does` goes in front of the subject and `go` stays in its bare form.",
+        "ru": "`go to` a school - предлог остаётся там, где его оставил глагол, то есть в конце, а не уезжает вперёд вместе с `which school`. Вопрос прямой, поэтому `does` встаёт перед подлежащим, а `go` остаётся в начальной форме."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/questions-wh-questions",
+        "https://dictionary.cambridge.org/grammar/british-grammar/word-order-and-focus"
+      ],
+      "code": "Which school ___?"
+    },
+    {
+      "id": "grammar-homework.questions-direct-indirect.005",
+      "section": "questions-direct-indirect",
+      "difficulty": "medium",
+      "level": "intermediate",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "does",
+            "ru": "does"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "do",
+            "ru": "do"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "is",
+            "ru": "is"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "offers",
+            "ru": "offers"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "did it",
+            "ru": "did it"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The subject is `the centre`, not the plural `activities` that the question word phrase picked up on the way past, so the auxiliary is `does`. It carries the tense, which is why the main verb stays bare: `does the centre offer`.",
+        "ru": "Подлежащее здесь `the centre`, а не множественное `activities`, которое подобрала по дороге вопросительная группа, поэтому вспомогательный глагол - `does`. Время несёт он, поэтому смысловой глагол остаётся в начальной форме: `does the centre offer`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/questions-wh-questions",
+        "https://learnenglish.britishcouncil.org/grammar/verbs/questions-and-negatives"
+      ],
+      "code": "What kind of after-school activities ___ the centre offer?"
+    },
+    {
+      "id": "grammar-homework.questions-direct-indirect.006",
+      "section": "questions-direct-indirect",
+      "difficulty": "hard",
+      "level": "intermediate",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "what you think",
+            "ru": "what you think"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "what do you think",
+            "ru": "what do you think"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "what you do think",
+            "ru": "what you do think"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "if you think",
+            "ru": "if you think"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "what think you",
+            "ru": "what think you"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The question word moves inside, and the clause after it keeps statement order with no `do` at all: `what you think`. `if` is for a question that has no question word, and this one has `what`.",
+        "ru": "Вопросительное слово уезжает внутрь, а придаточное за ним сохраняет утвердительный порядок и обходится вовсе без `do`: `what you think`. `if` нужен там, где вопросительного слова нет, а здесь есть `what`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/questions-wh-questions",
+        "https://dictionary.cambridge.org/grammar/british-grammar/word-order-and-focus"
+      ],
+      "code": "Can I ask you ___ about the sports centre?"
+    }
+  ]
+}

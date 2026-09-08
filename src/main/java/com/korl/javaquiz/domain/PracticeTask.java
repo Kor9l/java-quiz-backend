@@ -1,5 +1,6 @@
 package com.korl.javaquiz.domain;
 
+import com.korl.javaquiz.practice.GrammarExerciseKind;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -17,13 +18,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * One hands-on exercise, on either track. Correctness is defined by the reference answer —
- * {@link #getSolutionSql()} on the SQL track, {@link #getSolutionCode()} on the Java one:
- * whatever the reference produces is what a submission has to produce, however it gets there.
+ * One hands-on exercise, on any of the three tracks. Correctness is defined by the reference
+ * answer — {@link #getSolutionSql()} on the SQL track, {@link #getSolutionCode()} on the Java
+ * one, {@link #getBlanks()} on the grammar one: whatever the reference produces is what a
+ * submission has to produce, however it gets there.
  *
- * <p>Which half of the columns is filled follows from {@link #getTrack()}, and the two halves
- * are exclusive. Sharing the table is what lets tracks, difficulties, progress, sources and
- * the link back to the study material be written once instead of once per track.
+ * <p>Which third of the columns is filled follows from {@link #getTrack()}, and the thirds are
+ * exclusive; {@code practice_tasks_track_shape} is where that is enforced. Sharing the table is
+ * what lets tracks, difficulties, progress, sources and the link back to the study material be
+ * written once instead of once per track.
  */
 @Entity
 @Table(name = "practice_tasks")
@@ -32,7 +35,7 @@ public class PracticeTask {
     @Id
     private String id;
 
-    /** Which practice track this belongs to: {@code sql} or {@code java}. */
+    /** Which practice track this belongs to: {@code sql}, {@code java} or {@code grammar}. */
     @Column(nullable = false)
     private String track;
 
@@ -96,6 +99,22 @@ public class PracticeTask {
     @Column(name = "solution_code")
     private String solutionCode;
 
+    /** What the exercise asks for, and so how its answer is read. Grammar track only. */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "kind")
+    private GrammarExerciseKind kind;
+
+    /**
+     * The text the exercise is about: the shuffled chunks of a {@code WORD_ORDER} prompt,
+     * separated by {@code /}. Grammar track only.
+     */
+    @Column(name = "sentence")
+    private String sentence;
+
+    /** Whether capitals are part of the answer. False everywhere but the exercises about case. */
+    @Column(name = "case_sensitive", nullable = false)
+    private boolean caseSensitive;
+
     @Column(name = "explanation_en", nullable = false)
     private String explanationEn;
 
@@ -112,6 +131,15 @@ public class PracticeTask {
     @CollectionTable(name = "practice_task_cases", joinColumns = @JoinColumn(name = "task_id"))
     @OrderColumn(name = "sort_order")
     private List<Case> cases = new ArrayList<>();
+
+    /**
+     * Every answer that counts as right, one row each and tagged with the blank it answers.
+     * Grammar track only, and the whole of what correctness means there.
+     */
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "practice_task_blanks", joinColumns = @JoinColumn(name = "task_id"))
+    @OrderColumn(name = "sort_order")
+    private List<Blank> blanks = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -205,6 +233,22 @@ public class PracticeTask {
         return cases;
     }
 
+    public GrammarExerciseKind getKind() {
+        return kind;
+    }
+
+    public String getSentence() {
+        return sentence;
+    }
+
+    public boolean isCaseSensitive() {
+        return caseSensitive;
+    }
+
+    public List<Blank> getBlanks() {
+        return blanks;
+    }
+
     /**
      * One call made against a submission on the Java track. The expression is compiled into a
      * generated harness, so it is bundled content and never anything a user supplied.
@@ -224,6 +268,29 @@ public class PracticeTask {
 
         public String getExpression() {
             return expression;
+        }
+    }
+
+    /**
+     * One acceptable answer for one blank of a grammar exercise. Several rows share a
+     * {@code blankIndex} when several answers are good English — which of them a learner
+     * reached is not what the exercise is about.
+     */
+    @Embeddable
+    public static class Blank {
+
+        @Column(name = "blank_index", nullable = false)
+        private int blankIndex;
+
+        @Column(nullable = false)
+        private String accepted;
+
+        public int getBlankIndex() {
+            return blankIndex;
+        }
+
+        public String getAccepted() {
+            return accepted;
         }
     }
 
