@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Test;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,20 +21,25 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * <p>Every bundled file is checked together, since they all land in the same two tables: a code
  * repeated across files would break the unique constraint on {@code word_groups.code} exactly as
- * one repeated inside a file would.
+ * one repeated inside a file would. Files come in two shapes — the ones that declare groups, and
+ * the ones that name an existing group and add to it — and the word-level checks run over the
+ * union, because that is what a group actually holds once every migration has run.
  */
 class EnglishWordsContentTest {
 
     private static final String CORPUS = "/content/english/words.json";
     private static final String PART_TWO = "/content/english/words-2026-part-2.json";
+    private static final String PART_TWO_EXTRA = "/content/english/words-2026-part-2-extra.json";
 
     private static JsonNode corpus;
     private static JsonNode partTwo;
+    private static JsonNode partTwoExtra;
 
     @BeforeAll
     static void load() throws Exception {
         corpus = read(CORPUS);
         partTwo = read(PART_TWO);
+        partTwoExtra = read(PART_TWO_EXTRA);
     }
 
     private static JsonNode read(String resource) throws Exception {
@@ -48,6 +55,22 @@ class EnglishWordsContentTest {
         corpus.get("groups").forEach(groups::add);
         partTwo.get("groups").forEach(groups::add);
         return groups;
+    }
+
+    /** Each group's words with the additions folded in, keyed by the group code. */
+    private static Map<String, List<JsonNode>> wordsByGroup() {
+        Map<String, List<JsonNode>> words = new LinkedHashMap<>();
+        for (JsonNode group : allGroups()) {
+            List<JsonNode> into = words.computeIfAbsent(group.path("code").asText(), key -> new ArrayList<>());
+            group.get("words").forEach(into::add);
+        }
+        for (JsonNode addition : List.of(partTwoExtra)) {
+            List<JsonNode> into = words.get(addition.path("groupCode").asText());
+            assertThat(into).describedAs("group %s the additions extend", addition.path("groupCode").asText())
+                    .isNotNull();
+            addition.get("words").forEach(into::add);
+        }
+        return words;
     }
 
     @Test
@@ -68,9 +91,8 @@ class EnglishWordsContentTest {
     @Test
     void everyWordHasBothSides() {
         List<String> problems = new ArrayList<>();
-        for (JsonNode group : allGroups()) {
-            String code = group.path("code").asText();
-            for (JsonNode word : group.get("words")) {
+        wordsByGroup().forEach((code, words) -> {
+            for (JsonNode word : words) {
                 String text = word.path("text").asText("");
                 if (text.isBlank()) {
                     problems.add(code + ": a word with no English side");
@@ -78,30 +100,34 @@ class EnglishWordsContentTest {
                     problems.add(code + " / " + text + ": no translation");
                 }
             }
-        }
+        });
         assertThat(problems).isEmpty();
     }
 
-    /** The same word twice in one group is a paste accident; across groups it is deliberate. */
+    /**
+     * The same word twice in one group is a paste accident; across groups it is deliberate. The
+     * group is the merged one, so a phrase the additions repeat from the file they extend is
+     * caught here rather than showing up twice in the trainer.
+     */
     @Test
     void noGroupRepeatsAWord() {
         List<String> duplicates = new ArrayList<>();
-        for (JsonNode group : allGroups()) {
+        wordsByGroup().forEach((code, words) -> {
             Set<String> seen = new HashSet<>();
-            for (JsonNode word : group.get("words")) {
+            for (JsonNode word : words) {
                 String text = word.path("text").asText("").toLowerCase();
                 if (!seen.add(text)) {
-                    duplicates.add(group.path("code").asText() + " / " + text);
+                    duplicates.add(code + " / " + text);
                 }
             }
-        }
+        });
         assertThat(duplicates).isEmpty();
     }
 
     @Test
     void answerCountsAreNeverNegative() {
-        for (JsonNode group : allGroups()) {
-            for (JsonNode word : group.get("words")) {
+        for (List<JsonNode> words : wordsByGroup().values()) {
+            for (JsonNode word : words) {
                 assertThat(word.path("correct").asInt(0))
                         .describedAs("correct count of %s", word.path("text").asText()).isNotNegative();
                 assertThat(word.path("incorrect").asInt(0))
@@ -129,5 +155,17 @@ class EnglishWordsContentTest {
         assertThat(group.path("code").asText()).isEqualTo("seed-2026-part-2");
         assertThat(group.path("title").asText()).isEqualTo("2026 part 2 words");
         assertThat(group.get("words")).hasSize(42);
+    }
+
+    /**
+     * What V17 appends to that group: the tail of Wordlist Unit 1A and both tables of the 1.2
+     * Project Management handout. It names a group instead of declaring one — the group already
+     * exists in every database V14 ran against — so the code it names has to resolve.
+     */
+    @Test
+    void extendsTheTwentyTwentySixHandout() {
+        assertThat(partTwoExtra.path("groupCode").asText()).isEqualTo("seed-2026-part-2");
+        assertThat(partTwoExtra.get("words")).hasSize(44);
+        assertThat(wordsByGroup().get("seed-2026-part-2")).hasSize(86);
     }
 }
