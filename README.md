@@ -86,6 +86,7 @@ because Spring questions contain `${...}` placeholders that Flyway would interpo
 | `V14__LoadWords2026Part2` | one more English group: "2026 part 2 words", 42 words | `content/english/words-2026-part-2.json` |
 | `V15__grammar_module` | the `module` column on topics and `area` on sections | — |
 | `V16__LoadGrammarBase` | the base English grammar course: 14 sections, articles, 84 questions | `content/english/grammar/base/` |
+| `V17__ExtendWords2026Part2` | 44 more words into that same group, taking it to 86 | `content/english/words-2026-part-2-extra.json` |
 
 SQL and Java Concurrency live in their own directories rather than in the shared files because
 V2 has already run everywhere; adding a topic to `topics.json` would load it on a fresh database
@@ -324,6 +325,16 @@ phrase itself as the entry, the sentence it was shown in kept as the example whe
 the grammar notes left behind. It is a file of its own for the same reason a new topic is: V10 has
 already run everywhere, so a group appended to `words.json` would load on a fresh database and be
 missing on an existing one.
+
+That group has since grown to 86: `V17__ExtendWords2026Part2` appends the 44 rows of
+`content/english/words-2026-part-2-extra.json` — the tail of Wordlist Unit 1A, and both
+vocabulary tables of the 1.2 Project Planning & Preparation handout (Scheduling & Time
+Management, Budget & Resources) — condensed the same way. The reasoning that gave the group its
+own file applies once more inside it: the group exists in every database V14 ran against, so the
+new words cannot go into `words-2026-part-2.json` either. The extension file therefore names its
+target by `groupCode` instead of declaring a group, and the migration looks the group up by that
+code and appends after whatever it already holds — read from `max(sort_order)`, not counted from
+the file, since an admin may have edited the group in between.
 
 **Every seeded group is PUBLIC.** Four of the eight were one learner's private groups in the old
 app, but that app numbered its users and this one identifies them by UUID, so there is nobody here

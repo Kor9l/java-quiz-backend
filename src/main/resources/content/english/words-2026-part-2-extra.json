@@ -1,0 +1,188 @@
+{
+  "groupCode": "seed-2026-part-2",
+  "words": [
+    {
+      "text": "posh",
+      "translation": "шикарный, элитный (о месте, одежде, акценте, человеке)"
+    },
+    {
+      "text": "to pay a one-off fee",
+      "translation": "сделать разовый платеж",
+      "example": "You don't need a recurring subscription; you just pay a one-off fee to unlock lifetime access to the software."
+    },
+    {
+      "text": "to give it a go",
+      "translation": "попробовать, попытаться"
+    },
+    {
+      "text": "to keep buzzing and pinging",
+      "translation": "непрерывно жужжать и вибрировать (о телефоне)",
+      "example": "Her phone kept buzzing and pinging."
+    },
+    {
+      "text": "could do with smth",
+      "translation": "не отказался бы от чего-либо",
+      "example": "I could really do with something to eat."
+    },
+    {
+      "text": "ginormous",
+      "translation": "огромный (= gigantic + enormous)"
+    },
+    {
+      "text": "The look on your face!",
+      "translation": "Видел бы ты своё лицо! / Ну и выражение у тебя на лице!"
+    },
+    {
+      "text": "to fall behind schedule",
+      "translation": "отставать от графика"
+    },
+    {
+      "text": "to be on schedule",
+      "translation": "укладываться в график"
+    },
+    {
+      "text": "to stick to a schedule",
+      "translation": "придерживаться графика"
+    },
+    {
+      "text": "to have a busy (tight) schedule",
+      "translation": "иметь плотный график"
+    },
+    {
+      "text": "to catch up (with smb)",
+      "translation": "догнать кого-либо"
+    },
+    {
+      "text": "to be back on track",
+      "translation": "вернуться к графику, в нормальное русло"
+    },
+    {
+      "text": "to finish ahead of schedule",
+      "translation": "закончить раньше срока"
+    },
+    {
+      "text": "to miss the deadline",
+      "translation": "не успеть в срок"
+    },
+    {
+      "text": "to meet the deadline",
+      "translation": "уложиться в срок"
+    },
+    {
+      "text": "to stay on track",
+      "translation": "идти по плану (по времени)"
+    },
+    {
+      "text": "to get off track",
+      "translation": "сойти с намеченного плана, «сойти с колеи»"
+    },
+    {
+      "text": "to eat up time and money",
+      "translation": "«съедать» время и деньги"
+    },
+    {
+      "text": "halfway through the project",
+      "translation": "на полпути (в ходе проекта)"
+    },
+    {
+      "text": "timely",
+      "translation": "своевременный"
+    },
+    {
+      "text": "time is tight",
+      "translation": "времени мало, аврал"
+    },
+    {
+      "text": "to push (move) back a deadline",
+      "translation": "перенести дедлайн на более поздний срок",
+      "example": "We need more time, so we're pushing back the deadline from Monday to Thursday."
+    },
+    {
+      "text": "to bring a deadline forward",
+      "translation": "перенести дедлайн на более ранний срок",
+      "example": "The client wants it earlier, so we're bringing the deadline forward from Friday to Wednesday."
+    },
+    {
+      "text": "to allow some buffer time",
+      "translation": "оставить время «с запасом»"
+    },
+    {
+      "text": "to burn the midnight oil",
+      "translation": "работать допоздна, «сидеть до ночи»"
+    },
+    {
+      "text": "a last-minute rush",
+      "translation": "спешка в последний момент"
+    },
+    {
+      "text": "(the) crunch",
+      "translation": "критический момент (crisis); нехватка (shortage)",
+      "example": "When it comes to the crunch, you chicken out."
+    },
+    {
+      "text": "in a time crunch",
+      "translation": "аврал, период максимального напряжения в условиях дефицита времени (= crunch time; реже in a time pinch)",
+      "example": "Sorry, I can't join the meeting — I'm in a time pinch today."
+    },
+    {
+      "text": "to allocate resources",
+      "translation": "распределять ресурсы"
+    },
+    {
+      "text": "to stay (remain) within budget",
+      "translation": "оставаться в пределах бюджета"
+    },
+    {
+      "text": "to be on budget",
+      "translation": "уложиться в бюджет"
+    },
+    {
+      "text": "to get over (exceed, stretch) a budget",
+      "translation": "превысить бюджет"
+    },
+    {
+      "text": "to adhere to (keep to) a budget",
+      "translation": "придерживаться бюджета"
+    },
+    {
+      "text": "to cut down (back) on expenses",
+      "translation": "сократить расходы"
+    },
+    {
+      "text": "budget constraints",
+      "translation": "бюджетные ограничения"
+    },
+    {
+      "text": "cost overruns",
+      "translation": "перерасход средств"
+    },
+    {
+      "text": "in hand",
+      "translation": "в распоряжении, в наличии"
+    },
+    {
+      "text": "a poorly budgeted project",
+      "translation": "плохо спланированный по бюджету проект"
+    },
+    {
+      "text": "manpower concerns",
+      "translation": "проблемы, связанные с рабочей силой"
+    },
+    {
+      "text": "bang for the buck",
+      "translation": "максимальный эффект за минимум средств"
+    },
+    {
+      "text": "to run low on resources",
+      "translation": "испытывать нехватку ресурсов"
+    },
+    {
+      "text": "to stretch resources thin",
+      "translation": "растянуть ресурсы до предела"
+    },
+    {
+      "text": "to pull the plug on a project",
+      "translation": "прекратить финансирование проекта"
+    }
+  ]
+}
