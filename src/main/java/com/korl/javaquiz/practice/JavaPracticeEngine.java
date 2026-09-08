@@ -71,7 +71,7 @@ public class JavaPracticeEngine {
         ClassFileGuard.check(compiled.bytecode(), compiled.bytecode().keySet());
         return new SubmissionOutcome(
                 SubmissionStatus.PASSED, null, null, null, null, null,
-                elapsedMs(started), compiled.diagnostics(), List.of());
+                elapsedMs(started), compiled.diagnostics(), List.of(), List.of());
     }
 
     /** Runs a submission and compares what it returned with what the reference returned. */
@@ -100,7 +100,8 @@ public class JavaPracticeEngine {
                 comparison,
                 elapsedMs(started),
                 List.of(),
-                actual.output());
+                actual.output(),
+                List.of());
     }
 
     /**
@@ -119,6 +120,7 @@ public class JavaPracticeEngine {
                 null, null, null,
                 elapsedMs(started),
                 diagnostics,
+                List.of(),
                 List.of());
     }
 

@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 3,
+  "topic": "grammar-homework",
+  "sections": [
+    {
+      "id": "questions-direct-indirect",
+      "estimatedMinutes": 14,
+      "summary": {
+        "en": "How a question is built: the auxiliary in front of the subject, a question word before that, and the two cases where the swap does not happen at all - a question to the subject, and a question tucked inside a polite opener.",
+        "ru": "Как собирается вопрос: вспомогательный глагол перед подлежащим, вопросительное слово перед ним, и два случая, когда обмена местами нет вовсе - вопрос к подлежащему и вопрос внутри вежливого начала."
+      },
+      "body": {
+        "en": "English builds a question by moving one word, not by rearranging the sentence. Find the auxiliary - `do`, `does`, `did`, `have`, `is`, `can` - put it in front of the subject, and leave everything else where a statement would have it.\n\n```\nYou have known the Swanns for a long time.\nHave you known the Swanns for a long time?\n```\n\n## A question word goes first, and the swap still happens\n\n`What`, `which`, `how long` and the rest open the question; the auxiliary and the subject follow in the same swapped order.\n\n```\nWhat kind of after-school activities does it offer?\nWhich school does your daughter go to?\n```\n\nTwo details do most of the damage. `does` carries the tense, so the main verb goes back to its bare form - `does it offer`, never `does it offers`. And a preposition that belongs to the verb stays with the verb: you `go to` a school, so `to` is left at the end instead of travelling to the front with `which school`.\n\n## A question to the subject has no auxiliary at all\n\nWhen the question word *is* the subject, there is nothing to swap, and adding `did` is the classic mistake:\n\n```\nWhat made you decide to join it?       not: What did make you decide\nWho told you about the sports centre?  not: Who did tell you\n```\n\nCompare `What made you decide?` with `What did you decide?`. The first asks about the cause, which is the subject of the sentence; the second asks about the thing decided, which is its object - and there the auxiliary is back.\n\n## An indirect question keeps statement order\n\nPut a polite opener in front - `Could you tell me`, `Can I ask you`, `Do you know`, `I'd like to know` - and the question becomes a clause. Inside a clause nothing is inverted and there is no `do`:\n\n```\nCould you tell me if the Black Horse restaurant is near here?\nCan I ask you what you think about the sports centre?\n```\n\nNot `if is the restaurant`, and not `what do you think`, however right those sound on their own: the inversion has already been spent on `Could you`.\n\nA yes/no question loses its question word on the way in, so `if` or `whether` stands in for one. And the sentence takes its punctuation from the opener rather than from the clause - `Could you tell me ...?` is a question, `I'd like to know ...` is a statement and ends in a full stop.",
+        "ru": "Английский строит вопрос переносом одного слова, а не пересборкой предложения. Находим вспомогательный глагол - `do`, `does`, `did`, `have`, `is`, `can` - ставим его перед подлежащим, а всё остальное оставляем там, где оно стояло бы в утверждении.\n\n```\nYou have known the Swanns for a long time.\nHave you known the Swanns for a long time?\n```\n\n## Вопросительное слово идёт первым, обмен местами остаётся\n\n`What`, `which`, `how long` и остальные открывают вопрос, а вспомогательный глагол и подлежащее идут за ними в том же перевёрнутом порядке.\n\n```\nWhat kind of after-school activities does it offer?\nWhich school does your daughter go to?\n```\n\nДве детали дают почти все ошибки. `does` несёт время, поэтому смысловой глагол возвращается в начальную форму: `does it offer`, но не `does it offers`. И предлог, который принадлежит глаголу, остаётся при глаголе: `go to` a school, поэтому `to` висит в конце, а не уезжает вперёд вместе с `which school`.\n\n## У вопроса к подлежащему вспомогательного глагола нет вообще\n\nЕсли вопросительное слово *и есть* подлежащее, менять местами нечего, и добавленное `did` - классическая ошибка:\n\n```\nWhat made you decide to join it?       не: What did make you decide\nWho told you about the sports centre?  не: Who did tell you\n```\n\nСравните `What made you decide?` и `What did you decide?`. Первый спрашивает о причине, а причина здесь - подлежащее; второй спрашивает о том, что решили, то есть о дополнении, и там вспомогательный глагол возвращается.\n\n## В косвенном вопросе порядок слов утвердительный\n\nПоставьте впереди вежливое начало - `Could you tell me`, `Can I ask you`, `Do you know`, `I'd like to know` - и вопрос превращается в придаточное. Внутри придаточного ничего не переворачивается и никакого `do` нет:\n\n```\nCould you tell me if the Black Horse restaurant is near here?\nCan I ask you what you think about the sports centre?\n```\n\nНе `if is the restaurant` и не `what do you think`, как бы правильно они ни звучали сами по себе: обмен местами уже израсходован на `Could you`.\n\nВопрос без вопросительного слова теряет по пути внутрь свою вопросительность, поэтому за неё отвечает `if` или `whether`. А знак в конце предложение берёт у начала, а не у придаточного: `Could you tell me ...?` - вопрос, `I'd like to know ...` - утверждение с точкой."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - wh-questions",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/questions-wh-questions"
+        },
+        {
+          "title": "Cambridge Grammar - word order and focus",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/word-order-and-focus"
+        },
+        {
+          "title": "British Council - questions and negatives",
+          "url": "https://learnenglish.britishcouncil.org/grammar/verbs/questions-and-negatives"
+        },
+        {
+          "title": "English Grammar Profile",
+          "url": "https://www.englishprofile.org/english-grammar-profile"
+        }
+      ]
+    },
+    {
+      "id": "hw-questions-word-order",
+      "estimatedMinutes": 12,
+      "summary": {
+        "en": "Six questions to assemble from shuffled chunks, straight from the lesson handout, plus the order to attack them in and what the checker ignores.",
+        "ru": "Шесть вопросов, которые нужно собрать из перемешанных кусков, прямо из хендаута занятия, плюс порядок разбора и то, что проверка игнорирует."
+      },
+      "body": {
+        "en": "The exercise from the lesson handout: six sets of chunks, each of which makes exactly one question. The theory they run on is the previous section, `Word order in questions, direct and indirect`.\n\n## How to work through one\n\n1. Find the verb, then decide whether the question is direct or indirect. `Could you tell me` or `Can I ask you` among the chunks means indirect - and indirect means statement order inside.\n2. Pick out the auxiliary: `Have`, `does`, `did`, `is`, `Could`, `Can`. In a direct question it goes in front of the subject; in an indirect one the opener has already used it up.\n3. Ask what the question word refers to. If it is the subject, there is no auxiliary left to place.\n4. Leave a preposition at the end if that is where the verb left it.\n5. Read the result aloud. A question you would actually say is usually the right one.\n\n## What the checker cares about\n\nEvery chunk you were given has to appear and none may be added. `Check` reports that on its own and says nothing about your order, so it is worth pressing before `Run` when a chunk looks left over.\n\nCapital letters and the final question mark are ignored: neither is among the chunks, so neither can be part of the answer. Extra spaces are ignored too.\n\n## What the six drill, in the order they come\n\nPresent perfect with `for`; `do`-support after `what kind of`; a question to the subject; a preposition left at the end; an indirect question with a question word; an indirect yes/no question with `if`.",
+        "ru": "Упражнение из хендаута занятия: шесть наборов кусков, из каждого собирается ровно один вопрос. Теория под них - предыдущий раздел, `Порядок слов в вопросах: прямых и косвенных`.\n\n## Как разбирать один пункт\n\n1. Найдите глагол и решите, вопрос прямой или косвенный. `Could you tell me` или `Can I ask you` среди кусков означает косвенный, а косвенный означает утвердительный порядок внутри.\n2. Выделите вспомогательный глагол: `Have`, `does`, `did`, `is`, `Could`, `Can`. В прямом вопросе он идёт перед подлежащим, в косвенном его уже израсходовало вежливое начало.\n3. Спросите себя, к чему относится вопросительное слово. Если оно и есть подлежащее, ставить вспомогательный глагол некуда.\n4. Оставьте предлог в конце, если глагол оставил его там.\n5. Прочитайте вслух. Вопрос, который вы действительно сказали бы, обычно и есть верный.\n\n## Что проверяет движок\n\nКаждый выданный кусок должен быть использован, лишних быть не должно. `Check` сообщает именно это и ничего не говорит о порядке, так что его стоит нажать до `Run`, если какой-то кусок кажется лишним.\n\nЗаглавные буквы и вопросительный знак в конце игнорируются: их нет среди кусков, значит, они не могут быть частью ответа. Лишние пробелы тоже игнорируются.\n\n## Что отрабатывают эти шесть, по порядку\n\nPresent Perfect с `for`; `do` как вспомогательный после `what kind of`; вопрос к подлежащему; предлог, оставшийся в конце; косвенный вопрос с вопросительным словом; косвенный вопрос без вопросительного слова, с `if`."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - wh-questions",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/questions-wh-questions"
+        },
+        {
+          "title": "British Council - questions and negatives",
+          "url": "https://learnenglish.britishcouncil.org/grammar/verbs/questions-and-negatives"
+        }
+      ]
+    }
+  ]
+}

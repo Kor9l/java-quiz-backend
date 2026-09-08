@@ -1,5 +1,6 @@
 package com.korl.javaquiz.config;
 
+import com.korl.javaquiz.practice.GrammarLimits;
 import com.korl.javaquiz.practice.JavaLimits;
 import com.korl.javaquiz.practice.SandboxLimits;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -25,5 +26,11 @@ public class PracticeConfig {
     public JavaLimits javaLimits(AppConfig config) {
         AppConfig.Practice.Java java = config.practice().java();
         return new JavaLimits(java.runTimeoutSeconds(), java.maxSourceLength(), java.maxOutputBytes());
+    }
+
+    @Produces
+    @Singleton
+    public GrammarLimits grammarLimits(AppConfig config) {
+        return new GrammarLimits(config.practice().grammar().maxAnswerLength());
     }
 }

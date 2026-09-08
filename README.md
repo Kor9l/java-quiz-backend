@@ -50,8 +50,8 @@ URIs — so the frontend needed no change. Two behaviours did change on purpose,
 | GET | `/api/practice` | user, tracks with progress |
 | GET | `/api/practice/tracks/{track}` | user, difficulties with progress |
 | GET | `/api/practice/tracks/{track}/{difficulty}` | user, task list |
-| GET | `/api/practice/tasks/{id}` | user, statement, dataset schema, expected result |
-| POST | `/api/practice/tasks/{id}/check` | user, parse (SQL) or compile (Java), without running |
+| GET | `/api/practice/tasks/{id}` | user, statement, plus the dataset schema (SQL), the cases (Java) or the shuffled chunks (grammar) |
+| POST | `/api/practice/tasks/{id}/check` | user, parse (SQL), compile (Java) or check the words used (grammar), without grading |
 | POST | `/api/practice/tasks/{id}/run` | user, run and grade |
 | GET | `/api/modules` | user, the post-login choice with per-module counts and sections |
 | GET | `/api/english/groups` | user, groups they may see, with word counts |
@@ -97,6 +97,8 @@ because Spring questions contain `${...}` placeholders that Flyway would interpo
 | `V16__LoadGrammarBase` | the base English grammar course: 14 sections, articles, 84 questions | `content/english/grammar/base/` |
 | `V17__ExtendWords2026Part2` | 44 more words into that same group, taking it to 86 | `content/english/words-2026-part-2-extra.json` |
 | `V18__admin_korianko` | a second admin account | — |
+| `V19__grammar_practice` | the grammar practice track: `kind`, `sentence`, `case_sensitive`, `practice_task_blanks` | — |
+| `V20__LoadGrammarHomework` | the homework course: 2 sections, articles, 6 questions, 6 exercises | `content/english/grammar/homework/` |
 
 SQL and Java Concurrency live in their own directories rather than in the shared files because
 V2 has already run everywhere; adding a topic to `topics.json` would load it on a fresh database
@@ -176,7 +178,9 @@ does the same for the articles and questions V6 loads, since that migration only
 once, against a real database.
 
 The second practice track is [Java](#java-practice), which grades the same way and sits behind
-the same two endpoints.
+the same two endpoints. The third is [grammar](#grammar-practice), which grades by comparing
+text rather than by running anything — the same two endpoints again, and the only one of the
+three with no sandbox.
 
 ## Java practice
 
@@ -197,7 +201,9 @@ case that differs.
 `POST /check` compiles without running, which is the whole answer for a learner who only wants
 to know whether it builds. `POST /run` compiles, runs and grades. Both return `diagnostics` —
 severity, line, column, message — and `run` also returns `output`, one entry per case, holding
-whatever the submission printed.
+whatever the submission printed. Every track fills the fields the others have nothing for rather
+than dropping them, so a client reads one response shape: `diagnostics` and `output` are empty
+on the SQL and grammar tracks, `blanks` is empty on the SQL and Java ones.
 
 ### Three rings
 
@@ -302,8 +308,16 @@ stats breakdown.
 Three courses are planned, one per level; the first is loaded. `grammar-base` is 14 sections of
 A1–A2 material with 84 quiz questions, in `content/english/grammar/base/` and loaded by
 `V16__LoadGrammarBase`. The remaining two are in
-[docs/ENGLISH_GRAMMAR_ROADMAP.md](docs/ENGLISH_GRAMMAR_ROADMAP.md) along with the practice track
-that follows them.
+[docs/ENGLISH_GRAMMAR_ROADMAP.md](docs/ENGLISH_GRAMMAR_ROADMAP.md).
+
+Beside them is a fourth course that is not one of the three: `grammar-homework`, where the
+exercises from a lesson handout land. Its sections are handouts rather than levels, and each one
+states its own — a homework course fills up in lesson order, so the next handout may sit anywhere
+on the ladder, and dropping a B1 section into an A1–A2 course would break the one property that
+makes those courses readable top to bottom. The first handout is questions: a section on word
+order in direct and indirect questions, which nothing in `grammar-base` covers past the plain
+yes/no question, and a handout section whose six exercises drill it. Loaded by
+`V20__LoadGrammarHomework` from `content/english/grammar/homework/`.
 
 A course runs one level end to end, so every section and question in `grammar-base` is `BASE`.
 That is what makes it readable as a course rather than a filtered view, and the cumulative track
@@ -319,6 +333,49 @@ have to: `grammarLevel` and `selectedGrammarCourses` sit beside the backend's `l
 `selectedTopics` in the settings payload, because one shared slot would have a grammar round
 writing `BASE` over a learner's chosen `SENIOR`. `GET /api/quiz/setup?module=english` reads the
 grammar side of it.
+
+### Grammar practice
+
+The third practice track, and the cheapest of the three: nothing is run, so there is no sandbox,
+no slot semaphore, no timeout and no cached reference result. An answer is a sentence, and
+grading it is `GrammarAnswerMatcher` comparing it with the answers the exercise accepts.
+
+It reuses `practice_tasks` as a third track rather than growing tables of its own, the way the
+Java track did before it. `V19__grammar_practice` adds `kind`, `sentence` and `case_sensitive`, a
+`practice_task_blanks` table holding one row per accepted answer, and a third branch in
+`practice_tasks_track_shape`; progress, sources, difficulty navigation and the link back to the
+study material are the ones already there. That branch requires the link to the section, which
+the other two tracks leave optional: `practice_tasks` has no `level` column, a grammar exercise
+takes its level from the section it drills, and an exercise with no section would be an exercise
+with no level — which in this module means an empty round rather than an odd one.
+
+`WORD_ORDER` is the only kind implemented, because it is the only one with content. A prompt is
+the shuffled chunks as the handout printed them, separated by `/`, and putting them in the right
+order is the answer. The five kinds the plan lists arrive with the exercises that need them: a
+`kind` the engine cannot grade would be a promise the API does not keep.
+
+**What is forgiven, and why.** Capitals, the final question mark, repeated spaces and a phone's
+curly apostrophe are normalised away on both sides. None of them is among the chunks, so a
+learner assembling a question has nowhere to get them from, and marking them wrong for a
+character they were never given grades something the exercise is not teaching. Word order
+itself, the words, and every apostrophe that changes a form all survive.
+
+**What `check` does here.** It reports whether the answer is built from the words handed out —
+none dropped, none added — and says nothing about their order, so a learner may press it as
+often as they like. That is also why a missing chunk comes back as `SYNTAX_ERROR` with
+`practice.error.notTheseWords` rather than as a wrong order: a learner who left a chunk behind
+has not ordered anything wrongly, and "wrong order" would send them looking in the wrong place.
+`run` adds `blanks: [{index, correct}]`, so feedback is per blank rather than per exercise. What
+it does *not* return on this track is `expected`: on the other two the reference result is the
+target and showing it helps, while here the reference is the answer.
+
+`GrammarHomeworkContentTest` holds the content to two rules a proofreader misses — the words of
+every accepted answer have to be exactly the chunks handed out, and a shuffled prompt must not
+already be in the right order — and then runs every bundled answer through the real engine, the
+way `JavaPracticeContentTest` compiles every bundled solution.
+
+The widget that lets a learner drag the chunks around is frontend work and lives in the client
+repository; until it is there, these exercises are reachable through the API only.
 
 ### The words
 

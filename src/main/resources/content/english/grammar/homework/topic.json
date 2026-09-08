@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 3,
+  "topic": {
+    "id": "grammar-homework",
+    "module": "english",
+    "order": 2,
+    "name": {
+      "en": "Grammar: homework",
+      "ru": "Грамматика: домашние задания"
+    },
+    "sections": [
+      {
+        "id": "questions-direct-indirect",
+        "order": 1,
+        "level": "intermediate",
+        "area": "syntax",
+        "title": {
+          "en": "Word order in questions, direct and indirect",
+          "ru": "Порядок слов в вопросах: прямых и косвенных"
+        }
+      },
+      {
+        "id": "hw-questions-word-order",
+        "order": 2,
+        "level": "intermediate",
+        "area": "syntax",
+        "title": {
+          "en": "Homework: put the words in the correct order",
+          "ru": "Домашка: расставить слова в правильном порядке"
+        }
+      }
+    ]
+  }
+}

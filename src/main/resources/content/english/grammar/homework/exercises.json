@@ -1,0 +1,270 @@
+{
+  "schemaVersion": 1,
+  "track": "grammar",
+  "tasks": [
+    {
+      "id": "grammar-easy-01",
+      "kind": "word_order",
+      "difficulty": "easy",
+      "order": 1,
+      "topic": "grammar-homework",
+      "section": "hw-questions-word-order",
+      "caseSensitive": false,
+      "title": {
+        "en": "A present perfect question with for",
+        "ru": "Вопрос в Present Perfect с for"
+      },
+      "statement": {
+        "en": "Put the words in the correct order to make a question.",
+        "ru": "Расставь слова в правильном порядке, чтобы получился вопрос."
+      },
+      "sentence": "you / the / a long time / Have / for / known / Swanns",
+      "hint": {
+        "en": "One chunk here is the auxiliary, and in a direct question it goes first, before the subject. `for a long time` answers how long, so it belongs at the end.",
+        "ru": "Один из кусков - вспомогательный глагол, и в прямом вопросе он идёт первым, перед подлежащим. `for a long time` отвечает на «как долго», поэтому его место в конце."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "Have you known the Swanns for a long time?"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "`Have you known the Swanns for a long time?` The auxiliary `have` swaps places with the subject `you`, the participle `known` follows it, and everything else stays in statement order: `You have known the Swanns for a long time.`",
+        "ru": "`Have you known the Swanns for a long time?` Вспомогательный `have` меняется местами с подлежащим `you`, за ним идёт причастие `known`, а всё остальное остаётся в том же порядке, что и в утверждении: `You have known the Swanns for a long time.`"
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - wh-questions",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/questions-wh-questions"
+        },
+        {
+          "title": "Cambridge Grammar - word order and focus",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/word-order-and-focus"
+        }
+      ]
+    },
+    {
+      "id": "grammar-easy-02",
+      "kind": "word_order",
+      "difficulty": "easy",
+      "order": 2,
+      "topic": "grammar-homework",
+      "section": "hw-questions-word-order",
+      "caseSensitive": false,
+      "title": {
+        "en": "do-support after what kind of",
+        "ru": "do как вспомогательный после what kind of"
+      },
+      "statement": {
+        "en": "Put the words in the correct order to make a question.",
+        "ru": "Расставь слова в правильном порядке, чтобы получился вопрос."
+      },
+      "sentence": "it / kind of / does / after-school activities / offer / What",
+      "hint": {
+        "en": "The question word phrase is longer than one word: `What kind of` needs the noun that follows it. After that the auxiliary comes before the subject, and the main verb stays bare.",
+        "ru": "Вопросительная группа длиннее одного слова: `What kind of` требует идущего за ним существительного. Дальше вспомогательный глагол встаёт перед подлежащим, а смысловой остаётся в начальной форме."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "What kind of after-school activities does it offer?"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "`What kind of after-school activities does it offer?` The whole phrase `What kind of after-school activities` is the question word, so it goes first as one piece; then `does` before the subject `it`, and `offer` bare because `does` is already carrying the tense.",
+        "ru": "`What kind of after-school activities does it offer?` Вопросительное слово здесь - вся группа `What kind of after-school activities`, поэтому она идёт вперёд целиком; затем `does` перед подлежащим `it`, и `offer` без окончания, потому что время уже несёт `does`."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - wh-questions",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/questions-wh-questions"
+        },
+        {
+          "title": "British Council - questions and negatives",
+          "url": "https://learnenglish.britishcouncil.org/grammar/verbs/questions-and-negatives"
+        }
+      ]
+    },
+    {
+      "id": "grammar-medium-01",
+      "kind": "word_order",
+      "difficulty": "medium",
+      "order": 1,
+      "topic": "grammar-homework",
+      "section": "hw-questions-word-order",
+      "caseSensitive": false,
+      "title": {
+        "en": "A question to the subject",
+        "ru": "Вопрос к подлежащему"
+      },
+      "statement": {
+        "en": "Put the words in the correct order to make a question.",
+        "ru": "Расставь слова в правильном порядке, чтобы получился вопрос."
+      },
+      "sentence": "to join / made / What / decide / it / you",
+      "hint": {
+        "en": "Ask who did the making. If the answer is `What` itself, then `What` is the subject - and a question to the subject has no auxiliary at all, which is why there is no `did` in the list.",
+        "ru": "Спросите себя, кто заставил. Если ответ - само `What`, значит `What` и есть подлежащее, а у вопроса к подлежащему вспомогательного глагола нет вовсе - поэтому `did` в списке и не выдали."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "What made you decide to join it?"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "`What made you decide to join it?` `What` is the subject, so the order is already the statement order and nothing swaps places: `Something made you decide to join it.` After `make` the infinitive drops its `to`, so `decide` - while `join` keeps its own `to`, because it belongs to `decide`.",
+        "ru": "`What made you decide to join it?` `What` - подлежащее, поэтому порядок и так утвердительный и ничего не меняется местами: `Something made you decide to join it.` После `make` инфинитив теряет `to`, отсюда `decide`, а `join` своё `to` сохраняет, потому что относится к `decide`."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - wh-questions",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/questions-wh-questions"
+        },
+        {
+          "title": "Cambridge Grammar - word order and focus",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/word-order-and-focus"
+        }
+      ]
+    },
+    {
+      "id": "grammar-medium-02",
+      "kind": "word_order",
+      "difficulty": "medium",
+      "order": 2,
+      "topic": "grammar-homework",
+      "section": "hw-questions-word-order",
+      "caseSensitive": false,
+      "title": {
+        "en": "A question that ends in a preposition",
+        "ru": "Вопрос, который кончается предлогом"
+      },
+      "statement": {
+        "en": "Put the words in the correct order to make a question.",
+        "ru": "Расставь слова в правильном порядке, чтобы получился вопрос."
+      },
+      "sentence": "does / go / school / your daughter / Which / to",
+      "hint": {
+        "en": "The verb is `go to`. The preposition does not travel to the front with the question word - it stays where the verb left it.",
+        "ru": "Глагол здесь - `go to`. Предлог не уезжает вперёд вместе с вопросительным словом, а остаётся там, где его оставил глагол."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "Which school does your daughter go to?"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "`Which school does your daughter go to?` `Which school` opens the question, `does` swaps with the subject `your daughter`, and `to` is left stranded at the end - which is normal English, not a mistake. `To which school does your daughter go?` is grammatical too, but it is formal enough to sound written rather than spoken.",
+        "ru": "`Which school does your daughter go to?` `Which school` открывает вопрос, `does` меняется местами с подлежащим `your daughter`, а `to` остаётся в конце - и это норма, а не ошибка. `To which school does your daughter go?` тоже грамматично, но настолько формально, что звучит письменно, а не разговорно."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - wh-questions",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/questions-wh-questions"
+        },
+        {
+          "title": "Cambridge Grammar - word order and focus",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/word-order-and-focus"
+        }
+      ]
+    },
+    {
+      "id": "grammar-hard-01",
+      "kind": "word_order",
+      "difficulty": "hard",
+      "order": 1,
+      "topic": "grammar-homework",
+      "section": "hw-questions-word-order",
+      "caseSensitive": false,
+      "title": {
+        "en": "An indirect question with a question word",
+        "ru": "Косвенный вопрос с вопросительным словом"
+      },
+      "statement": {
+        "en": "Put the words in the correct order to make a question.",
+        "ru": "Расставь слова в правильном порядке, чтобы получился вопрос."
+      },
+      "sentence": "ask / I / you / Can / about the sports centre / think / what / you",
+      "hint": {
+        "en": "Two of the chunks are a polite opener, and it takes the inversion for itself. Whatever follows the question word is then a clause in statement order - and note that `you` is in the list twice.",
+        "ru": "Два куска - вежливое начало, и инверсию оно забирает себе. Всё, что идёт за вопросительным словом, - придаточное с утвердительным порядком. И обратите внимание: `you` в списке дважды."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "Can I ask you what you think about the sports centre?"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "`Can I ask you what you think about the sports centre?` The opener `Can I ask you` is the direct question and gets the swap; after `what` the order is the statement one, `you think`, with no `do`. `what do you think` is right on its own and wrong here.",
+        "ru": "`Can I ask you what you think about the sports centre?` Прямой вопрос здесь - начало `Can I ask you`, обмен местами достаётся ему; после `what` порядок утвердительный, `you think`, и никакого `do`. `what do you think` верно само по себе и неверно здесь."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - wh-questions",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/questions-wh-questions"
+        },
+        {
+          "title": "British Council - questions and negatives",
+          "url": "https://learnenglish.britishcouncil.org/grammar/verbs/questions-and-negatives"
+        }
+      ]
+    },
+    {
+      "id": "grammar-hard-02",
+      "kind": "word_order",
+      "difficulty": "hard",
+      "order": 2,
+      "topic": "grammar-homework",
+      "section": "hw-questions-word-order",
+      "caseSensitive": false,
+      "title": {
+        "en": "An indirect yes/no question",
+        "ru": "Косвенный вопрос без вопросительного слова"
+      },
+      "statement": {
+        "en": "Put the words in the correct order to make a question.",
+        "ru": "Расставь слова в правильном порядке, чтобы получился вопрос."
+      },
+      "sentence": "the Black Horse restaurant / if / tell / you / near here / is / Could / me",
+      "hint": {
+        "en": "There is no question word among the chunks, so something else has to carry the question inside. After it, statement order - subject before verb.",
+        "ru": "Вопросительного слова среди кусков нет, значит перенести вопрос внутрь должно что-то другое. После него - утвердительный порядок: подлежащее перед глаголом."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "Could you tell me if the Black Horse restaurant is near here?"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "`Could you tell me if the Black Horse restaurant is near here?` `if` stands in for the missing question word, and the clause after it keeps statement order: `the Black Horse restaurant is near here`, not `is the Black Horse restaurant`. `whether` would do the same job, a shade more formally.",
+        "ru": "`Could you tell me if the Black Horse restaurant is near here?` `if` заменяет отсутствующее вопросительное слово, а придаточное за ним сохраняет утвердительный порядок: `the Black Horse restaurant is near here`, а не `is the Black Horse restaurant`. `whether` сделало бы то же самое, чуть более формально."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - wh-questions",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/questions-wh-questions"
+        },
+        {
+          "title": "British Council - questions and negatives",
+          "url": "https://learnenglish.britishcouncil.org/grammar/verbs/questions-and-negatives"
+        }
+      ]
+    }
+  ]
+}

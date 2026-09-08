@@ -9,7 +9,10 @@ import com.korl.javaquiz.domain.PracticeProgressEntity;
 import com.korl.javaquiz.domain.PracticeProgressRepository;
 import com.korl.javaquiz.domain.PracticeTask;
 import com.korl.javaquiz.domain.PracticeTaskRepository;
+import com.korl.javaquiz.practice.BlankOutcome;
 import com.korl.javaquiz.practice.CompileDiagnostic;
+import com.korl.javaquiz.practice.GrammarPracticeEngine;
+import com.korl.javaquiz.practice.GrammarTaskSpec;
 import com.korl.javaquiz.practice.JavaPracticeEngine;
 import com.korl.javaquiz.practice.JavaTaskSpec;
 import com.korl.javaquiz.practice.PracticeSubmissionException;
@@ -33,10 +36,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
- * The practice section: hands-on exercises the learner solves by writing code that is then
- * run, rather than by picking an option.
+ * The practice section: hands-on exercises the learner solves by writing something that is then
+ * checked, rather than by picking an option.
  *
- * <p>Two tracks share everything except grading. Navigation, progress, difficulty and the link
+ * <p>Three tracks share everything except grading. Navigation, progress, difficulty and the link
  * back to the study material are written once here; which engine a submission goes to is the
  * one thing that follows from the task's track.
  */
@@ -45,23 +48,28 @@ public class PracticeService {
 
     static final String JAVA_TRACK = "java";
 
+    static final String GRAMMAR_TRACK = "grammar";
+
     private final PracticeTaskRepository tasks;
     private final PracticeDatasetRepository datasets;
     private final PracticeProgressRepository progress;
     private final SqlPracticeEngine engine;
     private final JavaPracticeEngine javaEngine;
+    private final GrammarPracticeEngine grammarEngine;
 
     public PracticeService(
             PracticeTaskRepository tasks,
             PracticeDatasetRepository datasets,
             PracticeProgressRepository progress,
             SqlPracticeEngine engine,
-            JavaPracticeEngine javaEngine) {
+            JavaPracticeEngine javaEngine,
+            GrammarPracticeEngine grammarEngine) {
         this.tasks = tasks;
         this.datasets = datasets;
         this.progress = progress;
         this.engine = engine;
         this.javaEngine = javaEngine;
+        this.grammarEngine = grammarEngine;
     }
 
     /** The tracks available and how far the user has got in each. */
@@ -114,6 +122,13 @@ public class PracticeService {
             // The cases are the specification, so they are shown rather than held back.
             dto.put("cases", casesDto(task));
             dto.put("expected", tableDto(javaEngine.expectedResult(javaSpec(task))));
+        } else if (isGrammar(task)) {
+            // The chunks are the material, and the only thing withheld is the order they go in.
+            dto.put("chunks", grammarSpec(task).chunks());
+            dto.put("caseSensitive", task.isCaseSensitive());
+            dto.put("lastAnswer", state == null ? null : state.getLastSubmission());
+            // No `expected` on this track, deliberately. On the other two the reference result
+            // is the target and showing it is a help; here the reference is the answer.
         } else {
             PracticeDataset dataset = requireDataset(task.getDatasetId());
             dto.put("starterSql", task.getStarterSql());
@@ -132,8 +147,9 @@ public class PracticeService {
 
     /**
      * Checks a submission without running it and without touching the user's record. On the SQL
-     * track that means parsing it, on the Java track compiling it — the same question asked of
-     * two languages.
+     * track that means parsing it, on the Java track compiling it, on the grammar track asking
+     * whether the answer is built from the words handed out at all — the same question asked
+     * three ways, and none of the three says whether the answer is right.
      */
     @Transactional
     public Map<String, Object> check(String taskId, String submission) {
@@ -141,6 +157,10 @@ public class PracticeService {
         if (isJava(task)) {
             JavaTaskSpec spec = javaSpec(task);
             return graded(task, () -> javaEngine.checkCompilation(spec, submission), false);
+        }
+        if (isGrammar(task)) {
+            GrammarTaskSpec grammar = grammarSpec(task);
+            return graded(task, () -> grammarEngine.check(grammar, submission), false);
         }
         TaskSpec spec = spec(task, requireDataset(task.getDatasetId()));
         return graded(task, () -> engine.checkSyntax(spec, submission), false);
@@ -154,6 +174,9 @@ public class PracticeService {
         if (isJava(task)) {
             JavaTaskSpec spec = javaSpec(task);
             response = graded(task, () -> javaEngine.grade(spec, submission), true);
+        } else if (isGrammar(task)) {
+            GrammarTaskSpec grammar = grammarSpec(task);
+            response = graded(task, () -> grammarEngine.grade(grammar, submission), true);
         } else {
             TaskSpec spec = spec(task, requireDataset(task.getDatasetId()));
             response = graded(task, () -> engine.grade(spec, submission), true);
@@ -188,10 +211,13 @@ public class PracticeService {
         dto.put("result", tableDto(outcome.result()));
         dto.put("expected", tableDto(outcome.expected()));
         dto.put("comparison", comparisonDto(outcome.comparison()));
-        // Present on both tracks, empty on the SQL one, so that a client does not have to know
-        // which track it is looking at to read the response.
+        // Present on every track, empty where a track has nothing to put there, so that a
+        // client does not have to know which track it is looking at to read the response.
         dto.put("diagnostics", outcome.diagnostics().stream().map(PracticeService::diagnosticDto).toList());
         dto.put("output", outcome.output());
+        // Per blank rather than per exercise: "the second gap is wrong" sends a learner to the
+        // part they got wrong, where a bare "wrong" sends them over all of it again.
+        dto.put("blanks", outcome.blanks().stream().map(PracticeService::blankDto).toList());
         if (revealOnPass && outcome.passed()) {
             dto.put("explanation", LocalizedTextDto.of(task.getExplanationEn(), task.getExplanationRu()));
         }
@@ -239,6 +265,9 @@ public class PracticeService {
         dto.put("order", task.getSortOrder());
         dto.put("title", LocalizedTextDto.of(task.getTitleEn(), task.getTitleRu()));
         dto.put("datasetId", task.getDatasetId());
+        // Null on the tracks whose exercises are all of one shape; on the grammar track it is
+        // what tells a client which widget to render.
+        dto.put("kind", task.getKind() == null ? null : task.getKind().name());
         // The study section this exercise drills, so a stuck learner can go and read about it.
         dto.put("material", task.getSectionId() == null ? null : Map.of(
                 "topicId", task.getTopicId(), "sectionId", task.getSectionId()));
@@ -325,8 +354,19 @@ public class PracticeService {
                 .toList();
     }
 
+    private static Map<String, Object> blankDto(BlankOutcome blank) {
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("index", blank.index());
+        dto.put("correct", blank.correct());
+        return dto;
+    }
+
     private static boolean isJava(PracticeTask task) {
         return JAVA_TRACK.equals(task.getTrack());
+    }
+
+    private static boolean isGrammar(PracticeTask task) {
+        return GRAMMAR_TRACK.equals(task.getTrack());
     }
 
     private TaskSpec spec(PracticeTask task, PracticeDataset dataset) {
@@ -342,6 +382,23 @@ public class PracticeService {
                 task.getCases().stream()
                         .map(current -> new JavaTaskSpec.Case(current.getLabel(), current.getExpression()))
                         .toList());
+    }
+
+    /**
+     * Groups the accepted answers by the blank they answer, which is the shape the matcher
+     * works in. Stored flat, one row per answer, because a blank with two good answers is
+     * ordinary content rather than a special case.
+     */
+    private GrammarTaskSpec grammarSpec(PracticeTask task) {
+        Map<Integer, List<String>> byBlank = new LinkedHashMap<>();
+        for (PracticeTask.Blank blank : task.getBlanks()) {
+            byBlank.computeIfAbsent(blank.getBlankIndex(), index -> new ArrayList<>()).add(blank.getAccepted());
+        }
+        List<GrammarTaskSpec.Blank> blanks = byBlank.entrySet().stream()
+                .map(entry -> new GrammarTaskSpec.Blank(entry.getKey(), List.copyOf(entry.getValue())))
+                .toList();
+        return new GrammarTaskSpec(
+                task.getId(), task.getKind(), task.getSentence(), blanks, task.isCaseSensitive());
     }
 
     private PracticeTask requireTask(String taskId) {

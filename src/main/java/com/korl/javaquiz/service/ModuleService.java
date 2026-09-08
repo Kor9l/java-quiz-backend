@@ -2,6 +2,7 @@ package com.korl.javaquiz.service;
 
 import com.korl.javaquiz.api.dto.LocalizedTextDto;
 import com.korl.javaquiz.domain.LearningModule;
+import com.korl.javaquiz.domain.PracticeTaskRepository;
 import com.korl.javaquiz.domain.QuestionRepository;
 import com.korl.javaquiz.domain.TopicRepository;
 import com.korl.javaquiz.domain.WordGroupRepository;
@@ -31,13 +32,16 @@ public class ModuleService {
     private final QuestionRepository questions;
     private final WordGroupRepository wordGroups;
     private final WordRepository words;
+    private final PracticeTaskRepository practiceTasks;
 
     public ModuleService(TopicRepository topics, QuestionRepository questions,
-                         WordGroupRepository wordGroups, WordRepository words) {
+                         WordGroupRepository wordGroups, WordRepository words,
+                         PracticeTaskRepository practiceTasks) {
         this.topics = topics;
         this.questions = questions;
         this.wordGroups = wordGroups;
         this.words = words;
+        this.practiceTasks = practiceTasks;
     }
 
     @Transactional
@@ -53,6 +57,10 @@ public class ModuleService {
         Map<String, Object> grammarCounts = new LinkedHashMap<>();
         grammarCounts.put("courses", topics.findByModuleOrderBySortOrderAsc(LearningModule.ENGLISH).size());
         grammarCounts.put("questions", questions.countByModule(LearningModule.ENGLISH));
+        // Grammar has a practice track of its own, so the tile says how much of it there is.
+        // Counted from the track rather than from the courses: an exercise belongs to a section,
+        // but what a learner picks first is "grammar exercises", the same way they pick SQL ones.
+        grammarCounts.put("exercises", practiceTasks.countByTrack(PracticeService.GRAMMAR_TRACK));
 
         return List.of(
                 // Navigated straight by topics and practice, so there is nothing to choose
