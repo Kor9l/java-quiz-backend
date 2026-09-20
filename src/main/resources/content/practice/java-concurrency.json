@@ -1,0 +1,556 @@
+{
+  "schemaVersion": 1,
+  "track": "java",
+  "tasks": [
+    {
+      "id": "java-conc-easy-01",
+      "difficulty": "easy",
+      "order": 7,
+      "topic": "java-concurrency",
+      "section": "threads-lifecycle",
+      "className": "Solution",
+      "title": {
+        "en": "Start the thread, do not run it",
+        "ru": "Запусти поток, а не вызови его"
+      },
+      "statement": {
+        "en": "Start one thread per index, each named worker-0, worker-1 and so on, and have every thread record the name of the thread it is actually running on. Wait for all of them, then return the recorded names in index order.",
+        "ru": "Запусти по потоку на каждый индекс — с именами worker-0, worker-1 и так далее — и пусть каждый поток запишет имя потока, на котором он реально выполняется. Дождись всех и верни записанные имена в порядке индексов."
+      },
+      "hint": {
+        "en": "A Thread has both run() and start(), and only one of them is a thread.",
+        "ru": "У Thread есть и run(), и start(), но потоком является только один из них."
+      },
+      "starter": "import java.util.Arrays;\nimport java.util.List;\n\npublic class Solution {\n\n    public static List<String> workerNames(int count) {\n        String[] names = new String[count];\n        for (int i = 0; i < count; i++) {\n            int index = i;\n            Thread worker = new Thread(() -> names[index] = Thread.currentThread().getName(), \"worker-\" + i);\n            // TODO: this calls the task on the current thread. Start a thread instead,\n            // and remember to wait for every one of them before returning.\n            worker.run();\n        }\n        return Arrays.asList(names);\n    }\n}\n",
+      "solution": "import java.util.Arrays;\nimport java.util.List;\n\npublic class Solution {\n\n    public static List<String> workerNames(int count) {\n        String[] names = new String[count];\n        Thread[] workers = new Thread[count];\n        for (int i = 0; i < count; i++) {\n            int index = i;\n            workers[i] = new Thread(() -> names[index] = Thread.currentThread().getName(), \"worker-\" + i);\n            workers[i].start();\n        }\n        for (Thread worker : workers) {\n            try {\n                worker.join();\n            } catch (InterruptedException e) {\n                Thread.currentThread().interrupt();\n            }\n        }\n        return Arrays.asList(names);\n    }\n}\n",
+      "cases": [
+        {
+          "label": "workerNames(3)",
+          "expression": "Solution.workerNames(3)"
+        },
+        {
+          "label": "workerNames(1)",
+          "expression": "Solution.workerNames(1)"
+        },
+        {
+          "label": "workerNames(0)",
+          "expression": "Solution.workerNames(0)"
+        }
+      ],
+      "explanation": {
+        "en": "run() is an ordinary method call: it executes the body on the thread that called it, which is why the starter records main three times. start() is what asks the JVM for a new thread and then calls run() on it. join() is the other half — without it the method could return before any worker had written its slot, and reading those slots after join() is also what makes the writes visible.",
+        "ru": "run() — обычный вызов метода: тело выполняется на вызывающем потоке, поэтому стартовый код трижды записывает main. Новый поток создаёт start(), и уже он вызывает run(). Вторая половина — join(): без него метод мог бы вернуться раньше, чем воркеры запишут свои ячейки, а чтение после join() ещё и делает эти записи видимыми."
+      },
+      "sources": [
+        {
+          "title": "Thread (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Thread.html"
+        },
+        {
+          "title": "Thread.start()",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Thread.html#start()"
+        }
+      ]
+    },
+    {
+      "id": "java-conc-easy-02",
+      "difficulty": "easy",
+      "order": 8,
+      "topic": "java-concurrency",
+      "section": "shared-state-races",
+      "className": "Solution",
+      "title": {
+        "en": "A counter that loses increments",
+        "ru": "Счётчик, который теряет инкременты"
+      },
+      "statement": {
+        "en": "Run the given number of threads, each incrementing one shared counter the given number of times, and return the final value. With four threads incrementing ten thousand times each the answer is forty thousand every single run, not almost that.",
+        "ru": "Запусти заданное число потоков, каждый из которых инкрементирует один общий счётчик заданное число раз, и верни итоговое значение. Четыре потока по десять тысяч инкрементов дают сорок тысяч в каждом запуске, а не «почти сорок тысяч»."
+      },
+      "hint": {
+        "en": "count++ is a read, an add and a write. AtomicInteger has a method that is all three at once.",
+        "ru": "count++ — это чтение, сложение и запись. У AtomicInteger есть метод, который делает все три действия разом."
+      },
+      "starter": "public class Solution {\n\n    public static int total(int threads, int increments) {\n        // TODO: start the threads, let each one add increments to a shared counter,\n        // wait for all of them and return what the counter holds.\n        return 0;\n    }\n}\n",
+      "solution": "import java.util.concurrent.atomic.AtomicInteger;\n\npublic class Solution {\n\n    public static int total(int threads, int increments) {\n        AtomicInteger counter = new AtomicInteger();\n        Thread[] workers = new Thread[threads];\n        for (int i = 0; i < threads; i++) {\n            workers[i] = new Thread(() -> {\n                for (int step = 0; step < increments; step++) {\n                    counter.incrementAndGet();\n                }\n            });\n            workers[i].start();\n        }\n        for (Thread worker : workers) {\n            try {\n                worker.join();\n            } catch (InterruptedException e) {\n                Thread.currentThread().interrupt();\n            }\n        }\n        return counter.get();\n    }\n}\n",
+      "cases": [
+        {
+          "label": "total(4, 10000)",
+          "expression": "Solution.total(4, 10000)"
+        },
+        {
+          "label": "total(1, 1000)",
+          "expression": "Solution.total(1, 1000)"
+        },
+        {
+          "label": "total(8, 1)",
+          "expression": "Solution.total(8, 1)"
+        }
+      ],
+      "explanation": {
+        "en": "A plain count++ compiles to a read, an increment and a write, and two threads can read the same value before either writes — one increment then overwrites the other. incrementAndGet performs the whole triple as one indivisible step. synchronized on the increment would also be correct; it is simply more machinery than a single counter needs.",
+        "ru": "Обычный count++ компилируется в чтение, увеличение и запись, и два потока могут прочитать одно значение до того, как любой из них запишет своё — один инкремент затирает другой. incrementAndGet выполняет всю тройку как одно неделимое действие. synchronized вокруг инкремента тоже верен, просто для одного счётчика это лишняя машинерия."
+      },
+      "sources": [
+        {
+          "title": "AtomicInteger (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/atomic/AtomicInteger.html"
+        },
+        {
+          "title": "java.util.concurrent.atomic",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/atomic/package-summary.html"
+        }
+      ]
+    },
+    {
+      "id": "java-conc-easy-03",
+      "difficulty": "easy",
+      "order": 9,
+      "topic": "java-concurrency",
+      "section": "synchronized-monitor",
+      "className": "Solution",
+      "title": {
+        "en": "A handoff through a one-slot buffer",
+        "ru": "Передача через буфер на одно значение"
+      },
+      "statement": {
+        "en": "A producer thread puts the numbers 1..items into a buffer that holds one value at a time, and the calling thread takes them out. Return everything taken, in order. The buffer must block rather than spin: a put waits while the slot is full, a take waits while it is empty.",
+        "ru": "Поток-производитель кладёт числа 1..items в буфер, вмещающий одно значение, а вызывающий поток их забирает. Верни всё забранное по порядку. Буфер должен блокироваться, а не крутиться вхолостую: put ждёт, пока слот занят, take — пока он пуст."
+      },
+      "hint": {
+        "en": "wait() releases the monitor while it waits; that is the point of it. And it belongs in a while loop, never an if.",
+        "ru": "wait() отпускает монитор на время ожидания — в этом его смысл. И вызывать его нужно в цикле while, а не в if."
+      },
+      "starter": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n\n    public static List<Integer> drain(int items) {\n        // TODO: a producer thread puts 1..items into a one-slot buffer guarded by a\n        // monitor, this thread takes them out, and both sides wait rather than spin.\n        return new ArrayList<>();\n    }\n}\n",
+      "solution": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n\n    private static final class Slot {\n\n        private Integer value;\n\n        synchronized void put(int item) throws InterruptedException {\n            while (value != null) {\n                wait();\n            }\n            value = item;\n            notifyAll();\n        }\n\n        synchronized int take() throws InterruptedException {\n            while (value == null) {\n                wait();\n            }\n            int taken = value;\n            value = null;\n            notifyAll();\n            return taken;\n        }\n    }\n\n    public static List<Integer> drain(int items) {\n        Slot slot = new Slot();\n        List<Integer> consumed = new ArrayList<>();\n        Thread producer = new Thread(() -> {\n            try {\n                for (int item = 1; item <= items; item++) {\n                    slot.put(item);\n                }\n            } catch (InterruptedException e) {\n                Thread.currentThread().interrupt();\n            }\n        });\n        producer.start();\n        try {\n            for (int taken = 0; taken < items; taken++) {\n                consumed.add(slot.take());\n            }\n            producer.join();\n        } catch (InterruptedException e) {\n            Thread.currentThread().interrupt();\n        }\n        return consumed;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "drain(5)",
+          "expression": "Solution.drain(5)"
+        },
+        {
+          "label": "drain(1)",
+          "expression": "Solution.drain(1)"
+        },
+        {
+          "label": "drain(0)",
+          "expression": "Solution.drain(0)"
+        }
+      ],
+      "explanation": {
+        "en": "Every object has a monitor, and synchronized takes it. wait() gives it back and parks the thread, so the other side can enter and change what is being waited for; notifyAll() wakes the waiters, which then re-take the monitor and re-check. The while loop rather than an if is what makes that re-check real: a thread can wake without anything having changed, and it can also lose the race for the slot to a third thread.",
+        "ru": "У каждого объекта есть монитор, и synchronized его захватывает. wait() возвращает монитор и паркует поток, чтобы другая сторона могла войти и изменить то, чего ждут; notifyAll() будит ожидающих, и они заново берут монитор и заново проверяют условие. Именно while, а не if, делает эту перепроверку настоящей: поток может проснуться без изменений и может проиграть гонку за слот третьему потоку."
+      },
+      "sources": [
+        {
+          "title": "Object.wait()",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()"
+        },
+        {
+          "title": "Object.notifyAll()",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()"
+        }
+      ]
+    },
+    {
+      "id": "java-conc-medium-01",
+      "difficulty": "medium",
+      "order": 7,
+      "topic": "java-concurrency",
+      "section": "memory-model",
+      "className": "Solution",
+      "title": {
+        "en": "The flag a worker never sees",
+        "ru": "Флаг, которого воркер не видит"
+      },
+      "statement": {
+        "en": "Start the given number of workers, each spinning until a shared stop flag is set. After a short pause set the flag, join every worker with a two-second timeout, and return whether all of them actually finished.",
+        "ru": "Запусти заданное число воркеров, каждый из которых крутится, пока не выставлен общий флаг остановки. После короткой паузы выстави флаг, дождись каждого воркера с таймаутом в две секунды и верни, действительно ли все завершились."
+      },
+      "hint": {
+        "en": "Nothing here is a race in the usual sense — the flag is written once. The question is when, and whether, another thread is guaranteed to see that write.",
+        "ru": "Гонки в привычном смысле тут нет — флаг пишется один раз. Вопрос в том, когда и гарантирован ли вообще момент, в который другой поток эту запись увидит."
+      },
+      "starter": "public class Solution {\n\n    // TODO: one of these two fields is read by a thread that never wrote it.\n    private static boolean running = true;\n\n    public static boolean stops(int workers) {\n        // TODO: start the workers spinning on running, clear it after a short pause,\n        // join each worker with a two-second timeout and report whether all finished.\n        return false;\n    }\n}\n",
+      "solution": "public class Solution {\n\n    private static volatile boolean running = true;\n\n    public static boolean stops(int workers) {\n        running = true;\n        Thread[] spinning = new Thread[workers];\n        for (int i = 0; i < workers; i++) {\n            spinning[i] = new Thread(() -> {\n                while (running) {\n                    Thread.onSpinWait();\n                }\n            });\n            spinning[i].start();\n        }\n        try {\n            Thread.sleep(50);\n            running = false;\n            for (Thread worker : spinning) {\n                worker.join(2000);\n            }\n        } catch (InterruptedException e) {\n            Thread.currentThread().interrupt();\n            return false;\n        }\n        for (Thread worker : spinning) {\n            if (worker.isAlive()) {\n                return false;\n            }\n        }\n        return true;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "stops(1)",
+          "expression": "Solution.stops(1)"
+        },
+        {
+          "label": "stops(2)",
+          "expression": "Solution.stops(2)"
+        },
+        {
+          "label": "stops(4)",
+          "expression": "Solution.stops(4)"
+        }
+      ],
+      "explanation": {
+        "en": "Without volatile there is no happens-before edge between the write in one thread and the read in another, so the JIT is free to hoist the read out of the loop and spin on a value it loaded once. The loop then never ends — not because the write was slow, but because the reading thread was never obliged to look again. volatile makes the write visible to every subsequent read and forbids that hoisting.",
+        "ru": "Без volatile между записью в одном потоке и чтением в другом нет отношения happens-before, поэтому JIT вправе вынести чтение из цикла и крутиться на однажды загруженном значении. Цикл тогда не кончается — не потому, что запись «не успела», а потому, что читающий поток не был обязан перечитывать. volatile делает запись видимой любому последующему чтению и запрещает такой вынос."
+      },
+      "sources": [
+        {
+          "title": "Java Language Specification: happens-before",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/../../specs/index.html"
+        },
+        {
+          "title": "Thread.onSpinWait()",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Thread.html#onSpinWait()"
+        }
+      ]
+    },
+    {
+      "id": "java-conc-medium-02",
+      "difficulty": "medium",
+      "order": 8,
+      "topic": "java-concurrency",
+      "section": "locks",
+      "className": "Solution",
+      "title": {
+        "en": "Two accounts, two directions, no deadlock",
+        "ru": "Два счёта, два направления, без взаимной блокировки"
+      },
+      "statement": {
+        "en": "Two accounts start at 100 each. One thread moves a single unit from the first to the second, the given number of times; another moves a unit the other way, the same number of times. Both accounts must be locked for each move. Return the two final balances.",
+        "ru": "Два счёта начинают со 100 каждый. Один поток переводит по единице с первого на второй заданное число раз, другой — столько же раз в обратную сторону. Каждый перевод должен захватывать оба счёта. Верни два итоговых баланса."
+      },
+      "hint": {
+        "en": "Taking two locks in whatever order they come is exactly how two threads wait for each other forever. Give the accounts an order that does not depend on the direction of the transfer.",
+        "ru": "Брать два замка в произвольном порядке — это ровно тот случай, когда два потока ждут друг друга вечно. Задай счетам порядок, не зависящий от направления перевода."
+      },
+      "starter": "import java.util.List;\n\npublic class Solution {\n\n    public static List<Integer> transfer(int rounds) {\n        // TODO: two accounts under their own locks, two threads moving units in opposite\n        // directions, and a lock order that cannot deadlock. Return both balances.\n        return List.of(0, 0);\n    }\n}\n",
+      "solution": "import java.util.List;\nimport java.util.concurrent.locks.ReentrantLock;\n\npublic class Solution {\n\n    private static final class Account {\n\n        private final int id;\n        private final ReentrantLock lock = new ReentrantLock();\n        private int balance;\n\n        Account(int id, int balance) {\n            this.id = id;\n            this.balance = balance;\n        }\n    }\n\n    public static List<Integer> transfer(int rounds) {\n        Account first = new Account(1, 100);\n        Account second = new Account(2, 100);\n        Thread forwards = new Thread(() -> move(first, second, rounds));\n        Thread backwards = new Thread(() -> move(second, first, rounds));\n        forwards.start();\n        backwards.start();\n        try {\n            forwards.join();\n            backwards.join();\n        } catch (InterruptedException e) {\n            Thread.currentThread().interrupt();\n        }\n        return List.of(first.balance, second.balance);\n    }\n\n    private static void move(Account from, Account to, int rounds) {\n        Account lower = from.id < to.id ? from : to;\n        Account higher = lower == from ? to : from;\n        for (int round = 0; round < rounds; round++) {\n            lower.lock.lock();\n            try {\n                higher.lock.lock();\n                try {\n                    from.balance--;\n                    to.balance++;\n                } finally {\n                    higher.lock.unlock();\n                }\n            } finally {\n                lower.lock.unlock();\n            }\n        }\n    }\n}\n",
+      "cases": [
+        {
+          "label": "transfer(1000)",
+          "expression": "Solution.transfer(1000)"
+        },
+        {
+          "label": "transfer(1)",
+          "expression": "Solution.transfer(1)"
+        },
+        {
+          "label": "transfer(0)",
+          "expression": "Solution.transfer(0)"
+        }
+      ],
+      "explanation": {
+        "en": "The deadlock in the obvious version is not subtle: one thread holds the first account and wants the second, the other holds the second and wants the first, and neither ever gives one up. Ordering the acquisitions by a value both threads agree on — here the account id — removes the cycle, which is what a deadlock is. tryLock with a timeout and a retry is the other standard answer, and is what you reach for when no such order exists.",
+        "ru": "Взаимная блокировка в наивной версии совсем не тонкая: один поток держит первый счёт и хочет второй, другой держит второй и хочет первый, и никто не отпускает. Упорядочивание захватов по значению, с которым согласны оба потока — здесь по id счёта, — убирает цикл, а взаимная блокировка и есть цикл. Второй стандартный ответ — tryLock с таймаутом и повтором; к нему прибегают, когда такого порядка не существует."
+      },
+      "sources": [
+        {
+          "title": "ReentrantLock (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/locks/ReentrantLock.html"
+        },
+        {
+          "title": "java.util.concurrent.locks",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/locks/package-summary.html"
+        }
+      ]
+    },
+    {
+      "id": "java-conc-medium-03",
+      "difficulty": "medium",
+      "order": 9,
+      "topic": "java-concurrency",
+      "section": "concurrent-collections",
+      "className": "Solution",
+      "title": {
+        "en": "Counting words from several threads",
+        "ru": "Подсчёт слов из нескольких потоков"
+      },
+      "statement": {
+        "en": "Count how often each word occurs, splitting the array across the given number of threads. Return one string per distinct word, formatted word=count, sorted alphabetically.",
+        "ru": "Посчитай, сколько раз встречается каждое слово, распределив массив по заданному числу потоков. Верни по строке на каждое различное слово в формате word=count, отсортировав по алфавиту."
+      },
+      "hint": {
+        "en": "A HashMap under concurrent writes does not merely lose counts; it can corrupt itself. ConcurrentHashMap.merge does the read, the combine and the write atomically.",
+        "ru": "HashMap при конкурентной записи не просто теряет счётчики — он может испортить сам себя. ConcurrentHashMap.merge выполняет чтение, объединение и запись атомарно."
+      },
+      "starter": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n\n    public static List<String> counts(String[] words, int threads) {\n        // TODO: split the words across threads, count them into a map that survives\n        // concurrent writes, and return word=count sorted alphabetically.\n        return new ArrayList<>();\n    }\n}\n",
+      "solution": "import java.util.ArrayList;\nimport java.util.List;\nimport java.util.Map;\nimport java.util.TreeMap;\nimport java.util.concurrent.ConcurrentHashMap;\n\npublic class Solution {\n\n    public static List<String> counts(String[] words, int threads) {\n        Map<String, Integer> counted = new ConcurrentHashMap<>();\n        Thread[] workers = new Thread[threads];\n        for (int worker = 0; worker < threads; worker++) {\n            int offset = worker;\n            workers[worker] = new Thread(() -> {\n                for (int i = offset; i < words.length; i += threads) {\n                    counted.merge(words[i], 1, Integer::sum);\n                }\n            });\n            workers[worker].start();\n        }\n        for (Thread worker : workers) {\n            try {\n                worker.join();\n            } catch (InterruptedException e) {\n                Thread.currentThread().interrupt();\n            }\n        }\n        List<String> sorted = new ArrayList<>();\n        new TreeMap<>(counted).forEach((word, count) -> sorted.add(word + \"=\" + count));\n        return sorted;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "counts({a,b,a,c,a,b}, 3)",
+          "expression": "Solution.counts(new String[] {\"a\", \"b\", \"a\", \"c\", \"a\", \"b\"}, 3)"
+        },
+        {
+          "label": "counts({x,x}, 1)",
+          "expression": "Solution.counts(new String[] {\"x\", \"x\"}, 1)"
+        },
+        {
+          "label": "counts({}, 2)",
+          "expression": "Solution.counts(new String[] {}, 2)"
+        }
+      ],
+      "explanation": {
+        "en": "get-then-put is a read-modify-write across two calls, and two threads interleaving there lose a count however thread-safe each call is on its own — which is why a synchronized map is not enough either. merge is one atomic operation on one key, and ConcurrentHashMap locks only the bin that key lands in, so unrelated words do not contend at all.",
+        "ru": "get-затем-put — это чтение-изменение-запись через два вызова, и два потока, вклинившись между ними, теряют счётчик, какими бы потокобезопасными ни были вызовы по отдельности; поэтому synchronized-обёртка над Map тоже не спасает. merge — одна атомарная операция над одним ключом, а ConcurrentHashMap блокирует только корзину этого ключа, так что несвязанные слова не конкурируют вовсе."
+      },
+      "sources": [
+        {
+          "title": "ConcurrentHashMap (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html"
+        },
+        {
+          "title": "Map.merge",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#merge(K,V,java.util.function.BiFunction)"
+        }
+      ]
+    },
+    {
+      "id": "java-conc-medium-04",
+      "difficulty": "medium",
+      "order": 10,
+      "topic": "java-concurrency",
+      "section": "thread-pools",
+      "className": "Solution",
+      "title": {
+        "en": "Submit the work, then shut the pool down",
+        "ru": "Отправь работу и погаси пул"
+      },
+      "statement": {
+        "en": "Submit one task per number from 1 to n to a fixed pool of four threads, each returning that number squared. Add up the results, then shut the pool down and wait up to two seconds for it. Return sum=<total>,terminated=<true or false>.",
+        "ru": "Отправь в фиксированный пул из четырёх потоков по задаче на каждое число от 1 до n; каждая возвращает квадрат своего числа. Сложи результаты, затем погаси пул и подожди его до двух секунд. Верни sum=<сумма>,terminated=<true или false>."
+      },
+      "hint": {
+        "en": "An executor's threads are not daemons: a pool nobody shut down keeps the JVM alive. shutdown() stops it accepting work; awaitTermination is what tells you it is actually done.",
+        "ru": "Потоки executor'а не демоны: непогашенный пул держит JVM живой. shutdown() прекращает приём задач, а закончил ли пул на самом деле — говорит awaitTermination."
+      },
+      "starter": "public class Solution {\n\n    public static String run(int tasks) {\n        // TODO: a fixed pool of four, one task per number, the squares added up,\n        // then shutdown() and awaitTermination. Return sum=<total>,terminated=<flag>.\n        return \"sum=0,terminated=false\";\n    }\n}\n",
+      "solution": "import java.util.ArrayList;\nimport java.util.List;\nimport java.util.concurrent.ExecutionException;\nimport java.util.concurrent.ExecutorService;\nimport java.util.concurrent.Executors;\nimport java.util.concurrent.Future;\nimport java.util.concurrent.TimeUnit;\n\npublic class Solution {\n\n    public static String run(int tasks) {\n        ExecutorService pool = Executors.newFixedThreadPool(4);\n        long sum = 0;\n        try {\n            List<Future<Long>> pending = new ArrayList<>();\n            for (int i = 1; i <= tasks; i++) {\n                long value = i;\n                pending.add(pool.submit(() -> value * value));\n            }\n            for (Future<Long> future : pending) {\n                sum += future.get();\n            }\n        } catch (InterruptedException e) {\n            Thread.currentThread().interrupt();\n            return \"interrupted\";\n        } catch (ExecutionException e) {\n            return \"failed\";\n        } finally {\n            pool.shutdown();\n        }\n        boolean terminated;\n        try {\n            terminated = pool.awaitTermination(2, TimeUnit.SECONDS);\n        } catch (InterruptedException e) {\n            Thread.currentThread().interrupt();\n            terminated = false;\n        }\n        return \"sum=\" + sum + \",terminated=\" + terminated;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "run(10)",
+          "expression": "Solution.run(10)"
+        },
+        {
+          "label": "run(1)",
+          "expression": "Solution.run(1)"
+        },
+        {
+          "label": "run(0)",
+          "expression": "Solution.run(0)"
+        }
+      ],
+      "explanation": {
+        "en": "shutdown() is a request, not an event: it stops the pool accepting new work and lets the submitted work finish, and it returns immediately. awaitTermination is the part that blocks until the pool is actually idle, and its boolean is the difference between 'finished' and 'still running when I gave up'. Putting shutdown() in a finally is what keeps a failing task from leaving four live threads behind.",
+        "ru": "shutdown() — это просьба, а не событие: пул перестаёт принимать новые задачи, доделывает принятые, а сам метод возвращается сразу. Блокирует до реального простоя уже awaitTermination, и его boolean — это разница между «закончил» и «всё ещё работал, когда я перестал ждать». shutdown() в finally — то, что не даёт упавшей задаче оставить после себя четыре живых потока."
+      },
+      "sources": [
+        {
+          "title": "ExecutorService (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ExecutorService.html"
+        },
+        {
+          "title": "Executors.newFixedThreadPool",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Executors.html#newFixedThreadPool(int)"
+        }
+      ]
+    },
+    {
+      "id": "java-conc-medium-05",
+      "difficulty": "medium",
+      "order": 11,
+      "topic": "java-concurrency",
+      "section": "completable-future",
+      "className": "Solution",
+      "title": {
+        "en": "Compose the stages, and recover from one",
+        "ru": "Собери цепочку и восстановись после сбоя"
+      },
+      "statement": {
+        "en": "For every input start an asynchronous stage that doubles it, but throws IllegalArgumentException with the message negative: <input> when the input is below zero. Map a successful value to ok:<doubled> and a failed one to fallback:<the message that was thrown>. Return the results in input order.",
+        "ru": "Для каждого входа запусти асинхронную стадию, которая его удваивает, но бросает IllegalArgumentException с сообщением negative: <вход>, если вход меньше нуля. Успешное значение преобразуй в ok:<удвоенное>, упавшее — в fallback:<сообщение, с которым упало>. Верни результаты в порядке входов."
+      },
+      "hint": {
+        "en": "exceptionally receives the failure wrapped in a CompletionException, so the message you want is on its cause.",
+        "ru": "В exceptionally приходит сбой, завёрнутый в CompletionException, поэтому нужное сообщение лежит в его причине."
+      },
+      "starter": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n\n    public static List<String> pipeline(int[] inputs) {\n        // TODO: one asynchronous stage per input, doubled, mapped to ok:<value>,\n        // with a failure turned into fallback:<message>.\n        return new ArrayList<>();\n    }\n}\n",
+      "solution": "import java.util.ArrayList;\nimport java.util.List;\nimport java.util.concurrent.CompletableFuture;\n\npublic class Solution {\n\n    public static List<String> pipeline(int[] inputs) {\n        List<CompletableFuture<String>> stages = new ArrayList<>();\n        for (int input : inputs) {\n            int value = input;\n            stages.add(CompletableFuture\n                    .supplyAsync(() -> {\n                        if (value < 0) {\n                            throw new IllegalArgumentException(\"negative: \" + value);\n                        }\n                        return value * 2;\n                    })\n                    .thenApply(doubled -> \"ok:\" + doubled)\n                    .exceptionally(failure -> \"fallback:\" + failure.getCause().getMessage()));\n        }\n        List<String> results = new ArrayList<>();\n        for (CompletableFuture<String> stage : stages) {\n            results.add(stage.join());\n        }\n        return results;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "pipeline({1, 2, -1})",
+          "expression": "Solution.pipeline(new int[] {1, 2, -1})"
+        },
+        {
+          "label": "pipeline({0})",
+          "expression": "Solution.pipeline(new int[] {0})"
+        },
+        {
+          "label": "pipeline({})",
+          "expression": "Solution.pipeline(new int[] {})"
+        }
+      ],
+      "explanation": {
+        "en": "thenApply runs only on the success path and is skipped entirely when the stage before it failed, so the recovery has to be its own stage: exceptionally is the one that runs only on failure and puts the pipeline back on the success path. What it receives is a CompletionException wrapping what was actually thrown, which is why the message comes off getCause — a detail that is easy to miss until a fallback prints the wrapper's own text.",
+        "ru": "thenApply выполняется только на успешном пути и пропускается целиком, если предыдущая стадия упала, поэтому восстановление должно быть отдельной стадией: exceptionally выполняется только при сбое и возвращает цепочку на успешный путь. Приходит в него CompletionException, обёрнутый вокруг реально бро́шенного исключения, — отсюда getCause; деталь, которую легко упустить, пока fallback не начнёт печатать текст самой обёртки."
+      },
+      "sources": [
+        {
+          "title": "CompletableFuture (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletableFuture.html"
+        },
+        {
+          "title": "CompletionStage.exceptionally",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletionStage.html#exceptionally(java.util.function.Function)"
+        }
+      ]
+    },
+    {
+      "id": "java-conc-hard-01",
+      "difficulty": "hard",
+      "order": 7,
+      "topic": "java-concurrency",
+      "section": "atomics-cas",
+      "className": "Solution",
+      "title": {
+        "en": "A maximum without a lock",
+        "ru": "Максимум без блокировки"
+      },
+      "statement": {
+        "en": "Find the largest value in the array, splitting it across the given number of threads and keeping the running maximum in a single shared AtomicInteger. No synchronized, no locks — the update must be a compare-and-set retry loop.",
+        "ru": "Найди наибольшее значение массива, распределив его по заданному числу потоков и храня текущий максимум в одном общем AtomicInteger. Никаких synchronized и замков — обновление должно быть циклом повторов на compare-and-set."
+      },
+      "hint": {
+        "en": "Read the current value, decide, then set it only if it has not changed since you read it. If it has, read again.",
+        "ru": "Прочитай текущее значение, прими решение и запиши только если оно не изменилось с момента чтения. Изменилось — читай заново."
+      },
+      "starter": "public class Solution {\n\n    public static int max(int[] values, int threads) {\n        // TODO: split the array across threads and keep the maximum in one\n        // AtomicInteger, updated with a compare-and-set loop.\n        return Integer.MIN_VALUE;\n    }\n}\n",
+      "solution": "import java.util.concurrent.atomic.AtomicInteger;\n\npublic class Solution {\n\n    public static int max(int[] values, int threads) {\n        AtomicInteger largest = new AtomicInteger(Integer.MIN_VALUE);\n        Thread[] workers = new Thread[threads];\n        for (int worker = 0; worker < threads; worker++) {\n            int offset = worker;\n            workers[worker] = new Thread(() -> {\n                for (int i = offset; i < values.length; i += threads) {\n                    int candidate = values[i];\n                    int current = largest.get();\n                    while (candidate > current && !largest.compareAndSet(current, candidate)) {\n                        current = largest.get();\n                    }\n                }\n            });\n            workers[worker].start();\n        }\n        for (Thread worker : workers) {\n            try {\n                worker.join();\n            } catch (InterruptedException e) {\n                Thread.currentThread().interrupt();\n            }\n        }\n        return largest.get();\n    }\n}\n",
+      "cases": [
+        {
+          "label": "max({3, 9, 2, 7}, 2)",
+          "expression": "Solution.max(new int[] {3, 9, 2, 7}, 2)"
+        },
+        {
+          "label": "max({-5, -2}, 1)",
+          "expression": "Solution.max(new int[] {-5, -2}, 1)"
+        },
+        {
+          "label": "max({4}, 3)",
+          "expression": "Solution.max(new int[] {4}, 3)"
+        }
+      ],
+      "explanation": {
+        "en": "get-then-set is two operations and loses the update when another thread sets a larger value in between. compareAndSet is one: it writes only if the value is still the one that was read, and returns false when it is not — so the loop re-reads and decides again against the new value. That loop is the whole of lock-free programming: no thread ever blocks, and a thread that loses the race simply tries again. updateAndGet with Math::max is the same algorithm with the loop written for you.",
+        "ru": "get-затем-set — две операции, и обновление теряется, если между ними другой поток записал большее значение. compareAndSet — одна: он пишет, только если значение всё ещё то, которое было прочитано, и возвращает false, если нет, — тогда цикл перечитывает и решает заново уже по новому значению. Этот цикл и есть вся идея lock-free: никто не блокируется, а проигравший гонку просто повторяет попытку. updateAndGet с Math::max — тот же алгоритм, только цикл написан за вас."
+      },
+      "sources": [
+        {
+          "title": "AtomicInteger.compareAndSet",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/atomic/AtomicInteger.html#compareAndSet(int,int)"
+        },
+        {
+          "title": "java.util.concurrent.atomic",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/atomic/package-summary.html"
+        }
+      ]
+    },
+    {
+      "id": "java-conc-hard-02",
+      "difficulty": "hard",
+      "order": 8,
+      "topic": "java-concurrency",
+      "section": "fork-join",
+      "className": "Solution",
+      "title": {
+        "en": "Split until the piece is small enough",
+        "ru": "Дели, пока кусок не станет достаточно мал"
+      },
+      "statement": {
+        "en": "Sum the array with a RecursiveTask in a ForkJoinPool: a range no longer than the threshold is added up directly, a longer one is split in half. Shut the pool down before returning.",
+        "ru": "Просуммируй массив через RecursiveTask в ForkJoinPool: отрезок не длиннее порога складывается напрямую, более длинный делится пополам. Перед возвратом погаси пул."
+      },
+      "hint": {
+        "en": "Fork one half and compute the other on the current thread. Forking both and joining both leaves the thread that split the work with nothing to do.",
+        "ru": "Ответвляй одну половину, а вторую считай на текущем потоке. Ответвить обе и обе дождаться — значит оставить разделивший работу поток без дела."
+      },
+      "starter": "public class Solution {\n\n    public static long sum(long[] values, int threshold) {\n        // TODO: a RecursiveTask that adds up a short range directly and splits a long\n        // one in half, run in a ForkJoinPool that is shut down afterwards.\n        return 0L;\n    }\n}\n",
+      "solution": "import java.util.concurrent.ForkJoinPool;\nimport java.util.concurrent.RecursiveTask;\n\npublic class Solution {\n\n    public static long sum(long[] values, int threshold) {\n        ForkJoinPool pool = new ForkJoinPool();\n        try {\n            return pool.invoke(new SumTask(values, 0, values.length, threshold));\n        } finally {\n            pool.shutdown();\n        }\n    }\n\n    private static final class SumTask extends RecursiveTask<Long> {\n\n        private final long[] values;\n        private final int from;\n        private final int to;\n        private final int threshold;\n\n        SumTask(long[] values, int from, int to, int threshold) {\n            this.values = values;\n            this.from = from;\n            this.to = to;\n            this.threshold = threshold;\n        }\n\n        @Override\n        protected Long compute() {\n            if (to - from <= threshold) {\n                long total = 0;\n                for (int i = from; i < to; i++) {\n                    total += values[i];\n                }\n                return total;\n            }\n            int middle = (from + to) >>> 1;\n            SumTask left = new SumTask(values, from, middle, threshold);\n            left.fork();\n            SumTask right = new SumTask(values, middle, to, threshold);\n            long computed = right.compute();\n            return left.join() + computed;\n        }\n    }\n}\n",
+      "cases": [
+        {
+          "label": "sum(1..1000, threshold 100)",
+          "expression": "Solution.sum(java.util.stream.LongStream.rangeClosed(1, 1000).toArray(), 100)"
+        },
+        {
+          "label": "sum({5}, 1)",
+          "expression": "Solution.sum(new long[] {5}, 1)"
+        },
+        {
+          "label": "sum({}, 4)",
+          "expression": "Solution.sum(new long[] {}, 4)"
+        }
+      ],
+      "explanation": {
+        "en": "A fork-join task is not a thread: fork() puts the half on the current worker's own deque, and an idle worker steals from the back of somebody else's — which is why a pool of four threads can carry thousands of tasks. The threshold is the whole tuning knob: too low and the splitting costs more than the addition, too high and most of the pool sits idle. Computing one half on the current thread rather than forking both is the standard shape, and it is why the thread that did the splitting is never merely waiting.",
+        "ru": "Задача fork-join — не поток: fork() кладёт половину в собственную деку текущего воркера, а простаивающий воркер крадёт её с хвоста чужой; поэтому пул из четырёх потоков тянет тысячи задач. Порог — единственная ручка настройки: слишком мал — деление дороже сложения, слишком велик — большая часть пула простаивает. Считать одну половину на текущем потоке вместо того, чтобы ответвлять обе, — канонический приём, благодаря которому разделивший работу поток никогда не ждёт впустую."
+      },
+      "sources": [
+        {
+          "title": "RecursiveTask (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/RecursiveTask.html"
+        },
+        {
+          "title": "ForkJoinPool (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ForkJoinPool.html"
+        }
+      ]
+    },
+    {
+      "id": "java-conc-hard-03",
+      "difficulty": "hard",
+      "order": 9,
+      "topic": "java-concurrency",
+      "section": "diagnostics",
+      "className": "Solution",
+      "title": {
+        "en": "Never wait forever",
+        "ru": "Никогда не ждать вечно"
+      },
+      "statement": {
+        "en": "Submit a task that sleeps for taskMillis and returns completed, then wait at most waitMillis for its result. Return what the task returned if it arrived in time, and the string timed out if it did not — cancelling the task on the way out. Shut the pool down in either case.",
+        "ru": "Отправь задачу, которая спит taskMillis и возвращает completed, и подожди её результат не дольше waitMillis. Верни то, что вернула задача, если она успела, и строку timed out, если не успела, отменив её при выходе. Пул погаси в обоих случаях."
+      },
+      "hint": {
+        "en": "Future.get() has an overload that takes a timeout, and the exception it throws when the time runs out is not the same one a failing task throws.",
+        "ru": "У Future.get() есть перегрузка с таймаутом, и исключение, которым она отвечает на истечение времени, — не то же самое, которым отвечает упавшая задача."
+      },
+      "starter": "public class Solution {\n\n    public static String diagnose(long taskMillis, long waitMillis) {\n        // TODO: submit the sleeping task, wait no longer than waitMillis, and report\n        // either what it returned or that it timed out.\n        return \"completed\";\n    }\n}\n",
+      "solution": "import java.util.concurrent.ExecutorService;\nimport java.util.concurrent.Executors;\nimport java.util.concurrent.Future;\nimport java.util.concurrent.TimeUnit;\nimport java.util.concurrent.TimeoutException;\n\npublic class Solution {\n\n    public static String diagnose(long taskMillis, long waitMillis) {\n        ExecutorService pool = Executors.newSingleThreadExecutor();\n        try {\n            Future<String> pending = pool.submit(() -> {\n                Thread.sleep(taskMillis);\n                return \"completed\";\n            });\n            try {\n                return pending.get(waitMillis, TimeUnit.MILLISECONDS);\n            } catch (TimeoutException e) {\n                pending.cancel(true);\n                return \"timed out\";\n            } catch (InterruptedException e) {\n                Thread.currentThread().interrupt();\n                return \"interrupted\";\n            } catch (Exception e) {\n                return \"failed\";\n            }\n        } finally {\n            pool.shutdownNow();\n        }\n    }\n}\n",
+      "cases": [
+        {
+          "label": "diagnose(1000, 100)",
+          "expression": "Solution.diagnose(1000, 100)"
+        },
+        {
+          "label": "diagnose(10, 1000)",
+          "expression": "Solution.diagnose(10, 1000)"
+        },
+        {
+          "label": "diagnose(0, 1000)",
+          "expression": "Solution.diagnose(0, 1000)"
+        }
+      ],
+      "explanation": {
+        "en": "An unbounded get() is how a single stuck dependency takes a whole service down: the caller waits forever, its thread is never returned to the pool, and the next request waits for that thread. The bounded overload turns 'stuck' into an event you can handle and log, which is the difference between a slow endpoint and an outage nobody can explain. cancel(true) matters as much as the timeout — giving up on the answer does not by itself stop the work producing it.",
+        "ru": "Бесконечный get() — это то, как одна залипшая зависимость роняет целый сервис: вызывающий ждёт вечно, его поток не возвращается в пул, а следующий запрос ждёт уже этот поток. Перегрузка с таймаутом превращает «залипло» в событие, которое можно обработать и залогировать, а это разница между медленной ручкой и необъяснимым падением. cancel(true) важен не меньше таймаута: перестать ждать ответ — ещё не значит остановить работу, которая его готовит."
+      },
+      "sources": [
+        {
+          "title": "Future.get(long, TimeUnit)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Future.html#get(long,java.util.concurrent.TimeUnit)"
+        },
+        {
+          "title": "TimeoutException (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/TimeoutException.html"
+        }
+      ]
+    }
+  ]
+}

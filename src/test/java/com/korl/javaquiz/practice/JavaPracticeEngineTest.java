@@ -199,11 +199,130 @@ class JavaPracticeEngineTest {
                     }
                 }
                 """;
-        JavaPracticeEngine impatient = new JavaPracticeEngine(new JavaLimits(1, 20_000, 8_000));
+        // Long enough for the child JVM to start, so what overruns is the loop rather than the
+        // start-up — a one-second limit would time out before the submission ever ran.
+        JavaPracticeEngine impatient = new JavaPracticeEngine(new JavaLimits(3, 20_000, 8_000, 96));
 
         assertThatThrownBy(() -> impatient.grade(task(), spinning))
                 .isInstanceOf(PracticeSubmissionException.class)
                 .satisfies(thrown -> assertThat(((PracticeSubmissionException) thrown).getStatus())
                         .isEqualTo(SubmissionStatus.TIMEOUT));
+    }
+
+    /**
+     * The case the in-process sandbox could not survive, and the reason execution moved into a
+     * child JVM. Two threads taking two locks in opposite orders is a textbook deadlock, and
+     * every thread involved is parked rather than spinning — so {@code interrupt} is not
+     * observed and nothing in the old design could end the attempt. Here it ends with the
+     * process.
+     */
+    @Test
+    void aSubmissionThatDeadlocksIsKilledRatherThanLeftRunning() {
+        String deadlocking = """
+                public class Solution {
+
+                    private static final Object first = new Object();
+                    private static final Object second = new Object();
+
+                    public static int sum(int[] numbers) {
+                        Thread other = new Thread(() -> {
+                            synchronized (second) {
+                                sleep();
+                                synchronized (first) {
+                                    System.out.println("never reached");
+                                }
+                            }
+                        });
+                        other.start();
+                        synchronized (first) {
+                            sleep();
+                            synchronized (second) {
+                                return 0;
+                            }
+                        }
+                    }
+
+                    private static void sleep() {
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+                }
+                """;
+        JavaPracticeEngine impatient = new JavaPracticeEngine(new JavaLimits(3, 20_000, 8_000, 96));
+
+        assertThatThrownBy(() -> impatient.grade(task(), deadlocking))
+                .isInstanceOf(PracticeSubmissionException.class)
+                .satisfies(thrown -> assertThat(((PracticeSubmissionException) thrown).getStatus())
+                        .isEqualTo(SubmissionStatus.TIMEOUT));
+    }
+
+    /**
+     * And the case that kill is what makes possible: a submission that uses threads, finishes,
+     * and is graded on what it returned like any other.
+     */
+    @Test
+    void aSubmissionThatUsesThreadsIsGradedOnWhatItReturned() {
+        String threaded = """
+                import java.util.concurrent.atomic.AtomicInteger;
+
+                public class Solution {
+
+                    public static int sum(int[] numbers) {
+                        AtomicInteger total = new AtomicInteger();
+                        Thread[] workers = new Thread[numbers.length];
+                        for (int i = 0; i < numbers.length; i++) {
+                            int value = numbers[i];
+                            workers[i] = new Thread(() -> total.addAndGet(value));
+                            workers[i].start();
+                        }
+                        for (Thread worker : workers) {
+                            try {
+                                worker.join();
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                            }
+                        }
+                        return total.get();
+                    }
+                }
+                """;
+
+        assertThat(engine.grade(task(), threaded).status()).isEqualTo(SubmissionStatus.PASSED);
+    }
+
+    /**
+     * What a thread the submission started prints belongs to the attempt. The in-process
+     * capture routed by thread and so lost exactly this — one more thing the child process
+     * gets right for free, since in there every stream is the attempt's.
+     */
+    @Test
+    void outputPrintedFromAStartedThreadIsCaptured() {
+        String printing = """
+                public class Solution {
+
+                    public static int sum(int[] numbers) {
+                        Thread worker = new Thread(() -> System.out.println("from a worker"));
+                        worker.start();
+                        try {
+                            worker.join();
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                        int total = 0;
+                        for (int number : numbers) {
+                            total += number;
+                        }
+                        return total;
+                    }
+                }
+                """;
+
+        SubmissionOutcome outcome = engine.grade(task(), printing);
+
+        assertThat(outcome.status()).isEqualTo(SubmissionStatus.PASSED);
+        assertThat(outcome.output()).anySatisfy(printed -> assertThat(printed).contains("from a worker"));
     }
 }

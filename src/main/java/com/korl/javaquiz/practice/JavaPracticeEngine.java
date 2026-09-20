@@ -21,11 +21,20 @@ import java.util.concurrent.TimeUnit;
 public class JavaPracticeEngine {
 
     /**
-     * Concurrent compilations allowed process-wide. Lower than the SQL sandbox's eight because
-     * a compile is CPU-bound and the deployment target is a tenth of a core: letting several
-     * run at once makes all of them slow rather than any of them fast.
+     * Attempts allowed through at once, process-wide. One, where the SQL sandbox allows eight.
+     *
+     * <p>It was two while everything ran in this process, on the grounds that a compile is
+     * CPU-bound and the deployment target is a tenth of a core — several at once makes all of
+     * them slow rather than any of them fast. Moving execution into a child JVM turned this into
+     * a memory limit as well, and memory is the tighter of the two: the container is capped at
+     * 512 MB, the server takes up to 65 % of it by {@code -XX:MaxRAMPercentage}, and each child
+     * costs its own heap plus a JVM's overhead on top. One at a time is what keeps that
+     * arithmetic true no matter how large the server's live set grows.
+     *
+     * <p>The cost is that a second learner submitting at the same moment waits, for up to
+     * {@link #SLOT_WAIT_SECONDS}, rather than running beside the first.
      */
-    private static final int MAX_CONCURRENT_SANDBOXES = 2;
+    private static final int MAX_CONCURRENT_SANDBOXES = 1;
 
     /** How long a request waits for a sandbox slot before giving up. */
     private static final long SLOT_WAIT_SECONDS = 15;

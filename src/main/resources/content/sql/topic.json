@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "topic": {
     "id": "sql",
     "order": 6,
@@ -11,6 +11,7 @@
       {
         "id": "select-filter",
         "order": 1,
+        "level": "junior",
         "title": {
           "en": "Selecting and filtering",
           "ru": "Выборка и фильтрация"
@@ -19,6 +20,7 @@
       {
         "id": "null-logic",
         "order": 2,
+        "level": "junior",
         "title": {
           "en": "NULL and three-valued logic",
           "ru": "NULL и трёхзначная логика"
@@ -27,6 +29,7 @@
       {
         "id": "joins",
         "order": 3,
+        "level": "junior",
         "title": {
           "en": "Joins",
           "ru": "Соединения таблиц"
@@ -35,6 +38,7 @@
       {
         "id": "aggregation",
         "order": 4,
+        "level": "junior",
         "title": {
           "en": "Aggregation and grouping",
           "ru": "Агрегация и группировка"
@@ -43,6 +47,7 @@
       {
         "id": "subqueries-cte",
         "order": 5,
+        "level": "middle",
         "title": {
           "en": "Subqueries and CTEs",
           "ru": "Подзапросы и CTE"
@@ -51,6 +56,7 @@
       {
         "id": "window-functions",
         "order": 6,
+        "level": "senior",
         "title": {
           "en": "Window functions",
           "ru": "Оконные функции"
@@ -59,6 +65,7 @@
       {
         "id": "types-dates",
         "order": 7,
+        "level": "middle",
         "title": {
           "en": "Types, dates and text",
           "ru": "Типы, даты и текст"
@@ -67,6 +74,7 @@
       {
         "id": "schema-indexes",
         "order": 8,
+        "level": "middle",
         "title": {
           "en": "Schema, constraints and indexes",
           "ru": "Схема, ограничения и индексы"

@@ -99,6 +99,8 @@ because Spring questions contain `${...}` placeholders that Flyway would interpo
 | `V18__admin_korianko` | a second admin account | — |
 | `V19__grammar_practice` | the grammar practice track: `kind`, `sentence`, `case_sensitive`, `practice_task_blanks` | — |
 | `V20__LoadGrammarHomework` | the homework course: 2 sections, articles, 6 questions, 6 exercises | `content/english/grammar/homework/` |
+| `V21__LoadJavaConcurrencyPractice` | 11 concurrency exercises on the Java track | `content/practice/java-concurrency.json` |
+| `V22__BackfillLevels` | junior/middle/senior on the six topics loaded before levels existed | `content/topics.json`, `content/sql/topic.json`, `content/questions/`, `content/sql/questions.json` |
 
 SQL and Java Concurrency live in their own directories rather than in the shared files because
 V2 has already run everywhere; adding a topic to `topics.json` would load it on a fresh database
@@ -109,8 +111,25 @@ Java migration, guarded by a content test that runs at build time.
 
 Every question and section carries a `level` next to the `difficulty` a question already had.
 The two are orthogonal: difficulty says how tricky a question is, level says who is expected to
-know the material at all. Everything loaded before V7 was written for a middle-level reader and
-is tagged `MIDDLE`.
+know the material at all.
+
+`V7__levels` added the column with `DEFAULT 'MIDDLE'`, which was true of everything written
+until then and left the ladder with one rung occupied: a junior track draws on `JUNIOR` and
+nothing below it, so for six topics out of seven a junior got an empty round, and the senior
+track saw 366 questions of which 20 were senior material. `V22__BackfillLevels` is what fixed
+that, reading the levels the content files now carry:
+
+| | junior | middle | senior |
+|---|---|---|---|
+| backend questions | 163 | 132 | 71 |
+| backend sections | 23 | 28 | 10 |
+
+A section's level is a judgement about who the article is for. A question's level was derived
+from it — easy one rung down, hard one rung up, clamped at the ends of the ladder — which is a
+rule rather than 366 separate verdicts, and is meant to be overridden per question in the content
+file where it reads wrong. `BackendLevelsContentTest` holds the two invariants that matter: no
+question sits more than one rung from its own section, and every topic can fill a round of six at
+every level.
 
 There are two ladders, one per module, in the same enum and the same column: `JUNIOR` /
 `MIDDLE` / `SENIOR` for the backend material, graded by career level, and `BASE` /
@@ -184,9 +203,17 @@ three with no sandbox.
 
 ## Java practice
 
-The same idea carried into a compiled language: 18 exercises the learner solves by writing a
-class that is then **compiled and run**, six each at easy / medium / hard, drawn from seven Java
-Core sections and cross-linked with them the way the SQL ones are.
+The same idea carried into a compiled language: 29 exercises the learner solves by writing a
+class that is then **compiled and run**, cross-linked with the study sections the way the SQL
+ones are. Eighteen of them are Java Core, six each at easy / medium / hard, over seven sections.
+The other eleven are concurrency, one for each section of that topic a sandbox can grade — three
+easy, five medium, three hard, following the level of the section they belong to.
+
+`virtual-threads` is the section without an exercise. The topic is written against Java 21 while
+the application builds and runs on JDK 17, and the sandbox compiles with `-source 17`: an
+exercise calling `Thread.ofVirtual()` would not compile, here or in a learner's browser. The
+quiz questions for that section are unaffected — they teach the language, not the runtime this
+happens to be on.
 
 Where a SQL task is a dataset plus a reference query, a Java task is a class plus the **cases**
 called against it — each case a Java expression like `Solution.reverse("java")`. The cases are
@@ -205,13 +232,18 @@ whatever the submission printed. Every track fills the fields the others have no
 than dropping them, so a client reads one response shape: `diagnostics` and `output` are empty
 on the SQL and grammar tracks, `blanks` is empty on the SQL and Java ones.
 
-### Three rings
+### Three rings and a process
 
-Submitted code is arbitrary code, and the sandbox is `SandboxPolicy`: an allowlist of nine
+Submitted code is arbitrary code, and the sandbox is `SandboxPolicy`: an allowlist of twelve
 `java.*` packages, minus the classes inside them that are refused anyway, plus the members that
 are allowed on a class too useful to refuse whole. `System.out` is that case — `System.exit` is
-why it cannot simply be allowed. Threads are refused outright: a thread a submission starts
-outlives the attempt that started it.
+why it cannot simply be allowed. What is refused is the surface that reaches outside the
+process: starting programs, loading classes, reading the module graph or the call stack.
+
+Threads are **not** on that list any more. They were, for as long as a submission ran inside the
+server — see [the timeout](#what-the-timeout-can-and-cannot-do) — and that is why the topic with
+the most content in the base had no exercises at all. Execution now happens in a child JVM, so
+`java.util.concurrent`, `Thread` and `wait`/`notify` are all available.
 
 The policy is enforced three times, each ring covering what the one outside it can miss.
 
@@ -229,20 +261,45 @@ The policy is enforced three times, each ring covering what the one outside it c
 A loader per attempt, thrown away with it: a static field a submission sets does not outlive the
 submission that set it.
 
+The fourth ring is not policy but address space. Compilation stays in the server, where the
+diagnostics are produced and where `ClassFileGuard` reads the bytecode; **execution happens in a
+child JVM** (`ProcessSandbox`, `PracticeRunner`), whose class path holds five classes and no
+application code, and whose only channel back is a result file. The submission's own classes are
+not on that class path either — the runner reads them out of a work directory and defines them
+through `SandboxClassLoader`, exactly as before.
+
 ### What the timeout can and cannot do
 
-A run that overruns is interrupted, and interruption is cooperative — a submission spinning in a
-tight loop that never blocks does not observe it. Java has no safe way to stop such a thread, so
-the sandbox abandons it as a daemon and counts it; after four the track reports itself busy
-rather than filling the process with spinning threads. Heap is the gap this leaves: a submission
-that allocates until the JVM gives up is caught as a runtime error, not prevented.
+It can stop the attempt. That is a change: while a submission ran in the server, a timeout was a
+`Thread.interrupt`, interruption is cooperative, and `Thread.stop` is gone — so a submission
+spinning in a tight loop or parked on a deadlock could only be abandoned as a daemon and counted,
+and after four of them the whole track reported itself busy. A concurrency exercise is precisely
+the kind that deadlocks, which is why the policy refused threads and why `java-concurrency` had
+no practice track.
 
-`System.out` is captured by a stream installed on first use that routes **by thread** — an
-attempt's writes go to that attempt's buffer, every other thread's to the stream that was there
-before. Swapping `System.out` per attempt was the alternative, and it would mean either
-serialising every submission or handing one learner another's output. Installation is lazy
-rather than at boot, which is after the log manager has taken its own reference, so application
-logging never goes through it.
+In a child process the deadline is `destroyForcibly()`. A run that overruns is killed with every
+thread it started, nothing leaks back into the server, and the count of abandoned threads no
+longer exists because nothing is abandoned. Heap stopped being a gap too: the child runs under
+its own `-Xmx`, so a runaway allocation fails inside a process nobody else is using. What is
+still bounded only loosely is thread count — a submission can start thousands before the deadline
+fires, `-Xss512k` keeps each one cheap, and **one** of these processes runs at a time.
+
+That limit is a memory one as much as a CPU one. The container is capped at 512 MB, the server
+takes up to 65 % of it by `-XX:MaxRAMPercentage`, and a child costs its own 64 MB heap plus a
+JVM's overhead on top; serialising attempts is what keeps that arithmetic true however large the
+server's live set grows. It was two while execution was in-process and cost nothing but CPU. The
+price is that a second learner submitting at the same moment waits rather than running beside the
+first. `PRACTICE_JAVA_HEAP_MEGABYTES` is there for deployments that are not on the free tier.
+
+The price is the child's start-up, some 200–400 ms, which is inside the run timeout and is why
+that default went from five seconds to eight. Reference solutions pay it once per task and then
+sit in the engine's cache; a learner pays it once per submission, on top of a compile that
+already costs more.
+
+Output is simpler on this side of the boundary: the child has one tenant, so it captures
+`System.out` and `System.err` wholesale for the length of the run and slices them per case.
+Output printed from a thread the submission started is captured too — the in-process version
+routed by thread and lost exactly that.
 
 ### The compiler
 
@@ -275,8 +332,8 @@ compiled, but does not have the shape the cases call for — which is reported u
 message key, without a line number the learner has no way to look at.
 
 Limits live under `app.practice.java` in `application.properties`, overridable with
-`PRACTICE_JAVA_*` environment variables: a run timeout covering all of a task's cases together,
-a source length cap and an output cap.
+`PRACTICE_JAVA_*` environment variables: a run timeout covering all of a task's cases together
+and the child JVM's start-up, a source length cap, an output cap and the child's heap.
 
 `JavaPracticeContentTest` compiles and runs every bundled reference solution at build time and
 grades it against its own cases, so a task whose solution or cases have drifted fails the build

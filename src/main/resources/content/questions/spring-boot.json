@@ -1,11 +1,12 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "topic": "spring-boot",
   "questions": [
     {
       "id": "spring-boot.autoconfiguration.001",
       "section": "autoconfiguration",
       "difficulty": "easy",
+      "level": "middle",
       "text": {
         "en": "Which annotations does @SpringBootApplication combine?",
         "ru": "Какие аннотации объединяет в себе @SpringBootApplication?"
@@ -59,6 +60,7 @@
       "id": "spring-boot.autoconfiguration.002",
       "section": "autoconfiguration",
       "difficulty": "easy",
+      "level": "middle",
       "text": {
         "en": "Where must a library register its auto-configuration classes so that Spring Boot 3.x picks them up?",
         "ru": "Где библиотека должна зарегистрировать свои классы автоконфигурации, чтобы Spring Boot 3.x их подхватил?"
@@ -113,6 +115,7 @@
       "id": "spring-boot.autoconfiguration.003",
       "section": "autoconfiguration",
       "difficulty": "medium",
+      "level": "senior",
       "text": {
         "en": "A colleague copied this pattern from a Spring Boot auto-configuration into an ordinary application @Configuration class. Why is it unreliable there?",
         "ru": "Коллега скопировал этот приём из автоконфигурации Spring Boot в обычный @Configuration класс приложения. Почему здесь он работает ненадёжно?"
@@ -168,6 +171,7 @@
       "id": "spring-boot.autoconfiguration.004",
       "section": "autoconfiguration",
       "difficulty": "medium",
+      "level": "senior",
       "text": {
         "en": "Which statement about @AutoConfigureAfter is TRUE?",
         "ru": "Какое утверждение про @AutoConfigureAfter верно?"
@@ -222,6 +226,7 @@
       "id": "spring-boot.autoconfiguration.005",
       "section": "autoconfiguration",
       "difficulty": "medium",
+      "level": "senior",
       "text": {
         "en": "An auto-configuration you expected did not apply. What is the intended way to find out which condition failed?",
         "ru": "Ожидаемая автоконфигурация не применилась. Каким штатным способом выяснить, какое условие не выполнилось?"
@@ -276,6 +281,7 @@
       "id": "spring-boot.autoconfiguration.006",
       "section": "autoconfiguration",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "micrometer-core is an optional dependency of this library. When it is absent the application still fails with NoClassDefFoundError for MeterRegistry. Why?",
         "ru": "micrometer-core — необязательная зависимость этой библиотеки. Когда её нет, приложение всё равно падает с NoClassDefFoundError для MeterRegistry. Почему?"
@@ -331,6 +337,7 @@
       "id": "spring-boot.starters.001",
       "section": "starters",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "What does an official starter such as spring-boot-starter-web actually contain?",
         "ru": "Что на самом деле содержит официальный стартер, например spring-boot-starter-web?"
@@ -384,6 +391,7 @@
       "id": "spring-boot.starters.002",
       "section": "starters",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "How does using spring-boot-starter-parent differ from importing spring-boot-dependencies as a BOM?",
         "ru": "Чем использование spring-boot-starter-parent отличается от импорта spring-boot-dependencies как BOM?"
@@ -438,6 +446,7 @@
       "id": "spring-boot.starters.003",
       "section": "starters",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "The project already has a corporate parent POM, so Spring Boot is imported as a BOM. The Jackson version does not change. Why?",
         "ru": "У проекта уже есть корпоративный родительский POM, поэтому Spring Boot подключён как BOM. Версия Jackson не меняется. Почему?"
@@ -493,6 +502,7 @@
       "id": "spring-boot.starters.004",
       "section": "starters",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Both spring-boot-starter-web and spring-boot-starter-webflux are on the classpath. What does Spring Boot do?",
         "ru": "В classpath присутствуют и spring-boot-starter-web, и spring-boot-starter-webflux. Что сделает Spring Boot?"
@@ -546,6 +556,7 @@
       "id": "spring-boot.starters.005",
       "section": "starters",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "The team wants Jetty instead of Tomcat and simply added the Jetty starter. Which server starts, and what is still missing?",
         "ru": "Команда хочет Jetty вместо Tomcat и просто добавила стартер Jetty. Какой сервер запустится и чего не хватает?"
@@ -601,6 +612,7 @@
       "id": "spring-boot.starters.006",
       "section": "starters",
       "difficulty": "hard",
+      "level": "middle",
       "text": {
         "en": "A library ships AcmeAutoConfiguration (annotated @AutoConfiguration and listed in AutoConfiguration.imports) in package com.acme.mylib. The application's @SpringBootApplication class sits in com.acme, so component scanning also covers that package. How often is the configuration applied?",
         "ru": "Библиотека поставляет AcmeAutoConfiguration (с аннотацией @AutoConfiguration и записью в AutoConfiguration.imports) в пакете com.acme.mylib. Класс с @SpringBootApplication находится в com.acme, поэтому сканирование компонентов покрывает и этот пакет. Сколько раз применится конфигурация?"
@@ -655,6 +667,7 @@
       "id": "spring-boot.configuration-properties.001",
       "section": "configuration-properties",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "The key acme.timeout is defined in application.properties inside the jar, as an OS environment variable, as a Java system property and as a command-line argument. Which value does the application see?",
         "ru": "Ключ acme.timeout задан в application.properties внутри jar, в переменной окружения ОС, в системном свойстве Java и в аргументе командной строки. Какое значение увидит приложение?"
@@ -708,6 +721,7 @@
       "id": "spring-boot.configuration-properties.002",
       "section": "configuration-properties",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Both files sit in the same location and both define server.port. Which port does the application bind to?",
         "ru": "Оба файла лежат в одном и том же месте и оба задают server.port. На каком порту поднимется приложение?"
@@ -762,6 +776,7 @@
       "id": "spring-boot.configuration-properties.003",
       "section": "configuration-properties",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Injecting MailProperties fails with NoSuchBeanDefinitionException. What is the correct fix?",
         "ru": "Внедрение MailProperties падает с NoSuchBeanDefinitionException. Что нужно исправить?"
@@ -817,6 +832,7 @@
       "id": "spring-boot.configuration-properties.004",
       "section": "configuration-properties",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Which statement about @ConfigurationProperties compared with @Value is TRUE?",
         "ru": "Какое утверждение о @ConfigurationProperties в сравнении с @Value верно?"
@@ -870,6 +886,7 @@
       "id": "spring-boot.configuration-properties.005",
       "section": "configuration-properties",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "acme.security.token.ttl-seconds=0 is accepted without an error, while a blank acme.security.secret is rejected. Why?",
         "ru": "Значение acme.security.token.ttl-seconds=0 принимается без ошибки, а пустой acme.security.secret отклоняется. Почему?"
@@ -924,6 +941,7 @@
       "id": "spring-boot.configuration-properties.006",
       "section": "configuration-properties",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "spring.config.import=file:/etc/acme/extra.properties is configured, but on machines where that file is absent the application refuses to start. Which change makes the import tolerant of a missing file?",
         "ru": "Задано spring.config.import=file:/etc/acme/extra.properties, но на машинах, где файла нет, приложение отказывается стартовать. Какое изменение сделает импорт устойчивым к отсутствию файла?"
@@ -978,6 +996,7 @@
       "id": "spring-boot.profiles.001",
       "section": "profiles",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "What does @Profile(\"!prod\") on a @Component mean?",
         "ru": "Что означает @Profile(\"!prod\") на @Component?"
@@ -1032,6 +1051,7 @@
       "id": "spring-boot.profiles.002",
       "section": "profiles",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which value of acme.sample-rate is in effect?",
         "ru": "Какое значение acme.sample-rate будет действовать?"
@@ -1086,6 +1106,7 @@
       "id": "spring-boot.profiles.003",
       "section": "profiles",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Which profiles are active after start-up?",
         "ru": "Какие профили будут активны после запуска?"
@@ -1140,6 +1161,7 @@
       "id": "spring-boot.profiles.004",
       "section": "profiles",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "The application is started with --spring.profiles.active=prod. What happens?",
         "ru": "Приложение запускается с --spring.profiles.active=prod. Что произойдёт?"
@@ -1195,6 +1217,7 @@
       "id": "spring-boot.profiles.005",
       "section": "profiles",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "A feature has to be switchable by a boolean setting rather than by environment name. Which statement about @ConditionalOnProperty is TRUE?",
         "ru": "Функциональность нужно включать булевой настройкой, а не именем окружения. Какое утверждение про @ConditionalOnProperty верно?"
@@ -1249,6 +1272,7 @@
       "id": "spring-boot.profiles.006",
       "section": "profiles",
       "difficulty": "hard",
+      "level": "middle",
       "text": {
         "en": "Which statement about activating profiles in Spring Boot tests is TRUE?",
         "ru": "Какое утверждение об активации профилей в тестах Spring Boot верно?"
@@ -1303,6 +1327,7 @@
       "id": "spring-boot.web-embedded-server.001",
       "section": "web-embedded-server",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "What does server.port=0 do, and how does the application learn the port it actually got?",
         "ru": "Что делает server.port=0 и как приложение узнаёт, какой порт ему реально достался?"
@@ -1357,6 +1382,7 @@
       "id": "spring-boot.web-embedded-server.002",
       "section": "web-embedded-server",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which property sets the context path of the embedded servlet container?",
         "ru": "Какое свойство задаёт context path встроенного servlet-контейнера?"
@@ -1411,6 +1437,7 @@
       "id": "spring-boot.web-embedded-server.003",
       "section": "web-embedded-server",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Why does starting a repackaged Spring Boot jar this way fail?",
         "ru": "Почему запуск перепакованного jar-файла Spring Boot таким способом не работает?"
@@ -1466,6 +1493,7 @@
       "id": "spring-boot.web-embedded-server.004",
       "section": "web-embedded-server",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "A @Configuration class implements WebMvcConfigurer and is also annotated with @EnableWebMvc. What is the consequence?",
         "ru": "Класс @Configuration реализует WebMvcConfigurer и вместе с этим помечен аннотацией @EnableWebMvc. К чему это приведёт?"
@@ -1519,6 +1547,7 @@
       "id": "spring-boot.web-embedded-server.005",
       "section": "web-embedded-server",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Which statement about graceful shutdown of the embedded server in Spring Boot 3.5 is TRUE?",
         "ru": "Какое утверждение о graceful shutdown встроенного сервера в Spring Boot 3.5 верно?"
@@ -1573,6 +1602,7 @@
       "id": "spring-boot.web-embedded-server.006",
       "section": "web-embedded-server",
       "difficulty": "hard",
+      "level": "middle",
       "text": {
         "en": "The controller threw IllegalStateException(\"order 999 is archived\"), yet the default /error response carries no message. Which change adds it?",
         "ru": "Контроллер выбросил IllegalStateException(\"order 999 is archived\"), но стандартный ответ /error не содержит сообщения. Какое изменение его добавит?"
@@ -1628,6 +1658,7 @@
       "id": "spring-boot.actuator.001",
       "section": "actuator",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Only spring-boot-starter-actuator has been added, with no further configuration. Which endpoints are reachable over HTTP?",
         "ru": "Добавлен только spring-boot-starter-actuator, никакой дополнительной настройки нет. Какие endpoint-ы доступны по HTTP?"
@@ -1681,6 +1712,7 @@
       "id": "spring-boot.actuator.002",
       "section": "actuator",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "The info endpoint is exposed and returns HTTP 200, but its body is an empty JSON object. Why are the info.* values missing?",
         "ru": "Endpoint info опубликован и отвечает HTTP 200, но телом приходит пустой JSON-объект. Почему значений info.* там нет?"
@@ -1736,6 +1768,7 @@
       "id": "spring-boot.actuator.003",
       "section": "actuator",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "management.endpoint.health.probes.enabled=true is set and no health groups are declared. What does /actuator/health/readiness report?",
         "ru": "Задано management.endpoint.health.probes.enabled=true, группы health не объявлены. Что покажет /actuator/health/readiness?"
@@ -1790,6 +1823,7 @@
       "id": "spring-boot.actuator.004",
       "section": "actuator",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Which statement about securing actuator endpoints in Spring Boot 3.x is TRUE?",
         "ru": "Какое утверждение о защите endpoint-ов actuator в Spring Boot 3.x верно?"
@@ -1844,6 +1878,7 @@
       "id": "spring-boot.actuator.005",
       "section": "actuator",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "The bean is created, but GET /actuator/features returns 404. What is missing?",
         "ru": "Бин создаётся, но GET /actuator/features возвращает 404. Чего не хватает?"
@@ -1899,6 +1934,7 @@
       "id": "spring-boot.actuator.006",
       "section": "actuator",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "Which statement about Micrometer metrics in a Spring Boot 3.x application is TRUE?",
         "ru": "Какое утверждение о метриках Micrometer в приложении на Spring Boot 3.x верно?"
@@ -1953,6 +1989,7 @@
       "id": "spring-boot.data-access.001",
       "section": "data-access",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "spring-boot-starter-data-jpa is on the classpath and only spring.datasource.url, username and password are set. What does Spring Boot create?",
         "ru": "В classpath есть spring-boot-starter-data-jpa, и заданы только spring.datasource.url, username и password. Что создаст Spring Boot?"
@@ -2007,6 +2044,7 @@
       "id": "spring-boot.data-access.002",
       "section": "data-access",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "spring.jpa.hibernate.ddl-auto is not configured anywhere. Which value does Spring Boot use?",
         "ru": "Свойство spring.jpa.hibernate.ddl-auto нигде не задано. Какое значение использует Spring Boot?"
@@ -2060,6 +2098,7 @@
       "id": "spring-boot.data-access.003",
       "section": "data-access",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Which statement about these two derived queries is TRUE?",
         "ru": "Какое утверждение об этих двух производных запросах верно?"
@@ -2115,6 +2154,7 @@
       "id": "spring-boot.data-access.004",
       "section": "data-access",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Which statement about spring.jpa.open-in-view is TRUE?",
         "ru": "Какое утверждение о spring.jpa.open-in-view верно?"
@@ -2169,6 +2209,7 @@
       "id": "spring-boot.data-access.005",
       "section": "data-access",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "What happens to the order that was saved before the exception was thrown?",
         "ru": "Что произойдёт с заказом, сохранённым до выброса исключения?"
@@ -2224,6 +2265,7 @@
       "id": "spring-boot.data-access.006",
       "section": "data-access",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "Flyway is on the classpath with migrations in db/migration, spring.jpa.hibernate.ddl-auto is unset, and an @Entity maps a column that no migration creates. What happens?",
         "ru": "В classpath есть Flyway с миграциями в db/migration, spring.jpa.hibernate.ddl-auto не задан, а @Entity маппит колонку, которую ни одна миграция не создаёт. Что произойдёт?"
@@ -2278,6 +2320,7 @@
       "id": "spring-boot.testing-packaging.001",
       "section": "testing-packaging",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "What does a plain @SpringBootTest do with respect to the web environment?",
         "ru": "Что делает @SpringBootTest без параметров в отношении web-окружения?"
@@ -2331,6 +2374,7 @@
       "id": "spring-boot.testing-packaging.002",
       "section": "testing-packaging",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about @DataJpaTest is TRUE?",
         "ru": "Какое утверждение о @DataJpaTest верно?"
@@ -2384,6 +2428,7 @@
       "id": "spring-boot.testing-packaging.003",
       "section": "testing-packaging",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Why does this test fail before the assertion is even reached?",
         "ru": "Почему этот тест падает ещё до того, как дело доходит до проверки?"
@@ -2439,6 +2484,7 @@
       "id": "spring-boot.testing-packaging.004",
       "section": "testing-packaging",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Which statement about @WebMvcTest is TRUE?",
         "ru": "Какое утверждение о @WebMvcTest верно?"
@@ -2492,6 +2538,7 @@
       "id": "spring-boot.testing-packaging.005",
       "section": "testing-packaging",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Which statement about using Testcontainers with Spring Boot 3.x is TRUE?",
         "ru": "Какое утверждение об использовании Testcontainers со Spring Boot 3.x верно?"
@@ -2546,6 +2593,7 @@
       "id": "spring-boot.testing-packaging.006",
       "section": "testing-packaging",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "Which statement about packaging with the Spring Boot Maven plugin and AOT or native images is TRUE?",
         "ru": "Какое утверждение о сборке через Spring Boot Maven plugin и об AOT или native image верно?"

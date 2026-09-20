@@ -7,10 +7,16 @@ import java.util.Set;
  * What submitted Java is allowed to touch.
  *
  * <p>An allowlist rather than a denylist, because the interesting attacks are the ones nobody
- * thought to list. A learner solving an exercise about collections, strings or streams needs a
- * handful of {@code java.*} packages and nothing else; a submission reaching for anything
- * outside them is either lost or probing, and both are better answered with a refusal than
- * with a stack trace.
+ * thought to list. A learner solving an exercise about collections, strings, streams or threads
+ * needs a handful of {@code java.*} packages and nothing else; a submission reaching for
+ * anything outside them is either lost or probing, and both are better answered with a refusal
+ * than with a stack trace.
+ *
+ * <p>Concurrency is allowed, and that is a recent thing. It was refused for as long as a
+ * submission ran inside the server, where a thread it started outlived the attempt and no
+ * timeout could reach it. Execution now happens in a child JVM that is killed outright when it
+ * overruns ({@link ProcessSandbox}), so what used to be unbounded is bounded by the process,
+ * and a topic about threads can have exercises about threads.
  *
  * <p>The policy is read twice at two different depths — by {@link ClassFileGuard} over the
  * compiled constant pool, and again by {@link SandboxClassLoader} as classes are actually
@@ -30,14 +36,21 @@ public final class SandboxPolicy {
             "java.time.format",
             "java.time.temporal",
             "java.util",
+            "java.util.concurrent",
+            "java.util.concurrent.atomic",
+            "java.util.concurrent.locks",
             "java.util.function",
             "java.util.regex",
             "java.util.stream");
 
     /**
-     * Classes inside those packages that are refused anyway. Threads are here because a thread
-     * a submission starts outlives the attempt that started it: the run is bounded by a timeout
-     * on the calling thread, and nothing bounds the ones it spawned.
+     * Classes inside those packages that are refused anyway. What is left is the surface that
+     * reaches <em>outside</em> the child process — starting programs, loading classes, reading
+     * the module graph or the call stack — none of which a practice exercise has any use for.
+     *
+     * <p>{@code Thread} and its neighbours used to be on this list. They came off it when
+     * execution moved into a child JVM: the reason they were refused was that nothing could stop
+     * a thread a submission started, and now the process boundary stops all of them at once.
      */
     private static final Set<String> REFUSED_CLASSES = Set.of(
             "java.lang.Runtime",
@@ -46,16 +59,10 @@ public final class SandboxPolicy {
             "java.lang.ProcessHandle",
             "java.lang.ClassLoader",
             "java.lang.SecurityManager",
-            "java.lang.Thread",
-            "java.lang.ThreadGroup",
-            "java.lang.ThreadLocal",
-            "java.lang.InheritableThreadLocal",
             "java.lang.Module",
             "java.lang.ModuleLayer",
             "java.lang.StackWalker",
             "java.util.ServiceLoader",
-            "java.util.Timer",
-            "java.util.TimerTask",
             "java.util.Scanner");
 
     /**
@@ -111,6 +118,11 @@ public final class SandboxPolicy {
     /**
      * Members refused on a class whose remaining surface is harmless. Reflection is most of
      * the list: it is how a submission would reach a class the policy never let it name.
+     *
+     * <p>{@code Object.wait}, {@code notify} and {@code notifyAll} were here too, on the
+     * grounds that waiting for a notification that never comes is a hang. It is — and a hang is
+     * now a killed process rather than a leaked thread, while {@code synchronized}, {@code wait}
+     * and {@code notify} are half of what the monitor section teaches.
      */
     private static final Map<String, Set<String>> REFUSED_MEMBERS = Map.of(
             "java.lang.Class", Set.of(
@@ -120,9 +132,10 @@ public final class SandboxPolicy {
                     "getField", "getFields", "getDeclaredField", "getDeclaredFields",
                     "getConstructor", "getConstructors",
                     "getDeclaredConstructor", "getDeclaredConstructors"),
-            // Waiting on a monitor nothing will ever notify is a hang, and a hang is only
-            // noticed by the timeout, several seconds of a shared machine later.
-            "java.lang.Object", Set.of("wait", "notify", "notifyAll"));
+            // Thread keeps two of its own. The deprecated pair is unsafe by the JDK's own
+            // account and gone in later releases, so an exercise that leans on them teaches
+            // something that will not compile in a year.
+            "java.lang.Thread", Set.of("stop", "suspend", "resume"));
 
     private SandboxPolicy() {
     }

@@ -57,10 +57,9 @@ class SandboxPolicyTest {
             "java.nio.file.Files.exists(null);                  | java.nio.file",
             "java.net.InetAddress.getLoopbackAddress().toString(); | java.net",
             "Solution.class.getClassLoader().toString();        | ClassLoader through Class",
-            "new Thread(() -> { }).start();                     | Thread",
             "System.getProperties().toString();                 | System.getProperties",
             "System.setOut(null);                               | System.setOut",
-            "java.util.concurrent.Executors.newWorkStealingPool().shutdown(); | java.util.concurrent",
+            "java.util.ServiceLoader.load(Runnable.class).toString(); | ServiceLoader",
     })
     void submissionsReachingOutsideTheSandboxAreRefused(String statement, String name) {
         assertThatThrownBy(() -> engine.grade(task(), body(statement)))
@@ -130,7 +129,7 @@ class SandboxPolicyTest {
 
     @Test
     void aSubmissionLongerThanTheLimitIsRefusedWithoutCompiling() {
-        JavaPracticeEngine strict = new JavaPracticeEngine(new JavaLimits(5, 40, 8_000));
+        JavaPracticeEngine strict = new JavaPracticeEngine(new JavaLimits(5, 40, 8_000, 96));
 
         assertThatThrownBy(() -> strict.grade(task(), IDENTITY))
                 .isInstanceOf(PracticeSubmissionException.class)
