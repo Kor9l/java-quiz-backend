@@ -1,0 +1,2655 @@
+{
+  "schemaVersion": 2,
+  "topic": "git",
+  "questions": [
+    {
+      "id": "git.objects-and-areas.001",
+      "section": "objects-and-areas",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does `git add` change?",
+        "ru": "Что меняет `git add`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It creates a commit object containing that file and moves the current branch.",
+            "ru": "Создаёт объект-коммит с этим файлом и двигает текущую ветку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It marks the file as tracked but takes its content only when you commit.",
+            "ru": "Помечает файл как отслеживаемый, а содержимое берёт только в момент коммита."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It uploads the file to the remote so the change is not lost.",
+            "ru": "Отправляет файл на удалённый репозиторий, чтобы изменение не потерялось."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It copies the current content of the file from the working tree into the index.",
+            "ru": "Копирует текущее содержимое файла из рабочего дерева в индекс."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It changes nothing on disk; it only records the file name in .git/config.",
+            "ru": "Ничего не меняет на диске, только записывает имя файла в .git/config."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "add copies content, at the moment you run it, into the index. Edit the file afterwards and the new edit is not staged: git status will list the same file under both \"Changes to be committed\" and \"Changes not staged for commit\". The commit is built from the index, not from the disk.",
+        "ru": "add копирует содержимое — то, которое есть в момент запуска, — в индекс. Поправите файл после этого, и новая правка окажется непроиндексированной: git status покажет один и тот же файл и в «Changes to be committed», и в «Changes not staged for commit». Коммит собирается из индекса, а не с диска."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-status",
+        "https://git-scm.com/book/en/v2/Git-Internals-Git-Objects"
+      ]
+    },
+    {
+      "id": "git.objects-and-areas.002",
+      "section": "objects-and-areas",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "You ran `git add` on a file, then edited it again. What does bare `git diff` show?",
+        "ru": "Вы сделали `git add` на файле, а потом снова его отредактировали. Что покажет голый `git diff`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The difference between HEAD and the index, that is, what the next commit will change.",
+            "ru": "Разницу между HEAD и индексом, то есть то, что изменит следующий коммит."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The difference between the working tree and the index — only the edit made after add.",
+            "ru": "Разницу между рабочим деревом и индексом, то есть только правку, сделанную после add."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The difference between the working tree and HEAD, both edits together.",
+            "ru": "Разницу между рабочим деревом и HEAD, то есть обе правки сразу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing, because the file has already been staged.",
+            "ru": "Ничего, потому что файл уже проиндексирован."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The difference between your branch and its remote-tracking branch.",
+            "ru": "Разницу между вашей веткой и её remote-tracking веткой."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "git diff with no arguments is working tree against index, so it shows only what you changed after staging. git diff --staged is index against HEAD, the first edit. Reading one of these two as the other is behind most of the \"but I did change that file\" confusion.",
+        "ru": "git diff без аргументов — это рабочее дерево против индекса, поэтому он показывает только то, что вы изменили после индексации. git diff --staged — это индекс против HEAD, то есть первая правка. Путаница «но я же правил этот файл» почти всегда сводится к тому, что один из этих диффов прочитали как другой."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-status",
+        "https://git-scm.com/book/en/v2/Git-Internals-Git-Objects"
+      ]
+    },
+    {
+      "id": "git.objects-and-areas.003",
+      "section": "objects-and-areas",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "What does a commit object actually store?",
+        "ru": "Что на самом деле хранит объект-коммит?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The patch it introduced, so that history is a chain of diffs applied in order.",
+            "ru": "Патч, который он внёс, так что история — это цепочка последовательно применяемых диффов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The changed files only; unchanged files are inherited from the parent by reference.",
+            "ru": "Только изменённые файлы; неизменённые наследуются от родителя по ссылке."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A compressed copy of the working tree, including files listed in .gitignore.",
+            "ru": "Сжатую копию рабочего дерева, включая файлы из .gitignore."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The id of one tree — the whole project at that moment — plus parent ids, author, committer and message.",
+            "ru": "Идентификатор одного дерева — всего проекта на тот момент — плюс идентификаторы родителей, автора, коммиттера и сообщение."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The branch name it was made on, so that git log can group commits by branch.",
+            "ru": "Имя ветки, в которой он сделан, чтобы git log мог группировать коммиты по веткам."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A commit is a snapshot: one tree id covering the entire project, plus parents and metadata. The patch you see in git show is computed on the fly against the parent's tree, not stored. Storage stays small because identical content is one object, not because diffs are stored.",
+        "ru": "Коммит — это снимок: один идентификатор дерева на весь проект плюс родители и метаданные. Патч, который вы видите в git show, считается на лету относительно дерева родителя, а не хранится. Места это занимает мало не потому, что хранятся диффы, а потому что одинаковое содержимое — один объект."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-status",
+        "https://git-scm.com/book/en/v2/Git-Internals-Git-Objects"
+      ]
+    },
+    {
+      "id": "git.objects-and-areas.004",
+      "section": "objects-and-areas",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "Why does `git show` print no patch by default for a merge commit?",
+        "ru": "Почему `git show` по умолчанию не печатает патч для мерж-коммита?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because it has two parents, so there are two possible diffs and no single obvious one.",
+            "ru": "Потому что у него два родителя, а значит два возможных диффа, и ни один не является очевидным."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because merge commits are stored without a tree of their own.",
+            "ru": "Потому что мерж-коммиты хранятся без собственного дерева."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because a merge commit never changes any file by definition.",
+            "ru": "Потому что мерж-коммит по определению не меняет ни одного файла."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the patch is only stored for the first commit of a branch.",
+            "ru": "Потому что патч сохраняется только для первого коммита ветки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because showing it would require network access to the remote that produced the merge.",
+            "ru": "Потому что для показа потребовался бы доступ к удалённому репозиторию, где мерж был сделан."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A diff is always between two trees. A merge commit has two parents, so \"the\" diff is ambiguous, and Git declines to pick. --first-parent, -m or --cc ask for a specific one. A merge commit does have its own tree, and it can contain changes nobody made on either side — that is what a conflict resolution is.",
+        "ru": "Дифф всегда между двумя деревьями. У мерж-коммита два родителя, поэтому «тот самый» дифф неоднозначен, и Git отказывается выбирать за вас. --first-parent, -m или --cc просят конкретный. Собственное дерево у мерж-коммита есть, и в нём могут оказаться изменения, которых не делала ни одна сторона, — это и есть разрешение конфликта."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-status",
+        "https://git-scm.com/book/en/v2/Git-Internals-Git-Objects"
+      ]
+    },
+    {
+      "id": "git.objects-and-areas.005",
+      "section": "objects-and-areas",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "The same 2 KB of text appears as two files in two different directories, and stays unchanged for fifty commits. How many blob objects hold that content?",
+        "ru": "Один и тот же текст на 2 КБ лежит в двух файлах в разных каталогах и не меняется пятьдесят коммитов подряд. Сколько объектов-блобов хранят это содержимое?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Two, one per path, each then reused across the fifty commits.",
+            "ru": "Два, по одному на путь, и каждый затем переиспользуется во всех пятидесяти коммитах."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Fifty, one per commit, because each commit is a full snapshot.",
+            "ru": "Пятьдесят, по одному на коммит, потому что каждый коммит — полный снимок."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "One — an object is named by the hash of its content, so identical content is one object.",
+            "ru": "Один — объект именуется хешем своего содержимого, поэтому одинаковое содержимое — это один объект."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "One hundred — fifty commits times two paths.",
+            "ru": "Сто: пятьдесят коммитов на два пути."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "None until git gc runs and materialises the blobs.",
+            "ru": "Ни одного, пока не отработает git gc и не материализует блобы."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Blobs are content-addressed and hold content only — no name, no path. Identical bytes therefore land on the same object id and are stored once. The paths live in the tree objects, which point at that one blob twice; the fifty commits reuse the same trees where nothing changed.",
+        "ru": "Блобы адресуются по содержимому и хранят только его — ни имени, ни пути. Значит, одинаковые байты дают один и тот же идентификатор объекта и хранятся один раз. Пути живут в объектах-деревьях, которые дважды ссылаются на этот единственный блоб; а пятьдесят коммитов переиспользуют те же деревья там, где ничего не менялось."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-status",
+        "https://git-scm.com/book/en/v2/Git-Internals-Git-Objects"
+      ]
+    },
+    {
+      "id": "git.objects-and-areas.006",
+      "section": "objects-and-areas",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "You change only the message of a commit made ten commits ago. Which commit ids change?",
+        "ru": "Вы меняете только сообщение коммита, сделанного десять коммитов назад. Какие идентификаторы коммитов изменятся?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "None — the message is metadata and is not part of the hash.",
+            "ru": "Никакие — сообщение является метаданными и в хеш не входит."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only that commit's, since the later commits store their own content independently.",
+            "ru": "Только у него, поскольку последующие коммиты хранят своё содержимое независимо."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "All commits in the repository, because the object database is rehashed as a whole.",
+            "ru": "У всех коммитов репозитория, потому что база объектов перехешируется целиком."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That commit's and all ten after it, because each commit's hash covers its parent's id.",
+            "ru": "У него и у всех десяти после него, потому что хеш каждого коммита покрывает идентификатор его родителя."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Only the tree ids change; commit ids are assigned sequentially and stay put.",
+            "ru": "Изменятся только идентификаторы деревьев; идентификаторы коммитов выдаются последовательно и остаются прежними."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A commit's id is the hash of its content, and its content includes the message and the parent id. A new message means a new id, which means the next commit now has a different parent id, which means a new id for it too — all the way to the tip. Nothing is edited in place: an eleven-commit chain is rebuilt and the branch is pointed at the new tip.",
+        "ru": "Идентификатор коммита — это хеш его содержимого, а в содержимое входят и сообщение, и идентификатор родителя. Новое сообщение — новый идентификатор; значит, у следующего коммита теперь другой родитель, значит и у него новый идентификатор — и так до вершины. Ничего не правится на месте: цепочка из одиннадцати коммитов строится заново, а ветка переводится на новую вершину."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-status",
+        "https://git-scm.com/book/en/v2/Git-Internals-Git-Objects"
+      ]
+    },
+    {
+      "id": "git.branches.001",
+      "section": "branches",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What is a branch, physically, inside `.git`?",
+        "ru": "Что такое ветка физически, внутри `.git`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A directory holding a copy of every file as of the branch point.",
+            "ru": "Каталог с копией каждого файла на момент ответвления."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A list of the commits that belong to it, appended to on every commit.",
+            "ru": "Список принадлежащих ей коммитов, в который дописывается каждый новый коммит."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A file under refs/heads/ containing one commit id.",
+            "ru": "Файл в refs/heads/, в котором лежит один идентификатор коммита."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "An entry in the index, which is why switching branches rewrites the index.",
+            "ru": "Запись в индексе — поэтому переключение веток и переписывает индекс."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A server-side object; locally you only have a cached name for it.",
+            "ru": "Объект на стороне сервера; локально у вас есть только закешированное имя."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A branch is a moving pointer: one file, one commit id. The commits \"on\" the branch are simply those reachable from it through parent links. That is why creating and deleting branches is instant and why a branch is not a container of anything.",
+        "ru": "Ветка — это подвижный указатель: один файл, один идентификатор коммита. Коммиты «в ветке» — просто те, до которых от неё можно дойти по ссылкам на родителей. Поэтому создание и удаление веток мгновенны, и поэтому ветка ничего в себе не содержит."
+      },
+      "sources": [
+        "https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell",
+        "https://git-scm.com/docs/git-merge"
+      ]
+    },
+    {
+      "id": "git.branches.002",
+      "section": "branches",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "You delete a local branch whose commits were never merged anywhere. What happens to those commits immediately after `git branch -D`?",
+        "ru": "Вы удаляете локальную ветку, коммиты которой никуда не были влиты. Что происходит с этими коммитами сразу после `git branch -D`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "They are deleted from the object database together with the branch.",
+            "ru": "Они удаляются из базы объектов вместе с веткой."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "They are moved to the stash stack so that nothing is lost.",
+            "ru": "Они переносятся в стек stash, чтобы ничего не потерялось."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "They stay in the object database and are still reachable through the reflog.",
+            "ru": "Они остаются в базе объектов и всё ещё достижимы через reflog."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "They are pushed to origin automatically before the branch is removed.",
+            "ru": "Они автоматически отправляются на origin перед удалением ветки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "They are merged into the branch you are currently on.",
+            "ru": "Они вливаются в ветку, на которой вы сейчас находитесь."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Deleting a branch deletes the pointer. The commit objects remain until garbage collection, and gc spares anything reachable from a ref or from the reflog — which still names the deleted branch's tip. git reflog plus git branch <name> <sha> brings the branch back.",
+        "ru": "Удаление ветки удаляет указатель. Объекты-коммиты остаются до сборки мусора, а сборка щадит всё, до чего можно дойти по ссылке или по reflog — а reflog всё ещё называет вершину удалённой ветки. git reflog плюс git branch <имя> <sha> возвращают ветку обратно."
+      },
+      "sources": [
+        "https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell",
+        "https://git-scm.com/docs/git-merge"
+      ]
+    },
+    {
+      "id": "git.branches.003",
+      "section": "branches",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "When can `git merge feature` be a fast-forward?",
+        "ru": "Когда `git merge feature` может оказаться fast-forward?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "When feature contains no more than one commit.",
+            "ru": "Когда в feature не больше одного коммита."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When the current branch is an ancestor of feature, so there is nothing to combine.",
+            "ru": "Когда текущая ветка является предком feature, то есть объединять нечего."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "When the two branches touch no file in common.",
+            "ru": "Когда две ветки не трогают ни одного общего файла."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When feature was created from the current branch, regardless of what happened since.",
+            "ru": "Когда feature была создана из текущей ветки, независимо от того, что произошло с тех пор."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whenever the merge produces no conflicts.",
+            "ru": "Всегда, когда слияние проходит без конфликтов."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Fast-forward is possible exactly when the current branch's tip is an ancestor of the other's: your branch has nothing the other lacks, so Git slides the pointer forward and records no commit. The moment both sides have their own commits they have diverged and a merge commit is required — conflict or no conflict.",
+        "ru": "Fast-forward возможен ровно тогда, когда вершина текущей ветки — предок другой: у вашей ветки нет ничего, чего не было бы у той, поэтому Git просто сдвигает указатель и не записывает коммит. Как только у обеих сторон появились свои коммиты, они разошлись, и мерж-коммит обязателен — независимо от того, есть конфликты или нет."
+      },
+      "sources": [
+        "https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell",
+        "https://git-scm.com/docs/git-merge"
+      ]
+    },
+    {
+      "id": "git.branches.004",
+      "section": "branches",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "You run `git checkout 45d5c24`, make two commits, then `git switch master`. Where are those two commits?",
+        "ru": "Вы выполнили `git checkout 45d5c24`, сделали два коммита, а затем `git switch master`. Где эти два коммита?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "They were never created; commits are rejected while HEAD is detached.",
+            "ru": "Они и не были созданы: в состоянии detached HEAD коммиты не принимаются."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "They were added to master, because master is where you switched to.",
+            "ru": "Они попали в master, потому что именно туда вы переключились."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "They were folded into commit 45d5c24, which now contains all three changes.",
+            "ru": "Они влились в коммит 45d5c24, который теперь содержит все три изменения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "They exist but no branch points at them; the reflog is what still names them.",
+            "ru": "Они существуют, но на них не указывает ни одна ветка; называет их только reflog."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "They were moved onto a new branch that Git created automatically.",
+            "ru": "Они перенесены в новую ветку, которую Git создал автоматически."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Checking out a commit id detaches HEAD: commits are made normally but no branch follows along. Switching away leaves them unreferenced — still in the object database, named by the reflog, and collectable eventually. Git warns and prints the command; git branch <name> <sha> rescues them.",
+        "ru": "Выгрузка идентификатора коммита отсоединяет HEAD: коммиты делаются как обычно, но за вами не идёт ни одна ветка. Переключение уводит от них, и на них не остаётся ссылок — они всё ещё в базе объектов, названы в reflog и со временем будут собраны. Git при этом предупреждает и печатает нужную команду; git branch <имя> <sha> их спасает."
+      },
+      "sources": [
+        "https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell",
+        "https://git-scm.com/docs/git-merge"
+      ]
+    },
+    {
+      "id": "git.branches.005",
+      "section": "branches",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "Your colleague pushed to `master` an hour ago. You have not run any command since. What does the ref `origin/master` in your clone point at?",
+        "ru": "Коллега час назад запушил в `master`. Вы с тех пор не выполняли ни одной команды. На что указывает ссылка `origin/master` в вашем клоне?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "At the current tip of master on the server — the ref is resolved over the network on read.",
+            "ru": "На текущую вершину master на сервере — ссылка разрешается по сети в момент чтения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "At your local master, which is what origin/ is an alias for.",
+            "ru": "На ваш локальный master, псевдонимом которого и является origin/."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "At the merge base of your master and the server's master.",
+            "ru": "На базу слияния вашего master и серверного master."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "At nothing until you configure an upstream for the branch.",
+            "ru": "Ни на что, пока у ветки не настроен upstream."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "At the commit that was master on origin the last time you fetched or pulled.",
+            "ru": "На коммит, который был master на origin в момент вашего последнего fetch или pull."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Remote-tracking refs are a local cache under refs/remotes/. Nothing in Git contacts the network unless you ask: fetch, pull, push, ls-remote. Being out of date is what origin/master is for, not a fault — which is also why \"fetch first, then look\" is the habit that makes status readable.",
+        "ru": "Remote-tracking ссылки — это локальный кеш в refs/remotes/. Ничто в Git не идёт в сеть без вашей команды: fetch, pull, push, ls-remote. Отставать — это не сбой, а назначение origin/master; отсюда и привычка «сначала fetch, потом смотрим», которая делает вывод status осмысленным."
+      },
+      "sources": [
+        "https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell",
+        "https://git-scm.com/docs/git-merge"
+      ]
+    },
+    {
+      "id": "git.branches.006",
+      "section": "branches",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "`master` has not moved since `feature` branched off. What does `git merge --no-ff feature` produce, and why would a team ask for it?",
+        "ru": "`master` не двигался с момента ответвления `feature`. Что создаст `git merge --no-ff feature` и зачем команде это нужно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing different from a plain merge — --no-ff only suppresses the editor for the message.",
+            "ru": "Ничего отличного от обычного мержа — --no-ff лишь подавляет открытие редактора для сообщения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A single squashed commit containing the branch's whole diff and no second parent.",
+            "ru": "Один сплющенный коммит с полным диффом ветки и без второго родителя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A fast-forward, because --no-ff applies only when the branches have diverged.",
+            "ru": "Fast-forward, потому что --no-ff действует только при разошедшихся ветках."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A rebase of feature onto master, followed by a fast-forward.",
+            "ru": "Ребейз feature на master, за которым следует fast-forward."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A merge commit with two parents, keeping the branch visible in the graph as a unit of review.",
+            "ru": "Мерж-коммит с двумя родителями, сохраняющий ветку в графе как видимую единицу ревью."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "--no-ff forces the merge commit even where a pointer move would have sufficed. The content is identical either way; what differs is the record. With it, --first-parent on master reads as one line per merged branch and reverting the whole branch is one revert -m 1. Without it the branch leaves no trace. --squash is the different option that produces one commit and no second parent.",
+        "ru": "--no-ff принудительно создаёт мерж-коммит там, где хватило бы сдвига указателя. Содержимое в обоих случаях одинаковое; отличается запись. С ним --first-parent на master читается как одна строка на влитую ветку, а откат всей ветки — это один revert -m 1. Без него ветка не оставляет следа. А один коммит без второго родителя даёт другой флаг — --squash."
+      },
+      "sources": [
+        "https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell",
+        "https://git-scm.com/docs/git-merge"
+      ]
+    },
+    {
+      "id": "git.rebase.001",
+      "section": "rebase",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does `git commit --amend` do to the previous commit?",
+        "ru": "Что `git commit --amend` делает с предыдущим коммитом?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It edits that commit in place, keeping its id, which is why it is safe after pushing.",
+            "ru": "Правит этот коммит на месте, сохраняя его идентификатор, — поэтому он безопасен после пуша."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It creates a different commit with the same parent and moves the branch to it.",
+            "ru": "Создаёт другой коммит с тем же родителем и переводит ветку на него."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It appends a second message to the commit without touching its content.",
+            "ru": "Дописывает к коммиту второе сообщение, не трогая содержимое."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It creates a new commit on top that reverses and reapplies the change.",
+            "ru": "Создаёт сверху новый коммит, который откатывает и заново применяет изменение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It only works on the first commit of a branch.",
+            "ru": "Работает только на первом коммите ветки."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Commits are immutable, so --amend replaces rather than edits: a new commit, new id, same parent, and the branch pointer moves. The original stays in the object database and in the reflog. That is exactly why amending something already pushed and shared needs a force-push and coordination.",
+        "ru": "Коммиты неизменяемы, поэтому --amend не правит, а заменяет: новый коммит, новый идентификатор, тот же родитель, и указатель ветки переезжает. Оригинал остаётся в базе объектов и в reflog. Именно поэтому amend того, что уже запушено и есть у других, требует force-push и согласования."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-rebase",
+        "https://git-scm.com/book/en/v2/Git-Branching-Rebasing"
+      ]
+    },
+    {
+      "id": "git.rebase.002",
+      "section": "rebase",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "After `git rebase master` succeeds on your feature branch, what happened to your commit ids?",
+        "ru": "После успешного `git rebase master` на вашей ветке — что стало с идентификаторами ваших коммитов?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "They are unchanged; rebase only moves the branch pointer.",
+            "ru": "Они не изменились: ребейз лишь двигает указатель ветки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only the first one changed, since only it got a new parent.",
+            "ru": "Изменился только первый: только у него появился новый родитель."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "They are unchanged unless a conflict had to be resolved.",
+            "ru": "Они не изменились, если только не пришлось разрешать конфликт."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Every replayed commit has a new id, and the originals are left unreferenced.",
+            "ru": "У каждого переигранного коммита новый идентификатор, а оригиналы остались без ссылок."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "They are unchanged locally and recomputed on the server at push time.",
+            "ru": "Локально они не изменились, а пересчитываются на сервере при пуше."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Rebase replays each commit onto a new base. A new parent id is new commit content, so every replayed commit gets a new hash — conflicts or not. The originals survive unreferenced until garbage collection, which is how git reflog can undo a rebase that went wrong.",
+        "ru": "Ребейз переигрывает каждый коммит на новой базе. Новый идентификатор родителя — это новое содержимое коммита, поэтому новый хеш получает каждый переигранный коммит, независимо от конфликтов. Оригиналы живут без ссылок до сборки мусора — именно поэтому git reflog позволяет отменить неудачный ребейз."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-rebase",
+        "https://git-scm.com/book/en/v2/Git-Branching-Rebasing"
+      ]
+    },
+    {
+      "id": "git.rebase.003",
+      "section": "rebase",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "What is the difference between merging `master` into your branch and rebasing your branch onto `master`?",
+        "ru": "В чём разница между мержем `master` в вашу ветку и ребейзом вашей ветки на `master`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Merge adds a commit joining the two lines and keeps both intact; rebase replaces your commits with copies on the new base.",
+            "ru": "Мерж добавляет коммит, соединяющий две линии, и сохраняет обе целиком; ребейз заменяет ваши коммиты копиями на новой базе."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Merge keeps your commits and rebase deletes them, so a rebase loses work.",
+            "ru": "Мерж сохраняет ваши коммиты, а ребейз их удаляет, поэтому ребейз теряет работу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "They produce identical graphs; rebase is only a shorter way to type the merge.",
+            "ru": "Они дают одинаковый граф; ребейз — просто более короткая запись того же мержа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Merge can produce conflicts and rebase cannot, because rebase applies patches one at a time.",
+            "ru": "Мерж может дать конфликты, а ребейз нет, потому что применяет патчи по одному."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Merge works only on the default branch; rebase works on any branch.",
+            "ru": "Мерж работает только на ветке по умолчанию, ребейз — на любой."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Both bring you up to date with master. Merge records that the two lines met, preserving every original commit and adding a two-parent commit. Rebase rewrites your side onto the new base and leaves a linear history. Rebase can also conflict — once per replayed commit, in fact, which is why a long branch rebases more painfully than it merges.",
+        "ru": "Обе операции догоняют master. Мерж записывает факт встречи двух линий, сохраняя каждый исходный коммит и добавляя коммит с двумя родителями. Ребейз переписывает вашу сторону на новой базе и оставляет линейную историю. Конфликты у ребейза тоже бывают — причём отдельно на каждый переигранный коммит, поэтому длинную ветку ребейзить больнее, чем мержить."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-rebase",
+        "https://git-scm.com/book/en/v2/Git-Branching-Rebasing"
+      ]
+    },
+    {
+      "id": "git.rebase.004",
+      "section": "rebase",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "This repository's `V11__english_quiz.sql` was merged in pull request #12 and has run against the deployed database. A rebase gives you a chance to edit that file to fix a column type. What happens on the next deploy?",
+        "ru": "Файл `V11__english_quiz.sql` в этом репозитории вмержен пул-реквестом #12 и уже отработал на боевой базе. Ребейз даёт возможность поправить в нём тип колонки. Что произойдёт при следующем деплое?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The migration runs again with the new content, because rebasing produced a new commit id.",
+            "ru": "Миграция выполнится заново с новым содержимым, потому что ребейз создал новый идентификатор коммита."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Flyway validates the applied migration against its recorded checksum and the boot fails on a mismatch.",
+            "ru": "Flyway сверит применённую миграцию с записанной контрольной суммой и упадёт на старте из-за несовпадения."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Nothing happens and the column type stays wrong, but the service starts normally.",
+            "ru": "Ничего не произойдёт, тип колонки останется неверным, но сервис стартует нормально."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Flyway detects the edit and repairs the schema history automatically.",
+            "ru": "Flyway заметит правку и сам починит историю схемы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only a fresh database is affected; the deployed one silently skips validation.",
+            "ru": "Пострадает только свежая база, а боевая молча пропустит валидацию."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Flyway records a checksum per applied migration in flyway_schema_history and validates it at startup, so an applied migration is effectively immutable no matter how clean the local history looks. This is the concrete form of the rule about rewriting shared history: the fix is a new migration with the next version number, never an edit to the merged one. The Java migrations under db/migration have the same property from the other direction — they ran once, so editing their content files reaches only databases that have never seen them.",
+        "ru": "Flyway записывает контрольную сумму каждой применённой миграции в flyway_schema_history и проверяет её при старте, поэтому применённая миграция фактически неизменяема, как бы чисто ни выглядела локальная история. Это конкретная форма правила о переписывании общей истории: починка — это новая миграция со следующим номером версии, а не правка вмерженной. У Java-миграций в db/migration то же свойство с другой стороны: они отработали один раз, поэтому правка их контентных файлов доедет только до баз, которые их ни разу не видели."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-rebase",
+        "https://git-scm.com/book/en/v2/Git-Branching-Rebasing"
+      ]
+    },
+    {
+      "id": "git.rebase.005",
+      "section": "rebase",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "In an interactive rebase todo list, what is the difference between `squash` and `fixup`?",
+        "ru": "В todo-списке интерактивного ребейза — чем `squash` отличается от `fixup`?"
+      },
+      "code": "pick 599530f Run practice submissions in a child JVM\nsquash 45d5c24 Close wave 1: HTTP, testing, databases and security\nfixup  5581dce Measure the sandbox in its container",
+      "options": [
+        {
+          "text": {
+            "en": "squash keeps the commit as its own commit; fixup merges it into the previous one.",
+            "ru": "squash оставляет коммит отдельным, а fixup вливает его в предыдущий."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "squash applies to the commit below it and fixup to the commit above it.",
+            "ru": "squash относится к коммиту ниже, а fixup — к коммиту выше."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "squash works only on consecutive commits by the same author; fixup has no such limit.",
+            "ru": "squash работает только на подряд идущих коммитах одного автора, у fixup такого ограничения нет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both fold the commit into the previous one; squash keeps both messages, fixup discards this one's.",
+            "ru": "Оба вливают коммит в предыдущий; squash сохраняет оба сообщения, fixup выбрасывает сообщение этого коммита."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "fixup rewrites the commit's author date while squash preserves it.",
+            "ru": "fixup переписывает дату авторства коммита, а squash её сохраняет."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Both fold the line's commit into the one above it. squash opens an editor with both messages so you can compose one; fixup takes the earlier message and drops the second, which is what you want for a commit whose message is literally \"fix typo\". git commit --fixup=<sha> with git rebase -i --autosquash does the placement and marking for you.",
+        "ru": "Оба вливают коммит строки в предыдущий. squash открывает редактор с обоими сообщениями, чтобы вы собрали одно; fixup берёт раннее сообщение и выбрасывает второе — ровно то, что нужно коммиту с сообщением «fix typo». А git commit --fixup=<sha> вместе с git rebase -i --autosquash сам расставляет и помечает такие коммиты."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-rebase",
+        "https://git-scm.com/book/en/v2/Git-Branching-Rebasing"
+      ]
+    },
+    {
+      "id": "git.rebase.006",
+      "section": "rebase",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A colleague based work on your pushed branch. You rebased that branch and force-pushed. What does their next `git pull` do?",
+        "ru": "Коллега начал работу поверх вашей запушенной ветки. Вы отребейзили ветку и сделали force-push. Что сделает его следующий `git pull`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It fast-forwards to your rewritten branch and discards their local commits.",
+            "ru": "Сделает fast-forward на вашу переписанную ветку и отбросит его локальные коммиты."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It fails with a checksum error, since the rewritten commits no longer verify.",
+            "ru": "Упадёт с ошибкой контрольной суммы, потому что переписанные коммиты больше не проходят проверку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It merges two chains that contain the same changes under different ids, duplicating your commits.",
+            "ru": "Смержит две цепочки, содержащие одни и те же изменения под разными идентификаторами, продублировав ваши коммиты."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It detects the rebase and replays their work automatically, leaving history clean.",
+            "ru": "Распознает ребейз и сам переиграет его работу, оставив историю чистой."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It refuses to do anything until they delete and re-clone the repository.",
+            "ru": "Откажется делать что-либо, пока он не удалит и не переклонирует репозиторий."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Their branch still points at your originals, and the remote now holds replacements with different ids. Git has no way to know the two chains are the same work, so a default pull merges them and every one of your commits appears twice. git-rebase(1) has a whole section, \"Recovering from upstream rebase\", on cleaning this up — usually git rebase --onto with the old and new bases. The cheap prevention is not rewriting a branch others build on, and announcing it when you must.",
+        "ru": "Его ветка всё ещё указывает на ваши оригиналы, а на сервере теперь лежат замены с другими идентификаторами. Git никак не может узнать, что это одна и та же работа, поэтому pull по умолчанию сливает обе цепочки, и каждый ваш коммит появляется дважды. В `git-rebase(1)` этому посвящён целый раздел «Recovering from upstream rebase» — обычно лечится через git rebase --onto со старой и новой базой. Дешёвая профилактика — не переписывать ветку, на которую опираются другие, а если уж пришлось, предупреждать."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-rebase",
+        "https://git-scm.com/book/en/v2/Git-Branching-Rebasing"
+      ]
+    },
+    {
+      "id": "git.conflicts.001",
+      "section": "conflicts",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "You edited a conflicted file into the text you want and removed the markers. What does `git add` on that file do now?",
+        "ru": "Вы привели конфликтный файл к нужному тексту и убрали маркеры. Что теперь делает `git add` на этом файле?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It completes the merge and creates the merge commit.",
+            "ru": "Завершает слияние и создаёт мерж-коммит."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It re-runs the merge for that file with your edits as a hint.",
+            "ru": "Перезапускает слияние этого файла, используя ваши правки как подсказку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing — a conflicted file has to be resolved with git checkout --ours or --theirs.",
+            "ru": "Ничего: конфликтный файл можно разрешить только через git checkout --ours или --theirs."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It aborts the merge for that file and keeps the other files merged.",
+            "ru": "Прерывает слияние для этого файла, оставляя остальные слитыми."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It marks the path as resolved by collapsing its several index stages into one.",
+            "ru": "Помечает путь как разрешённый, схлопывая несколько стадий индекса в одну."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A conflicted path is held in the index at several stages — base, ours, theirs. git add replaces them with one entry containing your resolution, which is all \"marking it resolved\" means. The merge itself is finished by git merge --continue or git commit, and rebase by git rebase --continue.",
+        "ru": "Конфликтный путь хранится в индексе несколькими стадиями — база, наша сторона, их сторона. git add заменяет их одной записью с вашим разрешением, и в этом вся «пометка разрешённым». Само слияние завершает git merge --continue или git commit, а ребейз — git rebase --continue."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-merge",
+        "https://git-scm.com/docs/git-rerere"
+      ]
+    },
+    {
+      "id": "git.conflicts.002",
+      "section": "conflicts",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "You are on `master` and ran `git merge feature/english-quiz`. In the markers below, which line is yours and which comes from the other branch?",
+        "ru": "Вы на `master` и выполнили `git merge feature/english-quiz`. В маркерах ниже — какая строка ваша, а какая пришла из другой ветки?"
+      },
+      "code": "<<<<<<< HEAD\n    private static final int SECTION_COUNT = 8;\n=======\n    private static final int SECTION_COUNT = 12;\n>>>>>>> feature/english-quiz",
+      "options": [
+        {
+          "text": {
+            "en": "The top block is feature's and the bottom is master's; the label always names the current branch.",
+            "ru": "Верхний блок — из feature, нижний — из master; подпись всегда называет текущую ветку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Neither is attributable — Git lists the two sides in an unspecified order.",
+            "ru": "Ни то ни другое: Git перечисляет стороны в неопределённом порядке."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The top block is the merge base and the bottom is the combination of both sides.",
+            "ru": "Верхний блок — база слияния, нижний — объединение обеих сторон."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The top block is master's (HEAD) and the bottom is feature's, as the closing label says.",
+            "ru": "Верхний блок — из master (HEAD), нижний — из feature, как и говорит закрывающая подпись."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The top block is whichever side was committed most recently.",
+            "ru": "Верхний блок — та сторона, которая была закоммичена позже."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The block after <<<<<<< is HEAD, the side you are on; the block after ======= is the side being brought in, named after >>>>>>>. Setting merge.conflictStyle to diff3 or zdiff3 adds the merge base in the middle, which turns \"pick one\" into \"see what each side actually changed\".",
+        "ru": "Блок после <<<<<<< — это HEAD, сторона, на которой вы находитесь; блок после ======= — сторона, которую вливают, и она названа после >>>>>>>. Значение diff3 или zdiff3 в merge.conflictStyle добавляет посередине базу слияния, и «выбери одно» превращается в «увидь, что именно изменила каждая сторона»."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-merge",
+        "https://git-scm.com/docs/git-rerere"
+      ]
+    },
+    {
+      "id": "git.conflicts.003",
+      "section": "conflicts",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A merge finished without a single conflict, and the build fails on the merge result. How?",
+        "ru": "Слияние прошло без единого конфликта, а сборка на результате слияния падает. Как так?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The merge commit's tree is incomplete until you run git gc.",
+            "ru": "Дерево мерж-коммита неполно, пока не выполнен git gc."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A clean merge means the build cannot fail; the failure must come from a stale local target directory.",
+            "ru": "Чистое слияние означает, что сборка не может упасть; падение наверняка из-за устаревшего каталога target."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Conflicts in files under .gitignore are resolved silently in favour of the incoming side.",
+            "ru": "Конфликты в файлах из .gitignore молча разрешаются в пользу входящей стороны."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The merge dropped the commits whose changes did not apply cleanly.",
+            "ru": "Слияние отбросило коммиты, изменения которых не применились чисто."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Git merges text, not meaning: one side renamed a method while the other added a call to the old name.",
+            "ru": "Git сливает текст, а не смысл: одна сторона переименовала метод, другая добавила вызов старого имени."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Git conflicts only when both sides changed the same region of the same file. Changes in different files, or different regions, merge silently — including a rename on one side and a new caller of the old name on the other. That is a semantic conflict, and nothing in Git can see it. It is the reason CI builds the merge result rather than the branch alone.",
+        "ru": "Git конфликтует только там, где обе стороны изменили один и тот же участок одного файла. Изменения в разных файлах или в разных участках сливаются молча — включая переименование на одной стороне и новый вызов старого имени на другой. Это семантический конфликт, и увидеть его Git не может ничем. Поэтому CI и собирает результат слияния, а не одну лишь ветку."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-merge",
+        "https://git-scm.com/docs/git-rerere"
+      ]
+    },
+    {
+      "id": "git.conflicts.004",
+      "section": "conflicts",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "You are rebasing your branch onto `master` and hit a conflict. During that rebase, what does `git checkout --ours <file>` give you?",
+        "ru": "Вы ребейзите свою ветку на `master` и упёрлись в конфликт. Что во время этого ребейза даст `git checkout --ours <файл>`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Your own version, the same as during a merge — the flags mean the same thing everywhere.",
+            "ru": "Вашу собственную версию, как и при мерже: флаги везде означают одно и то же."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The merge base version, which is what --ours means outside a merge.",
+            "ru": "Версию из базы слияния — именно это --ours означает вне мержа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An error: --ours is rejected during a rebase.",
+            "ru": "Ошибку: во время ребейза --ours не принимается."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whichever side has the later commit timestamp.",
+            "ru": "Ту сторону, у которой позже время коммита."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The version from master, the branch being replayed onto — your commit is \"theirs\" here.",
+            "ru": "Версию из master, то есть из ветки, на которую всё переигрывается: ваш коммит здесь «theirs»."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Rebase checks out the upstream and replays your commits onto it, so the roles invert: \"ours\" is master and \"theirs\" is the commit of yours being applied. Reaching for --ours out of merge habit during a rebase discards your own change and keeps master's — the most reliable way to lose work in this topic. git status names both sides and the commit currently being applied; read it instead of guessing.",
+        "ru": "Ребейз выгружает upstream и переигрывает ваши коммиты поверх него, поэтому роли инвертируются: «ours» — это master, а «theirs» — применяемый сейчас ваш коммит. Взять --ours по мержевой привычке во время ребейза — значит выбросить своё изменение и оставить мастерское; это самый надёжный способ потерять работу во всей теме. git status называет обе стороны и применяемый коммит — читайте его, а не гадайте."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-merge",
+        "https://git-scm.com/docs/git-rerere"
+      ]
+    },
+    {
+      "id": "git.conflicts.005",
+      "section": "conflicts",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "What does `git config --global rerere.enabled true` change?",
+        "ru": "Что меняет `git config --global rerere.enabled true`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Git resolves conflicts automatically by preferring the side with more recent commits.",
+            "ru": "Git разрешает конфликты автоматически, предпочитая сторону с более свежими коммитами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Git retries the failed merge several times before reporting a conflict.",
+            "ru": "Git несколько раз повторяет неудавшееся слияние, прежде чем сообщить о конфликте."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Git shares your resolutions with the rest of the team through the remote.",
+            "ru": "Git делится вашими разрешениями с командой через удалённый репозиторий."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Git records how you resolved each conflict hunk and replays that resolution when the same hunk recurs.",
+            "ru": "Git запоминает, как вы разрешили каждый конфликтный участок, и подставляет это решение, когда тот же участок появляется снова."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Git refuses to commit a file that still contains conflict markers.",
+            "ru": "Git отказывается коммитить файл, в котором остались маркеры конфликта."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "rerere is \"reuse recorded resolution\": local, per-hunk, and it only ever replays something you resolved yourself. It earns its keep when the same conflict keeps coming back — a long branch rebased repeatedly, or one fix merged into several release branches. git rerere forget <path> drops a resolution that turned out wrong.",
+        "ru": "rerere — это «reuse recorded resolution»: локально, по участкам, и подставляется только то, что вы разрешили сами. Окупается, когда один и тот же конфликт возвращается снова и снова: длинная ветка, которую ребейзят по многу раз, или одна правка, вливаемая в несколько релизных веток. git rerere forget <путь> выбрасывает решение, оказавшееся неверным."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-merge",
+        "https://git-scm.com/docs/git-rerere"
+      ]
+    },
+    {
+      "id": "git.conflicts.006",
+      "section": "conflicts",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "During a rebase you resolve a conflict by concluding your commit's change is already upstream, so the file ends up identical to master. `git rebase --continue` then says there are no changes and asks whether you forgot `git add`. What is the correct next step?",
+        "ru": "Во время ребейза вы разрешаете конфликт, решив, что изменение вашего коммита уже есть в upstream, и файл в итоге совпадает с master. `git rebase --continue` отвечает, что изменений нет, и спрашивает, не забыли ли вы `git add`. Что делать дальше?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Run git add on the file again; the index entry was not written.",
+            "ru": "Снова выполнить git add на файле: запись в индексе не сохранилась."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Run git rebase --skip: the commit now introduces nothing and is dropped from the replay.",
+            "ru": "Выполнить git rebase --skip: коммит теперь ничего не вносит и выбрасывается из переигрывания."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Run git rebase --abort and redo the rebase with -X theirs.",
+            "ru": "Выполнить git rebase --abort и повторить ребейз с -X theirs."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Make a trivial edit so the commit is not empty, then continue.",
+            "ru": "Внести незначительную правку, чтобы коммит не был пустым, и продолжить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Run git commit --allow-empty and then git rebase --continue.",
+            "ru": "Выполнить git commit --allow-empty, а затем git rebase --continue."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The resolution left the commit with an empty patch, which usually means its change arrived upstream by another route — a cherry-pick, or the same fix applied there. --skip drops that commit from the replay and moves on, which is what you want. An empty commit or a padding edit both put noise into history to work around a message, and -X theirs would resolve every remaining conflict in the rebase by a rule you have not checked.",
+        "ru": "После разрешения у коммита остался пустой патч — обычно это значит, что его изменение попало в upstream другим путём: черри-пиком или той же правкой, сделанной там. --skip выбрасывает этот коммит из переигрывания и идёт дальше, и это верный ответ. Пустой коммит или правка «для объёма» кладут шум в историю ради обхода сообщения, а -X theirs разрешит все оставшиеся конфликты ребейза по правилу, которое вы не проверяли."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-merge",
+        "https://git-scm.com/docs/git-rerere"
+      ]
+    },
+    {
+      "id": "git.remotes.001",
+      "section": "remotes",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does `git fetch origin` change in your clone?",
+        "ru": "Что `git fetch origin` меняет в вашем клоне?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Your current branch, the index and the working tree, all brought up to date at once.",
+            "ru": "Текущую ветку, индекс и рабочее дерево — всё сразу приводится в актуальное состояние."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It downloads new objects and moves the remote-tracking refs; local branches and the working tree are untouched.",
+            "ru": "Скачивает новые объекты и двигает remote-tracking ссылки; локальные ветки и рабочее дерево не трогаются."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Only the working tree; branch pointers are updated on the next commit.",
+            "ru": "Только рабочее дерево; указатели веток обновятся при следующем коммите."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing at all — fetch only reports what the remote has.",
+            "ru": "Вообще ничего — fetch лишь сообщает, что есть на удалённом репозитории."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It rewrites your local branches to match the remote, discarding local commits.",
+            "ru": "Переписывает ваши локальные ветки под удалённые, отбрасывая локальные коммиты."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "fetch downloads objects and updates origin/*. No local branch moves, nothing on disk changes, and there is no state in which running it costs you something. That is why \"fetch, then look at git status or git log origin/master..HEAD\" is the safe way to find out where you stand.",
+        "ru": "fetch скачивает объекты и обновляет origin/*. Ни одна локальная ветка не двигается, на диске ничего не меняется, и нет состояния, в котором его запуск чего-то стоил бы. Поэтому «сделать fetch, а потом посмотреть git status или git log origin/master..HEAD» — безопасный способ понять, где вы находитесь."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-fetch",
+        "https://git-scm.com/docs/git-push"
+      ]
+    },
+    {
+      "id": "git.remotes.002",
+      "section": "remotes",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "`git pull` on a branch that has local commits and whose remote has moved does what, by default?",
+        "ru": "Что по умолчанию делает `git pull` на ветке, где есть локальные коммиты и чей удалённый двойник ушёл вперёд?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Fetches, then rebases your commits onto the remote branch.",
+            "ru": "Делает fetch, затем ребейзит ваши коммиты на удалённую ветку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Fetches, then merges the remote branch into yours, creating a merge commit.",
+            "ru": "Делает fetch, затем вливает удалённую ветку в вашу, создавая мерж-коммит."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Fetches only, and leaves the integration to you.",
+            "ru": "Делает только fetch, оставляя интеграцию вам."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Refuses to run until the local commits are pushed.",
+            "ru": "Отказывается выполняться, пока локальные коммиты не запушены."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Resets your branch to the remote branch, discarding local commits.",
+            "ru": "Сбрасывает вашу ветку на удалённую, отбрасывая локальные коммиты."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "pull is fetch plus an integration step, and that step is a merge unless configured otherwise. It is the source of the \"Merge branch 'master' of ...\" commits that clutter histories. pull.rebase true replays your commits instead, and --ff-only turns the surprise into a message by refusing anything that is not a clean fast-forward.",
+        "ru": "pull — это fetch плюс шаг интеграции, и этот шаг по умолчанию мерж. Отсюда и берутся коммиты «Merge branch 'master' of …», засоряющие историю. pull.rebase true вместо этого переигрывает ваши коммиты, а --ff-only превращает сюрприз в сообщение, отказываясь от всего, что не является чистым fast-forward."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-fetch",
+        "https://git-scm.com/docs/git-push"
+      ]
+    },
+    {
+      "id": "git.remotes.003",
+      "section": "remotes",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "After `git fetch`, `git status` says your branch and its remote have diverged, with 2 and 1 different commits. What does that mean?",
+        "ru": "После `git fetch` команда `git status` сообщает, что ваша ветка и её удалённый двойник разошлись: 2 и 1 различных коммита. Что это значит?"
+      },
+      "code": "$ git fetch origin\n$ git status\nOn branch feature/english-quiz\nYour branch and 'origin/feature/english-quiz' have diverged,\nand have 2 and 1 different commits each, respectively.",
+      "options": [
+        {
+          "text": {
+            "en": "Your last two commits failed to push and must be recreated.",
+            "ru": "Два ваших последних коммита не запушились, и их нужно создать заново."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The remote branch contains your two commits plus one extra of its own.",
+            "ru": "Удалённая ветка содержит два ваших коммита плюс один свой."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "You have two commits the remote lacks and it has one you lack; neither is an ancestor of the other.",
+            "ru": "У вас есть два коммита, которых нет на сервере, и у него есть один, которого нет у вас; ни одна вершина не является предком другой."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Two of your commits conflict with one of theirs and must be resolved before anything else.",
+            "ru": "Два ваших коммита конфликтуют с одним их, и это нужно разрешить прежде всего."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Your clone is corrupted and needs git fsck.",
+            "ru": "Клон повреждён и требует git fsck."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Divergence is a graph fact, not a conflict: both tips have commits the other cannot reach. Only two things resolve it — a merge, which records that both happened, or a rebase, which replays your two commits onto theirs. Pulling repeatedly does not help, and a plain push is refused because it would drop their commit.",
+        "ru": "Расхождение — это факт про граф, а не конфликт: у обеих вершин есть коммиты, до которых другая не дотягивается. Разрешает его только одно из двух: мерж, записывающий, что было и то и другое, или ребейз, переигрывающий два ваших коммита поверх их. Повторные pull не помогают, а обычный push отвергается, потому что выбросил бы их коммит."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-fetch",
+        "https://git-scm.com/docs/git-push"
+      ]
+    },
+    {
+      "id": "git.remotes.004",
+      "section": "remotes",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Why prefer `git push --force-with-lease` over `git push --force`?",
+        "ru": "Почему `git push --force-with-lease` предпочтительнее `git push --force`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It overwrites the remote branch only if it is still at the commit your remote-tracking ref records.",
+            "ru": "Он перезаписывает удалённую ветку, только если она всё ещё на том коммите, который записан в вашей remote-tracking ссылке."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is faster, because it sends only the objects the remote is missing.",
+            "ru": "Он быстрее, потому что отправляет только недостающие на сервере объекты."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It asks the server to merge instead of replacing, so nothing is ever lost.",
+            "ru": "Он просит сервер выполнить слияние вместо замены, поэтому ничего не теряется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It keeps the old commits on the server under a backup ref that anyone can restore from.",
+            "ru": "Он сохраняет старые коммиты на сервере под резервной ссылкой, откуда их может восстановить любой."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It works on protected branches, where plain --force is rejected by the server.",
+            "ru": "Он работает на защищённых ветках, где обычный --force сервер отвергает."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "--force-with-lease is the same overwrite with a compare-and-swap in front: if somebody pushed since your last fetch, your cached ref is stale, the check fails and the push is rejected instead of erasing their work silently. One caveat: a background fetch — an IDE, for instance — refreshes the lease to the newcomer's commit and the check then passes over work you have never seen. --force-with-lease=<ref>:<sha> pins the expectation explicitly.",
+        "ru": "--force-with-lease — та же перезапись, но с compare-and-swap перед ней: если кто-то запушил после вашего последнего fetch, ваша закешированная ссылка устарела, проверка не проходит, и push отвергается вместо молчаливого стирания чужой работы. Одна оговорка: фоновый fetch — например, от IDE — обновляет «аренду» до чужого коммита, и проверка пропускает затирание работы, которую вы никогда не видели. --force-with-lease=<ref>:<sha> фиксирует ожидание явно."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-fetch",
+        "https://git-scm.com/docs/git-push"
+      ]
+    },
+    {
+      "id": "git.remotes.005",
+      "section": "remotes",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "What does the `-u` in `git push -u origin feature/x` set up?",
+        "ru": "Что настраивает `-u` в команде `git push -u origin feature/x`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It makes the push unconditional, overwriting whatever is on the remote.",
+            "ru": "Делает push безусловным, перезаписывая всё, что есть на сервере."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It updates all remote branches, not just the one named.",
+            "ru": "Обновляет все удалённые ветки, а не только названную."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It records origin/feature/x as the branch's upstream, so later bare push and pull resolve and status can count ahead/behind.",
+            "ru": "Записывает origin/feature/x как upstream ветки, чтобы дальше голые push и pull находили адрес, а status мог считать ahead/behind."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It marks the branch as protected on the server.",
+            "ru": "Помечает ветку как защищённую на сервере."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It uploads the branch's reflog along with its commits.",
+            "ru": "Отправляет вместе с коммитами и reflog ветки."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "-u (--set-upstream) writes branch.feature/x.remote and .merge into .git/config. That configuration is what lets bare git push and git pull know where to go and what gives git status its \"ahead 2, behind 1\". Without it, push with the default push.default=simple declines to guess and prints the full command instead.",
+        "ru": "-u (--set-upstream) записывает branch.feature/x.remote и .merge в .git/config. Именно эта настройка позволяет голым git push и git pull понимать, куда идти, и даёт git status его «ahead 2, behind 1». Без неё push при умолчании push.default=simple отказывается угадывать и печатает полную команду."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-fetch",
+        "https://git-scm.com/docs/git-push"
+      ]
+    },
+    {
+      "id": "git.remotes.006",
+      "section": "remotes",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "Your team uses `--force-with-lease` everywhere. A colleague pushes to your review branch; your IDE runs `git fetch` in the background a minute later; you then force-push your rebase without looking. What happens?",
+        "ru": "Команда везде использует `--force-with-lease`. Коллега пушит в вашу ветку на ревью; через минуту ваша IDE в фоне выполняет `git fetch`; после этого вы, не глядя, делаете force-push своего ребейза. Что произойдёт?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The push succeeds and their commit is dropped: the background fetch refreshed the lease to their commit.",
+            "ru": "Push проходит, и их коммит исчезает: фоновый fetch обновил аренду до их коммита."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The push is rejected, because the lease is tied to the commit you last pushed yourself.",
+            "ru": "Push отвергается, потому что аренда привязана к коммиту, который вы сами пушили последним."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The push succeeds and their commit is merged into yours automatically.",
+            "ru": "Push проходит, и их коммит автоматически вливается в ваш."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The push is rejected, because a lease can only be satisfied by a fetch you ran yourself.",
+            "ru": "Push отвергается, потому что аренда удовлетворяется только тем fetch, который вы выполнили сами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The push is rejected, because force-with-lease refuses any push to a branch with more than one author.",
+            "ru": "Push отвергается, потому что force-with-lease не пускает push в ветку, у которой больше одного автора."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The lease is your remote-tracking ref, and any fetch updates it — whoever ran it and for whatever reason. Once origin/feature/x names your colleague's commit, the compare-and-swap succeeds and the protection is gone precisely when it was needed. This is the documented limitation: pin the expected value with --force-with-lease=<ref>:<sha>, or look at the branch before you push. The safety net is real but it is not a substitute for knowing what is on the branch.",
+        "ru": "Аренда — это ваша remote-tracking ссылка, и её обновляет любой fetch, кем бы и зачем бы он ни был запущен. Как только origin/feature/x стал указывать на коммит коллеги, compare-and-swap проходит, и защита исчезает ровно тогда, когда была нужна. Это задокументированное ограничение: фиксируйте ожидаемое значение через --force-with-lease=<ref>:<sha> или смотрите на ветку перед пушем. Страховка настоящая, но она не заменяет знания о том, что в ветке лежит."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-fetch",
+        "https://git-scm.com/docs/git-push"
+      ]
+    },
+    {
+      "id": "git.undoing.001",
+      "section": "undoing",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What state are you in right after `git reset --soft HEAD~3`?",
+        "ru": "В каком состоянии вы окажетесь сразу после `git reset --soft HEAD~3`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The branch is three commits back and the three commits' changes are gone from disk.",
+            "ru": "Ветка отъехала на три коммита назад, а изменения этих трёх коммитов исчезли с диска."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing moved yet; --soft only previews what a reset would do.",
+            "ru": "Пока ничего не сдвинулось: --soft лишь показывает, что сделал бы reset."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The branch is three commits back, and their combined changes sit staged in the index.",
+            "ru": "Ветка отъехала на три коммита назад, а их суммарные изменения лежат проиндексированными в индексе."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The branch is three commits back and their changes are unstaged in the working tree.",
+            "ru": "Ветка отъехала на три коммита назад, а их изменения лежат в рабочем дереве непроиндексированными."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Three revert commits were created on top of the branch.",
+            "ru": "Поверх ветки создано три коммита-отката."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "--soft moves the branch and stops there: the index and the working tree still hold the newer state, so everything those three commits contained is staged and ready to be committed differently. It is the standard way to turn three messy commits into one. --mixed would leave the same changes unstaged; --hard would discard them.",
+        "ru": "--soft двигает ветку и на этом останавливается: индекс и рабочее дерево по-прежнему содержат более новое состояние, поэтому всё, что было в этих трёх коммитах, проиндексировано и готово быть закоммиченным иначе. Это стандартный способ превратить три неряшливых коммита в один. --mixed оставил бы те же изменения непроиндексированными, а --hard выбросил бы их."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-reset",
+        "https://git-scm.com/docs/git-revert",
+        "https://git-scm.com/docs/git-reflog"
+      ]
+    },
+    {
+      "id": "git.undoing.002",
+      "section": "undoing",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which of these can actually destroy uncommitted work?",
+        "ru": "Что из перечисленного действительно может уничтожить незакоммиченную работу?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "git reset --soft, because it rewinds the branch.",
+            "ru": "git reset --soft, потому что он отматывает ветку назад."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "git revert, because it undoes a commit.",
+            "ru": "git revert, потому что он отменяет коммит."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "git fetch, because it overwrites refs.",
+            "ru": "git fetch, потому что он перезаписывает ссылки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "git branch -D, because it deletes a branch with unmerged commits.",
+            "ru": "git branch -D, потому что он удаляет ветку с невлитыми коммитами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "git reset --hard, because it overwrites the working tree for tracked files.",
+            "ru": "git reset --hard, потому что он перезаписывает рабочее дерево для отслеживаемых файлов."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "--hard resets the branch, the index and the working tree, so uncommitted changes to tracked files are gone with nothing to recover them from — the reflog records commits, not your unsaved edits. Untracked files survive it, which is a second surprise. Everything else listed touches only commits and refs, and the reflog still names those.",
+        "ru": "--hard сбрасывает ветку, индекс и рабочее дерево, поэтому незакоммиченные правки в отслеживаемых файлах исчезают, и восстанавливать их неоткуда: reflog записывает коммиты, а не ваши несохранённые правки. Неотслеживаемые файлы при этом выживают — второй сюрприз. Всё остальное из списка трогает только коммиты и ссылки, а их reflog всё ещё называет."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-reset",
+        "https://git-scm.com/docs/git-revert",
+        "https://git-scm.com/docs/git-reflog"
+      ]
+    },
+    {
+      "id": "git.undoing.003",
+      "section": "undoing",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A bad commit is already on `master` and everyone has pulled it. What undoes it correctly?",
+        "ru": "Плохой коммит уже в `master`, и все его забрали. Чем его правильно отменить?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "git revert <commit>, which adds a new commit applying the inverse patch.",
+            "ru": "git revert <коммит>, который добавляет новый коммит с обратным патчем."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "git reset --hard <before> on master, then force-push.",
+            "ru": "git reset --hard <до него> на master и затем force-push."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "git rebase -i and dropping the commit, then force-push.",
+            "ru": "git rebase -i с удалением коммита и затем force-push."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "git commit --amend after fixing the files.",
+            "ru": "git commit --amend после починки файлов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "git stash the fix and ask everyone to apply it locally.",
+            "ru": "Положить правку в stash и попросить всех применить её у себя."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "revert grows history instead of changing it: everyone who has the original keeps it and simply receives the undo on top. The three rewriting answers all replace commits that others already have, which means a force-push to a shared branch and a broken history for every clone. The rule from the rebase section, applied: rewrite what is only yours, revert what is shared.",
+        "ru": "revert наращивает историю, а не меняет её: у всех, у кого есть оригинал, он и остаётся, а сверху приезжает откат. Три «переписывающих» варианта заменяют коммиты, которые уже есть у других, а это force-push в общую ветку и сломанная история в каждом клоне. Правило из раздела про ребейз в действии: переписывают только своё, общее откатывают через revert."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-reset",
+        "https://git-scm.com/docs/git-revert",
+        "https://git-scm.com/docs/git-reflog"
+      ]
+    },
+    {
+      "id": "git.undoing.004",
+      "section": "undoing",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "`git reset <file>` with no commit argument — what does it do?",
+        "ru": "`git reset <файл>` без указания коммита — что он делает?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Discards your edits to the file, restoring it from HEAD.",
+            "ru": "Выбрасывает ваши правки по файлу, восстанавливая его из HEAD."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Unstages the file: the index entry goes back to HEAD, the working tree keeps your edits.",
+            "ru": "Снимает файл с индекса: запись индекса возвращается к HEAD, а рабочее дерево сохраняет ваши правки."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Removes the file from the repository while keeping it on disk.",
+            "ru": "Удаляет файл из репозитория, оставляя его на диске."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Moves the branch back one commit, limited to that file's history.",
+            "ru": "Отматывает ветку на один коммит назад, ограничиваясь историей этого файла."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing — reset requires a commit argument.",
+            "ru": "Ничего: reset требует указания коммита."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "With a path, reset is --mixed over that path alone: the index entry is reset to HEAD and the working tree is left untouched, which is exactly unstaging. git restore --staged <file> is the modern spelling of the same thing. The command that does discard your edits is git restore <file> (formerly git checkout -- <file>).",
+        "ru": "С путём reset работает как --mixed по одному этому пути: запись индекса сбрасывается к HEAD, а рабочее дерево не трогается — это и есть снятие с индекса. git restore --staged <файл> — современная запись того же самого. А правки действительно выбрасывает другая команда: git restore <файл> (раньше git checkout -- <файл>)."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-reset",
+        "https://git-scm.com/docs/git-revert",
+        "https://git-scm.com/docs/git-reflog"
+      ]
+    },
+    {
+      "id": "git.undoing.005",
+      "section": "undoing",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "You ran `git reset --hard HEAD~4` on a branch by mistake. Everything had been committed. What recovers it?",
+        "ru": "Вы по ошибке выполнили `git reset --hard HEAD~4` на ветке. Всё было закоммичено. Как это вернуть?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing: --hard is irreversible once the branch has moved.",
+            "ru": "Никак: после сдвига ветки --hard необратим."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "git fsck --lost-found is the only route, and it recovers loose blobs rather than commits.",
+            "ru": "Только git fsck --lost-found, и он достаёт отдельные блобы, а не коммиты."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "git revert HEAD~4, which reapplies the four commits.",
+            "ru": "git revert HEAD~4, который заново применит четыре коммита."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "git reflog to find the previous tip, then git reset --hard to that entry.",
+            "ru": "git reflog, чтобы найти прежнюю вершину, и затем git reset --hard на эту запись."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "git pull, because the remote still has the commits.",
+            "ru": "git pull, потому что коммиты всё ещё есть на сервере."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The reflog records every move of HEAD and of each branch locally, for 90 days by default, so the tip before the reset is one line up: git reset --hard HEAD@{1}. The commits were never deleted, only unreferenced. Pulling would work only if the branch had been pushed, and fsck is the last resort for when even the reflog entry is gone. What no route recovers is work that was never committed.",
+        "ru": "Reflog локально записывает каждое перемещение HEAD и каждой ветки, по умолчанию 90 дней, так что прежняя вершина находится строкой выше: git reset --hard HEAD@{1}. Коммиты никто не удалял, они лишь остались без ссылок. Pull сработал бы, только если ветка была запушена, а fsck — крайнее средство на случай, когда пропала и запись reflog. Чего не вернёт ни один путь — это работа, которую ни разу не закоммитили."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-reset",
+        "https://git-scm.com/docs/git-revert",
+        "https://git-scm.com/docs/git-reflog"
+      ]
+    },
+    {
+      "id": "git.undoing.006",
+      "section": "undoing",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "You revert a merge commit with `git revert -m 1 <merge>`. The branch is fixed and later ready to go in again. What happens when you merge it a second time?",
+        "ru": "Вы откатили мерж-коммит командой `git revert -m 1 <мерж>`. Ветку починили, и позже она снова готова к вливанию. Что произойдёт при повторном мерже?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It brings nothing: the branch is still recorded as merged, so only its new commits arrive and the reverted ones stay absent.",
+            "ru": "Он ничего не принесёт: ветка по-прежнему числится влитой, поэтому приедут только её новые коммиты, а отменённые так и останутся отсутствовать."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It merges normally, since the revert only affected the working tree.",
+            "ru": "Смержится обычным образом, поскольку revert затронул только рабочее дерево."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is refused, because a reverted merge cannot be merged again.",
+            "ru": "Будет отвергнут, потому что отменённый мерж нельзя влить повторно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It reapplies everything, because the revert commit is skipped during a merge.",
+            "ru": "Применится всё заново, потому что коммит-откат при мерже пропускается."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It duplicates every commit of the branch under new ids.",
+            "ru": "Он продублирует каждый коммит ветки под новыми идентификаторами."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Reverting a merge undoes its content but leaves the merge in the graph, so the branch's commits remain ancestors of master. A second merge therefore sees nothing to bring for them, while the revert that removed their content is still in effect — the branch looks merged and its code is absent. The fix is to revert the revert before merging again, or to rebuild the work on fresh commits. -m 1 itself names the mainline parent, which for a pull-request merge is the master side.",
+        "ru": "Откат мержа отменяет его содержимое, но оставляет сам мерж в графе, поэтому коммиты ветки остаются предками master. Повторный мерж не видит, что по ним приносить, а откат, убравший их содержимое, продолжает действовать: ветка выглядит влитой, а кода нет. Лечится откатом отката перед повторным мержем или пересборкой работы на новых коммитах. Сам же -m 1 указывает, какой родитель считается основной линией: для мержа пул-реквеста это сторона master."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-reset",
+        "https://git-scm.com/docs/git-revert",
+        "https://git-scm.com/docs/git-reflog"
+      ]
+    },
+    {
+      "id": "git.investigating.001",
+      "section": "investigating",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "What does `git log master..feature/english-quiz` list?",
+        "ru": "Что перечисляет `git log master..feature/english-quiz`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "All commits made between the two branches' creation dates.",
+            "ru": "Все коммиты, сделанные между датами создания двух веток."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Commits reachable from master but not from the branch — what the branch is missing.",
+            "ru": "Коммиты, достижимые из master, но не из ветки, — то, чего ветке не хватает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Every commit either side has that the other does not.",
+            "ru": "Все коммиты, которые есть у одной стороны и отсутствуют у другой."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only the merge commits joining the two branches.",
+            "ru": "Только мерж-коммиты, соединяющие две ветки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Commits reachable from feature/english-quiz but not from master — what the branch adds.",
+            "ru": "Коммиты, достижимые из feature/english-quiz, но не из master, — то, что добавляет ветка."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A..B is set arithmetic on reachability, not a time window: reachable from B, not from A. Swap the sides to see what your branch is missing. Three dots, A...B, is the symmetric difference — what either side has and the other does not — and --left-right marks which side each commit came from.",
+        "ru": "A..B — это арифметика множеств по достижимости, а не окно по времени: достижимо из B и не достижимо из A. Поменяйте стороны местами, чтобы увидеть, чего ветке не хватает. Три точки, A...B, дают симметрическую разность — что есть у одной стороны и нет у другой, — а --left-right помечает, с какой стороны каждый коммит."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-log",
+        "https://git-scm.com/docs/git-bisect"
+      ]
+    },
+    {
+      "id": "git.investigating.002",
+      "section": "investigating",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "What does `git bisect` do?",
+        "ru": "Что делает `git bisect`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It binary-searches the commits between a known good and a known bad one to find where behaviour changed.",
+            "ru": "Двоичным поиском по коммитам между заведомо хорошим и заведомо плохим находит, где изменилось поведение."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It compares two branches file by file and reports the first difference.",
+            "ru": "Сравнивает две ветки файл за файлом и сообщает о первом различии."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It splits a large commit into smaller ones automatically.",
+            "ru": "Автоматически разбивает большой коммит на несколько мелких."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It reorders history so that related commits sit next to each other.",
+            "ru": "Переупорядочивает историю так, чтобы связанные коммиты стояли рядом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It shows, for each line of a file, the commit that last changed it.",
+            "ru": "Показывает для каждой строки файла коммит, который изменил её последним."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "You mark one commit bad and one good, and bisect checks out the midpoint for you to test; each answer halves the range. A thousand commits take about ten steps. git bisect run <command> automates the testing — exit 0 means good — and git bisect reset puts you back. Attributing lines to commits is git blame.",
+        "ru": "Вы помечаете один коммит плохим, другой хорошим, и bisect выгружает середину, чтобы вы её проверили; каждый ответ вдвое сокращает диапазон. Тысяча коммитов — примерно десять шагов. git bisect run <команда> автоматизирует проверку (код выхода 0 означает «хороший»), а git bisect reset возвращает всё как было. Приписывает же строки коммитам другая команда — git blame."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-log",
+        "https://git-scm.com/docs/git-bisect"
+      ]
+    },
+    {
+      "id": "git.investigating.003",
+      "section": "investigating",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "You want the commits where a configuration key was introduced or removed. Which is the right tool?",
+        "ru": "Нужно найти коммиты, в которых появился или исчез ключ конфигурации. Какой инструмент подходит?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "git grep \"<key>\", which searches every commit in history.",
+            "ru": "git grep \"<ключ>\", который ищет по всем коммитам истории."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "git log -S \"<key>\" — the pickaxe, which finds commits changing the number of occurrences of that string.",
+            "ru": "git log -S \"<ключ>\" — pickaxe, который находит коммиты, где изменилось число вхождений этой строки."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "git blame on the file, which reports when each line was added or deleted.",
+            "ru": "git blame по файлу, который сообщает, когда каждая строка была добавлена или удалена."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "git log --grep=\"<key>\", which matches the string anywhere in the diff.",
+            "ru": "git log --grep=\"<ключ>\", который ищет строку в любом месте диффа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "git diff HEAD~100, which lists every change made since.",
+            "ru": "git diff HEAD~100, который перечисляет все изменения с того момента."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "-S counts occurrences of the string in each side of a commit's diff and reports the commits where the count changed — precisely \"introduced or removed\". -G takes a regex over the diff text instead, which also matches a line that merely moved. git grep searches one revision, not history, and --grep searches commit messages, not diffs. blame only shows surviving lines, so a key that was deleted is invisible to it.",
+        "ru": "-S считает вхождения строки в обеих сторонах диффа коммита и показывает коммиты, где это число изменилось, — ровно «появился или исчез». -G вместо этого принимает регулярное выражение по тексту диффа и срабатывает в том числе на строке, которую просто переместили. git grep ищет по одной ревизии, а не по истории, а --grep ищет по сообщениям коммитов, а не по диффам. blame же показывает только выжившие строки, поэтому удалённый ключ для него невидим."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-log",
+        "https://git-scm.com/docs/git-bisect"
+      ]
+    },
+    {
+      "id": "git.investigating.004",
+      "section": "investigating",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "`git blame` on a file attributes almost every line to one commit: a formatting pass. How do you get past it?",
+        "ru": "`git blame` по файлу приписывает почти каждую строку одному коммиту — прогону форматтера. Как пройти сквозь него?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Use -w to ignore whitespace, -C/-M to follow moved lines, or list the commit in a file passed to --ignore-revs-file.",
+            "ru": "Использовать -w, чтобы игнорировать пробелы, -C/-M, чтобы следовать за перемещёнными строками, либо внести коммит в файл для --ignore-revs-file."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Run git blame --no-merges, which skips mechanical commits.",
+            "ru": "Запустить git blame --no-merges, который пропускает механические коммиты."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Revert the formatting commit locally before blaming.",
+            "ru": "Локально откатить коммит форматирования перед blame."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing can be done; blame always reports the last commit to touch a line.",
+            "ru": "Сделать ничего нельзя: blame всегда показывает последний коммит, тронувший строку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Use git log --follow, which is blame with rename detection.",
+            "ru": "Использовать git log --follow — это blame с распознаванием переименований."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "-w ignores whitespace-only changes, -M and -C follow lines moved within a file and copied between files, and --ignore-revs-file (conventionally .git-blame-ignore-revs, honoured by the major forges too) skips listed commits entirely. The manual fallback is to blame again at <commit>~1 on the same file, stepping behind the noise commit by commit. --no-merges is not a blame option, and reverting locally changes the working tree rather than the history blame reads.",
+        "ru": "-w игнорирует изменения только из пробелов, -M и -C следуют за строками, перемещёнными внутри файла и скопированными между файлами, а --ignore-revs-file (по соглашению .git-blame-ignore-revs, который понимают и крупные хостинги) пропускает перечисленные коммиты целиком. Ручной запасной путь — снова сделать blame на <коммит>~1 по тому же файлу, шагая за шумный коммит. Опции --no-merges у blame нет, а локальный откат меняет рабочее дерево, а не историю, которую blame читает."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-log",
+        "https://git-scm.com/docs/git-bisect"
+      ]
+    },
+    {
+      "id": "git.investigating.005",
+      "section": "investigating",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "In `git bisect run mvn -o test -Dtest=SqlTopicContentTest`, how does Git interpret the command's exit code?",
+        "ru": "В команде `git bisect run mvn -o test -Dtest=SqlTopicContentTest` — как Git понимает код выхода?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "0 means bad and any non-zero code means good; the search runs from the broken end.",
+            "ru": "0 — плохой, любой ненулевой — хороший; поиск идёт от сломанного конца."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Any non-zero code aborts the bisect and requires a manual answer.",
+            "ru": "Любой ненулевой код прерывает bisect и требует ответа вручную."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "0 means good, 1-124 (and 126-127) mean bad, and 125 means the commit cannot be tested and is skipped.",
+            "ru": "0 — хороший, 1-124 (а также 126-127) — плохой, а 125 означает, что коммит нельзя проверить, и он пропускается."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The exit code is ignored; Git parses the command's output for the word FAILURE.",
+            "ru": "Код выхода игнорируется; Git ищет в выводе команды слово FAILURE."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only codes 0 and 1 are meaningful; anything else marks the commit good by default.",
+            "ru": "Осмысленны только коды 0 и 1, всё остальное по умолчанию помечает коммит хорошим."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "bisect run drives the search from exit codes: 0 good, non-zero bad, with 125 reserved for \"cannot test this one\" — the scripted form of git bisect skip. That special value matters when some commits do not build at all: without it a build failure is read as the bug you are hunting and the search converges on the wrong commit.",
+        "ru": "bisect run ведёт поиск по кодам выхода: 0 — хороший, ненулевой — плохой, а 125 зарезервирован под «этот проверить нельзя» — скриптовый аналог git bisect skip. Это особое значение важно, когда часть коммитов вообще не собирается: без него падение сборки будет прочитано как искомый баг, и поиск сойдётся не на том коммите."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-log",
+        "https://git-scm.com/docs/git-bisect"
+      ]
+    },
+    {
+      "id": "git.investigating.006",
+      "section": "investigating",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "You cherry-pick a fix from `master` onto a release branch, and later the whole of `master` is merged into that release branch. What should you expect?",
+        "ru": "Вы черри-пикнули правку из `master` в релизную ветку, а позже весь `master` был влит в эту релизную ветку. Чего следует ожидать?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Git deduplicates the change, because the cherry-pick recorded its origin commit.",
+            "ru": "Git дедуплицирует изменение, потому что черри-пик записал исходный коммит."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The merge is refused as already applied.",
+            "ru": "Мерж будет отвергнут как уже применённый."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The cherry-picked commit is silently replaced by the original during the merge.",
+            "ru": "Черри-пикнутый коммит при мерже молча заменяется оригиналом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing arrives at all, because the content is already present.",
+            "ru": "Ничего не приедет, потому что содержимое уже на месте."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The original commit arrives as a separate commit, and its change may conflict or apply twice.",
+            "ru": "Оригинальный коммит приедет отдельным коммитом, и его изменение может конфликтовать или примениться дважды."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A cherry-pick creates a new commit with a new id; Git treats it as unrelated to the original, so the merge brings the original along as its own commit. Often the content matches and the merge is quiet; when the branches drifted, you get a conflict over a fix you already have, or the change applied a second time. -x records \"(cherry picked from commit ...)\" in the message, which is what lets a person — not Git — recognise the pair; git cherry lists commits with an equivalent already upstream.",
+        "ru": "Черри-пик создаёт новый коммит с новым идентификатором, и Git считает его никак не связанным с оригиналом, поэтому мерж приносит оригинал отдельным коммитом. Часто содержимое совпадает и мерж проходит тихо; а если ветки разошлись, получается конфликт из-за правки, которая у вас уже есть, или изменение применяется второй раз. Флаг -x записывает в сообщение «(cherry picked from commit …)» — именно это позволяет распознать пару человеку, а не Git; а git cherry показывает коммиты, у которых эквивалент уже есть в upstream."
+      },
+      "sources": [
+        "https://git-scm.com/docs/git-cherry-pick",
+        "https://git-scm.com/docs/git-log"
+      ]
+    },
+    {
+      "id": "git.workflow-and-hygiene.001",
+      "section": "workflow-and-hygiene",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "What is the practical test that a change was the right size for one commit?",
+        "ru": "Какая практическая проверка показывает, что изменение имело правильный размер для одного коммита?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Reverting that commit alone leaves the project in a sensible, working state.",
+            "ru": "Откат одного этого коммита оставляет проект в осмысленном рабочем состоянии."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It touches no more than one file.",
+            "ru": "Оно затрагивает не больше одного файла."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It was written in a single sitting.",
+            "ru": "Оно написано за один присест."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Its diff fits on one screen.",
+            "ru": "Его дифф помещается на один экран."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It contains no test changes, which belong in a follow-up commit.",
+            "ru": "В нём нет изменений тестов — им место в следующем коммите."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "One commit is one reason to change the code, complete: the change, its test, and the documentation it invalidates. git revert is the test — if reverting it alone is sensible, the boundaries were right. Size and file count are poor proxies: a rename can touch two hundred files and still be one change, while two unrelated one-line fixes in one file are two.",
+        "ru": "Один коммит — это одна причина изменить код, целиком: само изменение, его тест и документация, которую оно обесценило. Проверка — git revert: если откат одного этого коммита осмыслен, границы были верными. Объём и число файлов — плохие приближения: переименование может затронуть двести файлов и остаться одним изменением, а две несвязанные однострочные правки в одном файле — это два."
+      },
+      "sources": [
+        "https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project",
+        "https://git-scm.com/docs/githooks"
+      ]
+    },
+    {
+      "id": "git.workflow-and-hygiene.002",
+      "section": "workflow-and-hygiene",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "Why is a commit subject conventionally written in the imperative — \"Add the English quiz\" rather than \"Added the English quiz\"?",
+        "ru": "Почему тему коммита принято писать в повелительном наклонении — «Add the English quiz», а не «Added the English quiz»?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because Git rejects subjects in the past tense.",
+            "ru": "Потому что Git отвергает темы в прошедшем времени."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because it matches the messages Git itself generates and reads as an instruction the commit carries out.",
+            "ru": "Потому что так пишет сообщения сам Git, и тема читается как указание, которое коммит выполняет."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because the past tense breaks changelog generators.",
+            "ru": "Потому что прошедшее время ломает генераторы changelog."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the imperative form compresses better in the object database.",
+            "ru": "Потому что повелительная форма лучше сжимается в базе объектов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because only the imperative form can be under 50 characters.",
+            "ru": "Потому что только повелительная форма помещается в 50 символов."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "It is a convention, not a rule Git enforces: Git's own generated messages (\"Merge branch ...\", \"Revert ...\") are imperative, and the form reads consistently in a log and in the sentence \"applying this commit will ...\". The part of the message that actually matters is the body, which should say why the change was made; what it did is already in the diff.",
+        "ru": "Это договорённость, а не правило, которое Git проверяет: сгенерированные самим Git сообщения («Merge branch …», «Revert …») повелительные, и такая форма единообразно читается и в логе, и во фразе «применение этого коммита …». По-настоящему же важна основная часть сообщения, где сказано, почему изменение сделано: что именно сделано, уже написано в диффе."
+      },
+      "sources": [
+        "https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project",
+        "https://git-scm.com/docs/githooks"
+      ]
+    },
+    {
+      "id": "git.workflow-and-hygiene.003",
+      "section": "workflow-and-hygiene",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "Your team wants to guarantee that no commit containing conflict markers reaches `master`. Is a `pre-commit` hook enough?",
+        "ru": "Команда хочет гарантировать, что ни один коммит с маркерами конфликта не попадёт в `master`. Достаточно ли хука `pre-commit`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Yes — hooks run on every commit and cannot be disabled.",
+            "ru": "Да: хуки выполняются на каждом коммите и не отключаются."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Yes, provided the hook is committed to .git/hooks/ so everyone gets it on clone.",
+            "ru": "Да, если закоммитить хук в .git/hooks/, чтобы он приезжал всем при клонировании."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "No, because pre-commit runs after the commit object is written and cannot reject it.",
+            "ru": "Нет, потому что pre-commit выполняется после создания объекта-коммита и не может его отклонить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "No, because hooks cannot read the staged content of a commit.",
+            "ru": "Нет, потому что хуки не могут прочитать проиндексированное содержимое коммита."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "No: hooks are not cloned and --no-verify skips them, so the guarantee belongs in CI or branch protection.",
+            "ru": "Нет: хуки не приезжают с клоном, а --no-verify их пропускает, поэтому гарантия живёт в CI или в защите ветки."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A pre-commit hook is a fine convenience — it catches the mistake in the second it is made — but it is not a control: .git/hooks/ is not part of the repository content and does not arrive with a clone (distributing hooks needs core.hooksPath or a tool), and anyone can pass --no-verify. Anything that must hold goes where the committer cannot skip it: a CI job and a branch protection rule that requires it.",
+        "ru": "Хук pre-commit — хорошее удобство: он ловит ошибку в ту же секунду, когда её сделали, — но он не контроль: каталог .git/hooks/ не входит в содержимое репозитория и не приезжает с клоном (для раздачи нужен core.hooksPath или отдельный инструмент), а любой может передать --no-verify. Всё, что обязано соблюдаться, живёт там, где коммитящий не может это пропустить: в задании CI и в правиле защиты ветки, которое его требует."
+      },
+      "sources": [
+        "https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project",
+        "https://git-scm.com/docs/githooks"
+      ]
+    },
+    {
+      "id": "git.workflow-and-hygiene.004",
+      "section": "workflow-and-hygiene",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "What is the real cost of a feature branch that lives for three months instead of three days?",
+        "ru": "В чём настоящая цена фиче-ветки, живущей три месяца вместо трёх дней?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Git slows down as the branch accumulates commits.",
+            "ru": "Git начинает работать медленнее по мере накопления коммитов в ветке."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The repository grows, since branches store copies of the files.",
+            "ru": "Репозиторий растёт, поскольку ветки хранят копии файлов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Integration cost grows with divergence — textual conflicts and, worse, semantic ones that merge cleanly and break at runtime.",
+            "ru": "Стоимость интеграции растёт вместе с расхождением: текстовые конфликты и, хуже того, семантические, которые сливаются чисто и ломаются в рантайме."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The reflog expires after 90 days and the branch becomes unrecoverable.",
+            "ru": "Reflog истекает через 90 дней, и ветку становится невозможно восстановить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "None, as long as the branch is rebased onto master every morning.",
+            "ru": "Никакой, если каждое утро ребейзить ветку на master."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Conflicts scale with how far two lines diverged, and the expensive ones are not the marked conflicts but the silent ones: an interface changed on one side, a new caller of the old shape on the other, merged cleanly and broken at runtime. Branch lifetime is the lever. What long-lived branches buy is also real — unfinished work stays out of the shared branch — which is why most teams pick short review branches plus feature flags. Daily rebasing helps with text and does nothing about a three-month-old design assumption.",
+        "ru": "Конфликты растут вместе с тем, насколько разошлись две линии, и дорогие из них — не размеченные, а молчаливые: интерфейс изменили на одной стороне, новый вызов старой формы появился на другой, слилось чисто и сломалось в рантайме. Рычаг здесь — время жизни ветки. То, что долгие ветки покупают, тоже реально: недоделанное не попадает в общую ветку, — поэтому большинство команд выбирает короткие ветки под ревью плюс фиче-флаги. Ежедневный ребейз помогает с текстом и никак не помогает с проектным допущением трёхмесячной давности."
+      },
+      "sources": [
+        "https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project",
+        "https://git-scm.com/docs/githooks"
+      ]
+    },
+    {
+      "id": "git.workflow-and-hygiene.005",
+      "section": "workflow-and-hygiene",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "An API key was committed in a `.env` file two weeks ago and pushed. What is the correct response?",
+        "ru": "Две недели назад в файле `.env` закоммитили и запушили API-ключ. Какова правильная реакция?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Delete the file in a new commit; the key is then no longer in the repository.",
+            "ru": "Удалить файл новым коммитом: после этого ключа в репозитории нет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Revert the commit that added it, which removes it from history.",
+            "ru": "Откатить коммит, который его добавил, — это уберёт ключ из истории."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Treat the key as leaked and rotate it; removing it from history is a separate, disruptive rewrite.",
+            "ru": "Считать ключ утёкшим и ротировать его; удаление из истории — отдельная разрушительная операция переписывания."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Add .env to .gitignore, which retroactively untracks the file.",
+            "ru": "Добавить .env в .gitignore — это задним числом снимет файл с отслеживания."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Force-push a branch without the file; clones will drop the old objects on the next fetch.",
+            "ru": "Сделать force-push ветки без файла: клоны выбросят старые объекты при следующем fetch."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "History is immutable and already distributed: the commit that introduced the key is in every clone and in the forge, so deleting, reverting or gitignoring the file changes only the current state. Rotation is the only thing that actually closes the exposure, and it is urgent. Purging history (filter-repo, and asking the forge to expire its copies) rewrites every commit since and forces everyone to re-clone — worth doing for a serious secret, after rotating, never instead of it.",
+        "ru": "История неизменяема и уже распространена: коммит, добавивший ключ, есть в каждом клоне и на хостинге, поэтому удаление файла, revert или .gitignore меняют только текущее состояние. Реально закрывает утечку только ротация, и делать её нужно срочно. Вычистка истории (filter-repo плюс просьба хостингу удалить свои копии) переписывает все коммиты с того момента и заставляет всех переклонироваться — это имеет смысл для серьёзного секрета, после ротации, но никогда вместо неё."
+      },
+      "sources": [
+        "https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project",
+        "https://git-scm.com/docs/gitignore"
+      ]
+    },
+    {
+      "id": "git.workflow-and-hygiene.006",
+      "section": "workflow-and-hygiene",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A 50 MB design asset has been committed weekly for a year. What is true of the repository now?",
+        "ru": "Дизайнерский ассет на 50 МБ коммитили еженедельно целый год. Что верно про репозиторий сейчас?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Every clone carries every version, and removing them means rewriting all later history and re-cloning everywhere.",
+            "ru": "Каждый клон несёт все версии, а их удаление означает переписывание всей последующей истории и переклонирование у всех."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Only the latest version occupies space; older ones are stored as deltas of a few kilobytes.",
+            "ru": "Место занимает только последняя версия, а старые хранятся дельтами в несколько килобайт."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Deleting the file in a new commit reclaims the space at the next git gc.",
+            "ru": "Удаление файла новым коммитом освободит место при следующем git gc."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "git clone --depth 1 removes the problem permanently for the whole team.",
+            "ru": "git clone --depth 1 навсегда снимает проблему для всей команды."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Git stores large binaries outside the object database by default, so nothing grew.",
+            "ru": "Git по умолчанию хранит большие бинарники вне базы объектов, поэтому ничего не выросло."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Git keeps every version of every file, and binary formats delta-compress badly, so a year of weekly 50 MB commits is carried by everyone forever. A later deletion adds a commit; the old blobs stay reachable from the commits that contained them, so gc frees nothing. Removing them means rewriting every commit since — new ids for all of them — and every clone re-cloning. Git LFS keeps the bytes outside and commits a pointer, but it fixes the future, not the past; a shallow clone only hides the cost per clone.",
+        "ru": "Git хранит каждую версию каждого файла, а бинарные форматы плохо сжимаются дельтами, так что год еженедельных коммитов по 50 МБ навсегда носит с собой каждый. Позднее удаление добавляет коммит, а старые блобы остаются достижимыми из коммитов, которые их содержали, — поэтому gc ничего не освободит. Убрать их — значит переписать все коммиты с того момента, дав им новые идентификаторы, и заставить каждый клон переклонироваться. Git LFS хранит байты снаружи и коммитит указатель, но чинит будущее, а не прошлое; а поверхностный клон лишь прячет цену на стороне одного клона."
+      },
+      "sources": [
+        "https://git-scm.com/docs/gitattributes",
+        "https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project"
+      ]
+    }
+  ]
+}
