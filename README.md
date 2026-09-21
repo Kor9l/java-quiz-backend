@@ -313,6 +313,13 @@ server's live set grows. It was two while execution was in-process and cost noth
 price is that a second learner submitting at the same moment waits rather than running beside the
 first. `PRACTICE_JAVA_HEAP_MEGABYTES` is there for deployments that are not on the free tier.
 
+Measured in that container, at `mem_limit: 512m`: 183 MiB idle, **217 MiB at the peak of a run**
+with the child JVM up, 198 MiB after. Three deliberately non-terminating submissions in a row
+were each killed at the deadline, and a correct submission ran in 71 ms immediately afterwards —
+which is the difference the process boundary makes. The in-process sandbox would have been three
+abandoned threads into its budget of four, one submission away from reporting the whole track
+busy until the next restart.
+
 The price is the child's start-up, some 200–400 ms, which is inside the run timeout and is why
 that default went from five seconds to eight. Reference solutions pay it once per task and then
 sit in the engine's cache; a learner pays it once per submission, on top of a compile that
