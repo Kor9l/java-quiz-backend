@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 2,
+  "topic": {
+    "id": "git",
+    "order": 18,
+    "name": {
+      "en": "Git: branches, rebase, resolving conflicts",
+      "ru": "Git: ветки, ребейз, разрешение конфликтов"
+    },
+    "sections": [
+      {
+        "id": "objects-and-areas",
+        "order": 1,
+        "level": "junior",
+        "title": {
+          "en": "Objects and areas: working tree, index, HEAD",
+          "ru": "Объекты и области: рабочее дерево, индекс, HEAD"
+        }
+      },
+      {
+        "id": "branches",
+        "order": 2,
+        "level": "junior",
+        "title": {
+          "en": "Branches, fast-forward and detached HEAD",
+          "ru": "Ветки, fast-forward и detached HEAD"
+        }
+      },
+      {
+        "id": "rebase",
+        "order": 3,
+        "level": "middle",
+        "title": {
+          "en": "Rebase and rewriting history",
+          "ru": "Ребейз и переписывание истории"
+        }
+      },
+      {
+        "id": "conflicts",
+        "order": 4,
+        "level": "middle",
+        "title": {
+          "en": "Conflicts and how to resolve them",
+          "ru": "Конфликты и их разрешение"
+        }
+      },
+      {
+        "id": "remotes",
+        "order": 5,
+        "level": "middle",
+        "title": {
+          "en": "Remotes: fetch, pull and force-push",
+          "ru": "Удалённые репозитории: fetch, pull и force-push"
+        }
+      },
+      {
+        "id": "undoing",
+        "order": 6,
+        "level": "middle",
+        "title": {
+          "en": "Undoing: reset, restore, revert, stash, reflog",
+          "ru": "Откат: reset, restore, revert, stash, reflog"
+        }
+      },
+      {
+        "id": "investigating",
+        "order": 7,
+        "level": "senior",
+        "title": {
+          "en": "Investigating history: log, blame, bisect",
+          "ru": "Расследование истории: log, blame, bisect"
+        }
+      },
+      {
+        "id": "workflow-and-hygiene",
+        "order": 8,
+        "level": "senior",
+        "title": {
+          "en": "Workflow and repository hygiene",
+          "ru": "Процесс работы и гигиена репозитория"
+        }
+      }
+    ]
+  }
+}

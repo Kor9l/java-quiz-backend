@@ -79,7 +79,7 @@ before creating one, so the first sign-in links the Google identity to this row 
 instead of making a second `USER` account beside it. Both paths leave everything but the role
 alone.
 
-Content is 17 topics, 141 article sections and 846 quiz questions, all bilingual, loaded from
+Content is 18 topics, 149 article sections and 894 quiz questions, all bilingual, loaded from
 `src/main/resources/content/` by Flyway **Java** migrations — Java rather than SQL scripts
 because Spring questions contain `${...}` placeholders that Flyway would interpolate.
 
@@ -113,6 +113,7 @@ because Spring questions contain `${...}` placeholders that Flyway would interpo
 | `V32__LoadJvmInternalsTopic` | Inside the JVM: 8 sections, articles, 48 questions | `content/jvm-internals/` |
 | `V33__LoadAlgorithmsTopic` | Algorithms and data structures: 8 sections, articles, 48 questions | `content/algorithms/` |
 | `V34__LoadAlgorithmsPractice` | 12 algorithm exercises on the Java track | `content/practice/algorithms.json` |
+| `V35__LoadGitTopic` | Git — branches, rebase, conflicts: 8 sections, articles, 48 questions | `content/git/` |
 
 SQL and Java Concurrency live in their own directories rather than in the shared files because
 V2 has already run everywhere; adding a topic to `topics.json` would load it on a fresh database
@@ -134,8 +135,8 @@ its levels already set, and the backend module now stands at:
 
 | | junior | middle | senior |
 |---|---|---|---|
-| questions | 343 | 312 | 191 |
-| sections | 43 | 68 | 30 |
+| questions | 361 | 330 | 203 |
+| sections | 45 | 72 | 32 |
 
 A section's level is a judgement about who the article is for. A question's level was derived
 from it — easy one rung down, hard one rung up, clamped at the ends of the ladder — which is a
