@@ -1,0 +1,2631 @@
+{
+  "schemaVersion": 2,
+  "questions": [
+    {
+      "id": "design.solid.001",
+      "section": "solid",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "The single responsibility principle says a class should have one of something. One what?",
+        "ru": "Принцип единственной ответственности говорит, что у класса должно быть что-то одно. Что именно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "One public method, so the class cannot grow past its purpose.",
+            "ru": "Один публичный метод, чтобы класс не разросся за пределы своего назначения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "One field, because state is what makes a class hard to reuse.",
+            "ru": "Одно поле, потому что именно состояние мешает переиспользовать класс."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "One reason to change — one group of people who can ask for it to be different.",
+            "ru": "Одна причина меняться — одна группа людей, которая может попросить его переделать."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "One implemented interface, so callers never see more than they need.",
+            "ru": "Один реализуемый интерфейс, чтобы вызывающие не видели лишнего."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "One instance at run time, guaranteed by the container.",
+            "ru": "Один экземпляр во время работы, гарантированный контейнером."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "SRP is about change, not size. A class has one responsibility when there is one source of requests to modify it; a class with two such sources will be edited for unrelated reasons and the two edits will collide. Counting methods, fields or interfaces measures none of that — a five-method class serving one audience is fine, and a one-method class that both parses and persists is not.",
+        "ru": "SRP — про изменения, а не про размер. У класса одна ответственность, когда есть один источник просьб его поменять; класс с двумя такими источниками будут править по несвязанным поводам, и эти правки столкнутся. Подсчёт методов, полей или интерфейсов не измеряет ничего из этого: класс из пяти методов, обслуживающий одну аудиторию, в порядке, а класс из одного метода, который и разбирает, и сохраняет, — нет."
+      },
+      "sources": [
+        "https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html"
+      ]
+    },
+    {
+      "id": "design.solid.002",
+      "section": "solid",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "A fourth rung is added to one of the two ladders in the Level enum. What has to change in this method?",
+        "ru": "В одну из двух лестниц перечисления Level добавили четвёртую ступень. Что придётся изменить в этом методе?"
+      },
+      "code": "public List<Level> andBelow() {\n    return Arrays.stream(values())\n            .filter(candidate -> candidate.module == module && candidate.rung <= rung)\n            .toList();\n}",
+      "options": [
+        {
+          "text": {
+            "en": "Nothing — a new constant with its own module and rung is picked up by the filter as it stands.",
+            "ru": "Ничего — новая константа со своими модулем и ступенью подхватывается фильтром как есть."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The filter has to be extended with the new constant by name.",
+            "ru": "Фильтр придётся дополнить новой константой по имени."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The method has to switch on the constant to place it on the right ladder.",
+            "ru": "В методе придётся сделать switch по константе, чтобы поставить её на нужную лестницу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The return type has to widen, because four rungs no longer fit a List.",
+            "ru": "Придётся расширить возвращаемый тип, потому что четыре ступени уже не помещаются в List."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Every caller has to start passing the new rung explicitly.",
+            "ru": "Все вызывающие должны будут явно передавать новую ступень."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "This is the open/closed principle as working code: the method is written against the two properties every constant carries rather than against the list of constants, so extension is a new enum constant and modification is nothing. Contrast the practice-track check in PracticeService, where isJava/isGrammar/else is spelled out three times and a fourth track means editing all three methods.",
+        "ru": "Это принцип открытости/закрытости в виде работающего кода: метод написан против двух свойств, которые несёт каждая константа, а не против списка констант, — поэтому расширение это новая константа, а изменение это ничто. Сравните с проверкой трека в PracticeService, где isJava/isGrammar/иначе выписано трижды и четвёртый трек означает правку всех трёх методов."
+      },
+      "sources": [
+        "https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html"
+      ]
+    },
+    {
+      "id": "design.solid.003",
+      "section": "solid",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "List.of(1, 2) returns a List whose add throws UnsupportedOperationException. Which principle does that break, and why?",
+        "ru": "List.of(1, 2) возвращает List, у которого add бросает UnsupportedOperationException. Какой принцип здесь нарушен и почему?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Interface segregation: List forces every client to depend on mutation methods it may not use.",
+            "ru": "Разделение интерфейса: List заставляет каждого клиента зависеть от методов мутации, которыми он может не пользоваться."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Open/closed: the immutable list extends List by modifying its behaviour.",
+            "ru": "Открытость/закрытость: неизменяемый список расширяет List, меняя его поведение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Single responsibility: the list both stores elements and enforces immutability.",
+            "ru": "Единственная ответственность: список и хранит элементы, и обеспечивает неизменяемость."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Dependency inversion: the caller ends up depending on a concrete immutable implementation.",
+            "ru": "Инверсия зависимостей: вызывающий в итоге зависит от конкретной неизменяемой реализации."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Liskov substitution: code written against List stops working when handed this subtype, because the contract narrowed.",
+            "ru": "Подстановка Лисков: код, написанный против List, перестаёт работать, когда ему дают этот подтип, потому что контракт сузился."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Every type check passes and the program still breaks at run time, which is the signature of an LSP violation: the subtype is substitutable to the compiler and not to the caller. The interface-segregation answer is the tempting one, and it does describe a real weakness of the List interface — but ISP is about what a client is forced to see, and here the client sees exactly what it asked for and gets a different answer. The practical defence is to say in the signature whether a returned list may be mutated, and to copy rather than share when it may not.",
+        "ru": "Все проверки типов проходят, а программа ломается во время выполнения — это подпись нарушения LSP: подтип подставим для компилятора и неподставим для вызывающего. Ответ про разделение интерфейса соблазнителен и действительно описывает настоящую слабость интерфейса List, но ISP о том, что клиента заставляют видеть, а здесь клиент видит ровно то, что просил, и получает другой ответ. Практическая защита — говорить в сигнатуре, можно ли менять возвращённый список, и копировать, а не делиться, когда нельзя."
+      },
+      "sources": [
+        "https://dl.acm.org/doi/10.1145/62139.62141",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html"
+      ]
+    },
+    {
+      "id": "design.solid.004",
+      "section": "solid",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "SubmissionOutcome is one record shared by three grading tracks: diagnostics is always empty on SQL and grammar, blanks always empty on SQL and Java. What is being traded for what?",
+        "ru": "SubmissionOutcome — одна запись на три трека проверки: diagnostics всегда пуст на SQL и грамматике, blanks всегда пуст на SQL и Java. Что здесь меняют и на что?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Liskov substitution is given up; what is bought is a record each track can subclass.",
+            "ru": "Отказываются от подстановки Лисков; взамен получают запись, которую каждый трек может унаследовать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Interface segregation is given up; what is bought is one response shape a client can read without knowing which track it is looking at.",
+            "ru": "Отказываются от разделения интерфейса; взамен получают одну форму ответа, которую клиент читает, не зная, на какой трек он смотрит."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Single responsibility is given up; what is bought is faster serialisation of the response.",
+            "ru": "Отказываются от единственной ответственности; взамен получают более быструю сериализацию ответа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Dependency inversion is given up; what is bought is a compile-time dependency on all three engines.",
+            "ru": "Отказываются от инверсии зависимостей; взамен получают зависимость от всех трёх движков на этапе компиляции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing is given up: an always-empty collection is not a dependency, so no principle is involved.",
+            "ru": "Ни от чего не отказываются: всегда пустая коллекция не зависимость, поэтому никакой принцип не задет."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "By the letter of interface segregation this is a fat type imposed on every caller, and the code says so on purpose: every field is present on every track so a client does not have to branch on the track to read the response. The point of the question is not that one side wins. It is that the trade was made deliberately and written down, which is what turns a violation into a decision somebody can revisit.",
+        "ru": "По букве разделения интерфейса это раздутый тип, навязанный каждому вызывающему, и код говорит об этом намеренно: каждое поле есть на каждом треке, чтобы клиенту не приходилось ветвиться по треку, читая ответ. Смысл вопроса не в том, чья сторона побеждает, а в том, что размен сделан осознанно и записан, — это и превращает нарушение в решение, которое кто-то может пересмотреть."
+      },
+      "sources": [
+        "https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html"
+      ]
+    },
+    {
+      "id": "design.solid.005",
+      "section": "solid",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "PracticeService takes SqlPracticeEngine, JavaPracticeEngine and GrammarPracticeEngine as constructor parameters — concrete classes, not interfaces. What does the project have here?",
+        "ru": "PracticeService принимает SqlPracticeEngine, JavaPracticeEngine и GrammarPracticeEngine параметрами конструктора — конкретными классами, а не интерфейсами. Что в итоге есть у проекта?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Neither injection nor inversion: constructor parameters are ordinary arguments and have nothing to do with either.",
+            "ru": "Ни внедрения, ни инверсии: параметры конструктора — обычные аргументы и к тому и другому отношения не имеют."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Inversion without injection: classes in a separate package are already an abstraction boundary.",
+            "ru": "Инверсия без внедрения: классы в отдельном пакете уже сами по себе граница абстракции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both, because CDI supplies the instances and that is what dependency inversion means.",
+            "ru": "И то и другое, потому что экземпляры даёт CDI, а это и есть инверсия зависимостей."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Injection without inversion: the wiring is external and the class is testable, but the dependency still points at a concrete class.",
+            "ru": "Внедрение без инверсии: проводка вынесена наружу и класс тестируем, но зависимость всё равно указывает на конкретный класс."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Inversion without injection: the container picks the implementation at deployment time.",
+            "ru": "Инверсия без внедрения: контейнер выбирает реализацию на этапе развёртывания."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Injection is about who supplies a collaborator; inversion is about which way the source dependency points. Here the collaborators are supplied from outside — which is why JavaPracticeEngineTest can build an engine with new JavaPracticeEngine(JavaLimits.defaults()) and no container — but PracticeService still cannot be compiled without the engine classes existing. For one deployable with one implementation of each engine that is a reasonable place to stop; it becomes expensive the day a second implementation appears.",
+        "ru": "Внедрение — про то, кто поставляет сотрудника; инверсия — про то, куда указывает зависимость в исходниках. Здесь сотрудников поставляют снаружи (поэтому JavaPracticeEngineTest создаёт движок как new JavaPracticeEngine(JavaLimits.defaults()) без всякого контейнера), но PracticeService всё равно не компилируется без существования классов движков. Для одного развёртывания с единственной реализацией каждого движка это разумная точка остановки; дорого станет в день появления второй реализации."
+      },
+      "sources": [
+        "https://martinfowler.com/articles/injection.html",
+        "https://martinfowler.com/articles/dipInTheWild.html"
+      ]
+    },
+    {
+      "id": "design.solid.006",
+      "section": "solid",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "A reviewer proposes extracting a PracticeEngine interface so the isJava/isGrammar/else chain repeated in run, check and task collapses into one map lookup. Which is the strongest design objection to doing it now?",
+        "ru": "Ревьюер предлагает выделить интерфейс PracticeEngine, чтобы цепочка isJava/isGrammar/иначе, повторённая в run, check и task, схлопнулась в один поиск по map. Какое возражение против этого сейчас сильнее всего?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The three engines take unrelated spec types and run different stages, so one interface would have to be wide enough to say almost nothing — and the set of tracks has grown twice in the project's life.",
+            "ru": "Три движка принимают несвязанные типы спецификаций и проходят разные стадии, так что единый интерфейс пришлось бы сделать настолько широким, что он почти ничего не говорит, — а набор треков за всю жизнь проекта вырос дважды."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "CDI cannot inject three implementations of one interface, so the change would not compile.",
+            "ru": "CDI не умеет внедрять три реализации одного интерфейса, поэтому изменение просто не соберётся."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Implementing an interface would force the engines to be final, which breaks the client proxies CDI generates.",
+            "ru": "Реализация интерфейса потребовала бы сделать движки final, а это ломает клиентские прокси, которые генерирует CDI."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The open/closed principle forbids introducing an abstraction over code that already works.",
+            "ru": "Принцип открытости/закрытости запрещает вводить абстракцию над кодом, который уже работает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The engines already share a superclass, so a second abstraction would be duplication.",
+            "ru": "У движков уже есть общий суперкласс, поэтому вторая абстракция была бы дублированием."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The chain is a real shotgun-surgery smell and the reviewer is not wrong that it costs an edit in three places. The counter-argument is about what the abstraction would contain: a SQL dataset, a compiled class and a fill-in-the-blank sentence share a task id and nothing else, so the common method would take Object or a marker type and the type safety lost would exceed the branching saved. CDI handles several implementations of an interface perfectly well given qualifiers or a typed Instance, interfaces do not force final, and open/closed is a heuristic and not a prohibition. Two tracks added in the project's history is roughly the rule of three saying wait.",
+        "ru": "Цепочка — настоящий запах «стрельбы дробью», и ревьюер прав, что она стоит правки в трёх местах. Контраргумент — про содержимое будущей абстракции: SQL-датасет, скомпилированный класс и предложение с пропусками делят между собой идентификатор задания и больше ничего, поэтому общий метод принимал бы Object или маркерный тип, и потеря типобезопасности перевесила бы сэкономленное ветвление. CDI прекрасно справляется с несколькими реализациями интерфейса через квалификаторы или типизированный Instance, интерфейсы не требуют final, а открытость/закрытость — эвристика, а не запрет. Два добавленных трека за историю проекта — это примерно то самое «подожди» из правила трёх."
+      },
+      "sources": [
+        "https://martinfowler.com/books/refactoring.html",
+        "https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html"
+      ]
+    },
+    {
+      "id": "design.creational.001",
+      "section": "creational",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does a static factory method give you that a constructor cannot?",
+        "ru": "Что даёт статический фабричный метод такого, чего не может дать конструктор?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It can be overridden by a subclass so that the subclass decides which product is built.",
+            "ru": "Его может переопределить наследник, и тогда наследник решает, какой продукт создаётся."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A name, and the freedom to return a cached instance or an instance of a subtype.",
+            "ru": "Имя и свободу вернуть закэшированный экземпляр или экземпляр подтипа."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A guarantee from the compiler that every field has been initialised.",
+            "ru": "Гарантию компилятора, что все поля инициализированы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Exemption from the rule that a class may have only one instance.",
+            "ru": "Освобождение от правила, что у класса может быть только один экземпляр."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Thread safety for the object it hands back.",
+            "ru": "Потокобезопасность объекта, который он возвращает."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Bloch's first item in Effective Java lists exactly these advantages: a factory method has a name, so two ways of building the same type can be told apart at the call site; it is not required to create a new object, which is how List.of() returns a shared empty instance and Integer.valueOf caches small values; and it can return any subtype, so the concrete class stays an implementation detail. Being overridable is the GoF factory method, which is an instance method — a different pattern with the same family name.",
+        "ru": "Первый пункт Effective Java перечисляет ровно эти преимущества: у фабричного метода есть имя, поэтому два способа создать один тип различимы в месте вызова; он не обязан создавать новый объект — так List.of() возвращает общий пустой экземпляр, а Integer.valueOf кэширует малые значения; и он может вернуть любой подтип, так что конкретный класс остаётся деталью реализации. Переопределяемость — это фабричный метод GoF, экземплярный: другой паттерн с похожим именем."
+      },
+      "sources": [
+        "https://www.oreilly.com/library/view/effective-java-3rd/9780134686097/"
+      ]
+    },
+    {
+      "id": "design.creational.002",
+      "section": "creational",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "SubmissionOutcome is a record with ten components. What is this method for?",
+        "ru": "SubmissionOutcome — запись из десяти компонентов. Зачем нужен этот метод?"
+      },
+      "code": "public static SubmissionOutcome of(\n        SubmissionStatus status, String messageKey, String detail,\n        ResultTable result, ResultTable expected,\n        ResultComparator.Comparison comparison, long durationMs) {\n    return new SubmissionOutcome(status, messageKey, detail, result, expected,\n            comparison, durationMs, List.of(), List.of(), List.of());\n}",
+      "options": [
+        {
+          "text": {
+            "en": "It makes SubmissionOutcome a singleton, so all three tracks share one outcome instance.",
+            "ru": "Он делает SubmissionOutcome синглтоном, чтобы все три трека делили один экземпляр результата."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It replaces the canonical constructor, which a record does not generate for more than seven components.",
+            "ru": "Он заменяет канонический конструктор, который запись не генерирует, если компонентов больше семи."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is a builder: each call adds one component to a partially built outcome.",
+            "ru": "Это строитель: каждый вызов добавляет один компонент к недособранному результату."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is a named static factory for one common shape — a track with no compiler, no captured output and no blanks — filling those three components with empty lists.",
+            "ru": "Это именованная статическая фабрика для одной частой формы — трека без компилятора, без захвата вывода и без пропусков, — заполняющая эти три компонента пустыми списками."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It exists so the three engines can each extend SubmissionOutcome with their own components.",
+            "ru": "Он нужен, чтобы каждый из трёх движков мог расширить SubmissionOutcome своими компонентами."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The javadoc on the method says it in one line: an outcome from a track that has no compiler, captures no output and has no blanks. That is the value of a name — the caller states which case it is in instead of typing three List.of() arguments and hoping the reader works out why. Records always generate a canonical constructor regardless of component count, and records are final, so no engine could extend this one.",
+        "ru": "Javadoc над методом говорит это одной строкой: результат с трека, у которого нет компилятора, не захватывается вывод и нет пропусков. В этом ценность имени — вызывающий называет свой случай вместо того, чтобы набирать три аргумента List.of() и надеяться, что читатель поймёт зачем. Канонический конструктор запись генерирует всегда, независимо от числа компонентов, а записи финальны, так что унаследовать эту ни один движок не мог бы."
+      },
+      "sources": [
+        "https://www.oreilly.com/library/view/effective-java-3rd/9780134686097/"
+      ]
+    },
+    {
+      "id": "design.creational.003",
+      "section": "creational",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "Why is an @ApplicationScoped bean usually preferred to a classic singleton with a private constructor and a static getInstance()?",
+        "ru": "Почему бин с @ApplicationScoped обычно предпочтительнее классического синглтона с приватным конструктором и статическим getInstance()?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It gives the same single instance while leaving the class ordinary: no static accessor, so the dependency is declared where it is used and the class can still be built with new in a test.",
+            "ru": "Он даёт ту же единственность экземпляра, оставляя класс обычным: статического доступа нет, поэтому зависимость объявляется там, где используется, и класс по-прежнему создаётся через new в тесте."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The container makes the bean's fields thread-safe automatically.",
+            "ru": "Контейнер автоматически делает поля бина потокобезопасными."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It creates the instance eagerly at startup, which a static accessor cannot do.",
+            "ru": "Он создаёт экземпляр жадно при старте, чего статический метод доступа не умеет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It forbids the class from declaring mutable fields.",
+            "ru": "Он запрещает классу объявлять изменяемые поля."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is faster, because the container caches the instance and a static field does not.",
+            "ru": "Так быстрее, потому что контейнер кэширует экземпляр, а статическое поле нет."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Almost every complaint about the singleton pattern is a complaint about the static accessor rather than about having one instance: callers reach for it instead of declaring it, and a test has no seam to substitute at. A scope annotation removes the accessor and keeps the instance — JavaPracticeEngine is application-scoped in production and is built with new JavaPracticeEngine(JavaLimits.defaults()) in its own unit test. Nothing about a scope makes fields thread-safe; that is why the engine's cache is a ConcurrentHashMap.",
+        "ru": "Почти любая претензия к синглтону — это претензия к статическому доступу, а не к единственности экземпляра: вызывающий дотягивается сам вместо того, чтобы объявить зависимость, и тесту негде её подменить. Аннотация области убирает доступ и оставляет экземпляр: JavaPracticeEngine в продакшене живёт в одном экземпляре, а в собственном юнит-тесте создаётся как new JavaPracticeEngine(JavaLimits.defaults()). Потокобезопасными поля область видимости не делает — именно поэтому кэш движка это ConcurrentHashMap."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/cdi/4.0/jakarta-cdi-spec-4.0.html",
+        "https://www.oreilly.com/library/view/effective-java-3rd/9780134686097/"
+      ]
+    },
+    {
+      "id": "design.creational.004",
+      "section": "creational",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "When does a builder start to pay for the extra class it costs?",
+        "ru": "Когда строитель начинает окупать лишний класс, который он стоит?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "As soon as a class has more than one constructor.",
+            "ru": "Как только у класса появляется больше одного конструктора."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whenever the object is immutable, since immutability cannot be achieved any other way.",
+            "ru": "Всегда, когда объект неизменяем, потому что иначе неизменяемости не добиться."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Around four or more parameters, and especially a run of same-typed ones where the compiler cannot catch a swapped pair.",
+            "ru": "Примерно от четырёх параметров и особенно на череде однотипных, где компилятор не поймает переставленную пару."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Only when the values come from user input and have to be validated.",
+            "ru": "Только когда значения приходят от пользователя и требуют валидации."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When the object is created on a different thread from the one that uses it.",
+            "ru": "Когда объект создаётся в одном потоке, а используется в другом."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Effective Java puts the threshold at roughly four parameters, and the sharper signal is a run of the same type: new JavaLimits(1, 20_000, 8_000) compiles just as happily with the last two swapped. This project has no builders because its value types are three- and four-component records that still read positionally — JavaTaskSpec(id, className, solutionCode, cases). Immutability needs no builder; a record and a constructor give it directly.",
+        "ru": "Effective Java ставит порог примерно на четырёх параметрах, а более резкий сигнал — череда одного типа: new JavaLimits(1, 20_000, 8_000) скомпилируется так же охотно с переставленными двумя последними. В этом проекте строителей нет, потому что его типы-значения — записи из трёх-четырёх компонентов, которые ещё читаются позиционно: JavaTaskSpec(id, className, solutionCode, cases). Неизменяемости строитель не нужен — её напрямую дают запись и конструктор."
+      },
+      "sources": [
+        "https://www.oreilly.com/library/view/effective-java-3rd/9780134686097/",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpRequest.Builder.html"
+      ]
+    },
+    {
+      "id": "design.creational.005",
+      "section": "creational",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "JavaPracticeEngine is @ApplicationScoped and caches compiled reference results in a field. Why is that field a ConcurrentHashMap rather than a HashMap?",
+        "ru": "JavaPracticeEngine помечен @ApplicationScoped и кэширует эталонные результаты в поле. Почему это поле — ConcurrentHashMap, а не HashMap?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "CDI requires collections on application-scoped beans to be from java.util.concurrent.",
+            "ru": "CDI требует, чтобы коллекции на бинах с областью приложения были из java.util.concurrent."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "HashMap cannot store the sandbox execution type as a value.",
+            "ru": "HashMap не может хранить тип результата исполнения песочницы в качестве значения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The Semaphore guarding sandbox slots requires a matching concurrent map to stay fair.",
+            "ru": "Семафор, стерегущий слоты песочницы, требует такой же конкурентной map, чтобы оставаться честным."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only concurrent maps support the clear() that clearCache() calls.",
+            "ru": "Только конкурентные map поддерживают clear(), который вызывает clearCache()."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "One instance is shared by every request on every thread, so a mutable field on it is shared state and needs to be safe for concurrent use.",
+            "ru": "Один экземпляр разделяется всеми запросами во всех потоках, поэтому изменяемое поле на нём — общее состояние, и оно должно быть безопасно при конкурентном доступе."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A scope answers how many instances exist; it says nothing about who may write to them. @ApplicationScoped means exactly one instance behind every concurrent request, so each mutable field is shared across threads and needs its own protection — here a concurrent map and a Semaphore limiting simultaneous compilations. A plain HashMap in the same place is a data race that passes every test on an idle machine and corrupts under load.",
+        "ru": "Область видимости отвечает, сколько существует экземпляров, и ничего не говорит о том, кому в них можно писать. @ApplicationScoped означает ровно один экземпляр за всеми конкурентными запросами, так что каждое изменяемое поле разделяется потоками и требует собственной защиты — здесь это конкурентная map и Semaphore, ограничивающий одновременные компиляции. Обычный HashMap на том же месте — гонка данных, которая проходит все тесты на незагруженной машине и портится под нагрузкой."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/cdi/4.0/jakarta-cdi-spec-4.0.html"
+      ]
+    },
+    {
+      "id": "design.creational.006",
+      "section": "creational",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "If you genuinely need a classic singleton in plain Java with no container, which form does Effective Java recommend, and on what grounds?",
+        "ru": "Если классический синглтон на чистой Java без контейнера действительно нужен, какую форму рекомендует Effective Java и на каком основании?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A private static final field with a public getter, on the grounds that it is the simplest thing that works.",
+            "ru": "Приватное static final поле с публичным геттером — на том основании, что это простейшее работающее решение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A single-element enum, because the language handles serialization and blocks reflective instantiation for you.",
+            "ru": "Перечисление из одной константы, потому что язык сам закрывает сериализацию и запрещает создание через рефлексию."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Double-checked locking on a volatile field, because it is the only form that is both lazy and correct.",
+            "ru": "Двойная проверка на volatile-поле, потому что это единственная форма, которая одновременно ленива и корректна."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A holder class with a static nested initialiser, because it is the only way to be lazy without synchronisation.",
+            "ru": "Класс-держатель со статическим вложенным инициализатором, потому что только так можно быть ленивым без синхронизации."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Any of them, since the JVM guarantees one instance of a class per process in every case.",
+            "ru": "Любую — JVM в любом случае гарантирует один экземпляр класса на процесс."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The enum form is the one Bloch recommends, and the reason is the two attacks the other forms have to defend against by hand: deserialization can otherwise produce a second instance unless you write readResolve, and setAccessible on a private constructor can produce a third. An enum constant is exempt from both by language rule. Double-checked locking on a volatile field is correct, and the holder idiom is lazy without synchronisation — both are true statements and neither is the recommendation. The last option confuses class identity with instance identity: a class loaded by two class loaders is two classes with two static fields.",
+        "ru": "Блох рекомендует форму с enum, и причина — две атаки, от которых остальным формам приходится защищаться вручную: десериализация иначе породит второй экземпляр, если не написать readResolve, а setAccessible на приватном конструкторе — третий. Константа перечисления освобождена от обоих по правилу языка. Двойная проверка на volatile-поле корректна, а идиома класса-держателя ленива без синхронизации — оба утверждения верны, и ни одно не является рекомендацией. Последний вариант путает идентичность класса с идентичностью экземпляра: класс, загруженный двумя загрузчиками, — это два класса с двумя статическими полями."
+      },
+      "sources": [
+        "https://www.oreilly.com/library/view/effective-java-3rd/9780134686097/"
+      ]
+    },
+    {
+      "id": "design.structural.001",
+      "section": "structural",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Adapter and decorator both wrap another object. What tells them apart?",
+        "ru": "И адаптер, и декоратор оборачивают другой объект. Что их различает?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "An adapter wraps exactly one object, a decorator wraps several at once.",
+            "ru": "Адаптер оборачивает ровно один объект, декоратор — несколько сразу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An adapter is created by the container, a decorator by the caller.",
+            "ru": "Адаптер создаёт контейнер, декоратор — вызывающий."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An adapter is immutable and a decorator is not.",
+            "ru": "Адаптер неизменяем, а декоратор нет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A decorator changes the interface while an adapter changes the behaviour.",
+            "ru": "Декоратор меняет интерфейс, а адаптер меняет поведение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An adapter presents different behaviour through a different interface; a decorator keeps the interface and adds to the behaviour.",
+            "ru": "Адаптер подаёт то же поведение через другой интерфейс; декоратор сохраняет интерфейс и добавляет поведение."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The structure is nearly identical and the intent is not. An adapter exists because two sides were designed apart and their interfaces do not meet — InputStreamReader turns bytes into characters. A decorator implements the very interface it wraps, which is what makes decorators stackable: BufferedInputStream is still an InputStream, so another wrapper can go round it. Neither pattern says anything about how many objects are held or who constructs them.",
+        "ru": "Структура почти одинакова, намерение — нет. Адаптер существует потому, что две стороны проектировались порознь и их интерфейсы не сходятся: InputStreamReader превращает байты в символы. Декоратор реализует ровно тот интерфейс, который оборачивает, и поэтому декораторы складываются стопкой: BufferedInputStream по-прежнему InputStream, и вокруг него можно надеть ещё одну обёртку. Ни один из паттернов ничего не говорит о числе удерживаемых объектов и о том, кто их создаёт."
+      },
+      "sources": [
+        "https://www.oreilly.com/library/view/design-patterns-elements/0201633612/",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/FilterInputStream.html"
+      ]
+    },
+    {
+      "id": "design.structural.002",
+      "section": "structural",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which of these is an adapter in the GoF sense?",
+        "ru": "Что из перечисленного является адаптером в смысле GoF?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "BufferedInputStream, because it adds buffering to any underlying stream.",
+            "ru": "BufferedInputStream, потому что он добавляет буферизацию к любому нижележащему потоку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ArrayList, because it presents an array through the List interface.",
+            "ru": "ArrayList, потому что он подаёт массив через интерфейс List."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "InputStreamReader, because it presents a byte stream through the character-stream interface.",
+            "ru": "InputStreamReader, потому что он подаёт байтовый поток через интерфейс символьного."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Collections.unmodifiableList, because it presents a mutable list as an immutable one.",
+            "ru": "Collections.unmodifiableList, потому что он подаёт изменяемый список как неизменяемый."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Optional, because it presents a nullable reference as a container.",
+            "ru": "Optional, потому что он подаёт ссылку, допускающую null, как контейнер."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "InputStreamReader takes an InputStream and a charset and exposes a Reader — two genuinely different interfaces with a conversion in the middle. ArrayList is not an adapter: it owns its array as an implementation detail rather than adapting something a caller handed it; Arrays.asList is the adapter in that family. BufferedInputStream and unmodifiableList both keep the interface they wrap and are decorators. Optional is neither — it is a container type, not a wrapper over an existing interface.",
+        "ru": "InputStreamReader принимает InputStream и кодировку, а выставляет Reader — два действительно разных интерфейса с преобразованием посередине. ArrayList не адаптер: он владеет массивом как деталью реализации, а не адаптирует то, что ему передал вызывающий; адаптер в этом семействе — Arrays.asList. BufferedInputStream и unmodifiableList сохраняют оборачиваемый интерфейс и являются декораторами. Optional ни то ни другое — это тип-контейнер, а не обёртка над существующим интерфейсом."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html",
+        "https://www.oreilly.com/library/view/design-patterns-elements/0201633612/"
+      ]
+    },
+    {
+      "id": "design.structural.003",
+      "section": "structural",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "PracticeService converts a JPA entity into a record before handing it to the grading engine. What does that boundary buy?",
+        "ru": "PracticeService превращает JPA-сущность в запись, прежде чем отдать её движку проверки. Что покупает эта граница?"
+      },
+      "code": "private JavaTaskSpec javaSpec(PracticeTask task) {\n    return new JavaTaskSpec(\n            task.getId(), task.getClassName(), task.getSolutionCode(),\n            task.getCases().stream()\n                    .map(c -> new JavaTaskSpec.Case(c.getLabel(), c.getExpression()))\n                    .toList());\n}",
+      "options": [
+        {
+          "text": {
+            "en": "It lets the engine run inside a transaction it would otherwise have to open for itself.",
+            "ru": "Она позволяет движку работать внутри транзакции, которую иначе пришлось бы открывать ему самому."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It makes the entity immutable, so Hibernate stops tracking changes to it.",
+            "ru": "Она делает сущность неизменяемой, и Hibernate перестаёт отслеживать её изменения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It removes the need for the engine to be a CDI bean.",
+            "ru": "Она избавляет движок от необходимости быть CDI-бином."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The grading logic can be exercised without a database behind it, which is exactly how the engine's unit tests build specs by hand.",
+            "ru": "Логику проверки можно гонять без базы за спиной — именно так юнит-тесты движка собирают спецификации руками."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "JPA requires it: an entity may not be passed outside the persistence context.",
+            "ru": "Этого требует JPA: сущность нельзя передавать за пределы контекста персистентности."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The javadoc on TaskSpec and JavaTaskSpec states the intent directly — everything the engine needs, free of persistence concerns, so the grading logic can be exercised without a database behind it. That is the payoff of an adapter at a layer boundary, and it is verifiable: JavaPracticeEngineTest constructs specs in the test source and never starts Postgres. The engine remains a CDI bean, nothing about the conversion affects Hibernate's dirty checking, and JPA has no rule against detached entities leaving a service.",
+        "ru": "Javadoc у TaskSpec и JavaTaskSpec прямо называет намерение: всё, что нужно движку, свободное от вопросов персистентности, чтобы логику проверки можно было гонять без базы. Это и есть выигрыш адаптера на границе слоёв, и он проверяем: JavaPracticeEngineTest собирает спецификации прямо в тестовом коде и ни разу не поднимает Postgres. Движок при этом остаётся CDI-бином, на отслеживание изменений Hibernate преобразование не влияет, а запрета выпускать отсоединённые сущности из сервиса в JPA нет."
+      },
+      "sources": [
+        "https://www.oreilly.com/library/view/design-patterns-elements/0201633612/",
+        "https://alistair.cockburn.us/hexagonal-architecture/"
+      ]
+    },
+    {
+      "id": "design.structural.004",
+      "section": "structural",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Collections.unmodifiableList(list) returns a view; ResultComparator hands back List.copyOf(rows) instead. Which difference is the one that matters here?",
+        "ru": "Collections.unmodifiableList(list) возвращает представление, а ResultComparator отдаёт List.copyOf(rows). Какая разница здесь важна?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A view keeps reflecting writes made through the original reference; a copy cannot be changed by anyone still holding that reference.",
+            "ru": "Представление продолжает отражать записи через исходную ссылку; копию не изменит никто, кто эту ссылку ещё держит."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A copy throws UnsupportedOperationException on writes while a view silently ignores them.",
+            "ru": "Копия бросает UnsupportedOperationException на запись, а представление молча её игнорирует."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A view is a decorator and a copy is a proxy; only the proxy is safe to publish across threads.",
+            "ru": "Представление — декоратор, а копия — заместитель; публиковать между потоками безопасно только заместителя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A copy shares the backing array with the original while a view allocates a new one.",
+            "ru": "Копия делит внутренний массив с оригиналом, а представление выделяет новый."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "There is no difference: List.copyOf returns an unmodifiable view of its argument.",
+            "ru": "Разницы нет: List.copyOf возвращает неизменяемое представление своего аргумента."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "An unmodifiable wrapper protects the recipient from itself, not from the original owner: the wrapped list can still be mutated through the reference it was created from, and the view shows the change. List.copyOf takes a snapshot, so the returned list is immutable whatever happens to the source afterwards. Both refuse writes with UnsupportedOperationException — the difference is who else can still change what you handed out.",
+        "ru": "Неизменяемая обёртка защищает получателя от него самого, а не от исходного владельца: обёрнутый список всё ещё можно менять через ссылку, из которой обёртка создана, и представление это изменение покажет. List.copyOf делает снимок, поэтому возвращённый список неизменяем, что бы дальше ни случилось с источником. Отказывают в записи оба, через UnsupportedOperationException, — разница в том, кто ещё может поменять то, что вы отдали."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collections.html"
+      ]
+    },
+    {
+      "id": "design.structural.005",
+      "section": "structural",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "PracticeService is @ApplicationScoped and is injected into a JAX-RS resource. What is actually stored in that field, and what follows from it?",
+        "ru": "PracticeService помечен @ApplicationScoped и внедряется в JAX-RS-ресурс. Что на самом деле лежит в этом поле и что из этого следует?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The bean instance itself; nothing follows, since a scope only says how many instances are created.",
+            "ru": "Сам экземпляр бина; ничего не следует, ведь область видимости говорит только о количестве экземпляров."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A client proxy that resolves the contextual instance at call time — which is also why a normal-scoped bean class cannot be final.",
+            "ru": "Клиентский прокси, который в момент вызова разрешает контекстный экземпляр, — поэтому же класс бина с нормальной областью не может быть final."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A WeakReference to the bean, so the container can evict it under memory pressure.",
+            "ru": "WeakReference на бин, чтобы контейнер мог вытеснить его при нехватке памяти."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A ThreadLocal holding one instance per request thread.",
+            "ru": "ThreadLocal, хранящий по экземпляру на поток запроса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A ServiceLoader entry resolved on first use.",
+            "ru": "Запись ServiceLoader, разрешаемая при первом использовании."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "CDI injects a client proxy for every normal-scoped bean. The proxy is what lets a reference captured once keep pointing at the right contextual instance — the mechanism that makes it safe to inject a @RequestScoped bean into an @ApplicationScoped one. The proxy is generated as a subclass, so the bean class needs an accessible no-argument constructor and cannot be final; neither can the methods that must be intercepted. Quarkus generates these classes at build time rather than at startup, which changes when the code appears and not what it does.",
+        "ru": "CDI внедряет клиентский прокси для каждого бина с нормальной областью видимости. Именно прокси позволяет однажды захваченной ссылке продолжать указывать на нужный контекстный экземпляр — механизм, благодаря которому безопасно внедрять @RequestScoped-бин в @ApplicationScoped. Прокси генерируется как наследник, поэтому классу бина нужен доступный конструктор без аргументов и он не может быть final; не могут быть final и методы, которые нужно перехватывать. Quarkus генерирует эти классы на этапе сборки, а не при старте, и это меняет момент появления кода, а не то, что он делает."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/cdi/4.0/jakarta-cdi-spec-4.0.html",
+        "https://quarkus.io/guides/cdi-reference"
+      ]
+    },
+    {
+      "id": "design.structural.006",
+      "section": "structural",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A class implements Repository, receives another Repository through its constructor, and caches the results of findById. Decorator or proxy?",
+        "ru": "Класс реализует Repository, получает другой Repository через конструктор и кэширует результаты findById. Декоратор или заместитель?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Decorator, definitively: a class given its target through a constructor can never be a proxy.",
+            "ru": "Однозначно декоратор: класс, получивший цель через конструктор, заместителем быть не может."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Proxy, definitively: any class implementing the same interface as its target is a proxy.",
+            "ru": "Однозначно заместитель: любой класс, реализующий тот же интерфейс, что и цель, — заместитель."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The structure fits both, and intent decides: caching controls whether the call reaches the target rather than changing the answer, which is what GoF classifies as a proxy.",
+            "ru": "Структура подходит обоим, решает намерение: кэширование управляет тем, дойдёт ли вызов до цели, а не меняет ответ, — и именно это GoF относит к заместителю."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Neither: caching is an interceptor concern and interceptors are not a GoF pattern.",
+            "ru": "Ни то ни другое: кэширование — дело перехватчика, а перехватчики не паттерн GoF."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Adapter, because the class translates between the caller and the repository.",
+            "ru": "Адаптер, потому что класс переводит между вызывающим и репозиторием."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Decorator and proxy are the same structure with different reasons, so the honest answer names the tiebreaker rather than a rule. A decorator changes what the answer is; a proxy changes when, whether or how the answer is produced. Caching leaves the answer identical and controls the call, which puts it under proxy in the catalogue — GoF lists caching alongside lazy loading and remoting there. Constructor composition is a hint towards decorator but not a rule: JavaPracticeEngine caches reference results for exactly this reason and is not a wrapper at all. The practical consequence is the same either way — a stale cache is a correctness bug the caller cannot see, so the wrapper has to be honest about invalidation.",
+        "ru": "Декоратор и заместитель — одна структура с разными причинами, поэтому честный ответ называет критерий, а не правило. Декоратор меняет то, каким будет ответ; заместитель меняет то, когда, будет ли и как ответ получен. Кэширование оставляет ответ прежним и управляет вызовом, что относит его в каталоге к заместителю — GoF перечисляет кэширование рядом с ленивой загрузкой и удалённым доступом. Композиция через конструктор — намёк в сторону декоратора, но не правило: JavaPracticeEngine кэширует эталонные результаты ровно по этой причине и обёрткой не является вовсе. Практическое следствие одинаково: устаревший кэш — ошибка корректности, которой вызывающий не видит, поэтому обёртка обязана быть честной насчёт инвалидации."
+      },
+      "sources": [
+        "https://www.oreilly.com/library/view/design-patterns-elements/0201633612/",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Proxy.html"
+      ]
+    },
+    {
+      "id": "design.behavioural.001",
+      "section": "behavioural",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which of these is a strategy in the GoF sense?",
+        "ru": "Что из перечисленного является стратегией в смысле GoF?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A Comparator passed to sort — an interchangeable algorithm chosen by the caller.",
+            "ru": "Comparator, переданный в sort, — взаимозаменяемый алгоритм, выбранный вызывающим."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The Iterator a collection returns, which holds the position for the loop.",
+            "ru": "Iterator, который возвращает коллекция и который держит позицию для цикла."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A BufferedInputStream wrapping a FileInputStream.",
+            "ru": "BufferedInputStream, обёрнутый вокруг FileInputStream."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An ExceptionMapper registered with JAX-RS through @Provider.",
+            "ru": "ExceptionMapper, зарегистрированный в JAX-RS через @Provider."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A record with no methods, used as a parameter object.",
+            "ru": "Запись без методов, используемая как объект-параметр."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Strategy means the algorithm is a value the caller supplies, and Comparator is the JDK's canonical one — the same sort with two comparators produces two orderings without the sort knowing anything about either. Since Java 8 a strategy is usually written as a lambda, which is why the pattern has become hard to spot: Comparator.comparing(Question::getId) is a strategy object with none of the ceremony. The iterator is the iterator pattern, the buffered stream a decorator, the exception mapper a registry dispatch, and a plain record is data rather than behaviour.",
+        "ru": "Стратегия означает, что алгоритм — это значение, которое передаёт вызывающий, и Comparator здесь канонический пример JDK: одна и та же сортировка с двумя компараторами даёт два порядка, ничего не зная ни об одном из них. С Java 8 стратегию обычно пишут лямбдой, и поэтому паттерн стало трудно замечать: Comparator.comparing(Question::getId) — объект-стратегия без всякой церемонии. Итератор — это паттерн «итератор», буферизованный поток — декоратор, маппер исключений — диспетчеризация через реестр, а обычная запись — данные, а не поведение."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Comparator.html",
+        "https://www.oreilly.com/library/view/design-patterns-elements/0201633612/"
+      ]
+    },
+    {
+      "id": "design.behavioural.002",
+      "section": "behavioural",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "PracticeService declares this interface and passes lambdas built from it into a shared method. Which pattern is that?",
+        "ru": "PracticeService объявляет этот интерфейс и передаёт построенные из него лямбды в общий метод. Какой это паттерн?"
+      },
+      "code": "@FunctionalInterface\nprivate interface Grading {\n    SubmissionOutcome run();\n}\n\n// ...\nresponse = graded(task, () -> javaEngine.grade(spec, submission), true);",
+      "options": [
+        {
+          "text": {
+            "en": "Observer: graded subscribes to whatever the engine eventually produces.",
+            "ru": "Наблюдатель: graded подписывается на то, что движок в итоге выдаст."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Template method: graded is the skeleton and the lambda is an overridden step.",
+            "ru": "Шаблонный метод: graded — скелет, а лямбда — переопределённый шаг."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Adapter: the lambda adapts the engine's signature to the one the service expects.",
+            "ru": "Адаптер: лямбда приводит сигнатуру движка к той, которую ждёт сервис."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Singleton: one Grading instance is reused across all three tracks.",
+            "ru": "Синглтон: один экземпляр Grading переиспользуется всеми тремя треками."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Command: the call is captured as a value so shared handling can decide when and how to run it.",
+            "ru": "Команда: вызов захвачен как значение, чтобы общая обработка решала, когда и как его выполнить."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A command turns an invocation into an object that can be stored, passed, logged, retried or run inside someone else's error handling — which is exactly what happens here: graded catches PracticeSubmissionException, assembles the response map, attaches diagnostics and reveals the explanation on a pass. Without the command the shared handling would be copied into each branch of the track chain. Template method is the near miss worth understanding: the skeleton-plus-varying-step shape is the same, but a template method fills the step by inheritance, and a lambda is the reason the pattern is so often unnecessary now.",
+        "ru": "Команда превращает вызов в объект, который можно сохранить, передать, залогировать, повторить или выполнить внутри чужой обработки ошибок — ровно это здесь и происходит: graded ловит PracticeSubmissionException, собирает ответ, прикладывает диагностику и раскрывает объяснение при успехе. Без команды эта общая обработка была бы скопирована в каждую ветку цепочки треков. Шаблонный метод — близкий промах, который стоит понимать: форма «скелет плюс меняющийся шаг» та же, но шаблонный метод подставляет шаг наследованием, и лямбда — как раз причина, по которой сегодня он так часто не нужен."
+      },
+      "sources": [
+        "https://www.oreilly.com/library/view/design-patterns-elements/0201633612/"
+      ]
+    },
+    {
+      "id": "design.behavioural.003",
+      "section": "behavioural",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "SubmissionOutcome.passed() is implemented as return status.passed(), with the answer living on the SubmissionStatus enum constant. What does that buy?",
+        "ru": "SubmissionOutcome.passed() реализован как return status.passed(), и ответ живёт на константе перечисления SubmissionStatus. Что это даёт?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It makes the outcome record smaller, which matters when it is serialised.",
+            "ru": "Запись результата становится меньше, что важно при сериализации."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Adding a status means adding a constant and answering one question, instead of finding every place that compares against a status.",
+            "ru": "Добавить статус — значит добавить константу и ответить на один вопрос, а не искать каждое место, где со статусом сравнивают."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It makes statuses comparable, so outcomes can be sorted by severity.",
+            "ru": "Статусы становятся сравнимыми, и результаты можно сортировать по тяжести."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It allows the status to be changed after the outcome has been built.",
+            "ru": "Это позволяет менять статус уже после создания результата."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It removes the requirement that a switch over the enum be exhaustive.",
+            "ru": "Это снимает требование исчерпывающего switch по перечислению."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "This is the state pattern in the form Java usually takes it: behaviour attached to the state rather than selected by inspecting it. The outcome does not ask which status it holds, it asks the status. The saving is in the next change — a new status is one constant with one answer, whereas a chain of comparisons spread over a codebase is a new status plus an archaeology exercise, and the compiler will not tell you which comparison you missed.",
+        "ru": "Это паттерн «состояние» в той форме, в которой его обычно берёт Java: поведение прикреплено к состоянию, а не выбирается его разглядыванием. Результат не спрашивает, какой у него статус, — он спрашивает сам статус. Экономия проявится при следующем изменении: новый статус — это одна константа с одним ответом, тогда как цепочки сравнений, разбросанные по коду, — это новый статус плюс археология, и компилятор не подскажет, какое сравнение вы пропустили."
+      },
+      "sources": [
+        "https://www.oreilly.com/library/view/design-patterns-elements/0201633612/"
+      ]
+    },
+    {
+      "id": "design.behavioural.004",
+      "section": "behavioural",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "The three practice engines run the same skeleton — check, produce the reference result, run the submission, compare — but share no superclass; the javadoc records the shape instead. What is the real cost of that choice?",
+        "ru": "Три движка практики исполняют один скелет — проверить, получить эталон, выполнить присланное, сравнить, — но общего суперкласса у них нет: форма записана в javadoc. В чём настоящая цена такого выбора?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The engines cannot be injected, because CDI requires a common supertype.",
+            "ru": "Движки нельзя внедрить, потому что CDI требует общего супертипа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Compilation gets slower, because the shape has to be checked at run time instead.",
+            "ru": "Компиляция замедляется, потому что форму приходится проверять во время выполнения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The engines can no longer be unit tested in isolation.",
+            "ru": "Движки больше нельзя тестировать юнит-тестами по отдельности."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The skeleton can drift in one engine and nothing fails: the consistency is a convention rather than a contract the compiler enforces.",
+            "ru": "Скелет может разъехаться в одном движке, и ничего не упадёт: согласованность держится на договорённости, а не на контракте, который проверяет компилятор."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Each engine has to reimplement ResultComparator for itself.",
+            "ru": "Каждому движку приходится заново реализовывать ResultComparator."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "That is the honest trade. A template method in a shared base class would make the sequence impossible to get wrong, at the price of a base class that has to accommodate a compilation stage two of the three engines do not have, and of binding all three to that base class permanently. Documenting the shape keeps the engines independent and moves the guarantee from the compiler to code review. CDI needs no common supertype to inject a class, and ResultComparator is a separate static utility that two of the tracks already share.",
+        "ru": "Это и есть честный размен. Шаблонный метод в общем базовом классе сделал бы последовательность невозможной для ошибки — ценой базового класса, который обязан вместить стадию компиляции, отсутствующую у двух движков из трёх, и ценой вечной привязки всех трёх к этому классу. Запись формы в документацию оставляет движки независимыми и переносит гарантию с компилятора на код-ревью. Общий супертип для внедрения класса CDI не нужен, а ResultComparator — отдельная статическая утилита, которую два трека уже делят."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/AbstractList.html",
+        "https://www.oreilly.com/library/view/design-patterns-elements/0201633612/"
+      ]
+    },
+    {
+      "id": "design.behavioural.005",
+      "section": "behavioural",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "ApiExceptionMapper implements ExceptionMapper<ApiException> and nothing in the codebase calls it. How does it run, and what does that cost?",
+        "ru": "ApiExceptionMapper реализует ExceptionMapper<ApiException>, и в коде его никто не вызывает. Как он выполняется и чего это стоит?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Quarkus rewrites throw statements at build time into direct calls; the cost is a longer build.",
+            "ru": "Quarkus переписывает throw на этапе сборки в прямые вызовы; цена — более долгая сборка."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is invoked reflectively from the ApiException constructor; the cost is an allocation on every throw.",
+            "ru": "Он вызывается рефлексией из конструктора ApiException; цена — выделение памяти на каждый бросок."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "JAX-RS keeps a registry of providers and dispatches to the closest match when an exception escapes a resource method; the cost is that what runs here can no longer be answered by reading the call site.",
+            "ru": "JAX-RS держит реестр провайдеров и направляет исключение, вылетевшее из метода ресурса, ближайшему подходящему; цена — на вопрос «что здесь выполнится» больше нельзя ответить, прочитав место вызова."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is a CDI observer method; the cost is that exception handling becomes asynchronous.",
+            "ru": "Это метод-наблюдатель CDI; цена — обработка исключений становится асинхронной."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The servlet container's error page mechanism calls it; the cost is an extra HTTP round trip.",
+            "ru": "Его вызывает механизм страниц ошибок сервлет-контейнера; цена — лишний HTTP-запрос."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A @Provider is registered rather than called: the runtime keeps the set of mappers and, when an exception propagates out of a resource method, selects the one whose type parameter is the nearest supertype of what was thrown. From the resource's point of view that is indistinguishable from an observer — throw, and the right code runs somewhere else. The cost is the same as for any registry or event bus: the call site vanishes, so the question of what happens next is answered by searching rather than by reading. At a framework boundary that is a good trade; in the middle of a workflow it is not.",
+        "ru": "@Provider регистрируют, а не вызывают: рантайм держит набор мапперов и, когда исключение выходит из метода ресурса, выбирает тот, чей параметр типа — ближайший супертип брошенного. Со стороны ресурса это неотличимо от наблюдателя: бросил — и нужный код выполнился где-то ещё. Цена та же, что у любого реестра или шины событий: место вызова исчезает, и на вопрос «что будет дальше» отвечают поиском, а не чтением. На границе фреймворка это хороший размен, в середине рабочего процесса — нет."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/cdi/4.0/jakarta-cdi-spec-4.0.html",
+        "https://www.oreilly.com/library/view/design-patterns-elements/0201633612/"
+      ]
+    },
+    {
+      "id": "design.behavioural.006",
+      "section": "behavioural",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "ResultComparator.compare(expected, actual, orderMatters) picks between ordered comparison and bag comparison with a boolean. When does replacing that flag with two strategy objects become the better design?",
+        "ru": "ResultComparator.compare(expected, actual, orderMatters) выбирает между упорядоченным сравнением и сравнением мультимножеств по булеву флагу. Когда замена флага на две стратегии станет лучшим решением?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Immediately: a boolean parameter is always a smell and always worth removing.",
+            "ru": "Сразу же: булев параметр — всегда запах и всегда стоит убрать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Never: comparison is a pure function, and pure functions cannot be strategies.",
+            "ru": "Никогда: сравнение — чистая функция, а чистые функции не бывают стратегиями."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "As soon as the method passes twenty lines, whatever the branching looks like.",
+            "ru": "Как только метод перевалит за двадцать строк, независимо от того, как устроено ветвление."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When the modes grow past two, or when a caller needs to supply a mode this class does not know about — at two fixed modes the flag is the clearer of the two.",
+            "ru": "Когда режимов станет больше двух или когда вызывающему понадобится режим, о котором класс не знает, — на двух фиксированных режимах флаг понятнее."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "When the flag is read from the database rather than passed by the caller, because a persisted flag cannot be a boolean.",
+            "ru": "Когда флаг читается из базы, а не передаётся вызывающим, потому что сохранённый флаг не может быть булевым."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Strategy buys two things: more than a handful of interchangeable algorithms without a growing conditional, and the ability for a caller to pass an algorithm the class was never written against. Neither is in play here — there are exactly two modes, both owned by this class, and orderMatters comes from the task's own spec. Two named private methods behind a boolean are less indirection than an interface, two implementations and a selection point. The flag stops being clearer as soon as it becomes two flags, because the branches multiply; that is the signal worth watching for, not the line count and not the flag's origin.",
+        "ru": "Стратегия покупает две вещи: возможность иметь больше пары взаимозаменяемых алгоритмов без разрастающегося условия и возможность для вызывающего передать алгоритм, под который класс не писали. Здесь нет ни того ни другого: режима ровно два, оба принадлежат этому классу, а orderMatters приходит из спецификации самого задания. Два именованных приватных метода за булевым флагом — меньше косвенности, чем интерфейс, две реализации и точка выбора. Флаг перестаёт быть понятнее, как только флагов становится два: ветвления перемножаются. Именно за этим и стоит следить, а не за числом строк и не за происхождением флага."
+      },
+      "sources": [
+        "https://martinfowler.com/books/refactoring.html",
+        "https://www.oreilly.com/library/view/design-patterns-elements/0201633612/"
+      ]
+    },
+    {
+      "id": "design.patterns-in-the-jdk.001",
+      "section": "patterns-in-the-jdk",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "An enhanced for loop over a collection compiles into which calls?",
+        "ru": "Расширенный цикл for по коллекции компилируется в какие вызовы?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "size() and get(int), which is why only a List can be looped over this way.",
+            "ru": "size() и get(int), поэтому так можно пройти только по List."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "forEach(Consumer), which is why the loop needs Java 8 or later.",
+            "ru": "forEach(Consumer), поэтому цикл требует Java 8 или новее."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "stream().iterator(), which is why the loop also works on arrays.",
+            "ru": "stream().iterator(), поэтому цикл работает и по массивам."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "iterator(), then repeated hasNext() and next() — so anything implementing Iterable can be looped over.",
+            "ru": "iterator(), а затем повторяющиеся hasNext() и next(), — поэтому пройти циклом можно по чему угодно, что реализует Iterable."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "toArray(), followed by an index loop over the copy.",
+            "ru": "toArray(), а дальше индексный цикл по копии."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Iterable declares one method, iterator(), which is a factory method returning an Iterator — the object that holds the position, so the collection does not have to and two loops over the same list do not interfere. The enhanced for is compiled into exactly those calls, which is why being loopable is a matter of implementing one interface rather than of extending anything. Arrays are the special case: the compiler produces an index loop for them, since an array is not Iterable.",
+        "ru": "Iterable объявляет один метод, iterator(), — фабричный метод, возвращающий Iterator, то есть объект, который держит позицию, чтобы её не держала коллекция и чтобы два цикла по одному списку не мешали друг другу. Расширенный for компилируется ровно в эти вызовы, поэтому «по этому можно пройти циклом» — вопрос реализации одного интерфейса, а не наследования от чего-либо. Массивы — особый случай: для них компилятор порождает индексный цикл, так как массив не Iterable."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Iterator.html"
+      ]
+    },
+    {
+      "id": "design.patterns-in-the-jdk.002",
+      "section": "patterns-in-the-jdk",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "new BufferedInputStream(new GZIPInputStream(new FileInputStream(f))) — which pattern is this, and what makes the stacking possible?",
+        "ru": "new BufferedInputStream(new GZIPInputStream(new FileInputStream(f))) — какой это паттерн и что делает такую стопку возможной?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Adapter: each class converts the bytes into a different representation for the next one.",
+            "ru": "Адаптер: каждый класс переводит байты в другое представление для следующего."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Decorator: every wrapper is itself an InputStream, so the next layer needs only the type and never the concrete class underneath.",
+            "ru": "Декоратор: каждая обёртка сама является InputStream, поэтому следующему слою нужен только тип и никогда не нужен конкретный класс под ним."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Composite: the three streams form a tree with a single root.",
+            "ru": "Компоновщик: три потока образуют дерево с одним корнем."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Proxy: each wrapper decides whether the read reaches the file at all.",
+            "ru": "Заместитель: каждая обёртка решает, дойдёт ли чтение до файла."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Builder: each constructor call adds one more component to the finished stream.",
+            "ru": "Строитель: каждый вызов конструктора добавляет ещё один компонент к готовому потоку."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "java.io is the textbook chapter on decorators, and FilterInputStream exists for no other purpose than to be extended by them. Because each decorator both takes and is an InputStream, the layers compose in any order the semantics allow. The cost is the one every decorator stack pays: a stack trace gains a frame per layer, and a debugger shows several objects where the domain has one file.",
+        "ru": "java.io — учебная глава про декораторы, и FilterInputStream существует ровно затем, чтобы от него наследовались декораторы. Поскольку каждый декоратор и принимает InputStream, и сам им является, слои складываются в любом порядке, который допускает семантика. Цена обычная для стопки декораторов: стектрейс прирастает кадром на слой, а отладчик показывает несколько объектов там, где в предметной области один файл."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/FilterInputStream.html"
+      ]
+    },
+    {
+      "id": "design.patterns-in-the-jdk.003",
+      "section": "patterns-in-the-jdk",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "AbstractList implements iterator, indexOf, equals and hashCode for you. What must a subclass supply, and which pattern is that?",
+        "ru": "AbstractList реализует за вас iterator, indexOf, equals и hashCode. Что обязан предоставить наследник и какой это паттерн?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing — AbstractList is complete, and a subclass only adds convenience methods. Strategy.",
+            "ru": "Ничего — AbstractList полон, а наследник лишь добавляет удобные методы. Стратегия."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "add and remove; the pattern is adapter.",
+            "ru": "add и remove; паттерн — адаптер."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "get(int) and size(); the pattern is template method — the skeleton is fixed in the base class and the named steps belong to the subclass.",
+            "ru": "get(int) и size(); паттерн — шаблонный метод: скелет зафиксирован в базовом классе, а именованные шаги принадлежат наследнику."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "iterator() alone; the pattern is factory method.",
+            "ru": "Только iterator(); паттерн — фабричный метод."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "equals and hashCode; the pattern is prototype.",
+            "ru": "equals и hashCode; паттерн — прототип."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "For an immutable list, get(int) and size() are the whole of it: everything else in AbstractList is written on top of those two. An AbstractList meant to be mutable additionally wants set, add and remove, and the javadoc says exactly which ones for which behaviour — a template method without that documentation is a trap, because the subclass has no way to know which steps it is expected to fill. InputStream.read(byte[], int, int) is the same pattern in one method: the loop is fixed, the abstract single-byte read() is yours.",
+        "ru": "Для неизменяемого списка get(int) и size() — это всё: остальное в AbstractList написано поверх этих двух. Изменяемому наследнику дополнительно нужны set, add и remove, и javadoc прямо называет, какие именно для какого поведения, — шаблонный метод без такой документации ловушка, потому что наследнику неоткуда узнать, какие шаги от него ждут. InputStream.read(byte[], int, int) — тот же паттерн в одном методе: цикл зафиксирован, абстрактный однобайтовый read() ваш."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/AbstractList.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html"
+      ]
+    },
+    {
+      "id": "design.patterns-in-the-jdk.004",
+      "section": "patterns-in-the-jdk",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "List.of() hands back a shared empty instance and Integer.valueOf caches the range from -128 to 127. Which pattern is that, and what makes it safe?",
+        "ru": "List.of() отдаёт общий пустой экземпляр, а Integer.valueOf кэширует диапазон от -128 до 127. Какой это паттерн и что делает его безопасным?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Singleton, safe because the JVM synchronises access to the shared instances.",
+            "ru": "Синглтон, безопасен потому, что JVM синхронизирует доступ к общим экземплярам."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Prototype, safe because each caller receives a clone of the stored instance.",
+            "ru": "Прототип, безопасен потому, что каждый вызывающий получает клон хранимого экземпляра."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Proxy, safe because the real instance is only materialised on first write.",
+            "ru": "Заместитель, безопасен потому, что настоящий экземпляр появляется только при первой записи."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Object pool, safe because callers return instances to the pool when they are done.",
+            "ru": "Пул объектов, безопасен потому, что вызывающие возвращают экземпляры в пул, когда закончили."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Flyweight, safe because the shared instances are immutable, so no caller can observe another caller's use of them.",
+            "ru": "Приспособленец, безопасен потому, что общие экземпляры неизменяемы и ни один вызывающий не заметит, что ими пользуется кто-то ещё."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Flyweight means sharing instances that carry no caller-specific state, and immutability is the precondition rather than an optimisation on top. The consequence you can see from user code is identity: Integer.valueOf(100) == Integer.valueOf(100) is true and the same comparison at 1000 is false, which is why == on boxed values is a bug and equals is not. The deprecation of new Integer(int) for removal is the same story from the other end — a constructor that promises a fresh object prevents the sharing.",
+        "ru": "Приспособленец — это разделение экземпляров, не несущих состояния конкретного вызывающего, и неизменяемость здесь предпосылка, а не оптимизация сверху. Последствие, видимое из пользовательского кода, — идентичность: Integer.valueOf(100) == Integer.valueOf(100) истинно, а то же сравнение на 1000 ложно; поэтому == на обёрнутых значениях это ошибка, а equals нет. Пометка new Integer(int) к удалению — та же история с другого конца: конструктор, обещающий новый объект, делает разделение невозможным."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html",
+        "https://www.oreilly.com/library/view/design-patterns-elements/0201633612/"
+      ]
+    },
+    {
+      "id": "design.patterns-in-the-jdk.005",
+      "section": "patterns-in-the-jdk",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "PracticeService.run is annotated @Transactional and its body never mentions a transaction. What makes the annotation work, and what is the trap?",
+        "ru": "PracticeService.run помечен @Transactional, и в его теле транзакция нигде не упоминается. Что заставляет аннотацию работать и в чём ловушка?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The container intercepts the call through a generated proxy, starting a transaction before the body and committing or rolling back after; the trap is that nothing in the body says so, and a call made from inside the same bean skips the interceptor entirely.",
+            "ru": "Контейнер перехватывает вызов через сгенерированный прокси, начиная транзакцию до тела и фиксируя или откатывая после; ловушка в том, что тело об этом ничего не сообщает, а вызов изнутри того же бина перехватчик вообще минует."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The EntityManager reads the annotation reflectively on first use; the trap is that it belongs on the entity rather than on the method.",
+            "ru": "EntityManager читает аннотацию рефлексией при первом использовании; ловушка в том, что её место на сущности, а не на методе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The compiler rewrites the method to include begin and commit calls; the trap is that the rewritten bytecode cannot be stepped through in a debugger.",
+            "ru": "Компилятор переписывает метод, вставляя begin и commit; ловушка в том, что переписанный байт-код нельзя пройти отладчиком."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Flyway opens the transaction at migration time; the trap is that it closes when migration finishes.",
+            "ru": "Транзакцию открывает Flyway на этапе миграции; ловушка в том, что она закрывается по окончании миграции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The annotation only documents intent and has no runtime effect; the trap is expecting it to do anything.",
+            "ru": "Аннотация только документирует намерение и ничего не делает во время выполнения; ловушка — ждать от неё чего-либо."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "An interceptor is a proxy applied to a method: the container wraps the call so that behaviour is added around a body that knows nothing about it. That is its whole value and its whole danger — remove the annotation and the body is byte-for-byte the same while the behaviour changes, so the only way to know a transaction is open is to look above the signature. The self-invocation trap follows from the same mechanism: a call to this.otherTransactionalMethod() goes straight to the class and never reaches the proxy. Quarkus generates these classes during the build rather than reflectively at startup, which moves when the code appears, not what it does.",
+        "ru": "Перехватчик — это заместитель, применённый к методу: контейнер оборачивает вызов, добавляя поведение вокруг тела, которое о нём ничего не знает. В этом вся его ценность и вся опасность: уберите аннотацию, и тело останется байт в байт тем же, а поведение изменится, — узнать, что транзакция открыта, можно только посмотрев над сигнатурой. Ловушка самовызова следует из того же механизма: вызов this.otherTransactionalMethod() уходит прямо в класс и до прокси не доходит. Quarkus генерирует такие классы во время сборки, а не рефлексией при старте, и это меняет момент появления кода, а не то, что он делает."
+      },
+      "sources": [
+        "https://quarkus.io/guides/cdi-reference",
+        "https://jakarta.ee/specifications/cdi/4.0/jakarta-cdi-spec-4.0.html"
+      ]
+    },
+    {
+      "id": "design.patterns-in-the-jdk.006",
+      "section": "patterns-in-the-jdk",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "What can java.lang.reflect.Proxy.newProxyInstance not do?",
+        "ru": "Чего не может java.lang.reflect.Proxy.newProxyInstance?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Implement more than one interface in a single generated class.",
+            "ru": "Реализовать больше одного интерфейса в одном сгенерированном классе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Be used outside a container, since it needs a CDI context to resolve the handler.",
+            "ru": "Работать вне контейнера, поскольку ему нужен контекст CDI, чтобы разрешить обработчик."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Intercept methods that declare checked exceptions.",
+            "ru": "Перехватывать методы, объявляющие проверяемые исключения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Work with an InvocationHandler that returns null from invoke.",
+            "ru": "Работать с InvocationHandler, который возвращает null из invoke."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Proxy a class: it generates a class implementing interfaces only, which is why frameworks that must wrap concrete classes generate a subclass instead.",
+            "ru": "Заместить класс: он генерирует класс, реализующий только интерфейсы, — поэтому фреймворки, которым нужно обернуть конкретный класс, генерируют наследника."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "newProxyInstance takes an array of interfaces and produces a class implementing all of them, routing every call into one InvocationHandler. It cannot extend a class, which is the constraint that shapes a lot of framework design: the moment a concrete class must be wrapped — a normal-scoped CDI bean, a Hibernate entity — the tool has to be subclass generation instead, and with it come the rules that the class cannot be final, must have a non-private no-argument constructor, and that final or private methods are not intercepted. A handler returning null is fine for a reference return type and throws NullPointerException for a primitive one, which is a contract detail rather than a limitation of the mechanism.",
+        "ru": "newProxyInstance принимает массив интерфейсов и порождает класс, реализующий их все, сводя каждый вызов в один InvocationHandler. Наследоваться от класса он не может, и именно это ограничение формирует большую часть устройства фреймворков: как только нужно обернуть конкретный класс — бин CDI с нормальной областью, сущность Hibernate, — инструментом становится генерация наследника, а вместе с ней приходят правила: класс не может быть final, ему нужен непубличный, но и не приватный конструктор без аргументов, а final- и private-методы не перехватываются. Обработчик, возвращающий null, вполне допустим для ссылочного возвращаемого типа и бросает NullPointerException для примитивного — это деталь контракта, а не ограничение механизма."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Proxy.html",
+        "https://jakarta.ee/specifications/cdi/4.0/jakarta-cdi-spec-4.0.html"
+      ]
+    },
+    {
+      "id": "design.di-and-antipatterns.001",
+      "section": "di-and-antipatterns",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "How do inversion of control and dependency injection relate to each other?",
+        "ru": "Как соотносятся инверсия управления и внедрение зависимостей?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "They are two names for the same thing.",
+            "ru": "Это два названия одного и того же."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "IoC is the Spring term and DI the Jakarta term for one mechanism.",
+            "ru": "IoC — термин Spring, DI — термин Jakarta для одного механизма."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "IoC is the broader idea that the framework calls your code; DI is one specific inversion, where an object is handed its collaborators instead of finding them.",
+            "ru": "IoC — более широкая идея: фреймворк вызывает ваш код. DI — одна конкретная инверсия: объекту передают сотрудников, вместо того чтобы он их находил."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "DI is the broader idea; IoC is the special case where a container is involved.",
+            "ru": "DI — более широкая идея, а IoC — частный случай, когда задействован контейнер."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "IoC applies to classes and DI applies to interfaces.",
+            "ru": "IoC относится к классам, а DI — к интерфейсам."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Fowler's article separates them precisely because the terms had become interchangeable. Inversion of control is old and broad: a JAX-RS resource method, a Flyway migrate implementation and a servlet lifecycle callback are all code you wrote and never call. Dependency injection is one particular inversion — the one about how an object obtains its collaborators. Knowing the difference is what lets you answer what a servlet container inverts when it is not injecting anything.",
+        "ru": "Статья Фаулера разделяет эти понятия именно потому, что термины стали взаимозаменяемыми. Инверсия управления стара и широка: метод ресурса JAX-RS, реализация migrate во Flyway и колбэк жизненного цикла сервлета — всё это код, который вы написали и никогда не вызываете. Внедрение зависимостей — одна конкретная инверсия, про то, как объект получает сотрудников. Различие как раз и позволяет ответить, что инвертирует сервлет-контейнер, когда он ничего не внедряет."
+      },
+      "sources": [
+        "https://martinfowler.com/articles/injection.html"
+      ]
+    },
+    {
+      "id": "design.di-and-antipatterns.002",
+      "section": "di-and-antipatterns",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Why does constructor injection make a class easier to unit test than field injection?",
+        "ru": "Почему внедрение через конструктор делает класс легче для юнит-тестирования, чем внедрение через поле?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The dependencies are in the signature, so a test builds the object directly with whatever it wants to pass — no container, no reflection.",
+            "ru": "Зависимости стоят в сигнатуре, поэтому тест создаёт объект напрямую с тем, что хочет передать, — без контейнера и без рефлексии."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The container injects the fields eagerly, so a test can read them before the first call.",
+            "ru": "Контейнер внедряет поля жадно, и тест может прочитать их до первого вызова."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Constructor injection makes the fields final, and final fields are mocked automatically.",
+            "ru": "Внедрение через конструктор делает поля final, а final-поля мокаются автоматически."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Field injection requires the class to be final, which prevents mocking it.",
+            "ru": "Внедрение через поле требует, чтобы класс был final, а это мешает его мокать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Constructor-injected beans are request-scoped by default, so each test gets a fresh instance.",
+            "ru": "Бины, внедрённые через конструктор, по умолчанию имеют область запроса, поэтому каждый тест получает свежий экземпляр."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The difference shows up in this project's own test suite. JavaPracticeEngine is constructor-injected and its test starts with new JavaPracticeEngine(JavaLimits.defaults()) — a plain JUnit test, milliseconds, no classpath scanning. QuestionRepository declares @Inject EntityManager em on a field, so new QuestionRepository() produces an object with a null field and the class is reachable only through an integration test. The injection style quietly decided the testing style, which is the strongest practical argument for putting dependencies in the constructor.",
+        "ru": "Разница видна на собственном наборе тестов проекта. JavaPracticeEngine внедряется через конструктор, и его тест начинается с new JavaPracticeEngine(JavaLimits.defaults()) — обычный JUnit-тест, миллисекунды, без сканирования classpath. QuestionRepository объявляет @Inject EntityManager em на поле, поэтому new QuestionRepository() даёт объект с null в поле, и класс достижим только через интеграционный тест. Стиль внедрения незаметно определил стиль тестирования — это и есть самый практичный аргумент за конструктор."
+      },
+      "sources": [
+        "https://martinfowler.com/articles/injection.html",
+        "https://jakarta.ee/specifications/cdi/4.0/jakarta-cdi-spec-4.0.html"
+      ]
+    },
+    {
+      "id": "design.di-and-antipatterns.003",
+      "section": "di-and-antipatterns",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A class reaches for CDI.current().select(JavaPracticeEngine.class).get() inside a method instead of declaring the engine as a dependency. Why is that worse?",
+        "ru": "Класс достаёт CDI.current().select(JavaPracticeEngine.class).get() внутри метода вместо того, чтобы объявить движок зависимостью. Почему это хуже?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It is slower, and speed is the whole of the objection.",
+            "ru": "Это медленнее, и вся претензия в скорости."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It fails at compile time when the bean is missing, which breaks the build for everyone.",
+            "ru": "При отсутствии бина это падает на компиляции и ломает сборку всем."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It prevents the calling class from being @ApplicationScoped.",
+            "ru": "Это мешает вызывающему классу быть @ApplicationScoped."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It creates a new engine on every call, which defeats the reference-result cache.",
+            "ru": "Это создаёт новый движок на каждый вызов и убивает кэш эталонных результатов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The dependency appears in no signature, a missing binding fails at call time rather than at wiring time, and a test cannot construct the class without standing up the locator.",
+            "ru": "Зависимость не появляется ни в одной сигнатуре, отсутствующая привязка падает в момент вызова, а не при сборке графа, и тест не может создать класс, не подняв локатор."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "This is the service locator, and every objection to it is about honesty rather than performance. Nothing in the class states what it needs, so a reader and a test both have to go looking; the failure moves from wiring time to call time, so a missing binding can survive until a rare code path runs; and the class now depends on the locator in addition to the engine. Note that programmatic lookup does not create a new instance — an @ApplicationScoped bean is still one instance, so the cache is intact. The legitimate uses are narrow: bootstrap code with nothing to inject into, and genuinely dynamic selection by a value known only at run time.",
+        "ru": "Это сервис-локатор, и все претензии к нему — про честность, а не про производительность. В классе ничто не заявляет, что ему нужно, поэтому и читателю, и тесту приходится искать; падение переезжает со времени сборки графа на время вызова, так что отсутствующая привязка может дожить до редкой ветки; и класс теперь зависит ещё и от локатора вдобавок к движку. Заметьте, что программный поиск не создаёт новый экземпляр: бин с @ApplicationScoped остаётся одним, и кэш не страдает. Законные применения узки: загрузочный код, которому некуда внедряться, и по-настоящему динамический выбор по значению, известному только во время работы."
+      },
+      "sources": [
+        "https://blog.ploeh.dk/2010/02/03/ServiceLocatorisanAnti-Pattern/",
+        "https://jakarta.ee/specifications/cdi/4.0/jakarta-cdi-spec-4.0.html"
+      ]
+    },
+    {
+      "id": "design.di-and-antipatterns.004",
+      "section": "di-and-antipatterns",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "PracticeService takes six collaborators in its constructor. What is that number telling you, and what is the wrong response to it?",
+        "ru": "PracticeService принимает шесть сотрудников в конструкторе. О чём говорит это число и какая реакция на него неверна?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing — six is unremarkable. The wrong response is to change anything at all.",
+            "ru": "Ни о чём — шесть это ничем не примечательное число. Неверная реакция — менять хоть что-то."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That more than one responsibility shares the class; the wrong response is to hide the dependencies behind a service locator or a static accessor.",
+            "ru": "О том, что в классе живёт больше одной ответственности; неверная реакция — спрятать зависимости за сервис-локатором или статическим доступом."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "That the class needs a builder; the wrong response is constructor injection.",
+            "ru": "О том, что классу нужен строитель; неверная реакция — внедрение через конструктор."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That CDI will fail to resolve the graph; the wrong response is to add qualifiers.",
+            "ru": "О том, что CDI не разрешит граф; неверная реакция — добавить квалификаторы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That the class should be @Dependent; the wrong response is @ApplicationScoped.",
+            "ru": "О том, что класс должен быть @Dependent; неверная реакция — @ApplicationScoped."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A long constructor is a message about design, not a formatting problem, and around six is where it stops being noise. Here it is saying what the SOLID section already admits: navigation, progress and grading are three concerns living in one class. The response that makes things worse is to reduce the visible count without reducing the coupling — a locator, a static accessor, or a bag-of-services parameter object all keep the six dependencies and take away the evidence. The response that helps is to split along the groups of methods that share fields.",
+        "ru": "Длинный конструктор — сообщение о дизайне, а не проблема форматирования, и примерно на шести он перестаёт быть шумом. Здесь он говорит то, в чём раздел про SOLID уже признался: навигация, прогресс и проверка решений — три заботы в одном классе. Реакция, которая делает хуже, — уменьшить видимое число, не уменьшив связанность: локатор, статический доступ или объект-параметр «мешок сервисов» сохраняют все шесть зависимостей и убирают улики. Реакция, которая помогает, — резать по группам методов, работающим с одними полями."
+      },
+      "sources": [
+        "https://martinfowler.com/books/refactoring.html",
+        "https://blog.ploeh.dk/2010/02/03/ServiceLocatorisanAnti-Pattern/"
+      ]
+    },
+    {
+      "id": "design.di-and-antipatterns.005",
+      "section": "di-and-antipatterns",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Which description of PracticeTask and Level in this codebase is accurate, in the terms of the anaemic domain model discussion?",
+        "ru": "Какое описание PracticeTask и Level в этом коде верно в терминах разговора об анемичной модели?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Both are anaemic: an enum cannot hold domain logic in the first place.",
+            "ru": "Оба анемичны: перечисление в принципе не может нести доменную логику."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both are rich: accessors are behaviour, so any class with methods qualifies.",
+            "ru": "Оба богаты: аксессоры — это поведение, так что подходит любой класс с методами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "PracticeTask is rich because it owns its cases and blanks; Level is anaemic because it only stores a rung.",
+            "ru": "PracticeTask богат, потому что владеет кейсами и пропусками; Level анемичен, потому что только хранит ступень."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "PracticeTask is close to anaemic — data plus accessors, with the rules in the service — while Level is rich: andBelow() and weightIn(track) put the ladder rules on the type that owns them.",
+            "ru": "PracticeTask близок к анемичному — данные и аксессоры, а правила в сервисе, — тогда как Level богат: andBelow() и weightIn(track) держат правила лестницы на том типе, которому они принадлежат."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Neither term applies, because anaemia is a concept about JPA entities only.",
+            "ru": "Ни один термин не применим, потому что анемия — понятие только про JPA-сущности."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Fowler's point is not that data holders are forbidden; it is that an unintentional one costs you the price of object orientation for the benefit of procedures. Level shows the alternative on a type nobody would call a domain object: andBelow() knows which rungs a track may draw on, weightIn(track) knows the damping, and the javadoc explains why the rung is stored rather than read off ordinal(). Ask which of the two you would rather change a rule in — that is the whole argument, and owning collections has nothing to do with it.",
+        "ru": "Мысль Фаулера не в том, что держатели данных запрещены, а в том, что ненамеренный держатель обходится вам в цену объектной ориентации при выгоде процедур. Level показывает альтернативу на типе, который никто не назвал бы доменным объектом: andBelow() знает, на какие ступени опирается трек, weightIn(track) знает затухание, а javadoc объясняет, почему ступень хранится, а не читается из ordinal(). Спросите себя, в каком из двух приятнее менять правило, — в этом весь аргумент, а владение коллекциями к нему отношения не имеет."
+      },
+      "sources": [
+        "https://martinfowler.com/bliki/AnemicDomainModel.html"
+      ]
+    },
+    {
+      "id": "design.di-and-antipatterns.006",
+      "section": "di-and-antipatterns",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "@ApplicationScoped removes the static accessor that most singleton criticism is aimed at. Which original objection survives, and what does this codebase do about it?",
+        "ru": "@ApplicationScoped убирает статический доступ, на который направлена бóльшая часть критики синглтона. Какое из исходных возражений остаётся и что с ним делает этот код?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Global mutable state survives: one instance is shared by every request on every thread, so each mutable field needs its own protection — JavaPracticeEngine uses a ConcurrentHashMap for its cache and a Semaphore to cap concurrent sandboxes.",
+            "ru": "Остаётся глобальное изменяемое состояние: один экземпляр разделяется всеми запросами во всех потоках, поэтому каждому изменяемому полю нужна своя защита — JavaPracticeEngine держит ConcurrentHashMap для кэша и Semaphore, ограничивающий число одновременных песочниц."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Untestability survives: a scoped bean can only be exercised through the container.",
+            "ru": "Остаётся нетестируемость: бин с областью видимости можно гонять только через контейнер."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Eager initialisation survives: the container builds every application-scoped bean at startup and cannot be told otherwise.",
+            "ru": "Остаётся жадная инициализация: контейнер создаёт каждый бин с областью приложения при старте, и переубедить его нельзя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The hidden dependency survives: injection points are not visible from the class.",
+            "ru": "Остаётся скрытая зависимость: точки внедрения из класса не видны."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "None survive: a scope annotation answers every objection to the singleton pattern.",
+            "ru": "Не остаётся ни одного: аннотация области закрывает все возражения к синглтону."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A scope answers how many instances exist. It says nothing about who may write to them, and that is the objection that outlives the static accessor. One application-scoped instance stands behind every concurrent request, so every mutable field is shared across threads — which is why the engine's reference-result cache is a ConcurrentHashMap and why a Semaphore, not a counter, caps simultaneous compilations on a deployment target sized at a fraction of a core. The other options are addressed by the container rather than surviving it: the class is still ordinary and its test builds it with new, an application-scoped bean is created lazily on first use, and constructor injection puts the dependencies in plain sight.",
+        "ru": "Область видимости отвечает, сколько существует экземпляров. Она ничего не говорит о том, кому в них можно писать, и именно это возражение переживает статический доступ. За всеми конкурентными запросами стоит один экземпляр с областью приложения, поэтому каждое изменяемое поле разделяется потоками; отсюда и ConcurrentHashMap в кэше эталонных результатов, и Semaphore — а не счётчик, — ограничивающий одновременные компиляции на целевой машине размером в долю ядра. Остальные пункты контейнер как раз закрывает, а не оставляет: класс остаётся обычным и его тест создаёт его через new, бин с областью приложения создаётся лениво при первом использовании, а внедрение через конструктор держит зависимости на виду."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/cdi/4.0/jakarta-cdi-spec-4.0.html",
+        "https://www.oreilly.com/library/view/effective-java-3rd/9780134686097/"
+      ]
+    },
+    {
+      "id": "design.layers-and-boundaries.001",
+      "section": "layers-and-boundaries",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "Returning a JPA entity straight from a resource method is a layering violation. Why, exactly?",
+        "ru": "Возврат JPA-сущности прямо из метода ресурса — нарушение слоистости. Почему именно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because it skips the service class, and a layer must never be skipped.",
+            "ru": "Потому что так пропускается сервисный класс, а слой пропускать нельзя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the database schema then reaches the HTTP contract: renaming a column becomes an API change.",
+            "ru": "Потому что схема базы дотягивается до HTTP-контракта: переименование колонки становится изменением API."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because entities are not serialisable and the response cannot be written.",
+            "ru": "Потому что сущности не сериализуемы и ответ не удастся записать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because JAX-RS cannot serialise a class that declares a no-argument constructor.",
+            "ru": "Потому что JAX-RS не умеет сериализовать класс, объявляющий конструктор без аргументов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the serialiser would modify the entity and the change would be flushed back to the database.",
+            "ru": "Потому что сериализатор изменит сущность и изменение уедет обратно в базу."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Layering is worth something because of the direction of dependency, not because of the number of layers, so skipping a class is not the offence. The offence is that two things which should be free to change at different times are welded together: the column names, the association mapping and the lazy-loading decisions become the shape clients depend on. That is why PracticeService assembles its response rather than returning PracticeTask — and it is also why the practical symptom usually arrives as a LazyInitializationException during serialisation, which is a consequence of the coupling rather than its definition.",
+        "ru": "Слоистость чего-то стоит из-за направления зависимости, а не из-за числа слоёв, поэтому пропуск класса — не преступление. Преступление в том, что свариваются вместе две вещи, которые должны меняться в разное время: имена колонок, отображение связей и решения о ленивой загрузке становятся той формой, от которой зависят клиенты. Поэтому PracticeService собирает ответ сам, а не возвращает PracticeTask, — и поэтому же практический симптом обычно приходит как LazyInitializationException при сериализации, а это следствие связанности, а не её определение."
+      },
+      "sources": [
+        "https://martinfowler.com/books/eaa.html"
+      ]
+    },
+    {
+      "id": "design.layers-and-boundaries.002",
+      "section": "layers-and-boundaries",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "In ports and adapters, which way does the source dependency between the domain and an adapter point?",
+        "ru": "В архитектуре портов и адаптеров куда указывает зависимость в исходниках между предметной областью и адаптером?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "From the domain to the database driver, because the domain has to know how to persist itself.",
+            "ru": "От предметной области к драйверу базы, ведь область должна знать, как себя сохранять."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both ways, since the adapter and the domain have to agree on the interface.",
+            "ru": "В обе стороны, ведь адаптер и область должны договориться об интерфейсе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "From the adapter to the framework, and from the framework to the domain.",
+            "ru": "От адаптера к фреймворку, а от фреймворка к предметной области."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "From the adapter to the domain: the domain defines the interface, the adapter implements it, and never the other way round.",
+            "ru": "От адаптера к предметной области: область определяет интерфейс, адаптер его реализует, и никогда наоборот."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "There is no arrow: ports and adapters removes compile-time dependencies altogether.",
+            "ru": "Стрелки нет: порты и адаптеры вообще убирают зависимости времени компиляции."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Cockburn's framing is that the application should be driveable equally by a user, a test or another program, and should talk to a database or to a stub through the same port. That only holds if the port is owned by the inside: the domain declares what it needs and the outside conforms. Once the arrow turns round — a domain class importing a JDBC or JAX-RS type — the inside can no longer be compiled, or tested, without the outside, which is the property the whole arrangement exists to protect.",
+        "ru": "Формулировка Кокберна: приложением должны одинаково управлять человек, тест или другая программа, и оно должно говорить с базой или с заглушкой через один порт. Это выполняется только если порт принадлежит внутренней стороне: область объявляет, что ей нужно, а внешняя сторона подстраивается. Стоит стрелке развернуться — доменный класс импортирует тип JDBC или JAX-RS, — и внутреннюю сторону уже нельзя ни собрать, ни протестировать без внешней, а ровно это свойство вся конструкция и защищает."
+      },
+      "sources": [
+        "https://alistair.cockburn.us/hexagonal-architecture/"
+      ]
+    },
+    {
+      "id": "design.layers-and-boundaries.003",
+      "section": "layers-and-boundaries",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "The grading engines reach a hexagonal shape with no port interfaces at all — only records at the boundary. What was obtained, and what was not?",
+        "ru": "Логика проверки решений достигает гексагональной формы вообще без интерфейсов-портов — только записями на границе. Что при этом получено, а что нет?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Obtained: the inner side is testable without infrastructure — the engine tests build specs by hand and start no database. Not obtained: substitutability, because PracticeService still depends on three concrete engine classes.",
+            "ru": "Получено: внутренняя сторона тестируема без инфраструктуры — тесты движков собирают спецификации руками и не поднимают базу. Не получено: заменяемость, ведь PracticeService по-прежнему зависит от трёх конкретных классов движков."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Obtained: substitutability of the persistence layer. Not obtained: testability, which requires a port interface.",
+            "ru": "Получено: заменяемость слоя персистентности. Не получено: тестируемость, для которой нужен интерфейс-порт."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Obtained: both, since a record at a boundary is equivalent to an interface.",
+            "ru": "Получено и то и другое: запись на границе эквивалентна интерфейсу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Obtained: neither — without port interfaces there is no hexagon of any kind.",
+            "ru": "Не получено ничего — без интерфейсов-портов никакого шестиугольника нет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Obtained: independence from Quarkus. Not obtained: independence from the JDK.",
+            "ru": "Получено: независимость от Quarkus. Не получено: независимость от JDK."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Hexagonal architecture bundles two benefits that are usually bought together and can be bought separately. Testability of the inside comes from the inside not naming infrastructure types, and records achieve that on their own — the spec javadoc says as much, and JavaPracticeEngineTest is the proof. Substitutability of the outside needs a declared port, and there is none: no PracticeEngine interface exists, so the service cannot be compiled without the engines. Knowing which half you bought is the point; a candidate who says the codebase is hexagonal without that distinction has not looked.",
+        "ru": "Гексагональная архитектура связывает две выгоды, которые обычно покупают вместе, а можно купить по отдельности. Тестируемость внутренней стороны возникает из того, что внутренняя сторона не называет инфраструктурных типов, и записи дают это сами по себе — javadoc спецификаций прямо это утверждает, а JavaPracticeEngineTest служит доказательством. Заменяемость внешней стороны требует объявленного порта, а его нет: интерфейса PracticeEngine не существует, и сервис не собирается без движков. Смысл в том, чтобы понимать, какую половину вы купили: тот, кто называет этот код гексагональным без такой оговорки, в него не смотрел."
+      },
+      "sources": [
+        "https://alistair.cockburn.us/hexagonal-architecture/",
+        "https://www.oreilly.com/library/view/clean-architecture-a/9780134494272/"
+      ]
+    },
+    {
+      "id": "design.layers-and-boundaries.004",
+      "section": "layers-and-boundaries",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "Which classification in DDD terms is accurate for this codebase?",
+        "ru": "Какая классификация в терминах DDD верна для этого кода?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "TaskSpec is an entity, because it carries a task id.",
+            "ru": "TaskSpec — сущность, потому что несёт идентификатор задания."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "PracticeTask is a value object, because it is loaded read-only during grading.",
+            "ru": "PracticeTask — объект-значение, потому что при проверке он грузится только на чтение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "TaskSpec is a value object — equal when its contents are equal, with no identity of its own — while PracticeTask is an aggregate root whose cases, blanks and sources are reached through it.",
+            "ru": "TaskSpec — объект-значение: равен при равенстве содержимого и без собственной идентичности, — а PracticeTask — корень агрегата, через который достают его кейсы, пропуски и источники."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "PracticeTaskRepository is a domain service, because it contains queries.",
+            "ru": "PracticeTaskRepository — доменный сервис, потому что содержит запросы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ResultTable is an entity, because two tables with identical rows are still different tables.",
+            "ru": "ResultTable — сущность, потому что две таблицы с одинаковыми строками — всё равно разные таблицы."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Identity is the test, not the presence of an id field. TaskSpec carries a task id as data — two specs with the same components are interchangeable, and the record's generated equals says so — which makes it a value object. PracticeTask has identity that survives changes to its fields, and its cases, blanks and sources are loaded and saved with it and never looked up separately, which is what an aggregate root means. PracticeTaskRepository is a repository: a collection-like interface onto stored aggregates, and in this codebase a concrete class, so it hides JPQL rather than hiding the database.",
+        "ru": "Проверка — это идентичность, а не наличие поля с идентификатором. TaskSpec несёт идентификатор задания как данные: две спецификации с одинаковыми компонентами взаимозаменяемы, и сгенерированный equals записи это подтверждает, — значит, это объект-значение. У PracticeTask есть идентичность, переживающая изменение полей, а его кейсы, пропуски и источники грузятся и сохраняются вместе с ним и отдельно не ищутся, — это и означает корень агрегата. PracticeTaskRepository — репозиторий: коллекциеподобный интерфейс к сохранённым агрегатам, причём в этом коде конкретный класс, так что он прячет JPQL, а не базу."
+      },
+      "sources": [
+        "https://www.domainlanguage.com/ddd/",
+        "https://martinfowler.com/books/eaa.html"
+      ]
+    },
+    {
+      "id": "design.layers-and-boundaries.005",
+      "section": "layers-and-boundaries",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "Level holds two ladders — JUNIOR/MIDDLE/SENIOR and BASE/INTERMEDIATE/PRO — in one enum backed by one column. What does the code pay for that missing context boundary?",
+        "ru": "Level держит две лестницы — JUNIOR/MIDDLE/SENIOR и BASE/INTERMEDIATE/PRO — в одном перечислении на одной колонке. Чем код платит за отсутствующую границу контекста?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing: an enum with two groups of constants is an ordinary use of the type.",
+            "ru": "Ничем: перечисление с двумя группами констант — обычное применение типа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A performance cost: every pool query has to filter the level column twice.",
+            "ru": "Производительностью: каждый запрос к пулу вынужден фильтровать колонку уровня дважды."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A migration cost: adding a rung to either ladder means rewriting the column type.",
+            "ru": "Миграцией: добавление ступени в любую из лестниц требует переписать тип колонки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A serialisation cost: the level has to be stored as text rather than as an ordinal.",
+            "ru": "Сериализацией: уровень приходится хранить текстом, а не порядковым номером."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A rung stored explicitly instead of read off ordinal(), plus orDefault(module, level) to catch a level from the wrong ladder — a runtime guard and a bug class that has to be remembered rather than prevented.",
+            "ru": "Явно хранимой ступенью вместо чтения из ordinal() и методом orDefault(module, level), ловящим уровень с чужой лестницы, — проверкой во время выполнения и классом ошибок, который приходится помнить, а не предотвращать."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The javadoc is candid about both guards. The rung is a field rather than ordinal() because by ordinal BASE would compare as sitting below SENIOR and an English track would silently pull in backend questions. orDefault exists because a level from the wrong module passes every type check and then matches nothing in the pool query — so the round comes out empty rather than merely wrong, and an empty round reads as missing content. That is the shape of the bill for a boundary the type system does not enforce: a guard, a comment explaining it, and a failure mode somebody has to keep in mind. Whether splitting the enum would have been better is a fair question; that the cost was paid is not in doubt.",
+        "ru": "Javadoc честно описывает обе защиты. Ступень — это поле, а не ordinal(), потому что по порядковому номеру BASE сравнивался бы как лежащий ниже SENIOR, и английский трек молча притянул бы бэкенд-вопросы. orDefault существует потому, что уровень чужого модуля проходит все проверки типов и затем не совпадает ни с чем в запросе к пулу: раунд выходит пустым, а не просто неправильным, а пустой раунд читается как отсутствующий контент. Так и выглядит счёт за границу, которую система типов не держит: проверка, комментарий к ней и режим отказа, который кому-то придётся помнить. Стоило ли разделить перечисление — честный вопрос; что цена заплачена — сомнений нет."
+      },
+      "sources": [
+        "https://www.domainlanguage.com/ddd/"
+      ]
+    },
+    {
+      "id": "design.layers-and-boundaries.006",
+      "section": "layers-and-boundaries",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "What is the practical test for whether a boundary earns the types and mapping it costs?",
+        "ru": "Какая практическая проверка показывает, окупает ли граница типы и отображение, которых она стоит?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Count the classes on each side; a boundary with fewer than five classes behind it is not worth having.",
+            "ru": "Посчитать классы с каждой стороны: граница, за которой меньше пяти классов, не нужна."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Name the change you expect and say which side it lands on; if every honest answer is both sides, the boundary is in the wrong place or is premature.",
+            "ru": "Назвать ожидаемое изменение и сказать, на какую сторону оно ляжет; если честный ответ всякий раз «на обе», граница стоит не там или ей рано."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Check whether the two sides live in different Maven modules; only a module boundary is a real boundary.",
+            "ru": "Проверить, лежат ли стороны в разных Maven-модулях: настоящая граница — только модульная."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Check whether the interface has more than one implementation today; if it does not, delete the boundary.",
+            "ru": "Проверить, есть ли у интерфейса сегодня больше одной реализации; если нет — удалить границу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Measure the mapping code; a boundary is worth keeping while the mapping stays under fifty lines.",
+            "ru": "Измерить код отображения: границу стоит держать, пока отображение укладывается в пятьдесят строк."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A boundary is a bet that the two sides will change at different times or need to be verified apart. Naming the expected change is what makes the bet checkable: if the answer is always both sides, you are paying for a conversion that buys nothing. The second-best option is the interesting wrong one — counting implementations catches speculative generality but would delete the boundary that carries this codebase, since the grading boundary has no interface and exactly one implementation and still pays for itself in tests that need no database. Class counts, module layout and mapping length measure the price, never the benefit.",
+        "ru": "Граница — это ставка на то, что стороны будут меняться в разное время или что их нужно проверять порознь. Названное ожидаемое изменение делает ставку проверяемой: если ответ всегда «на обе стороны», вы платите за преобразование, которое ничего не покупает. Интересен второй по привлекательности неверный вариант: подсчёт реализаций ловит спекулятивную общность, но удалил бы ту границу, на которой этот код держится, — у границы проверки решений нет интерфейса и есть ровно одна реализация, и она всё равно окупается тестами, которым не нужна база. Подсчёт классов, раскладка модулей и длина отображения измеряют цену, но никогда выгоду."
+      },
+      "sources": [
+        "https://martinfowler.com/books/eaa.html",
+        "https://alistair.cockburn.us/hexagonal-architecture/"
+      ]
+    },
+    {
+      "id": "design.smells-and-refactoring.001",
+      "section": "smells-and-refactoring",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "What makes a change a refactoring in Fowler's sense?",
+        "ru": "Что делает изменение рефакторингом в смысле Фаулера?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It is performed by an IDE rather than by hand.",
+            "ru": "Его выполняет IDE, а не руки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It reduces the number of lines of code.",
+            "ru": "Оно сокращает число строк кода."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is done before adding a feature rather than after.",
+            "ru": "Оно делается до добавления фичи, а не после."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is covered by tests, whether or not behaviour changes.",
+            "ru": "Оно покрыто тестами, независимо от того, меняется ли поведение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The internal structure changes and the externally observable behaviour does not.",
+            "ru": "Внутренняя структура меняется, а внешне наблюдаемое поведение — нет."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Both halves of the definition do work. Without the structural change there is nothing to call a refactoring; without the preserved behaviour it is a rewrite with a reassuring name, and the distinction matters when you are asked whether a change is safe to ship on its own. Tests are how you gain confidence that behaviour held, not what makes the change a refactoring, and an automated rename is a refactoring for exactly the same reason a careful manual one is.",
+        "ru": "Работают обе половины определения. Без структурного изменения рефакторингом называть нечего; без сохранённого поведения это переписывание под успокаивающим названием, и различие важно, когда спрашивают, можно ли выкатывать изменение само по себе. Тесты — способ убедиться, что поведение устояло, а не то, что делает изменение рефакторингом, и автоматическое переименование является рефакторингом ровно по той же причине, что и аккуратное ручное."
+      },
+      "sources": [
+        "https://martinfowler.com/books/refactoring.html",
+        "https://refactoring.com/catalog/"
+      ]
+    },
+    {
+      "id": "design.smells-and-refactoring.002",
+      "section": "smells-and-refactoring",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "Which of these comments is the smell?",
+        "ru": "Какой из этих комментариев является запахом?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A note explaining why a topic is loaded by a new migration instead of by editing the one that already ran.",
+            "ru": "Заметка о том, почему тема грузится новой миграцией, а не правкой уже отработавшей."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Javadoc naming which methods a subclass of an abstract class is expected to override.",
+            "ru": "Javadoc, называющий, какие методы наследник абстрактного класса должен переопределить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A paragraph walking the reader through what a dense block of code does, line by line.",
+            "ru": "Абзац, проводящий читателя по плотному блоку кода строка за строкой."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A note recording that only one List can be join-fetched per query, because of MultipleBagFetchException.",
+            "ru": "Заметка о том, что в одном запросе можно join-fetch-ить только один List из-за MultipleBagFetchException."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A comment naming the trade-off behind a decision that looks odd at first glance.",
+            "ru": "Комментарий, называющий размен, который стоит за решением, выглядящим странно на первый взгляд."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The smell is a comment used as deodorant: it explains what the code does, which means the code failed to. Extract a method with a name and the comment becomes unnecessary. The other four explain why, and none of them is recoverable from the code — a reader cannot deduce the Flyway checksum rule, the Hibernate limitation, the contract a subclass must honour, or the reasoning behind a deliberate trade by staring harder at the statements. This codebase leans on exactly that second kind.",
+        "ru": "Запах — это комментарий-дезодорант: он объясняет, что делает код, то есть код этого не сумел. Извлеките метод с именем — и комментарий станет не нужен. Остальные четыре объясняют почему, и ни один из них из кода не восстанавливается: читатель не выведет правило контрольных сумм Flyway, ограничение Hibernate, контракт, который обязан соблюсти наследник, или рассуждение за осознанным разменом, сколько бы он ни вглядывался в операторы. Этот код опирается как раз на второй вид."
+      },
+      "sources": [
+        "https://martinfowler.com/books/refactoring.html"
+      ]
+    },
+    {
+      "id": "design.smells-and-refactoring.003",
+      "section": "smells-and-refactoring",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "A practice track is a String, with JAVA_TRACK and GRAMMAR_TRACK as constants — textbook primitive obsession. What would replacing it with an enum actually cost here?",
+        "ru": "Трек практики — это String с константами JAVA_TRACK и GRAMMAR_TRACK, хрестоматийная одержимость примитивами. Чего на самом деле будет стоить замена на перечисление?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing: an enum is strictly better and the change is mechanical.",
+            "ru": "Ничего: перечисление строго лучше, а изменение механическое."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only a migration, since the column type would have to change.",
+            "ru": "Только миграции, ведь тип колонки пришлось бы изменить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It would break CDI injection of the three engines.",
+            "ru": "Это сломало бы внедрение трёх движков через CDI."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "findTracks() reads the distinct tracks straight out of the table, so today a migration can introduce a track and the listing endpoints follow with no code change; an enum makes every new track a code change.",
+            "ru": "findTracks() читает различные треки прямо из таблицы, поэтому сегодня миграция может завести трек и эндпоинты со списками подхватят его без правок кода; с перечислением каждый новый трек становится изменением кода."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It would force PracticeService to be split, which is a separate piece of work.",
+            "ru": "Это вынудило бы разделить PracticeService, а это отдельная работа."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A smell is a question, not a verdict, and this is the answer to the question. The enum would give exhaustive switches, compile-time safety and a place to hang per-track behaviour. It would also close a door that is currently open: tracks are data, discovered from the table rather than declared in code, which is why listTracks can enumerate them without knowing them. Whether the type safety is worth the lost openness is arguable; the mistake is refactoring on the smell alone without noticing there is something on the other side of the scale. Note also that the engines are chosen by an if-chain today, so this is not the change that removes the shotgun surgery.",
+        "ru": "Запах — это вопрос, а не приговор, и здесь дан ответ на вопрос. Перечисление дало бы исчерпывающие switch, безопасность на этапе компиляции и место, куда вешать поведение конкретного трека. Оно же закрыло бы сейчас открытую дверь: треки — это данные, обнаруживаемые из таблицы, а не объявленные в коде, поэтому listTracks перечисляет их, не зная их заранее. Стоит ли типобезопасность потерянной открытости — спорно; ошибка в том, чтобы рефакторить по одному запаху, не заметив, что на другой чаше что-то лежит. Отметим также, что движок сегодня выбирается цепочкой if, так что это не то изменение, которое уберёт «стрельбу дробью»."
+      },
+      "sources": [
+        "https://martinfowler.com/books/refactoring.html",
+        "https://refactoring.com/catalog/"
+      ]
+    },
+    {
+      "id": "design.smells-and-refactoring.004",
+      "section": "smells-and-refactoring",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "Why can V2__LoadContent not be refactored, and what is the general lesson?",
+        "ru": "Почему V2__LoadContent нельзя отрефакторить и в чём общий урок?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A Flyway migration runs once per database and its checksum is recorded, so editing an applied migration fails validation rather than re-running. Generally: anything already observed outside your control is changed by adding and deprecating, never in place.",
+            "ru": "Миграция Flyway выполняется на базе один раз, и её контрольная сумма записана, поэтому правка применённой миграции валит проверку, а не перезапускается. В общем: всё, что уже наблюдается вне вашего контроля, меняют добавлением и объявлением устаревшим, а не на месте."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Java migrations are compiled into the jar and cannot be edited after packaging.",
+            "ru": "Java-миграции компилируются в jar и не подлежат правке после упаковки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Later migrations reference V2, so editing it breaks the dependency graph.",
+            "ru": "Более поздние миграции ссылаются на V2, и её правка ломает граф зависимостей."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Flyway re-runs every migration on each startup, so an edit would load the content twice.",
+            "ru": "Flyway перезапускает все миграции при каждом старте, и правка загрузила бы контент дважды."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The content tests forbid edits to content that has already been loaded.",
+            "ru": "Контентные тесты запрещают править уже загруженный контент."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The roadmap states the consequence directly: new topics are self-contained because V2 has already run everywhere, and editing its sources would load a topic on a fresh database while skipping it on an existing one. Flyway records a checksum per applied version, so an edit is not a silent no-op — validation fails on the next startup, which is the loud behaviour you want. The general point is larger than migrations: a published API, a message on a topic other services consume and a schema other teams query are all in the same category, and the only available motions are add, deprecate and eventually remove. It is also why this repository has content tests — for data that cannot be corrected after it lands, the build is the last cheap place to catch a mistake.",
+        "ru": "Дорожная карта называет следствие прямо: новые темы самодостаточны, потому что V2 уже отработала везде, и правка её источников загрузила бы тему на чистой базе и пропустила бы на существующей. Flyway записывает контрольную сумму для каждой применённой версии, поэтому правка — не тихий no-op: при следующем старте падает валидация, и это как раз то громкое поведение, которого хочется. Общая мысль шире миграций: опубликованный API, сообщение в топике, который читают другие сервисы, и схема, к которой ходят соседние команды, — всё это та же категория, и доступные движения только три: добавить, объявить устаревшим, со временем убрать. Отсюда же и контентные тесты: для данных, которые нельзя поправить после приземления, сборка — последнее дешёвое место, где ловится ошибка."
+      },
+      "sources": [
+        "https://martinfowler.com/articles/evodb.html"
+      ]
+    },
+    {
+      "id": "design.smells-and-refactoring.005",
+      "section": "smells-and-refactoring",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "Which of these is speculative generality?",
+        "ru": "Что из перечисленного является спекулятивной общностью?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A record introduced at a layer boundary so the inner side can be tested without a database.",
+            "ru": "Запись, заведённая на границе слоёв, чтобы внутреннюю сторону можно было тестировать без базы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An interface with one implementation, no test double behind it, and no second implementation in prospect.",
+            "ru": "Интерфейс с одной реализацией, без тестового двойника за ним и без второй реализации в перспективе."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "An enum constant carrying the behaviour that depends on it.",
+            "ru": "Константа перечисления, несущая зависящее от неё поведение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A static factory method named after the case it covers.",
+            "ru": "Статический фабричный метод, названный по случаю, который он покрывает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A ConcurrentHashMap on a bean shared by every request.",
+            "ru": "ConcurrentHashMap на бине, который разделяют все запросы."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Speculative generality is machinery built for a future that has not arrived: the indirection is paid for now and the benefit is hypothetical. An interface with one implementation and no double behind it is the classic example — it adds a file, a navigation hop and an extra name for the same concept, and buys nothing until a second implementation exists. The other four all answer a present need: the boundary record is what lets the engine tests skip the database, behaviour on an enum constant is the state pattern doing real work, a named factory covers a shape that recurs, and a concurrent map on a shared bean is a correctness requirement rather than a guess about the future. The rule of three is the useful counterweight — abstract on the third occurrence, when you can see what varies.",
+        "ru": "Спекулятивная общность — это механика, построенная под ненаступившее будущее: за косвенность платят сейчас, а выгода гипотетична. Интерфейс с одной реализацией и без двойника за ним — классический пример: он добавляет файл, переход при навигации и второе имя для одного понятия и не покупает ничего, пока не появится вторая реализация. Остальные четыре отвечают на сегодняшнюю нужду: запись на границе — это то, что позволяет тестам движка обойтись без базы, поведение на константе перечисления — работающий паттерн «состояние», именованная фабрика закрывает повторяющуюся форму, а конкурентная map на общем бине — требование корректности, а не догадка о будущем. Полезный противовес — правило трёх: обобщать на третьем повторении, когда видно, что меняется."
+      },
+      "sources": [
+        "https://martinfowler.com/books/refactoring.html",
+        "https://refactoring.com/catalog/"
+      ]
+    },
+    {
+      "id": "design.smells-and-refactoring.006",
+      "section": "smells-and-refactoring",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "You are about to restructure a method whose test coverage is weak. What do you do first, and what kind of test do you write?",
+        "ru": "Вам предстоит перестроить метод, покрытие которого тестами слабое. Что вы сделаете первым и какие тесты напишете?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Write tests asserting on the private helper methods, so every step of the restructuring is verified individually.",
+            "ru": "Напишете тесты, утверждающие что-то о приватных вспомогательных методах, чтобы каждый шаг перестройки проверялся отдельно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Skip the tests and rely on the IDE's automated refactorings, which are behaviour-preserving by construction.",
+            "ru": "Обойдётесь без тестов и положитесь на автоматические рефакторинги IDE, сохраняющие поведение по построению."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Add tests against the externally observable behaviour you intend to keep — not against the implementation you intend to change — then move in small steps, running the suite after each.",
+            "ru": "Добавите тесты против внешне наблюдаемого поведения, которое собираетесь сохранить, — а не против реализации, которую собираетесь менять, — и дальше пойдёте маленькими шагами, прогоняя набор после каждого."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Change the code first and write tests against the new structure afterwards, since the old structure is going away.",
+            "ru": "Сначала измените код, а тесты напишете против новой структуры — старая ведь всё равно уходит."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Rewrite the method from scratch under a new name and delete the old one once the new one compiles.",
+            "ru": "Перепишете метод с нуля под новым именем и удалите старый, как только новый соберётся."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Tests written against the structure you are about to change will fail during the refactor and tell you nothing — they cannot distinguish a mistake from the move you intended. Characterising the observable behaviour first is what turns the suite into a safety net instead of an obstacle, and small steps are what keep a failure attributable to the step that caused it. Automated renames and extractions are genuinely safe, but the interesting refactorings are not automated, and writing the tests afterwards checks the new code against itself rather than against what the old code promised. The rewrite option skips the safety net entirely and also ceases to be a refactoring: nothing establishes that behaviour was preserved.",
+        "ru": "Тесты, написанные против структуры, которую вы собираетесь менять, упадут посреди рефакторинга и ничего вам не сообщат: они не отличают ошибку от задуманного движения. Зафиксировать сначала наблюдаемое поведение — это и превращает набор тестов в страховочную сетку, а не в помеху, а маленькие шаги оставляют падение приписываемым тому шагу, который его вызвал. Автоматические переименования и извлечения действительно безопасны, но интересные рефакторинги не автоматизированы, а тесты, написанные после, проверяют новый код против самого себя, а не против того, что обещал старый. Вариант с переписыванием пропускает сетку целиком и заодно перестаёт быть рефакторингом: сохранение поведения ничем не установлено."
+      },
+      "sources": [
+        "https://martinfowler.com/books/refactoring.html",
+        "https://www.oreilly.com/library/view/implementation-patterns/9780321413093/"
+      ]
+    }
+  ]
+}

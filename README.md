@@ -79,7 +79,7 @@ before creating one, so the first sign-in links the Google identity to this row 
 instead of making a second `USER` account beside it. Both paths leave everything but the role
 alone.
 
-Content is 11 topics, 93 article sections and 558 quiz questions, all bilingual, loaded from
+Content is 17 topics, 141 article sections and 846 quiz questions, all bilingual, loaded from
 `src/main/resources/content/` by Flyway **Java** migrations — Java rather than SQL scripts
 because Spring questions contain `${...}` placeholders that Flyway would interpolate.
 
@@ -106,6 +106,13 @@ because Spring questions contain `${...}` placeholders that Flyway would interpo
 | `V25__LoadDatabasesTopic` | Databases under the query: 8 sections, articles, 48 questions | `content/databases/` |
 | `V26__LoadSecurityTopic` | Security and access control: 8 sections, articles, 48 questions | `content/security/` |
 | `V27__LoadJavaCorePracticeExtra` | 9 more Java Core exercises, levelling the per-section counts | `content/practice/java-core-extra.json` |
+| `V28__LoadDesignTopic` | Design patterns, SOLID and architecture: 8 sections, articles, 48 questions | `content/design/` |
+| `V29__LoadDeliveryTopic` | Build, containers and delivery: 8 sections, articles, 48 questions | `content/delivery/` |
+| `V30__LoadDistributedTopic` | Microservices and distributed systems: 8 sections, articles, 48 questions | `content/distributed/` |
+| `V31__LoadObservabilityTopic` | Observability — logs, metrics, traces: 8 sections, articles, 48 questions | `content/observability/` |
+| `V32__LoadJvmInternalsTopic` | Inside the JVM: 8 sections, articles, 48 questions | `content/jvm-internals/` |
+| `V33__LoadAlgorithmsTopic` | Algorithms and data structures: 8 sections, articles, 48 questions | `content/algorithms/` |
+| `V34__LoadAlgorithmsPractice` | 12 algorithm exercises on the Java track | `content/practice/algorithms.json` |
 
 SQL and Java Concurrency live in their own directories rather than in the shared files because
 V2 has already run everywhere; adding a topic to `topics.json` would load it on a fresh database
@@ -127,8 +134,8 @@ its levels already set, and the backend module now stands at:
 
 | | junior | middle | senior |
 |---|---|---|---|
-| questions | 235 | 204 | 119 |
-| sections | 31 | 44 | 18 |
+| questions | 343 | 312 | 191 |
+| sections | 43 | 68 | 30 |
 
 A section's level is a judgement about who the article is for. A question's level was derived
 from it — easy one rung down, hard one rung up, clamped at the ends of the ladder — which is a
@@ -219,12 +226,14 @@ three with no sandbox.
 
 ## Java practice
 
-The same idea carried into a compiled language: 38 exercises the learner solves by writing a
+The same idea carried into a compiled language: 50 exercises the learner solves by writing a
 class that is then **compiled and run**, cross-linked with the study sections the way the SQL
 ones are. Twenty-seven are Java Core, spread four to a section over six sections and three over
-`streams-lambdas`. The other eleven are concurrency, one for each section of that topic a sandbox
-can grade — three easy, five medium, three hard, following the level of the section they belong
-to.
+`streams-lambdas`. Eleven are concurrency, one for each section of that topic a sandbox can
+grade — three easy, five medium, three hard, following the level of the section they belong to.
+The last twelve are algorithms, four at each difficulty, covering all eight sections of that
+topic; they are the exercises the roadmap said had to wait for a code-running engine, and the
+engine is what the concurrency work built.
 
 `jvm-memory` is the Java Core section with no exercises and is meant to stay that way: the
 sandbox cannot name the management APIs a heap or GC exercise would need, and "when is this

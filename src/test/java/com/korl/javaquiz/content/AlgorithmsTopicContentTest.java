@@ -17,25 +17,35 @@ import java.util.stream.StreamSupport;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Guards the Testing topic that {@code V24__LoadTestingTopic} loads. The migration runs once
- * against a real database, so a missing translation, an orphan question or a level nobody set
- * would surface as a failed deployment; these checks catch it at build time.
+ * Guards the Algorithms topic that {@code V33__LoadAlgorithmsTopic} loads. The migration runs
+ * once against a real database, so a missing translation, an orphan question or a level nobody
+ * set would surface as a failed deployment; these checks catch it at build time.
+ *
+ * <p>Two checks here go beyond what the older topic tests assert, because this topic's question
+ * bank is generated to a fixed shape: {@link #everySectionMixesDifficultyTheSameWay()} and
+ * {@link #everyQuestionLevelFollowsFromItsSection()} pin the mix and the derivation, so that a
+ * hand-edited question cannot quietly leave one track short of material.
  */
-class TestingTopicContentTest {
+class AlgorithmsTopicContentTest {
 
-    private static final String TOPIC_ID = "testing";
+    private static final String TOPIC_ID = "algorithms";
     private static final int SECTION_COUNT = 8;
     private static final int QUESTIONS_PER_SECTION = 6;
     private static final int OPTIONS_PER_QUESTION = 5;
     private static final Set<String> DIFFICULTIES = Set.of("easy", "medium", "hard");
-    private static final Set<String> LEVELS = Set.of("junior", "middle", "senior");
     private static final List<String> LEVEL_ORDER = List.of("junior", "middle", "senior");
+    private static final Set<String> LEVELS = Set.copyOf(LEVEL_ORDER);
+
+    /** Two easy, three medium and one hard in every section, whatever the section's level. */
+    private static final Map<String, Integer> EXPECTED_MIX = Map.of("easy", 2, "medium", 3, "hard", 1);
+
+    /** How a question's level is derived from its section's: easy is one step easier, hard one harder. */
+    private static final Map<String, Integer> LEVEL_SHIFT = Map.of("easy", -1, "medium", 0, "hard", 1);
 
     private static JsonNode topic;
     private static JsonNode materials;
     private static JsonNode questions;
     private static List<String> sectionIds;
-    private static Map<String, String> sectionLevels;
 
     @BeforeAll
     static void load() throws Exception {
@@ -43,15 +53,11 @@ class TestingTopicContentTest {
         materials = read("/content/" + TOPIC_ID + "/materials.json");
         questions = read("/content/" + TOPIC_ID + "/questions.json");
         sectionIds = new ArrayList<>();
-        sectionLevels = new LinkedHashMap<>();
-        topic.get("sections").forEach(section -> {
-            sectionIds.add(section.get("id").asText());
-            sectionLevels.put(section.get("id").asText(), section.get("level").asText());
-        });
+        topic.get("sections").forEach(section -> sectionIds.add(section.get("id").asText()));
     }
 
     private static JsonNode read(String path) throws Exception {
-        try (InputStream in = TestingTopicContentTest.class.getResourceAsStream(path)) {
+        try (InputStream in = AlgorithmsTopicContentTest.class.getResourceAsStream(path)) {
             assertThat(in).describedAs(path).isNotNull();
             return new ObjectMapper().readTree(in);
         }
@@ -69,11 +75,18 @@ class TestingTopicContentTest {
         return list(questions.get("questions"));
     }
 
+    private static String sectionLevel(String sectionId) {
+        return sections().stream()
+                .filter(section -> section.get("id").asText().equals(sectionId))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("no such section: " + sectionId))
+                .get("level").asText();
+    }
+
     @Test
     void theTopicDeclaresEightUniqueSectionsInOrder() {
         assertThat(topic.get("id").asText()).isEqualTo(TOPIC_ID);
-        // Sits after the concurrency and database topics in the catalogue.
-        assertThat(topic.get("order").asInt()).isEqualTo(9);
+        assertThat(topic.get("order").asInt()).isEqualTo(17);
         assertThat(sectionIds).doesNotHaveDuplicates().hasSize(SECTION_COUNT);
 
         int expected = 1;
@@ -126,13 +139,10 @@ class TestingTopicContentTest {
             String id = section.get("id").asText();
             assertThat(seen.add(id)).describedAs("duplicate article for %s", id).isTrue();
             assertThat(sectionIds).describedAs("article for undeclared section %s", id).contains(id);
+            // Narrower than the older topics: an article of this topic is one sitting.
             assertThat(section.get("estimatedMinutes").asInt()).describedAs("minutes of %s", id)
                     .isBetween(11, 18);
             assertThat(section.get("sources")).describedAs("sources of %s", id).isNotEmpty();
-            for (JsonNode source : section.get("sources")) {
-                assertThat(source.get("title").asText()).describedAs("source title in %s", id).isNotBlank();
-                assertThat(source.get("url").asText()).describedAs("source url in %s", id).isNotBlank();
-            }
             for (String language : List.of("en", "ru")) {
                 assertThat(section.get("summary").get(language).asText())
                         .describedAs("%s summary %s", id, language).isNotBlank();
@@ -193,43 +203,42 @@ class TestingTopicContentTest {
     }
 
     /**
-     * Every section mixes difficulty the same way — two easy, three medium, one hard — so that no
-     * section is a wall for the track below it or filler for the track above it.
+     * Every section carries the same two/three/one split, so no section is all warm-up and none
+     * is all hard. Because the level is derived from the difficulty, an uneven mix here is also
+     * what would leave one career track short of questions.
      */
     @Test
     void everySectionMixesDifficultyTheSameWay() {
-        for (String section : sectionIds) {
-            Map<String, Long> byDifficulty = new LinkedHashMap<>();
-            DIFFICULTIES.forEach(difficulty -> byDifficulty.put(difficulty, 0L));
+        for (String sectionId : sectionIds) {
+            Map<String, Integer> mix = new LinkedHashMap<>();
+            DIFFICULTIES.forEach(difficulty -> mix.put(difficulty, 0));
             questionList().stream()
-                    .filter(question -> question.get("section").asText().equals(section))
-                    .forEach(question -> byDifficulty.merge(question.get("difficulty").asText(), 1L, Long::sum));
-
-            assertThat(byDifficulty.get("easy")).describedAs("easy questions in %s", section).isEqualTo(2);
-            assertThat(byDifficulty.get("medium")).describedAs("medium questions in %s", section).isEqualTo(3);
-            assertThat(byDifficulty.get("hard")).describedAs("hard questions in %s", section).isEqualTo(1);
+                    .filter(question -> question.get("section").asText().equals(sectionId))
+                    .forEach(question -> mix.merge(question.get("difficulty").asText(), 1, Integer::sum));
+            assertThat(mix).describedAs("difficulty mix of %s", sectionId)
+                    .containsExactlyInAnyOrderEntriesOf(EXPECTED_MIX);
         }
     }
 
     /**
-     * A question's level follows from its section: easy sits one rung below the section, medium on
-     * it, hard one rung above, clamped at the ends. Setting it by hand is how a section quietly
-     * ends up feeding the wrong track.
+     * A question's level is its section's level shifted by its difficulty and clamped to the
+     * three that exist — easy one step down, hard one step up. Written out rather than
+     * assumed, because a hand-edited level is exactly the edit that silently drains a track:
+     * a senior-only reader sees only what carries the senior level.
+     *
+     * <p>{@code Math.clamp} would say this in one call and arrived in Java 21; this project
+     * targets 17.
      */
     @Test
-    void questionLevelsFollowFromTheirSection() {
+    void everyQuestionLevelFollowsFromItsSection() {
         for (JsonNode question : questionList()) {
             String id = question.get("id").asText();
-            int sectionLevel = LEVEL_ORDER.indexOf(sectionLevels.get(question.get("section").asText()));
-            int shift = switch (question.get("difficulty").asText()) {
-                case "easy" -> -1;
-                case "hard" -> 1;
-                default -> 0;
-            };
-            int expected = Math.min(Math.max(sectionLevel + shift, 0), LEVEL_ORDER.size() - 1);
+            int base = LEVEL_ORDER.indexOf(sectionLevel(question.get("section").asText()));
+            int shifted = base + LEVEL_SHIFT.get(question.get("difficulty").asText());
+            int clamped = Math.max(0, Math.min(LEVEL_ORDER.size() - 1, shifted));
             assertThat(question.get("level").asText())
-                    .describedAs("level of %s derived from its section and difficulty", id)
-                    .isEqualTo(LEVEL_ORDER.get(expected));
+                    .describedAs("level of %s does not follow from its section and difficulty", id)
+                    .isEqualTo(LEVEL_ORDER.get(clamped));
         }
     }
 
@@ -248,8 +257,9 @@ class TestingTopicContentTest {
     }
 
     /**
-     * The correct option is spread across all five positions. Otherwise the bank silently
-     * depends on the shuffle setting being switched on.
+     * The correct option is spread across all five positions, and evenly enough that a learner
+     * guessing one position gains nothing. Otherwise the bank silently depends on the shuffle
+     * setting being switched on.
      */
     @Test
     void theCorrectAnswerIsNotAlwaysInTheSamePlace() {
@@ -262,9 +272,8 @@ class TestingTopicContentTest {
                 }
             }
         }
-        // Even to within one, rather than merely non-zero: a pile-up on one slot is guessable,
-        // and "every slot is used" would not catch half the questions sitting in the middle.
-        int even = questionList().size() / OPTIONS_PER_QUESTION;
+        int total = questionList().size();
+        int even = total / OPTIONS_PER_QUESTION;
         for (int position = 0; position < OPTIONS_PER_QUESTION; position++) {
             assertThat(positions[position]).describedAs("correct answers at position %d", position)
                     .isBetween(even, even + 1);

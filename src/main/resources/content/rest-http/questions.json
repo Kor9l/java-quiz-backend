@@ -517,10 +517,10 @@
         },
         {
           "text": {
-            "en": "Query parameters are not encrypted by TLS, while request bodies are.",
-            "ru": "Query-параметры не шифруются TLS, а тела запросов шифруются."
+            "en": "The full URL is written to access logs, browser history and outgoing Referer headers, so the secret spreads far beyond the request.",
+            "ru": "Полный URL попадает в журналы доступа, историю браузера и исходящие заголовки Referer, поэтому секрет расходится далеко за пределы запроса."
           },
-          "correct": false
+          "correct": true
         },
         {
           "text": {
@@ -531,10 +531,10 @@
         },
         {
           "text": {
-            "en": "The full URL is written to access logs, browser history and outgoing Referer headers, so the secret spreads far beyond the request.",
-            "ru": "Полный URL попадает в журналы доступа, историю браузера и исходящие заголовки Referer, поэтому секрет расходится далеко за пределы запроса."
+            "en": "Query parameters are not encrypted by TLS, while request bodies are.",
+            "ru": "Query-параметры не шифруются TLS, а тела запросов шифруются."
           },
-          "correct": true
+          "correct": false
         },
         {
           "text": {

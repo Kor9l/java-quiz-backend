@@ -17,19 +17,20 @@ import java.util.stream.StreamSupport;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Guards the Testing topic that {@code V24__LoadTestingTopic} loads. The migration runs once
- * against a real database, so a missing translation, an orphan question or a level nobody set
+ * Guards the JVM internals topic that {@code V32__LoadJvmInternalsTopic} loads. The migration runs
+ * once against a real database, so a missing translation, an orphan question or a level nobody set
  * would surface as a failed deployment; these checks catch it at build time.
  */
-class TestingTopicContentTest {
+class JvmInternalsTopicContentTest {
 
-    private static final String TOPIC_ID = "testing";
+    private static final String TOPIC_ID = "jvm-internals";
     private static final int SECTION_COUNT = 8;
     private static final int QUESTIONS_PER_SECTION = 6;
     private static final int OPTIONS_PER_QUESTION = 5;
     private static final Set<String> DIFFICULTIES = Set.of("easy", "medium", "hard");
     private static final Set<String> LEVELS = Set.of("junior", "middle", "senior");
-    private static final List<String> LEVEL_ORDER = List.of("junior", "middle", "senior");
+    /** Reading order, easiest first. Index arithmetic in the level checks depends on it. */
+    private static final List<String> LADDER = List.of("junior", "middle", "senior");
 
     private static JsonNode topic;
     private static JsonNode materials;
@@ -51,7 +52,7 @@ class TestingTopicContentTest {
     }
 
     private static JsonNode read(String path) throws Exception {
-        try (InputStream in = TestingTopicContentTest.class.getResourceAsStream(path)) {
+        try (InputStream in = JvmInternalsTopicContentTest.class.getResourceAsStream(path)) {
             assertThat(in).describedAs(path).isNotNull();
             return new ObjectMapper().readTree(in);
         }
@@ -72,8 +73,7 @@ class TestingTopicContentTest {
     @Test
     void theTopicDeclaresEightUniqueSectionsInOrder() {
         assertThat(topic.get("id").asText()).isEqualTo(TOPIC_ID);
-        // Sits after the concurrency and database topics in the catalogue.
-        assertThat(topic.get("order").asInt()).isEqualTo(9);
+        assertThat(topic.get("order").asInt()).isEqualTo(16);
         assertThat(sectionIds).doesNotHaveDuplicates().hasSize(SECTION_COUNT);
 
         int expected = 1;
@@ -112,7 +112,7 @@ class TestingTopicContentTest {
     void sectionLevelsNeverGoBackwards() {
         int reached = 0;
         for (JsonNode section : sections()) {
-            int level = LEVEL_ORDER.indexOf(section.get("level").asText());
+            int level = LADDER.indexOf(section.get("level").asText());
             assertThat(level).describedAs("%s drops below the level reached before it",
                     section.get("id").asText()).isGreaterThanOrEqualTo(reached);
             reached = level;
@@ -193,43 +193,45 @@ class TestingTopicContentTest {
     }
 
     /**
-     * Every section mixes difficulty the same way — two easy, three medium, one hard — so that no
-     * section is a wall for the track below it or filler for the track above it.
+     * Each section carries the same mix, so no section is all-easy filler and none is six hard
+     * questions the intended track cannot answer.
      */
     @Test
     void everySectionMixesDifficultyTheSameWay() {
         for (String section : sectionIds) {
-            Map<String, Long> byDifficulty = new LinkedHashMap<>();
-            DIFFICULTIES.forEach(difficulty -> byDifficulty.put(difficulty, 0L));
+            Map<String, Integer> mix = new LinkedHashMap<>();
+            DIFFICULTIES.forEach(difficulty -> mix.put(difficulty, 0));
             questionList().stream()
                     .filter(question -> question.get("section").asText().equals(section))
-                    .forEach(question -> byDifficulty.merge(question.get("difficulty").asText(), 1L, Long::sum));
-
-            assertThat(byDifficulty.get("easy")).describedAs("easy questions in %s", section).isEqualTo(2);
-            assertThat(byDifficulty.get("medium")).describedAs("medium questions in %s", section).isEqualTo(3);
-            assertThat(byDifficulty.get("hard")).describedAs("hard questions in %s", section).isEqualTo(1);
+                    .forEach(question -> mix.merge(question.get("difficulty").asText(), 1, Integer::sum));
+            assertThat(mix.get("easy")).describedAs("easy questions in %s", section).isEqualTo(2);
+            assertThat(mix.get("medium")).describedAs("medium questions in %s", section).isEqualTo(3);
+            assertThat(mix.get("hard")).describedAs("hard questions in %s", section).isEqualTo(1);
         }
     }
 
     /**
-     * A question's level follows from its section: easy sits one rung below the section, medium on
-     * it, hard one rung above, clamped at the ends. Setting it by hand is how a section quietly
-     * ends up feeding the wrong track.
+     * A question's level is not chosen independently: it is the section's level shifted by the
+     * question's difficulty, clamped at the ends of the ladder. Stating it as a rule keeps the
+     * three tracks balanced without anyone counting by hand.
+     *
+     * <p>{@code Math.max}/{@code Math.min} rather than {@code Math.clamp}: the project compiles at
+     * release 17.
      */
     @Test
-    void questionLevelsFollowFromTheirSection() {
+    void everyQuestionLevelFollowsFromItsSection() {
         for (JsonNode question : questionList()) {
             String id = question.get("id").asText();
-            int sectionLevel = LEVEL_ORDER.indexOf(sectionLevels.get(question.get("section").asText()));
+            int sectionLevel = LADDER.indexOf(sectionLevels.get(question.get("section").asText()));
             int shift = switch (question.get("difficulty").asText()) {
                 case "easy" -> -1;
                 case "hard" -> 1;
                 default -> 0;
             };
-            int expected = Math.min(Math.max(sectionLevel + shift, 0), LEVEL_ORDER.size() - 1);
+            int expected = Math.max(0, Math.min(LADDER.size() - 1, sectionLevel + shift));
             assertThat(question.get("level").asText())
-                    .describedAs("level of %s derived from its section and difficulty", id)
-                    .isEqualTo(LEVEL_ORDER.get(expected));
+                    .describedAs("level of %s does not follow from its section and difficulty", id)
+                    .isEqualTo(LADDER.get(expected));
         }
     }
 

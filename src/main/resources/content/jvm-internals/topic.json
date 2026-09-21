@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 2,
+  "topic": {
+    "id": "jvm-internals",
+    "order": 16,
+    "name": {
+      "en": "Inside the JVM: memory, GC, profiling",
+      "ru": "JVM внутри: память, GC, профилирование"
+    },
+    "sections": [
+      {
+        "id": "memory-areas",
+        "order": 1,
+        "level": "junior",
+        "title": {
+          "en": "Memory areas: what lives where",
+          "ru": "Области памяти: что где лежит"
+        }
+      },
+      {
+        "id": "class-loading",
+        "order": 2,
+        "level": "junior",
+        "title": {
+          "en": "Class loaders, linking and initialisation",
+          "ru": "Загрузчики классов, связывание и инициализация"
+        }
+      },
+      {
+        "id": "garbage-collectors",
+        "order": 3,
+        "level": "middle",
+        "title": {
+          "en": "Garbage collectors and how they trade off",
+          "ru": "Сборщики мусора и их компромиссы"
+        }
+      },
+      {
+        "id": "tuning-and-limits",
+        "order": 4,
+        "level": "middle",
+        "title": {
+          "en": "Sizing the JVM and living inside a container",
+          "ru": "Размеры JVM и жизнь внутри контейнера"
+        }
+      },
+      {
+        "id": "leaks-and-oom",
+        "order": 5,
+        "level": "middle",
+        "title": {
+          "en": "Leaks and OutOfMemoryError",
+          "ru": "Утечки и OutOfMemoryError"
+        }
+      },
+      {
+        "id": "profiling",
+        "order": 6,
+        "level": "middle",
+        "title": {
+          "en": "Profiling: JFR, heap dumps, samplers",
+          "ru": "Профилирование: JFR, heap dump, сэмплеры"
+        }
+      },
+      {
+        "id": "jit",
+        "order": 7,
+        "level": "senior",
+        "title": {
+          "en": "JIT: C1, C2, inlining and warm-up",
+          "ru": "JIT: C1, C2, инлайнинг и разогрев"
+        }
+      },
+      {
+        "id": "references-and-cleanup",
+        "order": 8,
+        "level": "senior",
+        "title": {
+          "en": "Reference strengths and deterministic cleanup",
+          "ru": "Степени ссылок и детерминированная очистка"
+        }
+      }
+    ]
+  }
+}

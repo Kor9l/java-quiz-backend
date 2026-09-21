@@ -1621,10 +1621,10 @@
         },
         {
           "text": {
-            "en": "The image tag must be pinned to a specific minor version.",
-            "ru": "Тег образа надо зафиксировать до конкретной минорной версии."
+            "en": "Testcontainers gives a real dependency, not isolation: sharing one database means the tests now need rollback, truncation or unique keys, which was previously provided by starting from scratch.",
+            "ru": "Testcontainers даёт настоящую зависимость, но не изоляцию: при общей базе тестам теперь нужны откат, truncate или уникальные ключи — то, что раньше обеспечивал старт с нуля."
           },
-          "correct": false
+          "correct": true
         },
         {
           "text": {
@@ -1635,10 +1635,10 @@
         },
         {
           "text": {
-            "en": "Testcontainers gives a real dependency, not isolation: sharing one database means the tests now need rollback, truncation or unique keys, which was previously provided by starting from scratch.",
-            "ru": "Testcontainers даёт настоящую зависимость, но не изоляцию: при общей базе тестам теперь нужны откат, truncate или уникальные ключи — то, что раньше обеспечивал старт с нуля."
+            "en": "The image tag must be pinned to a specific minor version.",
+            "ru": "Тег образа надо зафиксировать до конкретной минорной версии."
           },
-          "correct": true
+          "correct": false
         },
         {
           "text": {
@@ -1800,17 +1800,17 @@
         },
         {
           "text": {
-            "en": "Because going over a socket exercises your deserialisation, timeouts, retries and error handling for a 503 - none of which a mocked interface touches.",
-            "ru": "Потому что проход через сокет прогоняет вашу десериализацию, таймауты, повторы и обработку 503 — ничего из этого мок интерфейса не затрагивает."
-          },
-          "correct": true
-        },
-        {
-          "text": {
             "en": "Because a mocked client would make the test an integration test by definition.",
             "ru": "Потому что мокнутый клиент по определению сделал бы тест интеграционным."
           },
           "correct": false
+        },
+        {
+          "text": {
+            "en": "Because going over a socket exercises your deserialisation, timeouts, retries and error handling for a 503 - none of which a mocked interface touches.",
+            "ru": "Потому что проход через сокет прогоняет вашу десериализацию, таймауты, повторы и обработку 503 — ничего из этого мок интерфейса не затрагивает."
+          },
+          "correct": true
         }
       ],
       "explanation": {

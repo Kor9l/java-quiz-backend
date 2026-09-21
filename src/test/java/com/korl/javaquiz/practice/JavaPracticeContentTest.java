@@ -38,7 +38,8 @@ class JavaPracticeContentTest {
     private static final List<String> CONTENT = List.of(
             "/content/practice/java.json",
             "/content/practice/java-concurrency.json",
-            "/content/practice/java-core-extra.json");
+            "/content/practice/java-core-extra.json",
+            "/content/practice/algorithms.json");
 
     private static List<JsonNode> roots;
 
@@ -109,9 +110,13 @@ class JavaPracticeContentTest {
     }
 
     /**
-     * Every section of every topic, from both places a topic can be defined: the original six
-     * live in one {@code topics.json}, and a topic added since ships its own {@code topic.json}
-     * next to its articles.
+     * Every section of every topic, from both places a topic can be defined: the original five
+     * live in one {@code topics.json}, and every topic added since ships its own
+     * {@code topic.json} next to its articles.
+     *
+     * <p>The per-topic files are found by asking each task which topic it belongs to, rather
+     * than by listing them here. A list would have to be extended by every new topic that grows
+     * exercises, and the failure of forgetting is this test quietly passing a dead link.
      */
     private static Map<String, Set<String>> studySections() throws Exception {
         Map<String, Set<String>> sections = new HashMap<>();
@@ -120,10 +125,16 @@ class JavaPracticeContentTest {
             assertThat(in).describedAs("bundled topic definitions").isNotNull();
             mapper.readTree(in).get("topics").forEach(topic -> collect(sections, topic));
         }
-        try (InputStream in =
-                     JavaPracticeContentTest.class.getResourceAsStream("/content/java-concurrency/topic.json")) {
-            assertThat(in).describedAs("bundled java-concurrency topic").isNotNull();
-            collect(sections, mapper.readTree(in).get("topic"));
+        for (JsonNode task : tasks()) {
+            String topicId = task.path("topic").asText();
+            if (topicId.isEmpty() || sections.containsKey(topicId)) {
+                continue;
+            }
+            String resource = "/content/" + topicId + "/topic.json";
+            try (InputStream in = JavaPracticeContentTest.class.getResourceAsStream(resource)) {
+                assertThat(in).describedAs("topic definition %s", resource).isNotNull();
+                collect(sections, mapper.readTree(in).get("topic"));
+            }
         }
         return sections;
     }

@@ -212,8 +212,12 @@ class JavaConcurrencyTopicContentTest {
                 }
             }
         }
+        // Even to within one, rather than merely non-zero: a pile-up on one slot is guessable,
+        // and "every slot is used" would not catch half the questions sitting in the middle.
+        int even = questionList().size() / OPTIONS_PER_QUESTION;
         for (int position = 0; position < OPTIONS_PER_QUESTION; position++) {
-            assertThat(positions[position]).describedAs("correct answers at position %d", position).isPositive();
+            assertThat(positions[position]).describedAs("correct answers at position %d", position)
+                    .isBetween(even, even + 1);
         }
     }
 }

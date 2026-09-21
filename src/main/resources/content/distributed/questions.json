@@ -1,0 +1,2651 @@
+{
+  "schemaVersion": 2,
+  "topic": "distributed",
+  "questions": [
+    {
+      "id": "distributed.service-boundaries.001",
+      "section": "service-boundaries",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Two services are deployed separately, each with its own repository and its own CI pipeline, but both read and write the same `orders` table. What does that arrangement actually give you?",
+        "ru": "Два сервиса развёрнуты раздельно, у каждого свой репозиторий и свой CI-пайплайн, но оба читают и пишут одну и ту же таблицу `orders`. Что в действительности даёт такая конструкция?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "One service with two deployment units: the shared table couples them at the strongest possible point, and there is no transaction spanning the two processes.",
+            "ru": "Один сервис с двумя единицами развёртывания: общая таблица связывает их в самой сильной точке, и транзакции, охватывающей оба процесса, не существует."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Two genuine services, because separate deployment is the property that defines a service boundary.",
+            "ru": "Два настоящих сервиса, потому что раздельное развёртывание и есть свойство, определяющее границу сервиса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Two genuine services, because the database enforces consistency for both of them.",
+            "ru": "Два настоящих сервиса, потому что база обеспечивает консистентность для обоих."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A valid CQRS split, since one side can be treated as the writer and the other as the reader.",
+            "ru": "Корректное разделение по CQRS, поскольку одну сторону можно считать писателем, а другую - читателем."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Two services with a performance problem, but no architectural problem - the table is just a shared cache.",
+            "ru": "Два сервиса с проблемой производительности, но без архитектурной проблемы: таблица - просто общий кеш."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A boundary means an own API, own data and an own release cycle. Sharing a table breaks the second and usually the third: a schema change has to be coordinated across both, and neither can be deployed alone. Separate repositories and pipelines are organisational facts, not architectural ones.",
+        "ru": "Граница означает собственный API, собственные данные и собственный цикл релиза. Общая таблица ломает второе и обычно третье: изменение схемы приходится согласовывать между обоими, и ни один нельзя выкатить отдельно. Отдельные репозитории и пайплайны - организационный факт, а не архитектурный."
+      },
+      "sources": [
+        "https://microservices.io/patterns/data/database-per-service.html",
+        "https://martinfowler.com/articles/microservices.html"
+      ]
+    },
+    {
+      "id": "distributed.service-boundaries.002",
+      "section": "service-boundaries",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which reason for splitting a monolith into services actually holds up?",
+        "ru": "Какая причина разбивать монолит на сервисы действительно состоятельна?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A network call between services is faster than a method call inside one process.",
+            "ru": "Сетевой вызов между сервисами быстрее, чем вызов метода внутри одного процесса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Teams need to build, deploy, scale and fail independently of each other.",
+            "ru": "Командам нужно собирать, деплоить, масштабировать и падать независимо друг от друга."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Services make the code cleaner, because a network boundary forces better design than a package boundary.",
+            "ru": "Сервисы делают код чище, потому что сетевая граница вынуждает проектировать лучше, чем граница пакета."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Services remove the need for transactions, since each step commits on its own.",
+            "ru": "Сервисы снимают необходимость в транзакциях, поскольку каждый шаг коммитится сам по себе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A distributed system is more reliable, because there is no longer a single process that can crash.",
+            "ru": "Распределённая система надёжнее, потому что больше нет одного процесса, который может упасть."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Independent deployability is the benefit you are buying; everything else on the list is a cost dressed up as a benefit. A remote call is slower, not faster. Discipline inside a process is a matter of discipline, not of protocol. Losing transactions is the price, not the prize. And more moving parts means more ways to fail, not fewer.",
+        "ru": "Независимость развёртывания - это то, ради чего платят; всё остальное в списке - издержка, выданная за выгоду. Удалённый вызов медленнее, а не быстрее. Дисциплина внутри процесса зависит от дисциплины, а не от протокола. Потеря транзакций - это цена, а не приз. А большее число движущихся частей означает больше способов сломаться, а не меньше."
+      },
+      "sources": [
+        "https://martinfowler.com/articles/microservices.html",
+        "https://martinfowler.com/bliki/MonolithFirst.html"
+      ]
+    },
+    {
+      "id": "distributed.service-boundaries.003",
+      "section": "service-boundaries",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "A page needs data from five services. Each is independently available 99.9 % of the time, and the page calls all five and needs every answer. What is the page's availability, roughly?",
+        "ru": "Странице нужны данные пяти сервисов. Каждый доступен независимо 99,9 % времени, страница вызывает все пять и нуждается в каждом ответе. Какова примерно доступность страницы?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Still 99.9 %, because the calls are independent of one another.",
+            "ru": "По-прежнему 99,9 %, потому что вызовы независимы друг от друга."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "About 99.98 %, because a failure needs all five to be down at once.",
+            "ru": "Около 99,98 %, потому что для отказа нужно, чтобы все пять легли одновременно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "About 99.5 %, because the individual availabilities multiply.",
+            "ru": "Около 99,5 %, потому что доступности перемножаются."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Exactly 99.9 % divided by five, so about 19.98 %.",
+            "ru": "Ровно 99,9 %, делённые на пять, то есть около 19,98 %."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It cannot be estimated without knowing the latency of each service.",
+            "ru": "Оценить нельзя, не зная задержку каждого сервиса."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "When every dependency is required, the probabilities of success multiply: 0.999 to the fifth power is about 0.995, so roughly one request in 200 fails. The tail is worse than the average suggests, because the page is as slow as the slowest of the five. This is why a chatty design degrades much faster than its mean latency predicts.",
+        "ru": "Когда нужна каждая зависимость, вероятности успеха перемножаются: 0,999 в пятой степени - примерно 0,995, то есть падает примерно один запрос из 200. С хвостом хуже, чем подсказывает среднее, потому что страница настолько медленная, насколько медленный самый медленный из пяти. Поэтому «болтливый» дизайн деградирует гораздо быстрее, чем предсказывает его средняя задержка."
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/Fallacies_of_distributed_computing",
+        "https://martinfowler.com/articles/microservices.html"
+      ]
+    },
+    {
+      "id": "distributed.service-boundaries.004",
+      "section": "service-boundaries",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "A `POST /payments` call to another service times out after 3 seconds with no response. What may the caller conclude?",
+        "ru": "Вызов `POST /payments` к другому сервису отвалился по таймауту через 3 секунды без ответа. Какой вывод может сделать вызывающий?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "That the payment did not happen, because a call that returns no response never reached the handler.",
+            "ru": "Что платёж не прошёл, потому что вызов без ответа не дошёл до обработчика."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That the payment did happen, because the server would have returned an error otherwise.",
+            "ru": "Что платёж прошёл, потому что иначе сервер вернул бы ошибку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That the payment was rolled back, because an unfinished HTTP request is rolled back by the container.",
+            "ru": "Что платёж откатился, потому что незавершённый HTTP-запрос откатывается контейнером."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing about whether the payment happened: the request may not have arrived, may have been processed with the reply lost, or may still be running.",
+            "ru": "Ничего о том, прошёл ли платёж: запрос мог не дойти, мог быть обработан с потерянным ответом, а мог всё ещё выполняться."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "That the network is partitioned, since a timeout is only produced by a partition.",
+            "ru": "Что сеть разделена, поскольку таймаут возникает только при разделе сети."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The ambiguous timeout is the failure with no local analogue: three quite different states produce exactly the same observation. Nothing the caller can inspect distinguishes them, which is why safe retry requires the operation to be idempotent, and why a caller that simply retries a non-idempotent POST is choosing to risk a double charge.",
+        "ru": "Неоднозначный таймаут - это отказ, у которого нет локального аналога: три совершенно разных состояния дают ровно одно и то же наблюдение. Ничто из доступного вызывающему их не различает, поэтому безопасный повтор требует идемпотентности операции, а вызывающий, просто повторяющий неидемпотентный POST, сознательно рискует двойным списанием."
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/Fallacies_of_distributed_computing",
+        "https://www.rfc-editor.org/rfc/rfc9110.html"
+      ]
+    },
+    {
+      "id": "distributed.service-boundaries.005",
+      "section": "service-boundaries",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "A team splits its monolith into a `controller-service`, a `business-logic-service` and a `repository-service`. What is wrong with this cut?",
+        "ru": "Команда разрезала монолит на `controller-service`, `business-logic-service` и `repository-service`. Что не так с таким разрезом?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing structurally: layered services are the standard decomposition, they only need an API gateway in front.",
+            "ru": "Структурно ничего: послойные сервисы - стандартная декомпозиция, им нужен только API gateway впереди."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The problem is the number: three is too few, and the same cut with eight services would be sound.",
+            "ru": "Проблема в количестве: три - слишком мало, тот же разрез на восемь сервисов был бы корректным."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The problem is naming: with domain names instead of layer names the same boundaries would be fine.",
+            "ru": "Проблема в именовании: с доменными именами вместо имён слоёв те же границы были бы в порядке."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The problem is that the repository service owns the database, which should belong to the controller service.",
+            "ru": "Проблема в том, что базой владеет сервис репозиториев, а владеть должен сервис контроллеров."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Every feature crosses all three boundaries, so nothing can be changed or deployed independently - the split adds network cost and removes nothing.",
+            "ru": "Каждая фича пересекает все три границы, поэтому ничего нельзя изменить или выкатить независимо: разрез добавляет сетевую цену и ничего не убирает."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A boundary is worth its cost when things that change together stay on the same side of it. Layers change together by definition - adding a field touches the controller, the logic and the persistence - so a layered cut puts a network hop inside every single change. Cut along business capabilities instead, and most changes stay inside one service.",
+        "ru": "Граница оправдывает свою цену, когда то, что меняется вместе, остаётся по одну её сторону. Слои по определению меняются вместе: добавление поля трогает контроллер, логику и хранение, - поэтому послойный разрез вставляет сетевой переход внутрь каждого изменения. Режьте по бизнес-возможностям, и большинство изменений останется внутри одного сервиса."
+      },
+      "sources": [
+        "https://martinfowler.com/articles/microservices.html",
+        "https://microservices.io/patterns/data/database-per-service.html"
+      ]
+    },
+    {
+      "id": "distributed.service-boundaries.006",
+      "section": "service-boundaries",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "After splitting, the order service can no longer join the `customers` table for a report that lists 500 orders with the customer's name and country. Which option keeps the boundary intact at the lowest ongoing cost?",
+        "ru": "После разделения сервис заказов больше не может присоединять таблицу `customers` для отчёта, который перечисляет 500 заказов с именем и страной клиента. Какой вариант сохраняет границу при наименьших постоянных издержках?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Keep a local read model of the customer fields the order service needs, updated from customer events, and join against that.",
+            "ru": "Держать локальную модель чтения с теми полями клиента, которые нужны сервису заказов, обновлять её из событий клиента и присоединять её."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Call the customer service once per order while building the report, so the data is always current.",
+            "ru": "Вызывать сервис клиентов по разу на заказ во время построения отчёта, чтобы данные всегда были актуальны."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Give the order service read-only credentials on the `customers` table: reading is harmless because it cannot corrupt anything.",
+            "ru": "Выдать сервису заказов права только на чтение таблицы `customers`: чтение безвредно, потому что ничего не портит."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Move the report into the customer service, since that is where the customer data lives.",
+            "ru": "Перенести отчёт в сервис клиентов, раз уж данные клиентов живут там."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Add a bulk endpoint to the customer service and call it once per report, accepting that the boundary is now broken.",
+            "ru": "Добавить пакетный эндпоинт в сервис клиентов и вызывать его раз на отчёт, признав, что граница теперь нарушена."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A local read model replicated from events keeps ownership where it belongs and removes the dependency from the read path entirely - the report works even when the customer service is down, at the price of data that is slightly stale. Per-order calls are an N+1 across the network. Read-only access to another service's table is still coupling to its schema: a column rename becomes someone else's incident. Moving the report is a reasonable option in general but here it puts order logic into the customer service. A bulk endpoint is a real improvement over N+1 and does not break the boundary, but it leaves the report unavailable whenever the dependency is.",
+        "ru": "Локальная модель чтения, реплицируемая из событий, оставляет владение там, где ему место, и полностью убирает зависимость с пути чтения: отчёт работает даже когда сервис клиентов лежит, ценой слегка устаревших данных. Вызовы на каждый заказ - это N+1 через сеть. Доступ на чтение к чужой таблице - всё равно связанность с её схемой: переименование колонки становится чужим инцидентом. Перенос отчёта в общем случае разумен, но здесь он кладёт логику заказов в сервис клиентов. Пакетный эндпоинт действительно лучше, чем N+1, и границу не ломает, но оставляет отчёт недоступным всякий раз, когда недоступна зависимость."
+      },
+      "sources": [
+        "https://microservices.io/patterns/data/cqrs.html",
+        "https://microservices.io/patterns/data/database-per-service.html"
+      ]
+    },
+    {
+      "id": "distributed.sync-and-async.001",
+      "section": "sync-and-async",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does \"temporal coupling\" mean in a synchronous request/response call between two services?",
+        "ru": "Что означает «связность во времени» (temporal coupling) при синхронном вызове запрос/ответ между двумя сервисами?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The two services must run the same version of the contract at the same time.",
+            "ru": "Оба сервиса должны одновременно работать на одной и той же версии контракта."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both services must be available at the same instant, so if the callee is down the caller's request fails now.",
+            "ru": "Оба сервиса должны быть доступны в один и тот же момент, поэтому если вызываемый лежит, запрос вызывающего падает сейчас."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The call must complete within a fixed time budget agreed in advance.",
+            "ru": "Вызов должен завершиться в заранее согласованный фиксированный бюджет времени."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The two services must have synchronised clocks for timestamps to be comparable.",
+            "ru": "У обоих сервисов должны быть синхронизированы часы, чтобы метки времени были сравнимы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The caller's thread is blocked, which is a coupling between the call and the thread pool.",
+            "ru": "Поток вызывающего заблокирован, и это связность между вызовом и пулом потоков."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Temporal coupling is about availability in time: a synchronous chain requires every link to hold simultaneously. Messaging removes the requirement because the broker holds the message while the consumer is away. Blocking a thread is a real consequence of a synchronous call, but it is a resource cost, not what the term names.",
+        "ru": "Связность во времени - про доступность во времени: синхронная цепочка требует, чтобы каждое звено держало одновременно. Обмен сообщениями это требование снимает, потому что брокер хранит сообщение, пока потребителя нет. Блокировка потока - реальное следствие синхронного вызова, но это расход ресурса, а не то, что называет термин."
+      },
+      "sources": [
+        "https://microservices.io/patterns/communication-style/messaging.html",
+        "https://www.enterpriseintegrationpatterns.com/patterns/messaging/EventMessage.html"
+      ]
+    },
+    {
+      "id": "distributed.sync-and-async.002",
+      "section": "sync-and-async",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What distinguishes an event from a command as a message?",
+        "ru": "Чем событие отличается от команды как сообщение?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A command is sent over HTTP and an event is sent over a broker.",
+            "ru": "Команда отправляется по HTTP, а событие - через брокер."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A command expects a reply and an event does not; both have exactly one recipient.",
+            "ru": "Команда ожидает ответа, а событие нет; у обоих ровно один получатель."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A command names something that should happen and has one intended handler; an event states something that already happened and has no intended handler at all.",
+            "ru": "Команда называет то, что должно произойти, и имеет одного предполагаемого обработчика; событие утверждает то, что уже произошло, и предполагаемого обработчика не имеет вовсе."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A command is synchronous by definition and an event is asynchronous by definition.",
+            "ru": "Команда синхронна по определению, а событие асинхронно по определению."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A command carries the full state of an entity and an event carries only the changed fields.",
+            "ru": "Команда несёт полное состояние сущности, а событие - только изменившиеся поля."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The distinction is intent and ownership, not transport: commands go over brokers all the time. The practical consequence is that a publisher of an event must not depend on any particular consumer's side effect - doing so turns a broadcast into an undocumented command, and the publisher breaks when that consumer is replaced.",
+        "ru": "Различие в намерении и ответственности, а не в транспорте: команды постоянно ходят через брокеры. Практическое следствие в том, что публикующий событие не должен зависеть от побочного эффекта конкретного потребителя: это превращает широковещательную рассылку в недокументированную команду, и публикующий ломается, когда потребителя заменяют."
+      },
+      "sources": [
+        "https://www.enterpriseintegrationpatterns.com/patterns/messaging/EventMessage.html",
+        "https://microservices.io/patterns/communication-style/messaging.html"
+      ]
+    },
+    {
+      "id": "distributed.sync-and-async.003",
+      "section": "sync-and-async",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "An endpoint starts a job that takes about two minutes. Which response shape is the honest one, and why?",
+        "ru": "Эндпоинт запускает задачу, которая выполняется примерно две минуты. Какая форма ответа честная и почему?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "`200 OK` after the work completes, with the client timeout raised to five minutes.",
+            "ru": "`200 OK` после завершения работы, с поднятым до пяти минут таймаутом клиента."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`204 No Content` immediately, since there is nothing to return until the job finishes.",
+            "ru": "`204 No Content` немедленно, поскольку до завершения задачи возвращать нечего."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`201 Created` immediately, because the resource will exist once the job finishes.",
+            "ru": "`201 Created` немедленно, потому что ресурс появится, как только задача завершится."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`202 Accepted` with a location to poll: the request is validated and recorded synchronously, and the long work happens off the request.",
+            "ru": "`202 Accepted` с адресом для опроса: запрос синхронно проверяется и записывается, а долгая работа идёт вне запроса."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "`102 Processing` repeatedly, keeping the connection open until the job ends.",
+            "ru": "Повторяющийся `102 Processing`, удерживая соединение открытым до конца задачи."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`202` says exactly what happened - the request was accepted, not completed - and gives the client something to poll. Holding the connection for two minutes ties up a thread and a socket on both sides and produces an ambiguous timeout whenever anything in between gives up first. `204` and `201` both claim an outcome that has not happened yet.",
+        "ru": "`202` говорит ровно то, что произошло: запрос принят, а не выполнен, - и даёт клиенту, что опрашивать. Удержание соединения на две минуты занимает поток и сокет с обеих сторон и порождает неоднозначный таймаут всякий раз, когда что-то посередине сдаётся первым. И `204`, и `201` утверждают исход, которого ещё не было."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9110.html",
+        "https://microservices.io/patterns/communication-style/messaging.html"
+      ]
+    },
+    {
+      "id": "distributed.sync-and-async.004",
+      "section": "sync-and-async",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "Which of these requirements forces asynchronous messaging rather than a synchronous call?",
+        "ru": "Какое из требований вынуждает использовать асинхронный обмен сообщениями, а не синхронный вызов?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The call is on the critical path of a page the user is waiting for.",
+            "ru": "Вызов находится на критическом пути страницы, которую ждёт пользователь."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The payload is large, so it should not travel in an HTTP body.",
+            "ru": "Полезная нагрузка большая, поэтому ей не место в теле HTTP."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The caller needs the result to decide what to do next in the same request.",
+            "ru": "Вызывающему нужен результат, чтобы в том же запросе решить, что делать дальше."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The two services are written in different languages.",
+            "ru": "Два сервиса написаны на разных языках."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The fact must be recorded and eventually acted on even if every interested service is down at the moment it occurs.",
+            "ru": "Факт должен быть зафиксирован и в итоге обработан, даже если в момент его наступления все заинтересованные сервисы лежат."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Durability across an outage of the consumer is the requirement a broker exists to satisfy - it holds the message while nobody is listening. Needing the answer inside the current request is the case for a synchronous call. Payload size and language differences are solved by choosing a format, not a transport.",
+        "ru": "Сохранность во время простоя потребителя - то самое требование, ради которого существует брокер: он держит сообщение, пока никто не слушает. Потребность в ответе внутри текущего запроса - довод за синхронный вызов. Размер нагрузки и разные языки решаются выбором формата, а не транспорта."
+      },
+      "sources": [
+        "https://microservices.io/patterns/communication-style/messaging.html",
+        "https://kafka.apache.org/documentation/"
+      ]
+    },
+    {
+      "id": "distributed.sync-and-async.005",
+      "section": "sync-and-async",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "A service publishes `AccountCredited` and `AccountDebited` for the same account to a topic with twelve partitions, using a random partition for each message. Consumers process them out of order. What is the fix?",
+        "ru": "Сервис публикует `AccountCredited` и `AccountDebited` по одному и тому же счёту в топик с двенадцатью партициями, выбирая партицию случайно. Потребители обрабатывают их не по порядку. Как это чинить?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Use the account id as the message key, so all messages about one account land in the same partition and keep their relative order.",
+            "ru": "Использовать идентификатор счёта как ключ сообщения, чтобы все сообщения по одному счёту попадали в одну партицию и сохраняли относительный порядок."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Reduce the topic to one partition, which is the only way to get ordering.",
+            "ru": "Свести топик к одной партиции - это единственный способ получить порядок."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Have the consumer sort messages by their timestamp before processing them.",
+            "ru": "Заставить потребителя сортировать сообщения по метке времени перед обработкой."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Publish both messages inside one transaction, which makes the broker deliver them in order.",
+            "ru": "Публиковать оба сообщения в одной транзакции, и брокер доставит их по порядку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Switch to a single consumer instance, since ordering is broken by having several consumers.",
+            "ru": "Перейти на один экземпляр потребителя, раз порядок ломается из-за нескольких потребителей."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Ordering in a partitioned log holds per partition, so the unit of ordering is chosen by the key. Keying by account id gives per-account order while keeping the parallelism of twelve partitions. One partition would work and would throw away all parallelism. Sorting by timestamp trusts producer clocks, which is exactly what you cannot do across machines. A transaction makes the two writes atomic, not ordered relative to each other for a consumer reading different partitions.",
+        "ru": "Порядок в партиционированном логе держится внутри партиции, поэтому единицу упорядочивания задаёт ключ. Ключ по идентификатору счёта даёт порядок в пределах счёта, сохраняя параллелизм двенадцати партиций. Одна партиция сработала бы, выбросив весь параллелизм. Сортировка по метке времени доверяет часам продюсеров - ровно тому, чему нельзя доверять между машинами. Транзакция делает две записи атомарными, а не упорядоченными друг относительно друга для потребителя, читающего разные партиции."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/",
+        "https://microservices.io/patterns/communication-style/messaging.html"
+      ]
+    },
+    {
+      "id": "distributed.sync-and-async.006",
+      "section": "sync-and-async",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "A team implements request/reply over a broker: the caller sends a message with a correlation id and a reply-to destination, and blocks until a reply arrives there. What is the accurate assessment?",
+        "ru": "Команда реализует запрос/ответ поверх брокера: вызывающий отправляет сообщение с correlation id и адресом для ответа и блокируется, пока туда не придёт ответ. Какая оценка верна?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It is strictly better than HTTP, because the broker's durability means the request can never be lost.",
+            "ru": "Это строго лучше HTTP, потому что надёжность брокера означает, что запрос не может быть потерян."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is legitimate, but it reintroduces temporal coupling and rebuilds a timeout and a pending-request table, so it is worth it only when the broker's buffering or delivery guarantees are what you actually want.",
+            "ru": "Это допустимо, но возвращает связность во времени и воспроизводит таймаут и таблицу ожидающих запросов, поэтому оправдано лишь тогда, когда вам действительно нужны буферизация или гарантии доставки брокера."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is invalid: a broker cannot carry a reply address, so correlation must be done by the application database.",
+            "ru": "Это некорректно: брокер не может нести адрес для ответа, поэтому корреляцию должна делать база приложения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It removes temporal coupling, because the broker decouples the two services by definition.",
+            "ru": "Это снимает связность во времени, потому что брокер по определению развязывает два сервиса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It guarantees exactly-once processing, since the correlation id deduplicates the request automatically.",
+            "ru": "Это гарантирует exactly-once обработку, поскольку correlation id автоматически дедуплицирует запрос."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Blocking for a reply puts the temporal coupling straight back: the responder must be alive within the caller's timeout, so the broker's main advantage is given up while its cost is kept. The pattern is real and widely implemented, and it is the right choice when you want the queue as a buffer or want the request to survive a responder restart - not because messaging sounds more modern. A correlation id identifies a reply; it deduplicates nothing on its own.",
+        "ru": "Блокирующее ожидание ответа возвращает связность во времени: отвечающий должен быть жив в пределах таймаута вызывающего, так что главное преимущество брокера отдано, а его цена сохранена. Паттерн реален и широко реализован, и он уместен, когда очередь нужна как буфер или когда запрос должен пережить перезапуск отвечающего, - но не потому, что обмен сообщениями звучит современнее. Correlation id опознаёт ответ; сам по себе он ничего не дедуплицирует."
+      },
+      "sources": [
+        "https://www.enterpriseintegrationpatterns.com/patterns/messaging/EventMessage.html",
+        "https://microservices.io/patterns/communication-style/messaging.html"
+      ]
+    },
+    {
+      "id": "distributed.resilience.001",
+      "section": "resilience",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What is the primary thing a timeout on an outgoing call protects?",
+        "ru": "Что в первую очередь защищает таймаут на исходящем вызове?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The dependency, by stopping it from processing a request it no longer has time to finish.",
+            "ru": "Зависимость - тем, что не даёт ей обрабатывать запрос, на который у неё уже нет времени."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The correctness of the call, by guaranteeing that a timed-out request had no effect.",
+            "ru": "Корректность вызова - гарантией, что отвалившийся по таймауту запрос не имел эффекта."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Your own resources: it bounds how long a thread, a connection and a request are held while the dependency does not answer.",
+            "ru": "Ваши собственные ресурсы: он ограничивает, как долго удерживаются поток, соединение и запрос, пока зависимость не отвечает."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The network, by reducing the number of open sockets below the operating system limit.",
+            "ru": "Сеть - снижением числа открытых сокетов ниже лимита операционной системы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The user's patience: it is a user-experience setting rather than a technical one.",
+            "ru": "Терпение пользователя: это настройка пользовательского опыта, а не техническая."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A timeout does not make a call succeed and does not cancel work already started on the other side - the server usually keeps going. What it does is stop one slow dependency from consuming your thread pool and connection pool until nothing else can be served. Pick it from the dependency's observed p99 plus headroom, not from a round number that feels generous.",
+        "ru": "Таймаут не заставляет вызов удаться и не отменяет работу, уже начатую на той стороне, - сервер обычно продолжает. Он не даёт одной медленной зависимости съесть ваш пул потоков и пул соединений до состояния, когда больше некого обслуживать. Выбирайте его из наблюдаемого p99 зависимости плюс запас, а не из круглого числа, которое кажется щедрым."
+      },
+      "sources": [
+        "https://sre.google/sre-book/handling-overload/",
+        "https://resilience4j.readme.io/docs/getting-started"
+      ]
+    },
+    {
+      "id": "distributed.resilience.002",
+      "section": "resilience",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What is the half-open state of a circuit breaker for?",
+        "ru": "Зачем circuit breaker нужно полуоткрытое состояние?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "To queue the rejected calls so they can be replayed once the circuit closes.",
+            "ru": "Чтобы складывать отклонённые вызовы в очередь и переиграть их, когда контур закроется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "To let read calls through while still blocking write calls.",
+            "ru": "Чтобы пропускать вызовы на чтение, продолжая блокировать вызовы на запись."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "To switch traffic to a fallback implementation of the same dependency.",
+            "ru": "Чтобы переключить трафик на запасную реализацию той же зависимости."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "To let a small number of trial calls through after the cooldown, so the breaker can find out whether the dependency recovered without sending it full traffic.",
+            "ru": "Чтобы после паузы пропустить небольшое число пробных вызовов и выяснить, восстановилась ли зависимость, не отправляя ей полный трафик."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "To halve the call rate permanently, which is what keeps the dependency from failing again.",
+            "ru": "Чтобы навсегда вдвое снизить частоту вызовов - именно это не даёт зависимости упасть снова."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Half-open is a probe. Going straight from open to closed would hit a recovering service with the full backlog of traffic and knock it over again, which is how a partial outage becomes a cycle. If the trial calls succeed the breaker closes; if they fail it opens again and the cooldown restarts.",
+        "ru": "Полуоткрытое состояние - это проба. Переход сразу из открытого в закрытое ударил бы по восстанавливающемуся сервису всем накопившимся трафиком и снова его уронил, - так частичный отказ превращается в цикл. Если пробные вызовы удались, breaker закрывается; если упали - открывается снова, и пауза начинается заново."
+      },
+      "sources": [
+        "https://martinfowler.com/bliki/CircuitBreaker.html",
+        "https://resilience4j.readme.io/docs/getting-started"
+      ]
+    },
+    {
+      "id": "distributed.resilience.003",
+      "section": "resilience",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A client retries a failed call three times with a fixed 1-second delay. The dependency recovers, and immediately falls over again. Why, and what is the fix?",
+        "ru": "Клиент повторяет упавший вызов три раза с фиксированной задержкой в 1 секунду. Зависимость восстанавливается и тут же падает снова. Почему и как это чинить?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "One second is too short; raising the fixed delay to thirty seconds solves it.",
+            "ru": "Одна секунда слишком мало; фиксированная задержка в тридцать секунд это решает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Three attempts is too many; a single retry would not produce enough load to matter.",
+            "ru": "Три попытки - слишком много; один повтор не создал бы заметной нагрузки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The dependency did not really recover; the retries are only revealing a failure that was already there.",
+            "ru": "Зависимость на самом деле не восстановилась; повторы лишь проявляют уже существовавший отказ."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The client is missing a circuit breaker, and a breaker alone would remove the spike.",
+            "ru": "У клиента нет circuit breaker, и один только breaker убрал бы всплеск."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "All the waiting clients retry in lockstep, so recovery is met by a synchronised spike; add randomised jitter to the backoff so the retries spread out.",
+            "ru": "Все ожидающие клиенты повторяют в ногу, поэтому восстановление встречает синхронизированный всплеск; добавьте случайный jitter к задержке, чтобы повторы разъехались."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Fixed delays keep every waiting client on the same schedule, so they all arrive together. Exponential backoff spreads attempts out over time, but on its own it keeps them synchronised; jitter is what actually breaks the alignment. A larger fixed delay just moves the spike later. A breaker helps by stopping calls while the dependency is down, but the clients released when it closes still need jitter.",
+        "ru": "Фиксированная задержка держит всех ожидающих клиентов на одном расписании, поэтому они приходят вместе. Экспоненциальный backoff растягивает попытки во времени, но сам по себе сохраняет синхронность; разрушает её именно jitter. Большая фиксированная задержка просто сдвигает всплеск. Breaker помогает тем, что останавливает вызовы, пока зависимость лежит, но клиентам, выпущенным при его закрытии, jitter всё равно нужен."
+      },
+      "sources": [
+        "https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/",
+        "https://sre.google/sre-book/handling-overload/"
+      ]
+    },
+    {
+      "id": "distributed.resilience.004",
+      "section": "resilience",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "The service below deployed fine for months on one runtime and then failed on the first boot after a runtime change, with `Acquisition timeout while waiting for new connection`. The database is a free tier that scales to zero and takes several seconds to wake. What was the actual cause?",
+        "ru": "Сервис ниже месяцами разворачивался нормально на одном рантайме и упал на первой же загрузке после его смены с ошибкой `Acquisition timeout while waiting for new connection`. База - бесплатный тариф, который масштабируется в ноль и просыпается несколько секунд. В чём была настоящая причина?"
+      },
+      "code": "quarkus.datasource.jdbc.acquisition-timeout=30S\nquarkus.datasource.jdbc.login-timeout=20S\nquarkus.flyway.connect-retries=5\nquarkus.flyway.connect-retries-interval=5S",
+      "options": [
+        {
+          "text": {
+            "en": "The new connection pool's default acquisition timeout was shorter than the old one's, so the same cold start that used to fit inside the wait now exceeded it.",
+            "ru": "Таймаут получения соединения по умолчанию у нового пула короче, чем у старого, поэтому тот же холодный старт, раньше укладывавшийся в ожидание, перестал в него укладываться."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The database credentials were not carried over, and an authentication failure surfaces as an acquisition timeout.",
+            "ru": "Учётные данные базы не перенесли, а ошибка аутентификации проявляется как таймаут получения соединения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The pool size was too small, so the boot could not obtain enough connections in parallel.",
+            "ru": "Размер пула был слишком мал, поэтому загрузка не смогла получить достаточно соединений параллельно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The database was genuinely unreachable; a timeout at boot always means a network or DNS problem.",
+            "ru": "База действительно была недоступна; таймаут при загрузке всегда означает проблему с сетью или DNS."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Migrations at start-up held the connection, so the pool had none left to hand out.",
+            "ru": "Миграции при старте удерживали соединение, поэтому пулу нечего было выдавать."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Nothing about the environment changed; the default did. Agroal gives up acquiring a connection after 5 seconds where HikariCP waited 30, and a database that needs a few seconds to wake sits exactly between the two. This is the general lesson about defaults: a timeout you did not choose is a timeout chosen by whoever wrote the library, for a workload that is not yours. The fix is to state the values explicitly, and to let the first connection of the boot retry rather than fail.",
+        "ru": "В окружении не изменилось ничего - изменилось значение по умолчанию. Agroal перестаёт ждать соединение через 5 секунд там, где HikariCP ждал 30, а база, которой нужно несколько секунд на пробуждение, находится ровно между этими значениями. Это общий урок про умолчания: таймаут, который вы не выбирали, выбран автором библиотеки под нагрузку, которая не ваша. Лечение - задать значения явно и дать первому соединению загрузки повторять попытки, а не падать."
+      },
+      "sources": [
+        "https://quarkus.io/guides/datasource",
+        "https://resilience4j.readme.io/docs/getting-started"
+      ]
+    },
+    {
+      "id": "distributed.resilience.005",
+      "section": "resilience",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A service calls two dependencies from one shared thread pool. One of them slows to 20 seconds per call; requests that never touch it start failing too. Which pattern addresses this specifically?",
+        "ru": "Сервис вызывает две зависимости из одного общего пула потоков. Одна из них замедляется до 20 секунд на вызов; начинают падать и запросы, которые её вообще не трогают. Какой паттерн решает именно эту проблему?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A circuit breaker, which is what stops one dependency from consuming shared threads.",
+            "ru": "Circuit breaker - именно он не даёт одной зависимости съедать общие потоки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A bulkhead: give each dependency its own pool or a semaphore capping its concurrent calls, so one cannot consume the shared capacity.",
+            "ru": "Bulkhead: дать каждой зависимости свой пул или семафор, ограничивающий число одновременных вызовов, чтобы одна не могла съесть общую ёмкость."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A retry with exponential backoff, which spreads the calls over time and frees threads.",
+            "ru": "Повтор с экспоненциальным backoff: он растягивает вызовы во времени и освобождает потоки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A larger thread pool, since the problem is capacity rather than isolation.",
+            "ru": "Больший пул потоков, ведь проблема в ёмкости, а не в изоляции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A fallback value for the slow dependency, which makes its calls return immediately.",
+            "ru": "Запасное значение для медленной зависимости, благодаря которому её вызовы возвращаются сразу."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The bulkhead is about isolation: it bounds the blast radius of one slow dependency so the rest of the service keeps working. A breaker helps once the calls are failing, but a dependency that is merely slow may not trip it at all, and until it does the threads are gone. A bigger pool raises the threshold and does not change the shape of the failure. A fallback only runs after the call gives up, so it needs a timeout to be useful in the first place.",
+        "ru": "Bulkhead - про изоляцию: он ограничивает радиус поражения одной медленной зависимости, чтобы остальной сервис продолжал работать. Breaker помогает, когда вызовы уже падают, но зависимость, которая просто медленная, может его вовсе не открыть, а до тех пор потоки потеряны. Больший пул поднимает порог и не меняет характер отказа. Фолбэк срабатывает только после того, как вызов сдался, то есть сам по себе требует таймаута."
+      },
+      "sources": [
+        "https://resilience4j.readme.io/docs/getting-started",
+        "https://martinfowler.com/bliki/CircuitBreaker.html"
+      ]
+    },
+    {
+      "id": "distributed.resilience.006",
+      "section": "resilience",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "An inbound request has a 3-second budget. The handler calls service A, then service B, and each client is configured with a 3-second timeout and two retries. Under load A becomes slow. What actually happens, and what is the right design?",
+        "ru": "У входящего запроса бюджет 3 секунды. Обработчик вызывает сервис A, затем сервис B, и у каждого клиента настроен таймаут 3 секунды и две повторные попытки. Под нагрузкой A становится медленным. Что на самом деле происходит и какой дизайн правильный?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The handler fails fast at three seconds, because the inbound budget automatically bounds the outbound calls.",
+            "ru": "Обработчик быстро падает на трёх секундах, потому что входящий бюджет автоматически ограничивает исходящие вызовы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The retries make the call succeed within the budget, since each attempt is likely to be faster than the last.",
+            "ru": "Повторы позволяют вызову уложиться в бюджет, поскольку каждая попытка вероятно быстрее предыдущей."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The handler can spend up to nine seconds on A alone for a client that left after three, so work continues for nobody; propagate a deadline instead, giving each hop only the time that is left.",
+            "ru": "Обработчик может потратить только на A до девяти секунд ради клиента, который ушёл через три, то есть работа продолжается ни для кого; вместо этого передавайте дедлайн, отдавая каждому переходу лишь оставшееся время."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "B absorbs the delay, because it starts only after A returns and therefore has the remaining budget by construction.",
+            "ru": "B поглощает задержку, потому что начинается только после ответа A и потому по построению получает оставшийся бюджет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing bad: a timeout equal to the inbound budget is the recommended setting, and the retries are free because they only run on failure.",
+            "ru": "Ничего плохого: таймаут, равный входящему бюджету, - рекомендуемая настройка, а повторы бесплатны, раз выполняются только при отказе."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Timeouts do not compose, and retries multiply them: three attempts at three seconds is nine seconds of held threads and nine seconds of load on a dependency that is already struggling - all after the client gave up. A deadline composes because it shrinks: the handler computes what remains of the 3 seconds and passes that to each call, so a hop that cannot fit is abandoned immediately. It also makes the retry decision honest - there is no point retrying with 200 ms left.",
+        "ru": "Таймауты не композируются, а повторы их умножают: три попытки по три секунды - это девять секунд удерживаемых потоков и девять секунд нагрузки на зависимость, которой и так плохо, причём уже после того, как клиент сдался. Дедлайн композируется, потому что сокращается: обработчик считает, сколько осталось от трёх секунд, и передаёт остаток каждому вызову, так что переход, который не укладывается, бросается сразу. Заодно решение о повторе становится честным: повторять, когда осталось 200 мс, бессмысленно."
+      },
+      "sources": [
+        "https://sre.google/sre-book/handling-overload/",
+        "https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/"
+      ]
+    },
+    {
+      "id": "distributed.idempotency.001",
+      "section": "idempotency",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which statement about idempotency is correct?",
+        "ru": "Какое утверждение об идемпотентности верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "An operation is idempotent only if it does not change state at all.",
+            "ru": "Операция идемпотентна, только если вообще не меняет состояние."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An operation is idempotent if repeated calls return byte-identical responses.",
+            "ru": "Операция идемпотентна, если повторные вызовы возвращают побайтово одинаковые ответы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`POST /orders` is idempotent as long as it returns the same body each time.",
+            "ru": "`POST /orders` идемпотентен, пока каждый раз возвращает одно и то же тело."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`DELETE /orders/7` is idempotent even though the second call finds nothing to delete, because the resulting state is the same.",
+            "ru": "`DELETE /orders/7` идемпотентен, хотя второму вызову уже нечего удалять, потому что итоговое состояние то же самое."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Idempotency is a property of the transport, so any call over a message broker is idempotent.",
+            "ru": "Идемпотентность - свойство транспорта, поэтому любой вызов через брокер сообщений идемпотентен."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Idempotency is about the state the system ends in, not about the response and not about being read-only. The second `DELETE` may honestly answer `404`, and the operation is still idempotent because the resource is absent either way. `POST /orders` creating a second order is not idempotent no matter what it returns.",
+        "ru": "Идемпотентность - про состояние, в котором оказывается система, а не про ответ и не про отсутствие изменений. Второй `DELETE` может честно ответить `404`, и операция всё равно идемпотентна, потому что ресурса нет в обоих случаях. `POST /orders`, создающий второй заказ, не идемпотентен, что бы он ни возвращал."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9110.html#name-idempotent-methods",
+        "https://datatracker.ietf.org/doc/draft-ietf-httpapi-idempotency-key-header/"
+      ]
+    },
+    {
+      "id": "distributed.idempotency.002",
+      "section": "idempotency",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Why do practical systems choose at-least-once delivery rather than trying to deliver each message exactly once?",
+        "ru": "Почему практические системы выбирают доставку at-least-once, а не пытаются доставить каждое сообщение ровно один раз?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because exactly-once delivery is slower, and the extra latency is not worth the correctness it provides.",
+            "ru": "Потому что доставка exactly-once медленнее, и лишняя задержка не стоит даваемой ею корректности."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because brokers have not implemented exactly-once delivery yet, but newer versions will.",
+            "ru": "Потому что брокеры пока не реализовали доставку exactly-once, но в новых версиях она появится."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because at-most-once is the only alternative, and it loses messages on every restart.",
+            "ru": "Потому что альтернатива только at-most-once, а она теряет сообщения при каждом перезапуске."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because duplicates are rare enough in practice that handling them is not necessary.",
+            "ru": "Потому что дубликаты на практике достаточно редки, чтобы их можно было не обрабатывать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because an unanswered call is ambiguous, the sender must either risk a duplicate or risk losing the work - and losing it is usually worse, so the receiver is made to tolerate duplicates instead.",
+            "ru": "Потому что неотвеченный вызов неоднозначен: отправитель обязан рискнуть либо дубликатом, либо потерей работы, - а потеря обычно хуже, поэтому получателя учат переживать дубликаты."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The choice is forced, not economic: the network can lose the acknowledgement, so the sender cannot tell a lost request from a lost reply. At-least-once plus a receiver that deduplicates gives effectively-once processing - the duplicate still arrives, it just stops mattering. Duplicates are not rare under retry, and a system that ignores them is one outage away from a double charge.",
+        "ru": "Выбор вынужденный, а не экономический: сеть может потерять подтверждение, поэтому отправитель не отличит потерянный запрос от потерянного ответа. At-least-once плюс дедуплицирующий получатель дают обработку effectively-once: дубликат по-прежнему приходит, он просто перестаёт что-либо значить. При повторах дубликаты не редки, и система, которая их игнорирует, находится в одном сбое от двойного списания."
+      },
+      "sources": [
+        "https://bravenewgeek.com/you-cannot-have-exactly-once-delivery/",
+        "https://kafka.apache.org/documentation/#semantics"
+      ]
+    },
+    {
+      "id": "distributed.idempotency.003",
+      "section": "idempotency",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A payments endpoint stores the `Idempotency-Key` in one transaction and performs the charge in a separate one that commits afterwards. What is wrong?",
+        "ru": "Эндпоинт платежей сохраняет `Idempotency-Key` в одной транзакции, а списание выполняет в отдельной, коммитящейся после. Что здесь не так?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A crash between the two commits leaves the key stored with no charge, or the charge done with no key - either way the next retry does the wrong thing.",
+            "ru": "Падение между двумя коммитами оставляет ключ без списания либо списание без ключа - и в том и в другом случае следующий повтор сделает не то."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Nothing is wrong, as long as the key is stored first: the key's presence is what the retry checks.",
+            "ru": "Ничего не так, если ключ сохраняется первым: повтор проверяет именно наличие ключа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing is wrong, as long as the charge happens first: a key without a charge is harmless.",
+            "ru": "Ничего не так, если списание идёт первым: ключ без списания безвреден."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The key should not be stored at all; the client should keep it and resend it only if it wants a repeat.",
+            "ru": "Ключ вообще не следует хранить; клиент должен держать его сам и присылать снова, только если хочет повтора."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The only problem is table growth, which a TTL on the key rows solves.",
+            "ru": "Единственная проблема - рост таблицы, и её решает TTL на строках с ключами."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The idempotency record is evidence that the effect happened, so it has to commit with the effect. Split across two transactions it is evidence of nothing: crash after storing the key and the retry is suppressed although nothing was charged; crash after charging and the retry charges again. A TTL is necessary for a different reason - unbounded growth - and does not fix the atomicity.",
+        "ru": "Запись идемпотентности - это свидетельство того, что эффект произошёл, поэтому коммититься она должна вместе с эффектом. Разнесённая на две транзакции, она не свидетельствует ни о чём: падение после сохранения ключа - и повтор подавлен, хотя ничего не списано; падение после списания - и повтор спишет ещё раз. TTL нужен по другой причине, против неограниченного роста, и атомарности не чинит."
+      },
+      "sources": [
+        "https://datatracker.ietf.org/doc/draft-ietf-httpapi-idempotency-key-header/",
+        "https://www.rfc-editor.org/rfc/rfc9110.html#name-idempotent-methods"
+      ]
+    },
+    {
+      "id": "distributed.idempotency.004",
+      "section": "idempotency",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A consumer deduplicates messages with `SELECT ... WHERE message_id = ?` followed by an `INSERT` if nothing was found. Under load the same message is occasionally processed twice. What is the fix?",
+        "ru": "Потребитель дедуплицирует сообщения через `SELECT ... WHERE message_id = ?` и последующий `INSERT`, если ничего не нашлось. Под нагрузкой одно и то же сообщение иногда обрабатывается дважды. Как это чинить?"
+      },
+      "code": "INSERT INTO processed_messages (message_id, processed_at)\nVALUES (?, now())\nON CONFLICT (message_id) DO NOTHING;",
+      "options": [
+        {
+          "text": {
+            "en": "Wrap the check and the insert in a `synchronized` block, which serialises the two steps.",
+            "ru": "Обернуть проверку и вставку в `synchronized`-блок, который сериализует два шага."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Let the database arbitrate: a unique constraint on `message_id` with `INSERT ... ON CONFLICT DO NOTHING`, treating zero affected rows as \"already handled\".",
+            "ru": "Отдать арбитраж базе: уникальное ограничение на `message_id` и `INSERT ... ON CONFLICT DO NOTHING`, считая ноль затронутых строк ответом «уже обработано»."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Retry the select once after a short delay, which resolves the race in practice.",
+            "ru": "Повторить select через короткую задержку - на практике это разрешает гонку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Reduce the consumer to a single instance, since deduplication cannot work with more than one.",
+            "ru": "Свести потребителя к одному экземпляру, раз дедупликация не работает более чем с одним."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Move the deduplication table to a cache, which has atomic operations that a database does not.",
+            "ru": "Перенести таблицу дедупликации в кеш, у которого есть атомарные операции, которых нет у базы."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Check-then-act across a network is a race: two consumers can both find nothing and both insert. A unique constraint makes the database the single arbiter, and `ON CONFLICT DO NOTHING` turns the loser into a no-op instead of an exception. `synchronized` guards one JVM only. A single instance would work and throws away scaling - and still races with itself after a redelivery during a restart.",
+        "ru": "«Проверить, потом сделать» через сеть - это гонка: два потребителя могут оба ничего не найти и оба вставить. Уникальное ограничение делает базу единственным арбитром, а `ON CONFLICT DO NOTHING` превращает проигравшего в пустую операцию вместо исключения. `synchronized` защищает только одну JVM. Один экземпляр сработал бы ценой отказа от масштабирования - и всё равно гоняется сам с собой при повторной доставке во время перезапуска."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/sql-insert.html",
+        "https://datatracker.ietf.org/doc/draft-ietf-httpapi-idempotency-key-header/"
+      ]
+    },
+    {
+      "id": "distributed.idempotency.005",
+      "section": "idempotency",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Which of these operations is naturally idempotent, so it needs no deduplication table at all?",
+        "ru": "Какая из операций естественно идемпотентна, так что таблица дедупликации ей вовсе не нужна?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "`UPDATE accounts SET balance = balance - 10 WHERE id = ?`",
+            "ru": "`UPDATE accounts SET balance = balance - 10 WHERE id = ?`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`INSERT INTO audit_log (order_id, event) VALUES (?, 'PAID')`",
+            "ru": "`INSERT INTO audit_log (order_id, event) VALUES (?, 'PAID')`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`UPDATE orders SET status = 'PAID' WHERE id = ?`",
+            "ru": "`UPDATE orders SET status = 'PAID' WHERE id = ?`"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "`UPDATE orders SET attempts = attempts + 1 WHERE id = ?`",
+            "ru": "`UPDATE orders SET attempts = attempts + 1 WHERE id = ?`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`INSERT INTO outbox (id, payload) VALUES (gen_random_uuid(), ?)`",
+            "ru": "`INSERT INTO outbox (id, payload) VALUES (gen_random_uuid(), ?)`"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Assignment to an absolute value is repeatable: running it twice leaves the same row. Every other option accumulates - a relative arithmetic update, an append to a log, a counter increment, an insert with a freshly generated id - so a duplicate leaves a different state. Where the operation can be written as an assignment rather than a delta, idempotency is free; where it cannot, carrying a version and ignoring anything not newer gives the same protection.",
+        "ru": "Присваивание абсолютного значения повторяемо: выполнение дважды оставляет ту же строку. Все остальные варианты накапливают - относительное арифметическое обновление, дописывание в журнал, инкремент счётчика, вставка со свежесгенерированным идентификатором, - поэтому дубликат оставляет другое состояние. Там, где операцию можно записать как присваивание, а не как дельту, идемпотентность достаётся бесплатно; там, где нельзя, ту же защиту даёт версия, при которой игнорируется всё, что не новее."
+      },
+      "sources": [
+        "https://datatracker.ietf.org/doc/draft-ietf-httpapi-idempotency-key-header/",
+        "https://www.rfc-editor.org/rfc/rfc9110.html"
+      ]
+    },
+    {
+      "id": "distributed.idempotency.006",
+      "section": "idempotency",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A pipeline reads from Kafka with exactly-once processing enabled - idempotent producer, transactions committing output records together with consumer offsets - and one of its steps sends a confirmation email. What guarantee does the email actually have?",
+        "ru": "Конвейер читает из Kafka с включённой обработкой exactly-once - идемпотентный продюсер, транзакции, коммитящие выходные записи вместе со смещениями потребителя, - и один из его шагов отправляет письмо-подтверждение. Какая гарантия в действительности есть у письма?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Exactly-once, because the transaction includes every side effect performed while it is open.",
+            "ru": "Exactly-once, потому что транзакция включает все побочные эффекты, выполненные пока она открыта."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Exactly-once, because the consumer offset is committed only after the send returns successfully.",
+            "ru": "Exactly-once, потому что смещение потребителя коммитится только после успешного возврата отправки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "At-most-once, because an external call that fails aborts the transaction and the record is never reprocessed.",
+            "ru": "At-most-once, потому что упавший внешний вызов прерывает транзакцию и запись больше не обрабатывается."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "At-least-once: the transaction covers only records and offsets inside Kafka, so a crash after sending but before the commit sends the email again.",
+            "ru": "At-least-once: транзакция покрывает только записи и смещения внутри Kafka, поэтому падение после отправки, но до коммита отправит письмо повторно."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "None: enabling transactions on the consumer side disables offset commits, so the email may not be sent at all.",
+            "ru": "Никакой: включение транзакций на стороне потребителя отключает коммит смещений, поэтому письмо может не уйти вовсе."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Exactly-once processing works by committing the effect and the record of the effect atomically, which is possible only while both live in the same transactional resource. A mail server is not part of the Kafka transaction and cannot be rolled back, so the guarantee ends at the cluster boundary and the application is responsible again. The practical answers are the usual ones: make the external effect idempotent through a key the provider accepts, or move it behind a consumer that deduplicates - and place irreversible steps last, after everything that could still fail.",
+        "ru": "Обработка exactly-once работает за счёт атомарного коммита эффекта и записи о нём, а это возможно, только пока оба живут в одном транзакционном ресурсе. Почтовый сервер не входит в транзакцию Kafka и не откатывается, поэтому гарантия заканчивается на границе кластера и ответственность снова на приложении. Практические ответы обычные: сделать внешний эффект идемпотентным через ключ, который принимает провайдер, либо вынести его за потребителя, который дедуплицирует, - и ставить необратимые шаги последними, после всего, что ещё может упасть."
+      },
+      "sources": [
+        "https://kafka.apache.org/documentation/#semantics",
+        "https://bravenewgeek.com/you-cannot-have-exactly-once-delivery/"
+      ]
+    },
+    {
+      "id": "distributed.saga-and-outbox.001",
+      "section": "saga-and-outbox",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What is a saga?",
+        "ru": "Что такое saga?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A distributed transaction coordinated by two-phase commit across several services.",
+            "ru": "Распределённая транзакция, координируемая двухфазным коммитом между несколькими сервисами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A long-running transaction that stays open across several service calls.",
+            "ru": "Долгая транзакция, остающаяся открытой на протяжении нескольких сервисных вызовов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A retry policy that repeats a multi-service operation until every step succeeds.",
+            "ru": "Политика повторов, повторяющая многосервисную операцию, пока каждый шаг не удастся."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A message pattern in which one service broadcasts its state to all the others.",
+            "ru": "Паттерн обмена сообщениями, при котором один сервис рассылает своё состояние всем остальным."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A sequence of local transactions, each committed independently, with a compensating action defined for each step so a later failure can be undone.",
+            "ru": "Последовательность локальных транзакций, каждая из которых коммитится независимо, с компенсирующим действием для каждого шага, чтобы более поздний отказ можно было отменить."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A saga gives up atomicity and buys availability: nothing is locked across the network, and each step is visible as soon as it commits. That is also its cost - the intermediate states are real and other people may observe them, which is why the domain has to be designed to tolerate them.",
+        "ru": "Saga отказывается от атомарности ради доступности: ничего не блокируется через сеть, и каждый шаг становится виден сразу после коммита. В этом же её цена: промежуточные состояния настоящие и их могут наблюдать другие, поэтому домен должен быть спроектирован так, чтобы их переносить."
+      },
+      "sources": [
+        "https://microservices.io/patterns/data/saga.html",
+        "https://www.cs.cornell.edu/andru/cs711/2002fa/reading/sagas.pdf"
+      ]
+    },
+    {
+      "id": "distributed.saga-and-outbox.002",
+      "section": "saga-and-outbox",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Why is a compensating action not the same thing as a rollback?",
+        "ru": "Почему компенсирующее действие - не то же самое, что откат?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A rollback erases the change as if it never happened; a compensation is a second, visible fact that undoes the effect semantically - a refund appears on the statement next to the charge.",
+            "ru": "Откат стирает изменение, как будто его не было; компенсация - это второй, видимый факт, отменяющий эффект по смыслу: возврат появляется в выписке рядом со списанием."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A compensation is slower, but otherwise identical in what it leaves behind.",
+            "ru": "Компенсация медленнее, но в остальном одинакова по тому, что оставляет после себя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A compensation is performed by the database and a rollback by the application.",
+            "ru": "Компенсацию выполняет база, а откат - приложение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A compensation applies to reads and a rollback to writes.",
+            "ru": "Компенсация относится к чтениям, а откат - к записям."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A compensation is automatic, while a rollback has to be written by hand for each step.",
+            "ru": "Компенсация автоматическая, а откат приходится писать руками для каждого шага."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "This is the honest cost of the pattern. The intermediate state existed and may have been observed: stock was reserved, a card was charged, someone saw the order. Compensation restores the business meaning, not the history. Some steps cannot be compensated at all - a sent email - so order the saga to put irreversible steps last.",
+        "ru": "В этом честная цена паттерна. Промежуточное состояние существовало и могло быть замечено: товар был зарезервирован, карта списана, кто-то видел заказ. Компенсация восстанавливает бизнес-смысл, а не историю. Некоторые шаги не компенсируются вовсе - отправленное письмо, - поэтому располагайте необратимые шаги последними."
+      },
+      "sources": [
+        "https://www.cs.cornell.edu/andru/cs711/2002fa/reading/sagas.pdf",
+        "https://microservices.io/patterns/data/saga.html"
+      ]
+    },
+    {
+      "id": "distributed.saga-and-outbox.003",
+      "section": "saga-and-outbox",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "What is wrong with the method below?",
+        "ru": "Что не так с методом ниже?"
+      },
+      "code": "@Transactional\npublic void placeOrder(Order order) {\n    orderRepository.save(order);\n    kafkaProducer.send(new OrderPlaced(order.getId()));\n}",
+      "options": [
+        {
+          "text": {
+            "en": "Nothing, as long as the send comes after the save: by then the order is durable.",
+            "ru": "Ничего, если отправка идёт после сохранения: к этому моменту заказ уже надёжно записан."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is a dual write: the database commit and the broker send are two systems with no atomicity between them, so either the order exists and nobody was told, or everyone was told about an order that rolled back.",
+            "ru": "Это двойная запись: коммит в базу и отправка в брокер - две системы без атомарности между ними, поэтому либо заказ есть и никто не узнал, либо все узнали о заказе, который откатился."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The send should come before the save, so that a failed send aborts the transaction.",
+            "ru": "Отправка должна идти перед сохранением, чтобы упавшая отправка прерывала транзакцию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The only problem is latency: the network call holds the transaction open longer than necessary.",
+            "ru": "Единственная проблема - задержка: сетевой вызов держит транзакцию открытой дольше необходимого."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`@Transactional` does not apply because the method is public, so the save is not transactional either.",
+            "ru": "`@Transactional` не действует, потому что метод публичный, так что и сохранение не транзакционно."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`@Transactional` covers the database and nothing else - the broker is not enlisted, so the two commits can succeed or fail independently. Swapping the lines only chooses which of the two inconsistencies you get. Holding the transaction open across a network call is a genuine second problem, but it is not the bug. The fix is to write the message into the same database in the same transaction, and publish it from there.",
+        "ru": "`@Transactional` покрывает базу и ничего больше: брокер в транзакцию не включён, поэтому два коммита могут удаться или упасть независимо. Перестановка строк лишь выбирает, какую из двух несогласованностей вы получите. Удержание транзакции открытой во время сетевого вызова - настоящая вторая проблема, но это не тот баг. Лечение - записать сообщение в ту же базу в той же транзакции и публиковать уже оттуда."
+      },
+      "sources": [
+        "https://microservices.io/patterns/data/transactional-outbox.html",
+        "https://microservices.io/patterns/data/saga.html"
+      ]
+    },
+    {
+      "id": "distributed.saga-and-outbox.004",
+      "section": "saga-and-outbox",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A service writes its events into an `outbox` table in the same transaction as the business data, and a separate publisher reads the table and sends them to the broker. What delivery guarantee does this give?",
+        "ru": "Сервис пишет события в таблицу `outbox` в той же транзакции, что и бизнес-данные, а отдельный публикатор читает таблицу и отправляет их в брокер. Какую гарантию доставки это даёт?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Exactly-once, because the outbox row and the business data commit together.",
+            "ru": "Exactly-once, потому что строка outbox и бизнес-данные коммитятся вместе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "At-most-once, because a failed publish loses the row.",
+            "ru": "At-most-once, потому что упавшая публикация теряет строку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "At-least-once: nothing is lost, but the publisher can send a row and die before recording that it did, so consumers still have to deduplicate.",
+            "ru": "At-least-once: ничего не теряется, но публикатор может отправить строку и умереть, не записав это, поэтому потребителям всё равно нужна дедупликация."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Exactly-once, provided the publisher deletes the row in the same transaction as the send.",
+            "ru": "Exactly-once, если публикатор удаляет строку в той же транзакции, что и отправка."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "No guarantee at all, since the publisher is outside the business transaction.",
+            "ru": "Никакой гарантии, поскольку публикатор находится вне бизнес-транзакции."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The outbox solves the dual write on the writing side: the event is durable if and only if the business change is. It does not solve it on the publishing side, because sending to the broker and marking the row are again two systems - the same problem one step down. That is acceptable precisely because consumers deduplicate; if they do not, the outbox has moved the bug rather than fixed it.",
+        "ru": "Outbox решает двойную запись на стороне записи: событие надёжно ровно тогда, когда надёжно бизнес-изменение. На стороне публикации он её не решает, потому что отправка в брокер и пометка строки - снова две системы, та же проблема на шаг ниже. Это приемлемо именно потому, что потребители дедуплицируют; если нет, outbox баг переместил, а не починил."
+      },
+      "sources": [
+        "https://microservices.io/patterns/data/transactional-outbox.html",
+        "https://debezium.io/documentation/reference/stable/transformations/outbox-event-router.html"
+      ]
+    },
+    {
+      "id": "distributed.saga-and-outbox.005",
+      "section": "saga-and-outbox",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A seven-step business process is implemented as a choreography: each service reacts to the previous service's events. Support asks why order 4711 is stuck. What is the structural problem?",
+        "ru": "Семишаговый бизнес-процесс реализован как хореография: каждый сервис реагирует на события предыдущего. Поддержка спрашивает, почему заказ 4711 застрял. В чём структурная проблема?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Choreography cannot express more than two steps, so the design is invalid at seven.",
+            "ru": "Хореография не выражает больше двух шагов, поэтому на семи шагах дизайн некорректен."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Events cannot carry enough data for seven steps, so the payload has to be replaced by shared database access.",
+            "ru": "События не могут нести достаточно данных для семи шагов, поэтому нагрузку приходится заменить общим доступом к базе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Choreography cannot compensate, so a stuck saga can never be rolled back.",
+            "ru": "Хореография не умеет компенсировать, поэтому застрявшую сагу нельзя откатить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The process exists nowhere as a whole - it is an emergent property of seven handlers - so there is no component that knows which step the order reached or that it is stuck.",
+            "ru": "Процесс нигде не существует целиком - он эмергентное свойство семи обработчиков, - поэтому нет компонента, который знает, до какого шага дошёл заказ и что он застрял."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The problem is only observability: adding tracing makes choreography equivalent to orchestration.",
+            "ru": "Проблема только в наблюдаемости: добавление трассировки делает хореографию эквивалентной оркестрации."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Choreography trades a central component for distributed knowledge, and past three or four steps that trade stops paying: nothing holds the state machine, so diagnosing and resuming a stuck flow means reconstructing it from logs. An orchestrator persists the saga state after each step, which gives one place that knows the process, knows it is stuck and can resume it. The cost is a component that knows about everyone - coupling chosen deliberately rather than coupling that crept in.",
+        "ru": "Хореография меняет центральный компонент на распределённое знание, и после трёх-четырёх шагов этот обмен перестаёт окупаться: конечный автомат не хранит никто, поэтому диагностика и возобновление застрявшего процесса означают восстановление его по логам. Оркестратор сохраняет состояние саги после каждого шага, и это даёт одно место, которое знает процесс, знает, что он застрял, и умеет его продолжить. Цена - компонент, который знает обо всех: связность, выбранная осознанно, а не просочившаяся сама."
+      },
+      "sources": [
+        "https://microservices.io/patterns/data/saga.html",
+        "https://microservices.io/patterns/data/saga.html"
+      ]
+    },
+    {
+      "id": "distributed.saga-and-outbox.006",
+      "section": "saga-and-outbox",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A team drops the outbox table and points Debezium directly at the business tables, publishing every row change as an integration event. What is the most serious consequence?",
+        "ru": "Команда убирает таблицу outbox и направляет Debezium прямо на бизнес-таблицы, публикуя каждое изменение строки как интеграционное событие. Какое следствие самое серьёзное?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Change data capture cannot read committed changes in order, so consumers see events out of sequence.",
+            "ru": "Change data capture не может читать закоммиченные изменения по порядку, поэтому потребители видят события вне очереди."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The events lose durability, because nothing is written inside the business transaction any more.",
+            "ru": "События теряют надёжность, потому что внутри бизнес-транзакции больше ничего не пишется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Debezium requires an outbox table, so the connector will refuse to start.",
+            "ru": "Debezium требует таблицу outbox, поэтому коннектор откажется стартовать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Reading the replication log makes every write slower, because the log is written synchronously with the transaction.",
+            "ru": "Чтение журнала репликации замедляет каждую запись, потому что журнал пишется синхронно с транзакцией."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The table layout becomes the published contract: every column rename or normalisation is now a breaking change for consumers who never agreed to depend on it.",
+            "ru": "Раскладка таблиц становится опубликованным контрактом: каждое переименование колонки или нормализация теперь ломающее изменение для потребителей, которые не соглашались от неё зависеть."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "This is the difference between replication and integration. CDC on business tables works technically - it reads committed changes in commit order and it is durable, because the write-ahead log is the transaction - but it publishes an implementation detail. The outbox row is a deliberately designed message you can keep stable while refactoring the tables underneath it. Worth knowing alongside this: a replication slot whose connector is down retains write-ahead log segments and will eventually fill the disk, which is a real operational failure rather than a theoretical one.",
+        "ru": "Здесь проходит граница между репликацией и интеграцией. CDC по бизнес-таблицам технически работает: он читает закоммиченные изменения в порядке коммитов и надёжен, потому что write-ahead log и есть транзакция, - но публикует деталь реализации. Строка outbox - это намеренно спроектированное сообщение, которое можно держать стабильным, перекраивая таблицы под ним. Рядом стоит помнить и другое: слот репликации, коннектор которого лежит, удерживает сегменты журнала и в итоге заполнит диск - это реальный эксплуатационный отказ, а не теоретический."
+      },
+      "sources": [
+        "https://debezium.io/documentation/reference/stable/transformations/outbox-event-router.html",
+        "https://debezium.io/documentation/reference/stable/connectors/postgresql.html"
+      ]
+    },
+    {
+      "id": "distributed.discovery-and-gateway.001",
+      "section": "discovery-and-gateway",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What problem does service discovery solve?",
+        "ru": "Какую задачу решает service discovery?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Finding the current network addresses of a service whose instances appear, move and disappear, so callers do not hold a hard-coded address that goes stale.",
+            "ru": "Поиск актуальных сетевых адресов сервиса, экземпляры которого появляются, переезжают и исчезают, чтобы вызывающие не держали жёстко прописанный адрес, который устаревает."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Deciding which version of a service's API a caller should use.",
+            "ru": "Выбор того, какую версию API сервиса должен использовать вызывающий."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Authenticating calls between services inside the cluster.",
+            "ru": "Аутентификацию вызовов между сервисами внутри кластера."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Distributing configuration values to every running instance.",
+            "ru": "Раздачу значений конфигурации всем работающим экземплярам."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Serialising messages so that services written in different languages can talk.",
+            "ru": "Сериализацию сообщений, чтобы сервисы на разных языках могли общаться."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Discovery is about addresses and liveness, nothing else. In Kubernetes you get it from the platform: a `Service` is a stable DNS name in front of the pods matching its selector, and a failing readiness probe takes a pod out of rotation. Versioning, authentication, configuration and serialisation are separate concerns that a registry does not address.",
+        "ru": "Discovery - про адреса и живость, и больше ни про что. В Kubernetes это даёт платформа: `Service` - стабильное DNS-имя перед подами, подходящими под его селектор, а провалившаяся readiness-проба выводит под из ротации. Версионирование, аутентификация, конфигурация и сериализация - отдельные задачи, которых реестр не касается."
+      },
+      "sources": [
+        "https://microservices.io/patterns/service-registry.html",
+        "https://kubernetes.io/docs/concepts/services-networking/service/"
+      ]
+    },
+    {
+      "id": "distributed.discovery-and-gateway.002",
+      "section": "discovery-and-gateway",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which responsibility belongs in an API gateway?",
+        "ru": "Какая ответственность относится к API gateway?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Validating that an order has at least one item before forwarding it.",
+            "ru": "Проверка, что в заказе есть хотя бы одна позиция, перед его пересылкой."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Cross-cutting edge concerns: TLS termination, authentication, rate limiting and request size limits, applied once for every service behind it.",
+            "ru": "Сквозные пограничные задачи: терминация TLS, аутентификация, ограничение частоты и размера запросов, применяемые один раз для всех сервисов за ним."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Owning the database schema shared by the services behind it.",
+            "ru": "Владение схемой базы, общей для сервисов за ним."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Running the saga that coordinates a multi-service business process.",
+            "ru": "Выполнение саги, координирующей многосервисный бизнес-процесс."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Deciding which service should own a given piece of data.",
+            "ru": "Решение о том, какой сервис должен владеть тем или иным куском данных."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Route, authenticate, limit - decide nothing. The moment a gateway knows a business rule, that rule lives in two places and every team's deployment runs through one component owned by somebody else. The compositions a gateway may legitimately do are technical: fanning one client request out to several services and merging the responses, which is what a backend for frontend takes further.",
+        "ru": "Маршрутизировать, аутентифицировать, ограничивать - и ничего не решать. Как только gateway знает бизнес-правило, это правило живёт в двух местах, а деплой каждой команды проходит через один компонент, принадлежащий кому-то ещё. Композиции, которые gateway делать вправе, технические: развернуть один клиентский запрос в несколько сервисных и слить ответы, - именно это развивает backend for frontend."
+      },
+      "sources": [
+        "https://microservices.io/patterns/apigateway.html",
+        "https://samnewman.io/patterns/architectural/bff/"
+      ]
+    },
+    {
+      "id": "distributed.discovery-and-gateway.003",
+      "section": "discovery-and-gateway",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "What does client-side discovery buy over server-side discovery, and what does it cost?",
+        "ru": "Что даёт клиентский discovery по сравнению с серверным и чего он стоит?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It removes the need for health checks, since the caller discovers failures directly.",
+            "ru": "Он снимает необходимость в health-проверках, раз вызывающий обнаруживает отказы напрямую."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It removes the registry entirely; the caller broadcasts on the network to find instances.",
+            "ru": "Он полностью убирает реестр: вызывающий находит экземпляры широковещательным запросом в сеть."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It removes a network hop and lets the caller apply real load-balancing policy such as least outstanding requests; it costs a discovery client in every service and in every language.",
+            "ru": "Он убирает сетевой переход и позволяет вызывающему применять настоящую политику балансировки, например по числу незавершённых запросов; цена - клиент discovery в каждом сервисе и на каждом языке."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is strictly better, which is why Kubernetes implements discovery on the client side.",
+            "ru": "Он строго лучше, поэтому Kubernetes реализует discovery на стороне клиента."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It guarantees even distribution of load, which a server-side balancer cannot provide.",
+            "ru": "Он гарантирует равномерное распределение нагрузки, которое серверный балансировщик обеспечить не может."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The trade is a library in every service against an extra hop and one more thing that can fail. Both shapes need a registry and health checks - something must know which instances are alive. Kubernetes gives the server-side shape without a library, which is why explicit registries are less common than they were; client-side discovery is worth its cost when you genuinely need the smarter balancing policy.",
+        "ru": "Обмен такой: библиотека в каждом сервисе против лишнего перехода и ещё одной вещи, которая может сломаться. Обе схемы требуют реестра и health-проверок - кто-то должен знать, какие экземпляры живы. Kubernetes даёт серверную схему без библиотеки, поэтому явные реестры встречаются реже, чем раньше; клиентский discovery оправдывает свою цену, когда более умная политика балансировки действительно нужна."
+      },
+      "sources": [
+        "https://microservices.io/patterns/service-registry.html",
+        "https://kubernetes.io/docs/concepts/services-networking/service/"
+      ]
+    },
+    {
+      "id": "distributed.discovery-and-gateway.004",
+      "section": "discovery-and-gateway",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "The configuration line below names an environment variable and supplies a default after the colon. Why is that pattern worth following?",
+        "ru": "Строка конфигурации ниже называет переменную окружения и задаёт значение по умолчанию после двоеточия. Почему этот приём стоит применять?"
+      },
+      "code": "quarkus.datasource.jdbc.url=${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/javaquiz}",
+      "options": [
+        {
+          "text": {
+            "en": "It lets the application change its database at run time without a restart.",
+            "ru": "Он позволяет приложению менять базу во время работы без перезапуска."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It keeps production credentials in the repository where they can be reviewed.",
+            "ru": "Он держит продакшен-учётные данные в репозитории, где их можно ревьюить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It makes the configuration type-safe, because the default documents the expected type.",
+            "ru": "Он делает конфигурацию типобезопасной, потому что значение по умолчанию документирует ожидаемый тип."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The same build artifact runs in every environment, configured from outside, while the default keeps a fresh local checkout runnable with no setup.",
+            "ru": "Один и тот же артефакт сборки работает в любом окружении, настраиваясь снаружи, а значение по умолчанию позволяет свежей локальной копии запускаться без настройки."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It removes the need for separate profiles, because one variable can hold every environment's settings.",
+            "ru": "Он снимает необходимость в отдельных профилях, потому что одна переменная может хранить настройки всех окружений."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "One artifact configured by the environment is what makes \"the thing we tested is the thing we deployed\" true. The local default is the second half of the pattern - it is a development convenience and must never be a production secret. A related detail worth noticing: the `SPRING_` prefix here outlived Spring deliberately, because those names were already set on the deployed service, so keeping them made a runtime migration a code change rather than a dashboard change.",
+        "ru": "Один артефакт, настраиваемый окружением, - это то, что делает правдой фразу «мы задеплоили ровно то, что тестировали». Локальное значение по умолчанию - вторая половина приёма: это удобство для разработки, и оно никогда не должно быть продакшен-секретом. Смежная деталь: префикс `SPRING_` здесь пережил Spring намеренно, потому что эти имена уже были прописаны у развёрнутого сервиса, и их сохранение сделало смену рантайма изменением в коде, а не в панели управления."
+      },
+      "sources": [
+        "https://12factor.net/config",
+        "https://microservices.io/patterns/service-registry.html"
+      ]
+    },
+    {
+      "id": "distributed.discovery-and-gateway.005",
+      "section": "discovery-and-gateway",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Which statement about north-south and east-west traffic is correct?",
+        "ru": "Какое утверждение о трафике «север-юг» и «запад-восток» верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "East-west traffic is trusted by definition, because it never leaves the cluster.",
+            "ru": "Трафик «запад-восток» доверен по определению, потому что никогда не покидает кластер."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "North-south is traffic between services and east-west is traffic to the outside world.",
+            "ru": "«Север-юг» - это трафик между сервисами, а «запад-восток» - трафик во внешний мир."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only north-south traffic needs encryption; east-west can stay plaintext for performance.",
+            "ru": "Шифрование нужно только трафику «север-юг»; «запад-восток» может остаться в открытом виде ради производительности."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The distinction is about protocols: north-south is HTTP and east-west is messaging.",
+            "ru": "Различие в протоколах: «север-юг» - это HTTP, а «запад-восток» - обмен сообщениями."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both are untrusted: being on the internal network is not an identity, so east-west calls still need authentication - typically a cheaper and stronger mechanism such as mutual TLS with workload certificates.",
+            "ru": "Оба недоверенные: нахождение во внутренней сети не является удостоверением личности, поэтому вызовы «запад-восток» всё равно нуждаются в аутентификации - обычно более дешёвым и сильным механизмом вроде взаимного TLS с сертификатами нагрузок."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "North-south is between the outside world and the system; east-west is between services inside it. They differ in what you can assume, not in whether you check. The usual arrangement is that the gateway exchanges an external credential for an internal one so downstream services never parse a third party's token - which is why what that internal credential is, and how it can be revoked, matters.",
+        "ru": "«Север-юг» - между внешним миром и системой, «запад-восток» - между сервисами внутри неё. Различаются они тем, что можно предполагать, а не тем, проверяете ли вы. Обычная схема: gateway обменивает внешнее удостоверение на внутреннее, чтобы сервисы за ним никогда не разбирали чужой токен, - и потому важно, чем является это внутреннее удостоверение и как его отзывать."
+      },
+      "sources": [
+        "https://microservices.io/patterns/apigateway.html",
+        "https://www.rfc-editor.org/rfc/rfc7519.html"
+      ]
+    },
+    {
+      "id": "distributed.discovery-and-gateway.006",
+      "section": "discovery-and-gateway",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "Services verify a signed JWT locally, without calling the issuer. An administrator disables a user at 09:00, but the user's existing token has a 24-hour lifetime. What is true?",
+        "ru": "Сервисы проверяют подписанный JWT локально, не обращаясь к издателю. Администратор отключает пользователя в 09:00, но у выданного токена срок жизни сутки. Что верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The token keeps working on every service that only checks the signature until it expires, because a stateless credential has no revocation - the mitigations all narrow that window rather than close it.",
+            "ru": "Токен продолжает работать на каждом сервисе, который проверяет только подпись, до истечения срока, потому что у stateless-удостоверения нет отзыва: все смягчения сужают это окно, а не закрывают его."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The token stops working immediately, because disabling the user invalidates tokens issued to them.",
+            "ru": "Токен перестаёт работать немедленно, потому что отключение пользователя аннулирует выданные ему токены."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The token stops working on the next request, because signature verification includes a check against the user store.",
+            "ru": "Токен перестаёт работать на следующем запросе, потому что проверка подписи включает сверку с хранилищем пользователей."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The token is valid but harmless, since an authorisation check will fail anyway when the service loads the user.",
+            "ru": "Токен валиден, но безвреден, поскольку проверка прав всё равно упадёт, когда сервис загрузит пользователя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Rotating the signing key is the standard fix, and it revokes exactly the affected user's tokens.",
+            "ru": "Ротация ключа подписи - стандартное лечение, и она отзывает ровно токены затронутого пользователя."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Stateless verification is the point of a JWT and also its limitation: the signature proves who issued the token, and nothing is checked against a store, so there is no place to say \"not this one any more\". The practical mitigations are short lifetimes with refresh tokens, a revocation list services consult, or introspection against the issuer - each trading some of the statelessness back. A service that loads the user for authorisation does close the hole, but only because it stopped being stateless. Rotating the key revokes every token at once, which is a blunt instrument for one user.",
+        "ru": "Stateless-проверка - и смысл JWT, и его ограничение: подпись доказывает, кто выдал токен, и ничего не сверяется с хранилищем, поэтому негде сказать «вот этот больше нельзя». Практические смягчения - короткий срок жизни с refresh-токенами, список отзыва, в который заглядывают сервисы, или интроспекция у издателя; каждое отдаёт часть stateless обратно. Сервис, который для проверки прав загружает пользователя, дыру закрывает, но лишь потому, что перестал быть stateless. Ротация ключа отзывает сразу все токены - слишком грубый инструмент ради одного пользователя."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc7519.html",
+        "https://microservices.io/patterns/apigateway.html"
+      ]
+    },
+    {
+      "id": "distributed.consistency.001",
+      "section": "consistency",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "The C in ACID and the C in CAP are different properties. What does the C in CAP mean?",
+        "ru": "C в ACID и C в CAP - разные свойства. Что означает C в CAP?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "That the database's declared invariants and constraints hold after every transaction.",
+            "ru": "Что объявленные инварианты и ограничения базы выполняются после каждой транзакции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Linearizability: every read sees the most recent completed write, as if there were one copy of the data and operations happened one at a time.",
+            "ru": "Линеаризуемость: каждое чтение видит последнюю завершённую запись, как если бы копия данных была одна и операции шли по одной."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "That all replicas hold byte-identical data at all times, including during a write.",
+            "ru": "Что все реплики в любой момент, включая момент записи, содержат побайтово одинаковые данные."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That transactions are isolated from each other, which is the serializable isolation level.",
+            "ru": "Что транзакции изолированы друг от друга, то есть уровень изоляции serializable."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That the data eventually converges once writes stop.",
+            "ru": "Что данные в итоге сходятся после прекращения записей."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "ACID's C is about application invariants the database enforces. CAP's C is a statement about what a read can observe across replicas. They are unrelated, and conflating them is where most confused architecture arguments start - a database can be fully ACID and give you stale reads from a replica at the same time.",
+        "ru": "C в ACID - про инварианты приложения, которые обеспечивает база. C в CAP - утверждение о том, что может увидеть чтение между репликами. Они не связаны, и их смешение - начало большинства путаных архитектурных споров: база может быть полностью ACID и при этом отдавать устаревшие чтения с реплики."
+      },
+      "sources": [
+        "https://users.ece.cmu.edu/~adrian/731-sp04/readings/GL-cap.pdf",
+        "https://jepsen.io/consistency"
+      ]
+    },
+    {
+      "id": "distributed.consistency.002",
+      "section": "consistency",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "A service writes to the primary database and reads from an asynchronous replica. A user saves a profile change and is immediately shown the old value. Which guarantee is missing?",
+        "ru": "Сервис пишет в primary-базу и читает с асинхронной реплики. Пользователь сохраняет изменение профиля и сразу видит старое значение. Какой гарантии не хватает?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Monotonic writes: the client's writes must be applied in the order it issued them.",
+            "ru": "Monotonic writes: записи клиента должны применяться в том порядке, в каком он их отправил."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Atomicity: the write must be all-or-nothing.",
+            "ru": "Атомарность: запись должна быть всё-или-ничего."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Read your writes: after a client writes, its own subsequent reads must see that write.",
+            "ru": "Read your writes: после записи клиента его собственные последующие чтения должны эту запись видеть."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Durability: the write must survive a crash of the primary.",
+            "ru": "Долговечность: запись должна пережить падение primary."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Consistent prefix: the client must never see an answer before its question.",
+            "ru": "Consistent prefix: клиент не должен видеть ответ раньше вопроса."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "This is the session guarantee whose absence users notice first, because the edit looks lost and they do it again. It is per session, so it is far cheaper than global linearizability: the standard fixes are routing that client's reads to the primary for a short window after a write, or carrying a version token and refusing a replica that has not caught up to it.",
+        "ru": "Это та сессионная гарантия, отсутствие которой пользователи замечают первой: правка выглядит потерянной, и они делают её ещё раз. Она действует в пределах сессии и потому обходится намного дешевле глобальной линеаризуемости: стандартные решения - направлять чтения этого клиента в primary в течение короткого окна после записи или носить версионный токен и не обслуживать реплику, которая до него не догнала."
+      },
+      "sources": [
+        "https://jepsen.io/consistency",
+        "https://www.cs.umd.edu/~abadi/papers/abadi-pacelc.pdf"
+      ]
+    },
+    {
+      "id": "distributed.consistency.003",
+      "section": "consistency",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "\"We picked CA: our network is reliable, so we do not need partition tolerance.\" What is wrong with this?",
+        "ru": "«Мы выбрали CA: у нас надёжная сеть, поэтому устойчивость к разделам нам не нужна». Что здесь не так?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing, as long as the network genuinely is reliable: CA is the correct choice for a single data centre.",
+            "ru": "Ничего, если сеть действительно надёжна: CA - верный выбор для одного дата-центра."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "CA is possible but requires two-phase commit, which the team probably has not implemented.",
+            "ru": "CA возможен, но требует двухфазного коммита, который команда, вероятно, не реализовала."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The error is the opposite one: CAP says you must pick exactly two, and they picked two correctly.",
+            "ru": "Ошибка противоположная: CAP требует выбрать ровно два, и они выбрали два правильно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Partitions are not a design choice - the network does them to you - so CA is not a category; it describes a system that has not decided what it will do when one happens.",
+            "ru": "Разделы - не проектное решение, их устраивает сеть, - поэтому CA не категория; так описывается система, которая не решила, что будет делать, когда раздел случится."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "CA is fine for reads but not for writes, so the claim holds for half of the workload.",
+            "ru": "CA годится для чтений, но не для записей, так что утверждение верно для половины нагрузки."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "CAP is a statement about behaviour during a partition, not a menu of three items to choose two from. A partition will happen - a switch, a cable, a misconfigured firewall, a long garbage-collection pause that looks like one - and the only real decision is whether the minority side answers with stale data or refuses to answer. Declaring CA means that decision was made by accident rather than on purpose.",
+        "ru": "CAP - утверждение о поведении во время раздела, а не меню из трёх пунктов, из которого берут два. Раздел случится - коммутатор, кабель, неверно настроенный межсетевой экран, длинная пауза сборки мусора, выглядящая как раздел, - и единственное настоящее решение в том, отвечает ли меньшая сторона устаревшими данными или не отвечает вовсе. Заявить CA означает, что это решение принято случайно, а не осознанно."
+      },
+      "sources": [
+        "https://www.infoq.com/articles/cap-twelve-years-later-how-the-rules-have-changed/",
+        "https://users.ece.cmu.edu/~adrian/731-sp04/readings/GL-cap.pdf"
+      ]
+    },
+    {
+      "id": "distributed.consistency.004",
+      "section": "consistency",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "What does the ELSE half of PACELC add to CAP, and why does it matter more day to day?",
+        "ru": "Что добавляет к CAP половина ELSE в PACELC и почему на практике она важнее?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It says that without a partition you can have consistency, availability and low latency at once.",
+            "ru": "Она говорит, что без раздела можно одновременно иметь консистентность, доступность и низкую задержку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It replaces availability with latency, so PACELC describes two choices instead of CAP's three properties.",
+            "ru": "Она заменяет доступность задержкой, так что PACELC описывает два выбора вместо трёх свойств CAP."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It adds durability as a fourth property that must be traded against the other three.",
+            "ru": "Она добавляет долговечность как четвёртое свойство, которым надо жертвовать ради трёх остальных."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It applies only to systems with a single leader, since multi-leader systems have no such trade.",
+            "ru": "Она применима только к системам с одним лидером, поскольку у многолидерных систем такого обмена нет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It says that even with a healthy network you trade latency against consistency, because making a read see the newest write requires coordinating with other replicas - and the healthy case is almost all of the time.",
+            "ru": "Она говорит, что даже на здоровой сети вы меняете задержку на консистентность, потому что чтение, видящее свежайшую запись, требует согласования с другими репликами, - а здоровый случай занимает почти всё время."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "PACELC: if Partition, choose between Availability and Consistency; Else, choose between Latency and Consistency. The second half is the one you live with, and it explains why the same product offers several read modes at different prices. \"We use a distributed database so consistency is handled\" is not an answer - it is a set of knobs with a latency price list.",
+        "ru": "PACELC: если Partition, выбирайте между Availability и Consistency; иначе (Else) - между Latency и Consistency. Со второй половиной вы живёте постоянно, и она объясняет, почему один и тот же продукт предлагает несколько режимов чтения по разной цене. «Мы взяли распределённую базу, значит с консистентностью всё решено» - не ответ, а набор ручек с прайс-листом по задержке."
+      },
+      "sources": [
+        "https://www.cs.umd.edu/~abadi/papers/abadi-pacelc.pdf",
+        "https://www.infoq.com/articles/cap-twelve-years-later-how-the-rules-have-changed/"
+      ]
+    },
+    {
+      "id": "distributed.consistency.005",
+      "section": "consistency",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "A multi-leader store resolves conflicting writes by keeping the one with the larger wall-clock timestamp. Why is this dangerous?",
+        "ru": "Многолидерное хранилище разрешает конфликтующие записи, оставляя ту, у которой больше метка настенных часов. Чем это опасно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Clocks on different machines disagree and can even move backwards, so \"larger timestamp\" can mean \"written on the machine whose clock was fast\" - and the other write is silently discarded.",
+            "ru": "Часы на разных машинах расходятся и даже могут идти назад, поэтому «большая метка» может означать «записано на машине, чьи часы спешили», - и другая запись молча теряется."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is not dangerous: NTP keeps clocks within milliseconds, which is far finer than the interval between two conflicting writes.",
+            "ru": "Это не опасно: NTP держит часы в пределах миллисекунд, что намного точнее интервала между двумя конфликтующими записями."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is dangerous only because comparing timestamps is slow at high write rates.",
+            "ru": "Опасно только тем, что сравнение меток времени медленно при высокой частоте записей."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is dangerous because the timestamp has to travel with every message, which doubles the payload.",
+            "ru": "Опасно тем, что метку приходится передавать с каждым сообщением, что удваивает размер нагрузки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is safe for writes to different keys and unsafe only for writes to the same key by the same client.",
+            "ru": "Безопасно для записей в разные ключи и небезопасно только для записей в один ключ одним клиентом."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Last-write-wins is a data-loss policy wearing a resolution policy's clothes. The alternative is to order by causality: Lamport clocks give a counter consistent with causal order, and vector clocks can additionally tell concurrent writes apart from ordered ones - which lets the system detect a conflict instead of quietly resolving it. Detecting it means somebody must then decide what to do, which is the real cost and the real honesty.",
+        "ru": "Last-write-wins - это политика потери данных, переодетая в политику разрешения конфликтов. Альтернатива - упорядочивать по причинности: часы Лампорта дают счётчик, согласованный с причинным порядком, а векторные часы дополнительно отличают параллельные записи от упорядоченных, что позволяет системе обнаружить конфликт, а не разрешить его тихо. Обнаружение означает, что кто-то должен решить, что делать, - в этом настоящая цена и настоящая честность."
+      },
+      "sources": [
+        "https://lamport.azurewebsites.net/pubs/time-clocks.pdf",
+        "https://jepsen.io/analyses"
+      ]
+    },
+    {
+      "id": "distributed.consistency.006",
+      "section": "consistency",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "Two events A and B carry Lamport timestamps `L(A) = 5` and `L(B) = 9`. What may you conclude?",
+        "ru": "У двух событий A и B метки Лампорта `L(A) = 5` и `L(B) = 9`. Какой вывод можно сделать?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "That A causally precedes B, because Lamport timestamps totally order causally related events.",
+            "ru": "Что A причинно предшествует B, потому что метки Лампорта полностью упорядочивают причинно связанные события."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only that B did not cause A: a smaller Lamport timestamp does not prove that A happened before B, since A and B may be concurrent.",
+            "ru": "Только то, что B не вызвало A: меньшая метка Лампорта не доказывает, что A произошло раньше B, поскольку A и B могут быть параллельными."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "That A and B are concurrent, because different counters mean different nodes.",
+            "ru": "Что A и B параллельны, потому что разные счётчики означают разные узлы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That A happened at least four events earlier in real time on the same node.",
+            "ru": "Что A произошло по реальному времени как минимум на четыре события раньше на том же узле."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing at all, because Lamport timestamps are only comparable within a single node.",
+            "ru": "Ничего вовсе, потому что метки Лампорта сравнимы только внутри одного узла."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The Lamport rule is one-directional: if A causally precedes B then `L(A) < L(B)`. The converse does not hold, so a smaller value proves only the contrapositive - B cannot have caused A. Distinguishing \"A before B\" from \"concurrent\" needs a vector clock, one counter per node, which is what lets a system detect a conflict rather than resolve it by accident; the cost is that the clock grows with the number of nodes.",
+        "ru": "Правило Лампорта одностороннее: если A причинно предшествует B, то `L(A) < L(B)`. Обратное неверно, поэтому меньшее значение доказывает лишь контрапозицию: B не могло вызвать A. Чтобы отличить «A раньше B» от «параллельно», нужны векторные часы - счётчик на каждый узел, - и именно они позволяют системе обнаружить конфликт, а не разрешить его случайно; цена в том, что часы растут с числом узлов."
+      },
+      "sources": [
+        "https://lamport.azurewebsites.net/pubs/time-clocks.pdf",
+        "https://jepsen.io/consistency"
+      ]
+    },
+    {
+      "id": "distributed.contract-evolution.001",
+      "section": "contract-evolution",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "A producer starts writing a new optional field into its messages. Consumers must be updated to read it. Which compatibility does the change need, and what is the deploy order?",
+        "ru": "Продюсер начинает писать в сообщения новое необязательное поле. Потребителей надо обновить, чтобы они его читали. Какая совместимость нужна и каков порядок деплоя?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Only backward compatibility is involved, and the producer must be deployed first so the data exists.",
+            "ru": "Задействована только обратная совместимость, и продюсера надо выкатить первым, чтобы данные появились."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Neither applies: adding a field is always safe regardless of deployment order.",
+            "ru": "Ни та ни другая: добавление поля всегда безопасно независимо от порядка деплоя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The old consumers must be forward compatible - tolerate the unknown field - and the new consumers backward compatible; deploy consumers first, then the producer.",
+            "ru": "Старые потребители должны быть прямо совместимы - переживать незнакомое поле, - а новые обратно совместимы; выкатывать сначала потребителей, затем продюсера."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Only forward compatibility is involved, and order does not matter because the field is optional.",
+            "ru": "Задействована только прямая совместимость, и порядок не важен, раз поле необязательное."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both apply, and the producer must be deployed first so consumers never see a message without the field.",
+            "ru": "Обе, и продюсера надо выкатить первым, чтобы потребители никогда не увидели сообщение без поля."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Backward compatible means a new reader understands old data; forward compatible means an old reader tolerates new data. Forward compatibility cannot be added retroactively - it is a property of the already-deployed reader - so it only exists if that reader ignores what it does not recognise. Deploying consumers first means they handle both shapes before either shape arrives.",
+        "ru": "Обратная совместимость - новый читатель понимает старые данные; прямая - старый читатель переживает новые. Прямую совместимость нельзя добавить задним числом: это свойство уже развёрнутого читателя, и она есть только если тот игнорирует незнакомое. Выкатив сначала потребителей, вы получаете обработку обеих форм раньше, чем появится любая из них."
+      },
+      "sources": [
+        "https://martinfowler.com/bliki/TolerantReader.html",
+        "https://protobuf.dev/programming-guides/proto3/"
+      ]
+    },
+    {
+      "id": "distributed.contract-evolution.002",
+      "section": "contract-evolution",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "Which change to a REST request body is a breaking change for existing callers?",
+        "ru": "Какое изменение тела REST-запроса ломает существующих вызывающих?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Adding a new optional field.",
+            "ru": "Добавление нового необязательного поля."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Adding a new endpoint next to the existing one.",
+            "ru": "Добавление нового эндпоинта рядом с существующим."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Widening an accepted numeric range from 1-100 to 1-1000.",
+            "ru": "Расширение допустимого числового диапазона с 1-100 до 1-1000."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Adding a new required field.",
+            "ru": "Добавление нового обязательного поля."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Adding a field to the response that no caller reads yet.",
+            "ru": "Добавление в ответ поля, которое пока никто не читает."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The rule of thumb is that adding optional things is safe and removing or tightening is not. A required field breaks every existing caller the moment it is deployed, because their requests were valid yesterday and are rejected today. Widening a range is safe; narrowing it is the breaking direction. Adding a response field is safe only against readers that tolerate unknown properties - which is the other half of the bargain.",
+        "ru": "Правило большого пальца: добавлять необязательное безопасно, убирать и ужесточать - нет. Обязательное поле ломает всех существующих вызывающих в момент выкатки, потому что их запросы были валидны вчера и отвергаются сегодня. Расширение диапазона безопасно; ломающее направление - сужение. Добавление поля в ответ безопасно лишь против читателей, переживающих незнакомые свойства, - это вторая половина сделки."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9110.html",
+        "https://martinfowler.com/bliki/TolerantReader.html"
+      ]
+    },
+    {
+      "id": "distributed.contract-evolution.003",
+      "section": "contract-evolution",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "A consumer deserialises an incoming JSON status into a Java enum with `Status.valueOf(node.get(\"status\").asText())` and fails whenever the producer adds a new status value. What is the underlying mistake?",
+        "ru": "Потребитель разбирает входящий JSON-статус в Java-enum через `Status.valueOf(node.get(\"status\").asText())` и падает всякий раз, когда продюсер добавляет новое значение статуса. В чём основная ошибка?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The mistake is using an enum at all; a status must always be a free-form string in a distributed system.",
+            "ru": "Ошибка в самом использовании enum: в распределённой системе статус всегда должен быть свободной строкой."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The mistake is the producer's: adding an enum value is always a breaking change and requires a new API version.",
+            "ru": "Ошибка продюсера: добавление значения enum всегда ломающее изменение и требует новой версии API."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The mistake is deploying the producer first; with the consumer deployed first the same code would work.",
+            "ru": "Ошибка в том, что продюсера выкатили первым; при обратном порядке тот же код работал бы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The mistake is JSON: a binary format would carry the enum ordinal and avoid the problem entirely.",
+            "ru": "Ошибка в JSON: бинарный формат нёс бы порядковый номер enum и полностью снял бы проблему."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The consumer is not a tolerant reader: it treats an unrecognised value as an error, which makes every future addition by the other team a breaking change for itself.",
+            "ru": "Потребитель не является толерантным читателем: он считает нераспознанное значение ошибкой, из-за чего любое будущее добавление чужой команды становится для него ломающим изменением."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Adding an enum value is safe only against consumers built to handle an unknown one - map it to an `UNKNOWN` constant, or keep the raw string and branch on the values you actually care about. Deploying the consumer first does not help, because the consumer being deployed is the one that throws. And a binary format with ordinals makes it worse, not better: ordinals are positional and a reordered enum silently changes meaning.",
+        "ru": "Добавление значения enum безопасно лишь против потребителей, построенных с учётом неизвестного значения: отобразить его в константу `UNKNOWN` или хранить исходную строку и ветвиться только по интересующим значениям. Выкатка потребителя первым не помогает, потому что бросает исключение именно выкатываемый потребитель. А бинарный формат с порядковыми номерами делает хуже: номера позиционны, и переставленный enum молча меняет смысл."
+      },
+      "sources": [
+        "https://martinfowler.com/bliki/TolerantReader.html",
+        "https://protobuf.dev/programming-guides/proto3/"
+      ]
+    },
+    {
+      "id": "distributed.contract-evolution.004",
+      "section": "contract-evolution",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "A field must be renamed in an API that several teams consume. What is the correct sequence?",
+        "ru": "В API, который потребляют несколько команд, нужно переименовать поле. Какова правильная последовательность?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Expand, migrate, contract: add the new field alongside the old one and write both; move readers over one at a time; remove the old field in a later release once nothing reads it.",
+            "ru": "Expand, migrate, contract: добавить новое поле рядом со старым и писать в оба; переводить читателей по одному; удалить старое поле в более позднем релизе, когда его никто не читает."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Rename it and publish a new major API version the same day, so consumers can move at their own pace.",
+            "ru": "Переименовать и в тот же день опубликовать новую мажорную версию API, чтобы потребители переходили в своём темпе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Rename it and add a compatibility layer in the gateway that rewrites the old name to the new one.",
+            "ru": "Переименовать и добавить в gateway слой совместимости, переписывающий старое имя в новое."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Add the new field and remove the old one in the same release, announcing the change in advance.",
+            "ru": "Добавить новое поле и удалить старое в одном релизе, заранее объявив об изменении."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Keep both names forever, since removing a field is never safe once it has been published.",
+            "ru": "Оставить оба имени навсегда, раз удаление поля после публикации никогда не безопасно."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Three deploys, each compatible with the one before it, which is exactly what keeps a rollback possible at every point. The same shape applies to a database column and to a method signature. A new major version is heavier than the change deserves and leaves two shapes to maintain. Rewriting names in the gateway puts contract knowledge in a component that should decide nothing. Doing both steps in one release breaks whoever had not migrated yet, announcement or not.",
+        "ru": "Три деплоя, каждый совместим с предыдущим, - именно это оставляет откат возможным в любой момент. Та же форма применима к колонке в базе и к сигнатуре метода. Новая мажорная версия тяжелее, чем заслуживает изменение, и оставляет две формы на поддержке. Переписывание имён в gateway кладёт знание о контракте в компонент, который не должен ничего решать. Оба шага в одном релизе ломают тех, кто ещё не мигрировал, объявляли вы это или нет."
+      },
+      "sources": [
+        "https://martinfowler.com/bliki/ParallelChange.html",
+        "https://www.rfc-editor.org/rfc/rfc8594.html"
+      ]
+    },
+    {
+      "id": "distributed.contract-evolution.005",
+      "section": "contract-evolution",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "The service migrates its schema at start-up with the setting below, and the platform performs rolling deploys. Which migration is unsafe?",
+        "ru": "Сервис мигрирует схему при старте с настройкой ниже, а платформа выполняет rolling-деплой. Какая миграция небезопасна?"
+      },
+      "code": "quarkus.flyway.migrate-at-start=true\nquarkus.hibernate-orm.schema-management.strategy=validate",
+      "options": [
+        {
+          "text": {
+            "en": "Adding a nullable column, because the old code does not know about it and will fail validation.",
+            "ru": "Добавление nullable-колонки, потому что старый код о ней не знает и провалит валидацию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Dropping a column that the previous version of the code still selects, because the old instances keep serving requests against the new schema during the overlap.",
+            "ru": "Удаление колонки, которую всё ещё выбирает предыдущая версия кода, потому что во время наложения старые экземпляры продолжают обслуживать запросы к новой схеме."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Creating an index, because index creation takes a lock that the old instances cannot tolerate.",
+            "ru": "Создание индекса, потому что построение индекса берёт блокировку, которую старые экземпляры не переживут."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Inserting reference rows, because the old code would read data it does not have a mapping for.",
+            "ru": "Вставка справочных строк, потому что старый код прочитал бы данные, для которых у него нет отображения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "None of them: migrating at start-up guarantees the new schema is in place before any request is served.",
+            "ru": "Никакая: миграция при старте гарантирует, что новая схема на месте до обслуживания любого запроса."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The new instance migrates and starts serving while the old instances are still up - for a minute or two both versions run against the same, just-changed schema. So a migration must be compatible with the previous version of the code, not only the new one. That is precisely why the destructive half of expand-and-contract belongs in a later release: expand now, contract next time, and a rollback to yesterday's build still finds a schema it can use.",
+        "ru": "Новый экземпляр мигрирует и начинает обслуживать, пока старые ещё живы: минуту-две обе версии работают с одной и той же, только что изменённой схемой. Поэтому миграция должна быть совместима с предыдущей версией кода, а не только с новой. Именно поэтому разрушительная половина expand-and-contract относится к следующему релизу: расширяем сейчас, сужаем в следующий раз, - и откат на вчерашнюю сборку по-прежнему находит схему, с которой может работать."
+      },
+      "sources": [
+        "https://martinfowler.com/bliki/ParallelChange.html",
+        "https://documentation.red-gate.com/flyway/concepts/migrations"
+      ]
+    },
+    {
+      "id": "distributed.contract-evolution.006",
+      "section": "contract-evolution",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "Three instances of a service start at once during a deploy, and the release contains a migration that rewrites a large table and takes eight minutes. What happens?",
+        "ru": "Три экземпляра сервиса стартуют одновременно во время деплоя, и в релизе есть миграция, переписывающая большую таблицу за восемь минут. Что произойдёт?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "All three run the migration in parallel, so the table is rewritten three times and the last writer wins.",
+            "ru": "Все три выполняют миграцию параллельно, таблица переписывается трижды, и побеждает последний записавший."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The two later instances skip the migration and start immediately, because the schema history row already exists.",
+            "ru": "Два более поздних экземпляра пропускают миграцию и стартуют сразу, потому что строка в истории схемы уже есть."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "One instance takes the lock on the schema history table and runs the migration; the other two block on that lock for the whole eight minutes, so none of them starts serving and the deploy may fail its health check.",
+            "ru": "Один экземпляр берёт блокировку на таблице истории схемы и выполняет миграцию; два других блокируются на ней все восемь минут, поэтому ни один не начинает обслуживать и деплой может провалить health-проверку."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The migration is applied once and the other two fail to start with a checksum mismatch.",
+            "ru": "Миграция применяется один раз, а два других экземпляра не стартуют с ошибкой несовпадения контрольной суммы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing notable: migrations at start-up are applied asynchronously, so the instances serve traffic while it runs.",
+            "ru": "Ничего примечательного: миграции при старте применяются асинхронно, поэтому экземпляры обслуживают трафик во время её выполнения."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The lock is what makes concurrent start-up safe: exactly one instance applies the change and the others wait rather than corrupting the schema. The cost is that waiting is not skipping - the lock is held for the whole run, so a slow migration is a slow deploy for the entire fleet, and a platform that kills instances failing a health check can turn it into a failed deploy. The practical response is to keep start-up migrations short and online, and to run genuinely long data rewrites as a separate backfill: add the new structure in a fast migration, backfill in the background in batches, and switch reads over in a later release.",
+        "ru": "Блокировка и делает одновременный старт безопасным: изменение применяет ровно один экземпляр, а остальные ждут, а не портят схему. Цена в том, что ждать - не то же самое, что пропустить: блокировка удерживается всё время выполнения, поэтому медленная миграция - это медленный деплой для всего флота, а платформа, убивающая экземпляры по провалу health-проверки, может превратить его в провалившийся деплой. Практический ответ - держать стартовые миграции короткими и онлайновыми, а по-настоящему долгие перезаписи данных выполнять отдельным backfill: добавить новую структуру быстрой миграцией, заполнить её в фоне пачками и переключить чтения в более позднем релизе."
+      },
+      "sources": [
+        "https://documentation.red-gate.com/flyway/reference/schema-history-table",
+        "https://martinfowler.com/bliki/ParallelChange.html"
+      ]
+    }
+  ]
+}

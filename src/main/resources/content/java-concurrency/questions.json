@@ -2770,10 +2770,10 @@
         },
         {
           "text": {
-            "en": "Thousands of concurrent requests that spend most of their time waiting on IO.",
-            "ru": "Тысячи одновременных запросов, которые большую часть времени ждут ввода-вывода."
+            "en": "Garbage-collection-heavy code, because their stacks live on the heap.",
+            "ru": "Код с интенсивной сборкой мусора, потому что их стеки лежат в heap."
           },
-          "correct": true
+          "correct": false
         },
         {
           "text": {
@@ -2791,10 +2791,10 @@
         },
         {
           "text": {
-            "en": "Garbage-collection-heavy code, because their stacks live on the heap.",
-            "ru": "Код с интенсивной сборкой мусора, потому что их стеки лежат в heap."
+            "en": "Thousands of concurrent requests that spend most of their time waiting on IO.",
+            "ru": "Тысячи одновременных запросов, которые большую часть времени ждут ввода-вывода."
           },
-          "correct": false
+          "correct": true
         }
       ],
       "explanation": {

@@ -1,0 +1,2608 @@
+{
+  "schemaVersion": 2,
+  "topic": "delivery",
+  "questions": [
+    {
+      "id": "delivery.maven-basics.001",
+      "section": "maven-basics",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "You run `mvn package`. Which phases of the default lifecycle actually execute?",
+        "ru": "Вы запускаете `mvn package`. Какие фазы стандартного жизненного цикла на самом деле выполнятся?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Only package — compile and test have to be named explicitly if you want them.",
+            "ru": "Только package — compile и test нужно называть явно, если они вам нужны."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "package and everything after it in the lifecycle, up to and including deploy.",
+            "ru": "package и всё, что идёт после него в жизненном цикле, вплоть до deploy включительно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Every phase from validate up to and including package, so compile and test run on the way.",
+            "ru": "Все фазы от validate до package включительно, так что compile и test выполнятся по дороге."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "package plus clean, because clean is the first phase of the default lifecycle.",
+            "ru": "package и clean, потому что clean — первая фаза стандартного жизненного цикла."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only the goals of plugins bound to package; phases do not depend on one another.",
+            "ru": "Только цели плагинов, привязанных к package; фазы друг от друга не зависят."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The default lifecycle is an ordered sequence, and naming a phase runs it and every phase before it. So `mvn package` validates, compiles and runs the tests first. `clean` belongs to a separate lifecycle, which is why `mvn clean package` names two things.",
+        "ru": "Стандартный жизненный цикл — упорядоченная последовательность, и названная фаза выполняется вместе со всеми предыдущими. Поэтому `mvn package` сначала валидирует, компилирует и прогоняет тесты. `clean` относится к отдельному жизненному циклу — потому `mvn clean package` и называет две вещи."
+      },
+      "sources": [
+        "https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html"
+      ]
+    },
+    {
+      "id": "delivery.maven-basics.002",
+      "section": "maven-basics",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "This project declares JUnit and AssertJ. Which scope keeps them off the compile classpath of `src/main/java` and out of the packaged artifact?",
+        "ru": "Этот проект объявляет JUnit и AssertJ. Какой scope не пустит их ни на classpath компиляции `src/main/java`, ни в собранный артефакт?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "`test` — available for compiling and running tests only, and never packaged.",
+            "ru": "`test` — доступен только для компиляции и запуска тестов и никогда не попадает в артефакт."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "`provided` — the runtime container supplies it, so it stays out of the artifact.",
+            "ru": "`provided` — его предоставляет контейнер выполнения, поэтому в артефакт он не попадает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`runtime` — needed while running but not while compiling.",
+            "ru": "`runtime` — нужен во время работы, но не во время компиляции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`compile` — the default, and the one test frameworks use.",
+            "ru": "`compile` — значение по умолчанию, и именно его используют тестовые фреймворки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`import` — it pulls the version in without adding the jar anywhere.",
+            "ru": "`import` — он подтягивает версию, не добавляя джарник никуда."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`test` scope is visible only to test compilation and test execution, and is not transitive and not packaged. `provided` would still put the jar on the main compile classpath, and `import` is not a classpath scope at all — it only works inside `dependencyManagement` for BOMs.",
+        "ru": "Scope `test` виден только компиляции и запуску тестов, не транзитивен и в артефакт не попадает. `provided` всё равно положил бы джарник на основной classpath компиляции, а `import` вообще не classpath-scope — он работает лишь внутри `dependencyManagement` для BOM."
+      },
+      "sources": [
+        "https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html"
+      ]
+    },
+    {
+      "id": "delivery.maven-basics.003",
+      "section": "maven-basics",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "This project's POM declares `jjwt-api` at the default scope and `jjwt-impl` at `runtime`. What does that split buy?",
+        "ru": "POM этого проекта объявляет `jjwt-api` со scope по умолчанию, а `jjwt-impl` — как `runtime`. Что даёт такое разделение?"
+      },
+      "code": "<dependency>\n  <groupId>io.jsonwebtoken</groupId>\n  <artifactId>jjwt-impl</artifactId>\n  <version>${jjwt.version}</version>\n  <scope>runtime</scope>\n</dependency>",
+      "options": [
+        {
+          "text": {
+            "en": "Nothing in practice — `runtime` and `compile` behave identically once the jar is on the classpath.",
+            "ru": "На практике ничего — `runtime` и `compile` ведут себя одинаково, раз джарник и так на classpath."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It keeps the implementation out of the image, so the platform has to provide a JWT library.",
+            "ru": "Он не пускает реализацию в образ, поэтому JWT-библиотеку должна предоставить платформа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It makes Maven download the jar lazily, the first time the running application needs it.",
+            "ru": "Он заставляет Maven скачивать джарник лениво, в момент первой надобности работающему приложению."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It allows two implementations to coexist, because runtime dependencies are not deduplicated.",
+            "ru": "Он позволяет сосуществовать двум реализациям, потому что runtime-зависимости не дедуплицируются."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Application code cannot compile against implementation classes, yet the implementation is on the classpath when the service runs.",
+            "ru": "Код приложения не может скомпилироваться против классов реализации, но при работе сервиса реализация на classpath есть."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "`runtime` removes the jar from the compile classpath and keeps it on the runtime one. The API stays the only thing code can reference, so an accidental import of an internal class fails at compile time rather than becoming a dependency on an implementation detail. The jar is still packaged.",
+        "ru": "`runtime` убирает джарник с classpath компиляции и оставляет на classpath выполнения. Единственное, на что может ссылаться код, — это API, поэтому случайный импорт внутреннего класса падает на компиляции, а не превращается в зависимость от детали реализации. В артефакт джарник при этом попадает."
+      },
+      "sources": [
+        "https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html"
+      ]
+    },
+    {
+      "id": "delivery.maven-basics.004",
+      "section": "maven-basics",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "A release version `1.0.0` of a library is already in your local repository. Someone republishes different bytes to the remote under the same coordinates. What does your next build use?",
+        "ru": "Релизная версия `1.0.0` библиотеки уже лежит в вашем локальном репозитории. Кто-то перезаливает в удалённый репозиторий другие байты под теми же координатами. Что возьмёт ваша следующая сборка?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The new bytes — Maven verifies the remote checksum of every dependency on every build.",
+            "ru": "Новые байты — Maven на каждой сборке сверяет контрольную сумму каждой зависимости с удалённой."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The cached copy: a release version is treated as immutable, so once it is local Maven never asks again.",
+            "ru": "Закэшированную копию: релизная версия считается неизменяемой, и, оказавшись локально, она больше никогда не перепроверяется."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Neither — the build fails with a checksum mismatch, which is what protects a release from replacement.",
+            "ru": "Ни то ни другое — сборка упадёт с несовпадением контрольной суммы, что и защищает релиз от подмены."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The new bytes, but only after a day, on the same schedule Maven uses for snapshots.",
+            "ru": "Новые байты, но только через сутки — по тому же расписанию, по которому Maven обновляет снапшоты."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both: the new copy is downloaded alongside and placed first on the classpath.",
+            "ru": "Обе: новая копия скачивается рядом и ставится на classpath первой."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Maven re-checks only `-SNAPSHOT` versions, by default once a day. A release version in the local repository is final, which is exactly why republishing under a number that was already handed out is a poison: different machines legitimately hold different jars under identical coordinates.",
+        "ru": "Maven перепроверяет только версии с `-SNAPSHOT`, по умолчанию раз в сутки. Релизная версия в локальном репозитории окончательна — потому перезалив под уже выданным номером и ядовит: разные машины законно держат разные джарники под одинаковыми координатами."
+      },
+      "sources": [
+        "https://maven.apache.org/guides/getting-started/index.html"
+      ]
+    },
+    {
+      "id": "delivery.maven-basics.005",
+      "section": "maven-basics",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "A dependency is declared with scope `provided`, packaged into a fat jar, and the jar is started with `java -jar`. Nothing else supplies that library. What happens?",
+        "ru": "Зависимость объявлена со scope `provided`, упакована в fat jar, и джарник запускают через `java -jar`. Больше эту библиотеку никто не предоставляет. Что произойдёт?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The build fails at `package`, because Maven refuses to package a `provided` dependency.",
+            "ru": "Сборка упадёт на `package`, потому что Maven отказывается упаковывать `provided`-зависимость."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Compilation fails, because `provided` is not on the compile classpath.",
+            "ru": "Упадёт компиляция, потому что `provided` не лежит на classpath компиляции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It works: `provided` is packaged like `compile` and is only excluded from WAR files.",
+            "ru": "Всё заработает: `provided` упаковывается как `compile` и исключается только из WAR-файлов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It compiles and packages cleanly, then fails at runtime with `NoClassDefFoundError` when the class is first touched.",
+            "ru": "Всё скомпилируется и упакуется, а в runtime при первом обращении к классу выпадет `NoClassDefFoundError`."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It works until the class is unloaded, after which the next call throws `ClassNotFoundException`.",
+            "ru": "Всё работает, пока класс не выгрузят, после чего следующий вызов бросит `ClassNotFoundException`."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`provided` is on the compile classpath and absent from the artifact — the promise is that something else supplies it at runtime. In a standalone fat jar nothing does, so the build is green and the failure arrives on the first class load. This is the classic servlet-API mistake.",
+        "ru": "`provided` лежит на classpath компиляции и отсутствует в артефакте: обещание состоит в том, что в runtime его даст кто-то другой. В самостоятельном fat jar его не даёт никто, поэтому сборка зелёная, а отказ приходит при первой загрузке класса. Это классическая ошибка с servlet API."
+      },
+      "sources": [
+        "https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html"
+      ]
+    },
+    {
+      "id": "delivery.maven-basics.006",
+      "section": "maven-basics",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "Your project declares `library-x` at `compile` scope. `library-x` itself declares `commons-io` (compile), `mockito-core` (test) and a servlet API (provided). What reaches your project's compile classpath?",
+        "ru": "Ваш проект объявляет `library-x` со scope `compile`. Сама `library-x` объявляет `commons-io` (compile), `mockito-core` (test) и servlet API (provided). Что попадёт на classpath компиляции вашего проекта?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "`commons-io` only — a library's `test` and `provided` dependencies are not transitive.",
+            "ru": "Только `commons-io` — `test`- и `provided`-зависимости библиотеки не транзитивны."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "`commons-io` and the servlet API; only `test` scope is dropped on the way.",
+            "ru": "`commons-io` и servlet API; по дороге отбрасывается только `test`."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "All three, re-scoped to `compile`, because transitivity copies the whole graph.",
+            "ru": "Все три, переведённые в `compile`, потому что транзитивность копирует граф целиком."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`commons-io` and `mockito-core`, with `mockito-core` moved into your test scope.",
+            "ru": "`commons-io` и `mockito-core`, причём `mockito-core` переедет в ваш тестовый scope."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing transitive — every dependency you compile against must be declared in your own POM.",
+            "ru": "Ничего транзитивного — каждая зависимость, против которой вы компилируетесь, должна быть объявлена в вашем POM."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Transitive resolution passes a dependency's scope through a table: through a `compile` dependency, `compile` stays `compile`, `runtime` stays `runtime`, and `test` and `provided` are omitted entirely. That is deliberate — otherwise every test framework and every container API any of your libraries touched would land on your classpath.",
+        "ru": "Транзитивное разрешение прогоняет scope зависимости через таблицу: через `compile`-зависимость `compile` остаётся `compile`, `runtime` остаётся `runtime`, а `test` и `provided` отбрасываются целиком. Это сделано намеренно: иначе на вашем classpath оказался бы каждый тестовый фреймворк и каждый контейнерный API, которых коснулась любая из ваших библиотек."
+      },
+      "sources": [
+        "https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html"
+      ]
+    },
+    {
+      "id": "delivery.docker-images.001",
+      "section": "docker-images",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which Dockerfile instructions add a filesystem layer to the image?",
+        "ru": "Какие инструкции Dockerfile добавляют образу слой файловой системы?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Every instruction in a Dockerfile produces exactly one layer.",
+            "ru": "Каждая инструкция Dockerfile порождает ровно один слой."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only `FROM` and `ENTRYPOINT`, since they define the image and the process it runs.",
+            "ru": "Только `FROM` и `ENTRYPOINT`, поскольку они задают образ и процесс, который он запускает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only `RUN`, because it is the only instruction that executes anything.",
+            "ru": "Только `RUN`, потому что это единственная инструкция, которая что-либо выполняет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`RUN`, `COPY` and `ADD` create layers; `ENV`, `WORKDIR`, `EXPOSE`, `ENTRYPOINT` and `CMD` only write metadata.",
+            "ru": "Слои создают `RUN`, `COPY` и `ADD`; `ENV`, `WORKDIR`, `EXPOSE`, `ENTRYPOINT` и `CMD` пишут только метаданные."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "None of them — layers come from `docker commit`, not from a build.",
+            "ru": "Никакие — слои появляются от `docker commit`, а не от сборки."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Only instructions that change the filesystem produce a layer. The rest change the image configuration, which is why adding an `ENV` or moving `EXPOSE` costs nothing in size, while an extra `RUN` always does.",
+        "ru": "Слой порождают только инструкции, меняющие файловую систему. Остальные меняют конфигурацию образа — поэтому добавить `ENV` или переставить `EXPOSE` ничего не стоит по размеру, а лишний `RUN` стоит всегда."
+      },
+      "sources": [
+        "https://docs.docker.com/reference/dockerfile/"
+      ]
+    },
+    {
+      "id": "delivery.docker-images.002",
+      "section": "docker-images",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "A Dockerfile installs a 300 MB toolchain in one `RUN` and deletes it in the next `RUN`. What happens to the image size?",
+        "ru": "Dockerfile ставит 300-мегабайтный тулчейн одним `RUN` и удаляет его следующим `RUN`. Что произойдёт с размером образа?"
+      },
+      "code": "RUN curl -o /tmp/toolchain.tar.gz https://example.com/toolchain.tar.gz && tar -xf /tmp/toolchain.tar.gz -C /opt\nRUN rm -rf /opt/toolchain /tmp/toolchain.tar.gz",
+      "options": [
+        {
+          "text": {
+            "en": "It drops by roughly 300 MB — the deletion frees the bytes in the image.",
+            "ru": "Он уменьшится примерно на 300 МБ — удаление освобождает байты в образе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It does not drop: the earlier layer still holds the files, and the later layer only records them as deleted.",
+            "ru": "Он не уменьшится: ранний слой по-прежнему содержит файлы, а поздний лишь помечает их удалёнными."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It drops, but only after `docker image prune` compacts the unreferenced layers.",
+            "ru": "Уменьшится, но только после того, как `docker image prune` уплотнит неиспользуемые слои."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The build fails: a layer is read-only, so files created earlier cannot be removed.",
+            "ru": "Сборка упадёт: слой доступен только на чтение, поэтому созданные ранее файлы удалить нельзя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It depends on the storage driver — on overlay2 the bytes are reclaimed automatically.",
+            "ru": "Зависит от драйвера хранилища — на overlay2 байты освобождаются автоматически."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Layers stack and are never rewritten. A deletion in a later layer is a whiteout marker: the file is invisible in the final filesystem and still weighs what it weighed. That is why installation and cleanup are chained into a single `RUN` — or, better here, moved into a build stage that is never shipped.",
+        "ru": "Слои складываются и никогда не переписываются. Удаление в позднем слое — это маркер-«забеливание»: файл невидим в итоговой файловой системе и по-прежнему весит столько же. Поэтому установку и уборку объединяют в один `RUN` — или, что здесь лучше, уносят в сборочную стадию, которая не поставляется."
+      },
+      "sources": [
+        "https://docs.docker.com/build/cache/"
+      ]
+    },
+    {
+      "id": "delivery.docker-images.003",
+      "section": "docker-images",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "This Dockerfile has two `FROM` instructions: a `maven:3.9.9-eclipse-temurin-17` build stage and an `eclipse-temurin:17-jdk-alpine` runtime stage. What ends up in the image that is actually pushed?",
+        "ru": "В этом Dockerfile два `FROM`: сборочная стадия на `maven:3.9.9-eclipse-temurin-17` и стадия выполнения на `eclipse-temurin:17-jdk-alpine`. Что окажется в образе, который в итоге уезжает в реестр?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Only the last stage — earlier stages contribute nothing but the files a `COPY --from=` explicitly pulls across, so Maven, `~/.m2` and the sources stay out.",
+            "ru": "Только последняя стадия: ранние не дают ничего, кроме файлов, явно перенесённых через `COPY --from=`, поэтому Maven, `~/.m2` и исходники остаются снаружи."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Both stages merged into one image, with files that appear twice deduplicated by digest.",
+            "ru": "Обе стадии, слитые в один образ, с дедупликацией по digest для файлов, встречающихся дважды."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Each stage becomes its own image, and the runtime image references the build image as its parent.",
+            "ru": "Каждая стадия становится отдельным образом, а образ выполнения ссылается на сборочный как на родительский."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Every stage's layers, but only the last stage's `ENTRYPOINT` is used.",
+            "ru": "Слои всех стадий, но используется только `ENTRYPOINT` последней стадии."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Everything except stages named with `AS`, which are treated as scratch space and discarded.",
+            "ru": "Всё, кроме стадий, названных через `AS`, — они считаются временными и отбрасываются."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A multi-stage build ships the final stage only. Everything else exists to produce files, and nothing crosses the boundary unless a `COPY --from=` names it. That is what keeps the build toolchain and the source tree out of production — and also why a credential handed to an early stage never reaches the artifact.",
+        "ru": "Multi-stage поставляет только последнюю стадию. Всё остальное существует, чтобы произвести файлы, и через границу не проходит ничего, кроме названного в `COPY --from=`. Именно это удерживает сборочный тулчейн и дерево исходников вне прода — и по той же причине креденшел, переданный ранней стадии, до артефакта не доезжает."
+      },
+      "sources": [
+        "https://docs.docker.com/build/building/multi-stage/"
+      ]
+    },
+    {
+      "id": "delivery.docker-images.004",
+      "section": "docker-images",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "The runtime stage copies the Quarkus fast-jar in four separate instructions, `lib/` first and `app/` third. Why that order?",
+        "ru": "Стадия выполнения копирует fast-jar Quarkus четырьмя отдельными инструкциями: `lib/` первым, `app/` третьим. Зачем такой порядок?"
+      },
+      "code": "COPY --from=build /src/target/quarkus-app/lib/ lib/\nCOPY --from=build /src/target/quarkus-app/quarkus/ quarkus/\nCOPY --from=build /src/target/quarkus-app/app/ app/\nCOPY --from=build /src/target/quarkus-app/quarkus-run.jar quarkus-run.jar",
+      "options": [
+        {
+          "text": {
+            "en": "`quarkus-run.jar` resolves its siblings at copy time, so `lib/` has to exist before it is copied.",
+            "ru": "`quarkus-run.jar` разрешает соседние каталоги в момент копирования, поэтому `lib/` должен существовать раньше."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The order is cosmetic: the builder sorts layers by size before storing them.",
+            "ru": "Порядок косметический: сборщик всё равно сортирует слои по размеру перед сохранением."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`app/` holds the entry point and must be the topmost layer for `ENTRYPOINT` to find it.",
+            "ru": "В `app/` лежит точка входа, и он должен быть верхним слоем, иначе `ENTRYPOINT` его не найдёт."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Layers must be copied in alphabetical order or the cache cannot match them.",
+            "ru": "Слои нужно копировать в алфавитном порядке, иначе кэш не сможет их сопоставить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`lib/` is large and changes only when dependencies change, while `app/` changes on every commit — putting the stable pieces first means a code-only change rebuilds and re-pushes only the last layers.",
+            "ru": "`lib/` большой и меняется только при смене зависимостей, а `app/` меняется с каждым коммитом — стабильные части впереди означают, что правка кода пересобирает и перезаливает лишь последние слои."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A `COPY` layer is invalidated when the files it copies change, and every layer after it is invalidated with it. Ordering from stablest to most volatile keeps the expensive layers cached across commits. The fast-jar makes this easy because the split into dependencies, framework data and application classes is already physical.",
+        "ru": "Слой `COPY` обесценивается при изменении копируемых файлов, а вместе с ним и все последующие. Порядок от самого стабильного к самому изменчивому сохраняет дорогие слои в кэше между коммитами. Fast-jar это упрощает: разделение на зависимости, данные фреймворка и классы приложения уже физическое."
+      },
+      "sources": [
+        "https://docs.docker.com/build/cache/"
+      ]
+    },
+    {
+      "id": "delivery.docker-images.005",
+      "section": "docker-images",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "This image declares its entry point as a JSON array (exec form) rather than as a shell string. What does that change?",
+        "ru": "Этот образ объявляет точку входа JSON-массивом (exec-форма), а не строкой для шелла. Что это меняет?"
+      },
+      "code": "ENTRYPOINT [\"java\", \"-XX:MaxRAMPercentage=65.0\", \"-jar\", \"/app/quarkus-run.jar\"]",
+      "options": [
+        {
+          "text": {
+            "en": "Exec form starts faster, because the arguments do not have to be parsed by a shell.",
+            "ru": "Exec-форма стартует быстрее, потому что аргументы не разбирает шелл."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing functional — the two forms are equivalent and the array is a style preference.",
+            "ru": "Функционально ничего — формы эквивалентны, а массив это вопрос стиля."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The JVM becomes PID 1 directly and receives `SIGTERM`; in shell form it runs under `/bin/sh -c`, which does not forward the signal, so a graceful stop degrades into a kill after the timeout.",
+            "ru": "JVM напрямую становится PID 1 и получает `SIGTERM`; в shell-форме она работает под `/bin/sh -c`, который сигнал не пробрасывает, и вежливая остановка вырождается в kill по таймауту."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Exec form expands environment variables such as `$JAVA_OPTS`, which shell form cannot.",
+            "ru": "Exec-форма подставляет переменные окружения вроде `$JAVA_OPTS`, чего shell-форма не умеет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Exec form requires a `CMD` as well, otherwise the container exits immediately.",
+            "ru": "Exec-форма дополнительно требует `CMD`, иначе контейнер сразу завершится."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Exec form runs the binary directly as PID 1, so the orchestrator's stop signal reaches the JVM and shutdown hooks run. Shell form inserts `/bin/sh -c`, and the shell neither forwards nor waits — the platform then kills the container when the grace period expires. The trade-off is that exec form does no variable expansion, which is the one thing shell form is genuinely better at.",
+        "ru": "Exec-форма запускает бинарник напрямую как PID 1, поэтому сигнал остановки от оркестратора доходит до JVM и shutdown-хуки отрабатывают. Shell-форма вставляет `/bin/sh -c`, а шелл ни сигнал не пробрасывает, ни дожидается — по истечении grace-периода платформа убивает контейнер. Размен в том, что exec-форма не подставляет переменные, и это единственное, в чём shell-форма действительно лучше."
+      },
+      "sources": [
+        "https://docs.docker.com/reference/dockerfile/"
+      ]
+    },
+    {
+      "id": "delivery.docker-images.006",
+      "section": "docker-images",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "The runtime stage is a JDK image, and the Dockerfile fails the build if `java --list-modules` does not list `jdk.compiler`. Why is a smaller JRE base image not an option here?",
+        "ru": "Стадия выполнения основана на JDK-образе, и Dockerfile роняет сборку, если `java --list-modules` не показывает `jdk.compiler`. Почему меньший JRE-образ здесь не подходит?"
+      },
+      "code": "FROM eclipse-temurin:17-jdk-alpine\nRUN java --list-modules | grep -q '^jdk.compiler@' \\\n    || { echo \"This image has no jdk.compiler; the practice sandbox cannot compile.\"; exit 1; }",
+      "options": [
+        {
+          "text": {
+            "en": "A JRE cannot run a fast-jar: `quarkus-run.jar` needs a compiler to expand `app/` at start-up.",
+            "ru": "JRE не может запустить fast-jar: `quarkus-run.jar` нужен компилятор, чтобы развернуть `app/` при старте."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The Java practice track compiles submissions at runtime through `ToolProvider.getSystemJavaCompiler()`, which returns null without `jdk.compiler` — so the check turns a wrong base image into a failed build instead of a track that 500s on every task.",
+            "ru": "Трек практики по Java компилирует решения в runtime через `ToolProvider.getSystemJavaCompiler()`, который без `jdk.compiler` возвращает null, — и проверка превращает неверный базовый образ в упавшую сборку вместо трека, отдающего 500 на каждой задаче."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Alpine publishes no JRE variant, so on that base the JDK is the only thing available.",
+            "ru": "Для Alpine JRE-вариант не публикуется, поэтому на этой базе доступен только JDK."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Flyway's Java migrations are compiled at start-up, so the deployed image needs javac to run them.",
+            "ru": "Java-миграции Flyway компилируются при старте, поэтому развёрнутому образу нужен javac, чтобы их выполнить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An AppCDS archive can only be created by a JDK, and this image dumps one during the build.",
+            "ru": "Архив AppCDS может создать только JDK, а этот образ снимает его во время сборки."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The practice sandbox asks for the platform compiler by name, and on a JRE that call simply answers null — a runtime failure on every submission, in an image that otherwise boots fine. The README records the price of the correct choice: the base image goes from 184 MB to 336 MB. Flyway's Java migrations are compiled at build time like any other class, and CDS is not JDK-only.",
+        "ru": "Песочница практики запрашивает компилятор платформы по имени, и на JRE этот вызов просто отдаёт null — отказ в runtime на каждом решении, в образе, который в остальном прекрасно стартует. README фиксирует цену верного выбора: базовый образ растёт со 184 МБ до 336 МБ. Java-миграции Flyway компилируются на этапе сборки, как любой другой класс, а CDS не является привилегией JDK."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.compiler/javax/tools/ToolProvider.html"
+      ]
+    },
+    {
+      "id": "delivery.dependency-resolution.001",
+      "section": "dependency-resolution",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does plain `mvn dependency:tree` print?",
+        "ru": "Что печатает обычный `mvn dependency:tree`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Every version anyone requested, each annotated with whether it won or lost.",
+            "ru": "Все версии, которые кто-либо запросил, каждая с пометкой, победила она или проиграла."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only the direct dependencies, one level deep.",
+            "ru": "Только прямые зависимости, на один уровень вглубь."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The dependencies that still need downloading, skipping anything already in `~/.m2`.",
+            "ru": "Зависимости, которые ещё нужно скачать, без тех, что уже лежат в `~/.m2`."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Two trees side by side, one for the compile classpath and one for the runtime classpath.",
+            "ru": "Два дерева рядом: одно для classpath компиляции, другое для classpath выполнения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The resolved graph — the winning version of each artifact — with losing candidates hidden unless `-Dverbose` is passed.",
+            "ru": "Разрешённый граф — победившую версию каждого артефакта — со скрытыми проигравшими кандидатами, пока не передан `-Dverbose`."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The plain tree is the answer, not the working. That is usually what you want, but it means a version you cannot explain is simply absent from the output — the losing candidate and the rule that removed it only appear with `-Dverbose`.",
+        "ru": "Обычное дерево — это ответ, а не решение. Обычно это и нужно, но версии, которую вы не можете объяснить, в выводе просто нет: проигравший кандидат и правило, которое его убрало, появляются только с `-Dverbose`."
+      },
+      "sources": [
+        "https://maven.apache.org/plugins/maven-dependency-plugin/tree-mojo.html"
+      ]
+    },
+    {
+      "id": "delivery.dependency-resolution.002",
+      "section": "dependency-resolution",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does a `<dependencyManagement>` block do on its own?",
+        "ru": "Что сам по себе делает блок `<dependencyManagement>`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Adds every dependency listed in it to the project's classpath.",
+            "ru": "Добавляет каждую перечисленную в нём зависимость на classpath проекта."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Downloads the listed artifacts eagerly so that later builds can run offline.",
+            "ru": "Заранее скачивает перечисленные артефакты, чтобы последующие сборки могли работать офлайн."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "States which version to use if the artifact appears in the graph — directly or transitively, at any depth — without adding it.",
+            "ru": "Фиксирует, какую версию использовать, если артефакт вообще появится в графе — напрямую или транзитивно, на любой глубине, — ничего не добавляя."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Locks the versions of the plugins the build uses.",
+            "ru": "Фиксирует версии плагинов, которые использует сборка."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Excludes the listed artifacts from transitive resolution everywhere in the build.",
+            "ru": "Исключает перечисленные артефакты из транзитивного разрешения по всей сборке."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`dependencyManagement` is a statement about version, not about presence. Nothing appears on the classpath because of it; a `<dependencies>` entry or a transitive edge still has to bring the artifact in. Plugin versions are managed separately, by `<pluginManagement>`.",
+        "ru": "`dependencyManagement` — утверждение о версии, а не о наличии. Из-за него на classpath ничего не появляется: артефакт всё равно должна принести запись в `<dependencies>` или транзитивное ребро. Версии плагинов управляются отдельно, через `<pluginManagement>`."
+      },
+      "sources": [
+        "https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html"
+      ]
+    },
+    {
+      "id": "delivery.dependency-resolution.003",
+      "section": "dependency-resolution",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Two direct dependencies each pull in a different version of the same artifact, both at depth two. Which version ends up on the classpath?",
+        "ru": "Две прямые зависимости тянут разные версии одного артефакта, обе на глубине два. Какая версия окажется на classpath?"
+      },
+      "code": "your-app\n+- library-a:1.0\n|  \\- commons-lang3:3.12.0      (depth 2)\n\\- library-b:2.0\n   \\- commons-lang3:3.14.0      (depth 2)",
+      "options": [
+        {
+          "text": {
+            "en": "3.14.0 — Maven takes the highest version among the candidates.",
+            "ru": "3.14.0 — Maven берёт наибольшую версию из кандидатов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "3.12.0 — the depths are equal, so the tie breaks on which dependency is declared first in the POM.",
+            "ru": "3.12.0 — глубины равны, поэтому ничья разрешается тем, какая зависимость объявлена в POM первой."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Neither: the build fails with a version conflict until one of them is managed explicitly.",
+            "ru": "Никакая: сборка упадёт с конфликтом версий, пока одну из них явно не зафиксируют."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both are kept, and the classloader resolves each class from whichever jar it finds first.",
+            "ru": "Останутся обе, и загрузчик классов возьмёт каждый класс из того джарника, который найдёт первым."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "3.14.0 — the last declaration wins, the way it does for properties.",
+            "ru": "3.14.0 — побеждает последнее объявление, как это работает для свойств."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Maven resolves conflicts by nearest definition, and when depths tie, by declaration order in the POM. Not the newest — the first. This is where the habit borrowed from Gradle, which takes the highest version by default, produces a wrong prediction, and it means reordering two unrelated dependencies can change a third library's version with nothing in the diff to show it.",
+        "ru": "Maven разрешает конфликт по ближайшему определению, а при равной глубине — по порядку объявления в POM. Не самая новая — первая. Здесь и промахивается привычка, перенесённая из Gradle, который по умолчанию берёт наибольшую версию; отсюда же и то, что перестановка двух несвязанных зависимостей способна изменить версию третьей библиотеки, никак не проявившись в диффе."
+      },
+      "sources": [
+        "https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html"
+      ]
+    },
+    {
+      "id": "delivery.dependency-resolution.004",
+      "section": "dependency-resolution",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "This POM imports `quarkus-bom` and then declares `quarkus-rest`, `quarkus-hibernate-orm` and `quarkus-flyway` with no `<version>` at all. What is the import doing?",
+        "ru": "Этот POM импортирует `quarkus-bom`, а затем объявляет `quarkus-rest`, `quarkus-hibernate-orm` и `quarkus-flyway` вообще без `<version>`. Что делает этот импорт?"
+      },
+      "code": "<dependencyManagement>\n  <dependencies>\n    <dependency>\n      <groupId>io.quarkus</groupId>\n      <artifactId>quarkus-bom</artifactId>\n      <version>${quarkus.version}</version>\n      <type>pom</type>\n      <scope>import</scope>\n    </dependency>\n  </dependencies>\n</dependencyManagement>",
+      "options": [
+        {
+          "text": {
+            "en": "It supplies the version for every `io.quarkus` artifact without adding any of them, so one property moves the whole platform as a set the Quarkus team tested together.",
+            "ru": "Он подставляет версию каждому артефакту `io.quarkus`, не добавляя ни одного, так что одно свойство двигает всю платформу как набор, протестированный командой Quarkus вместе."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It adds every Quarkus extension to the build; the ones you do not use are pruned at package time.",
+            "ru": "Он добавляет в сборку все расширения Quarkus, а неиспользуемые отсекаются на этапе упаковки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It makes the BOM the project's parent, so the build also inherits its plugins and configuration.",
+            "ru": "Он делает BOM родительским POM, поэтому проект наследует ещё и его плагины и конфигурацию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It pins transitive versions only; directly declared Quarkus artifacts still have to name their own.",
+            "ru": "Он фиксирует только транзитивные версии; прямо объявленные артефакты Quarkus обязаны называть свою."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It downloads the whole Quarkus platform as one jar, which the extensions are then loaded from.",
+            "ru": "Он скачивает всю платформу Quarkus одним джарником, из которого потом загружаются расширения."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A BOM is a POM containing nothing but `dependencyManagement`, and `<scope>import</scope>` splices its entries into yours. It adds nothing to the classpath — that is why the `<dependencies>` block below still lists what the project uses, just without versions. The value is that REST, Hibernate ORM, Flyway, the JDBC driver and security move together; upgrading them one at a time is how you find out they disagree.",
+        "ru": "BOM — это POM, в котором нет ничего, кроме `dependencyManagement`, а `<scope>import</scope>` вклеивает его записи в ваши. На classpath он не добавляет ничего — потому блок `<dependencies>` ниже по-прежнему перечисляет используемое, просто без версий. Ценность в том, что REST, Hibernate ORM, Flyway, JDBC-драйвер и security двигаются вместе; обновляя их по одному, вы и узнаёте, что они друг с другом не согласны."
+      },
+      "sources": [
+        "https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html"
+      ]
+    },
+    {
+      "id": "delivery.dependency-resolution.005",
+      "section": "dependency-resolution",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A jar you never declared is on the classpath at a version nobody can account for. Which command shows both who asked for it and which candidate versions were dropped?",
+        "ru": "На classpath лежит джарник, которого вы не объявляли, в версии, которую никто не может объяснить. Какая команда покажет и того, кто его запросил, и то, какие версии-кандидаты были отброшены?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "`mvn dependency:list`",
+            "ru": "`mvn dependency:list`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`mvn dependency:analyze`",
+            "ru": "`mvn dependency:analyze`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`mvn dependency:purge-local-repository`",
+            "ru": "`mvn dependency:purge-local-repository`"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`mvn dependency:tree -Dverbose`",
+            "ru": "`mvn dependency:tree -Dverbose`"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "`mvn help:effective-pom`",
+            "ru": "`mvn help:effective-pom`"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`-Dverbose` keeps the losing candidates in the tree and annotates them — `omitted for conflict with 3.12.0` — so you see the path that asked for each one and the rule that removed it. `dependency:analyze` answers a different question (declared-but-unused, used-but-undeclared), and `help:effective-pom` shows configuration after inheritance rather than the resolved graph.",
+        "ru": "`-Dverbose` оставляет в дереве проигравших кандидатов и помечает их — `omitted for conflict with 3.12.0`, — так что видно и путь, который каждого запросил, и правило, которое его убрало. `dependency:analyze` отвечает на другой вопрос (объявлено и не используется, используется и не объявлено), а `help:effective-pom` показывает конфигурацию после наследования, а не разрешённый граф."
+      },
+      "sources": [
+        "https://maven.apache.org/plugins/maven-dependency-plugin/tree-mojo.html"
+      ]
+    },
+    {
+      "id": "delivery.dependency-resolution.006",
+      "section": "dependency-resolution",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "Two libraries bring different versions of the same artifact and the older one wins. Which fix should be the default, and why?",
+        "ru": "Две библиотеки приносят разные версии одного артефакта, и побеждает старая. Какое исправление должно быть выбором по умолчанию и почему?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Add an `<exclusion>` to the library that brings the older version — the narrowest possible change.",
+            "ru": "Добавить `<exclusion>` библиотеке, которая приносит старую версию, — самое узкое возможное изменение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Upgrade the library that brings the older version: nearest-wins cannot be overridden, so there is no other lever.",
+            "ru": "Обновить библиотеку, приносящую старую версию: правило ближайшего перебить нельзя, других рычагов нет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Put the wanted version in `<dependencyManagement>`: it applies wherever the artifact appears, at any depth, without adding it to the graph and without removing an edge someone needs.",
+            "ru": "Записать нужную версию в `<dependencyManagement>`: она действует везде, где артефакт появится, на любой глубине, ничего не добавляя в граф и не убирая ребро, которое кому-то нужно."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Reorder the two `<dependency>` blocks so the one carrying the newer transitive version is declared first.",
+            "ru": "Переставить два блока `<dependency>` так, чтобы первым был объявлен тот, что несёт более новую транзитивную версию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Exclude the artifact from both libraries and let the runtime classpath supply it.",
+            "ru": "Исключить артефакт из обеих библиотек и позволить classpath выполнения предоставить его."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Managing the version says what you mean: this artifact, this version, wherever it turns up. An exclusion says something different and blunter — remove this edge — and it removes the jar for the code that legitimately needed it too, with the failure landing at runtime in a class you never looked at. Reordering works by accident and is invisible to the next reader; excluding from both and hoping the runtime provides it is how you get `NoClassDefFoundError` in production.",
+        "ru": "Управление версией говорит именно то, что вы имеете в виду: этот артефакт, эта версия, где бы он ни всплыл. Исключение говорит другое и грубее — убрать это ребро, — и убирает джарник в том числе для кода, которому он был нужен по делу, а отказ приходит в runtime, в классе, на который вы никогда не смотрели. Перестановка срабатывает случайно и следующему читателю не видна, а исключить из обеих в надежде на runtime — верный способ получить `NoClassDefFoundError` в проде."
+      },
+      "sources": [
+        "https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html"
+      ]
+    },
+    {
+      "id": "delivery.artifacts-and-startup.001",
+      "section": "artifacts-and-startup",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Quarkus packages this application as a fast-jar. What does `java -jar target/quarkus-app/quarkus-run.jar` need beside it?",
+        "ru": "Quarkus упаковывает это приложение как fast-jar. Что нужно рядом для `java -jar target/quarkus-app/quarkus-run.jar`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The three sibling directories `lib/`, `app/` and `quarkus/` — `quarkus-run.jar` is not self-contained.",
+            "ru": "Три соседних каталога `lib/`, `app/` и `quarkus/` — `quarkus-run.jar` не самодостаточен."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Nothing — it is an uber-jar with every dependency inside it.",
+            "ru": "Ничего — это uber-jar, все зависимости лежат внутри него."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Maven on the PATH, because dependencies are resolved at start-up.",
+            "ru": "Maven в PATH, потому что зависимости разрешаются при старте."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The `target/classes` directory, which the application classes are read from.",
+            "ru": "Каталог `target/classes`, из которого читаются классы приложения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A JDK rather than a JRE, since the fast-jar is compiled on first run.",
+            "ru": "JDK, а не JRE, поскольку fast-jar компилируется при первом запуске."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The fast-jar is a directory layout, not a single archive: dependencies in `lib/`, application classes in `app/`, the build-time wiring Quarkus computed in `quarkus/`, and a small launcher jar. Move the jar on its own and it runs nothing — and that same split is what lets the Dockerfile copy the four pieces as four cache layers.",
+        "ru": "Fast-jar — это раскладка каталогов, а не один архив: зависимости в `lib/`, классы приложения в `app/`, посчитанная на сборке обвязка Quarkus в `quarkus/` и маленький джарник-лаунчер. Унесите джарник отдельно — он не запустит ничего; и это же разделение позволяет Dockerfile копировать четыре части четырьмя слоями кэша."
+      },
+      "sources": [
+        "https://quarkus.io/guides/maven-tooling"
+      ]
+    },
+    {
+      "id": "delivery.artifacts-and-startup.002",
+      "section": "artifacts-and-startup",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What is the main drawback of shipping a fat (uber) jar inside a Docker image?",
+        "ru": "В чём основной недостаток поставки fat (uber) jar внутри Docker-образа?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The JVM cannot memory-map an archive that large, so start-up is slower.",
+            "ru": "JVM не может отобразить в память архив такого размера, поэтому старт медленнее."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Dependencies have to be downloaded again when the container starts.",
+            "ru": "Зависимости приходится заново скачивать при старте контейнера."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A fat jar cannot be built reproducibly, because shading rewrites timestamps.",
+            "ru": "Fat jar нельзя собрать воспроизводимо, потому что shading переписывает таймстемпы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is one file that changes completely when one class changes, so every commit re-pushes the whole archive — unchanged dependencies included.",
+            "ru": "Это один файл, меняющийся целиком при правке одного класса, поэтому каждый коммит перезаливает весь архив вместе с неизменившимися зависимостями."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Fat jars cannot carry resources, so content files have to be mounted separately.",
+            "ru": "Fat jar не умеет нести ресурсы, поэтому файлы контента приходится монтировать отдельно."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Layer caching works at file granularity, and a fat jar is one file. Layered jars and the Quarkus fast-jar exist to give the image build a seam it can cache along. Shading has a second cost worth remembering: two jars that both ship `META-INF/services/...` need the plugin configured to merge them, or one silently disappears.",
+        "ru": "Кэш слоёв работает с точностью до файла, а fat jar — это один файл. Layered jar и fast-jar Quarkus существуют, чтобы дать сборке образа шов, по которому можно кэшировать. У shading есть и вторая цена: два джарника, каждый со своим `META-INF/services/...`, требуют настроенного слияния в плагине, иначе один молча исчезнет."
+      },
+      "sources": [
+        "https://docs.docker.com/build/cache/"
+      ]
+    },
+    {
+      "id": "delivery.artifacts-and-startup.003",
+      "section": "artifacts-and-startup",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "This Dockerfile dumps the AppCDS archive with the same JVM that will run the application, from the directory it will run in. Why does that matter?",
+        "ru": "Этот Dockerfile снимает архив AppCDS той же JVM, которая будет выполнять приложение, и из того каталога, в котором оно будет работать. Почему это важно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The archive stores absolute source paths, which the compiler needs later.",
+            "ru": "Архив хранит абсолютные пути к исходникам, которые позже нужны компилятору."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Dumping is only permitted from the working directory, for security reasons.",
+            "ru": "Снимать архив разрешено только из рабочего каталога — из соображений безопасности."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The archive records its classpath and its JVM build, and a mismatch on either makes the JVM discard it — silently, at the cost of the whole gain.",
+            "ru": "Архив записывает свой classpath и свою сборку JVM, и расхождение в любом из двух заставляет JVM отбросить его — молча, ценой всего выигрыша."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The JVM verifies the archive against a checksum of the jar and refuses to start if it differs.",
+            "ru": "JVM сверяет архив с контрольной суммой джарника и отказывается стартовать при расхождении."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The dump embeds the heap, which depends on the machine's memory layout.",
+            "ru": "В дамп попадает куча, а она зависит от раскладки памяти конкретной машины."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A CDS archive is only valid for the classpath and JVM it was produced for. When it does not match, the JVM falls back to ordinary class loading and says nothing — so a build that dumps the archive in a different stage, or with a different JDK, produces an image that looks correct and has lost the entire benefit.",
+        "ru": "Архив CDS действителен только для того classpath и той JVM, под которые он снят. При несовпадении JVM молча откатывается к обычной загрузке классов — поэтому сборка, снимающая архив на другой стадии или другим JDK, даёт образ, который выглядит правильным и потерял весь выигрыш."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/vm/class-data-sharing.html"
+      ]
+    },
+    {
+      "id": "delivery.artifacts-and-startup.004",
+      "section": "artifacts-and-startup",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "The AppCDS training run is pointed at an unreachable datasource with Flyway retries switched off, and its failure is swallowed. What is that achieving?",
+        "ru": "Тренировочный прогон AppCDS направлен на недоступный датасорс с отключёнными повторами Flyway, а его падение проглатывается. Чего этим добиваются?"
+      },
+      "code": "RUN java -XX:ArchiveClassesAtExit=/app/app-cds.jsa \\\n      -Dquarkus.flyway.connect-retries=0 \\\n      -Dquarkus.datasource.jdbc.url=jdbc:postgresql://127.0.0.1:1/none \\\n      -jar /app/quarkus-run.jar > /tmp/cds-dump.log 2>&1 || true; \\\n    test -f /app/app-cds.jsa || { echo \"AppCDS: no archive was written\"; exit 1; }",
+      "options": [
+        {
+          "text": {
+            "en": "It stops Flyway applying the migrations twice — once at image build and once at deploy.",
+            "ru": "Это не даёт Flyway применить миграции дважды: на сборке образа и на деплое."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The archive only needs the classes loaded up to that point, so the boot is allowed to die at the datasource and no database has to exist at image build time.",
+            "ru": "Архиву нужны лишь классы, загруженные до этого момента, поэтому загрузке позволено умереть на датасорсе, и база на этапе сборки образа не нужна вовсе."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It measures how long the boot takes with the database removed from the picture.",
+            "ru": "Так измеряют, сколько занимает загрузка, если убрать базу из картины."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "AppCDS cannot archive classes that are loaded after the first SQL statement runs.",
+            "ru": "AppCDS не может архивировать классы, загруженные после выполнения первого SQL-запроса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It warms the connection pool with failed connections so the first real one is faster.",
+            "ru": "Так прогревают пул неудачными соединениями, чтобы первое настоящее устанавливалось быстрее."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`-XX:ArchiveClassesAtExit` archives whatever was loaded before the JVM exits, and the framework, the REST layer and the JDBC plumbing are all loaded well before the first connection attempt. Letting the boot die there removes any need for a database during the image build, and the explicit `test -f` afterwards is what keeps the `|| true` from hiding a missing archive.",
+        "ru": "`-XX:ArchiveClassesAtExit` архивирует всё, что было загружено до выхода JVM, а фреймворк, REST-слой и JDBC-обвязка загружаются задолго до первой попытки соединения. Дав загрузке умереть там, вы снимаете необходимость в базе во время сборки образа, а явный `test -f` после не даёт `|| true` скрыть отсутствующий архив."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/vm/class-data-sharing.html"
+      ]
+    },
+    {
+      "id": "delivery.artifacts-and-startup.005",
+      "section": "artifacts-and-startup",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "The build verifies the archive with `-Xshare:on`, but the `ENTRYPOINT` passes only `-XX:SharedArchiveFile`. Why is the stricter flag deliberately left out of the entry point?",
+        "ru": "Сборка проверяет архив с `-Xshare:on`, но в `ENTRYPOINT` передаётся только `-XX:SharedArchiveFile`. Почему более строгий флаг намеренно не попал в точку входа?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "`-Xshare:on` is only meaningful during a dump; at runtime the JVM ignores it.",
+            "ru": "`-Xshare:on` имеет смысл только при снятии дампа; в runtime JVM его игнорирует."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The flag makes every start slower, which is acceptable once but not on every boot.",
+            "ru": "Флаг замедляет каждый старт, что терпимо один раз, но не при каждой загрузке."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`-Xshare:on` cannot be combined with `-XX:SharedArchiveFile`.",
+            "ru": "`-Xshare:on` нельзя сочетать с `-XX:SharedArchiveFile`."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The entry point already fails when the archive file is missing, so the flag would add nothing.",
+            "ru": "Точка входа и так падает при отсутствии файла архива, поэтому флаг ничего не добавил бы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "At build time it turns an unusable archive into a failed build; in the entry point it would turn a base-image patch bump into an outage rather than just a slower boot.",
+            "ru": "На сборке он превращает непригодный архив в упавшую сборку; в точке входа он превратил бы патч-бамп базового образа в простой сервиса вместо просто более медленной загрузки."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The default `-Xshare:auto` falls back to normal class loading when the archive does not match, silently. `-Xshare:on` makes that fatal — which is exactly what you want in a build, where a silent loss of the optimisation would go unnoticed, and exactly what you do not want in production, where the mismatch may be a patched JDK in the base image and the correct response is a slower boot, not a crash loop.",
+        "ru": "Умолчание `-Xshare:auto` при несовпадении молча откатывается к обычной загрузке классов. `-Xshare:on` делает это фатальным — именно то, что нужно в сборке, где тихая потеря оптимизации осталась бы незамеченной, и именно то, чего не нужно в проде, где причиной несовпадения может быть пропатченный JDK в базовом образе, а верная реакция — более медленный старт, а не цикл перезапусков."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html"
+      ]
+    },
+    {
+      "id": "delivery.artifacts-and-startup.006",
+      "section": "artifacts-and-startup",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "`-XX:TieredStopAtLevel=1` took this container's boot from ~50 s to ~29 s on its 0.1-CPU quota. When would the same flag be a mistake?",
+        "ru": "`-XX:TieredStopAtLevel=1` сократил загрузку этого контейнера с ~50 с до ~29 с на квоте 0.1 CPU. Когда тот же флаг был бы ошибкой?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Always — C1-compiled code is slower than interpreted code, so the flag only ever hurts.",
+            "ru": "Всегда — код, скомпилированный C1, медленнее интерпретируемого, поэтому флаг только вредит."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Never — C2 only improves synthetic benchmarks.",
+            "ru": "Никогда — C2 улучшает только синтетические бенчмарки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whenever the image also uses AppCDS, because the archive stores C2-compiled code that the flag then invalidates.",
+            "ru": "Всегда, когда образ использует AppCDS, потому что архив хранит скомпилированный C2 код, который флаг обесценивает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "On a service under sustained load, where C2's optimised code earns back the CPU the compilation costs; here it never does, because a service that sleeps every 15 minutes never reaches that throughput.",
+            "ru": "На сервисе под постоянной нагрузкой, где оптимизированный C2 код отбивает потраченный на компиляцию процессор; здесь он не отбивает никогда, потому что сервис, засыпающий каждые 15 минут, до такой нагрузки не доходит."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Only on 32-bit JVMs, where the C2 compiler is unavailable in any case.",
+            "ru": "Только на 32-битных JVM, где компилятор C2 всё равно недоступен."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Capping the JIT at C1 is a trade of peak throughput for boot time and CPU. It wins here for two specific reasons, both written into the Dockerfile: a tenth of a core, where C2's compiler threads compete with the boot they are meant to optimise, and a usage pattern where steady state barely exists — the measured median login, the heaviest CPU path, is unchanged inside noise. Change either reason and the flag becomes a throughput regression.",
+        "ru": "Ограничение JIT уровнем C1 — размен пиковой пропускной способности на время старта и процессор. Здесь он выигрывает по двум конкретным причинам, записанным в Dockerfile: десятая доля ядра, где потоки компилятора C2 конкурируют с той самой загрузкой, которую должны ускорять, и характер использования, при котором установившегося режима почти нет — измеренная медиана логина, самый тяжёлый по процессору путь, не меняется в пределах шума. Измените любую из причин — и флаг станет регрессией пропускной способности."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html"
+      ]
+    },
+    {
+      "id": "delivery.jvm-in-a-container.001",
+      "section": "jvm-in-a-container",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "A JVM in a container exceeds the container's memory limit. What does that look like?",
+        "ru": "JVM в контейнере превышает лимит памяти контейнера. Как это выглядит?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "An `OutOfMemoryError` in the application log, with a heap dump if one was configured.",
+            "ru": "`OutOfMemoryError` в логе приложения и heap dump, если он был настроен."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The kernel kills the process — no `OutOfMemoryError`, no stack trace, nothing in the application log; exit code 137 and a restarted container.",
+            "ru": "Процесс убивает ядро — ни `OutOfMemoryError`, ни стектрейса, ничего в логе приложения; код выхода 137 и перезапустившийся контейнер."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The JVM shrinks its heap automatically and carries on with more frequent collections.",
+            "ru": "JVM автоматически ужимает кучу и продолжает работать с более частыми сборками."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The container is throttled until memory frees up, so requests get slower but nothing dies.",
+            "ru": "Контейнер троттлится, пока память не освободится: запросы замедляются, но ничего не умирает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Docker logs a warning and the failing allocation returns null.",
+            "ru": "Docker пишет предупреждение, а неудавшаяся аллокация возвращает null."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "An `OutOfMemoryError` comes from the JVM noticing its own heap is full. A cgroup limit is enforced by the kernel against the whole process, which is killed outright — so the evidence is a 137 in the platform's event log and nothing at all from the application. That difference is why heap tuning alone never explains these restarts.",
+        "ru": "`OutOfMemoryError` возникает, когда JVM сама замечает, что её куча заполнена. Лимит cgroup применяет ядро ко всему процессу, и процесс просто убивают — поэтому единственная улика это 137 в журнале платформы и полная тишина со стороны приложения. Из-за этой разницы одна только настройка кучи такие перезапуски никогда не объясняет."
+      },
+      "sources": [
+        "https://docs.docker.com/engine/containers/resource_constraints/"
+      ]
+    },
+    {
+      "id": "delivery.jvm-in-a-container.002",
+      "section": "jvm-in-a-container",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What exactly does `-XX:MaxRAMPercentage=65.0` set?",
+        "ru": "Что именно задаёт `-XX:MaxRAMPercentage=65.0`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The share of the container limit the whole process is allowed to use.",
+            "ru": "Долю лимита контейнера, которую разрешено занимать всему процессу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The share of host RAM the JVM reserves for itself when it starts.",
+            "ru": "Долю оперативной памяти хоста, которую JVM резервирует за собой при старте."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The share of the heap handed to the young generation.",
+            "ru": "Долю кучи, отдаваемую молодому поколению."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The occupancy above which the garbage collector runs continuously.",
+            "ru": "Заполненность, выше которой сборщик мусора работает непрерывно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The maximum Java heap size, expressed as a percentage of the memory the JVM believes is available to it.",
+            "ru": "Максимальный размер кучи Java, выраженный в процентах от памяти, которую JVM считает себе доступной."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "It is `-Xmx` as a proportion rather than an absolute number, which is what an image needs when the same artifact runs under different limits. \"Memory available\" means the cgroup limit on a container-aware JVM and the host's RAM without it — the whole reason container support matters.",
+        "ru": "Это `-Xmx`, выраженный долей, а не абсолютным числом, — именно то, что нужно образу, когда один артефакт работает под разными лимитами. «Доступная память» — это лимит cgroup на JVM с поддержкой контейнеров и оперативная память хоста без неё; ради этого container support и существует."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html"
+      ]
+    },
+    {
+      "id": "delivery.jvm-in-a-container.003",
+      "section": "jvm-in-a-container",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "The container has 512 MB and the entry point sets `MaxRAMPercentage=65.0`. Why not a value close to 100?",
+        "ru": "У контейнера 512 МБ, а точка входа ставит `MaxRAMPercentage=65.0`. Почему не значение, близкое к 100?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "100 is not a legal value for the flag; the JVM clamps anything above 75.",
+            "ru": "100 — недопустимое значение флага; JVM обрезает всё выше 75."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The collector needs the remaining third as copy space for its survivor regions.",
+            "ru": "Сборщику нужна оставшаяся треть как пространство для копирования survivor-регионов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Percentages above 75 silently disable container support.",
+            "ru": "Проценты выше 75 молча отключают поддержку контейнеров."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The limit counts everything the process uses — metaspace, code cache, thread stacks, the CDS mapping, native allocations — so the heap alone must not be allowed to reach it; 65% of 512 MB leaves that room alongside a measured ~131 MiB resident.",
+            "ru": "В лимит засчитывается всё, что использует процесс: metaspace, кэш кода, стеки потоков, отображение CDS, нативные аллокации, — поэтому одной куче нельзя позволять до него дорасти; 65 % от 512 МБ оставляют этот запас рядом с измеренными ~131 MiB резидентной памяти."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The platform caps the heap at 65% of the limit regardless of what the flag says.",
+            "ru": "Платформа ограничивает кучу 65 % лимита независимо от того, что сказано во флаге."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`-Xmx` bounds one region; the cgroup limit bounds the sum. Setting the heap to the whole limit guarantees the kill as soon as the heap actually fills. The number here is a measurement plus headroom rather than a convention — which is also why the right way to change it is to measure resident memory under the real limit, not to copy a percentage from somewhere else.",
+        "ru": "`-Xmx` ограничивает одну область, лимит cgroup — сумму. Выставив кучу во весь лимит, вы гарантируете убийство процесса, как только куча действительно заполнится. Число здесь — это измерение плюс запас, а не соглашение; поэтому и менять его правильно измерением резидентной памяти под реальным лимитом, а не копированием чужого процента."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html"
+      ]
+    },
+    {
+      "id": "delivery.jvm-in-a-container.004",
+      "section": "jvm-in-a-container",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A container is given a CPU quota of 0.1 of a core. On a container-aware JVM, what does `Runtime.availableProcessors()` report, and what follows from it?",
+        "ru": "Контейнеру выдана квота CPU в 0.1 ядра. Что сообщит `Runtime.availableProcessors()` на JVM с поддержкой контейнеров и что из этого следует?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "0 — and the JVM refuses to start on a quota below one core.",
+            "ru": "0 — и JVM отказывается стартовать на квоте меньше одного ядра."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The host's core count: a fractional quota cannot be expressed as a number of processors.",
+            "ru": "Число ядер хоста: дробную квоту нельзя выразить количеством процессоров."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "1 — the quota is rounded up to at least one — and that single number then sizes GC threads, JIT compiler threads and the common ForkJoinPool, so `parallelStream()` effectively runs on the calling thread.",
+            "ru": "1 — квота округляется вверх и не ниже единицы, — и это одно число задаёт количество потоков GC, потоков компилятора JIT и общий ForkJoinPool, так что `parallelStream()` фактически выполняется в вызывающем потоке."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "10, because the quota is reported in hundredths of a core.",
+            "ru": "10, потому что квота сообщается в сотых долях ядра."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "0.1 as a fractional value, which each pool rounds as it sees fit.",
+            "ru": "Дробное 0.1, которое каждый пул округляет по своему усмотрению."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A CPU limit is a quota per period — 0.1 CPU means 10 ms of runtime per 100 ms — and the JVM turns it into a processor count, floored at one. Everything automatic is then sized for a single processor. The mirror-image failure is worse: a JVM that reads the host instead creates dozens of GC and compiler threads for a tenth of a core and spends the boot letting them fight.",
+        "ru": "Лимит CPU — это квота на период: 0.1 CPU означает 10 мс выполнения на каждые 100 мс, — и JVM превращает её в число процессоров, не ниже единицы. Дальше всё автоматическое рассчитано на один процессор. Зеркальный отказ хуже: JVM, читающая хост, заводит десятки потоков GC и компилятора на десятую долю ядра и всю загрузку даёт им драться."
+      },
+      "sources": [
+        "https://docs.docker.com/engine/containers/resource_constraints/"
+      ]
+    },
+    {
+      "id": "delivery.jvm-in-a-container.005",
+      "section": "jvm-in-a-container",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Resident memory keeps climbing while the heap stays flat and the container is eventually killed. What tells you which region is growing?",
+        "ru": "Резидентная память растёт, куча при этом ровная, и в итоге контейнер убивают. Что покажет, какая именно область растёт?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "`-XX:NativeMemoryTracking=summary`, then `jcmd <pid> VM.native_memory summary`.",
+            "ru": "`-XX:NativeMemoryTracking=summary`, затем `jcmd <pid> VM.native_memory summary`."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Lowering `-Xmx` in steps until the restarts stop.",
+            "ru": "Понижать `-Xmx` шагами, пока перезапуски не прекратятся."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A heap dump opened in a memory analyser.",
+            "ru": "Heap dump, открытый в анализаторе памяти."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`-verbose:gc`, since all native growth shows up as GC pressure first.",
+            "ru": "`-verbose:gc`, поскольку любой рост нативной памяти сначала проявляется как давление на GC."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`docker stats`, which breaks resident memory down by JVM region.",
+            "ru": "`docker stats`, который разбивает резидентную память по областям JVM."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Native memory tracking is the only one of these that attributes resident memory to metaspace, code cache, thread stacks, GC structures and the rest. A heap dump cannot see any of it by definition, `docker stats` reports one total, and tuning `-Xmx` downward treats a symptom while the actual grower keeps growing.",
+        "ru": "Из перечисленного только native memory tracking относит резидентную память к metaspace, кэшу кода, стекам потоков, структурам GC и прочему. Heap dump ничего из этого по определению не видит, `docker stats` сообщает одну общую цифру, а понижение `-Xmx` лечит симптом, пока настоящий источник роста продолжает расти."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html"
+      ]
+    },
+    {
+      "id": "delivery.jvm-in-a-container.006",
+      "section": "jvm-in-a-container",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "An old JVM without container support runs in a 512 MB container on a 64 GB host, with no explicit `-Xmx`. What goes wrong, and why is it hard to diagnose?",
+        "ru": "Старая JVM без поддержки контейнеров работает в контейнере на 512 МБ на хосте с 64 ГБ и без явного `-Xmx`. Что пойдёт не так и почему это трудно диагностировать?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It refuses to start, because it cannot read the cgroup limit it needs to size the heap.",
+            "ru": "Она откажется стартовать, потому что не может прочитать лимит cgroup, нужный для расчёта кучи."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It sizes the heap from 512 MB correctly, but sizes GC threads from the host's cores, so the boot thrashes.",
+            "ru": "Кучу она посчитает от 512 МБ верно, а потоки GC — от ядер хоста, поэтому загрузка будет буксовать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing: the default maximum heap is 256 MB, which fits inside the limit either way.",
+            "ru": "Ничего: максимальная куча по умолчанию равна 256 МБ и в лимит помещается в любом случае."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing until the first full collection, which then fails with `OutOfMemoryError` and a usable stack trace.",
+            "ru": "Ничего до первой полной сборки, которая упадёт с `OutOfMemoryError` и пригодным стектрейсом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It sizes the default maximum heap from 64 GB of host memory, grows past 512 MB and is OOM-killed by the kernel — no `OutOfMemoryError`, no stack trace, just exit 137; `UseContainerSupport`, on by default since 8u191 and JDK 10, is what fixes it.",
+            "ru": "Максимальную кучу по умолчанию она посчитает от 64 ГБ памяти хоста, перерастёт 512 МБ и будет убита ядром по OOM — ни `OutOfMemoryError`, ни стектрейса, только код 137; лечится это `UseContainerSupport`, включённым по умолчанию с 8u191 и JDK 10."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Without container support the JVM sizes itself from `/proc/meminfo` and the host's core count, so a default heap computed from 64 GB is many times the limit the kernel will actually enforce. The process dies without producing any JVM-level evidence, which is why the symptom is usually reported as \"the container restarts under load\" rather than as a memory problem at all.",
+        "ru": "Без поддержки контейнеров JVM считает свои размеры по `/proc/meminfo` и числу ядер хоста, поэтому куча по умолчанию, посчитанная от 64 ГБ, многократно превышает лимит, который реально применит ядро. Процесс умирает, не оставив никаких улик уровня JVM, — поэтому симптом обычно описывают как «контейнер перезапускается под нагрузкой», а вовсе не как проблему с памятью."
+      },
+      "sources": [
+        "https://www.oracle.com/java/technologies/javase/8u191-relnotes.html"
+      ]
+    },
+    {
+      "id": "delivery.local-and-ci.001",
+      "section": "local-and-ci",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "On a fresh `docker compose up` the backend sometimes dies connecting to Postgres, even though `depends_on: [postgres]` is set. Why?",
+        "ru": "На свежем `docker compose up` бэкенд иногда умирает на соединении с Postgres, хотя `depends_on: [postgres]` задан. Почему?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "`depends_on` is ignored unless both services are attached to the same explicit network.",
+            "ru": "`depends_on` игнорируется, пока оба сервиса не подключены к одной явно заданной сети."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The backend starts before the Postgres image has finished being pulled.",
+            "ru": "Бэкенд стартует до того, как образ Postgres успевает скачаться."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Plain `depends_on` waits only for the container to start, not for Postgres to accept connections — the fix is a health check on Postgres plus `condition: service_healthy` on the backend.",
+            "ru": "Обычный `depends_on` ждёт только старта контейнера, а не готовности Postgres принимать соединения — лечится health-проверкой на Postgres и `condition: service_healthy` у бэкенда."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Compose starts services in alphabetical order and ignores `depends_on` on the first run.",
+            "ru": "Compose запускает сервисы в алфавитном порядке и на первом запуске игнорирует `depends_on`."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Postgres needs the backend to create the database first, so the declared order is wrong either way.",
+            "ru": "Postgres нужен бэкенд, чтобы сначала создать базу, поэтому объявленный порядок в любом случае неверен."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A Postgres container is listening on 5432 seconds before it will serve a connection — it still has to initialise the cluster on first boot. `depends_on` on its own is a start-order constraint, not a readiness one. This compose file pairs `pg_isready` as the health check with `condition: service_healthy`, so start-up order becomes a property of the file rather than of how fast the machine is.",
+        "ru": "Контейнер Postgres слушает 5432 за секунды до того, как начнёт обслуживать соединения, — при первом запуске ему ещё нужно инициализировать кластер. Сам по себе `depends_on` — ограничение порядка старта, а не готовности. Этот compose-файл сочетает `pg_isready` как health-проверку с `condition: service_healthy`, и порядок старта становится свойством файла, а не скорости машины."
+      },
+      "sources": [
+        "https://docs.docker.com/reference/compose-file/services/"
+      ]
+    },
+    {
+      "id": "delivery.local-and-ci.002",
+      "section": "local-and-ci",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "The database in this compose file lives in a named volume. What is the difference between `docker compose down` and `docker compose down -v`?",
+        "ru": "База в этом compose-файле живёт в именованном томе. Чем `docker compose down` отличается от `docker compose down -v`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "`down` stops and removes the containers but keeps the named volume and its data; `-v` also deletes the volume, wiping the database.",
+            "ru": "`down` останавливает и удаляет контейнеры, но сохраняет именованный том с данными; `-v` дополнительно удаляет том, стирая базу."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "They are the same command; `-v` only makes the output verbose.",
+            "ru": "Это одна и та же команда; `-v` лишь делает вывод подробным."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`down` removes the containers and the built images; `-v` keeps the images.",
+            "ru": "`down` удаляет контейнеры и собранные образы; `-v` образы сохраняет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`down -v` stops the containers without removing them, so they can be restarted in place.",
+            "ru": "`down -v` останавливает контейнеры, не удаляя их, чтобы их можно было перезапустить на месте."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`down` removes volumes by default, and `-v` is what preserves them.",
+            "ru": "`down` по умолчанию удаляет тома, а `-v` как раз их сохраняет."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Keeping the data by default is the point of a named volume: stopping the stack should not cost you the rows you were working with. Throwing the database away is then an explicit, memorable flag rather than something that happens because you restarted.",
+        "ru": "Смысл именованного тома в том, что данные по умолчанию сохраняются: остановка стека не должна стоить вам строк, с которыми вы работали. Выбросить базу становится явным запоминающимся флагом, а не тем, что случилось просто из-за перезапуска."
+      },
+      "sources": [
+        "https://docs.docker.com/reference/cli/docker/compose/down/"
+      ]
+    },
+    {
+      "id": "delivery.local-and-ci.003",
+      "section": "local-and-ci",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "What in this repository actually prevents a red build from reaching production?",
+        "ru": "Что в этом репозитории реально не даёт красной сборке доехать до прода?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Render redeploys only when the image digest changes, and a failed build produces no new image.",
+            "ru": "Render передеплоивает только при смене digest образа, а упавшая сборка нового образа не даёт."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The `/actuator/health` check fails the deploy if the new instance does not answer.",
+            "ru": "Проверка `/actuator/health` роняет деплой, если новый инстанс не отвечает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`mvn -B -ntp verify` exits non-zero and Render reads that exit code.",
+            "ru": "`mvn -B -ntp verify` завершается ненулевым кодом, и Render читает этот код."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Branch protection on `master`, which requires the check to pass before anything can be merged.",
+            "ru": "Защита ветки `master`, требующая пройденной проверки перед любым слиянием."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The deploy job declares `needs: build`, so it does not run unless the build succeeded — and Render's own auto-deploy is switched off in `render.yaml`, so the branch cannot be deployed around that gate.",
+            "ru": "Задача деплоя объявляет `needs: build`, поэтому не выполняется без успешной сборки, — а собственный автодеплой Render выключен в `render.yaml`, так что выкатить ветку в обход гейта нельзя."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Both halves are needed. `needs: build` orders the two jobs, and `autoDeploy: false` closes the other door — with Render also watching the branch, a broken commit would deploy in parallel with the very check meant to stop it. A health check is a different mechanism: it decides whether the new instance receives traffic, not whether the deploy was allowed to start.",
+        "ru": "Нужны обе половины. `needs: build` упорядочивает задачи, а `autoDeploy: false` закрывает вторую дверь: если бы Render тоже следил за веткой, сломанный коммит выкатывался бы параллельно с проверкой, которая должна была его остановить. Health-проверка — другой механизм: она решает, получит ли новый инстанс трафик, а не разрешено ли было начинать деплой."
+      },
+      "sources": [
+        "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax"
+      ]
+    },
+    {
+      "id": "delivery.local-and-ci.004",
+      "section": "local-and-ci",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "The deploy job sets `concurrency: {group: render-deploy, cancel-in-progress: false}`. What is that for?",
+        "ru": "Задача деплоя задаёт `concurrency: {group: render-deploy, cancel-in-progress: false}`. Зачем это?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It stops two builds running for the same commit when a branch is pushed twice.",
+            "ru": "Это не даёт запуститься двум сборкам одного коммита, если ветку запушили дважды."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It cancels older deploys so the newest commit always wins the race.",
+            "ru": "Это отменяет более старые деплои, чтобы гонку всегда выигрывал самый свежий коммит."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It restricts the workflow to a single runner to save billed minutes.",
+            "ru": "Это ограничивает workflow одним раннером ради экономии оплачиваемых минут."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Render rejects overlapping deploys, so deploys are queued instead of raced — and killing an in-progress deploy halfway is exactly what you do not want.",
+            "ru": "Render отклоняет пересекающиеся деплои, поэтому они ставятся в очередь, а не в гонку, — а убивать выполняющийся деплой на полпути как раз и не нужно."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A concurrency group is required for any job that reads a repository secret.",
+            "ru": "Группа concurrency обязательна для любой задачи, читающей секрет репозитория."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`cancel-in-progress: true` is a good default for builds — a superseded build is wasted work. It is the wrong default for deploys, where the in-flight run is changing production and stopping it halfway leaves an unknown state. Same mechanism, opposite answer, because the two jobs have different consequences.",
+        "ru": "`cancel-in-progress: true` — хорошее умолчание для сборок: устаревшая сборка это потраченная впустую работа. Для деплоев оно неверно: выполняющийся запуск меняет прод, и остановка на полпути оставляет неизвестное состояние. Механизм тот же, ответ противоположный, потому что у задач разные последствия."
+      },
+      "sources": [
+        "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax"
+      ]
+    },
+    {
+      "id": "delivery.local-and-ci.005",
+      "section": "local-and-ci",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "The workflow asks `actions/setup-java` for `cache: maven`. What does that do, and what is the risk worth watching?",
+        "ru": "Workflow просит у `actions/setup-java` `cache: maven`. Что это даёт и за каким риском стоит следить?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It caches the built artifact so `package` can be skipped when nothing changed.",
+            "ru": "Он кэширует собранный артефакт, чтобы пропускать `package`, когда ничего не изменилось."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It restores `~/.m2` keyed on the dependency files, so an unchanged POM restores in seconds; the risk is a key that is too coarse, which serves stale artifacts and makes the build behave differently depending on cache state.",
+            "ru": "Он восстанавливает `~/.m2` по ключу, построенному на файлах зависимостей, так что при неизменном POM восстановление занимает секунды; риск — слишком грубый ключ, который отдаёт протухшие артефакты и заставляет сборку вести себя по-разному в зависимости от состояния кэша."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It mirrors Maven Central inside the runner so the build works with no network at all.",
+            "ru": "Он поднимает зеркало Maven Central внутри раннера, чтобы сборка работала вообще без сети."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It caches the Docker layers produced by the build stage.",
+            "ru": "Он кэширует слои Docker, полученные на сборочной стадии."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It pins dependency versions so that repeated runs resolve identically.",
+            "ru": "Он фиксирует версии зависимостей, чтобы повторные запуски разрешались одинаково."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The cache is a copy of the local repository, restored and saved around the job. It is a speed optimisation and nothing else — it changes no versions and guarantees no reproducibility. The failure worth fearing is a build that is green with a warm cache and red with a cold one, because that difference is invisible in the diff.",
+        "ru": "Кэш — это копия локального репозитория, восстанавливаемая и сохраняемая вокруг задачи. Это оптимизация скорости и ничего больше: он не меняет версий и не гарантирует воспроизводимости. Бояться стоит сборки, зелёной на прогретом кэше и красной на холодном, потому что эта разница в диффе не видна."
+      },
+      "sources": [
+        "https://github.com/actions/setup-java#caching-packages-dependencies"
+      ]
+    },
+    {
+      "id": "delivery.local-and-ci.006",
+      "section": "local-and-ci",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "Which of these genuinely makes a Maven build less reproducible?",
+        "ru": "Что из перечисленного действительно делает сборку Maven менее воспроизводимой?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Leaving a build plugin without a `<version>`, so it resolves to whatever is newest on the day the build runs.",
+            "ru": "Оставить плагин сборки без `<version>`, чтобы он разрешался в то, что окажется самым свежим в день запуска сборки."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Setting `maven.compiler.release` instead of `source` and `target` separately.",
+            "ru": "Задать `maven.compiler.release` вместо раздельных `source` и `target`."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Importing a BOM so the platform's versions are managed in one place.",
+            "ru": "Импортировать BOM, чтобы версии платформы управлялись в одном месте."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Running `mvn -B -ntp verify` in CI instead of plain `mvn verify`.",
+            "ru": "Запускать в CI `mvn -B -ntp verify` вместо обычного `mvn verify`."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Pinning the base image, even if only to a tag such as `eclipse-temurin:17-jdk-alpine` rather than to a digest.",
+            "ru": "Фиксировать базовый образ, пусть даже тегом вроде `eclipse-temurin:17-jdk-alpine`, а не digest'ом."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "An unpinned plugin is a moving part in the build itself: the same commit can produce different bytes next Tuesday, and the change appears in no diff. `release` is stricter than `source`/`target` because it checks the API against that release rather than merely emitting matching bytecode — this project builds at release 17. `-B -ntp` only changes log output. Pinning to a tag is weaker than pinning to a digest, since a tag can be republished, but it is still strictly better than leaving the image floating.",
+        "ru": "Незафиксированный плагин — это подвижная деталь в самой сборке: тот же коммит может дать другие байты в следующий вторник, и в диффе это не отразится. `release` строже пары `source`/`target`, потому что проверяет API против указанного релиза, а не просто выдаёт подходящий байт-код, — этот проект собирается на release 17. `-B -ntp` меняет только вывод в лог. Фиксация тегом слабее фиксации по digest, поскольку тег можно перезалить, но она всё равно строго лучше плавающего образа."
+      },
+      "sources": [
+        "https://maven.apache.org/guides/mini/guide-reproducible-builds.html"
+      ]
+    },
+    {
+      "id": "delivery.deploying.001",
+      "section": "deploying",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "What does this line in `application.properties` mean?",
+        "ru": "Что означает эта строка в `application.properties`?"
+      },
+      "code": "quarkus.datasource.jdbc.url=${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/javaquiz}",
+      "options": [
+        {
+          "text": {
+            "en": "The value is always the literal text after the colon; the variable name is documentation only.",
+            "ru": "Значением всегда будет текст после двоеточия; имя переменной — лишь документация."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "`SPRING_DATASOURCE_URL` must be set, or the application refuses to start.",
+            "ru": "`SPRING_DATASOURCE_URL` обязан быть задан, иначе приложение откажется стартовать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The variable is consulted only when the application runs under the `prod` profile.",
+            "ru": "Переменная учитывается, только когда приложение работает в профиле `prod`."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The environment variable if it is set, otherwise the default after the colon — so a fresh clone runs against a local database and production overrides it.",
+            "ru": "Переменная окружения, если она задана, иначе умолчание после двоеточия — поэтому свежий клон работает с локальной базой, а прод её переопределяет."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Both are tried in order as datasource URLs, failing over to the second if the first is unreachable.",
+            "ru": "Оба пробуются по очереди как URL датасорса, с переключением на второй, если первый недоступен."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`${NAME:default}` is how one artifact runs in many environments: the default is the development value so the project starts after a clone, and every deployment supplies its own. The `SPRING_DATASOURCE_*` names survived the move off Spring on purpose — they are what the deployed service and its blueprint already hold.",
+        "ru": "`${NAME:default}` — это то, как один артефакт работает во многих окружениях: умолчание содержит значение для разработки, чтобы проект запускался сразу после клонирования, а каждое развёртывание подставляет своё. Имена `SPRING_DATASOURCE_*` пережили уход со Spring намеренно: именно они уже прописаны в развёрнутом сервисе и его blueprint."
+      },
+      "sources": [
+        "https://quarkus.io/guides/config-reference"
+      ]
+    },
+    {
+      "id": "delivery.deploying.002",
+      "section": "deploying",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "This service sets `quarkus.flyway.migrate-at-start=true`. What does that mean for a deploy?",
+        "ru": "Этот сервис выставляет `quarkus.flyway.migrate-at-start=true`. Что это означает для деплоя?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Migrations run in a separate container that must finish before the application container starts.",
+            "ru": "Миграции выполняются в отдельном контейнере, который должен завершиться до старта контейнера приложения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Pending migrations are applied while the application boots, so the boot now depends on the database being reachable and on the migration succeeding.",
+            "ru": "Неприменённые миграции выполняются во время загрузки приложения, поэтому загрузка теперь зависит от доступности базы и от успеха миграции."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Flyway validates the schema at start-up but applies nothing; applying stays a manual step.",
+            "ru": "Flyway при старте только валидирует схему и ничего не применяет; применение остаётся ручным шагом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Migrations run lazily, after the first HTTP request, so the health check can pass immediately.",
+            "ru": "Миграции выполняются лениво, после первого HTTP-запроса, чтобы health-проверка проходила сразу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Hibernate applies the migrations and Flyway only records that they ran.",
+            "ru": "Миграции применяет Hibernate, а Flyway лишь фиксирует, что они выполнились."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Schema and code then ship together and cannot drift, which is the appeal. The cost is that the boot has a new dependency, and this repository pays it explicitly: Flyway opens the first connection of the boot, so its retry settings are what stand between a sleeping database and a failed deploy. Hibernate is separately set to `validate` — Flyway owns the schema, Hibernate only checks the mapping still matches.",
+        "ru": "Схема и код едут вместе и не могут разойтись — в этом привлекательность. Цена в том, что у загрузки появляется новая зависимость, и этот репозиторий платит её явно: Flyway открывает первое соединение старта, поэтому его настройки повторов и стоят между спящей базой и упавшим деплоем. Hibernate при этом отдельно выставлен в `validate`: схемой владеет Flyway, Hibernate лишь проверяет соответствие маппинга."
+      },
+      "sources": [
+        "https://quarkus.io/guides/flyway"
+      ]
+    },
+    {
+      "id": "delivery.deploying.003",
+      "section": "deploying",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "Flyway here is configured with `connect-retries=5` and `connect-retries-interval=5S`. What problem is that solving?",
+        "ru": "Flyway здесь настроен с `connect-retries=5` и `connect-retries-interval=5S`. Какую задачу это решает?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Flyway opens the very first connection of the boot, so it is the one that meets a database that scales to zero and needs a few seconds to wake — retrying is what keeps a cold start from becoming a failed deploy.",
+            "ru": "Flyway открывает самое первое соединение старта, то есть именно он встречает базу, которая масштабируется в ноль и просыпается несколько секунд, — повторы и не дают холодному старту превратиться в упавший деплой."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It retries a failed migration until it succeeds, which is what makes migrations idempotent.",
+            "ru": "Он повторяет упавшую миграцию до успеха, что и делает миграции идемпотентными."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It works around the Flyway lock being held by another instance during a rolling deploy.",
+            "ru": "Он обходит блокировку Flyway, удерживаемую другим инстансом во время rolling-деплоя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It compensates for clock skew between the application and the database server.",
+            "ru": "Он компенсирует расхождение часов между приложением и сервером базы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It retries the schema validation Hibernate performs after Flyway has run.",
+            "ru": "Он повторяет валидацию схемы, которую Hibernate выполняет после Flyway."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The retries are about *connecting*, not about migrating — a migration that fails is not retried, and should not be. The matching decision in this file is the Agroal acquisition timeout raised to 30 s: its 5 s default is tighter than the 30 s HikariCP allowed under Spring, and the first deploy of the Quarkus port died on `Acquisition timeout while waiting for new connection` on an environment the Spring build had booted on for weeks.",
+        "ru": "Повторы относятся к *соединению*, а не к миграции: упавшая миграция не повторяется и не должна. Парное решение в этом же файле — поднятый до 30 с таймаут получения соединения у Agroal: его умолчание в 5 с жёстче, чем 30 с, которые позволял HikariCP под Spring, и первый деплой Quarkus-порта умер именно на `Acquisition timeout while waiting for new connection` — на окружении, где сборка на Spring поднималась неделями."
+      },
+      "sources": [
+        "https://quarkus.io/guides/flyway"
+      ]
+    },
+    {
+      "id": "delivery.deploying.004",
+      "section": "deploying",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "A migration renames a column in one step, and it is deployed as a rolling update with migrations running at start-up. What breaks?",
+        "ru": "Миграция переименовывает колонку одним шагом и выкатывается rolling-обновлением с миграциями при старте. Что сломается?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing: Flyway takes a lock, so only one instance ever observes the intermediate state.",
+            "ru": "Ничего: Flyway берёт блокировку, поэтому промежуточное состояние видит только один инстанс."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The migration itself fails, because a column holding data cannot be renamed.",
+            "ru": "Упадёт сама миграция, потому что колонку с данными переименовать нельзя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The old version, still serving traffic, queries a column that no longer exists — for the whole length of the rollout, and it is also the version you would roll back to.",
+            "ru": "Старая версия, всё ещё обслуживающая трафик, обращается к колонке, которой больше нет, — на всё время выкатки, и это же версия, на которую вы откатывались бы."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Hibernate's `validate` strategy rejects the new schema, so the new version refuses to start.",
+            "ru": "Стратегия `validate` в Hibernate отвергнет новую схему, и новая версия не стартует."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only reads break; writes keep working because they already use the new name.",
+            "ru": "Сломаются только чтения; записи продолжат работать, потому что уже используют новое имя."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Flyway's lock serialises the migration, not the traffic. During any rolling deploy the old and new versions both run against the new schema, so a migration has to be compatible with the code already in production. The discipline is expand/contract: add a nullable column, deploy code that writes both, backfill, deploy code that reads the new one, and drop the old one in a later release.",
+        "ru": "Блокировка Flyway сериализует миграцию, а не трафик. При любой rolling-выкатке старая и новая версии работают с новой схемой одновременно, поэтому миграция обязана быть совместима с кодом, уже стоящим в проде. Дисциплина здесь — expand/contract: добавить nullable-колонку, выкатить код, пишущий в обе, дозаполнить данные, выкатить код, читающий новую, и удалить старую в следующем релизе."
+      },
+      "sources": [
+        "https://documentation.red-gate.com/fd/migrate-184127461.html"
+      ]
+    },
+    {
+      "id": "delivery.deploying.005",
+      "section": "deploying",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "Why is a database connectivity check a bad thing to put behind a liveness probe?",
+        "ru": "Почему проверку доступности базы плохо вешать на liveness-пробу?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Liveness probes run too often for a database query to be cheap enough.",
+            "ru": "Liveness-пробы выполняются слишком часто, чтобы запрос к базе оставался достаточно дешёвым."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Liveness runs before the application context exists, so such a check always fails.",
+            "ru": "Liveness выполняется до появления контекста приложения, поэтому такая проверка всегда падает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The platform ignores the body of a liveness response, so the check contributes nothing.",
+            "ru": "Платформа игнорирует тело ответа liveness, поэтому проверка ничего не даёт."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A liveness failure stops traffic without restarting, which is not the response a database outage needs.",
+            "ru": "Отказ liveness прекращает трафик без перезапуска, а на аварию базы нужна не такая реакция."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A liveness failure restarts the process, so a database blip restarts every instance at once — turning a dependency's outage into your own. A dependency belongs in readiness, which only stops routing.",
+            "ru": "Отказ liveness перезапускает процесс, поэтому моргнувшая база разом перезапускает все инстансы, превращая аварию зависимости в собственную. Зависимости место в readiness, которая лишь прекращает маршрутизацию."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Liveness answers \"is this process wedged\" and its remedy is a restart; readiness answers \"can this instance serve right now\" and its remedy is to route elsewhere. Restarting does nothing about a database that is down, and a fleet-wide restart storm loses in-flight work and warm caches at the worst possible moment.",
+        "ru": "Liveness отвечает на вопрос «не завис ли процесс», и её средство — перезапуск; readiness отвечает «может ли этот инстанс обслуживать прямо сейчас», и её средство — увести трафик. Перезапуск ничем не помогает лежащей базе, а шторм перезапусков по всему парку теряет начатую работу и прогретые кэши в самый неподходящий момент."
+      },
+      "sources": [
+        "https://quarkus.io/guides/smallrye-health"
+      ]
+    },
+    {
+      "id": "delivery.deploying.006",
+      "section": "deploying",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "The new release is bad, so you redeploy the previous image. What does not roll back with it, and what does that imply?",
+        "ru": "Новый релиз оказался плохим, и вы передеплоиваете предыдущий образ. Что вместе с ним не откатится и что из этого следует?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The environment variables — the blueprint re-syncs them to the newer release's values on the next deploy.",
+            "ru": "Переменные окружения — blueprint при следующем деплое пересинхронизирует их под значения нового релиза."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The schema: Flyway migrations are forward-only and stay applied, so the previous version has to be able to run against the migrated schema — otherwise there is no rollback, only a forward fix under time pressure.",
+            "ru": "Схема: миграции Flyway однонаправленны и остаются применёнными, поэтому предыдущая версия обязана уметь работать на мигрированной схеме — иначе это не откат, а срочная правка вперёд под давлением времени."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The AppCDS archive, which was dumped against the newer jar and has to be regenerated before the old image boots.",
+            "ru": "Архив AppCDS, снятый под новый джарник: его придётся пересоздать, прежде чем старый образ загрузится."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The health check path, which the newer release registered with the platform.",
+            "ru": "Путь health-проверки, который новый релиз зарегистрировал у платформы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The connection pool's state, which needs a manual reset after any version change.",
+            "ru": "Состояние пула соединений, которое после смены версии приходится сбрасывать вручную."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Rolling an image back is a one-line operation; rolling a schema back usually is not possible at all once there is data in it. That makes \"can the previous version run against the new schema\" a design constraint on every migration, not a question you get to ask during the incident. Each image carries its own AppCDS archive, so that part travels with the rollback.",
+        "ru": "Откатить образ — операция в одну строку; откатить схему, когда в ней уже есть данные, обычно невозможно вовсе. Поэтому «сможет ли предыдущая версия работать на новой схеме» — это проектное ограничение для каждой миграции, а не вопрос, который задают во время инцидента. Свой архив AppCDS несёт каждый образ, так что эта часть откатывается вместе с ним."
+      },
+      "sources": [
+        "https://documentation.red-gate.com/fd/migrate-184127461.html"
+      ]
+    },
+    {
+      "id": "delivery.twelve-factor-and-secrets.001",
+      "section": "twelve-factor-and-secrets",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "Twelve-factor says configuration belongs in the environment. What counts as configuration under that rule?",
+        "ru": "Двенадцать факторов говорят, что конфигурация должна жить в окружении. Что считается конфигурацией по этому правилу?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Everything that looks like a setting, so that nothing at all is hard-coded.",
+            "ru": "Всё, что похоже на настройку, чтобы вообще ничего не было зашито в код."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing — configuration belongs in profile-specific files shipped inside the artifact.",
+            "ru": "Ничего — конфигурации место в файлах по профилям, поставляемых внутри артефакта."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only secrets; non-secret settings belong in the repository where they can be reviewed.",
+            "ru": "Только секреты; несекретные настройки должны лежать в репозитории, где их можно ревьюить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whatever changes most often, regardless of whether it differs between deployments.",
+            "ru": "То, что меняется чаще всего, независимо от того, различается ли оно между развёртываниями."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whatever varies between deployments — credentials, hostnames, URLs. A flag that is identical everywhere is code, not config.",
+            "ru": "То, что различается между развёртываниями: креденшелы, хосты, URL. Флаг, одинаковый везде, — это код, а не конфигурация."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The definition is about variance between deployments, not about how settings-like a value looks. The practical test the factor offers is blunt: could this repository be made public right now without leaking anything. A feature flag with the same value in every environment fails no such test and only loses readability by being externalised.",
+        "ru": "Определение говорит о различиях между развёртываниями, а не о том, насколько значение похоже на настройку. Практическая проверка, которую предлагает этот фактор, прямолинейна: можно ли прямо сейчас сделать репозиторий публичным, ничего не утекло бы. Флаг с одинаковым значением во всех окружениях такую проверку не проваливает и от выноса наружу только теряет читаемость."
+      },
+      "sources": [
+        "https://12factor.net/config"
+      ]
+    },
+    {
+      "id": "delivery.twelve-factor-and-secrets.002",
+      "section": "twelve-factor-and-secrets",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "Why should a containerised JVM write its logs to stdout rather than to rotating files inside the container?",
+        "ru": "Почему JVM в контейнере должна писать логи в stdout, а не в ротируемые файлы внутри контейнера?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "File I/O is measurably slower than writing to a pipe.",
+            "ru": "Файловый ввод-вывод ощутимо медленнее записи в канал."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A container's filesystem is read-only, so log files cannot be written at all.",
+            "ru": "Файловая система контейнера доступна только на чтение, поэтому файлы логов вообще не записать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The platform collects stdout, while a file written inside the container disappears with the container — and the lines you needed are exactly the ones you lost.",
+            "ru": "Stdout собирает платформа, а файл, записанный внутри контейнера, исчезает вместе с ним — и потерянными окажутся именно те строки, которые были нужны."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Rotating files violate the rule that a twelve-factor process may not open file descriptors.",
+            "ru": "Ротируемые файлы нарушают правило, по которому twelve-factor-процессу нельзя открывать файловые дескрипторы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "stdout is automatically structured as JSON, which a log file is not.",
+            "ru": "Stdout автоматически структурируется в JSON, чего с файлом лога не происходит."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The factor's point is that the application should not manage log storage at all: it emits an unbuffered stream of events and the execution environment decides what to do with them. A crash-looping container is the case that settles it — the container that died took its log file with it, and the platform still has every line the process printed.",
+        "ru": "Смысл фактора в том, что приложение вообще не должно управлять хранением логов: оно выдаёт небуферизованный поток событий, а среда выполнения решает, что с ним делать. Решающий случай — контейнер в цикле падений: умерший контейнер унёс свой файл лога с собой, а у платформы по-прежнему есть каждая напечатанная процессом строка."
+      },
+      "sources": [
+        "https://12factor.net/logs"
+      ]
+    },
+    {
+      "id": "delivery.twelve-factor-and-secrets.003",
+      "section": "twelve-factor-and-secrets",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "\"Strictly separate build, release and run\" — what does that forbid in practice?",
+        "ru": "«Строго разделяйте сборку, релиз и запуск» — что это запрещает на практике?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Building the image on a developer's machine rather than in CI.",
+            "ru": "Собирать образ на машине разработчика, а не в CI."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Building or downloading anything at container start: what ran in staging must be byte-identical to what runs in production. Config is combined with the built artifact at release time, and running changes nothing.",
+            "ru": "Собирать или скачивать что-либо при старте контейнера: то, что работало в staging, должно быть побайтово тем же, что работает в проде. Конфигурация соединяется с собранным артефактом на стадии релиза, а запуск не меняет ничего."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Keeping the Dockerfile in the same repository as the application source.",
+            "ru": "Держать Dockerfile в одном репозитории с исходниками приложения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Running database migrations at start-up, since that is build work performed at run time.",
+            "ru": "Выполнять миграции базы при старте, поскольку это сборочная работа, выполняемая во время запуска."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Promoting one image between environments instead of rebuilding it for each one.",
+            "ru": "Продвигать один образ между окружениями вместо пересборки под каждое."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The rule exists so that the artifact you tested is the artifact that serves. Anything fetched or compiled at boot reintroduces the difference the whole pipeline was built to remove. Promoting one image is the practice the factor asks for, not a violation of it, and migrations at start-up are a schema change rather than a build step — a separate trade-off, argued on its own terms.",
+        "ru": "Правило существует, чтобы обслуживал ровно тот артефакт, который вы протестировали. Всё, что скачивается или компилируется при загрузке, возвращает различие, ради устранения которого и строился весь конвейер. Продвижение одного образа — это то, чего фактор и требует, а не нарушение; миграции при старте — изменение схемы, а не шаг сборки, и это отдельный размен со своими аргументами."
+      },
+      "sources": [
+        "https://12factor.net/build-release-run"
+      ]
+    },
+    {
+      "id": "delivery.twelve-factor-and-secrets.004",
+      "section": "twelve-factor-and-secrets",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "Quarkus lets you prefix a key with a profile, as in `%prod.quarkus.datasource.jdbc.url=...`. When is that the wrong home for a value?",
+        "ru": "Quarkus позволяет снабдить ключ префиксом профиля, например `%prod.quarkus.datasource.jdbc.url=...`. Когда это неподходящее место для значения?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Always — profile-prefixed keys are deprecated in favour of environment variables.",
+            "ru": "Всегда — ключи с префиксом профиля объявлены устаревшими в пользу переменных окружения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whenever the key also has a default value, because the two definitions conflict.",
+            "ru": "Всегда, когда у ключа есть ещё и значение по умолчанию, потому что два определения конфликтуют."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only for keys the platform sets itself, such as the HTTP port.",
+            "ru": "Только для ключей, которые платформа задаёт сама, например HTTP-порта."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whenever the value varies per deployment or is a secret: a `%prod` password is a password in git with an extra step, and a `%prod` hostname means a second production environment needs a code change.",
+            "ru": "Всегда, когда значение различается от развёртывания к развёртыванию или является секретом: пароль в `%prod` — это пароль в git с лишним шагом, а хост в `%prod` означает, что второе продакшен-окружение потребует правки кода."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Whenever the application also reads the same key at build time.",
+            "ru": "Всегда, когда приложение читает тот же ключ ещё и на этапе сборки."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Profiles select behaviour — dev-only logging, a test-only in-memory engine — and that is a legitimate job. They are not a config store, because everything in them is committed and shipped inside the artifact. The line to defend: profiles decide *what the application does*, the environment supplies *the values it does it with*.",
+        "ru": "Профили выбирают поведение — логирование только в dev, движок в памяти только в тестах, — и это законная задача. Хранилищем конфигурации они не являются: всё, что в них лежит, закоммичено и уезжает внутри артефакта. Границу стоит защищать так: профили решают, *что делает приложение*, окружение подставляет *значения, с которыми оно это делает*."
+      },
+      "sources": [
+        "https://quarkus.io/guides/config-reference"
+      ]
+    },
+    {
+      "id": "delivery.twelve-factor-and-secrets.005",
+      "section": "twelve-factor-and-secrets",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "`render.yaml` is committed to the repository. It marks the datasource credentials `sync: false`, but writes `CORS_ORIGINS` out as a plain `value:`. Is that inconsistent?",
+        "ru": "`render.yaml` закоммичен в репозиторий. Креденшелы датасорса в нём помечены `sync: false`, а `CORS_ORIGINS` записан обычным `value:`. Это непоследовательность?"
+      },
+      "code": "- key: SPRING_DATASOURCE_PASSWORD\n  sync: false\n- key: JWT_SECRET\n  generateValue: true\n- key: CORS_ORIGINS\n  value: https://java-quiz-frontend.onrender.com",
+      "options": [
+        {
+          "text": {
+            "en": "No: those origins are addresses a browser already sees, so hiding them buys nothing and costs a failure mode — an unset `CORS_ORIGINS` answers every cross-origin call with a 403 and an empty body, and neither service's log says which origin was refused.",
+            "ru": "Нет: эти origin'ы — адреса, которые браузер и так видит, поэтому их сокрытие ничего не даёт и стоит целого режима отказа: незаданный `CORS_ORIGINS` отвечает 403 с пустым телом на каждый кросс-доменный вызов, и ни в одном из двух логов не сказано, какой origin отвергнут."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Yes: any value that reaches the browser should be `sync: false` so it can be changed without a commit.",
+            "ru": "Да: любое значение, доезжающее до браузера, должно быть `sync: false`, чтобы менять его без коммита."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Yes: CORS origins are part of the security configuration, and security configuration is secret by definition.",
+            "ru": "Да: CORS-origin'ы — часть конфигурации безопасности, а она по определению секретна."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "No, but only because Render encrypts every value in a blueprint at rest.",
+            "ru": "Нет, но лишь потому, что Render шифрует все значения blueprint при хранении."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "No: `value:` and `sync: false` behave identically, so the choice between them is cosmetic.",
+            "ru": "Нет: `value:` и `sync: false` ведут себя одинаково, поэтому выбор между ними косметический."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The rule is not \"hide everything\" but \"hide what is secret, and write down what is not\". A `sync: false` key is a value that exists only in a dashboard, so it can go missing — and a value that cannot go missing removes a whole failure mode. The same file also shows the third shape: `generateValue: true`, where the platform invents the secret and nobody ever sees it.",
+        "ru": "Правило звучит не как «спрятать всё», а как «спрятать секретное и записать несекретное». Ключ с `sync: false` — это значение, существующее только в дашборде, а значит, способное пропасть; значение, которое пропасть не может, убирает целый режим отказа. Тот же файл показывает и третью форму — `generateValue: true`, где секрет придумывает платформа и его не видит никто."
+      },
+      "sources": [
+        "https://render.com/docs/blueprint-spec"
+      ]
+    },
+    {
+      "id": "delivery.twelve-factor-and-secrets.006",
+      "section": "twelve-factor-and-secrets",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "Which statement about handling secrets is correct?",
+        "ru": "Какое утверждение об обращении с секретами верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Removing a committed secret by rewriting git history makes it safe to keep using.",
+            "ru": "Удаление закоммиченного секрета переписыванием истории git делает его безопасным для дальнейшего использования."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A secret held in an environment variable is invisible to anything outside the process.",
+            "ru": "Секрет в переменной окружения невидим ничему за пределами процесса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Environment variables are readable through `docker inspect`, the process environment and some crash dumps, so a mounted secrets file or a secret manager is the stronger form when the threat model calls for it.",
+            "ru": "Переменные окружения читаются через `docker inspect`, окружение процесса и некоторые аварийные дампы, поэтому примонтированный файл секретов или менеджер секретов сильнее, когда того требует модель угроз."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A build-time secret is safe inside an image layer as long as a later instruction deletes the file.",
+            "ru": "Сборочный секрет безопасен в слое образа, если позднейшая инструкция удаляет файл."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A secret generated by the platform (`generateValue: true`) never needs rotating, since no human has seen it.",
+            "ru": "Секрет, сгенерированный платформой (`generateValue: true`), не нуждается в ротации, раз его не видел ни один человек."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Environment variables are convenient and only moderately private — good enough for many services, not for all. The three wrong answers are the common misconceptions in one place: history rewriting does not un-leak anything, only rotation does; a deleted file still sits in the earlier layer, which is why build secrets belong in a stage that is never shipped; and a generated secret still has a lifetime, so a rotation you have never rehearsed is a rotation you will not perform.",
+        "ru": "Переменные окружения удобны и приватны лишь умеренно — этого достаточно многим сервисам, но не всем. Три неверных варианта собирают вместе обычные заблуждения: переписывание истории ничего не «разутекает», это делает только ротация; удалённый файл по-прежнему лежит в раннем слое, поэтому сборочным секретам место в стадии, которая не поставляется; а у сгенерированного секрета тоже есть срок жизни, и ротация, которую вы ни разу не репетировали, — это ротация, которую вы не выполните."
+      },
+      "sources": [
+        "https://12factor.net/config"
+      ]
+    }
+  ]
+}
