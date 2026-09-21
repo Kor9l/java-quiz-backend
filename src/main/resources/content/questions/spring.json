@@ -1,11 +1,12 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "topic": "spring",
   "questions": [
     {
       "id": "spring.ioc-container.001",
       "section": "ioc-container",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about BeanFactory and ApplicationContext is TRUE?",
         "ru": "Какое утверждение о BeanFactory и ApplicationContext верно?"
@@ -60,6 +61,7 @@
       "id": "spring.ioc-container.002",
       "section": "ioc-container",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "You need an IoC container in a plain Java SE application: it must bootstrap from @Configuration classes and let you register extra bean definitions programmatically before the container is refreshed. Which implementation fits?",
         "ru": "Нужен IoC-контейнер в обычном Java SE приложении: он должен подниматься из @Configuration-классов и позволять программно зарегистрировать дополнительные определения бинов до вызова refresh. Какая реализация подходит?"
@@ -115,6 +117,7 @@
       "id": "spring.ioc-container.003",
       "section": "ioc-container",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "How does BeanFactoryPostProcessor differ from BeanPostProcessor?",
         "ru": "Чем BeanFactoryPostProcessor отличается от BeanPostProcessor?"
@@ -168,6 +171,7 @@
       "id": "spring.ioc-container.004",
       "section": "ioc-container",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Why does this configuration start successfully, and what exactly is injected into A?",
         "ru": "Почему эта конфигурация успешно запускается и что именно попадает в A?"
@@ -223,6 +227,7 @@
       "id": "spring.ioc-container.005",
       "section": "ioc-container",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Which order of steps happens during AbstractApplicationContext.refresh()?",
         "ru": "В каком порядке выполняются шаги внутри AbstractApplicationContext.refresh()?"
@@ -277,6 +282,7 @@
       "id": "spring.ioc-container.006",
       "section": "ioc-container",
       "difficulty": "hard",
+      "level": "middle",
       "text": {
         "en": "MyFactory is registered as a bean definition under the name myFactory. What do the two lookups return?",
         "ru": "MyFactory зарегистрирован как определение бина с именем myFactory. Что вернут два обращения к контейнеру?"
@@ -332,6 +338,7 @@
       "id": "spring.dependency-injection.001",
       "section": "dependency-injection",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Why is constructor injection generally preferred over field injection?",
         "ru": "Почему инъекцию через конструктор обычно предпочитают инъекции в поле?"
@@ -386,6 +393,7 @@
       "id": "spring.dependency-injection.002",
       "section": "dependency-injection",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "No property named app.timeout is defined in any property source. What is the value of timeout after the bean is created?",
         "ru": "Свойство app.timeout не определено ни в одном property source. Каким будет значение timeout после создания бина?"
@@ -440,6 +448,7 @@
       "id": "spring.dependency-injection.003",
       "section": "dependency-injection",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "What happens when the context is refreshed?",
         "ru": "Что произойдёт при подъёме контекста?"
@@ -495,6 +504,7 @@
       "id": "spring.dependency-injection.004",
       "section": "dependency-injection",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Which statement about optional and programmatic dependency lookup is TRUE?",
         "ru": "Какое утверждение о необязательных зависимостях и программном поиске бинов верно?"
@@ -549,6 +559,7 @@
       "id": "spring.dependency-injection.005",
       "section": "dependency-injection",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "How do @Primary and @Qualifier interact when several beans of the same type exist?",
         "ru": "Как взаимодействуют @Primary и @Qualifier, когда есть несколько бинов одного типа?"
@@ -603,6 +614,7 @@
       "id": "spring.dependency-injection.006",
       "section": "dependency-injection",
       "difficulty": "hard",
+      "level": "middle",
       "text": {
         "en": "What is printed, and why?",
         "ru": "Что будет выведено и почему?"
@@ -658,6 +670,7 @@
       "id": "spring.bean-lifecycle.001",
       "section": "bean-lifecycle",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "What does the context print while creating the repo bean?",
         "ru": "Что выведет контекст при создании бина repo?"
@@ -713,6 +726,7 @@
       "id": "spring.bean-lifecycle.002",
       "section": "bean-lifecycle",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about prototype-scoped beans is TRUE?",
         "ru": "Какое утверждение о бинах со скоупом prototype верно?"
@@ -766,6 +780,7 @@
       "id": "spring.bean-lifecycle.003",
       "section": "bean-lifecycle",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "A singleton bean is created eagerly at startup and declares a constructor parameter whose type is a request-scoped bean, declared without any scoped proxy. What happens?",
         "ru": "Синглтон создаётся при старте и объявляет параметр конструктора типа request-scoped бина, объявленного без scoped-прокси. Что произойдёт?"
@@ -819,6 +834,7 @@
       "id": "spring.bean-lifecycle.004",
       "section": "bean-lifecycle",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "A session-scoped bean class implements no interface and must be injected into a singleton service. Which declaration is correct?",
         "ru": "Класс session-scoped бина не реализует интерфейсов, и его нужно внедрить в синглтон-сервис. Какое объявление корректно?"
@@ -873,6 +889,7 @@
       "id": "spring.bean-lifecycle.005",
       "section": "bean-lifecycle",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Which statement about destruction of a singleton bean is TRUE?",
         "ru": "Какое утверждение об уничтожении синглтон-бина верно?"
@@ -927,6 +944,7 @@
       "id": "spring.bean-lifecycle.006",
       "section": "bean-lifecycle",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "The class below is not annotated in any way and does not implement AutoCloseable. What is printed when ctx.close() is called?",
         "ru": "Класс ниже не помечен никакими аннотациями и не реализует AutoCloseable. Что будет выведено при вызове ctx.close()?"
@@ -982,6 +1000,7 @@
       "id": "spring.configuration.001",
       "section": "configuration",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about the stereotype annotations @Component, @Service, @Repository and @Controller is TRUE?",
         "ru": "Какое утверждение о стереотипных аннотациях @Component, @Service, @Repository и @Controller верно?"
@@ -1036,6 +1055,7 @@
       "id": "spring.configuration.002",
       "section": "configuration",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "A @Configuration class located in package com.acme.app is annotated with a bare @ComponentScan (no attributes). What is scanned?",
         "ru": "Класс @Configuration находится в пакете com.acme.app и помечен «пустым» @ComponentScan (без атрибутов). Что будет просканировано?"
@@ -1090,6 +1110,7 @@
       "id": "spring.configuration.003",
       "section": "configuration",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "The Dep constructor prints \"dep\". How many times is \"dep\" printed while the context starts, and how many Dep instances exist?",
         "ru": "Конструктор Dep печатает \"dep\". Сколько раз будет напечатано \"dep\" при старте контекста и сколько экземпляров Dep существует?"
@@ -1145,6 +1166,7 @@
       "id": "spring.configuration.004",
       "section": "configuration",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Which statement about @Import is TRUE?",
         "ru": "Какое утверждение об @Import верно?"
@@ -1199,6 +1221,7 @@
       "id": "spring.configuration.005",
       "section": "configuration",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "You must scan com.acme and register only classes annotated with the custom annotation @Handler, and nothing else - ordinary @Component or @Service classes in that package must be ignored. Which configuration does that?",
         "ru": "Нужно просканировать com.acme и зарегистрировать только классы, помеченные собственной аннотацией @Handler, и ничего больше — обычные классы с @Component или @Service в этом пакете должны игнорироваться. Какая конфигурация это делает?"
@@ -1253,6 +1276,7 @@
       "id": "spring.configuration.006",
       "section": "configuration",
       "difficulty": "hard",
+      "level": "middle",
       "text": {
         "en": "app.properties on the classpath contains server.port=8081. The JVM is started with -Dserver.port=9090 and the OS environment also defines server.port=7070. In a plain AnnotationConfigApplicationContext, what value is injected?",
         "ru": "Файл app.properties в classpath содержит server.port=8081. JVM запущена с -Dserver.port=9090, а в переменных окружения ОС тоже задан server.port=7070. Какое значение будет внедрено в обычном AnnotationConfigApplicationContext?"
@@ -1308,6 +1332,7 @@
       "id": "spring.aop.001",
       "section": "aop",
       "difficulty": "easy",
+      "level": "middle",
       "text": {
         "en": "A @Service class implements exactly one interface, an aspect matches its methods, and the application runs on Spring Boot 3.x with default settings. What kind of proxy is created?",
         "ru": "Класс с @Service реализует ровно один интерфейс, аспект попадает на его методы, приложение работает на Spring Boot 3.x с настройками по умолчанию. Какой прокси будет создан?"
@@ -1362,6 +1387,7 @@
       "id": "spring.aop.002",
       "section": "aop",
       "difficulty": "easy",
+      "level": "middle",
       "text": {
         "en": "An @Around aspect advises every method annotated with @Audited. How many times does the advice run when a caller invokes placeAll with a list of three orders?",
         "ru": "Аспект с @Around перехватывает каждый метод, помеченный @Audited. Сколько раз выполнится совет, если вызвать placeAll со списком из трёх заказов?"
@@ -1417,6 +1443,7 @@
       "id": "spring.aop.003",
       "section": "aop",
       "difficulty": "medium",
+      "level": "senior",
       "text": {
         "en": "Which pointcut expression matches all public methods of any class in com.acme.service and its sub-packages, for any return type and any arguments?",
         "ru": "Какое выражение pointcut соответствует всем публичным методам любого класса в com.acme.service и его подпакетах, с любым типом возврата и любыми аргументами?"
@@ -1470,6 +1497,7 @@
       "id": "spring.aop.004",
       "section": "aop",
       "difficulty": "medium",
+      "level": "senior",
       "text": {
         "en": "Which statement about the limitations of Spring AOP proxies is TRUE?",
         "ru": "Какое утверждение об ограничениях прокси в Spring AOP верно?"
@@ -1524,6 +1552,7 @@
       "id": "spring.aop.005",
       "section": "aop",
       "difficulty": "medium",
+      "level": "senior",
       "text": {
         "en": "Which statement about @Around advice and ProceedingJoinPoint is TRUE?",
         "ru": "Какое утверждение о совете @Around и ProceedingJoinPoint верно?"
@@ -1578,6 +1607,7 @@
       "id": "spring.aop.006",
       "section": "aop",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "Svc.run() prints X and returns normally. With Spring Framework 5.2.7 or newer, what is printed when run() is called through the proxy?",
         "ru": "Метод Svc.run() печатает X и завершается нормально. Что будет выведено при вызове run() через прокси на Spring Framework 5.2.7 или новее?"
@@ -1632,6 +1662,7 @@
       "id": "spring.spring-mvc.001",
       "section": "spring-mvc",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which sequence correctly describes how DispatcherServlet handles a request to an annotated controller?",
         "ru": "Какая последовательность верно описывает обработку запроса к аннотированному контроллеру в DispatcherServlet?"
@@ -1686,6 +1717,7 @@
       "id": "spring.spring-mvc.002",
       "section": "spring-mvc",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "The handler below is called as GET /orders with no query string and no @ExceptionHandler anywhere. What does the client get?",
         "ru": "Обработчик ниже вызывается как GET /orders без query-строки, и никаких @ExceptionHandler в приложении нет. Что получит клиент?"
@@ -1741,6 +1773,7 @@
       "id": "spring.spring-mvc.003",
       "section": "spring-mvc",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "What does the client receive from GET /report?",
         "ru": "Что получит клиент в ответ на GET /report?"
@@ -1796,6 +1829,7 @@
       "id": "spring.spring-mvc.004",
       "section": "spring-mvc",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "UserDto declares @NotBlank on its email field, the incoming JSON has an empty email, the method has no BindingResult parameter and the application declares no @ExceptionHandler. What happens?",
         "ru": "В UserDto поле email помечено @NotBlank, во входящем JSON email пустой, у метода нет параметра BindingResult, и в приложении нет ни одного @ExceptionHandler. Что произойдёт?"
@@ -1851,6 +1885,7 @@
       "id": "spring.spring-mvc.005",
       "section": "spring-mvc",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "A controller declares an @ExceptionHandler(IllegalStateException.class) method, and a @ControllerAdvice declares @ExceptionHandler(RuntimeException.class). The controller throws IllegalStateException. Which statement is TRUE?",
         "ru": "В контроллере объявлен метод @ExceptionHandler(IllegalStateException.class), а в @ControllerAdvice — @ExceptionHandler(RuntimeException.class). Контроллер бросает IllegalStateException. Какое утверждение верно?"
@@ -1905,6 +1940,7 @@
       "id": "spring.spring-mvc.006",
       "section": "spring-mvc",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "Only Jackson for JSON is on the classpath - there is no XML converter. The client sends Content-Type: application/json and Accept: application/xml. What does it get?",
         "ru": "В classpath есть только Jackson для JSON — XML-конвертера нет. Клиент отправляет Content-Type: application/json и Accept: application/xml. Что он получит?"
@@ -1960,6 +1996,7 @@
       "id": "spring.transactions.001",
       "section": "transactions",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "The method below is called through the proxy and throws IOException. What happens to the row saved before the throw?",
         "ru": "Метод ниже вызывается через прокси и бросает IOException. Что произойдёт со строкой, сохранённой до выброса исключения?"
@@ -2015,6 +2052,7 @@
       "id": "spring.transactions.002",
       "section": "transactions",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "importAll is called from outside the bean. In what transactional context do the saveOne calls run?",
         "ru": "Метод importAll вызывается извне бина. В каком транзакционном контексте выполняются вызовы saveOne?"
@@ -2070,6 +2108,7 @@
       "id": "spring.transactions.003",
       "section": "transactions",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Which statement about transaction propagation is TRUE?",
         "ru": "Какое утверждение о распространении транзакций (propagation) верно?"
@@ -2124,6 +2163,7 @@
       "id": "spring.transactions.004",
       "section": "transactions",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Which anomaly is still possible at isolation level REPEATABLE_READ but prevented by SERIALIZABLE?",
         "ru": "Какая аномалия всё ещё возможна на уровне изоляции REPEATABLE_READ, но исключается на SERIALIZABLE?"
@@ -2178,6 +2218,7 @@
       "id": "spring.transactions.005",
       "section": "transactions",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Which statement about @Transactional attributes and the transaction infrastructure is TRUE?",
         "ru": "Какое утверждение об атрибутах @Transactional и инфраструктуре транзакций верно?"
@@ -2232,6 +2273,7 @@
       "id": "spring.transactions.006",
       "section": "transactions",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "Both beans use default propagation and run() is called from outside. What is the outcome?",
         "ru": "Оба бина используют propagation по умолчанию, а run() вызывается извне. Каков будет результат?"
@@ -2287,6 +2329,7 @@
       "id": "spring.testing.001",
       "section": "testing",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about ApplicationContext caching in the Spring TestContext framework is TRUE?",
         "ru": "Какое утверждение о кэшировании ApplicationContext в Spring TestContext framework верно?"
@@ -2340,6 +2383,7 @@
       "id": "spring.testing.002",
       "section": "testing",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "How does Mockito's @Mock differ from a Spring bean-override annotation such as @MockitoBean (formerly @MockBean)?",
         "ru": "Чем @Mock из Mockito отличается от аннотации подмены бина в Spring, например @MockitoBean (ранее @MockBean)?"
@@ -2394,6 +2438,7 @@
       "id": "spring.testing.003",
       "section": "testing",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Which statement about bean overriding in tests on Spring Framework 6.2 / Spring Boot 3.4 and later is TRUE?",
         "ru": "Какое утверждение о подмене бинов в тестах на Spring Framework 6.2 / Spring Boot 3.4 и новее верно?"
@@ -2448,6 +2493,7 @@
       "id": "spring.testing.004",
       "section": "testing",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "What happens to the inserted row after the test method finishes?",
         "ru": "Что произойдёт со вставленной строкой после завершения тестового метода?"
@@ -2503,6 +2549,7 @@
       "id": "spring.testing.005",
       "section": "testing",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Which statement about MockMvc is TRUE?",
         "ru": "Какое утверждение о MockMvc верно?"
@@ -2557,6 +2604,7 @@
       "id": "spring.testing.006",
       "section": "testing",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "Both test classes reference the same configuration class. How many ApplicationContexts does the TestContext framework build for this pair?",
         "ru": "Оба тестовых класса ссылаются на один и тот же конфигурационный класс. Сколько ApplicationContext построит TestContext framework для этой пары?"

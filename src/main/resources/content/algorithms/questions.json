@@ -1,0 +1,2639 @@
+{
+  "schemaVersion": 2,
+  "topic": "algorithms",
+  "questions": [
+    {
+      "id": "algorithms.complexity.001",
+      "section": "complexity",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "In terms of n = values.length, what is the time complexity of this method?",
+        "ru": "Какова временная сложность этого метода относительно n = values.length?"
+      },
+      "code": "static int countEqualPairs(int[] values) {\n    int total = 0;\n    for (int i = 0; i < values.length; i++) {\n        for (int j = i + 1; j < values.length; j++) {\n            if (values[i] == values[j]) {\n                total++;\n            }\n        }\n    }\n    return total;\n}",
+      "options": [
+        {
+          "text": {
+            "en": "O(n^2) — the loops run n*(n-1)/2 times, and halving a quadratic leaves it quadratic.",
+            "ru": "O(n^2) — циклы выполняются n*(n-1)/2 раз, а деление квадратичной величины пополам оставляет её квадратичной."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "O(n log n), because the inner loop starts at i + 1 rather than at 0.",
+            "ru": "O(n log n), потому что внутренний цикл начинается с i + 1, а не с 0."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(n), because every element of the array is read exactly once.",
+            "ru": "O(n), потому что каждый элемент массива читается ровно один раз."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(n^2 / 2), which is a strictly smaller complexity class than O(n^2).",
+            "ru": "O(n^2 / 2) — строго меньший класс сложности, чем O(n^2)."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It depends on the contents: O(n) if no pair is equal, O(n^2) if all are.",
+            "ru": "Зависит от содержимого: O(n), если равных пар нет, и O(n^2), если равны все."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The inner loop runs n-1 times, then n-2, and so on, which sums to n*(n-1)/2. Big-O drops constant factors, so the 1/2 disappears and the class is O(n^2). The body always executes — only the increment is conditional — so the contents change nothing, and O(n^2 / 2) is not a separate class at all.",
+        "ru": "Внутренний цикл выполняется n-1 раз, затем n-2 и так далее, что в сумме даёт n*(n-1)/2. O-нотация отбрасывает постоянные множители, поэтому 1/2 исчезает и класс остаётся O(n^2). Тело цикла выполняется всегда — условным является только увеличение счётчика, — поэтому содержимое ничего не меняет, а O(n^2 / 2) вообще не является отдельным классом."
+      },
+      "sources": [
+        "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/"
+      ]
+    },
+    {
+      "id": "algorithms.complexity.002",
+      "section": "complexity",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which statement about Big-O notation is correct?",
+        "ru": "Какое утверждение об O-нотации верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It gives the exact number of operations an algorithm performs on an input of size n.",
+            "ru": "Она даёт точное число операций, которое алгоритм выполняет на входе размера n."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It bounds how cost grows with input size, so constant factors and lower-order terms are dropped: 3n + 500 and n are both O(n).",
+            "ru": "Она ограничивает рост стоимости с размером входа, поэтому постоянные множители и младшие слагаемые отбрасываются: и 3n + 500, и n являются O(n)."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It always describes the average case; the worst case is written with Omega instead.",
+            "ru": "Она всегда описывает средний случай, а худший записывается через Omega."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An O(n) algorithm is faster than an O(n^2) one for every possible input size.",
+            "ru": "Алгоритм O(n) быстрее алгоритма O(n^2) при любом размере входа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It describes memory consumption; running time is described by Theta notation.",
+            "ru": "Она описывает потребление памяти, а время работы описывается нотацией Theta."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Big-O is an asymptotic upper bound on growth. Constants vanish, which is why it says nothing about exact operation counts and nothing about small inputs — an O(n^2) algorithm with a tiny constant routinely beats an O(n) one below some size, which is exactly why Arrays.sort falls back to insertion sort. Omega is a lower bound and Theta a tight bound; none of the three is tied to a particular case or to a particular resource.",
+        "ru": "O-нотация — это асимптотическая верхняя граница роста. Константы исчезают, поэтому она ничего не говорит ни о точном числе операций, ни о малых входах: алгоритм O(n^2) с крошечной константой регулярно обгоняет O(n) ниже некоторого размера — именно поэтому Arrays.sort переходит на сортировку вставками. Omega — нижняя граница, Theta — точная; ни одна из трёх не привязана ни к конкретному случаю, ни к конкретному ресурсу."
+      },
+      "sources": [
+        "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/"
+      ]
+    },
+    {
+      "id": "algorithms.complexity.003",
+      "section": "complexity",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "ArrayList.add(e) is documented as running in amortised constant time. What exactly does that claim guarantee?",
+        "ru": "В документации сказано, что ArrayList.add(e) работает за амортизированное константное время. Что именно гарантирует это утверждение?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Each individual add is guaranteed to complete in constant time, resize included.",
+            "ru": "Каждое отдельное добавление гарантированно завершается за константное время, включая перевыделение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is the average cost over randomly distributed inputs, so an unlucky sequence can be O(n) per add.",
+            "ru": "Это средняя стоимость по случайно распределённым входам, поэтому неудачная последовательность может дать O(n) на добавление."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Any sequence of n adds costs O(n) in total: the rare resize is paid for by the many cheap adds around it, and the bound holds for every input, not on average.",
+            "ru": "Любая последовательность из n добавлений стоит O(n) суммарно: редкое перевыделение оплачивается множеством дешёвых добавлений вокруг него, и оценка верна для любого входа, а не в среднем."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is constant only while the list stays below its initial capacity; after that every add is O(n).",
+            "ru": "Оно константно лишь пока список не превысил начальную ёмкость; после этого каждое добавление стоит O(n)."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Amortised and average complexity are two names for the same measure.",
+            "ru": "Амортизированная и средняя сложность — два названия одной и той же меры."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Amortised analysis is a worst-case statement about a sequence, with no probability in it. One add in a while copies the whole backing array, but because the array grows by a multiplicative factor those copies happen at geometrically spaced sizes and their total cost over n adds stays linear. A single add is therefore not O(1) — the one that resizes is O(n) — while n of them together are always O(n).",
+        "ru": "Амортизированный анализ — это утверждение о худшем случае для последовательности, и вероятности в нём нет. Изредка одно добавление копирует весь внутренний массив, но поскольку массив растёт с множителем, такие копирования происходят на геометрически расходящихся размерах и их суммарная стоимость за n добавлений остаётся линейной. Поэтому отдельное добавление не является O(1) — то, которое перевыделяет, стоит O(n), — а n добавлений вместе всегда стоят O(n)."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html",
+        "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/"
+      ]
+    },
+    {
+      "id": "algorithms.complexity.004",
+      "section": "complexity",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "Suppose ArrayList grew its backing array by a fixed 10 slots instead of by a multiplicative factor. What would n appends cost in total?",
+        "ru": "Предположим, ArrayList увеличивал бы внутренний массив на фиксированные 10 ячеек вместо роста с множителем. Во что обошлись бы n добавлений суммарно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Still O(n) — copying 10 slots at a time is a constant amount of work per add.",
+            "ru": "По-прежнему O(n): копирование по 10 ячеек — это константный объём работы на добавление."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(n log n), because the number of resizes grows logarithmically with n.",
+            "ru": "O(n log n), потому что число перевыделений растёт логарифмически по n."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(10n), which simplifies to O(n) once the constant is dropped.",
+            "ru": "O(10n), что после отбрасывания константы упрощается до O(n)."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(n^2), because a copy happens every 10 adds and each copy costs the current size, so the copy costs sum to roughly n^2/20.",
+            "ru": "O(n^2), потому что копирование происходит каждые 10 добавлений и каждое стоит текущего размера, так что стоимости копирований складываются примерно в n^2/20."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Unchanged, since the total number of elements copied does not depend on the growth policy.",
+            "ru": "Без изменений, так как общее число скопированных элементов не зависит от политики роста."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "With a fixed step the resizes happen at sizes 10, 20, 30, …, n, and the copy at each one costs the size at that moment. The sum of that arithmetic series is quadratic. Multiplicative growth is what makes the series geometric instead: the sizes 1, 2, 4, 8, … sum to less than 2n, which is the whole reason the amortised bound is constant. The growth policy is exactly what decides this.",
+        "ru": "При фиксированном шаге перевыделения происходят на размерах 10, 20, 30, …, n, и копирование на каждом стоит текущего размера. Сумма этой арифметической прогрессии квадратична. Рост с множителем превращает прогрессию в геометрическую: размеры 1, 2, 4, 8, … в сумме дают меньше 2n, и именно поэтому амортизированная оценка константна. Всё решает именно политика роста."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html",
+        "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/"
+      ]
+    },
+    {
+      "id": "algorithms.complexity.005",
+      "section": "complexity",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "A recursive depth-first walk visits every node of a binary tree with n nodes. How much stack space does the recursion itself need?",
+        "ru": "Рекурсивный обход в глубину посещает каждый узел двоичного дерева из n узлов. Сколько стековой памяти нужно самой рекурсии?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "O(1), because each frame is popped as soon as its subtree has been visited.",
+            "ru": "O(1), потому что каждый фрейм снимается сразу после обхода его поддерева."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(n) always, because there is one frame per node for the duration of the walk.",
+            "ru": "Всегда O(n), потому что на время обхода существует по одному фрейму на узел."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(log n) always, since a binary tree of n nodes has height log n by definition.",
+            "ru": "Всегда O(log n), так как двоичное дерево из n узлов по определению имеет высоту log n."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "None — the JVM allocates recursion frames on the heap, so only heap usage grows.",
+            "ru": "Нисколько: JVM размещает фреймы рекурсии в куче, поэтому растёт только потребление кучи."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(height): O(log n) if the tree is balanced, but O(n) for a degenerate tree, which is where StackOverflowError comes from.",
+            "ru": "O(высоты): O(log n) для сбалансированного дерева, но O(n) для вырожденного, откуда и берётся StackOverflowError."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Only the frames along the current root-to-node path are live at once, so the peak is the height, not the node count. A binary tree has height log n only when it is balanced; a tree built by inserting sorted keys into an unbalanced structure degenerates into a chain of height n, and that is the case that overflows the stack on data that fits comfortably in heap. Frames live on the thread stack, sized by -Xss and quite separate from the heap.",
+        "ru": "Одновременно живы только фреймы текущего пути от корня к узлу, поэтому пик равен высоте, а не числу узлов. Высота log n бывает у двоичного дерева лишь когда оно сбалансировано; дерево, построенное вставкой отсортированных ключей в несбалансированную структуру, вырождается в цепочку высоты n — и именно этот случай переполняет стек на данных, которые спокойно помещаются в куче. Фреймы живут в стеке потока, размер которого задаётся -Xss и никак не связан с кучей."
+      },
+      "sources": [
+        "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/"
+      ]
+    },
+    {
+      "id": "algorithms.complexity.006",
+      "section": "complexity",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "banned is a HashSet with a well-distributed hashCode. In terms of n = names.size(), what is the complexity of this method?",
+        "ru": "banned — это HashSet с хорошо распределённым hashCode. Какова сложность этого метода относительно n = names.size()?"
+      },
+      "code": "static List<String> keepAllowed(List<String> names, Set<String> banned) {\n    List<String> sorted = new ArrayList<>(names);\n    Collections.sort(sorted);\n    List<String> kept = new ArrayList<>();\n    for (String name : sorted) {\n        if (!banned.contains(name)) {\n            kept.add(name);\n        }\n    }\n    return kept;\n}",
+      "options": [
+        {
+          "text": {
+            "en": "O(n log n) — the sort dominates, because the filtering pass is O(n) with expected constant-time set lookups.",
+            "ru": "O(n log n) — доминирует сортировка, поскольку фильтрующий проход стоит O(n) при ожидаемо константном поиске в множестве."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "O(n^2), because contains has to scan the set once per name.",
+            "ru": "O(n^2), потому что contains вынужден просматривать множество для каждого имени."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(n), because both the copy and the filter are single passes and sorting a list of strings is linear.",
+            "ru": "O(n), потому что и копирование, и фильтрация — одиночные проходы, а сортировка списка строк линейна."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(n log n + m log m) where m = banned.size(), since the set must be sorted to be searched.",
+            "ru": "O(n log n + m log m), где m = banned.size(), поскольку для поиска множество нужно отсортировать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(n^2 log n), because the sort is performed once per element of the filtering loop.",
+            "ru": "O(n^2 log n), потому что сортировка выполняется для каждого элемента фильтрующего цикла."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Three steps run one after another, so the total is the largest of them. The copy is O(n), Collections.sort is O(n log n) — it delegates to a comparison sort and cannot beat that bound — and the loop is n lookups that a well-distributed HashSet answers in expected O(1) each. n log n therefore dominates. A HashSet is never sorted and never scanned for a lookup; that is the entire point of hashing.",
+        "ru": "Три шага выполняются один за другим, поэтому итог равен наибольшему из них. Копирование стоит O(n), Collections.sort — O(n log n), так как делегирует сортировке сравнениями и обойти эту границу не может, а цикл — это n поисков, на каждый из которых хорошо распределённый HashSet отвечает за ожидаемое O(1). Значит, доминирует n log n. HashSet никогда не сортируется и не просматривается целиком ради поиска — в этом и есть весь смысл хеширования."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collections.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/HashSet.html"
+      ]
+    },
+    {
+      "id": "algorithms.arrays-and-strings.001",
+      "section": "arrays-and-strings",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What happens when this program runs?",
+        "ru": "Что произойдёт при запуске этой программы?"
+      },
+      "code": "public class Main {\n    public static void main(String[] args) {\n        List<String> names = Arrays.asList(\"ann\", \"bob\");\n        names.set(0, \"amy\");\n        names.add(\"cid\");\n        System.out.println(names);\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "It prints [amy, bob, cid] — Arrays.asList returns an ordinary mutable ArrayList.",
+            "ru": "Напечатает [amy, bob, cid] — Arrays.asList возвращает обычный изменяемый ArrayList."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It throws UnsupportedOperationException on add: the list returned by Arrays.asList has a fixed size, although set is allowed.",
+            "ru": "Бросится UnsupportedOperationException на add: список, возвращаемый Arrays.asList, имеет фиксированный размер, хотя set разрешён."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It throws UnsupportedOperationException on set, because the returned list is immutable.",
+            "ru": "Бросится UnsupportedOperationException на set, потому что возвращаемый список неизменяем."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It prints [ann, bob], because both modifications are silently ignored on a view.",
+            "ru": "Напечатает [ann, bob], потому что обе модификации на представлении молча игнорируются."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It throws ArrayIndexOutOfBoundsException on add, since the backing array has length 2.",
+            "ru": "Бросится ArrayIndexOutOfBoundsException на add, так как длина внутреннего массива равна 2."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Arrays.asList returns a fixed-size list that is a view over the array you passed in. Replacing an element with set writes straight through to that array and is legal; anything that would change the length — add, remove — throws UnsupportedOperationException, because an array cannot grow. For a real mutable list, wrap it: new ArrayList<>(Arrays.asList(...)).",
+        "ru": "Arrays.asList возвращает список фиксированного размера, являющийся представлением переданного массива. Замена элемента через set пишет прямо в этот массив и допустима; всё, что изменило бы длину — add, remove, — бросает UnsupportedOperationException, потому что массив расти не может. Для настоящего изменяемого списка оберните результат: new ArrayList<>(Arrays.asList(...))."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Arrays.html"
+      ]
+    },
+    {
+      "id": "algorithms.arrays-and-strings.002",
+      "section": "arrays-and-strings",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does this program print?",
+        "ru": "Что напечатает эта программа?"
+      },
+      "code": "public class Main {\n    public static void main(String[] args) {\n        String text = \"abc\";\n        text.toUpperCase();\n        text.concat(\"def\");\n        System.out.println(text + text.length());\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "ABCdef6, because both calls mutate the string the variable refers to.",
+            "ru": "ABCdef6, потому что оба вызова изменяют строку, на которую ссылается переменная."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ABC3, because toUpperCase mutates in place while concat returns a copy.",
+            "ru": "ABC3, потому что toUpperCase изменяет строку на месте, а concat возвращает копию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "abc3 — both calls return new strings that are thrown away, because a String is never modified in place.",
+            "ru": "abc3 — оба вызова возвращают новые строки, которые выбрасываются, потому что String никогда не изменяется на месте."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "abcdef6, because concat appends to the interned literal in the string pool.",
+            "ru": "abcdef6, потому что concat дописывает к интернированному литералу в пуле строк."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It does not compile: the results of toUpperCase and concat must be assigned.",
+            "ru": "Не скомпилируется: результаты toUpperCase и concat обязаны быть присвоены."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "String is immutable: its backing byte array is private and never written after construction. Every method that looks like a mutation — toUpperCase, concat, trim, replace, substring — returns a brand new String and leaves the receiver alone. Discarding that return value is legal Java and a no-op, which is why the variable still holds \"abc\" and length() is 3. Immutability is what makes strings safe to share and lets hashCode be cached.",
+        "ru": "String неизменяем: его внутренний массив байт приватен и после создания не переписывается. Каждый метод, выглядящий как изменение — toUpperCase, concat, trim, replace, substring, — возвращает совершенно новую строку и не трогает исходную. Отбросить возвращённое значение — законный Java-код и пустая операция, поэтому переменная по-прежнему хранит «abc», а length() равен 3. Именно неизменяемость делает строки безопасными для разделения и позволяет кешировать hashCode."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html"
+      ]
+    },
+    {
+      "id": "algorithms.arrays-and-strings.003",
+      "section": "arrays-and-strings",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "A loop appends n pieces of text to a String with +=, and the total length is L. Why is StringBuilder the right fix?",
+        "ru": "Цикл дописывает n фрагментов текста к String через +=, и суммарная длина равна L. Почему StringBuilder — правильное решение?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because the compiler cannot optimise += at all, while it inlines StringBuilder.append.",
+            "ru": "Потому что компилятор вообще не оптимизирует +=, а StringBuilder.append он встраивает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because += is synchronised on the string pool, and StringBuilder is not synchronised.",
+            "ru": "Потому что += синхронизируется на пуле строк, а StringBuilder не синхронизирован."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both are O(L); StringBuilder is preferred only because it reads more clearly in a loop.",
+            "ru": "Оба стоят O(L); StringBuilder предпочтительнее лишь потому, что читается в цикле понятнее."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Each += allocates a new String and copies everything accumulated so far, making the loop quadratic in L; StringBuilder appends into one growing buffer and produces the String once.",
+            "ru": "Каждый += выделяет новую строку и копирует всё накопленное, из-за чего цикл становится квадратичным по L; StringBuilder дописывает в один растущий буфер и создаёт строку один раз."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because += always interns its result, filling the string pool with n dead entries.",
+            "ru": "Потому что += всегда интернирует результат, забивая пул строк n мёртвыми записями."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Strings are immutable, so += builds a new one from both operands every iteration. The i-th iteration copies everything written so far, and those copies sum to O(L^2) characters. The compiler does turn a single concatenation expression into one StringConcatFactory call, but it cannot merge separate iterations, because each iteration's result is an observable value. StringBuilder keeps one mutable char buffer, so the whole loop costs O(L).",
+        "ru": "Строки неизменяемы, поэтому += на каждой итерации строит новую строку из обоих операндов. i-я итерация копирует всё написанное ранее, и эти копирования складываются в O(L^2) символов. Компилятор действительно превращает одно выражение конкатенации в один вызов StringConcatFactory, но слить отдельные итерации он не может, потому что результат каждой является наблюдаемым значением. StringBuilder держит один изменяемый буфер, поэтому весь цикл стоит O(L)."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuilder.html",
+        "https://openjdk.org/jeps/280"
+      ]
+    },
+    {
+      "id": "algorithms.arrays-and-strings.004",
+      "section": "arrays-and-strings",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "You need to copy a range out of a large int[] as fast as the JDK allows. Which statement is correct?",
+        "ru": "Нужно как можно быстрее скопировать диапазон из большого int[]. Какое утверждение верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A hand-written for loop is fastest, because it avoids the bounds checks the JDK helpers perform.",
+            "ru": "Написанный вручную цикл for быстрее всех, потому что избегает проверок границ, которые делают методы JDK."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Arrays.copyOfRange returns a view over the original array, so nothing is copied at all.",
+            "ru": "Arrays.copyOfRange возвращает представление исходного массива, поэтому ничего не копируется вовсе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "System.arraycopy cannot be used when the source and destination are the same array.",
+            "ru": "System.arraycopy нельзя использовать, когда источник и приёмник — один и тот же массив."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "clone() is the only way to copy a primitive array; Arrays.copyOfRange works on object arrays only.",
+            "ru": "clone() — единственный способ скопировать примитивный массив; Arrays.copyOfRange работает только с массивами объектов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Arrays.copyOfRange delegates to System.arraycopy, which is a JIT intrinsic compiled into a block memory move rather than a Java loop.",
+            "ru": "Arrays.copyOfRange делегирует System.arraycopy, который является интринсиком JIT и компилируется в блочное перемещение памяти, а не в Java-цикл."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "System.arraycopy is a native method the JIT recognises and replaces with a block move, so it outruns any loop you write. Arrays.copyOf and Arrays.copyOfRange are thin wrappers that allocate the destination and call it. The result is always a new array — arrays have no view semantics, which is precisely what Arrays.asList exists to provide for reading. Overlapping ranges within one array are explicitly supported: the copy behaves as if it went through a temporary.",
+        "ru": "System.arraycopy — нативный метод, который JIT распознаёт и заменяет блочным перемещением, поэтому он обгоняет любой написанный вами цикл. Arrays.copyOf и Arrays.copyOfRange — тонкие обёртки, выделяющие приёмник и вызывающие его. Результатом всегда является новый массив: у массивов нет семантики представления, и именно для чтения через представление существует Arrays.asList. Перекрывающиеся диапазоны внутри одного массива поддерживаются явно: копирование ведёт себя так, как если бы шло через временный буфер."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/System.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Arrays.html"
+      ]
+    },
+    {
+      "id": "algorithms.arrays-and-strings.005",
+      "section": "arrays-and-strings",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "Since JDK 7, what is the cost of String.substring, and why was it changed?",
+        "ru": "Какова стоимость String.substring начиная с JDK 7 и почему её изменили?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It copies the requested characters, so it is O(length of the substring); before JDK 7 it shared the parent's array in O(1), which kept whole large strings alive through tiny substrings.",
+            "ru": "Он копирует запрошенные символы, поэтому стоит O(длины подстроки); до JDK 7 он разделял массив родителя за O(1), из-за чего крошечные подстроки удерживали живыми целые большие строки."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is still O(1): the returned String shares the parent's array and only stores an offset and a count.",
+            "ru": "Он по-прежнему O(1): возвращаемая строка разделяет массив родителя и хранит лишь смещение и длину."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is O(length of the original string), because the whole backing array is duplicated and then trimmed.",
+            "ru": "Он стоит O(длины исходной строки), потому что весь внутренний массив дублируется и затем обрезается."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is O(1) for substrings shorter than 16 characters and O(n) beyond that.",
+            "ru": "Он O(1) для подстрок короче 16 символов и O(n) сверх того."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It was changed to make substring thread-safe; the complexity was the same before and after.",
+            "ru": "Его изменили, чтобы сделать substring потокобезопасным; сложность до и после одинакова."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The old implementation was a genuine O(1) view holding offset, count and a reference to the parent's char array — elegant, and a memory leak in practice: parse a ten-megabyte document, keep a two-character token, and the ten megabytes stay reachable. JDK 7 changed substring to copy, trading constant time for bounded memory. The practical consequence is that substring inside a loop can be quadratic, which it never used to be.",
+        "ru": "Старая реализация была настоящим представлением за O(1), хранившим смещение, длину и ссылку на массив родителя, — элегантно и на практике являлось утечкой памяти: разберите десятимегабайтный документ, сохраните двухсимвольный токен — и десять мегабайт останутся достижимыми. В JDK 7 substring переделали на копирование, обменяв константное время на ограниченную память. Практическое следствие в том, что substring внутри цикла может оказаться квадратичным, чего раньше не бывало."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html"
+      ]
+    },
+    {
+      "id": "algorithms.arrays-and-strings.006",
+      "section": "arrays-and-strings",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "JEP 254 introduced compact strings in JDK 9. What did it actually change?",
+        "ru": "JEP 254 ввёл компактные строки в JDK 9. Что именно он изменил?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "String literals are now compressed with a dictionary coder and decompressed on each read.",
+            "ru": "Строковые литералы теперь сжимаются словарным кодером и распаковываются при каждом чтении."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "String now stores a byte[] plus a coder flag, using one byte per character for Latin-1 content and two per character otherwise; length() still counts characters.",
+            "ru": "String теперь хранит byte[] плюс флаг кодировки, используя один байт на символ для латиницы и два в остальных случаях; length() по-прежнему считает символы."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "String switched from char[] to byte[] and length() now returns the number of bytes.",
+            "ru": "String перешёл с char[] на byte[], и length() теперь возвращает число байт."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It moved the string pool off the heap into metaspace, halving heap pressure for text.",
+            "ru": "Пул строк переехал из кучи в metaspace, вдвое снизив нагрузку на кучу от текста."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It made String store UTF-8 internally, so a Cyrillic character now costs two bytes instead of four.",
+            "ru": "String стал хранить UTF-8 внутри, поэтому кириллический символ теперь стоит два байта вместо четырёх."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Before JDK 9 every String held a char[], two bytes per character, even for text that was entirely ASCII — and heap dumps of real services showed that character arrays were the single largest consumer. Compact strings keep a byte[] and a coder field that says LATIN1 or UTF16; a string that fits in Latin-1 takes half the memory, and one that does not is stored as UTF-16 exactly as before. The API is unchanged: length(), charAt and indexOf still work in characters, so this is invisible except in memory usage.",
+        "ru": "До JDK 9 каждая строка хранила char[] по два байта на символ даже для полностью ASCII-текста — и дампы кучи реальных сервисов показывали, что массивы символов были крупнейшим потребителем памяти. Компактные строки держат byte[] и поле кодировки со значением LATIN1 или UTF16; строка, помещающаяся в Latin-1, занимает вдвое меньше памяти, а непомещающаяся хранится в UTF-16 ровно как раньше. API не изменился: length(), charAt и indexOf по-прежнему работают в символах, поэтому изменение незаметно нигде, кроме потребления памяти."
+      },
+      "sources": [
+        "https://openjdk.org/jeps/254",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html"
+      ]
+    },
+    {
+      "id": "algorithms.hash-tables.001",
+      "section": "hash-tables",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does HashMap.get(key) do, in order?",
+        "ru": "Что делает HashMap.get(key) и в каком порядке?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Calls equals on every key in the map until one matches; hashCode only decides the iteration order.",
+            "ru": "Вызывает equals на каждом ключе отображения, пока один не совпадёт; hashCode лишь задаёт порядок обхода."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Computes hashCode % table.length, then compares keys with ==, falling back to equals for Strings.",
+            "ru": "Вычисляет hashCode % table.length, затем сравнивает ключи через ==, переходя к equals только для строк."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Computes the key's hashCode, spreads it, masks it to a bucket index, then walks that bucket comparing stored hashes first and equals only when the hashes match.",
+            "ru": "Вычисляет hashCode ключа, перемешивает его, накладывает маску для получения индекса корзины, затем проходит по корзине, сравнивая сначала сохранённые хеши и вызывая equals только при их совпадении."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Binary searches the table, which is kept sorted by hash code, and then calls equals once.",
+            "ru": "Выполняет бинарный поиск по таблице, отсортированной по хеш-кодам, и затем один раз вызывает equals."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Looks the key up in an internal TreeMap keyed by hashCode, so lookups are O(log n).",
+            "ru": "Ищет ключ во внутреннем TreeMap с ключом hashCode, поэтому поиск стоит O(log n)."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Hashing is what makes a lookup cost one jump instead of a scan. The index is hash & (length - 1) — a mask, not a modulus, which is why the table length is always a power of two. Inside the bucket the stored hash is compared first because it is an int comparison and rules out almost every non-match before the more expensive equals is reached. HashMap is not sorted by anything and never scans the whole table for a get.",
+        "ru": "Хеширование и делает поиск одним прыжком вместо просмотра. Индекс вычисляется как hash & (length - 1) — маской, а не остатком от деления, поэтому длина таблицы всегда является степенью двойки. Внутри корзины сначала сравнивается сохранённый хеш, потому что это сравнение int, отсекающее почти все несовпадения до более дорогого equals. HashMap ни по чему не отсортирован и никогда не просматривает всю таблицу ради get."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/HashMap.html"
+      ]
+    },
+    {
+      "id": "algorithms.hash-tables.002",
+      "section": "hash-tables",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does this program print?",
+        "ru": "Что напечатает эта программа?"
+      },
+      "code": "// Point is a mutable class whose equals and hashCode both use x and y.\nSet<Point> seen = new HashSet<>();\nPoint p = new Point(1, 1);\nseen.add(p);\np.setX(2);\nSystem.out.println(seen.contains(p) + \" \" + seen.size());",
+      "options": [
+        {
+          "text": {
+            "en": "true 1, because contains compares with equals and the object is the same instance.",
+            "ru": "true 1, потому что contains сравнивает через equals, а объект — тот же самый экземпляр."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "false 0, because the entry became unreachable and the set dropped it.",
+            "ru": "false 0, потому что запись стала недостижимой и множество её удалило."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "true 2, because mutating the key reinserts it under its new hash.",
+            "ru": "true 2, потому что изменение ключа переносит его под новый хеш."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "false 1 — the set still holds the point, but it is filed under the old hash, so the lookup goes to the wrong bucket.",
+            "ru": "false 1 — множество всё ещё содержит точку, но она записана под старым хешом, поэтому поиск уходит не в ту корзину."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It throws ConcurrentModificationException, since the set detects the changed key.",
+            "ru": "Бросится ConcurrentModificationException, так как множество замечает изменение ключа."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A hash container records where an entry belongs at insertion time and never rechecks it. Change a field that hashCode depends on and the entry stays in the bucket chosen by the old hash, while every lookup computes the new one and searches a different bucket. The entry is now unreachable through the API but still counted by size and still visited by iteration — a leak that no exception announces. This is why keys should be immutable, or at least never mutated while they are in a map or set.",
+        "ru": "Хеш-контейнер запоминает место записи в момент вставки и больше его не перепроверяет. Измените поле, от которого зависит hashCode, — и запись останется в корзине, выбранной по старому хешу, тогда как любой поиск вычислит новый хеш и пойдёт в другую корзину. Запись становится недостижимой через API, но по-прежнему учитывается в size и посещается при обходе — это утечка, о которой не сообщает ни одно исключение. Поэтому ключи должны быть неизменяемыми или как минимум не изменяться, пока лежат в отображении или множестве."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/HashMap.html"
+      ]
+    },
+    {
+      "id": "algorithms.hash-tables.003",
+      "section": "hash-tables",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "HashMap's default load factor is 0.75. What does that number control, and why was it chosen?",
+        "ru": "Коэффициент загрузки HashMap по умолчанию равен 0.75. Чем управляет это число и почему выбрано именно оно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It is the fraction of a bucket's chain that may be occupied before the bucket becomes a tree.",
+            "ru": "Это доля цепочки корзины, которая может быть занята до превращения корзины в дерево."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is how much of the initial capacity is allocated eagerly; the rest is allocated on first use.",
+            "ru": "Это доля начальной ёмкости, выделяемая сразу; остальное выделяется при первом обращении."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is the probability that a resize rehashes an entry into a different bucket.",
+            "ru": "Это вероятность того, что при перестроении запись попадёт в другую корзину."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is the maximum fill level a HashMap will accept: putting beyond it throws IllegalStateException.",
+            "ru": "Это максимальная заполненность, которую допускает HashMap: вставка сверх неё бросает IllegalStateException."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is the entries-to-buckets ratio at which the table doubles and rehashes; 0.75 is a documented tradeoff — lower wastes buckets, higher lets collision chains grow.",
+            "ru": "Это отношение числа записей к числу корзин, при котором таблица удваивается и перераспределяется; 0.75 — задокументированный компромисс: меньше — пустые корзины впустую, больше — растущие цепочки коллизий."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Capacity is the number of buckets; the load factor is the fill level that triggers a resize, so the threshold is capacity * loadFactor. At 0.75 a map of 1000 entries needs a capacity of at least 1334, which rounds up to 2048. The Javadoc says plainly that 0.75 offers a good tradeoff between time and space costs: a lower factor means more empty buckets, a higher one means longer chains and slower lookups. Resizing is O(n) and happens while a caller waits, which is the argument for sizing the map up front.",
+        "ru": "Ёмкость — это число корзин; коэффициент загрузки — заполненность, запускающая перестроение, поэтому порог равен ёмкость * коэффициент. При 0.75 отображению на 1000 записей нужна ёмкость не меньше 1334, которая округлится вверх до 2048. Javadoc прямо говорит, что 0.75 даёт хороший компромисс между затратами времени и памяти: меньшее значение — больше пустых корзин, большее — длиннее цепочки и медленнее поиск. Перестроение стоит O(n) и происходит, пока вызывающий ждёт, — это и есть аргумент за то, чтобы задать размер заранее."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/HashMap.html"
+      ]
+    },
+    {
+      "id": "algorithms.hash-tables.004",
+      "section": "hash-tables",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Since JDK 8, when does a HashMap bucket become a red-black tree?",
+        "ru": "Начиная с JDK 8, когда корзина HashMap превращается в красно-чёрное дерево?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "When its chain reaches eight entries and the table has at least 64 buckets; below that capacity the map resizes instead, and a tree bucket reverts to a list when it shrinks to six.",
+            "ru": "Когда её цепочка достигает восьми записей, а в таблице не меньше 64 корзин; при меньшей ёмкости отображение вместо этого перестраивается, а древесная корзина возвращается к списку при сжатии до шести."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "As soon as any bucket holds two entries, so that every collision is resolved in logarithmic time.",
+            "ru": "Как только в корзине оказывается две записи, чтобы любая коллизия разрешалась за логарифмическое время."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When the whole map exceeds 64 entries, at which point every bucket is converted at once.",
+            "ru": "Когда всё отображение превышает 64 записи — в этот момент все корзины преобразуются разом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When the load factor exceeds 0.75, as an alternative to doubling the table.",
+            "ru": "Когда коэффициент загрузки превышает 0.75 — как альтернатива удвоению таблицы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Never automatically; treeification only happens if the map is constructed with a Comparator.",
+            "ru": "Никогда автоматически; превращение в дерево происходит, только если отображение создано с Comparator."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "TREEIFY_THRESHOLD is 8 and MIN_TREEIFY_CAPACITY is 64. The capacity condition matters: a long chain in a small table usually means the table is too small, not that the hash is bad, so resizing is the cheaper cure. UNTREEIFY_THRESHOLD is 6 rather than 8 so that a bucket hovering at the boundary does not convert back and forth. The feature is hardening rather than tuning — it bounds the worst case at O(log n) per bucket, which is what turns a deliberate collision attack from a denial of service into a slowdown.",
+        "ru": "TREEIFY_THRESHOLD равен 8, MIN_TREEIFY_CAPACITY — 64. Условие по ёмкости существенно: длинная цепочка в маленькой таблице обычно означает, что таблица мала, а не что хеш плох, поэтому перестроение является более дешёвым лечением. UNTREEIFY_THRESHOLD равен 6, а не 8, чтобы корзина, колеблющаяся у границы, не превращалась туда-обратно. Это механизм укрепления, а не оптимизации: он ограничивает худший случай величиной O(log n) на корзину, превращая намеренную атаку коллизиями из отказа в обслуживании в замедление."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/HashMap.html"
+      ]
+    },
+    {
+      "id": "algorithms.hash-tables.005",
+      "section": "hash-tables",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "HashMap applies h ^ (h >>> 16) to a key's hash code before using it. Why?",
+        "ru": "HashMap применяет к хеш-коду ключа операцию h ^ (h >>> 16) перед использованием. Зачем?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It makes hash codes unpredictable across JVM runs, which is the defence against collision attacks.",
+            "ru": "Она делает хеш-коды непредсказуемыми между запусками JVM, что и защищает от атак коллизиями."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The bucket index is taken with a bitmask, which keeps only the low bits, so this mixes the high sixteen bits down and stops hash codes that differ only high up from all colliding.",
+            "ru": "Индекс корзины берётся битовой маской, оставляющей только младшие биты, поэтому эта операция подмешивает старшие шестнадцать бит вниз и не даёт хеш-кодам, различающимся лишь в старших битах, столкнуться в одной корзине."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It guarantees a non-negative value, since a negative hash code would produce a negative index.",
+            "ru": "Она гарантирует неотрицательное значение, так как отрицательный хеш-код дал бы отрицательный индекс."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is a full-strength hash function that replaces whatever the key's hashCode returned.",
+            "ru": "Это полноценная хеш-функция, заменяющая всё, что вернул hashCode ключа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It compresses the hash to 16 bits so that two entries fit in one cache line of the table.",
+            "ru": "Она сжимает хеш до 16 бит, чтобы две записи помещались в одну кеш-линию таблицы."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Because the table length is a power of two, the index is hash & (length - 1), which discards every bit above the table's width. A key class whose hash codes vary only in the high bits — a poorly written one, or one derived from an identifier with a large constant offset — would then map every key to the same bucket. One xor with a right shift folds the high half into the low half and costs a single instruction. It is deliberately not a strong hash function: it is cheap insurance for the common bad cases, and treeification is what covers the rest.",
+        "ru": "Поскольку длина таблицы является степенью двойки, индекс равен hash & (length - 1), что отбрасывает все биты выше разрядности таблицы. Класс ключа, хеш-коды которого различаются только в старших битах — плохо написанный или выведенный из идентификатора с большим постоянным смещением, — отправлял бы тогда все ключи в одну корзину. Один xor со сдвигом вправо складывает старшую половину в младшую и стоит одной инструкции. Это намеренно не сильная хеш-функция: дешёвая страховка от типичных плохих случаев, а остальное покрывает превращение корзины в дерево."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/HashMap.html"
+      ]
+    },
+    {
+      "id": "algorithms.hash-tables.006",
+      "section": "hash-tables",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A key class overrides hashCode to return a constant. Its equals is correct and the class implements Comparable. What happens to a JDK 17 HashMap holding n such keys?",
+        "ru": "Класс ключа переопределяет hashCode так, что тот возвращает константу. Его equals корректен, и класс реализует Comparable. Что произойдёт с HashMap в JDK 17, содержащим n таких ключей?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing measurable: the spreading function redistributes equal hash codes across buckets.",
+            "ru": "Ничего заметного: функция перемешивания распределяет одинаковые хеш-коды по разным корзинам."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "put throws IllegalStateException once a chain exceeds the treeify threshold with equal hashes.",
+            "ru": "put бросит IllegalStateException, как только цепочка с одинаковыми хешами превысит порог превращения в дерево."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Every entry lands in one bucket; once that chain reaches eight in a table of at least 64 buckets it becomes a red-black tree, so lookups cost O(log n) instead of the intended O(1).",
+            "ru": "Все записи попадают в одну корзину; как только её цепочка достигает восьми в таблице не менее чем из 64 корзин, корзина становится красно-чёрным деревом, поэтому поиск стоит O(log n) вместо задуманного O(1)."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Lookups stay O(1) but the map silently loses entries, because equal hash codes overwrite each other.",
+            "ru": "Поиск останется O(1), но отображение молча теряет записи, потому что одинаковые хеш-коды перезаписывают друг друга."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The map degrades to O(n) per lookup and stays there; treeification only applies to String keys.",
+            "ru": "Отображение деградирует до O(n) на поиск и таким и остаётся; превращение в дерево работает только для ключей String."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A constant hashCode satisfies the contract perfectly — equal objects do have equal hash codes — and is still a disaster, because it removes every bit of information the table needs. All n entries collide into one bucket. Before JDK 8 that meant an O(n) chain walk; since JDK 8 the bucket treeifies and the worst case is O(log n), using the keys' Comparable ordering to build the tree. That is a floor under catastrophe, not a fix: the map is still orders of magnitude slower than it should be, and nothing warns you. Derive hashCode from the same fields as equals.",
+        "ru": "Константный hashCode идеально удовлетворяет контракту — равные объекты действительно имеют равные хеш-коды — и всё равно является катастрофой, потому что отнимает у таблицы всю информацию, которая ей нужна. Все n записей сталкиваются в одной корзине. До JDK 8 это означало проход по цепочке за O(n); начиная с JDK 8 корзина превращается в дерево, и худший случай становится O(log n), причём дерево строится по порядку Comparable у ключей. Это подстраховка от катастрофы, а не решение: отображение всё равно на порядки медленнее, чем должно быть, и никто вас не предупредит. Выводите hashCode из тех же полей, что и equals."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/HashMap.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Objects.html"
+      ]
+    },
+    {
+      "id": "algorithms.lists-stacks-queues.001",
+      "section": "lists-stacks-queues",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "You need a stack in new code. What does the Java Collections Framework recommend?",
+        "ru": "В новом коде нужен стек. Что рекомендует Java Collections Framework?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "java.util.Stack, which is the purpose-built class and the fastest of the options.",
+            "ru": "java.util.Stack — специально предназначенный класс и самый быстрый из вариантов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "LinkedList, because pushing and popping at the head is O(1) and an array-based stack is not.",
+            "ru": "LinkedList, потому что вставка и снятие с головы стоят O(1), а стек на массиве — нет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Collections.asLifoQueue(new ArrayList<>()), the only supported way to get LIFO semantics.",
+            "ru": "Collections.asLifoQueue(new ArrayList<>()) — единственный поддерживаемый способ получить LIFO-семантику."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ArrayDeque used through the Deque interface — the Deque javadoc names it the more complete and consistent replacement for java.util.Stack.",
+            "ru": "ArrayDeque через интерфейс Deque — javadoc Deque называет его более полной и последовательной заменой java.util.Stack."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A PriorityQueue with a reversed insertion-order comparator.",
+            "ru": "PriorityQueue с компаратором, обращающим порядок вставки."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "java.util.Stack extends Vector, so every operation is synchronised whether or not you need it, it exposes indexed access that has nothing to do with a stack, and it iterates bottom-to-top — the opposite of pop order. ArrayDeque is a circular buffer: push and pop are amortised O(1), the storage is contiguous and cache-friendly, and it allocates nothing per element. LinkedList works but pays an object header and two references per element for no benefit at the ends.",
+        "ru": "java.util.Stack наследуется от Vector, поэтому каждая операция синхронизирована независимо от вашей потребности, он открывает доступ по индексу, не имеющий отношения к стеку, и обходится снизу вверх — в порядке, обратном порядку извлечения. ArrayDeque — это кольцевой буфер: push и pop амортизированно O(1), хранилище непрерывно и дружественно к кешу, а на элемент ничего не выделяется. LinkedList работает, но платит заголовком объекта и двумя ссылками на элемент без какой-либо выгоды на концах."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Deque.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Stack.html"
+      ]
+    },
+    {
+      "id": "algorithms.lists-stacks-queues.002",
+      "section": "lists-stacks-queues",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What is the total cost of this loop when values is a LinkedList of n elements?",
+        "ru": "Во что обойдётся этот цикл целиком, если values — это LinkedList из n элементов?"
+      },
+      "code": "long total = 0;\nfor (int i = 0; i < values.size(); i++) {\n    total += values.get(i);\n}",
+      "options": [
+        {
+          "text": {
+            "en": "O(n), because a LinkedList caches the last accessed node and continues from it.",
+            "ru": "O(n), потому что LinkedList кеширует последний доступный узел и продолжает от него."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(n log n), because get(i) uses a skip-list index over the nodes.",
+            "ru": "O(n log n), потому что get(i) использует индекс по узлам в духе skip-list."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(n) — identical to ArrayList, since both implement RandomAccess.",
+            "ru": "O(n) — как у ArrayList, ведь оба реализуют RandomAccess."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It throws UnsupportedOperationException: LinkedList has no indexed get.",
+            "ru": "Бросится UnsupportedOperationException: у LinkedList нет доступа по индексу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(n^2), because each get(i) walks the chain from the nearer end, so the walks sum to a quadratic number of node hops.",
+            "ru": "O(n^2), потому что каждый get(i) идёт по цепочке от ближайшего конца, и эти проходы складываются в квадратичное число переходов по узлам."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "LinkedList.get(i) is O(min(i, n - i)) — it starts from whichever end is closer and follows next or prev pointers. Summed over an indexed loop that is O(n^2). ArrayList implements the RandomAccess marker to say indexed access is cheap; LinkedList deliberately does not, and Collections methods check for that marker to choose a strategy. The fix is the enhanced for loop or an explicit iterator, which advances one node per step and makes the pass O(n).",
+        "ru": "LinkedList.get(i) стоит O(min(i, n - i)) — он начинает от ближайшего конца и идёт по ссылкам next или prev. В сумме по индексному циклу это O(n^2). ArrayList реализует маркер RandomAccess, заявляя, что доступ по индексу дёшев; LinkedList намеренно его не реализует, а методы Collections проверяют этот маркер при выборе стратегии. Лечится это циклом for-each или явным итератором, который делает один шаг на узел и превращает проход в O(n)."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedList.html"
+      ]
+    },
+    {
+      "id": "algorithms.lists-stacks-queues.003",
+      "section": "lists-stacks-queues",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A worker drains a Deque until it is empty. Why does using remove() rather than poll() matter?",
+        "ru": "Обработчик опустошает Deque до конца. Почему важно, используется ли remove() или poll()?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Queue operations come in two forms: remove/element/add throw when the queue is empty or full, while poll/peek/offer return null or false, and a drain loop wants the second form.",
+            "ru": "Операции очереди существуют в двух формах: remove/element/add бросают исключение при пустой или полной очереди, а poll/peek/offer возвращают null или false — и циклу опустошения нужна вторая форма."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "remove() takes the last element and poll() takes the first, so they drain in opposite orders.",
+            "ru": "remove() берёт последний элемент, а poll() — первый, поэтому они опустошают очередь в противоположном порядке."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "remove() is O(n) because it scans for the element, while poll() is O(1).",
+            "ru": "remove() стоит O(n), потому что ищет элемент, а poll() — O(1)."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "poll() is the blocking form and waits for an element; remove() returns immediately.",
+            "ru": "poll() — блокирующая форма, ожидающая элемент, а remove() возвращает управление сразу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "There is no difference on a Deque; the two names exist only for backwards compatibility with Vector.",
+            "ru": "На Deque разницы нет; два имени существуют лишь ради обратной совместимости с Vector."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The Deque javadoc lays the API out as a table with exactly this pairing: addFirst/offerFirst, removeFirst/pollFirst, getFirst/peekFirst. The throwing form is right when an empty queue is a programming error; the sentinel form is right when it is an expected state. A loop that keeps calling remove() past the last element ends in NoSuchElementException instead of stopping. Note that the no-argument remove() takes the head — it is remove(Object) that searches and is O(n).",
+        "ru": "Javadoc Deque выкладывает API таблицей ровно с такими парами: addFirst/offerFirst, removeFirst/pollFirst, getFirst/peekFirst. Форма с исключением уместна, когда пустая очередь является ошибкой программиста; форма с признаком — когда это ожидаемое состояние. Цикл, продолжающий вызывать remove() после последнего элемента, заканчивается NoSuchElementException вместо остановки. Заметьте, что remove() без аргументов снимает голову, а ищет и стоит O(n) именно remove(Object)."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Deque.html"
+      ]
+    },
+    {
+      "id": "algorithms.lists-stacks-queues.004",
+      "section": "lists-stacks-queues",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Why does ArrayDeque reject null elements?",
+        "ru": "Почему ArrayDeque не принимает элементы null?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because the backing array is a primitive array, and null cannot be stored in one.",
+            "ru": "Потому что внутренний массив является примитивным, а null в нём хранить нельзя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "null is the sentinel poll() and peek() return for an empty deque, so storing one would make \"empty\" and \"holds null\" indistinguishable.",
+            "ru": "null является признаком, который poll() и peek() возвращают для пустого дека, поэтому хранение null сделало бы неразличимыми «пусто» и «хранится null»."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because the circular buffer uses null slots as the marker for the head index.",
+            "ru": "Потому что кольцевой буфер использует null-ячейки как маркер индекса головы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It does accept null; it is LinkedList that rejects it, for the same reason a Map key cannot be null.",
+            "ru": "Он принимает null; отвергает его LinkedList — по той же причине, по которой ключом Map не может быть null."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because every element must be Comparable, and null has no natural ordering.",
+            "ru": "Потому что каждый элемент обязан быть Comparable, а у null нет естественного порядка."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The sentinel-returning half of the Queue API uses null to mean \"nothing there\". If a deque could contain null, a poll() returning null would be ambiguous and every caller would have to check isEmpty() separately — so ArrayDeque, PriorityQueue and the concurrent queues all throw NullPointerException on insertion instead. LinkedList predates the Queue interface and does permit null, which is exactly the inconsistency that makes it a poor choice when it is used as a queue.",
+        "ru": "Половина API очереди, возвращающая признак, использует null в значении «ничего нет». Если бы дек мог содержать null, возврат null из poll() был бы неоднозначным и каждому вызывающему пришлось бы отдельно проверять isEmpty(), — поэтому ArrayDeque, PriorityQueue и конкурентные очереди при вставке бросают NullPointerException. LinkedList появился раньше интерфейса Queue и null допускает, и именно эта несогласованность делает его плохим выбором в роли очереди."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayDeque.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Deque.html"
+      ]
+    },
+    {
+      "id": "algorithms.lists-stacks-queues.005",
+      "section": "lists-stacks-queues",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "In which situation is a doubly linked structure genuinely the right choice over an array-backed one?",
+        "ru": "В какой ситуации двусвязная структура действительно предпочтительнее структуры на массиве?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Whenever the collection is large, because an array of a million elements cannot be allocated contiguously.",
+            "ru": "Всегда, когда коллекция велика, потому что массив из миллиона элементов нельзя выделить непрерывно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whenever you insert into the middle by index, because that is O(1) on a linked list and O(n) on an array.",
+            "ru": "Всегда при вставке в середину по индексу, потому что на связном списке это O(1), а на массиве O(n)."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When you already hold the node and only need to unlink and relink it — an LRU cache pairing a hash map with a linked list, which is what LinkedHashMap is.",
+            "ru": "Когда узел уже у вас в руках и нужно лишь отцепить и перецепить его, — например, LRU-кеш, сочетающий хеш-отображение со связным списком; именно так устроен LinkedHashMap."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Whenever elements are added at the end, because an array must be reallocated on every add.",
+            "ru": "Всегда при добавлении в конец, потому что массив приходится перевыделять на каждом добавлении."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whenever the collection is iterated often, because pointer chasing is friendlier to the CPU cache.",
+            "ru": "Всегда при частом обходе, потому что переходы по ссылкам дружелюбнее к кешу процессора."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Relinking a node is O(1) only if you already have the node. Insertion by index on a LinkedList is still O(n), because it has to walk there first — exactly as ArrayList is O(n) because it has to shift. The genuine wins are the cases where something else holds the node reference: an LRU cache where a hash map finds the node in O(1) and the list moves it to the front in O(1), or a lock-free queue where relinking is a single compare-and-swap and shifting an array is not an option. Everything else favours contiguous storage.",
+        "ru": "Перевязка узла стоит O(1), только если узел уже у вас есть. Вставка по индексу в LinkedList всё равно O(n), потому что до места нужно дойти, — ровно как ArrayList стоит O(n), потому что нужно сдвинуть хвост. Настоящие выигрыши там, где ссылку на узел держит кто-то ещё: LRU-кеш, в котором хеш-отображение находит узел за O(1), а список переносит его в начало за O(1), или неблокирующая очередь, где перевязка — это один compare-and-swap, а сдвиг массива невозможен. Во всех остальных случаях выигрывает непрерывное хранение."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedHashMap.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedList.html"
+      ]
+    },
+    {
+      "id": "algorithms.lists-stacks-queues.006",
+      "section": "lists-stacks-queues",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "What does this print, and what would java.util.Stack print for the same three pushes?",
+        "ru": "Что это напечатает и что напечатал бы java.util.Stack при тех же трёх помещениях в стек?"
+      },
+      "code": "Deque<String> stack = new ArrayDeque<>();\nstack.push(\"a\");\nstack.push(\"b\");\nstack.push(\"c\");\nSystem.out.println(stack);",
+      "options": [
+        {
+          "text": {
+            "en": "[a, b, c] in both cases — insertion order is the documented iteration order of every Collection.",
+            "ru": "[a, b, c] в обоих случаях: порядок вставки является задокументированным порядком обхода любой Collection."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "[c, b, a] in both cases, because push means the same thing on both classes.",
+            "ru": "[c, b, a] в обоих случаях, потому что push на обоих классах означает одно и то же."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "[a, b, c] for the deque and [c, b, a] for the Stack, because Stack overrides toString for LIFO order.",
+            "ru": "[a, b, c] для дека и [c, b, a] для Stack, потому что Stack переопределяет toString ради LIFO-порядка."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "[c, b, a] — Deque.push is addFirst, so iteration runs in pop order; java.util.Stack extends Vector and would print [a, b, c], the reverse.",
+            "ru": "[c, b, a] — Deque.push является addFirst, поэтому обход идёт в порядке извлечения; java.util.Stack наследуется от Vector и напечатал бы [a, b, c], то есть наоборот."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The deque prints nothing useful, because ArrayDeque does not override toString.",
+            "ru": "Дек не напечатает ничего осмысленного, потому что ArrayDeque не переопределяет toString."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "On a Deque, push is defined as addFirst and pop as removeFirst, so a deque used as a stack grows at the head and its iterator yields the most recent element first — the same order pop would give. java.util.Stack pushes onto the end of the Vector it extends and iterates from index zero, so printing it shows the oldest element first. That mismatch between iteration order and pop order is one of the reasons the Deque javadoc recommends ArrayDeque over Stack.",
+        "ru": "У Deque push определён как addFirst, а pop — как removeFirst, поэтому дек в роли стека растёт с головы, и его итератор выдаёт сначала самый свежий элемент — в том же порядке, в каком возвращал бы pop. java.util.Stack кладёт элемент в конец Vector, от которого наследуется, и обходится с нулевого индекса, поэтому печать показывает сначала самый старый элемент. Это расхождение между порядком обхода и порядком извлечения — одна из причин, по которым javadoc Deque рекомендует ArrayDeque вместо Stack."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Deque.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayDeque.html"
+      ]
+    },
+    {
+      "id": "algorithms.trees.001",
+      "section": "trees",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "You insert the keys 1, 2, 3, …, n in that order into a plain binary search tree with no balancing. What is the cost of a lookup afterwards?",
+        "ru": "Вы вставляете ключи 1, 2, 3, …, n именно в этом порядке в обычное двоичное дерево поиска без балансировки. Во что обойдётся последующий поиск?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "O(log n) — the height of a binary search tree is log n by construction, whatever the insertion order.",
+            "ru": "O(log n) — высота двоичного дерева поиска по построению равна log n при любом порядке вставки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(1), because sorted input lets the tree store the keys in a flat array instead.",
+            "ru": "O(1), потому что отсортированный вход позволяет дереву хранить ключи в плоском массиве."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(n log n), the cost of rebalancing the tree on the first lookup after a sorted insertion run.",
+            "ru": "O(n log n) — стоимость перебалансировки дерева при первом поиске после серии отсортированных вставок."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(log n), but only until the tree exceeds 64 nodes, after which it degrades to O(n).",
+            "ru": "O(log n), но лишь пока дерево не превысит 64 узла, после чего деградирует до O(n)."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(n) — every key becomes the right child of the previous one, so the tree is a chain of height n rather than a tree of height log n.",
+            "ru": "O(n) — каждый ключ становится правым потомком предыдущего, поэтому дерево превращается в цепочку высоты n, а не в дерево высоты log n."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A plain BST places each key by comparison and never restructures, so ascending input produces a right spine — a linked list with extra fields. Lookup, insert and delete are all O(height), and the height here is n. Sorted input is the common case in real systems (timestamps, autoincrement ids, alphabetised names), which is why unbalanced BSTs fail precisely where they would be used. Self-balancing trees such as red-black and AVL exist to bound the height at O(log n) by doing structural work on every write.",
+        "ru": "Обычное дерево поиска размещает каждый ключ сравнением и никогда не перестраивается, поэтому возрастающий вход даёт правую цепочку — связный список с лишними полями. Поиск, вставка и удаление стоят O(высоты), а высота здесь равна n. Отсортированный вход — обычное дело в реальных системах (метки времени, автоинкрементные идентификаторы, имена по алфавиту), поэтому несбалансированные деревья ломаются ровно там, где их стали бы применять. Самобалансирующиеся деревья вроде красно-чёрного и AVL существуют, чтобы удерживать высоту в O(log n), выполняя структурную работу при каждой записи."
+      },
+      "sources": [
+        "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/"
+      ]
+    },
+    {
+      "id": "algorithms.trees.002",
+      "section": "trees",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Lookups in a TreeMap cost O(log n) while a HashMap answers in expected O(1). What do you get in return?",
+        "ru": "Поиск в TreeMap стоит O(log n), тогда как HashMap отвечает за ожидаемое O(1). Что вы получаете взамен?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Order: firstKey, floorEntry, ceilingKey, subMap and an ordered iteration, plus a guaranteed rather than expected log(n) bound.",
+            "ru": "Порядок: firstKey, floorEntry, ceilingKey, subMap и упорядоченный обход, а вдобавок гарантированную, а не ожидаемую оценку log(n)."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Thread safety — a TreeMap serialises its writes, which is why it is slower.",
+            "ru": "Потокобезопасность: TreeMap сериализует записи, поэтому он и медленнее."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Lower memory use, because a tree stores no hash codes and no empty buckets.",
+            "ru": "Меньший расход памяти, потому что дерево не хранит ни хеш-кодов, ни пустых корзин."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Tolerance of mutable keys: a tree re-sorts itself when a key's fields change.",
+            "ru": "Устойчивость к изменяемым ключам: дерево пересортирует себя, когда меняются поля ключа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Null keys, which a TreeMap supports and a HashMap does not.",
+            "ru": "Ключи null, которые TreeMap поддерживает, а HashMap — нет."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Hashing destroys order by design, so a HashMap can never answer \"what is the next key after this one\". A TreeMap can, and NavigableMap is where that pays off: floorEntry, ceilingKey, headMap, tailMap and subMap, the last three returning live views rather than copies. It is also guaranteed log(n) in the worst case, which HashMap is not. The two other differences run the opposite way from the distractors: TreeMap rejects a null key unless the comparator accepts one, and HashMap is the one that permits null keys.",
+        "ru": "Хеширование по своей природе разрушает порядок, поэтому HashMap никогда не ответит на вопрос «какой ключ следующий за этим». TreeMap отвечает, и выигрыш достаётся именно через NavigableMap: floorEntry, ceilingKey, headMap, tailMap и subMap, причём последние три возвращают живые представления, а не копии. Кроме того, у него гарантированное log(n) в худшем случае, чего у HashMap нет. Два других отличия работают против предложенных вариантов: TreeMap отвергает ключ null, если только компаратор его не принимает, а допускает null-ключ как раз HashMap."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TreeMap.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/NavigableMap.html"
+      ]
+    },
+    {
+      "id": "algorithms.trees.003",
+      "section": "trees",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A TreeMap is given a Comparator that compares only a user's surname. Two users with the same surname but different ids are put into it. What happens?",
+        "ru": "TreeMap получает Comparator, сравнивающий только фамилию пользователя. В него кладут двух пользователей с одинаковой фамилией и разными идентификаторами. Что произойдёт?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Both entries are stored, because equals reports them as different and the map falls back to it.",
+            "ru": "Обе записи сохранятся, потому что equals считает их разными и отображение опирается на него."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The second put replaces the first: a sorted map decides key identity with the comparator, not with equals, so a comparator inconsistent with equals silently merges distinct keys.",
+            "ru": "Второй put заменит первого: сортированное отображение определяет тождественность ключей компаратором, а не equals, поэтому несогласованный с equals компаратор молча сливает разные ключи."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The second put throws IllegalArgumentException, because the comparator is inconsistent with equals.",
+            "ru": "Второй put бросит IllegalArgumentException, потому что компаратор несогласован с equals."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both are stored, and the iteration order between them is decided by hashCode.",
+            "ru": "Обе сохранятся, а порядок обхода между ними определит hashCode."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The map refuses the comparator at construction time unless it is consistent with equals.",
+            "ru": "Отображение отвергнет компаратор при создании, если тот несогласован с equals."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "TreeMap's whole notion of \"the same key\" is compare(a, b) == 0. The Javadoc is explicit that a sorted map's behaviour is well-defined but does not obey the general Map contract when the ordering is inconsistent with equals — it does not throw, it simply treats comparator-equal keys as one. That makes it a real source of lost data: two distinct users collapse into one entry and nothing reports it. Fix the comparator to break ties on the id, for example with Comparator.comparing(...).thenComparing(...).",
+        "ru": "Для TreeMap «тот же ключ» означает ровно compare(a, b) == 0. Javadoc прямо говорит, что поведение сортированного отображения определено, но не соответствует общему контракту Map, когда порядок несогласован с equals: исключения не будет, просто равные по компаратору ключи считаются одним. Это настоящий источник потери данных: два разных пользователя схлопываются в одну запись, и никто об этом не сообщает. Лечится доработкой компаратора, разрывающего ничью по идентификатору, например через Comparator.comparing(...).thenComparing(...)."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TreeMap.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Comparator.html"
+      ]
+    },
+    {
+      "id": "algorithms.trees.004",
+      "section": "trees",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Which red-black invariant is what actually bounds the tree's height at O(log n)?",
+        "ru": "Какой инвариант красно-чёрного дерева и ограничивает его высоту величиной O(log n)?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The two subtrees of every node differ in height by at most one.",
+            "ru": "Высоты двух поддеревьев любого узла различаются не более чем на единицу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Every level except the last is completely full, and the last is filled left to right.",
+            "ru": "Все уровни, кроме последнего, полностью заполнены, а последний заполняется слева направо."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Every path from a node down to a leaf contains the same number of black nodes, and no red node has a red child — together they keep the longest path at most twice the shortest.",
+            "ru": "Любой путь от узла до листа содержит одинаковое число чёрных узлов, и ни у одного красного узла нет красного потомка — вместе это удерживает самый длинный путь не более чем вдвое длиннее самого короткого."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Each node holds between two and four children, so the tree grows in width rather than depth.",
+            "ru": "Каждый узел хранит от двух до четырёх потомков, поэтому дерево растёт в ширину, а не в глубину."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The root is always black, which alone forces the two subtrees to stay the same size.",
+            "ru": "Корень всегда чёрный, и уже это заставляет оба поддерева оставаться одного размера."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Equal black height on every path gives a common backbone; forbidding a red node below a red node means at most half of any path can be red. So the longest root-to-leaf path is at most twice the shortest, which is what makes the height O(log n) and TreeMap's log(n) bound a guarantee rather than an average. The height-difference invariant is AVL's — stricter, so AVL trees are shorter and read faster but rotate more on write. Every level full except the last describes a complete tree, which is a binary heap, not a search tree.",
+        "ru": "Одинаковая чёрная высота на всех путях задаёт общий каркас; запрет красного узла под красным означает, что красным может быть не более половины пути. Значит, самый длинный путь от корня к листу не более чем вдвое длиннее самого короткого, и именно поэтому высота остаётся O(log n), а оценка log(n) у TreeMap является гарантией, а не средним. Инвариант о разнице высот принадлежит AVL — он строже, поэтому AVL-деревья ниже и читаются быстрее, но чаще поворачиваются при записи. Полнота всех уровней, кроме последнего, описывает полное дерево, то есть двоичную кучу, а не дерево поиска."
+      },
+      "sources": [
+        "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TreeMap.html"
+      ]
+    },
+    {
+      "id": "algorithms.trees.005",
+      "section": "trees",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "What does this program print?",
+        "ru": "Что напечатает эта программа?"
+      },
+      "code": "PriorityQueue<Integer> queue = new PriorityQueue<>();\nqueue.add(5);\nqueue.add(1);\nqueue.add(4);\nSystem.out.println(queue.peek());\nSystem.out.println(queue.poll() + \", \" + queue.poll() + \", \" + queue.poll());",
+      "options": [
+        {
+          "text": {
+            "en": "5, then 5, 1, 4 — a PriorityQueue is a FIFO queue until a comparator is supplied.",
+            "ru": "5, затем 5, 1, 4 — PriorityQueue работает как FIFO-очередь, пока не задан компаратор."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "1, then 1, 5, 4 — only the head is ordered, so the remaining polls return the array order.",
+            "ru": "1, затем 1, 5, 4 — упорядочена только голова, поэтому остальные извлечения возвращают порядок массива."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "5, then 1, 4, 5 — peek reports the last inserted element and poll re-sorts on demand.",
+            "ru": "5, затем 1, 4, 5 — peek сообщает последний вставленный элемент, а poll сортирует по запросу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "1, then 1, 4, 5 — peek and poll always see the smallest element, even though the queue's internal array is not fully sorted.",
+            "ru": "1, затем 1, 4, 5 — peek и poll всегда видят наименьший элемент, хотя внутренний массив очереди отсортирован не полностью."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "1, then 1, 4, 5, but only because three elements fit in the initial array without heapifying.",
+            "ru": "1, затем 1, 4, 5, но лишь потому, что три элемента помещаются в исходный массив без построения кучи."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A binary heap guarantees only that a node is not greater than its children, so the array is partially ordered — but that is enough for the minimum to always sit at index 0, and poll restores the invariant by sifting the last element down in O(log n). Repeated polls therefore come out fully sorted. What is not ordered is iteration: iterator() and toString() expose the raw array, so printing a PriorityQueue to check the order is a test that lies.",
+        "ru": "Двоичная куча гарантирует лишь то, что узел не больше своих потомков, поэтому массив упорядочен частично — но этого достаточно, чтобы минимум всегда лежал в индексе 0, а poll восстанавливал инвариант, просеивая последний элемент вниз за O(log n). Поэтому последовательные извлечения выходят полностью отсортированными. Не упорядочен обход: iterator() и toString() показывают сырой массив, так что печать PriorityQueue ради проверки порядка — это проверка, которая обманывает."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/PriorityQueue.html"
+      ]
+    },
+    {
+      "id": "algorithms.trees.006",
+      "section": "trees",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "You have a List of n elements and need a min-heap of all of them. Which is true of new PriorityQueue<>(list) compared with adding the elements one by one?",
+        "ru": "Есть список из n элементов, и нужна min-куча из них всех. Что верно о new PriorityQueue<>(list) по сравнению с поэлементным добавлением?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Both are O(n log n); the constructor is a convenience that calls add in a loop.",
+            "ru": "Оба стоят O(n log n); конструктор — это удобство, вызывающее add в цикле."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The constructor is O(n log n) and repeated add is O(n), because add can append without sifting.",
+            "ru": "Конструктор стоит O(n log n), а повторный add — O(n), потому что add может дописывать без просеивания."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The constructor sorts the list first, so it is O(n log n) and the queue is then fully ordered.",
+            "ru": "Конструктор сначала сортирует список, поэтому стоит O(n log n), и очередь оказывается полностью упорядоченной."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both are O(n), because a heap only needs the minimum at the front and the rest can stay as they are.",
+            "ru": "Оба стоят O(n), потому что куче нужен лишь минимум впереди, а остальное может остаться как есть."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It heapifies in O(n) by sifting down from the middle of the array, which is strictly better than the O(n log n) of n separate inserts.",
+            "ru": "Он строит кучу за O(n), просеивая элементы вниз начиная с середины массива, что строго лучше, чем O(n log n) при n отдельных вставках."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Bottom-up heapify starts at the last internal node and sifts each element down. The elements near the bottom — of which there are the most — have almost no distance to travel, and summing the work over all levels gives a linear total rather than n log n. That is a classic result and it is why bulk construction is worth reaching for. It does not sort: the result is a heap, where only the head is guaranteed to be the minimum. If you need the k smallest rather than all of them, keep a bounded heap of size k instead and pay O(n log k).",
+        "ru": "Построение кучи снизу вверх начинается с последнего внутреннего узла и просеивает каждый элемент вниз. Элементам у основания — а их большинство — идти почти некуда, и суммирование работы по всем уровням даёт линейный итог, а не n log n. Это классический результат, и именно поэтому массовое построение стоит использовать. Сортировки при этом не происходит: получается куча, в которой минимумом гарантированно является только голова. Если нужны k наименьших, а не все, держите ограниченную кучу размера k и платите O(n log k)."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/PriorityQueue.html",
+        "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/"
+      ]
+    },
+    {
+      "id": "algorithms.sorting.001",
+      "section": "sorting",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which algorithms does Arrays.sort actually run in a modern JDK?",
+        "ru": "Какие алгоритмы на самом деле запускает Arrays.sort в современной JDK?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Dual-pivot quicksort for primitive arrays and TimSort — a stable merge sort — for object arrays.",
+            "ru": "Двухопорную быструю сортировку для примитивных массивов и TimSort, устойчивую сортировку слиянием, — для массивов объектов."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Classic single-pivot quicksort for both, with a random pivot to avoid the quadratic worst case.",
+            "ru": "Классическую одноопорную быструю сортировку для обоих случаев, со случайным опорным элементом против квадратичного худшего случая."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Heapsort for primitives, because it sorts in place, and quicksort for objects, because it is faster.",
+            "ru": "Пирамидальную сортировку для примитивов, так как она работает на месте, и быструю для объектов, так как она быстрее."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Merge sort for both; the difference is only that the primitive version skips the stability check.",
+            "ru": "Сортировку слиянием для обоих; разница лишь в том, что примитивная версия пропускает проверку устойчивости."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "TimSort for both since JDK 7, which is why Arrays.sort is stable for every array type.",
+            "ru": "TimSort для обоих начиная с JDK 7 — поэтому Arrays.sort устойчив для массивов любого типа."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The split follows from what each kind of array needs. Primitives are indistinguishable when equal, so stability buys nothing and the in-place, allocation-free dual-pivot quicksort wins; it partitions around two pivots into three regions, which cuts passes and suits the memory system. Object references can be equal by comparator but distinct to the caller, so the JDK guarantees stability there and uses TimSort, which exploits existing runs and needs O(n) auxiliary space. Both fall back to insertion sort on small arrays.",
+        "ru": "Разделение вытекает из потребностей каждого вида массива. Равные примитивы неразличимы, поэтому устойчивость ничего не даёт и выигрывает работающая на месте и без выделений двухопорная быстрая сортировка: она разбивает массив вокруг двух опорных элементов на три области, что сокращает число проходов и хорошо ложится на подсистему памяти. Ссылки на объекты могут быть равны по компаратору и при этом различимы для вызывающего, поэтому там JDK гарантирует устойчивость и использует TimSort, который пользуется уже упорядоченными участками и требует O(n) дополнительной памяти. Оба на малых массивах переходят на сортировку вставками."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Arrays.html#sort(int%5B%5D)",
+        "https://mail.openjdk.org/pipermail/core-libs-dev/2009-September/002630.html",
+        "https://github.com/python/cpython/blob/main/Objects/listsort.txt"
+      ]
+    },
+    {
+      "id": "algorithms.sorting.002",
+      "section": "sorting",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does it mean for a sort to be stable?",
+        "ru": "Что означает устойчивость сортировки?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Its running time is the same for every input, with no quadratic worst case.",
+            "ru": "Время её работы одинаково для любого входа, без квадратичного худшего случая."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Elements the comparator considers equal keep the relative order they had in the input.",
+            "ru": "Элементы, которые компаратор считает равными, сохраняют тот относительный порядок, который был у них во входных данных."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It sorts in place, using a constant amount of memory beyond the input.",
+            "ru": "Она сортирует на месте, используя константный объём памяти сверх входных данных."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It produces the same result no matter how many threads execute it.",
+            "ru": "Она даёт одинаковый результат независимо от того, сколькими потоками выполняется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It never throws when the comparator is inconsistent with equals.",
+            "ru": "Она никогда не бросает исключение, если компаратор несогласован с equals."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Stability is about ties. It matters as soon as you sort twice: sort by name, then stably by department, and you get departments in order with names still ordered inside each one — an unstable sort would scramble the first pass. It also matters when \"equal\" means equal by the comparator but not identical as objects, such as two orders sharing a timestamp. Stability is orthogonal to running time, to memory and to threading; Collections.sort and Arrays.sort(Object[]) promise it, Arrays.sort(int[]) does not.",
+        "ru": "Устойчивость касается ничьих. Она становится важной, как только вы сортируете дважды: отсортируйте по имени, затем устойчиво по отделу — и получите отделы по порядку с именами, всё ещё упорядоченными внутри каждого; неустойчивая сортировка испортила бы результат первого прохода. Она важна и тогда, когда «равны» означает равенство по компаратору, но не тождественность объектов, — например, два заказа с одной меткой времени. Устойчивость ортогональна времени работы, памяти и многопоточности; Collections.sort и Arrays.sort(Object[]) её обещают, Arrays.sort(int[]) — нет."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html#sort(java.util.Comparator)"
+      ]
+    },
+    {
+      "id": "algorithms.sorting.003",
+      "section": "sorting",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "The JDK guarantees that Arrays.sort(Object[]) is stable but makes no such promise for Arrays.sort(int[]). Why is that acceptable?",
+        "ru": "JDK гарантирует устойчивость Arrays.sort(Object[]), но не обещает того же для Arrays.sort(int[]). Почему это допустимо?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Primitive arrays are always small enough that the difference cannot be measured.",
+            "ru": "Примитивные массивы всегда достаточно малы, чтобы разницу нельзя было измерить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "int[] is sorted with counting sort, which is stable anyway, so the guarantee would be redundant.",
+            "ru": "int[] сортируется подсчётом, которая и так устойчива, поэтому гарантия была бы избыточной."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Two equal ints are indistinguishable, so no observation can reveal whether they were swapped — which frees the primitive sort to use a faster in-place algorithm.",
+            "ru": "Два равных int неразличимы, поэтому никакое наблюдение не покажет, менялись ли они местами, — и это освобождает примитивную сортировку для более быстрого алгоритма, работающего на месте."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Stability is impossible without boxing, and boxing an int[] would defeat the point of using one.",
+            "ru": "Устойчивость невозможна без упаковки, а упаковка int[] обессмыслила бы его использование."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The guarantee was dropped in JDK 7 for compatibility with parallelSort, which is never stable.",
+            "ru": "Гарантию убрали в JDK 7 ради совместимости с parallelSort, который никогда не устойчив."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Stability only has meaning when equal elements carry information you can tell apart — two Order objects with the same timestamp are different objects. The value 7 is the value 7; there is no way to ask which 7 came first. Freed from that constraint the JDK uses dual-pivot quicksort, which sorts in place with no auxiliary array. For object arrays the constraint is real, so TimSort is used and pays O(n) extra memory for it. Note that Arrays.parallelSort(Object[]) is also stable — parallelism and stability are unrelated.",
+        "ru": "Устойчивость осмысленна лишь тогда, когда равные элементы несут различимую информацию: два объекта Order с одинаковой меткой времени — разные объекты. А значение 7 — это значение 7; спросить, какая семёрка была первой, невозможно. Избавившись от этого ограничения, JDK использует двухопорную быструю сортировку, работающую на месте без вспомогательного массива. Для массивов объектов ограничение реально, поэтому применяется TimSort, платящий за это O(n) дополнительной памяти. Заметим, что Arrays.parallelSort(Object[]) тоже устойчив: параллельность и устойчивость не связаны."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Arrays.html#sort(int%5B%5D)",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html#sort(java.util.Comparator)"
+      ]
+    },
+    {
+      "id": "algorithms.sorting.004",
+      "section": "sorting",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Why can no comparison-based sort beat O(n log n) in the worst case, and how does counting sort get around it?",
+        "ru": "Почему никакая сортировка сравнениями не может обогнать O(n log n) в худшем случае и как это обходит сортировка подсчётом?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because every comparison sort has to divide the input in half, and there are log n halvings of n elements.",
+            "ru": "Потому что любая сортировка сравнениями обязана делить вход пополам, а делений у n элементов — log n."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because cache misses dominate beyond n log n; counting sort avoids them by writing sequentially.",
+            "ru": "Потому что за пределами n log n доминируют промахи кеша, а сортировка подсчётом пишет последовательно и их избегает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is not a real bound, merely the best anyone has achieved so far; counting sort is the counterexample.",
+            "ru": "Это не настоящая граница, а лишь лучший достигнутый результат, и сортировка подсчётом является контрпримером."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "There are n! possible orderings and each comparison yields one bit, so at least log2(n!) ≈ n log n comparisons are needed; counting sort escapes by using the key itself as an index instead of comparing.",
+            "ru": "Существует n! возможных порядков, и каждое сравнение даёт один бит, поэтому нужно не менее log2(n!) ≈ n log n сравнений; сортировка подсчётом уходит от этого, используя сам ключ как индекс вместо сравнения."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because Java comparators are called through an interface, and the virtual call is what costs the log n factor.",
+            "ru": "Потому что компараторы в Java вызываются через интерфейс, и виртуальный вызов и стоит множителя log n."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The bound is an information-theoretic one, proved by a decision-tree argument: a sort that learns only through yes/no comparisons must distinguish n! outcomes, and a binary tree deep enough to have n! leaves has depth at least log2(n!), which is Theta(n log n). No implementation trick changes that, because the argument never mentions implementation. Counting, radix and bucket sorts are not counterexamples — they never compare two elements; they read the key and index into a table, which is why they need keys that are bounded small integers.",
+        "ru": "Граница теоретико-информационная и доказывается через дерево решений: сортировка, узнающая что-либо только из сравнений «да/нет», обязана различить n! исходов, а двоичное дерево, у которого хватает листьев на n!, имеет глубину не меньше log2(n!), то есть Theta(n log n). Никакие трюки реализации этого не меняют, потому что в доказательстве реализация вообще не упоминается. Сортировки подсчётом, поразрядная и карманная контрпримерами не являются: они никогда не сравнивают два элемента, а читают ключ и индексируют таблицу — поэтому им и нужны ключи в виде ограниченных небольших целых."
+      },
+      "sources": [
+        "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/"
+      ]
+    },
+    {
+      "id": "algorithms.sorting.005",
+      "section": "sorting",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A service sorts a large List of objects that is already almost in order — a few hundred new items appended to a sorted million. How does TimSort behave?",
+        "ru": "Сервис сортирует большой List объектов, который уже почти упорядочен: к отсортированному миллиону дописано несколько сотен новых элементов. Как поведёт себя TimSort?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Exactly the same as on random data: a merge sort always performs the full log n rounds of merging.",
+            "ru": "Ровно так же, как на случайных данных: сортировка слиянием всегда выполняет полные log n раундов слияния."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Worse than on random data, because nearly sorted input is the quadratic worst case for merge-based sorts.",
+            "ru": "Хуже, чем на случайных данных, потому что почти упорядоченный вход является квадратичным худшим случаем для сортировок слиянием."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(n) guaranteed, because TimSort skips the merge entirely when a run covers more than half the input.",
+            "ru": "Гарантированно O(n), потому что TimSort полностью пропускает слияние, когда участок покрывает больше половины входа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It falls back to dual-pivot quicksort, which handles partially ordered input better than merging does.",
+            "ru": "Он переключится на двухопорную быструю сортировку, которая справляется с частично упорядоченным входом лучше слияния."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Close to O(n): it detects the long existing run, sorts the short tail with binary insertion sort and merges, so nearly sorted input costs far less than n log n.",
+            "ru": "Близко к O(n): он обнаружит длинный уже упорядоченный участок, отсортирует короткий хвост бинарной сортировкой вставками и выполнит слияние, поэтому почти упорядоченный вход обойдётся гораздо дешевле n log n."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "TimSort's founding observation is that real data is rarely random. It scans for ascending or strictly descending runs — reversing the descending ones in place — extends runs shorter than a minimum length using binary insertion sort, and merges the runs under invariants that keep the merges balanced. Input that is one long run plus a short tail is close to the best case and costs near-linear time. The worst case is still O(n log n), and the auxiliary space is O(n). It never switches to quicksort: the object sort is required to be stable.",
+        "ru": "Исходное наблюдение TimSort в том, что реальные данные редко случайны. Он ищет возрастающие или строго убывающие участки, разворачивая убывающие на месте, достраивает участки короче минимальной длины бинарной сортировкой вставками и сливает участки, соблюдая инварианты, которые держат слияния сбалансированными. Вход из одного длинного участка и короткого хвоста близок к лучшему случаю и обходится почти линейно. Худший случай по-прежнему O(n log n), дополнительной памяти нужно O(n). На быструю сортировку он не переключается: объектная сортировка обязана быть устойчивой."
+      },
+      "sources": [
+        "https://github.com/python/cpython/blob/main/Objects/listsort.txt",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html#sort(java.util.Comparator)"
+      ]
+    },
+    {
+      "id": "algorithms.sorting.006",
+      "section": "sorting",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A nightly job sorts a large list with this comparator and fails intermittently with IllegalArgumentException: Comparison method violates its general contract! What is the cause?",
+        "ru": "Ночная задача сортирует большой список с этим компаратором и периодически падает с IllegalArgumentException: Comparison method violates its general contract! В чём причина?"
+      },
+      "code": "list.sort((a, b) -> a.getScore() - b.getScore());  // getScore() returns int",
+      "options": [
+        {
+          "text": {
+            "en": "The subtraction overflows for scores far apart, so the comparator reports a < b and b < a; TimSort detects the broken ordering while merging and refuses to continue.",
+            "ru": "Вычитание переполняется на далеко разнесённых значениях, из-за чего компаратор сообщает и a < b, и b < a; TimSort замечает нарушенный порядок при слиянии и отказывается продолжать."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The list was modified by another thread during the sort, and TimSort reports that as a contract violation.",
+            "ru": "Список изменялся другим потоком во время сортировки, и TimSort сообщает об этом как о нарушении контракта."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A lambda cannot be used as a Comparator for a stable sort, because it has no equals of its own.",
+            "ru": "Лямбду нельзя использовать как Comparator для устойчивой сортировки, потому что у неё нет собственного equals."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The comparator is inconsistent with equals, which TimSort checks and rejects.",
+            "ru": "Компаратор несогласован с equals, что TimSort проверяет и отвергает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The list contains null elements, and subtracting from a null score throws inside the merge.",
+            "ru": "Список содержит элементы null, и вычитание из null-значения бросает исключение внутри слияния."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The subtraction trick is only correct while the difference fits in an int. With one large positive and one large negative score it wraps around, so the sign is wrong and the relation stops being a total order — the comparator can claim both a < b and b < a. TimSort relies on a consistent ordering to keep its merge invariants and raises IllegalArgumentException when it observes the contradiction, which is why the failure is intermittent: it depends on which elements happen to be merged together. The exception is the sort catching a bug in the comparator, not a bug in the sort. Write Integer.compare(a.getScore(), b.getScore()) or Comparator.comparingInt.",
+        "ru": "Трюк с вычитанием корректен лишь пока разность помещается в int. При одном большом положительном и одном большом отрицательном значении происходит переполнение, знак оказывается неверным и отношение перестаёт быть полным порядком — компаратор может утверждать одновременно a < b и b < a. TimSort опирается на согласованный порядок ради своих инвариантов слияния и при обнаружении противоречия бросает IllegalArgumentException; поэтому падение и происходит периодически: всё зависит от того, какие элементы попали в одно слияние. Это исключение — сортировка поймала баг в компараторе, а не баг сортировки. Пишите Integer.compare(a.getScore(), b.getScore()) или Comparator.comparingInt."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Comparator.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html#compare(int,int)",
+        "https://github.com/python/cpython/blob/main/Objects/listsort.txt"
+      ]
+    },
+    {
+      "id": "algorithms.graphs.001",
+      "section": "graphs",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "A graph has V vertices and E edges, with E far smaller than V^2. Why is an adjacency list the default representation?",
+        "ru": "В графе V вершин и E рёбер, причём E много меньше V^2. Почему списки смежности являются представлением по умолчанию?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It answers \"is there an edge u to v\" in O(1), which a matrix cannot do.",
+            "ru": "Они отвечают на вопрос «есть ли ребро из u в v» за O(1), чего матрица не умеет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It uses O(V + E) space and enumerates a vertex's neighbours in O(degree), whereas a matrix costs O(V^2) space and O(V) per neighbour scan.",
+            "ru": "Они занимают O(V + E) памяти и перечисляют соседей вершины за O(степени), тогда как матрица стоит O(V^2) памяти и O(V) на просмотр соседей."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is the only representation that supports weighted edges; a matrix stores booleans only.",
+            "ru": "Это единственное представление, поддерживающее взвешенные рёбра; матрица хранит только флаги."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It keeps the neighbours sorted, so traversals are deterministic without extra work.",
+            "ru": "Они держат соседей отсортированными, поэтому обходы детерминированы без дополнительных усилий."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It makes BFS O(V) instead of O(V + E), because edges need not be visited at all.",
+            "ru": "Они делают BFS O(V) вместо O(V + E), потому что рёбра вообще не нужно посещать."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Real graphs are sparse, so O(V + E) against O(V^2) is usually orders of magnitude. The tradeoff runs the other way for edge existence: a matrix answers that in O(1) while a list takes O(degree). A matrix is the right choice on dense graphs, for small fixed V, or when the algorithm is O(V^3) anyway — Floyd-Warshall is the standard example. Both representations carry weights perfectly well, and neither promises an iteration order: a Map-of-List built on HashMap gives none, so sort the neighbour lists when the output must be reproducible.",
+        "ru": "Реальные графы разрежены, поэтому O(V + E) против O(V^2) обычно различаются на порядки. В вопросе о существовании ребра размен обратный: матрица отвечает за O(1), а список — за O(степени). Матрица уместна на плотных графах, при малом фиксированном V или когда алгоритм всё равно O(V^3), — стандартный пример здесь алгоритм Флойда — Уоршелла. Веса прекрасно хранятся в обоих представлениях, и ни одно не обещает порядка обхода: Map из List поверх HashMap не даёт никакого, поэтому сортируйте списки соседей, когда вывод должен быть воспроизводимым."
+      },
+      "sources": [
+        "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/",
+        "https://algs4.cs.princeton.edu/40graphs/"
+      ]
+    },
+    {
+      "id": "algorithms.graphs.002",
+      "section": "graphs",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "BFS and DFS are the same traversal with one component swapped. Which description is correct?",
+        "ru": "BFS и DFS — это один и тот же обход с заменённой составной частью. Какое описание верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "BFS uses a stack and DFS a queue; the names describe the order the results come out in.",
+            "ru": "BFS использует стек, а DFS — очередь; названия описывают порядок выдачи результатов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "BFS uses a priority queue ordered by depth, which is what makes it find shortest paths.",
+            "ru": "BFS использует приоритетную очередь, упорядоченную по глубине, — это и заставляет его находить кратчайшие пути."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "BFS holds pending vertices in a queue and DFS in a stack; both are O(V + E) on an adjacency list and both need a visited set.",
+            "ru": "BFS хранит ожидающие вершины в очереди, а DFS — в стеке; оба стоят O(V + E) на списке смежности и обоим нужно множество посещённых."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "DFS needs no visited set, because recursion naturally stops when it returns to a vertex.",
+            "ru": "DFS не нужно множество посещённых, потому что рекурсия сама останавливается, возвращаясь в уже увиденную вершину."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "BFS is O(V + E) but DFS is O(V * E), because it may re-enter a vertex from every edge.",
+            "ru": "BFS стоит O(V + E), а DFS — O(V * E), потому что он может входить в вершину по каждому ребру."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Swap the container and you swap the traversal: a queue explores by distance from the source, a stack — usually the call stack — goes deep first. Both touch every reachable vertex once and every edge once, so both are O(V + E) with adjacency lists, and both loop forever on the first cycle without a visited set, since recursion returning has nothing to do with having been somewhere before. A priority queue turns BFS into Dijkstra, which is a different algorithm for a different problem.",
+        "ru": "Замените контейнер — и обход поменяется: очередь исследует граф по расстоянию от источника, стек (обычно стек вызовов) сначала уходит вглубь. Оба посещают каждую достижимую вершину один раз и каждое ребро один раз, поэтому оба стоят O(V + E) на списках смежности, и оба без множества посещённых зациклятся на первом же цикле, ведь возврат из рекурсии не имеет отношения к тому, были ли вы здесь раньше. Приоритетная очередь превращает BFS в алгоритм Дейкстры — другой алгоритм для другой задачи."
+      },
+      "sources": [
+        "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayDeque.html"
+      ]
+    },
+    {
+      "id": "algorithms.graphs.003",
+      "section": "graphs",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "BFS from a source is often described as finding shortest paths. Under what condition is that actually true?",
+        "ru": "BFS из источника часто описывают как поиск кратчайших путей. При каком условии это действительно верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Whenever all edge weights are non-negative, which is the same condition Dijkstra requires.",
+            "ru": "Всегда, когда все веса рёбер неотрицательны, — это то же условие, что требует алгоритм Дейкстры."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Always: BFS relaxes edges in the same order Dijkstra does, so weights make no difference.",
+            "ru": "Всегда: BFS релаксирует рёбра в том же порядке, что и алгоритм Дейкстры, поэтому веса роли не играют."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only on a directed acyclic graph, because a cycle would let BFS revisit a vertex.",
+            "ru": "Только на направленном ациклическом графе, потому что цикл позволил бы BFS вернуться в вершину."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only when the graph is unweighted, or equivalently when every edge has the same weight — BFS minimises the number of edges, not the total cost.",
+            "ru": "Только когда граф невзвешен или, что то же самое, все рёбра имеют одинаковый вес: BFS минимизирует число рёбер, а не суммарную стоимость."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Only when the graph is connected; on a disconnected graph BFS returns distances that are too large.",
+            "ru": "Только на связном графе; на несвязном BFS возвращает завышенные расстояния."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "BFS reaches a vertex the first time by the fewest edges, so it minimises hop count. If edges carry different weights, fewest hops stops meaning cheapest — a two-edge path of weight 1 each beats a one-edge path of weight 10, and BFS would report the wrong one. Non-negative weights are Dijkstra's precondition, not BFS's. Cycles are fine for BFS as long as there is a visited set, and on a disconnected graph the unreachable vertices are simply never assigned a distance.",
+        "ru": "BFS достигает вершины впервые за наименьшее число рёбер, то есть минимизирует количество переходов. Если у рёбер разные веса, «меньше переходов» перестаёт означать «дешевле»: путь из двух рёбер весом 1 каждое лучше пути из одного ребра весом 10, а BFS указал бы на неверный. Неотрицательность весов — предусловие Дейкстры, а не BFS. Циклы для BFS не проблема, пока есть множество посещённых, а на несвязном графе недостижимым вершинам расстояние просто никогда не назначается."
+      },
+      "sources": [
+        "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/",
+        "https://algs4.cs.princeton.edu/40graphs/"
+      ]
+    },
+    {
+      "id": "algorithms.graphs.004",
+      "section": "graphs",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "Kahn's algorithm produces a topological order of a directed graph. What does it mean when the output contains fewer than V vertices?",
+        "ru": "Алгоритм Кана строит топологический порядок направленного графа. Что означает, если на выходе оказалось меньше V вершин?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The graph is disconnected, and the algorithm has to be restarted from each remaining component.",
+            "ru": "Граф несвязен, и алгоритм нужно перезапустить из каждой оставшейся компоненты."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Several valid topological orders exist, and the algorithm stopped at the first ambiguity.",
+            "ru": "Существует несколько корректных топологических порядков, и алгоритм остановился на первой неоднозначности."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The queue was seeded with the wrong vertices; seeding it with all of them fixes the output.",
+            "ru": "Очередь была заполнена не теми вершинами; заполнение её всеми вершинами исправит вывод."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Some vertices have out-degree zero, and Kahn's algorithm never emits sinks.",
+            "ru": "У некоторых вершин нулевая исходящая степень, а алгоритм Кана никогда не выводит стоки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The graph has a cycle: the vertices left out are exactly those whose in-degree never reached zero, so cycle detection comes free with the sort.",
+            "ru": "В графе есть цикл: не попавшие в вывод вершины — именно те, чья входящая степень так и не обнулилась, поэтому обнаружение циклов достаётся вместе с сортировкой бесплатно."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Kahn's algorithm repeatedly removes a vertex whose in-degree is zero and decrements its neighbours. A vertex inside a cycle always has an incoming edge from another vertex of that cycle, so its in-degree never reaches zero and it is never emitted. That makes the short output a proof of a cycle and the remainder the cycle itself — which is usually the point: \"circular dependency between A and B\" is this exact computation, and it costs nothing extra on top of the O(V + E) sort. A disconnected DAG sorts perfectly well, since every component contributes its own zero-in-degree sources.",
+        "ru": "Алгоритм Кана многократно удаляет вершину с нулевой входящей степенью и уменьшает степени её соседей. У вершины внутри цикла всегда есть входящее ребро от другой вершины того же цикла, поэтому её степень никогда не обнуляется и она не выводится. Значит, укороченный вывод является доказательством цикла, а остаток — самим циклом, и обычно ради этого всё и делается: «циклическая зависимость между A и B» — это ровно то же вычисление, не стоящее ничего сверх O(V + E). Несвязный ациклический граф сортируется прекрасно: каждая компонента даёт свои источники с нулевой входящей степенью."
+      },
+      "sources": [
+        "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/",
+        "https://algs4.cs.princeton.edu/40graphs/"
+      ]
+    },
+    {
+      "id": "algorithms.graphs.005",
+      "section": "graphs",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "Dijkstra's algorithm is implemented with a java.util.PriorityQueue of (distance, vertex) pairs. What is its running time, and what is the queue doing?",
+        "ru": "Алгоритм Дейкстры реализован через java.util.PriorityQueue из пар (расстояние, вершина). Каково время его работы и что делает очередь?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "O((V + E) log V): the queue always yields the cheapest unsettled vertex, and each relaxation pushes an entry that costs log V to insert.",
+            "ru": "O((V + E) log V): очередь всегда выдаёт самую дешёвую нерешённую вершину, а каждая релаксация добавляет запись, вставка которой стоит log V."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "O(V + E), because a binary heap gives constant-time insertion and extraction of the minimum.",
+            "ru": "O(V + E), потому что двоичная куча даёт константные вставку и извлечение минимума."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(V^2 log V), because the queue must be re-sorted after every relaxation.",
+            "ru": "O(V^2 log V), потому что после каждой релаксации очередь приходится пересортировывать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(E log E) only if the graph is dense; on a sparse graph the heap degrades to a linear scan.",
+            "ru": "O(E log E) лишь на плотном графе; на разреженном куча вырождается в линейный просмотр."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(V log V), because each vertex enters the queue exactly once regardless of its degree.",
+            "ru": "O(V log V), потому что каждая вершина попадает в очередь ровно один раз независимо от её степени."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The greedy step needs the cheapest unsettled vertex, and a binary heap gives that in O(log V) for both the insert and the extract — not in constant time; only peek is O(1). Every edge can trigger one relaxation and therefore one push, so there are O(V + E) heap operations in total. The usual Java implementation does not decrease keys — PriorityQueue has no such operation — and instead pushes a duplicate entry and skips stale ones on extraction, which keeps the same bound with a slightly larger heap.",
+        "ru": "Жадный шаг требует самой дешёвой нерешённой вершины, а двоичная куча даёт её за O(log V) и на вставку, и на извлечение — не за константу; константным является только peek. Каждое ребро может вызвать одну релаксацию и, значит, одну вставку, поэтому операций с кучей всего O(V + E). Обычная Java-реализация не уменьшает ключи — такой операции у PriorityQueue нет, — а вместо этого кладёт дублирующую запись и пропускает устаревшие при извлечении, что сохраняет ту же оценку при немного большей куче."
+      },
+      "sources": [
+        "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/PriorityQueue.html"
+      ]
+    },
+    {
+      "id": "algorithms.graphs.006",
+      "section": "graphs",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A weighted directed graph has some edges with negative weights but no negative cycle. You run Dijkstra on it. What happens?",
+        "ru": "Во взвешенном направленном графе есть рёбра с отрицательными весами, но отрицательных циклов нет. Вы запускаете на нём алгоритм Дейкстры. Что произойдёт?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It loops forever, revisiting vertices as the negative edges keep lowering their distances.",
+            "ru": "Он зациклится, возвращаясь к вершинам, пока отрицательные рёбра продолжают снижать их расстояния."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It terminates and returns wrong distances without any error, because settling a vertex assumes no cheaper route can appear later — which a negative edge breaks.",
+            "ru": "Он завершится и вернёт неверные расстояния без всякой ошибки, потому что фиксация вершины предполагает, что более дешёвый маршрут появиться уже не может, а отрицательное ребро это нарушает."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It still returns the correct answer, only slower — the negative edges add extra relaxations.",
+            "ru": "Он всё равно вернёт правильный ответ, только медленнее: отрицательные рёбра добавляют лишние релаксации."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It throws IllegalArgumentException, because a PriorityQueue rejects negative priorities.",
+            "ru": "Он бросит IllegalArgumentException, потому что PriorityQueue не принимает отрицательные приоритеты."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is correct as long as no negative cycle exists, which is the only precondition Dijkstra has.",
+            "ru": "Он корректен, пока нет отрицательного цикла, — это единственное предусловие алгоритма Дейкстры."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Dijkstra's correctness rests on one assumption: once the cheapest unsettled vertex is taken, no route through the remaining vertices can be cheaper, because every further edge only adds cost. A single negative edge invalidates that, so a vertex can be settled at a distance that a later path improves — and the algorithm never revisits it. The failure is silent, which is what makes it dangerous. Bellman-Ford is the right tool: it relaxes every edge V-1 times for O(V * E) and a V-th improving pass proves a negative cycle. On a DAG, relaxing in topological order handles negative weights in O(V + E).",
+        "ru": "Корректность алгоритма Дейкстры держится на одном предположении: как только взята самая дешёвая нерешённая вершина, маршрут через оставшиеся вершины дешевле быть не может, потому что любое следующее ребро только добавляет стоимость. Одно отрицательное ребро это опровергает, и вершина может быть зафиксирована на расстоянии, которое более поздний путь улучшает, — а алгоритм к ней больше не возвращается. Сбой при этом молчаливый, чем он и опасен. Правильный инструмент — алгоритм Беллмана — Форда: он релаксирует каждое ребро V-1 раз за O(V * E), а улучшающий V-й проход доказывает наличие отрицательного цикла. На ациклическом графе релаксация в топологическом порядке справляется с отрицательными весами за O(V + E)."
+      },
+      "sources": [
+        "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/",
+        "https://algs4.cs.princeton.edu/40graphs/"
+      ]
+    },
+    {
+      "id": "algorithms.techniques.001",
+      "section": "techniques",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "The two-pointer scan for a pair summing to a target starts at both ends and moves one pointer inward each step. What does it require of the input?",
+        "ru": "Приём двух указателей для поиска пары с заданной суммой начинает с обоих концов и на каждом шаге сдвигает один указатель внутрь. Что он требует от входных данных?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The values must be distinct, otherwise the two pointers can meet on the same element twice.",
+            "ru": "Значения должны быть различны, иначе два указателя могут дважды встретиться на одном элементе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The values must be non-negative, so that moving a pointer always changes the sum in a known direction.",
+            "ru": "Значения должны быть неотрицательными, чтобы сдвиг указателя всегда менял сумму в известную сторону."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The array must be sorted — sortedness is what proves the discarded element cannot belong to any remaining pair.",
+            "ru": "Массив должен быть отсортирован: именно отсортированность доказывает, что отброшенный элемент не может входить ни в одну оставшуюся пару."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Nothing — the technique works on any array, which is why it replaces the nested loop everywhere.",
+            "ru": "Ничего: приём работает на любом массиве, поэтому он повсюду заменяет вложенный цикл."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The array must have even length, since the pointers must meet exactly in the middle.",
+            "ru": "Длина массива должна быть чётной, так как указатели обязаны встретиться ровно посередине."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The move is a proof step, not a heuristic. If the sum is too large, the right element is larger than every remaining candidate on the left, so no pair using it can work and it can be discarded forever; sortedness is the only reason that holds. Without it the argument collapses and the scan misses pairs. On unsorted data use a HashSet of values already seen, which is O(n) time and O(n) space. Duplicates, negative values and odd lengths are all fine for the two-pointer scan.",
+        "ru": "Сдвиг здесь является шагом доказательства, а не эвристикой. Если сумма велика, правый элемент больше любого оставшегося кандидата слева, поэтому ни одна пара с ним не подойдёт и его можно отбросить навсегда; держится это исключительно на отсортированности. Без неё рассуждение рассыпается и проход пропускает пары. На неотсортированных данных используйте HashSet уже виденных значений — это O(n) времени и O(n) памяти. Повторы, отрицательные значения и нечётная длина приёму двух указателей не мешают."
+      },
+      "sources": [
+        "https://algs4.cs.princeton.edu/home/"
+      ]
+    },
+    {
+      "id": "algorithms.techniques.002",
+      "section": "techniques",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "A sliding window solution has a for loop over the right edge and a nested while loop that advances the left edge. Why is it O(n) rather than O(n^2)?",
+        "ru": "В решении со скользящим окном есть цикл for по правой границе и вложенный цикл while, продвигающий левую. Почему оно стоит O(n), а не O(n^2)?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because the inner loop runs a constant number of times per outer iteration, by construction.",
+            "ru": "Потому что внутренний цикл по построению выполняется константное число раз на итерацию внешнего."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the JIT hoists the inner loop out of the outer one when neither index is reassigned.",
+            "ru": "Потому что JIT выносит внутренний цикл из внешнего, когда ни один индекс не переприсваивается."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is not — a nested loop is always O(n^2); the window only reduces the constant factor.",
+            "ru": "Оно и не O(n): вложенный цикл всегда O(n^2), окно лишь уменьшает константу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Each index enters the window once and leaves once, so the inner loop runs at most n times in total across all iterations of the outer loop.",
+            "ru": "Каждый индекс входит в окно один раз и выходит один раз, поэтому внутренний цикл суммарно за все итерации внешнего выполняется не более n раз."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because the window size is bounded by a constant, so the inner loop cannot run more than that.",
+            "ru": "Потому что размер окна ограничен константой, и внутренний цикл не может выполниться чаще."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "This is an amortised argument over the left pointer. It only ever moves forward, and it can never pass the right pointer, so across the whole run it advances at most n times no matter how it is distributed between outer iterations — one outer step might shrink the window by fifty positions and the next by none. Counting nesting rather than total work is the usual way this is misread. The window size is not bounded by anything; it can be the whole array.",
+        "ru": "Это амортизационное рассуждение о левом указателе. Он движется только вперёд и не может обогнать правый, поэтому за весь запуск продвигается не более n раз, как бы это ни распределялось между итерациями внешнего цикла: один внешний шаг может сжать окно на пятьдесят позиций, а следующий — ни на одну. Подсчёт вложенности вместо суммарной работы и является обычной причиной ошибки. Размер окна ничем не ограничен и может охватывать весь массив."
+      },
+      "sources": [
+        "https://algs4.cs.princeton.edu/home/"
+      ]
+    },
+    {
+      "id": "algorithms.techniques.003",
+      "section": "techniques",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "Why is the midpoint of a binary search written as low + (high - low) / 2 rather than (low + high) / 2?",
+        "ru": "Почему середину в бинарном поиске пишут как low + (high - low) / 2, а не (low + high) / 2?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because integer division rounds towards zero, and the first form rounds towards low instead.",
+            "ru": "Потому что целочисленное деление округляет к нулю, а первая форма округляет к low."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the second form is one instruction slower, since the addition cannot be strength-reduced.",
+            "ru": "Потому что вторая форма на одну инструкцию медленнее: сложение не поддаётся упрощению."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "They are equivalent; the first form is only a convention for readability.",
+            "ru": "Они эквивалентны; первая форма — лишь соглашение ради читаемости."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the first form keeps working when low is greater than high, which ends the loop safely.",
+            "ru": "Потому что первая форма продолжает работать, когда low больше high, безопасно завершая цикл."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "For large indices low + high can overflow int and go negative, producing an ArrayIndexOutOfBoundsException — the bug that sat in Arrays.binarySearch for nine years.",
+            "ru": "При больших индексах low + high может переполнить int и стать отрицательным, приводя к ArrayIndexOutOfBoundsException, — этот баг девять лет жил в Arrays.binarySearch."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "With indices above about a billion the sum exceeds Integer.MAX_VALUE and wraps to a negative number; dividing that by two leaves it negative, and the next array access throws. Joshua Bloch wrote up the fix after it was found in the JDK's own binary search. Subtracting first keeps every intermediate value within the range already spanned by the array, so it cannot overflow. Both forms round the same way when they do not overflow, so this is purely about correctness at scale. The alternative is (low + high) >>> 1, an unsigned shift, which the JDK uses.",
+        "ru": "При индексах примерно свыше миллиарда сумма превышает Integer.MAX_VALUE и заворачивается в отрицательное число; деление его пополам оставляет его отрицательным, и следующее обращение к массиву бросает исключение. Джошуа Блох описал исправление после того, как баг нашли в собственном бинарном поиске JDK. Вычитание в первую очередь удерживает все промежуточные значения внутри диапазона, уже покрытого массивом, поэтому переполнения быть не может. Пока переполнения нет, обе формы округляют одинаково, так что речь исключительно о корректности на больших данных. Альтернатива — (low + high) >>> 1, беззнаковый сдвиг, который и применяется в JDK."
+      },
+      "sources": [
+        "https://research.google/blog/extra-extra-read-all-about-it-nearly-all-binary-searches-and-mergesorts-are-broken/",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Arrays.html#binarySearch(int%5B%5D,int)"
+      ]
+    },
+    {
+      "id": "algorithms.techniques.004",
+      "section": "techniques",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "\"Binary search on the answer\" solves problems like \"the smallest ship capacity that delivers all packages within d days\". What must hold for it to be correct?",
+        "ru": "«Бинарный поиск по ответу» решает задачи вида «наименьшая грузоподъёмность, позволяющая развезти все посылки за d дней». Что должно выполняться для его корректности?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The feasibility predicate must be monotone over the candidate range — false up to some point and true from there on — so that one check tells you which half to discard.",
+            "ru": "Предикат допустимости должен быть монотонным на диапазоне кандидатов — ложным до некоторой точки и истинным начиная с неё, — чтобы одна проверка говорила, какую половину отбросить."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The input array must be sorted, exactly as for an ordinary binary search over elements.",
+            "ru": "Входной массив должен быть отсортирован — ровно как для обычного бинарного поиска по элементам."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The feasibility check must run in O(1), otherwise the overall complexity is no better than a linear scan.",
+            "ru": "Проверка допустимости должна выполняться за O(1), иначе итоговая сложность не лучше линейного просмотра."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The candidate range must contain at most log n distinct values, which is what bounds the number of checks.",
+            "ru": "Диапазон кандидатов должен содержать не более log n различных значений — именно это ограничивает число проверок."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The answer must be a power of two, since the search halves the range at every step.",
+            "ru": "Ответ должен быть степенью двойки, так как поиск на каждом шаге делит диапазон пополам."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Binary search never needed an array; it needed a predicate that flips once. If a capacity of x works then every larger capacity works too, so the predicate is false, false, …, true, true and the search finds the boundary in O(log range) checks. The input order is irrelevant — you are searching the answer space, not the data. The check is usually an O(n) greedy simulation, giving O(n log range) overall, which is the whole point: a cheap check repeated a logarithmic number of times replaces an intractable search.",
+        "ru": "Бинарному поиску никогда не был нужен массив — ему нужен предикат, переключающийся ровно один раз. Если грузоподъёмность x подходит, то подходит и любая большая, поэтому предикат идёт как ложь, ложь, …, истина, истина, и поиск находит границу за O(log диапазона) проверок. Порядок входных данных при этом не важен: вы ищете в пространстве ответов, а не в данных. Проверка обычно является жадной симуляцией за O(n), что даёт O(n log диапазона) в целом, — в этом и весь смысл: дешёвая проверка, повторённая логарифмическое число раз, заменяет неподъёмный перебор."
+      },
+      "sources": [
+        "https://algs4.cs.princeton.edu/home/",
+        "https://research.google/blog/extra-extra-read-all-about-it-nearly-all-binary-searches-and-mergesorts-are-broken/"
+      ]
+    },
+    {
+      "id": "algorithms.techniques.005",
+      "section": "techniques",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "Prefix sums answer any range-sum query in O(1) after O(n) of setup. Why does the same trick not work for range minimum?",
+        "ru": "Префиксные суммы отвечают на любой запрос суммы по отрезку за O(1) после O(n) подготовки. Почему тот же приём не работает для минимума на отрезке?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because minimum is not associative, and a prefix array requires an associative operation.",
+            "ru": "Потому что минимум не ассоциативен, а префиксный массив требует ассоциативной операции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Addition is invertible, so a range is prefix[to] - prefix[from]; minimum is not, so the prefix minimum cannot be undone and a sparse table or segment tree is needed instead.",
+            "ru": "Сложение обратимо, поэтому отрезок равен prefix[to] - prefix[from]; минимум необратим, префиксный минимум «отменить» нельзя, и вместо этого нужны разреженная таблица или дерево отрезков."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because the prefix minimum array would need O(n^2) memory, which defeats the purpose.",
+            "ru": "Потому что массив префиксных минимумов потребовал бы O(n^2) памяти, что обессмысливает приём."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It does work: prefix[to] - prefix[from] gives the range minimum as long as the values are non-negative.",
+            "ru": "Он работает: prefix[to] - prefix[from] даёт минимум на отрезке, пока значения неотрицательны."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the minimum has to be recomputed whenever any element changes, and sums do not.",
+            "ru": "Потому что минимум приходится пересчитывать при изменении любого элемента, а суммы — нет."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The prefix trick works by subtracting away the part of the prefix you do not want, and that step needs an inverse. Sums and XORs have one; min and max do not — knowing the minimum of the first ten elements and of the first three tells you nothing about the minimum of elements four to ten. Minimum is perfectly associative, which is exactly why a segment tree or a sparse table works instead: they combine precomputed overlapping or adjacent blocks rather than cancelling them. Updates are a separate issue and affect sums just as much, which is what a Fenwick tree exists for.",
+        "ru": "Приём с префиксами работает за счёт вычитания ненужной части префикса, а этому шагу нужен обратный элемент. У суммы и XOR он есть; у min и max — нет: знание минимума первых десяти элементов и первых трёх ничего не говорит о минимуме элементов с четвёртого по десятый. Минимум при этом вполне ассоциативен — именно поэтому вместо префиксов работают дерево отрезков или разреженная таблица: они объединяют предпосчитанные перекрывающиеся или соседние блоки, а не сокращают их. Обновления — отдельный вопрос, и сумм он касается ровно так же; для них и существует дерево Фенвика."
+      },
+      "sources": [
+        "https://algs4.cs.princeton.edu/home/",
+        "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/"
+      ]
+    },
+    {
+      "id": "algorithms.techniques.006",
+      "section": "techniques",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A sliding window finds the shortest subarray with a sum of at least k, and works on a list of positive numbers. The list now admits negative numbers. What breaks, and what replaces it?",
+        "ru": "Скользящее окно ищет кратчайший подмассив с суммой не меньше k и работает на списке положительных чисел. Теперь в списке допускаются отрицательные числа. Что ломается и чем это заменить?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing breaks: the window still visits every subarray, so it is correct for any values.",
+            "ru": "Ничего не ломается: окно всё равно перебирает все подмассивы, поэтому корректно при любых значениях."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The complexity rises to O(n^2) but the answer stays correct, because the left pointer now backtracks.",
+            "ru": "Сложность вырастает до O(n^2), но ответ остаётся верным, потому что левый указатель теперь возвращается назад."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Shrinking is no longer safe: dropping an element can raise the sum, so a shorter valid window may be missed. A prefix-sum array with a monotonic deque, or a prefix sum plus a map of earlier sums, handles it.",
+            "ru": "Сжатие перестаёт быть безопасным: выбрасывание элемента может увеличить сумму, и более короткое допустимое окно может быть пропущено. Помогает массив префиксных сумм с монотонным деком или префиксная сумма плюс отображение ранее встреченных сумм."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It overflows: negative values make the running sum wrap, so switching to long is the whole fix.",
+            "ru": "Происходит переполнение: отрицательные значения заставляют текущую сумму заворачиваться, и вся починка — переход на long."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only the empty-window case breaks; guarding left <= right restores correctness for any values.",
+            "ru": "Ломается только случай пустого окна; проверка left <= right восстанавливает корректность при любых значениях."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The window's correctness rests on monotonicity: with positive values, removing an element can only decrease the sum, so once a window is valid it is safe to shrink it looking for a shorter one, and the left pointer never needs to go back. A negative element destroys that — extending the window can lower the sum and a later extension can raise it again, so a shorter valid window can sit entirely inside a region the window already discarded. The standard replacement works on the prefix-sum array: keep a deque of indices with increasing prefix sums and pop from the front whenever the difference reaches k, which is still O(n). The failure is a wrong answer, not a slow one or an overflow.",
+        "ru": "Корректность окна держится на монотонности: при положительных значениях удаление элемента может лишь уменьшить сумму, поэтому, как только окно стало допустимым, его безопасно сжимать в поисках более короткого, и левый указатель никогда не должен возвращаться. Отрицательный элемент это разрушает: расширение окна может снизить сумму, а следующее расширение снова её поднять, так что более короткое допустимое окно может целиком лежать в области, которую окно уже отбросило. Стандартная замена работает по массиву префиксных сумм: держите дек индексов с возрастающими префиксными суммами и снимайте с головы всякий раз, когда разность достигает k, — это по-прежнему O(n). Сбой здесь — неверный ответ, а не медленная работа и не переполнение."
+      },
+      "sources": [
+        "https://algs4.cs.princeton.edu/home/",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/HashMap.html"
+      ]
+    }
+  ]
+}

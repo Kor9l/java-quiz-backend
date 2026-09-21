@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 2,
+  "topic": {
+    "id": "design",
+    "order": 12,
+    "name": {
+      "en": "Design patterns, SOLID and architecture",
+      "ru": "Паттерны проектирования, SOLID и архитектура"
+    },
+    "sections": [
+      {
+        "id": "solid",
+        "order": 1,
+        "level": "junior",
+        "title": {
+          "en": "SOLID on real code",
+          "ru": "SOLID на живом коде"
+        }
+      },
+      {
+        "id": "creational",
+        "order": 2,
+        "level": "junior",
+        "title": {
+          "en": "Creational patterns and object lifecycle",
+          "ru": "Порождающие паттерны и жизненный цикл объекта"
+        }
+      },
+      {
+        "id": "structural",
+        "order": 3,
+        "level": "middle",
+        "title": {
+          "en": "Structural patterns",
+          "ru": "Структурные паттерны"
+        }
+      },
+      {
+        "id": "behavioural",
+        "order": 4,
+        "level": "middle",
+        "title": {
+          "en": "Behavioural patterns",
+          "ru": "Поведенческие паттерны"
+        }
+      },
+      {
+        "id": "patterns-in-the-jdk",
+        "order": 5,
+        "level": "middle",
+        "title": {
+          "en": "Patterns inside the JDK and a DI container",
+          "ru": "Паттерны внутри JDK и DI-контейнера"
+        }
+      },
+      {
+        "id": "di-and-antipatterns",
+        "order": 6,
+        "level": "middle",
+        "title": {
+          "en": "IoC, DI and the antipatterns around them",
+          "ru": "IoC, DI и антипаттерны вокруг них"
+        }
+      },
+      {
+        "id": "layers-and-boundaries",
+        "order": 7,
+        "level": "senior",
+        "title": {
+          "en": "Layers, boundaries and hexagonal architecture",
+          "ru": "Слои, границы и гексагональная архитектура"
+        }
+      },
+      {
+        "id": "smells-and-refactoring",
+        "order": 8,
+        "level": "senior",
+        "title": {
+          "en": "Code smells and refactoring",
+          "ru": "Запахи кода и рефакторинг"
+        }
+      }
+    ]
+  }
+}

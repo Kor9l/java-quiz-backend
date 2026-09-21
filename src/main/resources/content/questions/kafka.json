@@ -1,11 +1,12 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "topic": "kafka",
   "questions": [
     {
       "id": "kafka.architecture.001",
       "section": "architecture",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which property makes Kafka a distributed log rather than a traditional message queue such as classic ActiveMQ or RabbitMQ?",
         "ru": "Какое свойство делает Kafka распределённым логом, а не традиционной очередью сообщений вроде классических ActiveMQ или RabbitMQ?"
@@ -60,6 +61,7 @@
       "id": "kafka.architecture.002",
       "section": "architecture",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about KRaft mode is TRUE?",
         "ru": "Какое утверждение о режиме KRaft верно?"
@@ -114,6 +116,7 @@
       "id": "kafka.architecture.003",
       "section": "architecture",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "A broker runs in Docker with the configuration below. A client outside Docker connects to localhost:9092 (published port), successfully fetches metadata, and then every produce attempt fails with a connection error. Why?",
         "ru": "Брокер запущен в Docker со следующей конфигурацией. Клиент вне Docker подключается к localhost:9092 (опубликованный порт), успешно получает метаданные, после чего любая попытка отправки падает с ошибкой соединения. Почему?"
@@ -169,6 +172,7 @@
       "id": "kafka.architecture.004",
       "section": "architecture",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Kafka consumption is pull-based. Which consequence of that design is stated correctly?",
         "ru": "Потребление в Kafka построено на модели pull. Какое следствие этого решения описано верно?"
@@ -223,6 +227,7 @@
       "id": "kafka.architecture.005",
       "section": "architecture",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "What is the responsibility of the active controller in a KRaft cluster?",
         "ru": "За что отвечает активный контроллер в кластере KRaft?"
@@ -277,6 +282,7 @@
       "id": "kafka.architecture.006",
       "section": "architecture",
       "difficulty": "hard",
+      "level": "middle",
       "text": {
         "en": "Which statement about Kafka's log-structured storage on the broker is TRUE?",
         "ru": "Какое утверждение о лог-структурированном хранении данных на брокере Kafka верно?"
@@ -331,6 +337,7 @@
       "id": "kafka.topics-partitions.001",
       "section": "topics-partitions",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Why is the partition count of a topic a decision that is hard to change later?",
         "ru": "Почему количество партиций топика — решение, которое трудно изменить позже?"
@@ -385,6 +392,7 @@
       "id": "kafka.topics-partitions.002",
       "section": "topics-partitions",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about offsets is TRUE?",
         "ru": "Какое утверждение об offset'ах верно?"
@@ -439,6 +447,7 @@
       "id": "kafka.topics-partitions.003",
       "section": "topics-partitions",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "A topic has the configuration below and receives a steady but low volume of traffic. A consumer that starts from the beginning still sees records that are three days old. What explains it?",
         "ru": "У топика следующая конфигурация, и он получает стабильный, но небольшой поток данных. Консьюмер, начавший чтение с начала, всё ещё видит записи трёхдневной давности. Чем это объясняется?"
@@ -494,6 +503,7 @@
       "id": "kafka.topics-partitions.004",
       "section": "topics-partitions",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "A topic is configured as below. What can a consumer that reads this topic from the beginning rely on?",
         "ru": "Топик сконфигурирован так, как показано ниже. На что может рассчитывать консьюмер, читающий этот топик с начала?"
@@ -549,6 +559,7 @@
       "id": "kafka.topics-partitions.005",
       "section": "topics-partitions",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "You need a topic that keeps the latest value for every entity id forever, stays writable while two in-sync copies are available, and fails writes rather than accepting them once only one copy is left. The topic has replication.factor=3. Which configuration meets all three requirements?",
         "ru": "Нужен топик, который бессрочно хранит последнее значение для каждого id сущности, остаётся доступным для записи, пока есть две синхронные копии, и отклоняет запись, а не принимает её, когда остаётся лишь одна копия. У топика replication.factor=3. Какая конфигурация удовлетворяет все три требования?"
@@ -603,6 +614,7 @@
       "id": "kafka.topics-partitions.006",
       "section": "topics-partitions",
       "difficulty": "hard",
+      "level": "middle",
       "text": {
         "en": "Each log segment on disk is accompanied by .index and .timeindex files. Which statement about them is TRUE?",
         "ru": "Каждый segment лога на диске сопровождается файлами .index и .timeindex. Какое утверждение о них верно?"
@@ -657,6 +669,7 @@
       "id": "kafka.producers.001",
       "section": "producers",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "A producer uses the default partitioner (partitioner.class is not set). How is the target partition chosen for a ProducerRecord?",
         "ru": "Продюсер использует партиционер по умолчанию (partitioner.class не задан). Как выбирается целевая партиция для ProducerRecord?"
@@ -711,6 +724,7 @@
       "id": "kafka.producers.002",
       "section": "producers",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about acks=1 is TRUE?",
         "ru": "Какое утверждение об acks=1 верно?"
@@ -765,6 +779,7 @@
       "id": "kafka.producers.003",
       "section": "producers",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "A producer is built with a modern (3.x/4.x) Kafka client and nothing but the properties below. Which delivery configuration is in effect?",
         "ru": "Продюсер создан на современном клиенте Kafka (3.x/4.x) и только со следующими свойствами. Какая конфигурация доставки при этом действует?"
@@ -820,6 +835,7 @@
       "id": "kafka.producers.004",
       "section": "producers",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "The producer below sends two records with the same key back to back, and the first batch is rejected with a retriable error that succeeds on retry. What can be observed in the partition?",
         "ru": "Продюсер ниже отправляет подряд две записи с одинаковым ключом, и первый батч отклоняется с retriable-ошибкой, которая при повторе завершается успешно. Что можно наблюдать в партиции?"
@@ -875,6 +891,7 @@
       "id": "kafka.producers.005",
       "section": "producers",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Given the producer settings below, which statement about batching and compression is TRUE?",
         "ru": "Учитывая настройки продюсера ниже, какое утверждение о батчинге и сжатии верно?"
@@ -930,6 +947,7 @@
       "id": "kafka.producers.006",
       "section": "producers",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "In the transactional loop below, why must ProducerFencedException be handled by closing the producer instead of calling abortTransaction()?",
         "ru": "В транзакционном цикле ниже: почему ProducerFencedException нужно обрабатывать закрытием продюсера, а не вызовом abortTransaction()?"
@@ -985,6 +1003,7 @@
       "id": "kafka.consumers-groups.001",
       "section": "consumers-groups",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "A topic has 4 partitions and 6 consumers with the same group.id subscribe to it. What is the resulting assignment?",
         "ru": "У топика 4 партиции, и на него подписываются 6 консьюмеров с одинаковым group.id. Каким будет итоговое назначение?"
@@ -1039,6 +1058,7 @@
       "id": "kafka.consumers-groups.002",
       "section": "consumers-groups",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about consumer.assign() compared with consumer.subscribe() is TRUE?",
         "ru": "Какое утверждение о consumer.assign() в сравнении с consumer.subscribe() верно?"
@@ -1093,6 +1113,7 @@
       "id": "kafka.consumers-groups.003",
       "section": "consumers-groups",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "The poll loop below processes each record in about 700 ms with the default timeouts shown. What happens?",
         "ru": "Цикл poll ниже обрабатывает каждую запись примерно за 700 мс при показанных таймаутах по умолчанию. Что произойдёт?"
@@ -1148,6 +1169,7 @@
       "id": "kafka.consumers-groups.004",
       "section": "consumers-groups",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "A consumer group is switched to the assignor below. What changes compared with the default configuration?",
         "ru": "Consumer group переводится на указанный ниже assignor. Что изменится по сравнению с конфигурацией по умолчанию?"
@@ -1203,6 +1225,7 @@
       "id": "kafka.consumers-groups.005",
       "section": "consumers-groups",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "What does setting group.instance.id on a consumer achieve?",
         "ru": "Чего добиваются установкой group.instance.id на консьюмере?"
@@ -1257,6 +1280,7 @@
       "id": "kafka.consumers-groups.006",
       "section": "consumers-groups",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "Which statement about the group coordinator in the classic consumer group protocol is TRUE?",
         "ru": "Какое утверждение о group coordinator в классическом протоколе consumer group верно?"
@@ -1311,6 +1335,7 @@
       "id": "kafka.offsets-semantics.001",
       "section": "offsets-semantics",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "A brand-new group.id subscribes to a topic that already holds one million records. auto.offset.reset is left at its default. What does the consumer read?",
         "ru": "Совершенно новый group.id подписывается на топик, в котором уже лежит миллион записей. auto.offset.reset оставлен по умолчанию. Что прочитает консьюмер?"
@@ -1364,6 +1389,7 @@
       "id": "kafka.offsets-semantics.002",
       "section": "offsets-semantics",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "A consumer has just processed the record at offset 42 of a partition and commits. Which statement is TRUE?",
         "ru": "Консьюмер только что обработал запись с offset 42 в партиции и делает коммит. Какое утверждение верно?"
@@ -1418,6 +1444,7 @@
       "id": "kafka.offsets-semantics.003",
       "section": "offsets-semantics",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "The consumer below runs with enable.auto.commit=false. Which delivery semantics does this loop provide?",
         "ru": "Консьюмер ниже работает с enable.auto.commit=false. Какую семантику доставки даёт этот цикл?"
@@ -1473,6 +1500,7 @@
       "id": "kafka.offsets-semantics.004",
       "section": "offsets-semantics",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "A consumer is configured with isolation.level=read_committed. Which statement is TRUE?",
         "ru": "Консьюмер настроен с isolation.level=read_committed. Какое утверждение верно?"
@@ -1527,6 +1555,7 @@
       "id": "kafka.offsets-semantics.005",
       "section": "offsets-semantics",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "The code below is meant to rewind a partition to a point in time. Under which condition does it throw a NullPointerException?",
         "ru": "Код ниже должен перевести партицию на определённый момент времени. При каком условии он выбросит NullPointerException?"
@@ -1582,6 +1611,7 @@
       "id": "kafka.offsets-semantics.006",
       "section": "offsets-semantics",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "The consume-transform-produce loop below is intended to be exactly-once. Which statement about it is TRUE?",
         "ru": "Цикл consume-transform-produce ниже задуман как exactly-once. Какое утверждение о нём верно?"
@@ -1637,6 +1667,7 @@
       "id": "kafka.replication-durability.001",
       "section": "replication-durability",
       "difficulty": "easy",
+      "level": "middle",
       "text": {
         "en": "Which statement about partition leaders and followers is TRUE by default?",
         "ru": "Какое утверждение о лидере и фолловерах партиции верно при настройках по умолчанию?"
@@ -1691,6 +1722,7 @@
       "id": "kafka.replication-durability.002",
       "section": "replication-durability",
       "difficulty": "easy",
+      "level": "middle",
       "text": {
         "en": "What exactly is the ISR (in-sync replica set) of a partition?",
         "ru": "Что именно представляет собой ISR (набор синхронных реплик) партиции?"
@@ -1745,6 +1777,7 @@
       "id": "kafka.replication-durability.003",
       "section": "replication-durability",
       "difficulty": "medium",
+      "level": "senior",
       "text": {
         "en": "A topic uses the settings below on a three-broker cluster. One broker is taken down for maintenance. What is the effect on producers and consumers?",
         "ru": "Топик использует приведённые настройки на кластере из трёх брокеров. Один брокер выводится на обслуживание. Как это отразится на продюсерах и консьюмерах?"
@@ -1800,6 +1833,7 @@
       "id": "kafka.replication-durability.004",
       "section": "replication-durability",
       "difficulty": "medium",
+      "level": "senior",
       "text": {
         "en": "What is the effect of setting unclean.leader.election.enable=true?",
         "ru": "К чему приводит установка unclean.leader.election.enable=true?"
@@ -1854,6 +1888,7 @@
       "id": "kafka.replication-durability.005",
       "section": "replication-durability",
       "difficulty": "medium",
+      "level": "senior",
       "text": {
         "en": "What is the high watermark of a partition?",
         "ru": "Что такое high watermark партиции?"
@@ -1908,6 +1943,7 @@
       "id": "kafka.replication-durability.006",
       "section": "replication-durability",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "An operator runs the command below after a rolling restart. Which statement about preferred leader election and rack awareness is TRUE?",
         "ru": "Оператор выполняет приведённую команду после rolling restart. Какое утверждение о preferred leader election и rack awareness верно?"
@@ -1963,6 +1999,7 @@
       "id": "kafka.serialization.001",
       "section": "serialization",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "What is the main practical advantage of Avro or Protobuf with a Schema Registry over plain JSON documents on a high-volume topic?",
         "ru": "В чём главное практическое преимущество Avro или Protobuf со Schema Registry по сравнению с обычными JSON-документами на высоконагруженном топике?"
@@ -2017,6 +2054,7 @@
       "id": "kafka.serialization.002",
       "section": "serialization",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "With the default subject naming strategy, under which subject does the Confluent serializer register the value schema for topic orders?",
         "ru": "При стратегии именования subject по умолчанию под каким subject сериализатор Confluent регистрирует схему значения для топика orders?"
@@ -2070,6 +2108,7 @@
       "id": "kafka.serialization.003",
       "section": "serialization",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Both serializers are configured as StringSerializer, but the producer is declared with a byte[] value type. What happens when this code runs?",
         "ru": "Оба сериализатора настроены как StringSerializer, но продюсер объявлен с типом значения byte[]. Что произойдёт при запуске этого кода?"
@@ -2125,6 +2164,7 @@
       "id": "kafka.serialization.004",
       "section": "serialization",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "A value was written with the Confluent Avro serializer using a schema whose registered id is 7. A raw byte[] consumer inspects it with the code below. What is printed?",
         "ru": "Значение записано сериализатором Confluent Avro со схемой, зарегистрированной под id 7. Консьюмер, читающий сырой byte[], разбирает его кодом ниже. Что будет напечатано?"
@@ -2179,6 +2219,7 @@
       "id": "kafka.serialization.005",
       "section": "serialization",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "A subject uses the default compatibility level of Confluent Schema Registry. Which statement about evolving its schema is TRUE?",
         "ru": "Для subject задан уровень совместимости Confluent Schema Registry по умолчанию. Какое утверждение об эволюции его схемы верно?"
@@ -2232,6 +2273,7 @@
       "id": "kafka.serialization.006",
       "section": "serialization",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "One malformed record was produced to a topic read by a JSON consumer. Which statement about the failure and the configuration below is TRUE?",
         "ru": "В топик, читаемый JSON-консьюмером, попала одна некорректная запись. Какое утверждение об этом сбое и о конфигурации ниже верно?"
@@ -2287,6 +2329,7 @@
       "id": "kafka.streams-connect.001",
       "section": "streams-connect",
       "difficulty": "easy",
+      "level": "middle",
       "text": {
         "en": "What is the difference between a KStream and a KTable in Kafka Streams?",
         "ru": "В чём разница между KStream и KTable в Kafka Streams?"
@@ -2341,6 +2384,7 @@
       "id": "kafka.streams-connect.002",
       "section": "streams-connect",
       "difficulty": "easy",
+      "level": "middle",
       "text": {
         "en": "How does Kafka Connect in distributed mode differ from standalone mode?",
         "ru": "Чем Kafka Connect в distributed-режиме отличается от standalone?"
@@ -2395,6 +2439,7 @@
       "id": "kafka.streams-connect.003",
       "section": "streams-connect",
       "difficulty": "medium",
+      "level": "senior",
       "text": {
         "en": "Consider the windowed aggregation below. Which statement about it is TRUE?",
         "ru": "Рассмотрите оконную агрегацию ниже. Какое утверждение о ней верно?"
@@ -2450,6 +2495,7 @@
       "id": "kafka.streams-connect.004",
       "section": "streams-connect",
       "difficulty": "medium",
+      "level": "senior",
       "text": {
         "en": "The topology below enriches orders from a GlobalKTable. Which statement is TRUE?",
         "ru": "Топология ниже обогащает заказы данными из GlobalKTable. Какое утверждение верно?"
@@ -2505,6 +2551,7 @@
       "id": "kafka.streams-connect.005",
       "section": "streams-connect",
       "difficulty": "medium",
+      "level": "senior",
       "text": {
         "en": "In Kafka Connect, how do converters relate to single message transforms (SMTs)?",
         "ru": "Как в Kafka Connect соотносятся конвертеры и single message transforms (SMT)?"
@@ -2559,6 +2606,7 @@
       "id": "kafka.streams-connect.006",
       "section": "streams-connect",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "A Kafka Streams application is switched to the setting below. Which statement about the consequences is TRUE?",
         "ru": "Приложение Kafka Streams переключают на приведённую настройку. Какое утверждение о последствиях верно?"

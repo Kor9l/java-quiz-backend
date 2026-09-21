@@ -1,11 +1,12 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "topic": "java-core",
   "questions": [
     {
       "id": "java-core.oop-basics.001",
       "section": "oop-basics",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about interfaces and abstract classes in Java 17+ is TRUE?",
         "ru": "Какое утверждение об интерфейсах и абстрактных классах в Java 17+ верно?"
@@ -60,6 +61,7 @@
       "id": "java-core.oop-basics.002",
       "section": "oop-basics",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Why is implementation inheritance generally considered a more fragile reuse mechanism than composition?",
         "ru": "Почему наследование реализации обычно считают более хрупким способом переиспользования кода, чем композицию?"
@@ -113,6 +115,7 @@
       "id": "java-core.oop-basics.003",
       "section": "oop-basics",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "What is the output of this program?",
         "ru": "Что выведет эта программа?"
@@ -168,6 +171,7 @@
       "id": "java-core.oop-basics.004",
       "section": "oop-basics",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "What happens when this code is compiled?",
         "ru": "Что произойдёт при компиляции этого кода?"
@@ -223,6 +227,7 @@
       "id": "java-core.oop-basics.005",
       "section": "oop-basics",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Which statement about record classes is TRUE?",
         "ru": "Какое утверждение о record-классах верно?"
@@ -277,6 +282,7 @@
       "id": "java-core.oop-basics.006",
       "section": "oop-basics",
       "difficulty": "hard",
+      "level": "middle",
       "text": {
         "en": "Which statement about sealed classes and interfaces is TRUE?",
         "ru": "Какое утверждение о sealed-классах и интерфейсах верно?"
@@ -331,6 +337,7 @@
       "id": "java-core.strings.001",
       "section": "strings",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "What does this snippet print?",
         "ru": "Что выведет этот фрагмент?"
@@ -386,6 +393,7 @@
       "id": "java-core.strings.002",
       "section": "strings",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about String immutability is TRUE?",
         "ru": "Какое утверждение о неизменяемости String верно?"
@@ -440,6 +448,7 @@
       "id": "java-core.strings.003",
       "section": "strings",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "How does javac 9+ compile a non-constant string concatenation such as \"id=\" + id + \":\" + name?",
         "ru": "Как javac 9+ компилирует неконстантную конкатенацию строк вида \"id=\" + id + \":\" + name?"
@@ -494,6 +503,7 @@
       "id": "java-core.strings.004",
       "section": "strings",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "What happens when this code runs?",
         "ru": "Что произойдёт при выполнении этого кода?"
@@ -549,6 +559,7 @@
       "id": "java-core.strings.005",
       "section": "strings",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Which statement about StringBuilder and StringBuffer is TRUE?",
         "ru": "Какое утверждение о StringBuilder и StringBuffer верно?"
@@ -603,6 +614,7 @@
       "id": "java-core.strings.006",
       "section": "strings",
       "difficulty": "hard",
+      "level": "middle",
       "text": {
         "en": "What does this program print?",
         "ru": "Что выведет эта программа?"
@@ -658,6 +670,7 @@
       "id": "java-core.equals-hashcode.001",
       "section": "equals-hashcode",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "A class overrides equals() but keeps the inherited hashCode(). Instances are used as HashMap keys. What is the practical consequence?",
         "ru": "Класс переопределяет equals(), но оставляет унаследованный hashCode(). Его объекты используются как ключи HashMap. Каково практическое следствие?"
@@ -712,6 +725,7 @@
       "id": "java-core.equals-hashcode.002",
       "section": "equals-hashcode",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about the equals()/hashCode() contract is TRUE?",
         "ru": "Какое утверждение о контракте equals()/hashCode() верно?"
@@ -765,6 +779,7 @@
       "id": "java-core.equals-hashcode.003",
       "section": "equals-hashcode",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "What does this program print?",
         "ru": "Что выведет эта программа?"
@@ -820,6 +835,7 @@
       "id": "java-core.equals-hashcode.004",
       "section": "equals-hashcode",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Which statement about ordering in TreeSet and TreeMap is TRUE?",
         "ru": "Какое утверждение об упорядочивании в TreeSet и TreeMap верно?"
@@ -874,6 +890,7 @@
       "id": "java-core.equals-hashcode.005",
       "section": "equals-hashcode",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "What does this snippet print?",
         "ru": "Что выведет этот фрагмент?"
@@ -929,6 +946,7 @@
       "id": "java-core.equals-hashcode.006",
       "section": "equals-hashcode",
       "difficulty": "hard",
+      "level": "middle",
       "text": {
         "en": "What does this code print, and which part of the equals contract does it violate?",
         "ru": "Что выведет этот код и какую часть контракта equals он нарушает?"
@@ -984,6 +1002,7 @@
       "id": "java-core.collections.001",
       "section": "collections",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about ArrayList and LinkedList is TRUE?",
         "ru": "Какое утверждение об ArrayList и LinkedList верно?"
@@ -1038,6 +1057,7 @@
       "id": "java-core.collections.002",
       "section": "collections",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "What happens when this code runs?",
         "ru": "Что произойдёт при выполнении этого кода?"
@@ -1093,6 +1113,7 @@
       "id": "java-core.collections.003",
       "section": "collections",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "What does this program print?",
         "ru": "Что выведет эта программа?"
@@ -1148,6 +1169,7 @@
       "id": "java-core.collections.004",
       "section": "collections",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Which statement about the HashMap implementation in the JDK (Java 8 and later) is TRUE?",
         "ru": "Какое утверждение о реализации HashMap в JDK (Java 8 и новее) верно?"
@@ -1202,6 +1224,7 @@
       "id": "java-core.collections.005",
       "section": "collections",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "What happens when this code runs?",
         "ru": "Что произойдёт при выполнении этого кода?"
@@ -1256,6 +1279,7 @@
       "id": "java-core.collections.006",
       "section": "collections",
       "difficulty": "hard",
+      "level": "middle",
       "text": {
         "en": "What does this program print?",
         "ru": "Что выведет эта программа?"
@@ -1311,6 +1335,7 @@
       "id": "java-core.generics.001",
       "section": "generics",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about type erasure is TRUE?",
         "ru": "Какое утверждение о стирании типов верно?"
@@ -1365,6 +1390,7 @@
       "id": "java-core.generics.002",
       "section": "generics",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about this code is TRUE?",
         "ru": "Какое утверждение об этом коде верно?"
@@ -1420,6 +1446,7 @@
       "id": "java-core.generics.003",
       "section": "generics",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Which statement correctly describes the PECS rule for wildcards?",
         "ru": "Какое утверждение верно описывает правило PECS для wildcards?"
@@ -1474,6 +1501,7 @@
       "id": "java-core.generics.004",
       "section": "generics",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Why does this class fail to compile?",
         "ru": "Почему этот класс не компилируется?"
@@ -1529,6 +1557,7 @@
       "id": "java-core.generics.005",
       "section": "generics",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Which statement about the restrictions on type parameters is TRUE?",
         "ru": "Какое утверждение об ограничениях на типовые параметры верно?"
@@ -1583,6 +1612,7 @@
       "id": "java-core.generics.006",
       "section": "generics",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "What happens when this program is compiled and run?",
         "ru": "Что произойдёт при компиляции и запуске этой программы?"
@@ -1638,6 +1668,7 @@
       "id": "java-core.exceptions.001",
       "section": "exceptions",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about the Throwable hierarchy and checked exceptions is TRUE?",
         "ru": "Какое утверждение об иерархии Throwable и проверяемых исключениях верно?"
@@ -1692,6 +1723,7 @@
       "id": "java-core.exceptions.002",
       "section": "exceptions",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about try-with-resources is TRUE?",
         "ru": "Какое утверждение о try-with-resources верно?"
@@ -1746,6 +1778,7 @@
       "id": "java-core.exceptions.003",
       "section": "exceptions",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "What does this program print?",
         "ru": "Что выведет эта программа?"
@@ -1801,6 +1834,7 @@
       "id": "java-core.exceptions.004",
       "section": "exceptions",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Which statement about a multi-catch clause such as catch (IOException | SQLException e) is TRUE?",
         "ru": "Какое утверждение о multi-catch вида catch (IOException | SQLException e) верно?"
@@ -1855,6 +1889,7 @@
       "id": "java-core.exceptions.005",
       "section": "exceptions",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "The system property is not set. What does this program print?",
         "ru": "Системное свойство не задано. Что выведет эта программа?"
@@ -1910,6 +1945,7 @@
       "id": "java-core.exceptions.006",
       "section": "exceptions",
       "difficulty": "hard",
+      "level": "middle",
       "text": {
         "en": "What does this program print?",
         "ru": "Что выведет эта программа?"
@@ -1965,6 +2001,7 @@
       "id": "java-core.concurrency.001",
       "section": "concurrency",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about the volatile keyword is TRUE?",
         "ru": "Какое утверждение о ключевом слове volatile верно?"
@@ -2019,6 +2056,7 @@
       "id": "java-core.concurrency.002",
       "section": "concurrency",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "What happens when this code runs?",
         "ru": "Что произойдёт при выполнении этого кода?"
@@ -2074,6 +2112,7 @@
       "id": "java-core.concurrency.003",
       "section": "concurrency",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Which of these establishes a happens-before edge under the Java Memory Model?",
         "ru": "Что из перечисленного создаёт связь happens-before в модели памяти Java?"
@@ -2128,6 +2167,7 @@
       "id": "java-core.concurrency.004",
       "section": "concurrency",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "What does this snippet print?",
         "ru": "Что выведет этот фрагмент?"
@@ -2183,6 +2223,7 @@
       "id": "java-core.concurrency.005",
       "section": "concurrency",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Which statement about ExecutorService and Future is TRUE?",
         "ru": "Какое утверждение об ExecutorService и Future верно?"
@@ -2237,6 +2278,7 @@
       "id": "java-core.concurrency.006",
       "section": "concurrency",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "Which statement about virtual threads in current JDK releases is TRUE?",
         "ru": "Какое утверждение о виртуальных потоках в актуальных версиях JDK верно?"
@@ -2292,6 +2334,7 @@
       "id": "java-core.streams-lambdas.001",
       "section": "streams-lambdas",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about intermediate and terminal stream operations is TRUE?",
         "ru": "Какое утверждение о промежуточных и терминальных операциях стрима верно?"
@@ -2346,6 +2389,7 @@
       "id": "java-core.streams-lambdas.002",
       "section": "streams-lambdas",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about Optional is TRUE?",
         "ru": "Какое утверждение об Optional верно?"
@@ -2400,6 +2444,7 @@
       "id": "java-core.streams-lambdas.003",
       "section": "streams-lambdas",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "What does this program print, and in which order?",
         "ru": "Что и в каком порядке выведет эта программа?"
@@ -2455,6 +2500,7 @@
       "id": "java-core.streams-lambdas.004",
       "section": "streams-lambdas",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "What does this snippet print?",
         "ru": "Что выведет этот фрагмент?"
@@ -2510,6 +2556,7 @@
       "id": "java-core.streams-lambdas.005",
       "section": "streams-lambdas",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "What happens when this code runs?",
         "ru": "Что произойдёт при выполнении этого кода?"
@@ -2565,6 +2612,7 @@
       "id": "java-core.streams-lambdas.006",
       "section": "streams-lambdas",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "What is the behaviour of this code?",
         "ru": "Как поведёт себя этот код?"
@@ -2620,6 +2668,7 @@
       "id": "java-core.jvm-memory.001",
       "section": "jvm-memory",
       "difficulty": "easy",
+      "level": "middle",
       "text": {
         "en": "Which statement about heap, stack and Metaspace is TRUE?",
         "ru": "Какое утверждение о heap, stack и Metaspace верно?"
@@ -2674,6 +2723,7 @@
       "id": "java-core.jvm-memory.002",
       "section": "jvm-memory",
       "difficulty": "easy",
+      "level": "middle",
       "text": {
         "en": "Which statement about the java.lang.ref reference types is TRUE?",
         "ru": "Какое утверждение о ссылочных типах из java.lang.ref верно?"
@@ -2728,6 +2778,7 @@
       "id": "java-core.jvm-memory.003",
       "section": "jvm-memory",
       "difficulty": "medium",
+      "level": "senior",
       "text": {
         "en": "Which statement about OutOfMemoryError is TRUE?",
         "ru": "Какое утверждение об OutOfMemoryError верно?"
@@ -2782,6 +2833,7 @@
       "id": "java-core.jvm-memory.004",
       "section": "jvm-memory",
       "difficulty": "medium",
+      "level": "senior",
       "text": {
         "en": "Which statement about generational garbage collection is TRUE?",
         "ru": "Какое утверждение о поколенческой сборке мусора верно?"
@@ -2836,6 +2888,7 @@
       "id": "java-core.jvm-memory.005",
       "section": "jvm-memory",
       "difficulty": "medium",
+      "level": "senior",
       "text": {
         "en": "Which statement about garbage collector defaults in recent JDK releases is TRUE?",
         "ru": "Какое утверждение о сборщиках мусора по умолчанию в свежих версиях JDK верно?"
@@ -2891,6 +2944,7 @@
       "id": "java-core.jvm-memory.006",
       "section": "jvm-memory",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "What does this program print?",
         "ru": "Что выведет эта программа?"

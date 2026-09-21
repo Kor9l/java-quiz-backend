@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 2,
+  "topic": {
+    "id": "algorithms",
+    "order": 17,
+    "name": {
+      "en": "Algorithms and data structures",
+      "ru": "Алгоритмы и структуры данных"
+    },
+    "sections": [
+      {
+        "id": "complexity",
+        "order": 1,
+        "level": "junior",
+        "title": {
+          "en": "Complexity and Big-O",
+          "ru": "Сложность и O-нотация"
+        }
+      },
+      {
+        "id": "arrays-and-strings",
+        "order": 2,
+        "level": "junior",
+        "title": {
+          "en": "Arrays and strings",
+          "ru": "Массивы и строки"
+        }
+      },
+      {
+        "id": "hash-tables",
+        "order": 3,
+        "level": "middle",
+        "title": {
+          "en": "Hash tables and HashMap",
+          "ru": "Хеш-таблицы и HashMap"
+        }
+      },
+      {
+        "id": "lists-stacks-queues",
+        "order": 4,
+        "level": "middle",
+        "title": {
+          "en": "Lists, stacks and queues",
+          "ru": "Списки, стеки и очереди"
+        }
+      },
+      {
+        "id": "trees",
+        "order": 5,
+        "level": "middle",
+        "title": {
+          "en": "Trees, heaps and sorted maps",
+          "ru": "Деревья, кучи и сортированные отображения"
+        }
+      },
+      {
+        "id": "sorting",
+        "order": 6,
+        "level": "middle",
+        "title": {
+          "en": "Sorting",
+          "ru": "Сортировка"
+        }
+      },
+      {
+        "id": "graphs",
+        "order": 7,
+        "level": "senior",
+        "title": {
+          "en": "Graphs and traversal",
+          "ru": "Графы и обход"
+        }
+      },
+      {
+        "id": "techniques",
+        "order": 8,
+        "level": "senior",
+        "title": {
+          "en": "Algorithmic techniques",
+          "ru": "Алгоритмические приёмы"
+        }
+      }
+    ]
+  }
+}

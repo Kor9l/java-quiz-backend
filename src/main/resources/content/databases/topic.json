@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 2,
+  "topic": {
+    "id": "databases",
+    "order": 10,
+    "name": {
+      "en": "Databases: transactions, locks, plans",
+      "ru": "Базы данных: транзакции, блокировки, планы"
+    },
+    "sections": [
+      {
+        "id": "acid-isolation",
+        "order": 1,
+        "level": "junior",
+        "title": {
+          "en": "ACID and isolation levels",
+          "ru": "ACID и уровни изоляции"
+        }
+      },
+      {
+        "id": "schema-design",
+        "order": 2,
+        "level": "junior",
+        "title": {
+          "en": "Schema design, keys and constraints",
+          "ru": "Проектирование схемы, ключи и ограничения"
+        }
+      },
+      {
+        "id": "anomalies",
+        "order": 3,
+        "level": "middle",
+        "title": {
+          "en": "Concurrency anomalies",
+          "ru": "Аномалии параллельного доступа"
+        }
+      },
+      {
+        "id": "mvcc-vacuum",
+        "order": 4,
+        "level": "middle",
+        "title": {
+          "en": "MVCC, row versions and VACUUM",
+          "ru": "MVCC, версии строк и VACUUM"
+        }
+      },
+      {
+        "id": "indexes",
+        "order": 5,
+        "level": "middle",
+        "title": {
+          "en": "Indexes and selectivity",
+          "ru": "Индексы и селективность"
+        }
+      },
+      {
+        "id": "pooling-n-plus-one",
+        "order": 6,
+        "level": "middle",
+        "title": {
+          "en": "Connection pools, N+1 and migrations",
+          "ru": "Пул соединений, N+1 и миграции"
+        }
+      },
+      {
+        "id": "locks-deadlocks",
+        "order": 7,
+        "level": "senior",
+        "title": {
+          "en": "Locks, deadlocks and contention strategies",
+          "ru": "Блокировки, deadlock и стратегии конкуренции"
+        }
+      },
+      {
+        "id": "query-plans",
+        "order": 8,
+        "level": "senior",
+        "title": {
+          "en": "Query plans and EXPLAIN",
+          "ru": "Планы запросов и EXPLAIN"
+        }
+      }
+    ]
+  }
+}

@@ -1,11 +1,12 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "topic": "hibernate",
   "questions": [
     {
       "id": "hibernate.jpa-orm-basics.001",
       "section": "jpa-orm-basics",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement correctly describes the relationship between Jakarta Persistence (JPA) and Hibernate ORM?",
         "ru": "Какое утверждение верно описывает отношение между Jakarta Persistence (JPA) и Hibernate ORM?"
@@ -60,6 +61,7 @@
       "id": "hibernate.jpa-orm-basics.002",
       "section": "jpa-orm-basics",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about a detached entity is TRUE?",
         "ru": "Какое утверждение о detached-сущности верно?"
@@ -114,6 +116,7 @@
       "id": "hibernate.jpa-orm-basics.003",
       "section": "jpa-orm-basics",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "What does this code give you?",
         "ru": "Что даёт этот код?"
@@ -169,6 +172,7 @@
       "id": "hibernate.jpa-orm-basics.004",
       "section": "jpa-orm-basics",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "An application is migrated to Spring Boot 3 with Hibernate 6. Which statement about the persistence annotations is TRUE?",
         "ru": "Приложение переводят на Spring Boot 3 с Hibernate 6. Какое утверждение об аннотациях персистентности верно?"
@@ -223,6 +227,7 @@
       "id": "hibernate.jpa-orm-basics.005",
       "section": "jpa-orm-basics",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "A Spring Boot application uses spring-boot-starter-data-jpa and has no persistence.xml. Which statement is TRUE?",
         "ru": "Приложение на Spring Boot использует spring-boot-starter-data-jpa и не содержит persistence.xml. Какое утверждение верно?"
@@ -277,6 +282,7 @@
       "id": "hibernate.jpa-orm-basics.006",
       "section": "jpa-orm-basics",
       "difficulty": "hard",
+      "level": "middle",
       "text": {
         "en": "Which is a genuine trade-off of using an ORM instead of hand-written JDBC?",
         "ru": "Что является реальным недостатком ORM по сравнению с вручную написанным JDBC?"
@@ -331,6 +337,7 @@
       "id": "hibernate.entity-mapping.001",
       "section": "entity-mapping",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which requirement does the Jakarta Persistence specification actually impose on an entity class?",
         "ru": "Какое требование спецификация Jakarta Persistence действительно предъявляет к классу сущности?"
@@ -385,6 +392,7 @@
       "id": "hibernate.entity-mapping.002",
       "section": "entity-mapping",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "How is a java.time.LocalDateTime field of an entity mapped in Jakarta Persistence 3.x?",
         "ru": "Как в Jakarta Persistence 3.x маппится поле сущности типа java.time.LocalDateTime?"
@@ -439,6 +447,7 @@
       "id": "hibernate.entity-mapping.003",
       "section": "entity-mapping",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "What is stored in the status column, and what is the real risk of this mapping?",
         "ru": "Что будет храниться в колонке status и в чём реальный риск такого маппинга?"
@@ -494,6 +503,7 @@
       "id": "hibernate.entity-mapping.004",
       "section": "entity-mapping",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Which statement about the resulting mapping is TRUE?",
         "ru": "Какое утверждение о получившемся маппинге верно?"
@@ -549,6 +559,7 @@
       "id": "hibernate.entity-mapping.005",
       "section": "entity-mapping",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Which access type does Hibernate use here, and what does that mean for the value read from the database?",
         "ru": "Какой тип доступа использует Hibernate в этом случае и что это значит для значения, прочитанного из базы?"
@@ -604,6 +615,7 @@
       "id": "hibernate.entity-mapping.006",
       "section": "entity-mapping",
       "difficulty": "hard",
+      "level": "middle",
       "text": {
         "en": "An inheritance hierarchy is mapped with InheritanceType.TABLE_PER_CLASS. Which statement is TRUE?",
         "ru": "Иерархия наследования размечена как InheritanceType.TABLE_PER_CLASS. Какое утверждение верно?"
@@ -658,6 +670,7 @@
       "id": "hibernate.associations.001",
       "section": "associations",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "What does the mappedBy attribute of a bidirectional association declare?",
         "ru": "Что объявляет атрибут mappedBy в двунаправленной связи?"
@@ -712,6 +725,7 @@
       "id": "hibernate.associations.002",
       "section": "associations",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about cascading and orphanRemoval is TRUE?",
         "ru": "Какое утверждение о каскадах и orphanRemoval верно?"
@@ -766,6 +780,7 @@
       "id": "hibernate.associations.003",
       "section": "associations",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Post.comments is mapped as @OneToMany(mappedBy = \"post\", cascade = CascadeType.ALL) and Comment.post as @ManyToOne. What does the flush produce?",
         "ru": "Post.comments размечено как @OneToMany(mappedBy = \"post\", cascade = CascadeType.ALL), а Comment.post — как @ManyToOne. Что произойдёт при flush?"
@@ -821,6 +836,7 @@
       "id": "hibernate.associations.004",
       "section": "associations",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Why is Set usually preferred over List for a @ManyToMany association in Hibernate?",
         "ru": "Почему для связи @ManyToMany в Hibernate обычно предпочитают Set, а не List?"
@@ -875,6 +891,7 @@
       "id": "hibernate.associations.005",
       "section": "associations",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "A parent maps its children as a unidirectional List with @OneToMany and no @JoinColumn and no @ManyToOne on the child. Why is this mapping discouraged?",
         "ru": "Родитель размечает детей как односторонний List с @OneToMany, без @JoinColumn и без @ManyToOne на дочерней сущности. Почему такой маппинг не рекомендуется?"
@@ -929,6 +946,7 @@
       "id": "hibernate.associations.006",
       "section": "associations",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "Loading a User still triggers an immediate SELECT on the profile table. Why is FetchType.LAZY ineffective here?",
         "ru": "Загрузка User всё равно вызывает немедленный SELECT по таблице профиля. Почему FetchType.LAZY здесь не работает?"
@@ -984,6 +1002,7 @@
       "id": "hibernate.identifiers.001",
       "section": "identifiers",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Why does GenerationType.IDENTITY prevent Hibernate from batching INSERT statements?",
         "ru": "Почему GenerationType.IDENTITY не позволяет Hibernate батчить INSERT-операторы?"
@@ -1038,6 +1057,7 @@
       "id": "hibernate.identifiers.002",
       "section": "identifiers",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about using a UUID as the entity identifier is TRUE?",
         "ru": "Какое утверждение об использовании UUID в качестве идентификатора сущности верно?"
@@ -1092,6 +1112,7 @@
       "id": "hibernate.identifiers.003",
       "section": "identifiers",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Which statement about @GeneratedValue(strategy = GenerationType.AUTO) is TRUE?",
         "ru": "Какое утверждение о @GeneratedValue(strategy = GenerationType.AUTO) верно?"
@@ -1146,6 +1167,7 @@
       "id": "hibernate.identifiers.004",
       "section": "identifiers",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Which statement about this identifier mapping is TRUE?",
         "ru": "Какое утверждение об этом маппинге идентификатора верно?"
@@ -1201,6 +1223,7 @@
       "id": "hibernate.identifiers.005",
       "section": "identifiers",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Which statement contrasts @EmbeddedId with @IdClass correctly?",
         "ru": "Какое утверждение верно противопоставляет @EmbeddedId и @IdClass?"
@@ -1256,6 +1279,7 @@
       "id": "hibernate.identifiers.006",
       "section": "identifiers",
       "difficulty": "hard",
+      "level": "middle",
       "text": {
         "en": "An entity uses a database-generated surrogate identifier and instances are put into a HashSet before being persisted. Which equals/hashCode design is safe?",
         "ru": "Сущность использует суррогатный идентификатор, генерируемый базой, и её экземпляры попадают в HashSet до сохранения. Какая реализация equals/hashCode безопасна?"
@@ -1310,6 +1334,7 @@
       "id": "hibernate.persistence-context.001",
       "section": "persistence-context",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "What does this code print, and why?",
         "ru": "Что выведет этот код и почему?"
@@ -1365,6 +1390,7 @@
       "id": "hibernate.persistence-context.002",
       "section": "persistence-context",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about persist and merge is TRUE?",
         "ru": "Какое утверждение о persist и merge верно?"
@@ -1419,6 +1445,7 @@
       "id": "hibernate.persistence-context.003",
       "section": "persistence-context",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "A @Transactional service loads an Order and returns it; the web layer then serialises order.getItems() and a LazyInitializationException is thrown. What is the correct explanation?",
         "ru": "Сервис с @Transactional загружает Order и возвращает его; затем web-слой сериализует order.getItems() и получает LazyInitializationException. Какое объяснение верно?"
@@ -1473,6 +1500,7 @@
       "id": "hibernate.persistence-context.004",
       "section": "persistence-context",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "The Author with id 1 currently has the name \"Old name\" in the database. How many rows does the query return?",
         "ru": "У Author с id 1 в базе сейчас имя \"Old name\". Сколько строк вернёт запрос?"
@@ -1528,6 +1556,7 @@
       "id": "hibernate.persistence-context.005",
       "section": "persistence-context",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "What is the practical consequence of switching a query or an EntityManager to FlushModeType.COMMIT?",
         "ru": "Каково практическое следствие переключения запроса или EntityManager в FlushModeType.COMMIT?"
@@ -1582,6 +1611,7 @@
       "id": "hibernate.persistence-context.006",
       "section": "persistence-context",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "Why is em.clear() needed here in addition to em.flush()?",
         "ru": "Зачем здесь нужен em.clear() в дополнение к em.flush()?"
@@ -1637,6 +1667,7 @@
       "id": "hibernate.fetching.001",
       "section": "fetching",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which set of default fetch types does the Jakarta Persistence specification define for associations?",
         "ru": "Какой набор значений FetchType по умолчанию задаёт спецификация Jakarta Persistence для связей?"
@@ -1691,6 +1722,7 @@
       "id": "hibernate.fetching.002",
       "section": "fetching",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "A JPQL query loads 100 Order entities and the code then reads order.getCustomer().getName() for each of them. Which description of the resulting N+1 problem is accurate?",
         "ru": "JPQL-запрос загружает 100 сущностей Order, после чего код для каждой читает order.getCustomer().getName(). Какое описание возникающей проблемы N+1 корректно?"
@@ -1745,6 +1777,7 @@
       "id": "hibernate.fetching.003",
       "section": "fetching",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "The application runs on Hibernate 7.4 against PostgreSQL. What does Hibernate do with this query?",
         "ru": "Приложение работает на Hibernate 7.4 с PostgreSQL. Что Hibernate сделает с этим запросом?"
@@ -1800,6 +1833,7 @@
       "id": "hibernate.fetching.004",
       "section": "fetching",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Which statement about JPA entity graphs is TRUE?",
         "ru": "Какое утверждение о entity graph в JPA верно?"
@@ -1854,6 +1888,7 @@
       "id": "hibernate.fetching.005",
       "section": "fetching",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "The comments collection is annotated as shown. What happens when 200 posts are loaded and their comments are then iterated?",
         "ru": "Коллекция comments размечена как показано. Что произойдёт, если загрузить 200 постов и затем пройти по их комментариям?"
@@ -1909,6 +1944,7 @@
       "id": "hibernate.fetching.006",
       "section": "fetching",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "Which statement about Hibernate proxies and bytecode enhancement is TRUE?",
         "ru": "Какое утверждение о прокси Hibernate и bytecode enhancement верно?"
@@ -1963,6 +1999,7 @@
       "id": "hibernate.jpql-criteria.001",
       "section": "jpql-criteria",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Which statement about parameters in a JPQL query is TRUE?",
         "ru": "Какое утверждение о параметрах в JPQL-запросе верно?"
@@ -2017,6 +2054,7 @@
       "id": "hibernate.jpql-criteria.002",
       "section": "jpql-criteria",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "What is the practical advantage of declaring a query with @NamedQuery instead of building the JPQL string at the call site?",
         "ru": "В чём практическое преимущество объявления запроса через @NamedQuery по сравнению с построением строки JPQL на месте вызова?"
@@ -2071,6 +2109,7 @@
       "id": "hibernate.jpql-criteria.003",
       "section": "jpql-criteria",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Which statement about this DTO projection is TRUE?",
         "ru": "Какое утверждение об этой проекции в DTO верно?"
@@ -2126,6 +2165,7 @@
       "id": "hibernate.jpql-criteria.004",
       "section": "jpql-criteria",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "A native query is executed as em.createNativeQuery(\"select * from book\", Book.class). Which statement is TRUE?",
         "ru": "Нативный запрос выполняется как em.createNativeQuery(\"select * from book\", Book.class). Какое утверждение верно?"
@@ -2180,6 +2220,7 @@
       "id": "hibernate.jpql-criteria.005",
       "section": "jpql-criteria",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "The Product with id 1 was loaded into this persistence context before the bulk update ran. What does the last line observe?",
         "ru": "Product с id 1 был загружен в этот persistence context до выполнения массового обновления. Что увидит последняя строка?"
@@ -2235,6 +2276,7 @@
       "id": "hibernate.jpql-criteria.006",
       "section": "jpql-criteria",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "Which statement about the JPA Criteria API is TRUE?",
         "ru": "Какое утверждение о Criteria API в JPA верно?"
@@ -2289,6 +2331,7 @@
       "id": "hibernate.caching-performance.001",
       "section": "caching-performance",
       "difficulty": "easy",
+      "level": "middle",
       "text": {
         "en": "Which statement correctly contrasts Hibernate's first-level and second-level caches?",
         "ru": "Какое утверждение верно противопоставляет кеш первого и второго уровня в Hibernate?"
@@ -2343,6 +2386,7 @@
       "id": "hibernate.caching-performance.002",
       "section": "caching-performance",
       "difficulty": "easy",
+      "level": "middle",
       "text": {
         "en": "What does Hibernate actually keep in the second-level entity cache?",
         "ru": "Что Hibernate реально хранит в кеше сущностей второго уровня?"
@@ -2397,6 +2441,7 @@
       "id": "hibernate.caching-performance.003",
       "section": "caching-performance",
       "difficulty": "medium",
+      "level": "senior",
       "text": {
         "en": "Which statement about the Hibernate query cache is TRUE?",
         "ru": "Какое утверждение о кеше запросов Hibernate верно?"
@@ -2451,6 +2496,7 @@
       "id": "hibernate.caching-performance.004",
       "section": "caching-performance",
       "difficulty": "medium",
+      "level": "senior",
       "text": {
         "en": "The entity below is cached as shown. What happens when a transaction loads a Country and changes its name?",
         "ru": "Сущность ниже кешируется так, как показано. Что произойдёт, если транзакция загрузит Country и изменит его name?"
@@ -2506,6 +2552,7 @@
       "id": "hibernate.caching-performance.005",
       "section": "caching-performance",
       "difficulty": "medium",
+      "level": "senior",
       "text": {
         "en": "Which statement about this configuration is TRUE?",
         "ru": "Какое утверждение об этой конфигурации верно?"
@@ -2561,6 +2608,7 @@
       "id": "hibernate.caching-performance.006",
       "section": "caching-performance",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "Which statement about StatelessSession in Hibernate 7 is TRUE?",
         "ru": "Какое утверждение о StatelessSession в Hibernate 7 верно?"

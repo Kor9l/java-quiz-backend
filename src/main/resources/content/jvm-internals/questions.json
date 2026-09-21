@@ -1,0 +1,2648 @@
+{
+  "schemaVersion": 2,
+  "topic": "jvm-internals",
+  "questions": [
+    {
+      "id": "jvm-internals.memory-areas.001",
+      "section": "memory-areas",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Where does the native code produced by the JIT compiler live?",
+        "ru": "Где находится нативный код, порождённый JIT-компилятором?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "In the code cache, a native region outside the heap whose size is set by -XX:ReservedCodeCacheSize.",
+            "ru": "В code cache — нативной области вне heap, размер которой задаёт -XX:ReservedCodeCacheSize."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "On the heap, next to the objects the compiled method operates on.",
+            "ru": "В heap, рядом с объектами, с которыми работает скомпилированный метод."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "In Metaspace, alongside the bytecode of the class it was compiled from.",
+            "ru": "В Metaspace, рядом с байткодом класса, из которого он скомпилирован."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "In the stack frame of the thread that first made the method hot.",
+            "ru": "Во фрейме стека того потока, который первым разогрел метод."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "In the compressed class space, which is exactly what that reservation is for.",
+            "ru": "В compressed class space — именно для этого данный резерв и существует."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Compiled code goes into the code cache, a native memory region separate from both the heap and Metaspace, defaulting to 240 MB with tiered compilation. If it fills, the JVM prints \"CodeCache is full. Compiler has been disabled\" and falls back to interpreting — a throughput collapse that no GC log explains.",
+        "ru": "Скомпилированный код попадает в code cache — нативную область, отдельную и от heap, и от Metaspace, по умолчанию 240 МБ при многоуровневой компиляции. При заполнении JVM печатает «CodeCache is full. Compiler has been disabled» и переходит на интерпретацию: обвал пропускной способности, который не объясняет ни один GC-лог."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html",
+        "https://openjdk.org/jeps/197"
+      ]
+    },
+    {
+      "id": "jvm-internals.memory-areas.002",
+      "section": "memory-areas",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which statement about ByteBuffer.allocateDirect() is TRUE?",
+        "ru": "Какое утверждение о ByteBuffer.allocateDirect() верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It allocates in eden like any other object, so a young collection reclaims it.",
+            "ru": "Он выделяет память в eden, как любой другой объект, поэтому её освобождает молодая сборка."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It allocates outside the heap, and the budget for such buffers defaults to the maximum heap size (-XX:MaxDirectMemorySize).",
+            "ru": "Он выделяет память вне heap, а бюджет таких буферов по умолчанию равен максимальному размеру heap (-XX:MaxDirectMemorySize)."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The native memory is freed as soon as the local variable holding the buffer goes out of scope.",
+            "ru": "Нативная память освобождается, как только локальная переменная с буфером выходит из области видимости."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "-Xmx bounds it, because every buffer is still a Java object.",
+            "ru": "Её ограничивает -Xmx, ведь любой буфер — всё равно Java-объект."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is identical to ByteBuffer.allocate() apart from the name.",
+            "ru": "Он отличается от ByteBuffer.allocate() только названием."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A direct buffer is allocated outside the heap so that I/O can read and write it without copying. Its bound is -XX:MaxDirectMemorySize, which defaults to the maximum heap size, so raising -Xmx silently raises the native footprint too. The memory is released only when the buffer object itself is collected, through a Cleaner — so an idle heap means direct memory is not being released.",
+        "ru": "Direct-буфер выделяется вне heap, чтобы ввод-вывод читал и писал его без копирования. Границей служит -XX:MaxDirectMemorySize, по умолчанию равный максимальному размеру heap, — то есть увеличение -Xmx молча увеличивает и нативный след. Память освобождается только когда собран сам объект буфера, через Cleaner: простаивающий heap означает, что direct-память не освобождается."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.memory-areas.003",
+      "section": "memory-areas",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "A container is killed with exit code 137 while the GC log shows the heap comfortably below -Xmx. Which tool answers \"where did the rest of the memory go\"?",
+        "ru": "Контейнер убит с кодом выхода 137, при том что GC-лог показывает heap с запасом ниже -Xmx. Какой инструмент отвечает на вопрос «куда делась остальная память»?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "jcmd <pid> GC.heap_dump — the dump lists every region of the process.",
+            "ru": "jcmd <pid> GC.heap_dump — дамп перечисляет все области процесса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "-Xlog:gc* — the GC log records the resident size of the process after each collection.",
+            "ru": "-Xlog:gc* — GC-лог записывает resident-размер процесса после каждой сборки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Native Memory Tracking: start with -XX:NativeMemoryTracking=summary and read jcmd <pid> VM.native_memory summary.",
+            "ru": "Native Memory Tracking: запустить с -XX:NativeMemoryTracking=summary и прочитать jcmd <pid> VM.native_memory summary."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "jstack, because native memory is always held by a thread and shows up in its stack.",
+            "ru": "jstack, ведь нативную память всегда держит какой-то поток, и она видна в его стеке."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Calling System.gc() from a JMX console and comparing the heap size before and after.",
+            "ru": "Вызов System.gc() из JMX-консоли и сравнение размера heap до и после."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Exit code 137 is SIGKILL from the kernel: the process exceeded the container limit, not -Xmx. Resident memory is heap plus Metaspace, code cache, committed thread stacks, direct buffers and GC bookkeeping, and Native Memory Tracking is the only thing that splits it honestly. It costs roughly 5-10%, which is why it is a diagnostic switch rather than a default.",
+        "ru": "Код выхода 137 — это SIGKILL от ядра: процесс превысил лимит контейнера, а не -Xmx. Resident-память — это heap плюс Metaspace, code cache, зафиксированные стеки потоков, direct-буферы и служебные структуры GC, и честно разложить её умеет только Native Memory Tracking. Он стоит примерно 5-10%, поэтому это диагностический переключатель, а не значение по умолчанию."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/troubleshoot/diagnostic-tools.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/jcmd.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.memory-areas.004",
+      "section": "memory-areas",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "Which statement about Metaspace in HotSpot 17 is TRUE?",
+        "ru": "Какое утверждение о Metaspace в HotSpot 17 верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It is a region inside the heap, so -Xmx bounds class metadata as well.",
+            "ru": "Это область внутри heap, поэтому -Xmx ограничивает и метаданные классов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is capped at 1 GB by default, which is where OutOfMemoryError: Metaspace comes from.",
+            "ru": "По умолчанию она ограничена 1 ГБ — отсюда и берётся OutOfMemoryError: Metaspace."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is allocated per thread, like the JVM stack.",
+            "ru": "Она выделяется на каждый поток, как стек JVM."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It lives in native memory and is unbounded by default; -XX:MaxMetaspaceSize is what puts a ceiling on it.",
+            "ru": "Она находится в нативной памяти и по умолчанию не ограничена; потолок ей ставит -XX:MaxMetaspaceSize."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is simply the JDK 8 name for PermGen; nothing about the layout changed.",
+            "ru": "Это просто название PermGen из JDK 8; в размещении ничего не изменилось."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "JEP 122 moved class metadata out of the heap into native memory in JDK 8. Metaspace grows until -XX:MaxMetaspaceSize, which is not set by default, so an unbounded class-loader leak eats the container rather than hitting a JVM limit. The 1 GB default belongs to a different reservation inside it — -XX:CompressedClassSpaceSize.",
+        "ru": "JEP 122 в JDK 8 вынес метаданные классов из heap в нативную память. Metaspace растёт до -XX:MaxMetaspaceSize, который по умолчанию не задан, — поэтому неограниченная утечка загрузчиков съедает контейнер, а не упирается в лимит JVM. Значение 1 ГБ по умолчанию относится к другому резерву внутри неё — -XX:CompressedClassSpaceSize."
+      },
+      "sources": [
+        "https://openjdk.org/jeps/122",
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.memory-areas.005",
+      "section": "memory-areas",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "Which statement about thread stacks in HotSpot is TRUE?",
+        "ru": "Какое утверждение о стеках потоков в HotSpot верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Stacks are carved out of the heap, which is why -Xmx has to cover the stacks of all threads.",
+            "ru": "Стеки вырезаются из heap — поэтому -Xmx должен покрывать стеки всех потоков."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "-Xss sets the total stack budget shared by every thread in the process.",
+            "ru": "-Xss задаёт общий бюджет стека, разделяемый всеми потоками процесса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "StackOverflowError means the heap has no room left for new frames.",
+            "ru": "StackOverflowError означает, что в heap не осталось места под новые фреймы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Daemon threads run without a stack, which is what makes them cheap.",
+            "ru": "Daemon-потоки работают без стека — именно это делает их дешёвыми."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Stack space is reserved per thread outside the heap, so a failure to create one more thread reports OutOfMemoryError: unable to create native thread, not Java heap space.",
+            "ru": "Стек резервируется на каждый поток вне heap, поэтому невозможность создать ещё один поток даёт OutOfMemoryError: unable to create native thread, а не Java heap space."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Each thread gets its own stack, -Xss (1 MB by default on 64-bit Linux), reserved as address space outside the heap and committed as used. Deep recursion overflows one stack and gives StackOverflowError; running out of room to create stacks gives OutOfMemoryError: unable to create native thread. Neither is fixed by -Xmx, and raising -Xmx makes the second one more likely.",
+        "ru": "Каждый поток получает собственный стек, -Xss (по умолчанию 1 МБ на 64-битном Linux), зарезервированный как адресное пространство вне heap и фиксируемый по мере использования. Глубокая рекурсия переполняет один стек и даёт StackOverflowError; нехватка места под создание стеков даёт OutOfMemoryError: unable to create native thread. Ни то ни другое не лечится через -Xmx, а увеличение -Xmx делает второй случай более вероятным."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jvms/se17/html/jvms-2.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.memory-areas.006",
+      "section": "memory-areas",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "A service runs in a 512 MB container with -Xmx448m. The GC log never shows the heap above 300 MB, yet the container is killed. Which explanation fits?",
+        "ru": "Сервис работает в контейнере на 512 МБ с -Xmx448m. GC-лог никогда не показывает heap выше 300 МБ, но контейнер всё равно убивают. Какое объяснение подходит?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "-Xmx bounds only the heap; Metaspace, the code cache, thread stacks and direct buffers sit on top of it, and the direct-memory budget alone defaults to the maximum heap size.",
+            "ru": "-Xmx ограничивает только heap; Metaspace, code cache, стеки потоков и direct-буферы лежат сверх него, а один только бюджет direct-памяти по умолчанию равен максимальному размеру heap."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The JVM would have thrown OutOfMemoryError first, so this must be a kernel bug rather than a memory problem.",
+            "ru": "JVM сначала бросила бы OutOfMemoryError, значит, это баг ядра, а не проблема с памятью."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Raising -Xmx to 512m would fix it, because the JVM then knows the real limit.",
+            "ru": "Поднять -Xmx до 512m — и всё починится, потому что JVM узнает настоящий лимит."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The container limit applies only to the heap, so anything native is free.",
+            "ru": "Лимит контейнера относится только к heap, поэтому всё нативное бесплатно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A heap that never reaches -Xmx means the collector is broken and should be switched to Serial GC.",
+            "ru": "Heap, который никогда не достигает -Xmx, означает сломанный сборщик — надо переключиться на Serial GC."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The kernel counts the whole process. With -Xmx448m inside 512 MB there is 64 MB left for Metaspace, the compressed class space, the code cache, every thread stack and any direct buffers — and -XX:MaxDirectMemorySize defaults to the maximum heap size, so a networking library can claim hundreds of megabytes the GC log never mentions. Leaving a gap is exactly what a percentage-based ceiling such as -XX:MaxRAMPercentage=65.0 is for.",
+        "ru": "Ядро считает весь процесс. При -Xmx448m внутри 512 МБ остаётся 64 МБ на Metaspace, compressed class space, code cache, стек каждого потока и любые direct-буферы — а -XX:MaxDirectMemorySize по умолчанию равен максимальному размеру heap, так что сетевая библиотека может занять сотни мегабайт, о которых GC-лог не скажет ни слова. Оставлять зазор — ровно то, ради чего существует процентный потолок вроде -XX:MaxRAMPercentage=65.0."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html",
+        "https://docs.oracle.com/en/java/javase/17/troubleshoot/diagnostic-tools.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.class-loading.001",
+      "section": "class-loading",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does String.class.getClassLoader() return on JDK 17?",
+        "ru": "Что возвращает String.class.getClassLoader() на JDK 17?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The platform class loader, which owns java.base since the module system arrived.",
+            "ru": "Platform-загрузчик, которому java.base принадлежит с появлением модульной системы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "null — String is defined by the bootstrap loader, which is the VM itself and is not represented by a ClassLoader object.",
+            "ru": "null — String определён bootstrap-загрузчиком, который является самой виртуальной машиной и не представлен объектом ClassLoader."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The system class loader, because java.base is on the module path like everything else.",
+            "ru": "System-загрузчик, потому что java.base лежит на module path, как и всё остальное."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A ClassLoader instance whose getName() returns \"bootstrap\".",
+            "ru": "Экземпляр ClassLoader, у которого getName() возвращает «bootstrap»."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It throws SecurityException, because core classes do not expose their loader.",
+            "ru": "Бросает SecurityException, потому что базовые классы не раскрывают свой загрузчик."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The bootstrap loader is built into the VM and has no ClassLoader object, so getClassLoader() returns null for every class it defines. Code that walks the loader chain has to treat null as \"the top\" rather than as \"no loader\" — a null check is not an error path here.",
+        "ru": "Bootstrap-загрузчик встроен в виртуальную машину и не имеет объекта ClassLoader, поэтому для всех определённых им классов getClassLoader() возвращает null. Код, который идёт по цепочке загрузчиков, обязан трактовать null как «вершина», а не как «загрузчика нет»: проверка на null здесь не путь ошибки."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassLoader.html",
+        "https://openjdk.org/jeps/261"
+      ]
+    },
+    {
+      "id": "jvm-internals.class-loading.002",
+      "section": "class-loading",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What is the difference between ClassNotFoundException and NoClassDefFoundError?",
+        "ru": "В чём разница между ClassNotFoundException и NoClassDefFoundError?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "They are the same condition; the Error variant exists only for backwards compatibility with Java 1.1.",
+            "ru": "Это одно и то же; вариант-Error существует лишь ради совместимости с Java 1.1."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ClassNotFoundException is for interfaces and NoClassDefFoundError is for classes.",
+            "ru": "ClassNotFoundException — для интерфейсов, NoClassDefFoundError — для классов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ClassNotFoundException comes from a lookup you asked for, such as Class.forName or loadClass; NoClassDefFoundError is thrown when the JVM resolves a reference on your behalf and cannot — including when the class failed its own initialisation earlier.",
+            "ru": "ClassNotFoundException приходит от поиска, который запросили вы, — Class.forName или loadClass; NoClassDefFoundError бросается, когда JVM разрешает ссылку за вас и не может, — в том числе если класс ранее провалил собственную инициализацию."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "NoClassDefFoundError is a compile-time diagnostic; it can never reach a running program.",
+            "ru": "NoClassDefFoundError — диагностика времени компиляции и до работающей программы дойти не может."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ClassNotFoundException means the class file is corrupt, NoClassDefFoundError means it is missing.",
+            "ru": "ClassNotFoundException означает повреждённый class-файл, NoClassDefFoundError — отсутствующий."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The split follows who asked. A reflective lookup returns a checked ClassNotFoundException because you were prepared for a miss. When the JVM itself resolves a symbolic reference during linking and the class is absent — or was present but its <clinit> threw, leaving it in an erroneous state — you get NoClassDefFoundError, and the second cause is why the message sometimes names a class that is plainly on the classpath.",
+        "ru": "Разделение следует за тем, кто спрашивал. Рефлексивный поиск возвращает проверяемое ClassNotFoundException, потому что вы были готовы к промаху. Когда JVM сама разрешает символическую ссылку при связывании и класса нет — либо он был, но его <clinit> бросил исключение и оставил класс в ошибочном состоянии, — вы получаете NoClassDefFoundError; вторая причина и объясняет, почему в сообщении иногда стоит класс, который явно лежит в classpath."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jvms/se17/html/jvms-5.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassLoader.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.class-loading.003",
+      "section": "class-loading",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "What does this program print?",
+        "ru": "Что напечатает эта программа?"
+      },
+      "code": "class Config {\n    static final String NAME = \"quiz\";\n    static { System.out.println(\"init\"); }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(Config.NAME);\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "init, then quiz — reading any static field is an active use of the class.",
+            "ru": "init, затем quiz — чтение любого статического поля является активным использованием класса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "quiz, then init — the initialiser runs after the field is read.",
+            "ru": "quiz, затем init — инициализатор выполняется после чтения поля."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "init only — the constant is not printable because the class was not loaded.",
+            "ru": "Только init — константу напечатать нельзя, потому что класс не был загружен."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "quiz — a static final field with a constant initialiser is folded into the call site, so Config is never initialised.",
+            "ru": "quiz — поле static final с константным инициализатором подставляется прямо в место использования, поэтому Config не инициализируется вовсе."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It throws NoClassDefFoundError, because Config is never initialised.",
+            "ru": "Бросит NoClassDefFoundError, потому что Config не инициализируется."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "NAME is a compile-time constant, so javac copies the literal \"quiz\" into Main and Main never refers to Config at run time. Class initialisation only happens on an active use, and this is not one. The practical consequence: changing such a constant requires recompiling every class that reads it, not just the one that declares it.",
+        "ru": "NAME — константа времени компиляции, поэтому javac копирует литерал «quiz» прямо в Main, и во время выполнения Main к Config не обращается. Инициализация класса происходит только при активном использовании, а это не оно. Практическое следствие: изменение такой константы требует пересборки каждого класса, который её читает, а не только того, что её объявляет."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jvms/se17/html/jvms-5.html",
+        "https://docs.oracle.com/javase/specs/jls/se17/html/jls-12.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.class-loading.004",
+      "section": "class-loading",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "Which statement about parent delegation is TRUE?",
+        "ru": "Какое утверждение о делегировании родителю верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A loader searches its own sources first and asks the parent only as a fallback.",
+            "ru": "Загрузчик сначала ищет в своих источниках и обращается к родителю лишь как к запасному варианту."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Delegation runs downwards: the bootstrap loader asks the application loader for anything it cannot find.",
+            "ru": "Делегирование идёт вниз: bootstrap-загрузчик спрашивает у application-загрузчика всё, чего не нашёл сам."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The module system removed delegation in JDK 9; loaders are now independent.",
+            "ru": "Модульная система убрала делегирование в JDK 9; теперь загрузчики независимы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Delegation is advisory and a loader that breaks it is rejected by the verifier.",
+            "ru": "Делегирование носит рекомендательный характер, и нарушивший его загрузчик отвергается верификатором."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "loadClass asks its parent first and searches itself only if the parent fails, which is why an application cannot substitute its own java.lang.String for the real one.",
+            "ru": "loadClass сначала спрашивает родителя и ищет сам, только если родитель не нашёл, — поэтому приложение не может подменить настоящий java.lang.String своим."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The default loadClass consults the parent before searching itself, so the bootstrap loader always wins for core classes — a security property, not a convention. The java.* package is protected outright on top of that: defining a class there throws SecurityException. Breaking delegation is legitimate and deliberate: servlet containers search the web application first so the application's own library version wins.",
+        "ru": "Стандартный loadClass обращается к родителю до собственного поиска, поэтому для базовых классов всегда побеждает bootstrap-загрузчик — это свойство безопасности, а не соглашение. Сверх того пакет java.* защищён напрямую: определение класса в нём бросает SecurityException. Нарушить делегирование законно и осознанно: контейнеры сервлетов сначала ищут в веб-приложении, чтобы побеждала его собственная версия библиотеки."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassLoader.html",
+        "https://docs.oracle.com/javase/specs/jvms/se17/html/jvms-5.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.class-loading.005",
+      "section": "class-loading",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "The same class file is loaded by two different class loaders in one JVM. What is the result?",
+        "ru": "Один и тот же class-файл загружен двумя разными загрузчиками в одной JVM. Что получится?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Two distinct runtime types: a class's identity is the pair (name, defining loader), so casting an instance of one to the other throws ClassCastException even though both print the same name.",
+            "ru": "Два разных типа времени выполнения: идентичность класса — это пара (имя, определяющий загрузчик), поэтому приведение экземпляра одного к другому бросает ClassCastException, хотя оба печатают одно и то же имя."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "One type: the JVM interns Class objects by fully qualified name, so the second loader receives the first one's result.",
+            "ru": "Один тип: JVM интернирует объекты Class по полному имени, поэтому второй загрузчик получит результат первого."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Two Class objects that are not identical but for which equals() returns true, so casting works.",
+            "ru": "Два объекта Class, не идентичных, но equals() у которых возвращает true, поэтому приведение работает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The second load always throws LinkageError: duplicate class definition.",
+            "ru": "Вторая загрузка всегда бросает LinkageError: duplicate class definition."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Two types that are interchangeable as long as both loaders share the same parent.",
+            "ru": "Два типа, взаимозаменяемых до тех пор, пока у обоих загрузчиков общий родитель."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Runtime type identity includes the defining loader. That is not a quirk — it is the mechanism that lets one JVM host two applications using incompatible versions of the same library. LinkageError is what you get when one loader defines the same name twice, which is a different situation. The famous symptom is a ClassCastException where both sides of the message read identically.",
+        "ru": "Идентичность типа времени выполнения включает определяющий загрузчик. Это не причуда, а механизм, позволяющий одной JVM держать два приложения с несовместимыми версиями одной библиотеки. LinkageError возникает, когда один загрузчик определяет одно и то же имя дважды, — другая ситуация. Знаменитый симптом — ClassCastException, у которого обе стороны сообщения читаются одинаково."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jvms/se17/html/jvms-5.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassLoader.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.class-loading.006",
+      "section": "class-loading",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "Which of these lines makes Holder's static initialiser run?",
+        "ru": "Какая из этих строк заставляет выполниться статический инициализатор Holder?"
+      },
+      "code": "class Holder {\n    static { System.out.println(\"init\"); }\n    static int COUNT = 1;\n    static final int MAX = 10;\n}",
+      "options": [
+        {
+          "text": {
+            "en": "Holder[] all = new Holder[5];",
+            "ru": "Holder[] all = new Holder[5];"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "System.out.println(Holder.COUNT);",
+            "ru": "System.out.println(Holder.COUNT);"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Class<?> c = Class.forName(\"Holder\", false, loader);",
+            "ru": "Class<?> c = Class.forName(\"Holder\", false, loader);"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "System.out.println(Holder.MAX);",
+            "ru": "System.out.println(Holder.MAX);"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Class<?> c = Holder.class;",
+            "ru": "Class<?> c = Holder.class;"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "JVMS 5.5 initialises a class on first active use, and only reading COUNT qualifies: it is a non-constant static field. Creating an array creates the array type, not the element type. Class.forName with initialize=false deliberately stops after loading. MAX is a compile-time constant folded into the caller. A class literal only needs the Class object, which loading produces.",
+        "ru": "JVMS 5.5 инициализирует класс при первом активном использовании, и подходит только чтение COUNT: это неконстантное статическое поле. Создание массива создаёт тип массива, а не тип элемента. Class.forName с initialize=false намеренно останавливается после загрузки. MAX — константа времени компиляции, подставленная в вызывающий код. Литерал класса требует лишь объекта Class, который появляется при загрузке."
+      },
+      "sources": [
+        "https://docs.oracle.com/javase/specs/jvms/se17/html/jvms-5.html",
+        "https://docs.oracle.com/javase/specs/jls/se17/html/jls-12.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.garbage-collectors.001",
+      "section": "garbage-collectors",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which statement about what a garbage collector can and cannot optimise is TRUE?",
+        "ru": "Какое утверждение о том, что сборщик мусора может и чего не может оптимизировать, верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A modern collector optimises all three at once; the older ones simply had worse algorithms.",
+            "ru": "Современный сборщик оптимизирует все три сразу; у старых просто были хуже алгоритмы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Pause time is determined by heap size alone, so the only lever is -Xmx.",
+            "ru": "Длительность паузы определяется одним лишь размером heap, поэтому единственный рычаг — -Xmx."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Throughput, pause time and footprint trade against each other: a collector that shortens pauses generally pays for it in CPU or in memory.",
+            "ru": "Пропускная способность, длительность пауз и след в памяти конкурируют друг с другом: сборщик, укорачивающий паузы, обычно платит за это процессором или памятью."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Footprint is fixed by -Xmx, so choosing a collector cannot change it.",
+            "ru": "След в памяти зафиксирован -Xmx, поэтому выбор сборщика на него не влияет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Throughput collectors have no pauses at all; that is what the name means.",
+            "ru": "У сборщиков, ориентированных на пропускную способность, пауз нет вовсе — это и означает название."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "There are only three currencies and they are spent against each other. Parallel GC buys throughput with long stop-the-world pauses; ZGC buys short pauses with a load barrier on every reference read, which is throughput; Serial buys a small footprint with a single collecting thread. Knowing which one you are short of is the whole of collector selection.",
+        "ru": "Валют всего три, и они тратятся друг против друга. Parallel GC покупает пропускную способность длинными stop-the-world паузами; ZGC покупает короткие паузы барьером чтения на каждой ссылке, то есть пропускной способностью; Serial покупает маленький след единственным потоком сборки. Понимание того, чего именно вам не хватает, и есть весь выбор сборщика."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/gctuning/available-collectors.html",
+        "https://docs.oracle.com/en/java/javase/17/gctuning/ergonomics.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.garbage-collectors.002",
+      "section": "garbage-collectors",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What is a thread-local allocation buffer (TLAB) for?",
+        "ru": "Для чего нужен thread-local allocation buffer (TLAB)?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It caches recently collected objects so that the next allocation of the same class can reuse one.",
+            "ru": "Он кеширует недавно собранные объекты, чтобы следующее выделение того же класса могло переиспользовать один из них."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is another name for the thread's stack, where local variables are allocated.",
+            "ru": "Это другое название стека потока, где выделяются локальные переменные."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It holds the values of that thread's ThreadLocal variables.",
+            "ru": "В нём хранятся значения ThreadLocal-переменных этого потока."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Each thread gets its own chunk of eden to allocate from, so the common case of allocating an object is a pointer bump with no synchronisation.",
+            "ru": "Каждый поток получает собственный кусок eden под выделение, поэтому обычный случай создания объекта — это сдвиг указателя без синхронизации."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is a per-thread copy of the old generation used to avoid promotion.",
+            "ru": "Это персональная копия старого поколения для каждого потока, позволяющая избежать продвижения объектов."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Without TLABs every allocation would need to synchronise on the shared allocation pointer of eden. With them, a thread claims a chunk once and then allocates inside it by incrementing a pointer — which is why object allocation in Java is often cheaper than a malloc. Objects too large for the remaining TLAB space are allocated directly in eden, and JFR records both cases separately.",
+        "ru": "Без TLAB каждое выделение требовало бы синхронизации на общем указателе выделения в eden. С ними поток один раз забирает кусок и дальше выделяет внутри него, увеличивая указатель, — поэтому создание объекта в Java часто дешевле malloc. Объекты, не влезающие в остаток TLAB, выделяются прямо в eden, и JFR фиксирует оба случая по отдельности."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/gctuning/available-collectors.html",
+        "https://docs.oracle.com/en/java/javase/17/gctuning/other-considerations.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.garbage-collectors.003",
+      "section": "garbage-collectors",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Why does HotSpot put a write barrier on reference stores?",
+        "ru": "Зачем HotSpot ставит барьер записи на сохранение ссылок?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "To stop the compiler and the CPU from reordering the store, the way a volatile write does.",
+            "ru": "Чтобы запретить компилятору и процессору переупорядочивать запись, как это делает volatile-запись."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "To pause the application thread while concurrent marking is in progress.",
+            "ru": "Чтобы приостановить поток приложения на время конкурентной разметки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only ZGC uses barriers; the generational collectors scan the whole heap every time.",
+            "ru": "Барьеры использует только ZGC; поколенческие сборщики каждый раз сканируют весь heap."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "To store the object's age so the collector knows when to promote it.",
+            "ru": "Чтобы сохранить возраст объекта и знать, когда его продвигать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "So that old-to-young references are recorded — in a card table, and in G1 additionally in per-region remembered sets — letting a young collection run without scanning the old generation.",
+            "ru": "Чтобы фиксировать ссылки из старого поколения в молодое — в card table, а у G1 дополнительно в порегионных remembered set, — что позволяет молодой сборке обойтись без сканирования старого поколения."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Collecting the young generation alone requires knowing every reference into it from elsewhere. The card table marks a 512-byte card dirty on each reference store, and the young collection scans only dirty cards. G1 maintains per-region remembered sets on top of that, which is why its write barrier costs more than Parallel's — it buys region-granular collection with slightly slower reference writes. Note this is a garbage-collection barrier, not a memory-model one.",
+        "ru": "Чтобы собрать только молодое поколение, нужно знать все ссылки в него извне. Card table помечает 512-байтовую карту грязной при каждом сохранении ссылки, и молодая сборка сканирует только грязные карты. G1 поверх этого ведёт порегионные remembered set — поэтому его барьер записи дороже, чем у Parallel: он покупает порегионную сборку ценой чуть более медленной записи ссылок. Важно: это барьер сборщика, а не барьер модели памяти."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/gctuning/garbage-first-g1-garbage-collector1.html",
+        "https://docs.oracle.com/en/java/javase/17/gctuning/available-collectors.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.garbage-collectors.004",
+      "section": "garbage-collectors",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "What does -XX:MaxGCPauseMillis actually do in G1?",
+        "ru": "Что на самом деле делает -XX:MaxGCPauseMillis в G1?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It is a target, not a guarantee: G1 tries to meet it by putting fewer regions into each collection set, so missing it shows up as rising heap occupancy rather than as an error.",
+            "ru": "Это цель, а не гарантия: G1 старается её выдержать, беря меньше регионов в collection set, поэтому промах проявляется ростом занятости heap, а не ошибкой."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is a hard limit; a collection that would exceed it is aborted and OutOfMemoryError is thrown.",
+            "ru": "Это жёсткий лимит: сборка, которая его превысит, прерывается, и бросается OutOfMemoryError."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It sets the interval between collections, so a smaller number means G1 collects more often.",
+            "ru": "Он задаёт интервал между сборками, поэтому меньшее число означает более частые сборки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It applies only to full collections; young pauses are not affected.",
+            "ru": "Он действует только на полные сборки; на молодые паузы не влияет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Its default is 10 ms, which is why G1 is considered a low-latency collector.",
+            "ru": "По умолчанию он равен 10 мс — поэтому G1 и считают сборщиком с низкими задержками."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The default is 200 ms and it is advisory. G1 honours a smaller target by collecting less per pause; if the allocation rate outruns what it can reclaim in those slices, occupancy climbs and eventually a full collection happens anyway. That is why setting a very low pause target often produces worse pauses than leaving it alone — a target below roughly 50 ms is a request for a different collector, not a smaller number.",
+        "ru": "Значение по умолчанию — 200 мс, и оно рекомендательное. Меньшую цель G1 выполняет, собирая меньше за паузу; если темп выделения обгоняет то, что он успевает освободить такими порциями, занятость растёт и в итоге всё равно случается полная сборка. Поэтому очень низкая цель паузы часто даёт паузы хуже, чем если её не трогать: цель ниже примерно 50 мс — это запрос на другой сборщик, а не на меньшее число."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/gctuning/garbage-first-g1-garbage-collector1.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.garbage-collectors.005",
+      "section": "garbage-collectors",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "How does ZGC keep pause times from growing with the heap?",
+        "ru": "Как ZGC добивается того, что паузы не растут вместе с heap?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It never moves objects, so there is nothing to pause for.",
+            "ru": "Он никогда не перемещает объекты, поэтому паузы не для чего."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It marks and relocates concurrently, storing metadata in unused bits of the pointer (coloured pointers) and putting a load barrier on every reference read that fixes up a pointer to a moved object on the spot.",
+            "ru": "Он ведёт и разметку, и перемещение конкурентно, храня метаданные в неиспользуемых битах указателя (цветные указатели) и ставя барьер чтения на каждую ссылку, который тут же чинит указатель на перемещённый объект."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It uses a write barrier and a very large remembered set, so the old generation never has to be scanned.",
+            "ru": "Он использует барьер записи и очень большой remembered set, поэтому старое поколение никогда не приходится сканировать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It stops the world only for relocation, which is short because relocation copies very few objects.",
+            "ru": "Он останавливает мир только на перемещение, которое коротко, потому что копируется очень мало объектов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It skips the old generation entirely and collects only newly allocated objects.",
+            "ru": "Он полностью пропускает старое поколение и собирает только недавно выделенные объекты."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "ZGC moves the repair work into the application itself: the load barrier means a thread that reads a stale reference fixes it before using it, so relocation needs no stop-the-world phase and pause length stops depending on how much is live. The price is a test on every reference read — throughput traded for a pause you will not have. ZGC became generational in JDK 21 (JEP 439) behind -XX:+ZGenerational, and that mode became the ZGC default in JDK 23.",
+        "ru": "ZGC переносит починку в само приложение: барьер чтения означает, что поток, прочитавший устаревшую ссылку, чинит её до использования, — поэтому перемещению не нужна stop-the-world фаза, и длина паузы перестаёт зависеть от объёма живых данных. Цена — проверка на каждом чтении ссылки: пропускная способность, отданная за паузу, которой не будет. Поколенческим ZGC стал в JDK 21 (JEP 439) под флагом -XX:+ZGenerational, и в JDK 23 этот режим стал для ZGC режимом по умолчанию."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/gctuning/z-garbage-collector.html",
+        "https://openjdk.org/jeps/439"
+      ]
+    },
+    {
+      "id": "jvm-internals.garbage-collectors.006",
+      "section": "garbage-collectors",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A G1 log line reads \"to-space exhausted\". What happened, and what is the usual fix?",
+        "ru": "В логе G1 строка «to-space exhausted». Что произошло и что обычно помогает?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The survivor spaces were sized wrongly and the only remedy is to pin -XX:SurvivorRatio.",
+            "ru": "Неверно рассчитаны survivor-области, и единственное средство — зафиксировать -XX:SurvivorRatio."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "MaxGCPauseMillis was set too high, so G1 collected too much at once.",
+            "ru": "MaxGCPauseMillis выставлен слишком большим, и G1 собрал слишком много за раз."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Evacuation failed: G1 had no free region to copy survivors into, so it fell back to a slow full compacting collection. The fix is normally more headroom or a lower allocation rate, not another flag.",
+            "ru": "Эвакуация провалилась: у G1 не нашлось свободного региона, куда копировать выживших, и он откатился к медленной полной уплотняющей сборке. Помогает обычно больший запас памяти или меньший темп выделения, а не ещё один флаг."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Metaspace filled up, which G1 reports in the GC log rather than as an OutOfMemoryError.",
+            "ru": "Заполнился Metaspace, о чём G1 сообщает в GC-логе, а не через OutOfMemoryError."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is routine bookkeeping that appears in every G1 log and can be ignored.",
+            "ru": "Это рутинная служебная запись, которая есть в любом логе G1, и её можно игнорировать."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "G1 is a copying collector: survivors are evacuated into fresh regions. With no free region to copy into, the evacuation fails and G1 degrades to a full compacting collection — by default single-threaded and the slowest thing it can do. It is a symptom of the heap being too tight or the allocation rate outrunning the collector; adding flags on top of a heap with no room usually makes the next failure arrive sooner.",
+        "ru": "G1 — копирующий сборщик: выжившие эвакуируются в свободные регионы. Когда свободного региона нет, эвакуация проваливается, и G1 деградирует до полной уплотняющей сборки, по умолчанию однопоточной, — самого медленного, что он умеет. Это симптом слишком тесного heap или темпа выделения, обгоняющего сборщик; новые флаги поверх heap без запаса обычно лишь приближают следующий отказ."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/gctuning/garbage-first-g1-garbage-collector1.html",
+        "https://docs.oracle.com/en/java/javase/17/gctuning/other-considerations.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.tuning-and-limits.001",
+      "section": "tuning-and-limits",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Why is -XX:MaxRAMPercentage usually preferred over -Xmx inside a container?",
+        "ru": "Почему внутри контейнера -XX:MaxRAMPercentage обычно предпочтительнее -Xmx?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "They are exactly equivalent; the percentage form is only shorter to type.",
+            "ru": "Они полностью эквивалентны; процентная форма просто короче в наборе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "MaxRAMPercentage bounds the whole process including native memory, which -Xmx does not.",
+            "ru": "MaxRAMPercentage ограничивает весь процесс, включая нативную память, чего -Xmx не делает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "MaxRAMPercentage is computed from the host's physical memory, which is more stable than a container limit.",
+            "ru": "MaxRAMPercentage вычисляется от физической памяти хоста, а она стабильнее лимита контейнера."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The percentage is computed from the container's own memory limit, so it stays correct when that limit changes; -Xmx is a fixed number that has to be edited by hand every time.",
+            "ru": "Процент вычисляется от собственного лимита памяти контейнера и потому остаётся верным при его изменении; -Xmx — фиксированное число, которое каждый раз приходится править руками."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "-Xmx has been deprecated since JDK 10 in favour of the percentage flags.",
+            "ru": "-Xmx объявлен устаревшим с JDK 10 в пользу процентных флагов."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "-XX:+UseContainerSupport is on by default and makes the JVM read the cgroup memory limit, so a percentage tracks the limit automatically. The default MaxRAMPercentage of 25.0 is conservative for a shared machine and usually far too small for a container that exists only to run this one JVM. Neither flag bounds native memory — that is the whole reason the percentage has to stay well below 100.",
+        "ru": "-XX:+UseContainerSupport включён по умолчанию и заставляет JVM читать лимит памяти из cgroup, поэтому процент следует за лимитом автоматически. Значение MaxRAMPercentage по умолчанию, 25.0, осторожно для разделяемой машины и обычно сильно мало для контейнера, существующего ради одной этой JVM. Нативную память не ограничивает ни один из флагов — именно поэтому процент обязан оставаться заметно ниже 100."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html",
+        "https://docs.oracle.com/en/java/javase/17/gctuning/ergonomics.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.tuning-and-limits.002",
+      "section": "tuning-and-limits",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "This project's Dockerfile starts the service with -XX:MaxRAMPercentage=65.0. Why 65 rather than something closer to the limit?",
+        "ru": "Dockerfile этого проекта запускает сервис с -XX:MaxRAMPercentage=65.0. Почему 65, а не что-то ближе к лимиту?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "G1 requires 35% of the heap to remain free or evacuation fails.",
+            "ru": "G1 требует, чтобы 35% heap оставались свободными, иначе эвакуация провалится."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "65.0 is the JVM default and the flag is there only for documentation.",
+            "ru": "65.0 — значение JVM по умолчанию, и флаг стоит только ради документирования."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The container limit applies to the heap only, so the number is a safety margin against GC overhead.",
+            "ru": "Лимит контейнера относится только к heap, поэтому число — запас на накладные расходы сборщика."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Quarkus refuses to start when the heap exceeds 70% of available memory.",
+            "ru": "Quarkus отказывается стартовать, когда heap превышает 70% доступной памяти."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The free hosting tier gives the container 512 MB, and the remaining share is where Metaspace, the code cache, thread stacks and the CDS mapping live alongside a measured ~131 MiB resident.",
+            "ru": "Бесплатный тариф хостинга даёт контейнеру 512 МБ, и оставшаяся доля — это место под Metaspace, code cache, стеки потоков и отображение CDS рядом с измеренными ~131 MiB resident."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The Dockerfile states it outright: \"65% rather than 75% of 512 MB leaves room for metaspace, code cache, thread stacks and the CDS mapping alongside a measured ~131 MiB resident.\" That is what a defensible tuning argument looks like — a limit, a measurement and a reason for the gap. Without the gap the kernel sends SIGKILL, which leaves no stack trace and no heap dump.",
+        "ru": "Dockerfile говорит об этом прямо: «65% вместо 75% от 512 МБ оставляют место под metaspace, code cache, стеки потоков и отображение CDS рядом с измеренными ~131 MiB resident». Так выглядит защитимый аргумент о тюнинге — лимит, измерение и причина зазора. Без зазора ядро присылает SIGKILL, и не остаётся ни стектрейса, ни heap dump."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html",
+        "https://openjdk.org/jeps/310"
+      ]
+    },
+    {
+      "id": "jvm-internals.tuning-and-limits.003",
+      "section": "tuning-and-limits",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A container is given a CPU quota of 0.1. What does that do to the JVM?",
+        "ru": "Контейнеру выдана квота 0.1 CPU. Как это сказывается на JVM?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The JVM reads the cgroup CPU limit, so Runtime.availableProcessors() reports 1, and the GC thread count, the JIT compiler threads, the common ForkJoinPool and most library pools are all sized from that one number.",
+            "ru": "JVM читает лимит процессора из cgroup, поэтому Runtime.availableProcessors() показывает 1, и число потоков GC, потоков компилятора JIT, общий ForkJoinPool и большинство библиотечных пулов выводятся из этой единицы."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Nothing: availableProcessors() always reports the host's core count, so the JVM sizes itself for the machine.",
+            "ru": "Ничего: availableProcessors() всегда показывает число ядер хоста, поэтому JVM рассчитывает себя на машину."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only the garbage collector is affected; thread pools are sized from -Xmx instead.",
+            "ru": "Затронут только сборщик мусора; пулы потоков рассчитываются от -Xmx."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Container CPU awareness has to be switched on with -XX:+UseContainerSupport, which is off by default.",
+            "ru": "Учёт процессора контейнера нужно включать флагом -XX:+UseContainerSupport, который по умолчанию выключен."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A quota below 1.0 is rejected by the JVM at startup.",
+            "ru": "Квоту меньше 1.0 JVM отвергает при запуске."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Container support is on by default and covers CPU as well as memory. One reported processor changes the JVM's whole shape — ergonomics may choose Serial GC, the compiler gets fewer threads, and the common ForkJoinPool has a parallelism of one, which is why parallel streams silently stop being parallel. This is also why an application that is fast on a developer's laptop can behave completely differently on a tenth of a core.",
+        "ru": "Поддержка контейнеров включена по умолчанию и охватывает и процессор, и память. Один доступный процессор меняет всю форму JVM: эргономика может выбрать Serial GC, компилятор получает меньше потоков, а у общего ForkJoinPool параллелизм равен единице — поэтому параллельные стримы молча перестают быть параллельными. По той же причине приложение, быстрое на ноутбуке разработчика, на десятой доле ядра ведёт себя совершенно иначе."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html",
+        "https://docs.oracle.com/en/java/javase/17/gctuning/ergonomics.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.tuning-and-limits.004",
+      "section": "tuning-and-limits",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Which of these is the best advice about GC flags?",
+        "ru": "Какой из этих советов о флагах GC лучший?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Set -Xmn to half the heap first; every other flag depends on that.",
+            "ru": "Сначала выставьте -Xmn в половину heap: все остальные флаги зависят от него."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "G1 adapts the young generation size and the tenuring threshold continuously, so pinning NewRatio, SurvivorRatio or MaxTenuringThreshold removes that adaptation and usually makes things worse.",
+            "ru": "G1 непрерывно подстраивает размер молодого поколения и порог продвижения, поэтому фиксация NewRatio, SurvivorRatio или MaxTenuringThreshold отнимает эту адаптацию и обычно делает хуже."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Set -XX:MaxGCPauseMillis=5 — asking for a smaller pause is the standard way to get one.",
+            "ru": "Выставьте -XX:MaxGCPauseMillis=5: попросить паузу поменьше — стандартный способ её получить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Always add -XX:+DisableExplicitGC, since libraries that call System.gc() cannot be fixed.",
+            "ru": "Всегда добавляйте -XX:+DisableExplicitGC, ведь библиотеки, вызывающие System.gc(), починить нельзя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Choose the flags first and only then collect a GC log, so the log shows the tuned system.",
+            "ru": "Сначала выберите флаги и только потом снимайте GC-лог, чтобы он показывал уже настроенную систему."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Adaptive sizing is most of what G1 does well; pinning the generational ratios is the single most common way to take that away. A pause target of 5 ms is honoured by collecting less per pause until occupancy climbs and a full GC happens anyway. And the ordering in the last option is backwards: -Xlog:gc*:file=gc.log:time,uptime,level,tags costs nearly nothing and is the input to every real decision, not the output.",
+        "ru": "Адаптивный подбор размеров — большая часть того, что G1 делает хорошо; фиксация поколенческих соотношений — самый частый способ это отнять. Цель паузы в 5 мс выполняется уменьшением объёма сборки за паузу — до тех пор, пока занятость не вырастет и полная сборка не случится всё равно. А порядок в последнем варианте перевёрнут: -Xlog:gc*:file=gc.log:time,uptime,level,tags стоит почти ничего и является входными данными любого настоящего решения, а не его результатом."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/gctuning/ergonomics.html",
+        "https://docs.oracle.com/en/java/javase/17/gctuning/garbage-first-g1-garbage-collector1.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.tuning-and-limits.005",
+      "section": "tuning-and-limits",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "What is the difference between exceeding -Xmx and exceeding the container's memory limit?",
+        "ru": "Чем превышение -Xmx отличается от превышения лимита памяти контейнера?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Both produce OutOfMemoryError; only the message differs.",
+            "ru": "Оба дают OutOfMemoryError; отличается только сообщение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The container limit produces OutOfMemoryError: container memory exhausted, which is catchable.",
+            "ru": "Лимит контейнера даёт OutOfMemoryError: container memory exhausted, которое можно поймать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Exceeding -Xmx raises OutOfMemoryError — a Java-level error with a stack trace you can dump on; exceeding the container limit is SIGKILL from the kernel: exit code 137, no stack trace, nothing in the application log.",
+            "ru": "Превышение -Xmx поднимает OutOfMemoryError — ошибку уровня Java со стектрейсом, по которой можно снять дамп; превышение лимита контейнера — это SIGKILL от ядра: код выхода 137, ни стектрейса, ни строчки в логе приложения."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The JVM always receives a warning signal first and has time to write a heap dump in both cases.",
+            "ru": "JVM в обоих случаях сначала получает предупреждающий сигнал и успевает записать heap dump."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Exit code 137 means the application called System.exit(137) from a shutdown hook.",
+            "ru": "Код выхода 137 означает, что приложение вызвало System.exit(137) из shutdown-хука."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The JVM knows about -Xmx and can react: throw, run -XX:+HeapDumpOnOutOfMemoryError, and with -XX:+ExitOnOutOfMemoryError terminate cleanly instead of limping on with one thread dead mid-operation. It knows nothing about the cgroup limit — the kernel simply kills the process (128 + SIGKILL's 9 = 137). Leaving the gap between the heap ceiling and the container limit is what keeps failures in the first category.",
+        "ru": "О -Xmx JVM знает и может отреагировать: бросить ошибку, отработать -XX:+HeapDumpOnOutOfMemoryError и с -XX:+ExitOnOutOfMemoryError завершиться чисто, а не ковылять дальше с потоком, умершим посреди операции. О лимите cgroup она не знает ничего — ядро просто убивает процесс (128 + 9 от SIGKILL = 137). Зазор между потолком heap и лимитом контейнера как раз и удерживает отказы в первой категории."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html",
+        "https://docs.oracle.com/en/java/javase/17/troubleshoot/troubleshoot-memory-leaks.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.tuning-and-limits.006",
+      "section": "tuning-and-limits",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A service is OOMKilled under load, but the GC log shows the heap steady and well under -Xmx across the whole run. What is the right next step?",
+        "ru": "Сервис под нагрузкой убивают по OOM, но GC-лог всю дорогу показывает стабильный heap с большим запасом до -Xmx. Какой следующий шаг верен?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Raise -Xmx, since the heap evidently needs more room than it was given.",
+            "ru": "Поднять -Xmx: heap явно нужно больше места, чем ему выдали."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Take a heap dump and look for the largest retained set; the answer is always a Java object.",
+            "ru": "Снять heap dump и искать наибольший retained set: ответ всегда какой-нибудь Java-объект."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Switch to ZGC, whose smaller pauses reduce peak memory use.",
+            "ru": "Переключиться на ZGC: его короткие паузы уменьшают пиковое потребление памяти."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Restart with -XX:NativeMemoryTracking=summary and read jcmd VM.native_memory summary: the growth is outside the heap — direct buffers, Metaspace, thread stacks or the code cache — and no heap flag addresses it.",
+            "ru": "Перезапустить с -XX:NativeMemoryTracking=summary и прочитать jcmd VM.native_memory summary: рост идёт вне heap — direct-буферы, Metaspace, стеки потоков или code cache, — и ни один heap-флаг тут не поможет."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Add -XX:+DisableExplicitGC so nothing interferes with the collector's own schedule.",
+            "ru": "Добавить -XX:+DisableExplicitGC, чтобы никто не мешал собственному расписанию сборщика."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A stable heap and a growing process means the growth is not in the heap, so a heap dump — which only describes Java objects — will show nothing wrong. NMT splits the native side by category (class, thread, code, GC, internal) and is the only honest answer. Raising -Xmx makes it worse twice over: less address space for stacks, and a larger default -XX:MaxDirectMemorySize.",
+        "ru": "Стабильный heap при растущем процессе означает, что рост не в heap, поэтому heap dump, описывающий только Java-объекты, ничего подозрительного не покажет. NMT раскладывает нативную сторону по категориям (class, thread, code, GC, internal) и остаётся единственным честным ответом. Увеличение -Xmx вредит дважды: меньше адресного пространства под стеки и больше значение -XX:MaxDirectMemorySize по умолчанию."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/troubleshoot/diagnostic-tools.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/jcmd.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.leaks-and-oom.001",
+      "section": "leaks-and-oom",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "A service fails with OutOfMemoryError: Direct buffer memory. What does that mean?",
+        "ru": "Сервис падает с OutOfMemoryError: Direct buffer memory. Что это значит?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The Java heap is full; raising -Xmx is the fix.",
+            "ru": "Java heap заполнен; лечится увеличением -Xmx."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A native library called malloc and never freed, and the JVM detected the leak.",
+            "ru": "Нативная библиотека вызвала malloc и не освободила память, а JVM обнаружила утечку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The operating system is out of memory and every process is affected.",
+            "ru": "В операционной системе кончилась память, и это затронуло все процессы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ByteBuffer.allocate() was called with a size larger than Integer.MAX_VALUE.",
+            "ru": "ByteBuffer.allocate() вызвали с размером больше Integer.MAX_VALUE."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The -XX:MaxDirectMemorySize budget is exhausted. It defaults to the maximum heap size, and that memory is released only when the buffer objects themselves are collected.",
+            "ru": "Исчерпан бюджет -XX:MaxDirectMemorySize. По умолчанию он равен максимальному размеру heap, и эта память освобождается только когда собраны сами объекты буферов."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Direct buffers live outside the heap and are bounded separately. Because their release depends on the referencing buffer object being collected, an application with a quiet heap can starve for direct memory while the collector sees no reason to run. Networking libraries that pool their own buffers are the usual source, and the fix is on the library's side — a bigger -Xmx only raises the default budget without changing the rate.",
+        "ru": "Direct-буферы живут вне heap и ограничены отдельно. Поскольку их освобождение зависит от сборки объекта-буфера, приложение со спокойным heap может остаться без direct-памяти, пока сборщик не видит повода запуститься. Обычный источник — сетевые библиотеки со своими пулами буферов, и лечить надо на их стороне: больший -Xmx лишь поднимает бюджет по умолчанию, не меняя темпа."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.leaks-and-oom.002",
+      "section": "leaks-and-oom",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does \"memory leak\" mean in a JVM application?",
+        "ru": "Что означает «утечка памяти» в приложении на JVM?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "An object that is still reachable from a GC root but that the program will never use again — unintended reachability, not a forgotten free().",
+            "ru": "Объект, до сих пор достижимый от корня GC, но который программа больше никогда не использует, — непреднамеренная достижимость, а не забытый free()."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "An object whose finalize() method never ran, so its memory was never handed back.",
+            "ru": "Объект, у которого не выполнился finalize(), из-за чего память не вернулась."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Memory the operating system failed to reclaim after the JVM process exited.",
+            "ru": "Память, которую операционная система не вернула после завершения процесса JVM."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An unreachable object that the collector's algorithm failed to find.",
+            "ru": "Недостижимый объект, который алгоритм сборщика не сумел найти."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A native allocation not matched by a corresponding free in JNI code.",
+            "ru": "Нативное выделение без парного free в JNI-коде."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "There is no free() to forget: a tracing collector reclaims everything unreachable, and reachable is exactly what it will not touch. So a leak in Java is a logical error — something is still holding a reference. That is also why the diagnosis is a path to GC roots rather than an allocation site: you need to know who is holding it, not who created it.",
+        "ru": "Забывать free() здесь негде: трассирующий сборщик освобождает всё недостижимое, а достижимое — ровно то, что он не тронет. Поэтому утечка в Java — логическая ошибка: кто-то до сих пор держит ссылку. По той же причине диагностика — это путь до корней GC, а не место выделения: нужно знать, кто держит, а не кто создал."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/troubleshoot/troubleshoot-memory-leaks.html",
+        "https://docs.oracle.com/en/java/javase/17/gctuning/other-considerations.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.leaks-and-oom.003",
+      "section": "leaks-and-oom",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Why is a ThreadLocal dangerous on a pooled thread?",
+        "ru": "Чем опасен ThreadLocal на пуловом потоке?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The WeakReference key inside ThreadLocalMap means the entry is cleaned at the next GC, so the only risk is a short delay.",
+            "ru": "WeakReference-ключ внутри ThreadLocalMap означает, что запись вычистится на следующей сборке, поэтому риск — лишь небольшая задержка."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The thread outlives the request, so a value left in the ThreadLocal is retained for the life of the pool; ThreadLocal.remove() in a finally is the fix, and the weak key inside ThreadLocalMap does not save you because the entry's value is held strongly until the map is next cleaned.",
+            "ru": "Поток переживает запрос, поэтому оставленное в ThreadLocal значение удерживается всё время жизни пула; лечится ThreadLocal.remove() в finally, а слабый ключ внутри ThreadLocalMap не спасает, потому что значение записи удерживается сильно до следующей чистки карты."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The executor clears every ThreadLocal when a task finishes, so the danger is only in threads you create by hand.",
+            "ru": "Executor очищает все ThreadLocal по завершении задачи, поэтому опасны только потоки, созданные вручную."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only a static ThreadLocal can leak; an instance field is collected with its owner.",
+            "ru": "Утечь может только статический ThreadLocal; поле экземпляра собирается вместе со своим владельцем."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A ThreadLocal cannot leak at all, because its storage belongs to the thread rather than to the heap.",
+            "ru": "ThreadLocal утечь не может в принципе, потому что его хранилище принадлежит потоку, а не heap."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Each thread holds a ThreadLocalMap whose keys are weak references to the ThreadLocal objects, but whose values are strong. A pooled thread is never discarded, so a value set during one request stays reachable through that thread until something explicitly removes it or the map happens to clean a stale entry. With a pool of two hundred threads that is two hundred retained object graphs, and in a container it is also a class-loader leak waiting to happen.",
+        "ru": "Каждый поток держит ThreadLocalMap, чьи ключи — слабые ссылки на объекты ThreadLocal, а значения — сильные. Пуловой поток никогда не выбрасывается, поэтому значение, установленное в одном запросе, остаётся достижимым через этот поток, пока его явно не удалят или пока карта не вычистит устаревшую запись сама. При пуле в двести потоков это двести удержанных графов объектов, а в контейнере — ещё и заготовка утечки загрузчика классов."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ThreadLocal.html",
+        "https://docs.oracle.com/en/java/javase/17/troubleshoot/troubleshoot-memory-leaks.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.leaks-and-oom.004",
+      "section": "leaks-and-oom",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A long-running application server runs out of Metaspace after a few redeployments. What is the usual cause?",
+        "ru": "Долгоживущий сервер приложений исчерпывает Metaspace после нескольких передеплоев. Какова обычная причина?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The heap is fragmented, and Metaspace is allocated from the same address range.",
+            "ru": "Heap фрагментирован, а Metaspace выделяется из того же диапазона адресов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Metaspace is never collected by design, so any redeployment leaks and only a restart helps.",
+            "ru": "Metaspace по замыслу не собирается вовсе, поэтому любой передеплой течёт и помогает только перезапуск."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A class-loader leak: one surviving reference to anything the old loader defined — a thread's context class loader, a driver left in DriverManager, a ThreadLocal holding such an instance — keeps the loader and every class and static field it defined alive.",
+            "ru": "Утечка загрузчика классов: одна пережившая ссылка на что угодно, определённое старым загрузчиком, — context class loader потока, драйвер, оставшийся в DriverManager, ThreadLocal с таким экземпляром — удерживает живыми и загрузчик, и все определённые им классы со статическими полями."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "-XX:MaxMetaspaceSize is too low; raising it removes the problem.",
+            "ru": "-XX:MaxMetaspaceSize слишком мал; его увеличение устраняет проблему."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Each redeployment recompiles every method, and compiled code is stored in Metaspace.",
+            "ru": "Каждый передеплой перекомпилирует все методы, а скомпилированный код хранится в Metaspace."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Class metadata is reclaimed only when the whole loader becomes unreachable — it is all or nothing. So a single stray reference pins an entire application's worth of classes, and repeating the redeployment multiplies it. Raising MaxMetaspaceSize postpones the failure by exactly one redeployment. Compiled code, by the way, lives in the code cache, not in Metaspace.",
+        "ru": "Метаданные классов освобождаются только когда недостижимым становится весь загрузчик — либо всё, либо ничего. Поэтому одна забытая ссылка удерживает классы целого приложения, а повторный передеплой их умножает. Увеличение MaxMetaspaceSize откладывает отказ ровно на один передеплой. Скомпилированный же код лежит в code cache, а не в Metaspace."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/troubleshoot/troubleshoot-memory-leaks.html",
+        "https://docs.oracle.com/en/java/javase/17/gctuning/other-considerations.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.leaks-and-oom.005",
+      "section": "leaks-and-oom",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Two services both die with OutOfMemoryError: Java heap space. Which observation separates a leak from a heap that is simply too small?",
+        "ru": "Два сервиса умирают с OutOfMemoryError: Java heap space. Какое наблюдение отличает утечку от просто маленького heap?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Peak heap occupancy: a leak reaches a higher peak than an undersized heap does.",
+            "ru": "Пиковая занятость heap: утечка достигает более высокого пика, чем недостаточный heap."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The number of full collections per minute: a leak causes more of them than an undersized heap.",
+            "ru": "Число полных сборок в минуту: при утечке их больше, чем при недостаточном heap."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Comparing resident memory with -Xmx: a leak makes RSS exceed the heap ceiling.",
+            "ru": "Сравнение resident-памяти с -Xmx: при утечке RSS превышает потолок heap."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Heap occupancy measured immediately after each full collection: a flat line at a high level is a working set that needs more heap; a line climbing monotonically from one full GC to the next is a leak.",
+            "ru": "Занятость heap, измеренная сразу после каждой полной сборки: ровная линия на высоком уровне — рабочий набор, которому нужно больше heap; линия, монотонно растущая от одной полной сборки к следующей, — утечка."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Neither: any OutOfMemoryError is by definition a leak, since a correct program frees what it allocates.",
+            "ru": "Никакое: любой OutOfMemoryError по определению утечка, ведь корректная программа освобождает то, что выделила."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Live set after a full collection is the one number that distinguishes them, because a full GC has already removed everything reclaimable — what remains is genuinely held. Both cases reach a high peak and both provoke frequent collections near the end, so peaks and rates cannot separate them. Get the data from -Xlog:gc*:file=gc.log:time,uptime,level,tags and plot the post-full-GC points only.",
+        "ru": "Живой набор после полной сборки — то единственное число, которое их различает: полная сборка уже удалила всё освобождаемое, и оставшееся действительно удерживается. Оба случая дают высокий пик и оба под конец провоцируют частые сборки, поэтому ни пики, ни частота их не разделяют. Данные берите из -Xlog:gc*:file=gc.log:time,uptime,level,tags и стройте только точки после полных сборок."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/troubleshoot/troubleshoot-memory-leaks.html",
+        "https://docs.oracle.com/en/java/javase/17/gctuning/available-collectors.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.leaks-and-oom.006",
+      "section": "leaks-and-oom",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "You have a heap dump from a process that died with OutOfMemoryError. Which view answers \"what is holding this memory\" fastest?",
+        "ru": "У вас heap dump процесса, умершего с OutOfMemoryError. Какое представление быстрее всего отвечает на вопрос «что держит эту память»?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A histogram sorted by instance count, since the class with the most instances is the culprit.",
+            "ru": "Гистограмма по числу экземпляров: виноват класс, которых больше всего."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The list of threads and their stacks at the moment of the dump.",
+            "ru": "Список потоков и их стеки на момент снятия дампа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The allocation stack traces recorded in the dump, which show where each object was created.",
+            "ru": "Записанные в дампе стектрейсы выделения, показывающие, где создан каждый объект."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The full list of GC roots on its own, since every retained object hangs off one of them.",
+            "ru": "Полный список корней GC сам по себе — ведь каждый удержанный объект висит на одном из них."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The dominator tree — how much would be freed if a given object went away — followed by the path to GC roots with weak and soft references excluded.",
+            "ru": "Dominator tree — сколько освободится, если данный объект исчезнет, — а затем path to GC roots с исключением слабых и мягких ссылок."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Retained size is the question that matters, and the dominator tree is the view that computes it. A histogram by count misleads badly: a million Strings can be 40 MB while one HashMap retains 400. A heap dump has no allocation history at all — it is a single instant, so it can name the holder but never the rate; for rate, use JFR's allocation events. Excluding weak and soft references from the root path stops the tool pointing at a cache that was never the problem.",
+        "ru": "Важен retained size, и вычисляет его именно dominator tree. Гистограмма по количеству сильно вводит в заблуждение: миллион String может весить 40 МБ, тогда как одна HashMap удерживает 400. У heap dump нет никакой истории выделений — это один момент, поэтому он назовёт держателя, но никогда темп; для темпа берите события выделения из JFR. Исключение слабых и мягких ссылок из пути до корней не даёт инструменту указать на кеш, который никогда не был проблемой."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/troubleshoot/troubleshoot-memory-leaks.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/jcmd.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.profiling.001",
+      "section": "profiling",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which statement about JDK Flight Recorder is TRUE?",
+        "ru": "Какое утверждение о JDK Flight Recorder верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It is built into the VM, has been part of OpenJDK and free for production use since JDK 11, and costs roughly 1% at its default settings.",
+            "ru": "Он встроен в виртуальную машину, входит в OpenJDK и бесплатен для продакшена с JDK 11, а на настройках по умолчанию стоит примерно 1%."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It requires a commercial Oracle licence for use in production.",
+            "ru": "Для использования в продакшене требуется коммерческая лицензия Oracle."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is an agent that has to be attached with -javaagent before the application classes load.",
+            "ru": "Это агент, который нужно подключать через -javaagent до загрузки классов приложения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It can only be enabled at launch; there is no way to start a recording on a running process.",
+            "ru": "Его можно включить только при запуске; начать запись на работающем процессе нельзя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Its overhead is around 30%, which is why it is a development-only tool.",
+            "ru": "Его накладные расходы около 30% — поэтому это инструмент только для разработки."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "JEP 328 brought Flight Recorder into OpenJDK in JDK 11 under the GPL, ending the commercial-feature era. Because it is an event recorder inside the VM rather than an agent on top of it, the default settings profile costs about 1% — low enough to leave on permanently — and the heavier \"profile\" settings about 2%. Recordings can be started at launch with -XX:StartFlightRecording or attached later with jcmd.",
+        "ru": "JEP 328 перенёс Flight Recorder в OpenJDK в JDK 11 под GPL, закончив эпоху коммерческой функции. Поскольку это регистратор событий внутри виртуальной машины, а не агент поверх неё, набор настроек default стоит около 1% — достаточно мало, чтобы держать его включённым постоянно, — а более тяжёлый profile около 2%. Запись запускается при старте через -XX:StartFlightRecording или подключается позже через jcmd."
+      },
+      "sources": [
+        "https://openjdk.org/jeps/328",
+        "https://docs.oracle.com/en/java/javase/17/troubleshoot/diagnostic-tools.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.profiling.002",
+      "section": "profiling",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which command pair starts a Flight Recorder recording on an already-running process and writes it to a file?",
+        "ru": "Какая пара команд запускает запись Flight Recorder на уже работающем процессе и сохраняет её в файл?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "jstack <pid>, then jstack <pid> > /tmp/app.jfr",
+            "ru": "jstack <pid>, затем jstack <pid> > /tmp/app.jfr"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "jcmd <pid> JFR.start name=diag settings=profile, then jcmd <pid> JFR.dump name=diag filename=/tmp/app.jfr",
+            "ru": "jcmd <pid> JFR.start name=diag settings=profile, затем jcmd <pid> JFR.dump name=diag filename=/tmp/app.jfr"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "jmap -dump:live,format=b,file=/tmp/app.jfr <pid>",
+            "ru": "jmap -dump:live,format=b,file=/tmp/app.jfr <pid>"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Restarting with -XX:StartFlightRecording — there is no way to attach to a live process.",
+            "ru": "Перезапуск с -XX:StartFlightRecording — подключиться к живому процессу нельзя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "kill -3 <pid>, which makes the JVM write a recording next to its working directory.",
+            "ru": "kill -3 <pid> — JVM запишет recording рядом с рабочим каталогом."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "jcmd is the attach-based diagnostic entry point, and JFR.start / JFR.dump / JFR.stop are its recording commands. jstack produces a thread dump, jmap a heap dump, and kill -3 the same thread dump on stderr — all useful, none of them a recording. Being able to attach matters: the interesting incident is usually already underway when you decide to look.",
+        "ru": "jcmd — точка входа в диагностику через attach, а JFR.start / JFR.dump / JFR.stop — её команды записи. jstack даёт дамп потоков, jmap — дамп heap, kill -3 — тот же дамп потоков в stderr; всё полезно, но ничто из этого не recording. Возможность подключиться важна: интересный инцидент обычно уже идёт, когда вы решаете посмотреть."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/jcmd.html",
+        "https://openjdk.org/jeps/328"
+      ]
+    },
+    {
+      "id": "jvm-internals.profiling.003",
+      "section": "profiling",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Why is an instrumenting profiler a poor tool for answering \"where does the time go\"?",
+        "ru": "Почему инструментирующий профайлер — плохой инструмент для вопроса «куда уходит время»?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It is the most accurate way to measure time; the objection to it is only the disk space it uses.",
+            "ru": "Это самый точный способ измерять время; претензия к нему только в занимаемом месте на диске."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It has no effect on the JIT, but it cannot see methods that were inlined.",
+            "ru": "На JIT он не влияет, но не видит методы, которые были заинлайнены."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Rewriting bytecode to time method entries and exits blocks inlining, so the reported timings describe a program the JIT compiled differently from the real one; it stays trustworthy for call counts.",
+            "ru": "Переписывание байткода для замера входов и выходов мешает инлайнингу, поэтому показанные тайминги описывают программу, которую JIT скомпилировал иначе, чем настоящую; для счётчиков вызовов он по-прежнему надёжен."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It cannot count method calls, only sample stacks at intervals.",
+            "ru": "Он не умеет считать вызовы, а только периодически снимает стеки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is the only tool that can show native frames, which is why it is slow.",
+            "ru": "Это единственный инструмент, показывающий нативные фреймы, — потому он и медленный."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The measurement changes the thing being measured, and not uniformly: small hot methods that would normally be inlined become too large to inline once the instrumentation is added, so they pay a call they would not otherwise pay. The distortion is worst exactly where you care most. Use instrumentation for call counts and coverage, and a sampler for time.",
+        "ru": "Измерение меняет измеряемое, и неравномерно: маленькие горячие методы, которые обычно инлайнятся, после добавления обвязки становятся слишком велики для встраивания и начинают платить за вызов, которого иначе не было бы. Искажение сильнее всего ровно там, где вам важнее всего. Берите инструментирование для счётчиков вызовов и покрытия, а сэмплер — для времени."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/troubleshoot/troubleshooting-performance-issues.html",
+        "https://openjdk.org/jeps/328"
+      ]
+    },
+    {
+      "id": "jvm-internals.profiling.004",
+      "section": "profiling",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "What is safepoint bias in a sampling profiler?",
+        "ru": "Что такое safepoint bias у сэмплирующего профайлера?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It means the profiler samples too often, so the samples themselves dominate the measurement.",
+            "ru": "Это значит, что профайлер сэмплирует слишком часто, и сами сэмплы начинают доминировать в измерении."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It affects instrumenting profilers only; samplers are unbiased by construction.",
+            "ru": "Оно затрагивает только инструментирующие профайлеры; сэмплеры не смещены по построению."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is removed by increasing the sampling interval, which gives the JVM time to reach a safepoint.",
+            "ru": "Оно устраняется увеличением интервала сэмплирования, дающим JVM время дойти до safepoint."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "JVMTI's GetStackTrace can only run at a safepoint, so code without safepoint polls — tight counted loops, inlined bodies — is never sampled and its time is attributed to whatever safepoint came next; profilers built on AsyncGetCallTrace sample from a signal handler and avoid it.",
+            "ru": "GetStackTrace из JVMTI может выполниться только в safepoint, поэтому код без опроса safepoint — плотные счётные циклы, заинлайненные тела — никогда не попадает в выборку, и его время приписывается следующему safepoint; профайлеры на AsyncGetCallTrace берут выборку из обработчика сигнала и этого избегают."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It only appears when GC logging is enabled, because logging adds extra safepoints.",
+            "ru": "Оно проявляется только при включённом GC-логировании, потому что логирование добавляет лишние safepoint-ы."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A safepoint is a point where the JVM can inspect a thread's stack, and the compiler only emits polls where it must. The result is systematic, not random: the same methods are invisible every time, and their cost lands on a neighbour. A longer interval does not help because the bias is in *where* samples can be taken, not in how many. This is why a naive profiler can point confidently at the wrong method.",
+        "ru": "Safepoint — точка, где JVM может осмотреть стек потока, и компилятор ставит опросы только там, где обязан. Отсюда систематичность, а не случайность: одни и те же методы невидимы каждый раз, а их стоимость оседает на соседе. Больший интервал не помогает, потому что смещение в том, *где* можно взять сэмпл, а не в том, сколько их. Поэтому наивный профайлер уверенно указывает не на тот метод."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/troubleshoot/troubleshooting-performance-issues.html",
+        "https://docs.oracle.com/en/java/javase/17/troubleshoot/diagnostic-tools.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.profiling.005",
+      "section": "profiling",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "What can a heap dump NOT tell you?",
+        "ru": "Чего heap dump сказать НЕ может?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Which objects were alive, since a dump records only class names and counts.",
+            "ru": "Какие объекты были живы, — дамп записывает только имена классов и количества."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The retained size of an object, which requires a running JVM to compute.",
+            "ru": "Retained size объекта — для его вычисления нужна работающая JVM."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The path from an object to a GC root, which is only available from a live process.",
+            "ru": "Путь от объекта до корня GC — он доступен только на живом процессе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing — a heap dump is a complete record and replaces both a profiler and a GC log.",
+            "ru": "Ничего — heap dump это полная запись, заменяющая и профайлер, и GC-лог."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The rate of allocation — a dump is a single instant with no history, so it identifies the holder of memory but never how fast objects are being created; JFR's allocation events answer that.",
+            "ru": "Темп выделения — дамп это один момент без истории, поэтому он определяет держателя памяти, но не скорость создания объектов; на это отвечают события выделения в JFR."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A dump is a snapshot of the object graph: it contains the objects, their fields, the references between them, and therefore retained sizes and root paths — all computed offline by the analyser. What it has no notion of is time. A workload allocating 2 GB per second of short-lived objects and one allocating 2 MB can produce identical dumps. jcmd <pid> GC.heap_dump also triggers a full GC first, so it is a stop-the-world operation sized to your heap rather than something to do casually in production.",
+        "ru": "Дамп — снимок графа объектов: в нём есть объекты, их поля, ссылки между ними, а значит, и retained size, и пути до корней, которые анализатор считает офлайн. Чего в нём нет вовсе — это времени. Нагрузка, выделяющая 2 ГБ короткоживущих объектов в секунду, и нагрузка на 2 МБ могут дать одинаковые дампы. К тому же jcmd <pid> GC.heap_dump сначала запускает полную сборку, то есть это stop-the-world операция размером с ваш heap, а не то, что делают в продакшене между делом."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/jcmd.html",
+        "https://docs.oracle.com/en/java/javase/17/troubleshoot/troubleshoot-memory-leaks.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.profiling.006",
+      "section": "profiling",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "How do you read a flame graph correctly?",
+        "ru": "Как правильно читать flame graph?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Find the deepest stack: the longest call chain is where the program spends its time.",
+            "ru": "Найдите самый глубокий стек: самая длинная цепочка вызовов и есть место, где программа проводит время."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Width is time or sample count and the vertical axis is only the call stack, so the answer is the widest plateau near the top — wide frames lower down are where time passes through, not where it is spent.",
+            "ru": "Ширина — это время или число сэмплов, а вертикальная ось — только стек вызовов, поэтому ответ находится в самом широком плато ближе к верху; широкие фреймы внизу — это то, сквозь что время проходит, а не где оно тратится."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Read left to right — the horizontal axis is chronological, so the rightmost frames are the most recent hot spots.",
+            "ru": "Читайте слева направо: горизонтальная ось хронологическая, поэтому самые правые фреймы — самые свежие горячие точки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Find the tallest tower; its height is proportional to the CPU time of the leaf method.",
+            "ru": "Найдите самую высокую башню: её высота пропорциональна процессорному времени листового метода."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Width is the number of times a method was called, so the widest frame is the most frequently invoked one.",
+            "ru": "Ширина — это число вызовов метода, поэтому самый широкий фрейм — самый часто вызываемый."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The horizontal axis is not time-ordered — frames are merged and usually sorted alphabetically so that identical stacks stack up. Width is the share of samples, height is nesting depth alone, and main() is always full width without being the hot spot. Three habits keep the reading honest: profile a warmed-up JVM, profile the load you actually care about, and confirm the fix by measuring again — knowing where the time went is not a promise that removing it makes the program faster.",
+        "ru": "Горизонтальная ось не упорядочена по времени: фреймы сливаются и обычно сортируются по алфавиту, чтобы одинаковые стеки складывались. Ширина — доля сэмплов, высота — только глубина вложенности, а main() всегда во всю ширину, не будучи горячей точкой. Честность чтения держат три привычки: профилировать прогретую JVM, профилировать ту нагрузку, которая вам важна, и подтверждать исправление повторным измерением — знание о том, куда ушло время, не обещает, что без него станет быстрее."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/troubleshoot/troubleshooting-performance-issues.html",
+        "https://docs.oracle.com/en/java/javase/17/troubleshoot/diagnostic-tools.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.jit.001",
+      "section": "jit",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "How does tiered compilation move a method from the interpreter to optimised code?",
+        "ru": "Как многоуровневая компиляция переводит метод из интерпретатора в оптимизированный код?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Every method is compiled by C2 at class-loading time; the interpreter exists only for debugging.",
+            "ru": "Каждый метод компилируется C2 при загрузке класса; интерпретатор существует только для отладки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "C1 and C2 are alternatives chosen at startup; a given method is compiled by one of them, never by both.",
+            "ru": "C1 и C2 — альтернативы, выбираемые при старте; конкретный метод компилирует один из них, но никогда оба."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It starts interpreted with counters, is compiled by C1 with profiling instrumentation attached, and once hot enough is recompiled by C2 using that profile.",
+            "ru": "Он начинает интерпретироваться со счётчиками, компилируется C1 с приложенной профилирующей обвязкой, а разогревшись достаточно, перекомпилируется C2 с опорой на этот профиль."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The interpreter runs a method only when compilation of it failed.",
+            "ru": "Интерпретатор выполняет метод только тогда, когда его компиляция не удалась."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "C2 compiles first and the VM falls back to C1 if the optimised code deoptimises.",
+            "ru": "Сначала компилирует C2, а при деоптимизации оптимизированного кода машина откатывается к C1."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The two compilers are stages, not options. C1 is fast to compile and produces moderate code that also gathers a profile — which branches were taken, which concrete types appeared at each call site, whether a null was ever seen. C2 is slow to compile and produces excellent code by trusting that profile. A long loop that becomes hot while already running is replaced mid-flight by on-stack replacement.",
+        "ru": "Два компилятора — это ступени, а не варианты. C1 компилирует быстро и даёт умеренный код, который заодно собирает профиль: какие ветки брались, какие конкретные типы появлялись в каждой точке вызова, встречался ли null. C2 компилирует медленно и даёт отличный код, доверяя этому профилю. Длинный цикл, разогревшийся уже во время выполнения, заменяется на лету механизмом on-stack replacement."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html",
+        "https://docs.oracle.com/en/java/javase/17/troubleshoot/troubleshooting-performance-issues.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.jit.002",
+      "section": "jit",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "This project's Dockerfile runs the service with -XX:TieredStopAtLevel=1. What does that flag do, and why is it there?",
+        "ru": "Dockerfile этого проекта запускает сервис с -XX:TieredStopAtLevel=1. Что делает этот флаг и зачем он здесь?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It disables the JIT entirely, leaving the interpreter, which is what makes the boot faster.",
+            "ru": "Он полностью отключает JIT, оставляя интерпретатор, — за счёт этого старт и ускоряется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It limits the code cache to one segment, reducing the resident footprint of the container.",
+            "ru": "Он ограничивает code cache одним сегментом, уменьшая resident-след контейнера."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It raises peak throughput by letting C2 skip the C1 profiling stage.",
+            "ru": "Он повышает пиковую пропускную способность, позволяя C2 пропустить стадию профилирования в C1."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It stops compilation at C1 so C2 never runs. On the free tier's 0.1 CPU the Dockerfile records the boot dropping from ~50 s to ~29 s, and steady state is unaffected because a service that sleeps every 15 minutes never reaches the throughput where C2 pays for itself.",
+            "ru": "Он останавливает компиляцию на C1, и C2 не запускается никогда. На 0.1 CPU бесплатного тарифа Dockerfile фиксирует сокращение старта с ~50 с до ~29 с, а установившийся режим не страдает, потому что сервис, засыпающий каждые 15 минут, никогда не выходит на пропускную способность, при которой C2 себя окупает."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is required by AppCDS: a shared archive cannot be used together with C2.",
+            "ru": "Он необходим для AppCDS: общий архив нельзя использовать вместе с C2."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Level 1 is C1 without profiling counters. The general rule behind the flag is that C2 is an investment repaid over sustained throughput; short-lived processes, CLI tools and idle-heavy services often do better without it. On a tenth of a core the C2 compiler threads compete with the boot they are supposed to be optimising. The AppCDS archive in the same Dockerfile is a separate, independent gain — CDS shortens class loading, not compilation.",
+        "ru": "Уровень 1 — это C1 без профилирующих счётчиков. Общее правило за этим флагом: C2 — вложение, окупающееся на длительной пропускной способности; короткоживущие процессы, CLI-утилиты и по большей части простаивающие сервисы часто живут лучше без него. На десятой доле ядра потоки компилятора C2 конкурируют с тем самым стартом, который должны оптимизировать. AppCDS-архив в том же Dockerfile — отдельный независимый выигрыш: CDS сокращает загрузку классов, а не компиляцию."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html",
+        "https://openjdk.org/jeps/310"
+      ]
+    },
+    {
+      "id": "jvm-internals.jit.003",
+      "section": "jit",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "Why is inlining considered the most important JIT optimisation?",
+        "ru": "Почему инлайнинг считают важнейшей оптимизацией JIT?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because the call instruction is the single most expensive operation on modern CPUs.",
+            "ru": "Потому что инструкция вызова — самая дорогая операция на современных процессорах."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the JVM inlines every method under 325 bytecodes regardless of how often it runs, which removes most calls from the program.",
+            "ru": "Потому что JVM встраивает любой метод короче 325 байткодов независимо от частоты выполнения, убирая из программы почти все вызовы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because javac decides inlining at compile time, so it is free at run time.",
+            "ru": "Потому что инлайнинг решает javac во время компиляции, и во время выполнения он бесплатен."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because only final methods can be inlined, which is why final is a performance keyword.",
+            "ru": "Потому что встраивать можно только final-методы — поэтому final и является ключевым словом производительности."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Less for the call it saves than for the larger unit it creates: after inlining, escape analysis, constant propagation and loop transformations can all work across what used to be a method boundary.",
+            "ru": "Не столько ради сэкономленного вызова, сколько ради более крупной единицы, которую он создаёт: после встраивания escape analysis, распространение констант и преобразования циклов работают через бывшую границу метода."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A call is cheap; a boundary the optimiser cannot see across is expensive. Once a callee's body is inlined, the compiler can prove an object never escapes and scalarise it, fold constants through the former call, and unroll a loop with the callee inside. HotSpot decides by size and heat — roughly -XX:MaxInlineSize (35 bytecodes) anywhere, up to -XX:FreqInlineSize (325) when hot — so one oversized hot method can block the optimisation of everything around it. -XX:+UnlockDiagnosticVMOptions -XX:+PrintInlining shows the decisions.",
+        "ru": "Вызов дёшев; дорога граница, сквозь которую оптимизатор не видит. Как только тело вызываемого встроено, компилятор может доказать, что объект не покидает метод, и разложить его на скаляры, протащить константы через бывший вызов, развернуть цикл вместе с телом. HotSpot решает по размеру и температуре — примерно -XX:MaxInlineSize (35 байткодов) где угодно и до -XX:FreqInlineSize (325) для горячих, — поэтому один слишком большой горячий метод способен заблокировать оптимизацию всего вокруг. Решения показывает -XX:+UnlockDiagnosticVMOptions -XX:+PrintInlining."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html",
+        "https://openjdk.org/jeps/165"
+      ]
+    },
+    {
+      "id": "jvm-internals.jit.004",
+      "section": "jit",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "What is deoptimisation in HotSpot?",
+        "ru": "Что такое деоптимизация в HotSpot?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "C2 compiles against assumptions taken from the profile; when a guard fails or a newly loaded class invalidates one, the compiled frame is rewritten back into an interpreter frame at an uncommon trap and execution continues correctly from there.",
+            "ru": "C2 компилирует, опираясь на допущения из профиля; когда охранная проверка не проходит или новый загруженный класс ломает допущение, скомпилированный фрейм переписывается обратно во фрейм интерпретатора в точке uncommon trap, и выполнение корректно продолжается оттуда."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is a JIT failure: the compiler could not produce valid code and the method is permanently blacklisted.",
+            "ru": "Это отказ JIT: компилятор не смог породить корректный код, и метод навсегда занесён в чёрный список."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It throws an internal error that surfaces to the application as VirtualMachineError.",
+            "ru": "Она бросает внутреннюю ошибку, которая доходит до приложения как VirtualMachineError."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It happens only at shutdown, when the VM discards compiled code before exiting.",
+            "ru": "Она происходит только при завершении работы, когда машина сбрасывает скомпилированный код перед выходом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is what the VM does when the code cache fills and compiled methods have to be evicted.",
+            "ru": "Это то, что машина делает при заполнении code cache, когда приходится вытеснять скомпилированные методы."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Deoptimisation is what makes speculation sound. C2 is allowed to compile \"this reference was never null\" or \"this class has no loaded subclasses\" because it can always unwind to the interpreter when the assumption stops holding. Without it, Java would have to compile for the worst case everywhere. It also means performance can change long after startup: a new implementation class loaded at hour three can turn a monomorphic call site megamorphic and force recompilation around it.",
+        "ru": "Деоптимизация — то, что делает спекуляцию корректной. C2 вправе компилировать «эта ссылка никогда не была null» или «у этого класса нет загруженных подклассов», потому что всегда может отмотаться в интерпретатор, когда допущение перестаёт держаться. Без неё Java пришлось бы везде компилировать под худший случай. Отсюда же и то, что производительность может измениться спустя долгое время после старта: новый класс реализации, загруженный на третьем часу, превращает мономорфную точку вызова в мегаморфную и вызывает перекомпиляцию вокруг неё."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html",
+        "https://docs.oracle.com/en/java/javase/17/troubleshoot/troubleshooting-performance-issues.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.jit.005",
+      "section": "jit",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "What happens at a call site where the profile has seen three or more receiver types?",
+        "ru": "Что происходит в точке вызова, где профиль видел три и более типа получателя?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing changes: a virtual call is never inlined anyway, whatever the profile says.",
+            "ru": "Ничего не меняется: виртуальный вызов всё равно никогда не встраивается, что бы ни говорил профиль."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is megamorphic: C2 stops inlining and emits a real virtual dispatch, so an interface with many implementations on a hot path costs more than the same code with one.",
+            "ru": "Она мегаморфна: C2 прекращает встраивание и порождает настоящую виртуальную диспетчеризацию, поэтому интерфейс со множеством реализаций на горячем пути стоит дороже того же кода с одной."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The JIT inlines all of them, because class hierarchy analysis proves the set of receivers is closed.",
+            "ru": "JIT встраивает их все, потому что анализ иерархии классов доказывает замкнутость множества получателей."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "\"Megamorphic\" means the method body is too large to inline; the number of receiver types is irrelevant.",
+            "ru": "«Мегаморфный» означает слишком большое для встраивания тело метода; число типов получателя ни при чём."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Adding more implementations has no run-time cost, since dispatch is a single vtable lookup either way.",
+            "ru": "Добавление реализаций ничего не стоит во время выполнения, ведь диспетчеризация в любом случае — один поиск по vtable."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "With one receiver type (monomorphic) or two (bimorphic), C2 inlines the body and guards it with a type check — the common case is then straight-line code. At three or more the guard chain stops paying, so the call becomes a real dispatch and, worse, the boundary that inlining would have erased comes back, taking the surrounding optimisations with it. This is a real argument for keeping hot paths concrete, and equally a reason not to guess: confirm with PrintInlining before restructuring anything.",
+        "ru": "При одном типе получателя (мономорфная) или двух (биморфная) C2 встраивает тело и защищает его проверкой типа — обычный случай превращается в линейный код. При трёх и более цепочка проверок перестаёт окупаться, вызов становится настоящей диспетчеризацией и, что хуже, возвращается граница, которую встраивание бы стёрло, а вместе с ней уходят и окрестные оптимизации. Это настоящий аргумент за конкретность горячих путей — и ровно такой же повод не гадать: сверьтесь с PrintInlining, прежде чем что-то перестраивать."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html",
+        "https://openjdk.org/jeps/165"
+      ]
+    },
+    {
+      "id": "jvm-internals.jit.006",
+      "section": "jit",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A developer times a loop with System.nanoTime() in main and reports that the operation takes 0.3 ns. What is wrong?",
+        "ru": "Разработчик замерил цикл через System.nanoTime() в main и сообщает, что операция занимает 0,3 нс. Что не так?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The measurement averages the interpreter, then C1, then C2, and C2 is entitled to delete a computation whose result is never used or fold it to a constant — JMH exists because it forks a fresh JVM, warms up before counting, and gives Blackhole to keep the result alive.",
+            "ru": "Измерение усредняет интерпретатор, затем C1, затем C2, а C2 вправе удалить вычисление, результат которого не используется, или свернуть его в константу; JMH и существует затем, что форкает свежую JVM, прогревается до начала счёта и даёт Blackhole, чтобы результат не пропал."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Nothing is wrong with the method; the loop simply needs more iterations for the average to converge on the truth.",
+            "ru": "С методикой всё в порядке; циклу просто нужно больше итераций, чтобы среднее сошлось к истине."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "System.nanoTime() is too coarse; System.currentTimeMillis() has better resolution for short operations.",
+            "ru": "System.nanoTime() слишком груб; у System.currentTimeMillis() выше разрешение для коротких операций."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Calling System.gc() between iterations removes the variance and makes the number trustworthy.",
+            "ru": "Вызов System.gc() между итерациями убирает разброс и делает число достоверным."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The number is fine as long as it was measured with a debugger attached, which disables the JIT for accuracy.",
+            "ru": "Число нормальное, если измерено с подключённым отладчиком, который отключает JIT ради точности."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "0.3 ns is below one CPU cycle on typical hardware, which is the tell: the loop was optimised away. More iterations make it worse, because they give C2 more opportunity to hoist the invariant out or eliminate the dead code entirely. System.currentTimeMillis() is coarser, not finer, and a debugger-attached JVM measures a differently compiled program. JMH is the answer precisely because warm-up, forking, dead-code elimination and constant folding all have to be handled at once.",
+        "ru": "0,3 нс — это меньше одного такта на типичном железе, и это признак: цикл оптимизировали прочь. Больше итераций сделает только хуже, дав C2 больше возможностей вынести инвариант или целиком удалить мёртвый код. System.currentTimeMillis() грубее, а не точнее, а JVM с подключённым отладчиком измеряет иначе скомпилированную программу. JMH и есть ответ именно потому, что прогрев, форк, удаление мёртвого кода и свёртку констант нужно учесть разом."
+      },
+      "sources": [
+        "https://github.com/openjdk/jmh",
+        "https://docs.oracle.com/en/java/javase/17/troubleshoot/troubleshooting-performance-issues.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.references-and-cleanup.001",
+      "section": "references-and-cleanup",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "In what order does the collector clear a weak reference and enqueue it on its ReferenceQueue?",
+        "ru": "В каком порядке сборщик очищает слабую ссылку и ставит её в ReferenceQueue?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Enqueued first; the reference is cleared when you call get() on it after dequeuing.",
+            "ru": "Сначала ставит в очередь; ссылка очищается, когда вы вызываете get() уже после снятия с очереди."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both happen atomically during the GC pause, so there is no observable order.",
+            "ru": "И то и другое происходит атомарно во время паузы сборки, поэтому наблюдаемого порядка нет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The reference is enqueued and get() keeps working until you call clear() yourself.",
+            "ru": "Ссылка ставится в очередь, а get() продолжает работать, пока вы сами не вызовете clear()."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Enqueueing happens synchronously on the application thread that dropped the last strong reference.",
+            "ru": "Постановка в очередь происходит синхронно в том потоке приложения, который отпустил последнюю сильную ссылку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Cleared first — get() starts returning null — and only then enqueued, so a reference you take off the queue never hands you the referent.",
+            "ru": "Сначала очищает — get() начинает возвращать null — и только потом ставит в очередь, поэтому снятая с очереди ссылка никогда не отдаст вам объект."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Clear, then enqueue — the ordering is what makes the mechanism safe: nobody can resurrect an object through a queued reference. Enqueueing is asynchronous, done by a reference handler thread, so there is an unspecified delay between the collection and the notification. Code that must react polls the queue or blocks on ReferenceQueue.remove().",
+        "ru": "Сначала очистка, затем постановка в очередь — именно этот порядок делает механизм безопасным: воскресить объект через поставленную в очередь ссылку невозможно. Постановка асинхронна, её делает поток обработчика ссылок, поэтому между сборкой и уведомлением есть неопределённая задержка. Код, который должен отреагировать, опрашивает очередь или блокируется на ReferenceQueue.remove()."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ref/package-summary.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ref/Reference.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.references-and-cleanup.002",
+      "section": "references-and-cleanup",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "When does HotSpot clear a SoftReference?",
+        "ru": "Когда HotSpot очищает SoftReference?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "At every young collection, exactly like a weak reference.",
+            "ru": "При каждой молодой сборке, ровно как слабую ссылку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only when heap occupancy reaches exactly -Xmx, and never before.",
+            "ru": "Только когда занятость heap достигнет ровно -Xmx, и никогда раньше."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "At the collector's discretion before throwing OutOfMemoryError, by an LRU policy scaled to free heap — roughly -XX:SoftRefLRUPolicyMSPerMB (1000 by default) milliseconds of survival per free megabyte since last access.",
+            "ru": "По усмотрению сборщика до того, как он бросит OutOfMemoryError, по LRU-политике, масштабируемой свободным heap: примерно -XX:SoftRefLRUPolicyMSPerMB (по умолчанию 1000) миллисекунд жизни на свободный мегабайт с момента последнего обращения."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "After a fixed 60 seconds without access, which is why soft caches are predictable.",
+            "ru": "После фиксированных 60 секунд без обращения — поэтому мягкие кеши предсказуемы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Never — a SoftReference is only enqueued, and the referent is freed when you call clear().",
+            "ru": "Никогда — SoftReference только ставится в очередь, а объект освобождается при вызове clear()."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The guarantee is narrow: all soft references to softly reachable objects are cleared before the VM throws OutOfMemoryError. Everything before that is policy, and HotSpot's policy ties lifetime to free heap, so the same cache behaves differently on a bigger machine or after an unrelated allocation spike. That makes SoftReference reasonable for a memory-sensitive cache and unsuitable for anything whose lifetime you need to predict — use a bounded cache with an eviction policy you chose.",
+        "ru": "Гарантия узкая: все мягкие ссылки на мягко достижимые объекты очищаются до того, как машина бросит OutOfMemoryError. Всё, что до этого, — политика, а политика HotSpot привязывает время жизни к свободному heap, поэтому один и тот же кеш ведёт себя иначе на большей машине или после постороннего всплеска выделений. Значит, SoftReference разумна для кеша, чувствительного к памяти, и не годится там, где время жизни нужно предсказывать: берите ограниченный кеш с вытеснением, которое выбрали вы."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ref/package-summary.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.references-and-cleanup.003",
+      "section": "references-and-cleanup",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "An object is referenced by one static field and by five WeakReferences. What is its reachability?",
+        "ru": "На объект ссылаются одно статическое поле и пять WeakReference. Какова его достижимость?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Strongly reachable: an object is as strong as its strongest path from a root, so the weak references are irrelevant while the static field holds it.",
+            "ru": "Сильно достижим: объект настолько силён, насколько силён его сильнейший путь от корня, поэтому слабые ссылки не имеют значения, пока его держит статическое поле."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Weakly reachable: five weak references outweigh one strong reference.",
+            "ru": "Слабо достижим: пять слабых ссылок перевешивают одну сильную."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Softly reachable: mixing reference strengths averages them out to the middle degree.",
+            "ru": "Мягко достижим: смешение степеней ссылок усредняет их до средней."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Weakly reachable: creating a WeakReference downgrades every other reference to the same object.",
+            "ru": "Слабо достижим: создание WeakReference понижает все остальные ссылки на тот же объект."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It depends on which reference was created last; the most recent one determines the degree.",
+            "ru": "Зависит от того, какая ссылка создана последней: степень определяет самая свежая."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The java.lang.ref package definition orders reachability — strongly, softly, weakly, phantom, unreachable — and an object takes the strongest degree any path from a GC root gives it. Reference strengths do not combine or average. This is why sprinkling WeakReferences over a leaking structure fixes nothing: as long as one strong path survives, the object stays, and the weak references simply never get cleared.",
+        "ru": "Описание пакета java.lang.ref задаёт порядок достижимости — сильная, мягкая, слабая, фантомная, недостижимость — и объект получает сильнейшую степень, какую даёт любой путь от корня GC. Степени ссылок не складываются и не усредняются. Поэтому посыпать текущую структуру WeakReference-ами бесполезно: пока жив хоть один сильный путь, объект остаётся, а слабые ссылки просто никогда не очищаются."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ref/package-summary.html",
+        "https://docs.oracle.com/en/java/javase/17/troubleshoot/troubleshoot-memory-leaks.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.references-and-cleanup.004",
+      "section": "references-and-cleanup",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "What is the current status of Object.finalize()?",
+        "ru": "Каков текущий статус Object.finalize()?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Removed from the JDK in Java 11 together with the other deprecated Object methods.",
+            "ru": "Удалён из JDK в Java 11 вместе с прочими устаревшими методами Object."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Removed in Java 17, which is why AutoCloseable became the only cleanup mechanism.",
+            "ru": "Удалён в Java 17 — поэтому AutoCloseable и стал единственным механизмом очистки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Disabled by default since Java 18; an application must opt in with --finalization=enabled.",
+            "ru": "Отключён по умолчанию с Java 18; приложение должно включить его через --finalization=enabled."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Deprecated in Java 9 and deprecated for removal by JEP 421 in Java 18, which also added --finalization=disabled; it still runs by default in JDK 17 and 18, and removal is planned for a future release.",
+            "ru": "Объявлен устаревшим в Java 9 и устаревшим с прицелом на удаление в JEP 421 в Java 18, который добавил и --finalization=disabled; в JDK 17 и 18 он по умолчанию ещё работает, а удаление запланировано на будущий релиз."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Never formally deprecated — merely discouraged in the javadoc since Java 7.",
+            "ru": "Формально никогда не объявлялся устаревшим — лишь не рекомендуется в javadoc с Java 7."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "JEP 421 (Java 18) deprecated finalization for removal and gave applications --finalization=disabled so they can prove in advance that they do not depend on it. It remains enabled by default for now. Its problems are structural rather than fixable: an unspecified thread, no ordering or timing guarantee, exceptions silently swallowed, the ability to resurrect the object being finalised, and at least one extra GC cycle before the memory comes back. Cleaner and AutoCloseable are the replacements.",
+        "ru": "JEP 421 (Java 18) объявил финализацию устаревшей с прицелом на удаление и дал приложениям --finalization=disabled, чтобы заранее доказать независимость от неё. Пока она остаётся включённой по умолчанию. Её проблемы структурны, а не исправимы: неуказанный поток, отсутствие гарантий порядка и времени, молча проглатываемые исключения, возможность воскресить финализируемый объект и как минимум один лишний цикл сборки до возврата памяти. Замена — Cleaner и AutoCloseable."
+      },
+      "sources": [
+        "https://openjdk.org/jeps/421",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ref/Cleaner.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.references-and-cleanup.005",
+      "section": "references-and-cleanup",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "What is Reference.reachabilityFence(this) for?",
+        "ru": "Для чего нужен Reference.reachabilityFence(this)?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It is a memory barrier that orders a volatile write against subsequent reads.",
+            "ru": "Это барьер памяти, упорядочивающий volatile-запись относительно последующих чтений."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An object can become unreachable while one of its own instance methods is still executing, if the JIT proves this is not used afterwards; the fence keeps it reachable up to that point so a Cleaner cannot fire underneath the method.",
+            "ru": "Объект может стать недостижимым, пока ещё выполняется его собственный метод экземпляра, если JIT доказал, что this дальше не используется; барьер удерживает его достижимым до нужной точки, чтобы Cleaner не сработал у метода под ногами."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It forces a garbage collection at that point in the code.",
+            "ru": "Он принудительно запускает сборку мусора в этой точке кода."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It pins the object at its current address so the collector cannot move it during compaction.",
+            "ru": "Он закрепляет объект по текущему адресу, чтобы сборщик не двигал его при уплотнении."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It makes this strongly reachable for the whole duration of every instance method, which the JVM does not otherwise guarantee at all.",
+            "ru": "Он делает this сильно достижимым на всё время любого метода экземпляра, чего JVM иначе не гарантирует вовсе."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Reachability is defined by what the optimised program can still use, not by which frame is on the stack. If a method reads a native handle out of a field and then computes with it, this may be dead from that point on and the object can be collected — firing its Cleaner while the native resource is in use. reachabilityFence(this) placed after the last use is what closes the window. It is not a memory barrier, does not force a collection, and does not pin the object in memory.",
+        "ru": "Достижимость определяется тем, что оптимизированная программа ещё может использовать, а не тем, чей фрейм лежит на стеке. Если метод прочитал нативный дескриптор из поля и дальше считает с ним, this с этого момента может быть мёртв, и объект соберут — а его Cleaner сработает, пока нативный ресурс используется. reachabilityFence(this), поставленный после последнего использования, и закрывает это окно. Это не барьер памяти, он не запускает сборку и не закрепляет объект в памяти."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ref/Reference.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ref/Cleaner.html"
+      ]
+    },
+    {
+      "id": "jvm-internals.references-and-cleanup.006",
+      "section": "references-and-cleanup",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A class registers a Cleaner action to release a native handle, and the action is a lambda that reads an instance field of the object being registered. What happens?",
+        "ru": "Класс регистрирует в Cleaner действие, освобождающее нативный дескриптор, и это действие — лямбда, читающая поле экземпляра регистрируемого объекта. Что произойдёт?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It works: Cleaner holds its registered object phantomly, so capturing it in the action is harmless.",
+            "ru": "Всё работает: Cleaner держит зарегистрированный объект фантомно, поэтому захват его в действии безвреден."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The JVM detects the capture and register() throws IllegalArgumentException.",
+            "ru": "JVM обнаруживает захват, и register() бросает IllegalArgumentException."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The lambda captures the object, so it stays strongly reachable from the cleaner, never becomes phantom reachable, and the action never runs — the native handle leaks.",
+            "ru": "Лямбда захватывает объект, поэтому он остаётся сильно достижимым от cleaner-а, никогда не становится фантомно достижимым, и действие не выполнится никогда — нативный дескриптор утекает."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It works, but the action runs on the application thread that dropped the last reference instead of the cleaner thread.",
+            "ru": "Всё работает, но действие выполняется в том потоке приложения, который отпустил последнюю ссылку, а не в потоке cleaner-а."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It works after an explicit System.gc(), which is why Cleaner-based cleanup is considered non-deterministic.",
+            "ru": "Всё работает после явного System.gc() — поэтому очистку через Cleaner и считают недетерминированной."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A lambda that touches an instance field captures this, and the cleaner holds the action strongly. The object is therefore reachable from the cleaner for as long as the cleaner lives, so it can never reach phantom reachability and the cleanup is never triggered — a leak created by the code written to prevent one. Capture a plain handle, a long, or a static method reference instead; Cleaner's javadoc makes this the central caveat. And Cleaner is a safety net, not a plan: AutoCloseable with try-with-resources is the deterministic release.",
+        "ru": "Лямбда, трогающая поле экземпляра, захватывает this, а cleaner держит действие сильно. Значит, объект достижим от cleaner-а всё время его жизни, фантомной достижимости достичь не может, и очистка не запускается никогда — утечка, созданная кодом, написанным ради её предотвращения. Захватывайте вместо этого простой дескриптор, long или ссылку на статический метод; javadoc Cleaner делает это главной оговоркой. И Cleaner — страховка, а не план: детерминированное освобождение даёт AutoCloseable с try-with-resources."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ref/Cleaner.html",
+        "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ref/package-summary.html"
+      ]
+    }
+  ]
+}

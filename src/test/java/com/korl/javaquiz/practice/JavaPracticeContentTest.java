@@ -9,8 +9,10 @@ import org.junit.jupiter.api.TestFactory;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.StreamSupport;
 
@@ -26,20 +28,41 @@ class JavaPracticeContentTest {
 
     private static final Set<String> DIFFICULTIES = Set.of("easy", "medium", "hard");
 
-    private static JsonNode root;
+    /**
+     * One track, several files. The exercises grew a second file when the concurrency ones were
+     * added: content files are loaded by a migration each, and a migration only runs once, so
+     * appending to {@code java.json} would have left the new tasks out of every database that
+     * had already migrated. They are one corpus here because they are one track to a learner —
+     * ids have to be unique across both, and the difficulty counts are counted together.
+     */
+    private static final List<String> CONTENT = List.of(
+            "/content/practice/java.json",
+            "/content/practice/java-concurrency.json",
+            "/content/practice/java-core-extra.json",
+            "/content/practice/algorithms.json");
+
+    private static List<JsonNode> roots;
 
     private final JavaPracticeEngine engine = new JavaPracticeEngine(JavaLimits.defaults());
 
     @BeforeAll
     static void load() throws Exception {
-        try (InputStream in = JavaPracticeContentTest.class.getResourceAsStream("/content/practice/java.json")) {
-            assertThat(in).describedAs("bundled Java practice content").isNotNull();
-            root = new ObjectMapper().readTree(in);
+        List<JsonNode> loaded = new ArrayList<>();
+        for (String resource : CONTENT) {
+            try (InputStream in = JavaPracticeContentTest.class.getResourceAsStream(resource)) {
+                assertThat(in).describedAs("bundled Java practice content %s", resource).isNotNull();
+                JsonNode root = new ObjectMapper().readTree(in);
+                assertThat(root.get("track").asText()).describedAs("track of %s", resource).isEqualTo("java");
+                loaded.add(root);
+            }
         }
+        roots = List.copyOf(loaded);
     }
 
     private static List<JsonNode> tasks() {
-        return StreamSupport.stream(root.get("tasks").spliterator(), false).toList();
+        return roots.stream()
+                .flatMap(root -> StreamSupport.stream(root.get("tasks").spliterator(), false))
+                .toList();
     }
 
     private static JavaTaskSpec spec(JsonNode task) {
@@ -75,24 +98,51 @@ class JavaPracticeContentTest {
     /** A task pointing at a section that does not exist would render a dead link. */
     @Test
     void everyTaskPointsAtARealStudySection() throws Exception {
-        JsonNode topics;
-        try (InputStream in = JavaPracticeContentTest.class.getResourceAsStream("/content/topics.json")) {
-            assertThat(in).describedAs("bundled topic definitions").isNotNull();
-            topics = new ObjectMapper().readTree(in).get("topics");
-        }
+        Map<String, Set<String>> sectionsByTopic = studySections();
         for (JsonNode task : tasks()) {
             String id = task.get("id").asText();
             String topicId = task.path("topic").asText();
-            JsonNode topic = StreamSupport.stream(topics.spliterator(), false)
-                    .filter(candidate -> candidate.get("id").asText().equals(topicId))
-                    .findFirst()
-                    .orElse(null);
-            assertThat(topic).describedAs("topic %s of %s", topicId, id).isNotNull();
-
-            Set<String> sectionIds = new HashSet<>();
-            topic.get("sections").forEach(section -> sectionIds.add(section.get("id").asText()));
-            assertThat(sectionIds).describedAs("section of %s", id).contains(task.path("section").asText());
+            assertThat(sectionsByTopic).describedAs("topic %s of %s", topicId, id).containsKey(topicId);
+            assertThat(sectionsByTopic.get(topicId))
+                    .describedAs("section of %s", id)
+                    .contains(task.path("section").asText());
         }
+    }
+
+    /**
+     * Every section of every topic, from both places a topic can be defined: the original five
+     * live in one {@code topics.json}, and every topic added since ships its own
+     * {@code topic.json} next to its articles.
+     *
+     * <p>The per-topic files are found by asking each task which topic it belongs to, rather
+     * than by listing them here. A list would have to be extended by every new topic that grows
+     * exercises, and the failure of forgetting is this test quietly passing a dead link.
+     */
+    private static Map<String, Set<String>> studySections() throws Exception {
+        Map<String, Set<String>> sections = new HashMap<>();
+        ObjectMapper mapper = new ObjectMapper();
+        try (InputStream in = JavaPracticeContentTest.class.getResourceAsStream("/content/topics.json")) {
+            assertThat(in).describedAs("bundled topic definitions").isNotNull();
+            mapper.readTree(in).get("topics").forEach(topic -> collect(sections, topic));
+        }
+        for (JsonNode task : tasks()) {
+            String topicId = task.path("topic").asText();
+            if (topicId.isEmpty() || sections.containsKey(topicId)) {
+                continue;
+            }
+            String resource = "/content/" + topicId + "/topic.json";
+            try (InputStream in = JavaPracticeContentTest.class.getResourceAsStream(resource)) {
+                assertThat(in).describedAs("topic definition %s", resource).isNotNull();
+                collect(sections, mapper.readTree(in).get("topic"));
+            }
+        }
+        return sections;
+    }
+
+    private static void collect(Map<String, Set<String>> sections, JsonNode topic) {
+        Set<String> ids = new HashSet<>();
+        topic.get("sections").forEach(section -> ids.add(section.get("id").asText()));
+        sections.put(topic.get("id").asText(), ids);
     }
 
     @Test

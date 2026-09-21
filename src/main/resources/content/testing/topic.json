@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 2,
+  "topic": {
+    "id": "testing",
+    "order": 9,
+    "name": {
+      "en": "Testing Java applications",
+      "ru": "Тестирование Java-приложений"
+    },
+    "sections": [
+      {
+        "id": "test-pyramid",
+        "order": 1,
+        "level": "junior",
+        "title": {
+          "en": "The test pyramid and what a test is for",
+          "ru": "Пирамида тестов и зачем вообще нужен тест"
+        }
+      },
+      {
+        "id": "junit5",
+        "order": 2,
+        "level": "junior",
+        "title": {
+          "en": "JUnit 5 in practice",
+          "ru": "JUnit 5 на практике"
+        }
+      },
+      {
+        "id": "mockito",
+        "order": 3,
+        "level": "middle",
+        "title": {
+          "en": "Mockito: stubs, spies and verification",
+          "ru": "Mockito: стабы, спаи и verify"
+        }
+      },
+      {
+        "id": "spring-tests",
+        "order": 4,
+        "level": "middle",
+        "title": {
+          "en": "Testing a Spring application",
+          "ru": "Тестирование Spring-приложения"
+        }
+      },
+      {
+        "id": "testcontainers",
+        "order": 5,
+        "level": "middle",
+        "title": {
+          "en": "Testcontainers: tests against real infrastructure",
+          "ru": "Testcontainers: тесты с реальной инфраструктурой"
+        }
+      },
+      {
+        "id": "web-contracts",
+        "order": 6,
+        "level": "middle",
+        "title": {
+          "en": "The web layer and contracts",
+          "ru": "Web-слой и контракты"
+        }
+      },
+      {
+        "id": "test-data-flakiness",
+        "order": 7,
+        "level": "senior",
+        "title": {
+          "en": "Test data, isolation and flaky tests",
+          "ru": "Тестовые данные, изоляция и flaky-тесты"
+        }
+      },
+      {
+        "id": "coverage-mutation-tdd",
+        "order": 8,
+        "level": "senior",
+        "title": {
+          "en": "Coverage, mutation testing and TDD",
+          "ru": "Покрытие, мутационное тестирование и TDD"
+        }
+      }
+    ]
+  }
+}

@@ -25,7 +25,8 @@ public class PracticeConfig {
     @Singleton
     public JavaLimits javaLimits(AppConfig config) {
         AppConfig.Practice.Java java = config.practice().java();
-        return new JavaLimits(java.runTimeoutSeconds(), java.maxSourceLength(), java.maxOutputBytes());
+        return new JavaLimits(
+                java.runTimeoutSeconds(), java.maxSourceLength(), java.maxOutputBytes(), java.heapMegabytes());
     }
 
     @Produces

@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 2,
+  "topic": {
+    "id": "rest-http",
+    "order": 8,
+    "name": {
+      "en": "HTTP and REST API design",
+      "ru": "HTTP и проектирование REST API"
+    },
+    "sections": [
+      {
+        "id": "http-methods-status",
+        "order": 1,
+        "level": "junior",
+        "title": {
+          "en": "HTTP methods and status codes",
+          "ru": "Методы HTTP и статус-коды"
+        }
+      },
+      {
+        "id": "resources-and-versioning",
+        "order": 2,
+        "level": "junior",
+        "title": {
+          "en": "Resources, URLs and API versioning",
+          "ru": "Ресурсы, URL и версионирование API"
+        }
+      },
+      {
+        "id": "dto-validation",
+        "order": 3,
+        "level": "middle",
+        "title": {
+          "en": "DTOs, mapping and Bean Validation",
+          "ru": "DTO, маппинг и Bean Validation"
+        }
+      },
+      {
+        "id": "error-responses",
+        "order": 4,
+        "level": "middle",
+        "title": {
+          "en": "Error responses and problem details",
+          "ru": "Ответы с ошибками и problem details"
+        }
+      },
+      {
+        "id": "pagination-filtering",
+        "order": 5,
+        "level": "middle",
+        "title": {
+          "en": "Pagination, filtering and partial updates",
+          "ru": "Пагинация, фильтрация и частичные обновления"
+        }
+      },
+      {
+        "id": "caching-conditional",
+        "order": 6,
+        "level": "middle",
+        "title": {
+          "en": "Caching and conditional requests",
+          "ru": "Кэширование и условные запросы"
+        }
+      },
+      {
+        "id": "negotiation-openapi",
+        "order": 7,
+        "level": "senior",
+        "title": {
+          "en": "Content negotiation and OpenAPI",
+          "ru": "Content negotiation и OpenAPI"
+        }
+      },
+      {
+        "id": "cross-cutting",
+        "order": 8,
+        "level": "senior",
+        "title": {
+          "en": "CORS, timeouts, retries and rate limiting",
+          "ru": "CORS, таймауты, ретраи и rate limiting"
+        }
+      }
+    ]
+  }
+}

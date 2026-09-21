@@ -1,11 +1,12 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "topic": "sql",
   "questions": [
     {
       "id": "sql.select-filter.001",
       "section": "select-filter",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Why is the first statement rejected while the second one runs?",
         "ru": "Почему первый запрос отвергается, а второй выполняется?"
@@ -61,6 +62,7 @@
       "id": "sql.select-filter.002",
       "section": "select-filter",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "What does `SELECT * FROM orders LIMIT 10` guarantee about which rows come back?",
         "ru": "Что гарантирует `SELECT * FROM orders LIMIT 10` относительно того, какие строки вернутся?"
@@ -115,6 +117,7 @@
       "id": "sql.select-filter.003",
       "section": "select-filter",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "`created_at` is a `timestamp`. What does this predicate quietly get wrong?",
         "ru": "`created_at` имеет тип `timestamp`. Что это условие тихо делает неверно?"
@@ -170,6 +173,7 @@
       "id": "sql.select-filter.004",
       "section": "select-filter",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Which rows does this WHERE clause keep?",
         "ru": "Какие строки сохранит это условие WHERE?"
@@ -225,6 +229,7 @@
       "id": "sql.select-filter.005",
       "section": "select-filter",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "What does `SELECT DISTINCT country, city FROM customers` return?",
         "ru": "Что вернёт `SELECT DISTINCT country, city FROM customers`?"
@@ -278,6 +283,7 @@
       "id": "sql.select-filter.006",
       "section": "select-filter",
       "difficulty": "hard",
+      "level": "middle",
       "text": {
         "en": "A listing paginates with `ORDER BY created_at DESC LIMIT 20 OFFSET 100000` and page loads get slower the deeper users go. Why, and what is the usual fix?",
         "ru": "Список листается через `ORDER BY created_at DESC LIMIT 20 OFFSET 100000`, и чем глубже уходит пользователь, тем медленнее грузится страница. Почему и что обычно с этим делают?"
@@ -332,6 +338,7 @@
       "id": "sql.null-logic.001",
       "section": "null-logic",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "An orders table has 20 rows, 5 of which have `shipped_on` set to NULL. How many rows does `SELECT * FROM orders WHERE shipped_on = NULL` return?",
         "ru": "В таблице заказов 20 строк, у 5 из них `shipped_on` равен NULL. Сколько строк вернёт `SELECT * FROM orders WHERE shipped_on = NULL`?"
@@ -385,6 +392,7 @@
       "id": "sql.null-logic.002",
       "section": "null-logic",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "After a LEFT JOIN from books to loans, what does `COUNT(*)` report for a book that has never been borrowed?",
         "ru": "После LEFT JOIN от книг к выдачам что вернёт `COUNT(*)` для книги, которую ни разу не брали?"
@@ -439,6 +447,7 @@
       "id": "sql.null-logic.003",
       "section": "null-logic",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "`order_items.product_id` is nullable and one row has NULL in it. What does this query return?",
         "ru": "`order_items.product_id` допускает NULL, и в одной строке он равен NULL. Что вернёт этот запрос?"
@@ -494,6 +503,7 @@
       "id": "sql.null-logic.004",
       "section": "null-logic",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "A table has `CHECK (quantity > 0)` and `quantity` is nullable. Is a row with `quantity = NULL` accepted?",
         "ru": "В таблице есть `CHECK (quantity > 0)`, и `quantity` допускает NULL. Примет ли база строку с `quantity = NULL`?"
@@ -548,6 +558,7 @@
       "id": "sql.null-logic.005",
       "section": "null-logic",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "A column is declared `email VARCHAR(255) UNIQUE` and is nullable. How many rows may hold NULL in it?",
         "ru": "Столбец объявлен как `email VARCHAR(255) UNIQUE` и допускает NULL. Сколько строк могут содержать в нём NULL?"
@@ -602,6 +613,7 @@
       "id": "sql.null-logic.006",
       "section": "null-logic",
       "difficulty": "hard",
+      "level": "middle",
       "text": {
         "en": "You need to find rows where two nullable columns differ, counting 'one is null and the other is not' as a difference and 'both null' as equal. Which predicate does that?",
         "ru": "Нужно найти строки, где два допускающих NULL столбца различаются, считая «один пуст, другой нет» различием, а «оба пусты» — совпадением. Какое условие это делает?"
@@ -655,6 +667,7 @@
       "id": "sql.joins.001",
       "section": "joins",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "What does a LEFT JOIN return for a left-hand row with no matching row on the right?",
         "ru": "Что вернёт LEFT JOIN для левой строки, у которой нет соответствия справа?"
@@ -708,6 +721,7 @@
       "id": "sql.joins.002",
       "section": "joins",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "How do these two queries differ?",
         "ru": "Чем различаются эти два запроса?"
@@ -762,6 +776,7 @@
       "id": "sql.joins.003",
       "section": "joins",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "An order has 3 line items and 2 shipments. Joining orders to both tables and taking `SUM(i.quantity)` gives what?",
         "ru": "У заказа 3 позиции и 2 отгрузки. Соединение заказа с обеими таблицами и `SUM(i.quantity)` даст что?"
@@ -816,6 +831,7 @@
       "id": "sql.joins.004",
       "section": "joins",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Which of these anti-joins is safe regardless of whether the subquery column contains nulls?",
         "ru": "Какое из этих анти-соединений безопасно независимо от того, есть ли NULL в столбце подзапроса?"
@@ -870,6 +886,7 @@
       "id": "sql.joins.005",
       "section": "joins",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Why does reading a manager hierarchy require aliases on both sides of the join?",
         "ru": "Почему для чтения иерархии руководителей нужны псевдонимы с обеих сторон соединения?"
@@ -924,6 +941,7 @@
       "id": "sql.joins.006",
       "section": "joins",
       "difficulty": "hard",
+      "level": "middle",
       "text": {
         "en": "Why is `NATURAL JOIN` discouraged in production code?",
         "ru": "Почему `NATURAL JOIN` не рекомендуют в продакшен-коде?"
@@ -977,6 +995,7 @@
       "id": "sql.aggregation.001",
       "section": "aggregation",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Why is `WHERE COUNT(*) > 2` rejected while `HAVING COUNT(*) > 2` works?",
         "ru": "Почему `WHERE COUNT(*) > 2` отвергается, а `HAVING COUNT(*) > 2` работает?"
@@ -1031,6 +1050,7 @@
       "id": "sql.aggregation.002",
       "section": "aggregation",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "A department has no employees. What does `SUM(salary)` return for it after a LEFT JOIN and GROUP BY?",
         "ru": "В отделе нет сотрудников. Что вернёт для него `SUM(salary)` после LEFT JOIN и GROUP BY?"
@@ -1085,6 +1105,7 @@
       "id": "sql.aggregation.003",
       "section": "aggregation",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "Why is grouping customers by `c.id, c.name` safer than grouping by `c.name` alone?",
         "ru": "Почему группировать покупателей по `c.id, c.name` безопаснее, чем только по `c.name`?"
@@ -1138,6 +1159,7 @@
       "id": "sql.aggregation.004",
       "section": "aggregation",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "A customer bought three keyboards in three separate orders. Which expression reports that they shopped in one category, not three?",
         "ru": "Покупатель взял три клавиатуры в трёх разных заказах. Какое выражение покажет, что он покупал в одной категории, а не в трёх?"
@@ -1191,6 +1213,7 @@
       "id": "sql.aggregation.005",
       "section": "aggregation",
       "difficulty": "medium",
+      "level": "junior",
       "text": {
         "en": "What does this SELECT list produce?",
         "ru": "Что даст этот список SELECT?"
@@ -1245,6 +1268,7 @@
       "id": "sql.aggregation.006",
       "section": "aggregation",
       "difficulty": "hard",
+      "level": "middle",
       "text": {
         "en": "`salary` is nullable for some employees. When does `AVG(salary)` differ from `SUM(salary) / COUNT(*)`?",
         "ru": "У части сотрудников `salary` не заполнена. Когда `AVG(salary)` отличается от `SUM(salary) / COUNT(*)`?"
@@ -1298,6 +1322,7 @@
       "id": "sql.subqueries-cte.001",
       "section": "subqueries-cte",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Why is `SELECT 1` the idiomatic body of an EXISTS subquery?",
         "ru": "Почему `SELECT 1` — идиоматичное тело подзапроса в EXISTS?"
@@ -1351,6 +1376,7 @@
       "id": "sql.subqueries-cte.002",
       "section": "subqueries-cte",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Which statement about this query is correct?",
         "ru": "Какое утверждение об этом запросе верно?"
@@ -1405,6 +1431,7 @@
       "id": "sql.subqueries-cte.003",
       "section": "subqueries-cte",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Why does averaging per-order totals require a CTE or subquery rather than `AVG(SUM(...))`?",
         "ru": "Почему усреднение сумм заказов требует CTE или подзапроса, а не `AVG(SUM(...))`?"
@@ -1459,6 +1486,7 @@
       "id": "sql.subqueries-cte.004",
       "section": "subqueries-cte",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "In modern PostgreSQL, how is a CTE referenced exactly once treated by the planner?",
         "ru": "Как современный PostgreSQL обрабатывает CTE, на который ссылаются ровно один раз?"
@@ -1512,6 +1540,7 @@
       "id": "sql.subqueries-cte.005",
       "section": "subqueries-cte",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "What ends the recursion in a `WITH RECURSIVE` query?",
         "ru": "Что завершает рекурсию в запросе `WITH RECURSIVE`?"
@@ -1565,6 +1594,7 @@
       "id": "sql.subqueries-cte.006",
       "section": "subqueries-cte",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "A scalar subquery in a comparison returns two rows at runtime. What happens?",
         "ru": "Скалярный подзапрос в сравнении вернул во время выполнения две строки. Что произойдёт?"
@@ -1618,6 +1648,7 @@
       "id": "sql.window-functions.001",
       "section": "window-functions",
       "difficulty": "easy",
+      "level": "middle",
       "text": {
         "en": "What is the essential difference between `AVG(salary) OVER (PARTITION BY department_id)` and `AVG(salary)` with `GROUP BY department_id`?",
         "ru": "В чём принципиальная разница между `AVG(salary) OVER (PARTITION BY department_id)` и `AVG(salary)` с `GROUP BY department_id`?"
@@ -1671,6 +1702,7 @@
       "id": "sql.window-functions.002",
       "section": "window-functions",
       "difficulty": "medium",
+      "level": "senior",
       "text": {
         "en": "Why is `WHERE ROW_NUMBER() OVER (PARTITION BY category ORDER BY price DESC) <= 2` rejected?",
         "ru": "Почему `WHERE ROW_NUMBER() OVER (PARTITION BY category ORDER BY price DESC) <= 2` отвергается?"
@@ -1725,6 +1757,7 @@
       "id": "sql.window-functions.003",
       "section": "window-functions",
       "difficulty": "medium",
+      "level": "senior",
       "text": {
         "en": "Salaries in a department are 5000, 4000, 4000, 3000. What does RANK assign to the 3000 row, and what does DENSE_RANK assign?",
         "ru": "Зарплаты в отделе: 5000, 4000, 4000, 3000. Какой ранг присвоит строке с 3000 функция RANK, а какой — DENSE_RANK?"
@@ -1778,6 +1811,7 @@
       "id": "sql.window-functions.004",
       "section": "window-functions",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "Several orders share the same date. Why does a running total written as `SUM(total) OVER (ORDER BY placed_on)` jump past all of them at once?",
         "ru": "У нескольких заказов совпадает дата. Почему нарастающий итог `SUM(total) OVER (ORDER BY placed_on)` перепрыгивает через все них разом?"
@@ -1831,6 +1865,7 @@
       "id": "sql.window-functions.005",
       "section": "window-functions",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "`LAST_VALUE(price) OVER (PARTITION BY category ORDER BY price)` returns the current row's price rather than the highest. Why?",
         "ru": "`LAST_VALUE(price) OVER (PARTITION BY category ORDER BY price)` возвращает цену текущей строки, а не максимальную. Почему?"
@@ -1885,6 +1920,7 @@
       "id": "sql.window-functions.006",
       "section": "window-functions",
       "difficulty": "medium",
+      "level": "senior",
       "text": {
         "en": "What does `LAG(revenue)` return for the first row of each partition, and what does `revenue - LAG(revenue)` give there?",
         "ru": "Что вернёт `LAG(revenue)` для первой строки каждой партиции и что даст там `revenue - LAG(revenue)`?"
@@ -1938,6 +1974,7 @@
       "id": "sql.types-dates.001",
       "section": "types-dates",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "Why should a monetary amount be stored as NUMERIC rather than DOUBLE PRECISION?",
         "ru": "Почему денежную сумму хранят в NUMERIC, а не в DOUBLE PRECISION?"
@@ -1991,6 +2028,7 @@
       "id": "sql.types-dates.002",
       "section": "types-dates",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "`total` and `count` are both INTEGER columns. What does `SELECT total / count * 100` compute?",
         "ru": "`total` и `count` — целочисленные столбцы. Что вычислит `SELECT total / count * 100`?"
@@ -2044,6 +2082,7 @@
       "id": "sql.types-dates.003",
       "section": "types-dates",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "What does PostgreSQL actually store in a `timestamptz` column?",
         "ru": "Что PostgreSQL на самом деле хранит в столбце типа `timestamptz`?"
@@ -2097,6 +2136,7 @@
       "id": "sql.types-dates.004",
       "section": "types-dates",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Which expression groups orders by month and sorts correctly as plain text?",
         "ru": "Какое выражение группирует заказы по месяцам и корректно сортируется как обычный текст?"
@@ -2151,6 +2191,7 @@
       "id": "sql.types-dates.005",
       "section": "types-dates",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "`name` is NULL for one row. What does `'Hello, ' || name` produce for it, and what does `CONCAT('Hello, ', name)`?",
         "ru": "У одной строки `name` равен NULL. Что даст для неё `'Hello, ' || name` и что даст `CONCAT('Hello, ', name)`?"
@@ -2204,6 +2245,7 @@
       "id": "sql.types-dates.006",
       "section": "types-dates",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "Why does `WHERE LOWER(email) = 'a@b.c'` fail to use an ordinary index on `email`, and what fixes it?",
         "ru": "Почему `WHERE LOWER(email) = 'a@b.c'` не задействует обычный индекс по `email` и что это исправляет?"
@@ -2258,6 +2300,7 @@
       "id": "sql.schema-indexes.001",
       "section": "schema-indexes",
       "difficulty": "easy",
+      "level": "junior",
       "text": {
         "en": "What is the practical argument for a foreign key constraint over enforcing the same rule in application code?",
         "ru": "Каков практический аргумент в пользу внешнего ключа против той же проверки в коде приложения?"
@@ -2312,6 +2355,7 @@
       "id": "sql.schema-indexes.002",
       "section": "schema-indexes",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "An index exists on `(customer_id, placed_on)`. Which of these queries can use it?",
         "ru": "Есть индекс по `(customer_id, placed_on)`. Какой из запросов сможет его использовать?"
@@ -2365,6 +2409,7 @@
       "id": "sql.schema-indexes.003",
       "section": "schema-indexes",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "In `EXPLAIN ANALYZE` output, which discrepancy most often points at the real problem?",
         "ru": "Какое расхождение в выводе `EXPLAIN ANALYZE` чаще всего указывает на настоящую проблему?"
@@ -2418,6 +2463,7 @@
       "id": "sql.schema-indexes.004",
       "section": "schema-indexes",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "A page loads a list of 200 orders and then issues one query per order to fetch its customer. Which fix addresses the actual problem?",
         "ru": "Страница загружает список из 200 заказов, а затем выполняет по запросу на каждый, чтобы получить покупателя. Что действительно решает проблему?"
@@ -2472,6 +2518,7 @@
       "id": "sql.schema-indexes.005",
       "section": "schema-indexes",
       "difficulty": "medium",
+      "level": "middle",
       "text": {
         "en": "Why is `PRIMARY KEY (order_id, product_id)` a good choice for an order-items table?",
         "ru": "Почему `PRIMARY KEY (order_id, product_id)` — удачный выбор для таблицы позиций заказа?"
@@ -2525,6 +2572,7 @@
       "id": "sql.schema-indexes.006",
       "section": "schema-indexes",
       "difficulty": "hard",
+      "level": "senior",
       "text": {
         "en": "Which statement about adding an index is accurate?",
         "ru": "Какое утверждение о добавлении индекса верно?"

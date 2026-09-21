@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 2,
+  "topic": {
+    "id": "delivery",
+    "order": 13,
+    "name": {
+      "en": "Build, containers and delivery",
+      "ru": "Сборка, Docker и доставка"
+    },
+    "sections": [
+      {
+        "id": "maven-basics",
+        "order": 1,
+        "level": "junior",
+        "title": {
+          "en": "Maven: lifecycle, coordinates and scopes",
+          "ru": "Maven: жизненный цикл, координаты и scope"
+        }
+      },
+      {
+        "id": "docker-images",
+        "order": 2,
+        "level": "junior",
+        "title": {
+          "en": "Docker images, layers and the build cache",
+          "ru": "Docker-образы, слои и кэш сборки"
+        }
+      },
+      {
+        "id": "dependency-resolution",
+        "order": 3,
+        "level": "middle",
+        "title": {
+          "en": "Dependency resolution and version conflicts",
+          "ru": "Разрешение зависимостей и конфликты версий"
+        }
+      },
+      {
+        "id": "artifacts-and-startup",
+        "order": 4,
+        "level": "middle",
+        "title": {
+          "en": "Artifacts and start-up time",
+          "ru": "Артефакты и время старта"
+        }
+      },
+      {
+        "id": "jvm-in-a-container",
+        "order": 5,
+        "level": "middle",
+        "title": {
+          "en": "The JVM inside a container",
+          "ru": "JVM внутри контейнера"
+        }
+      },
+      {
+        "id": "local-and-ci",
+        "order": 6,
+        "level": "middle",
+        "title": {
+          "en": "Local environment and CI",
+          "ru": "Локальное окружение и CI"
+        }
+      },
+      {
+        "id": "deploying",
+        "order": 7,
+        "level": "senior",
+        "title": {
+          "en": "Deploying: configuration, migrations, health checks",
+          "ru": "Деплой: конфигурация, миграции, health checks"
+        }
+      },
+      {
+        "id": "twelve-factor-and-secrets",
+        "order": 8,
+        "level": "senior",
+        "title": {
+          "en": "Twelve-factor, profiles and secrets",
+          "ru": "12-factor, профили и секреты"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 2,
+  "topic": {
+    "id": "observability",
+    "order": 15,
+    "name": {
+      "en": "Observability: logs, metrics, traces",
+      "ru": "Наблюдаемость: логи, метрики, трассировка"
+    },
+    "sections": [
+      {
+        "id": "three-signals",
+        "order": 1,
+        "level": "junior",
+        "title": {
+          "en": "Three signals and what each one answers",
+          "ru": "Три сигнала и на какой вопрос отвечает каждый"
+        }
+      },
+      {
+        "id": "logging",
+        "order": 2,
+        "level": "junior",
+        "title": {
+          "en": "Logging: levels, structure, correlation",
+          "ru": "Логирование: уровни, структура, корреляция"
+        }
+      },
+      {
+        "id": "metrics",
+        "order": 3,
+        "level": "middle",
+        "title": {
+          "en": "Metrics: instrument types, RED and USE",
+          "ru": "Метрики: типы инструментов, RED и USE"
+        }
+      },
+      {
+        "id": "dashboards-and-alerts",
+        "order": 4,
+        "level": "middle",
+        "title": {
+          "en": "Dashboards and alerts",
+          "ru": "Дашборды и алерты"
+        }
+      },
+      {
+        "id": "tracing",
+        "order": 5,
+        "level": "middle",
+        "title": {
+          "en": "Distributed tracing and context propagation",
+          "ru": "Распределённая трассировка и передача контекста"
+        }
+      },
+      {
+        "id": "error-tracking",
+        "order": 6,
+        "level": "middle",
+        "title": {
+          "en": "Error tracking and why it is not logging",
+          "ru": "Трекинг ошибок и почему это не логи"
+        }
+      },
+      {
+        "id": "health-and-profiling",
+        "order": 7,
+        "level": "senior",
+        "title": {
+          "en": "Health checks and profiling a live process",
+          "ru": "Health-проверки и профилирование живого процесса"
+        }
+      },
+      {
+        "id": "cardinality-and-cost",
+        "order": 8,
+        "level": "senior",
+        "title": {
+          "en": "Cardinality, retention and what it all costs",
+          "ru": "Кардинальность, хранение и во что это обходится"
+        }
+      }
+    ]
+  }
+}

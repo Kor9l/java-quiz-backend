@@ -76,8 +76,11 @@ public interface AppConfig {
 
         /** The Java track, which compiles and runs rather than querying. */
         interface Java {
-            /** Covers every case of one task together, not each case on its own. */
-            @WithDefault("5")
+            /**
+             * Covers every case of one task together, not each case on its own, and the start-up
+             * of the child JVM they run in — which is why it is longer than the SQL timeout.
+             */
+            @WithDefault("8")
             int runTimeoutSeconds();
 
             /** Generous next to the SQL cap: a class is longer than a query. */
@@ -86,6 +89,14 @@ public interface AppConfig {
 
             @WithDefault("8000")
             int maxOutputBytes();
+
+            /**
+             * Heap of the child JVM. Small enough that a runaway allocation fails quickly, and
+             * small enough that two of these processes fit beside the server on a 512 MB
+             * container — which is what the free deployment tier gives.
+             */
+            @WithDefault("64")
+            int heapMegabytes();
         }
 
         /**

@@ -1,0 +1,2650 @@
+{
+  "schemaVersion": 2,
+  "topic": "observability",
+  "questions": [
+    {
+      "id": "observability.three-signals.001",
+      "section": "three-signals",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which question is a metric the right signal for?",
+        "ru": "На какой вопрос метрика — подходящий сигнал?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "How often did logins fail over the last hour, and is that rising?",
+            "ru": "Как часто за последний час падали входы и растёт ли это?"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Which user hit the error at 14:03, and what was their request id?",
+            "ru": "Какой пользователь поймал ошибку в 14:03 и какой у него был id запроса?"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Which of the six services in the chain consumed the latency?",
+            "ru": "Какой из шести сервисов в цепочке съел латентность?"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "What were the local variables at the moment the exception was thrown?",
+            "ru": "Какими были локальные переменные в момент броска исключения?"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Which release first produced this particular stack trace?",
+            "ru": "В каком релизе впервые появился именно этот стектрейс?"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Metrics answer how much and how often, aggregated over time and cheap to keep. The other four questions are about one specific event or one specific request, and aggregation has already thrown those details away — they belong to logs, traces and an error tracker.",
+        "ru": "Метрики отвечают на «сколько» и «как часто», агрегированно по времени и дёшево в хранении. Остальные четыре вопроса — про одно конкретное событие или один конкретный запрос, а агрегация эти детали уже выбросила: это работа логов, трасс и трекера ошибок."
+      },
+      "sources": [
+        "https://sre.google/sre-book/monitoring-distributed-systems/",
+        "https://prometheus.io/docs/introduction/overview/"
+      ]
+    },
+    {
+      "id": "observability.three-signals.002",
+      "section": "three-signals",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does a distributed trace give you that a Java stack trace does not?",
+        "ru": "Что даёт распределённая трасса такого, чего не даёт стектрейс Java?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The values of local variables in every frame.",
+            "ru": "Значения локальных переменных в каждом фрейме."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It crosses process boundaries: it shows how much time each service contributed to one request.",
+            "ru": "Она пересекает границы процессов: показывает, сколько времени в один запрос вложил каждый сервис."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is cheaper to store, because it is aggregated when it is written.",
+            "ru": "Она дешевле в хранении, потому что агрегируется при записи."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It replaces logs by recording every line the application printed.",
+            "ru": "Она заменяет логи, записывая каждую строку вывода приложения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It survives a process restart, where a stack trace does not.",
+            "ru": "Она переживает перезапуск процесса, в отличие от стектрейса."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Within one process a stack trace already answers \"where is the code right now\". The thing it cannot do is follow a request into another process. A trace is a tree of spans sharing a trace id, and its whole reason to exist is the hops a stack trace cannot see.",
+        "ru": "Внутри одного процесса стектрейс уже отвечает на вопрос «где сейчас код». Чего он не умеет — проследить запрос в другом процессе. Трасса — это дерево span'ов с общим trace id, и весь смысл её существования — переходы, которых стектрейс не видит."
+      },
+      "sources": [
+        "https://opentelemetry.io/docs/concepts/signals/traces/",
+        "https://opentelemetry.io/docs/concepts/observability-primer/"
+      ]
+    },
+    {
+      "id": "observability.three-signals.003",
+      "section": "three-signals",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "Which statement about monitoring and observability is TRUE?",
+        "ru": "Какое утверждение о мониторинге и наблюдаемости верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Monitoring is a subset of tracing; adopting tracing makes monitoring unnecessary.",
+            "ru": "Мониторинг — подмножество трассировки; с появлением трассировки мониторинг не нужен."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A system that emits all three signals is observable by definition.",
+            "ru": "Система, отдающая все три сигнала, наблюдаема по определению."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Observability is the ability to answer questions nobody prepared for, without shipping new code to answer them.",
+            "ru": "Наблюдаемость — это способность отвечать на вопросы, к которым никто не готовился, не выкатывая ради ответа новый код."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Monitoring covers infrastructure and observability covers applications.",
+            "ru": "Мониторинг — про инфраструктуру, наблюдаемость — про приложения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Observability replaces monitoring once a team adopts it.",
+            "ru": "Наблюдаемость заменяет мониторинг, как только команда её внедрила."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Monitoring watches what you decided in advance to watch, and it handles anticipated failures well. Observability is about the unanticipated ones — which is why emitting three signals is not enough on its own: if the dimensions you need were never attached to the events, no amount of signal types will let you slice by them.",
+        "ru": "Мониторинг следит за тем, за чем вы решили следить заранее, и с предвиденными отказами справляется хорошо. Наблюдаемость — про непредвиденные, и поэтому сама по себе отдача трёх сигналов ничего не гарантирует: если нужные измерения к событиям никогда не прикладывали, никакое количество типов сигналов не даст по ним нарезать."
+      },
+      "sources": [
+        "https://opentelemetry.io/docs/concepts/observability-primer/",
+        "https://sre.google/sre-book/monitoring-distributed-systems/"
+      ]
+    },
+    {
+      "id": "observability.three-signals.004",
+      "section": "three-signals",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "A latency metric shows p99 has doubled across the whole API. Which signal do you reach for NEXT to find which hop is responsible?",
+        "ru": "Метрика латентности показывает, что p99 удвоился по всему API. К какому сигналу вы обратитесь СЛЕДУЮЩИМ, чтобы найти виновный переход?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The same metric at a finer scrape resolution.",
+            "ru": "К той же метрике с более частым опросом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A heap dump of the slowest instance.",
+            "ru": "К heap dump самого медленного инстанса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The error tracker, filtered to the last hour.",
+            "ru": "К трекеру ошибок с фильтром за последний час."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A trace of a slow request, read as a waterfall.",
+            "ru": "К трассе медленного запроса, прочитанной как водопад."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The raw log stream, sorted by timestamp.",
+            "ru": "К сырому потоку логов, отсортированному по времени."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The metric told you what changed; the trace tells you where. A waterfall shows the hop that owns the extra time and whether calls that should have run concurrently ran serially. Only after that does a log line from the guilty service explain why. Finer metric resolution just gives you the same shape in more detail.",
+        "ru": "Метрика сказала, что изменилось; трасса говорит, где. Водопад показывает переход, которому принадлежит лишнее время, и не выполнились ли последовательно вызовы, которые должны были идти параллельно. И только потом строка лога из виновного сервиса объясняет почему. Более частый опрос метрики даст ту же форму, только подробнее."
+      },
+      "sources": [
+        "https://opentelemetry.io/docs/concepts/signals/traces/",
+        "https://sre.google/sre-book/monitoring-distributed-systems/"
+      ]
+    },
+    {
+      "id": "observability.three-signals.005",
+      "section": "three-signals",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "Why can a metric not answer \"why was THIS request slow\"?",
+        "ru": "Почему метрика не может ответить на вопрос «почему был медленным ИМЕННО ЭТОТ запрос»?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because metrics carry no timestamps, only values.",
+            "ru": "Потому что метрики не несут меток времени, только значения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the scrape interval is always longer than a request.",
+            "ru": "Потому что интервал опроса всегда длиннее запроса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because metrics are unstructured text and cannot be queried.",
+            "ru": "Потому что метрики — неструктурированный текст и их нельзя запрашивать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because a metrics backend stores only counters, never durations.",
+            "ru": "Потому что бэкенд метрик хранит только счётчики и никогда длительности."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because aggregation happens when the value is written, so the individual events no longer exist.",
+            "ru": "Потому что агрегация происходит при записи значения, и отдельных событий больше не существует."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "That aggregation is exactly what makes a metric cheap enough to keep for a year — and exactly what makes it unable to speak about one request. Per-request detail has to live where storage is per event: a log line or a span attribute.",
+        "ru": "Именно эта агрегация делает метрику достаточно дешёвой, чтобы хранить её год, — и именно она лишает метрику возможности сказать что-то про один запрос. Детали на запрос должны жить там, где хранение идёт на событие: в строке лога или атрибуте span'а."
+      },
+      "sources": [
+        "https://prometheus.io/docs/introduction/overview/",
+        "https://prometheus.io/docs/concepts/metric_types/"
+      ]
+    },
+    {
+      "id": "observability.three-signals.006",
+      "section": "three-signals",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "Which statement about the observability of THIS project (the Java Quiz backend) is accurate?",
+        "ru": "Какое утверждение о наблюдаемости ЭТОГО проекта (бэкенда Java Quiz) верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It logs through JBoss Logging under Quarkus and has no metrics endpoint, no tracing and no error tracker.",
+            "ru": "Он пишет логи через JBoss Logging под Quarkus, и у него нет ни эндпоинта метрик, ни трассировки, ни трекера ошибок."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It exposes Prometheus metrics and a Grafana dashboard is provisioned alongside it.",
+            "ru": "Он отдаёт метрики Prometheus, и рядом с ним поднимается дашборд Grafana."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It ships OpenTelemetry traces to a collector, which is why requests carry a traceparent header.",
+            "ru": "Он отправляет трассы OpenTelemetry в коллектор, поэтому запросы несут заголовок traceparent."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Application logging is routed through the practice sandbox's output capture so that submissions and the service share one stream.",
+            "ru": "Логирование приложения заведено через перехват вывода песочницы практики, чтобы попытки и сервис делили один поток."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Unhandled exceptions are reported to an error tracker and grouped by fingerprint.",
+            "ru": "Необработанные исключения уходят в трекер ошибок и группируются по отпечатку."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Logging is all there is. The sandbox option is the opposite of the truth and worth knowing as a decision: SandboxOutput installs its routing stream on the first Java submission, after the log manager has taken its own reference to the original System.out, specifically so that application logging does not go through the capture.",
+        "ru": "Логирование — это всё, что есть. Вариант про песочницу — противоположность правде, и его стоит знать как принятое решение: SandboxOutput ставит свой маршрутизирующий поток при первой Java-попытке, уже после того как менеджер логов взял собственную ссылку на исходный System.out, — именно чтобы логирование приложения через перехват не шло."
+      },
+      "sources": [
+        "https://opentelemetry.io/docs/concepts/observability-primer/",
+        "https://sre.google/sre-book/monitoring-distributed-systems/"
+      ]
+    },
+    {
+      "id": "observability.logging.001",
+      "section": "logging",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which of these belongs at WARN rather than ERROR?",
+        "ru": "Что из перечисленного относится к WARN, а не к ERROR?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A migration failed and the service cannot finish starting.",
+            "ru": "Миграция упала, и сервис не может закончить старт."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A call to the database timed out and the retry succeeded.",
+            "ru": "Вызов базы отвалился по таймауту, и повторная попытка прошла успешно."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The request handler was entered with these arguments.",
+            "ru": "В обработчик запроса вошли с такими-то аргументами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The connection pool can no longer reach the database at all.",
+            "ru": "Пул соединений вообще больше не может достучаться до базы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A user opened a practice task.",
+            "ru": "Пользователь открыл практическое задание."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "WARN is for something that went wrong and was handled. The two failures that need a human are ERROR; the two routine events are INFO or DEBUG. Logging a handled-and-retried timeout at ERROR is the most common way an error stream stops being read.",
+        "ru": "WARN — про то, что пошло не так и было обработано. Два отказа, требующих человека, — это ERROR; два рутинных события — INFO или DEBUG. Записать обработанный и отретраенный таймаут как ERROR — самый частый способ добиться того, чтобы поток ошибок перестали читать."
+      },
+      "sources": [
+        "https://www.slf4j.org/manual.html",
+        "https://quarkus.io/guides/logging"
+      ]
+    },
+    {
+      "id": "observability.logging.002",
+      "section": "logging",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What is wrong with `log.error(\"error: \" + e.getMessage())`?",
+        "ru": "Что не так с `log.error(\"error: \" + e.getMessage())`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing — this is the recommended form for logging a caught exception.",
+            "ru": "Ничего — это рекомендованная форма для записи пойманного исключения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only that string concatenation is slower than a placeholder.",
+            "ru": "Только то, что конкатенация строк медленнее плейсхолдера."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It discards the stack trace and the cause chain; the throwable should be passed as the last argument.",
+            "ru": "Она выбрасывает стектрейс и цепочку причин; throwable надо передавать последним аргументом."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "ERROR is the wrong level for any caught exception.",
+            "ru": "ERROR — неверный уровень для любого пойманного исключения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "getMessage() is not thread-safe and must be synchronised.",
+            "ru": "getMessage() не потокобезопасен и требует синхронизации."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`log.error(\"Failed to load topic {}\", topicId, e)` keeps the throwable as a throwable, so the logging framework prints the stack trace and unwinds the cause chain. Concatenating getMessage() leaves you one sentence and no idea where it came from — and the cause is usually the only part worth having.",
+        "ru": "`log.error(\"Failed to load topic {}\", topicId, e)` оставляет throwable именно исключением, и фреймворк печатает стектрейс и разворачивает цепочку причин. Склейка с getMessage() оставляет одно предложение и никакого понимания, откуда оно, — а причина обычно единственное, ради чего всё и затевалось."
+      },
+      "sources": [
+        "https://www.slf4j.org/manual.html",
+        "https://quarkus.io/guides/logging"
+      ]
+    },
+    {
+      "id": "observability.logging.003",
+      "section": "logging",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "DEBUG is disabled in production. What happens on this line?",
+        "ru": "DEBUG в проде выключен. Что произойдёт на этой строке?"
+      },
+      "code": "log.debug(\"Practice report for task {}: {}\", taskId, buildReport(taskId));",
+      "options": [
+        {
+          "text": {
+            "en": "Nothing at all is executed, because the level check comes first.",
+            "ru": "Не выполнится ничего, потому что проверка уровня идёт первой."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The placeholder makes the argument lazy, so buildReport() is skipped.",
+            "ru": "Плейсхолдер делает аргумент ленивым, поэтому buildReport() не вызывается."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "buildReport() is called twice: once to size the message and once to format it.",
+            "ru": "buildReport() вызовется дважды: один раз чтобы оценить размер сообщения и один раз чтобы отформатировать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The call throws, because a disabled level rejects arguments.",
+            "ru": "Вызов бросит исключение, потому что выключенный уровень не принимает аргументы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "buildReport() is still called — the placeholder defers formatting, not argument evaluation.",
+            "ru": "buildReport() всё равно вызывается — плейсхолдер откладывает форматирование, а не вычисление аргумента."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Placeholders save the string formatting, not the work that produces the arguments — Java evaluates arguments before the call. For an expensive argument you need either `if (log.isDebugEnabled())` or a supplier-based API. This is why a \"harmless\" debug line can cost real throughput in production.",
+        "ru": "Плейсхолдеры экономят форматирование строки, а не работу, порождающую аргументы: Java вычисляет аргументы до вызова. Для дорогого аргумента нужен либо `if (log.isDebugEnabled())`, либо API с поставщиком значения. Именно поэтому «безобидная» отладочная строка может стоить реальной пропускной способности в проде."
+      },
+      "sources": [
+        "https://www.slf4j.org/manual.html",
+        "https://quarkus.io/guides/logging"
+      ]
+    },
+    {
+      "id": "observability.logging.004",
+      "section": "logging",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "A correlation id is put into MDC at the edge of the request. A handler then submits part of the work to an ExecutorService. What happens to the id on the pooled thread?",
+        "ru": "Correlation id кладётся в MDC на границе запроса. Затем обработчик отдаёт часть работы в ExecutorService. Что происходит с id на пуловом потоке?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It is shared, because MDC is a static map global to the JVM.",
+            "ru": "Он общий, потому что MDC — статическая карта, глобальная на всю JVM."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is propagated automatically: executors copy the diagnostic context by contract.",
+            "ru": "Он передаётся автоматически: executor'ы по контракту копируют диагностический контекст."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is preserved only if the logs are encoded as JSON.",
+            "ru": "Он сохраняется, только если логи кодируются в JSON."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is lost, because MDC is bound to the thread; the context has to be copied across deliberately.",
+            "ru": "Он теряется, потому что MDC привязан к потоку; контекст надо переносить намеренно."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is lost, and there is no way to recover it other than passing the id as a method parameter.",
+            "ru": "Он теряется, и восстановить его нельзя ничем, кроме передачи id параметром метода."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "MDC is thread-local storage, so every hand-off that changes threads drops it unless something copies it — which is what context-propagating executor wrappers exist for. The last option is wrong in its second half: wrapping the task is the standard fix, and passing the id by hand is the fallback, not the only route.",
+        "ru": "MDC — это хранилище, привязанное к потоку, поэтому любая передача, меняющая поток, его теряет, если контекст никто не скопировал; ровно для этого существуют обёртки executor'ов, переносящие контекст. Последний вариант неверен во второй половине: обёртка задачи — стандартное решение, а передача id руками — запасной путь, а не единственный."
+      },
+      "sources": [
+        "https://www.slf4j.org/manual.html",
+        "https://opentelemetry.io/docs/concepts/observability-primer/"
+      ]
+    },
+    {
+      "id": "observability.logging.005",
+      "section": "logging",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "`V3__SeedAdmin` writes the generated admin password to the log once, at WARN. Which description of that decision is accurate?",
+        "ru": "`V3__SeedAdmin` один раз пишет сгенерированный пароль админа в лог на уровне WARN. Какое описание этого решения верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A deliberate trade-off against a hardcoded password: the account is usable only to whoever reads that line, and setting ADMIN_INITIAL_PASSWORD removes the line entirely.",
+            "ru": "Осознанный размен против захардкоженного пароля: аккаунт доступен только тому, кто прочитал эту строку, а заданный ADMIN_INITIAL_PASSWORD убирает строку вовсе."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Standard practice — secrets are acceptable in logs as long as they are at WARN or above.",
+            "ru": "Стандартная практика: секреты в логах допустимы, если уровень WARN или выше."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Harmless, because what is written is the bcrypt hash rather than the password.",
+            "ru": "Безвредно, потому что пишется bcrypt-хеш, а не пароль."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Unavoidable, because a Flyway migration cannot read environment variables.",
+            "ru": "Неизбежно, потому что миграция Flyway не может читать переменные окружения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A plain bug with no upside, since the admin account could simply have been created without a password.",
+            "ru": "Обычный баг без плюсов: аккаунт админа можно было просто создать без пароля."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The comment in the file states the reasoning: a hardcoded password would be an open door on a public deployment, so without an explicit value the account exists but only the reader of that one log line can use it. It is still a secret in a log — the honest way to take such a decision is to say so, and to give the operator the environment variable that avoids it.",
+        "ru": "Комментарий в файле прямо объясняет ход мысли: захардкоженный пароль был бы открытой дверью на публичном развёртывании, поэтому без явного значения аккаунт существует, но воспользоваться им может только прочитавший эту одну строку лога. Это всё равно секрет в логе — честный способ принять такое решение в том, чтобы это сказать и дать оператору переменную окружения, которая его избегает."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html",
+        "https://quarkus.io/guides/logging"
+      ]
+    },
+    {
+      "id": "observability.logging.006",
+      "section": "logging",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "Which of these is safe to keep as a field on every log line of a production service?",
+        "ru": "Что из этого безопасно держать полем в каждой строке лога продового сервиса?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The value of the Authorization header, so failed calls can be replayed.",
+            "ru": "Значение заголовка Authorization, чтобы можно было повторить упавшие вызовы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The route template of the request, such as /api/topics/{id}.",
+            "ru": "Шаблон маршрута запроса, например /api/topics/{id}."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The full request body of /api/auth/login, so bad input can be reproduced.",
+            "ru": "Полное тело запроса /api/auth/login, чтобы воспроизводить плохой ввод."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The session cookie, since it expires anyway.",
+            "ru": "Сессионную cookie — она ведь всё равно протухнет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The user's password hash, since a hash is not the password.",
+            "ru": "Хеш пароля пользователя — хеш ведь не пароль."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A route template is bounded, non-identifying and exactly what you want to group and count on. Every other option ships a credential into a stream that is copied, forwarded to third parties, retained for months and read by people without production access. A password hash is no exception: it is an offline-crackable credential, and an expiring cookie is valid for as long as the attacker needs.",
+        "ru": "Шаблон маршрута ограничен, никого не идентифицирует и ровно по нему удобно группировать и считать. Любой другой вариант отправляет учётные данные в поток, который копируется, пересылается третьим сторонам, хранится месяцами и читается людьми без доступа в прод. Хеш пароля не исключение: это подбираемые офлайн учётные данные, а протухающая cookie действительна ровно столько, сколько нужно атакующему."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html",
+        "https://www.slf4j.org/manual.html"
+      ]
+    },
+    {
+      "id": "observability.metrics.001",
+      "section": "metrics",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which instrument fits \"the number of database connections currently in use\"?",
+        "ru": "Какой инструмент подходит для «количества соединений с базой, занятых прямо сейчас»?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A counter, because connections are acquired one at a time.",
+            "ru": "Counter, потому что соединения берутся по одному."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A histogram, because the number varies.",
+            "ru": "Histogram, потому что число меняется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A gauge, because the value goes both up and down and is read at scrape time.",
+            "ru": "Gauge, потому что значение растёт и падает и читается в момент опроса."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A summary, because it needs a quantile.",
+            "ru": "Summary, потому что нужен квантиль."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A counter with a negative increment when a connection is released.",
+            "ru": "Counter с отрицательным приращением при возврате соединения."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "\"Currently in use\" is a level, not an accumulation, so it is a gauge. A counter is monotonic by definition — decrementing one breaks rate() and every query built on it. The last option is the trap: a counter that goes down is not a counter.",
+        "ru": "«Занято прямо сейчас» — это уровень, а не накопление, значит, gauge. Counter по определению монотонен: уменьшение ломает rate() и все построенные на нём запросы. Последний вариант — ловушка: счётчик, который убывает, счётчиком не является."
+      },
+      "sources": [
+        "https://prometheus.io/docs/concepts/metric_types/",
+        "https://docs.micrometer.io/micrometer/reference/concepts.html"
+      ]
+    },
+    {
+      "id": "observability.metrics.002",
+      "section": "metrics",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What is a counter?",
+        "ru": "Что такое counter?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A value read at the moment of scrape that can go up or down.",
+            "ru": "Значение, читаемое в момент опроса, которое может расти и падать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A set of cumulative buckets describing a distribution.",
+            "ru": "Набор кумулятивных корзин, описывающих распределение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A quantile computed inside the process and exported directly.",
+            "ru": "Квантиль, посчитанный внутри процесса и экспортируемый напрямую."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A value that only increases, or resets to zero on restart; you read its rate rather than its raw value.",
+            "ru": "Значение, которое только растёт или сбрасывается в ноль при рестарте; читают его rate, а не сырое значение."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A gauge that carries labels.",
+            "ru": "Gauge, несущий метки."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Monotonicity is what makes a counter useful: because the only thing that can lower it is a restart, the backend can detect that reset and compute a correct rate across it. The raw value of a counter — 4,812,331 requests since some boot — is almost never the number you want.",
+        "ru": "Полезным counter делает именно монотонность: раз единственное, что может его снизить, — это рестарт, бэкенд распознаёт сброс и корректно считает rate через него. Сырое значение счётчика — 4 812 331 запрос с какого-то старта — почти никогда не то число, которое нужно."
+      },
+      "sources": [
+        "https://prometheus.io/docs/concepts/metric_types/",
+        "https://docs.micrometer.io/micrometer/reference/concepts.html"
+      ]
+    },
+    {
+      "id": "observability.metrics.003",
+      "section": "metrics",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Why prefer a histogram over a summary for request duration on a service running many instances?",
+        "ru": "Почему для длительности запросов на сервисе со многими инстансами лучше histogram, а не summary?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because Prometheus does not support summaries.",
+            "ru": "Потому что Prometheus не поддерживает summary."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because histograms are cheaper for the client to compute.",
+            "ru": "Потому что гистограммы дешевле считать на клиенте."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because a summary loses the timestamp of each observation.",
+            "ru": "Потому что summary теряет метку времени каждого наблюдения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because a summary cannot carry labels.",
+            "ru": "Потому что summary не может нести метки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because buckets are aggregatable across instances, while per-instance quantiles cannot be combined into a fleet quantile.",
+            "ru": "Потому что корзины складываются между инстансами, а поинстансные квантили нельзя свести в квантиль по всему флоту."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A summary computes its quantiles inside the process, and the average of ten instances' p99 values is not the p99 of the fleet — it is a number with no meaning. Histogram buckets are counts, counts add up, and the backend computes the quantile from the summed buckets. The cost is that you must choose bucket boundaries that bracket your real latencies.",
+        "ru": "Summary считает квантили внутри процесса, а среднее десяти значений p99 — это не p99 флота, а число без смысла. Корзины гистограммы — это счётчики, счётчики складываются, и бэкенд считает квантиль по сумме корзин. Плата — необходимость выбрать границы корзин, попадающие в диапазон ваших реальных латентностей."
+      },
+      "sources": [
+        "https://prometheus.io/docs/practices/histograms/",
+        "https://prometheus.io/docs/concepts/metric_types/"
+      ]
+    },
+    {
+      "id": "observability.metrics.004",
+      "section": "metrics",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Under the USE method, which number is the SATURATION signal of a connection pool?",
+        "ru": "По методу USE какое число является сигналом SATURATION для пула соединений?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The number of callers currently waiting for a connection to become free.",
+            "ru": "Количество вызывающих, которые прямо сейчас ждут освобождения соединения."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The number of connections currently checked out.",
+            "ru": "Количество соединений, взятых прямо сейчас."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The total number of connections acquired since start-up.",
+            "ru": "Общее количество соединений, взятых с момента старта."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The number of acquisitions that failed with a timeout.",
+            "ru": "Количество попыток взять соединение, упавших по таймауту."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The configured maximum pool size.",
+            "ru": "Настроенный максимальный размер пула."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Checked-out connections are utilisation; failed acquisitions are errors; the maximum is configuration, not a measurement. Saturation is the queued work that could not be served yet — and it is the early-warning signal, because a pool at full utilisation with nobody waiting is simply well-sized, while the same pool with a growing wait queue is about to start timing out.",
+        "ru": "Взятые соединения — это utilisation; упавшие попытки — errors; максимум — конфигурация, а не измерение. Saturation — это работа в очереди, которую ещё не обслужили, и именно она предупреждает раньше всех: пул на полной утилизации без ожидающих просто хорошо подобран, а тот же пул с растущей очередью ожидания вот-вот начнёт отдавать таймауты."
+      },
+      "sources": [
+        "https://sre.google/sre-book/monitoring-distributed-systems/",
+        "https://docs.micrometer.io/micrometer/reference/concepts.html"
+      ]
+    },
+    {
+      "id": "observability.metrics.005",
+      "section": "metrics",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Why is mean request duration a poor signal of service health?",
+        "ru": "Почему средняя длительность запроса — плохой сигнал здоровья сервиса?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because a mean cannot be computed from a histogram.",
+            "ru": "Потому что среднее нельзя посчитать по гистограмме."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because it hides the tail: a slow 1% barely moves a mean dominated by fast requests, and it is that 1% that users complain about.",
+            "ru": "Потому что оно прячет хвост: медленный 1% почти не двигает среднее, в котором доминируют быстрые запросы, а жалуются именно на этот 1%."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because a mean resets to zero whenever the process restarts.",
+            "ru": "Потому что среднее сбрасывается в ноль при каждом перезапуске процесса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because means are not aggregatable across instances under any circumstances.",
+            "ru": "Потому что средние ни при каких условиях не складываются между инстансами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because duration must be measured as a counter, not as a mean.",
+            "ru": "Потому что длительность надо измерять счётчиком, а не средним."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "If 99% of requests take 10 ms and 1% take 8 s, the mean is around 90 ms — a number that looks healthy and that no user ever experienced. Percentiles describe the experience; also keep success and failure latency apart, because failures are often fast and mixing them makes an outage look like an improvement.",
+        "ru": "Если 99% запросов занимают 10 мс, а 1% — 8 с, среднее будет около 90 мс: число, выглядящее здоровым и не пережитое ни одним пользователем. Перцентили описывают опыт; и держите латентность успехов и отказов раздельно, потому что отказы часто быстрые и их смешение превращает аварию в картину улучшения."
+      },
+      "sources": [
+        "https://prometheus.io/docs/practices/histograms/",
+        "https://sre.google/sre-book/monitoring-distributed-systems/"
+      ]
+    },
+    {
+      "id": "observability.metrics.006",
+      "section": "metrics",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "Prometheus scrapes a process every 15 seconds. Which consequence of that pull model is TRUE?",
+        "ru": "Prometheus опрашивает процесс каждые 15 секунд. Какое следствие этой pull-модели верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing can be missed, because the exporter buffers every change between scrapes.",
+            "ru": "Ничего потеряться не может, потому что экспортёр буферизует все изменения между опросами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Counters and gauges are sampled identically, so both miss anything shorter than the interval.",
+            "ru": "Counter и gauge сэмплируются одинаково, поэтому оба теряют всё короче интервала."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A gauge reports only its value at scrape time, so a spike entirely between two scrapes is invisible — while a counter accumulates and the spike still shows in its rate.",
+            "ru": "Gauge сообщает только значение в момент опроса, поэтому всплеск целиком между двумя опросами невидим, — а counter накапливает, и всплеск всё равно виден в его rate."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Short-lived jobs are handled natively, because Prometheus scrapes them as they exit.",
+            "ru": "Короткоживущие задачи обрабатываются штатно, потому что Prometheus опрашивает их при завершении."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The scrape endpoint must be publicly reachable for Prometheus to work.",
+            "ru": "Эндпоинт метрик должен быть публично доступен, иначе Prometheus не работает."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "This is the practical reason instrument choice matters: accumulating instruments survive sampling, sampled levels do not. Short-lived jobs that exit between scrapes are exactly the case pull does NOT cover — that is what a push gateway is for. And the scrape endpoint enumerates routes and dependency versions, so it belongs behind the network boundary, not on the public port.",
+        "ru": "Это практическая причина, по которой выбор инструмента важен: накапливающие инструменты переживают выборку, а измеряемые уровни — нет. Короткоживущие задачи, завершающиеся между опросами, — ровно тот случай, который pull НЕ покрывает; для него существует push gateway. А эндпоинт метрик перечисляет маршруты и версии зависимостей, поэтому его место за сетевой границей, а не на публичном порту."
+      },
+      "sources": [
+        "https://prometheus.io/docs/practices/instrumentation/",
+        "https://prometheus.io/docs/concepts/metric_types/"
+      ]
+    },
+    {
+      "id": "observability.dashboards-and-alerts.001",
+      "section": "dashboards-and-alerts",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What is the test for whether something deserves to be an alert?",
+        "ru": "Какая проверка решает, достоин ли сигнал стать алертом?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Whether a metric has crossed a round number such as 80%.",
+            "ru": "Перешла ли метрика круглое число вроде 80%."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whether the condition has occurred more than once this week.",
+            "ru": "Случалось ли это состояние больше одного раза за неделю."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whether the underlying metric is already on a dashboard.",
+            "ru": "Есть ли уже эта метрика на дашборде."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whether there is something a person must do right now when it fires.",
+            "ru": "Есть ли что-то, что человек обязан сделать прямо сейчас, когда оно сработает."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Whether it corresponds to a log line written at ERROR.",
+            "ru": "Соответствует ли оно строке лога уровня ERROR."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "If nobody would act, it is not an alert — it might be a dashboard panel, a ticket, or nothing. Every alert that fires without requiring action spends the attention of the people who will have to read the next one.",
+        "ru": "Если никто не пойдёт ничего делать, это не алерт: возможно, панель дашборда, возможно, тикет, возможно, ничего. Каждый сработавший алерт, не требующий действия, тратит внимание тех, кому придётся читать следующий."
+      },
+      "sources": [
+        "https://sre.google/sre-book/practical-alerting/",
+        "https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/"
+      ]
+    },
+    {
+      "id": "observability.dashboards-and-alerts.002",
+      "section": "dashboards-and-alerts",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does \"alert fatigue\" describe?",
+        "ru": "Что описывает «усталость от алертов»?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The alerting backend running out of capacity to evaluate rules.",
+            "ru": "Исчерпание мощности бэкенда алертинга на вычисление правил."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The paging provider rate-limiting notifications during a storm.",
+            "ru": "Ограничение уведомлений провайдером пейджинга во время шторма."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An alert that fires later than the incident it describes.",
+            "ru": "Алерт, срабатывающий позже описываемого им инцидента."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An alert that resolves itself before anyone opens it.",
+            "ru": "Алерт, который сам себя закрывает раньше, чем его откроют."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "People learning to dismiss a noisy channel, so the one alert that mattered is dismissed along with the rest.",
+            "ru": "Люди приучаются закрывать шумный канал, и тот единственный важный алерт закрывают вместе с остальными."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "It is a property of the readers, not of the system, which is what makes it hard to notice from a dashboard. The consequence is that noisy alerts are not merely useless: each one degrades every other alert in the same channel.",
+        "ru": "Это свойство читателей, а не системы, и поэтому его не видно с дашборда. Следствие: шумные алерты не просто бесполезны — каждый из них обесценивает все остальные алерты в том же канале."
+      },
+      "sources": [
+        "https://sre.google/sre-book/practical-alerting/",
+        "https://sre.google/workbook/alerting-on-slos/"
+      ]
+    },
+    {
+      "id": "observability.dashboards-and-alerts.003",
+      "section": "dashboards-and-alerts",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Following the symptom-over-cause rule, which of these should page a human?",
+        "ru": "Следуя правилу «симптом важнее причины», что из этого должно будить человека?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "5% of checkout requests are returning errors to users.",
+            "ru": "5% запросов оформления возвращают пользователям ошибки."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A pod restarted twelve minutes ago.",
+            "ru": "Под перезапустился двенадцать минут назад."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "CPU on one node has been above 85% for two minutes.",
+            "ru": "CPU на одном узле две минуты держится выше 85%."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The connection pool reached its configured maximum size.",
+            "ru": "Пул соединений дошёл до настроенного максимума."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A garbage collection pause exceeded 200 ms.",
+            "ru": "Пауза сборки мусора превысила 200 мс."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Only the first is something a user experiences. The other four are mechanisms that may or may not be a problem: a restarted pod may be a routine rollout, a busy CPU may be a batch job doing its job, a full pool may be correctly sized. They belong on the dashboard you open after a symptom has already told you what is wrong.",
+        "ru": "Только первое — то, что переживает пользователь. Остальные четыре — механизмы, которые могут быть проблемой, а могут и не быть: перезапущенный под может быть обычной выкаткой, занятый CPU — батчем, делающим свою работу, полный пул — правильно подобранным. Им место на дашборде, который вы откроете после того, как симптом уже сказал, что не так."
+      },
+      "sources": [
+        "https://sre.google/sre-book/practical-alerting/",
+        "https://sre.google/workbook/alerting-on-slos/"
+      ]
+    },
+    {
+      "id": "observability.dashboards-and-alerts.004",
+      "section": "dashboards-and-alerts",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Why does a Prometheus alerting rule usually carry `for: 5m`?",
+        "ru": "Почему в правиле алертинга Prometheus обычно стоит `for: 5m`?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It delays delivery of the notification by five minutes after the alert fires.",
+            "ru": "Оно задерживает доставку уведомления на пять минут после срабатывания алерта."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It requires the condition to hold across several evaluations, so single-scrape blips that resolve themselves never page anyone.",
+            "ru": "Оно требует, чтобы условие держалось несколько вычислений, и одиночные всплески, рассасывающиеся сами, никого не будят."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It sets how often the rule is evaluated.",
+            "ru": "Оно задаёт, как часто вычисляется правило."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is the interval at which an already-firing alert is re-sent.",
+            "ru": "Это интервал, с которым уже сработавший алерт отправляется повторно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It silences the alert for five minutes after it resolves.",
+            "ru": "Оно заглушает алерт на пять минут после его закрытия."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`for` is a pending period: the rule matches, the alert sits in pending, and only if the condition is still true after the duration does it fire. Evaluation frequency is `evaluation_interval`, re-notification is `repeat_interval` in Alertmanager, and silences are a separate concept — confusing them is how teams end up with a rule that both pages instantly and never stops.",
+        "ru": "`for` — это период ожидания: правило совпало, алерт висит в pending, и срабатывает, только если условие всё ещё истинно по истечении срока. Частота вычисления — это `evaluation_interval`, повторное уведомление — `repeat_interval` в Alertmanager, а заглушки — отдельное понятие; их смешение и приводит к правилу, которое одновременно будит мгновенно и не замолкает никогда."
+      },
+      "sources": [
+        "https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/",
+        "https://sre.google/sre-book/practical-alerting/"
+      ]
+    },
+    {
+      "id": "observability.dashboards-and-alerts.005",
+      "section": "dashboards-and-alerts",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Which CAUSE is nevertheless worth an alert, despite the symptom-over-cause rule?",
+        "ru": "Какая ПРИЧИНА всё же достойна алерта вопреки правилу «симптом важнее причины»?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A pod restarted once during the night.",
+            "ru": "Под один раз перезапустился ночью."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "CPU went above 80% for one minute.",
+            "ru": "CPU на минуту поднялся выше 80%."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A TLS certificate will expire in seven days.",
+            "ru": "TLS-сертификат истекает через семь дней."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A single query took longer than a second.",
+            "ru": "Один запрос выполнялся дольше секунды."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The disk is 40% full.",
+            "ru": "Диск заполнен на 40%."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "An expiring certificate is a prediction rather than an observation: it is guaranteed to become a user-visible symptom, and it gives enough notice to act calmly. That is the shape of the exception — a cause that will certainly become a symptom, with enough lead time. It earns a ticket-grade alert, not a 3 a.m. page.",
+        "ru": "Истекающий сертификат — это прогноз, а не наблюдение: он гарантированно станет видимым пользователю симптомом и даёт достаточно времени, чтобы спокойно среагировать. Такова форма исключения: причина, которая точно станет симптомом, с достаточным запасом времени. Она достойна алерта уровня тикета, а не звонка в три ночи."
+      },
+      "sources": [
+        "https://sre.google/sre-book/practical-alerting/",
+        "https://sre.google/workbook/alerting-on-slos/"
+      ]
+    },
+    {
+      "id": "observability.dashboards-and-alerts.006",
+      "section": "dashboards-and-alerts",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "Which statement about error-budget (burn-rate) alerting is TRUE?",
+        "ru": "Какое утверждение об алертинге по бюджету ошибок (burn rate) верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It is simply a fixed error-rate threshold expressed as a percentage.",
+            "ru": "Это просто фиксированный порог доли ошибок, выраженный в процентах."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It fires only once the reliability budget is fully exhausted, and not before.",
+            "ru": "Оно срабатывает, только когда бюджет надёжности полностью исчерпан, и не раньше."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It replaces symptom alerting with cause alerting.",
+            "ru": "Оно заменяет алертинг на симптомы алертингом на причины."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It fires on how fast errors are consuming the reliability budget, which makes a brief spike unremarkable and a slow persistent bleed urgent.",
+            "ru": "Оно срабатывает по скорости, с которой ошибки съедают бюджет надёжности, и поэтому короткий всплеск остаётся незначительным, а медленное постоянное кровотечение — срочным."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It requires distributed tracing to compute the budget.",
+            "ru": "Для расчёта бюджета ему нужна распределённая трассировка."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The point is the ranking. A fixed threshold treats a two-minute spike and a week-long degradation the same way, while a burn rate weighs each by how much of the budget it consumes — usually with a fast and a slow window so both a sudden outage and a slow bleed are caught. It is still symptom alerting: the budget is defined over user-visible success.",
+        "ru": "Суть — в порядке важности. Фиксированный порог одинаково относится к двухминутному всплеску и к недельной деградации, а burn rate взвешивает каждое по тому, сколько бюджета оно съедает, — обычно с быстрым и медленным окнами, чтобы поймать и внезапную аварию, и медленное кровотечение. Это по-прежнему алертинг на симптомы: бюджет определён через видимый пользователю успех."
+      },
+      "sources": [
+        "https://sre.google/workbook/alerting-on-slos/",
+        "https://grafana.com/docs/grafana/latest/dashboards/build-dashboards/best-practices/"
+      ]
+    },
+    {
+      "id": "observability.tracing.001",
+      "section": "tracing",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What is a span?",
+        "ru": "Что такое span?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The whole journey of one request across every service it touches.",
+            "ru": "Весь путь одного запроса через все сервисы, которых он касается."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A log line that happens to carry a timestamp and a trace id.",
+            "ru": "Строка лога, которая несёт метку времени и trace id."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A single sample of a metric taken at scrape time.",
+            "ru": "Одна выборка метрики, взятая в момент опроса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The stack of one thread at the moment the trace was captured.",
+            "ru": "Стек одного потока в момент снятия трассы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "One unit of work with a start, an end, a name, attributes and a parent.",
+            "ru": "Единица работы с началом, концом, именем, атрибутами и родителем."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The first option describes a trace, which is the tree those spans form. An HTTP handler is a span, the database call it makes is a child span, and the outbound call to another service is another child — the parent links are what turn a flat list into a tree.",
+        "ru": "Первый вариант описывает трассу — дерево, которое эти span'ы образуют. HTTP-обработчик — это span, вызов базы внутри него — дочерний span, исходящий вызов к другому сервису — ещё один дочерний; связи с родителем и превращают плоский список в дерево."
+      },
+      "sources": [
+        "https://opentelemetry.io/docs/concepts/signals/traces/",
+        "https://opentelemetry.io/docs/languages/java/getting-started/"
+      ]
+    },
+    {
+      "id": "observability.tracing.002",
+      "section": "tracing",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What ties the spans of one request together into a single trace?",
+        "ru": "Что связывает span'ы одного запроса в единую трассу?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A trace id shared by every span, plus each span's reference to its parent span id.",
+            "ru": "Общий для всех span'ов trace id плюс ссылка каждого span'а на span id родителя."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Their timestamps, sorted by the collector on arrival.",
+            "ru": "Их метки времени, отсортированные коллектором при получении."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The name of the service that emitted them.",
+            "ru": "Имя сервиса, который их отправил."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The id of the user who made the request.",
+            "ru": "Идентификатор пользователя, сделавшего запрос."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The order in which the collector received them.",
+            "ru": "Порядок, в котором коллектор их получил."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Timestamps are not enough: clocks differ between machines and thousands of requests overlap. The trace id groups the spans and the parent span id gives the tree its shape — without the parent link you would have a bag of spans and no idea which call made which.",
+        "ru": "Меток времени недостаточно: часы на машинах расходятся, а тысячи запросов накладываются друг на друга. Trace id группирует span'ы, а span id родителя задаёт форму дерева — без ссылки на родителя у вас мешок span'ов и никакого понимания, какой вызов породил какой."
+      },
+      "sources": [
+        "https://opentelemetry.io/docs/concepts/signals/traces/",
+        "https://www.w3.org/TR/trace-context/"
+      ]
+    },
+    {
+      "id": "observability.tracing.003",
+      "section": "tracing",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "What does the W3C `traceparent` header carry?",
+        "ru": "Что несёт заголовок W3C `traceparent`?"
+      },
+      "code": "traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01",
+      "options": [
+        {
+          "text": {
+            "en": "The full tree of spans collected so far on this request.",
+            "ru": "Полное дерево span'ов, собранных по этому запросу на данный момент."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A version, the trace id, the calling span's id, and sampling flags.",
+            "ru": "Версию, trace id, id вызывающего span'а и флаги сэмплирования."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The service name and the endpoint being called.",
+            "ru": "Имя сервиса и вызываемый эндпоинт."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The trace id only; everything else is reconstructed by the backend.",
+            "ru": "Только trace id; всё остальное бэкенд восстанавливает сам."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The trace id and the authenticated user's id.",
+            "ru": "Trace id и идентификатор аутентифицированного пользователя."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "That is the entire wire contract of distributed tracing: the caller injects the header, the callee extracts it and starts its own spans as children of the id it found. The sampling flag travels with it so every service in the chain makes the same keep-or-drop decision — otherwise you would collect half-traces.",
+        "ru": "Это и есть весь проводной контракт распределённой трассировки: вызывающий вставляет заголовок, вызываемый извлекает его и начинает свои span'ы детьми найденного id. Флаг сэмплирования едет вместе с ним, чтобы все сервисы цепочки приняли одинаковое решение «хранить или выбросить», иначе вы собирали бы половинчатые трассы."
+      },
+      "sources": [
+        "https://www.w3.org/TR/trace-context/",
+        "https://opentelemetry.io/docs/concepts/context-propagation/"
+      ]
+    },
+    {
+      "id": "observability.tracing.004",
+      "section": "tracing",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Inside a single Java service, where is trace context most likely to be lost?",
+        "ru": "Внутри одного Java-сервиса где вероятнее всего теряется контекст трассировки?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "At every outgoing HTTP call, because headers are rewritten by the client library.",
+            "ru": "На каждом исходящем HTTP-вызове, потому что клиентская библиотека переписывает заголовки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whenever a span name is longer than the backend allows.",
+            "ru": "Каждый раз, когда имя span'а длиннее допустимого для бэкенда."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "At a hand-off that changes threads — an executor, a callback, a reactive operator — unless the instrumentation propagates the context.",
+            "ru": "На передаче, меняющей поток, — executor, колбэк, реактивный оператор, — если инструментация не переносит контекст."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "When sampling is switched on, because unsampled spans discard the context.",
+            "ru": "При включённом сэмплировании, потому что несэмплированные span'ы выбрасывают контекст."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When the service writes its logs as JSON rather than plain text.",
+            "ru": "Когда сервис пишет логи в JSON, а не в виде обычного текста."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The active context lives in a thread-bound container, exactly like MDC, so it has exactly the same weakness. Outgoing HTTP is the well-covered case — that is what instrumentation libraries do first. It is the in-process thread hand-offs that quietly orphan spans and leave you with a tree that stops halfway.",
+        "ru": "Активный контекст живёт в контейнере, привязанном к потоку, ровно как MDC, и слабость у него ровно та же. Исходящий HTTP — как раз хорошо покрытый случай: с него библиотеки инструментации и начинают. А вот внутрипроцессные передачи между потоками тихо осиротят span'ы и оставят дерево, обрывающееся на полпути."
+      },
+      "sources": [
+        "https://opentelemetry.io/docs/concepts/context-propagation/",
+        "https://opentelemetry.io/docs/languages/java/getting-started/"
+      ]
+    },
+    {
+      "id": "observability.tracing.005",
+      "section": "tracing",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "In a trace waterfall, what does a span's SELF TIME tell you?",
+        "ru": "Что в водопаде трассы говорит СОБСТВЕННОЕ ВРЕМЯ span'а?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "How long the span waited before the sampler decided to keep it.",
+            "ru": "Сколько span ждал, пока сэмплер решит его сохранить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The total duration of the whole trace, measured from this span.",
+            "ru": "Полную длительность всей трассы, измеренную от этого span'а."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The clock skew between this service and its caller.",
+            "ru": "Расхождение часов между этим сервисом и его вызывающим."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Its duration minus the duration of its children — the time the work actually happened here rather than downstream.",
+            "ru": "Его длительность минус длительность детей — время, когда работа действительно шла здесь, а не ниже по цепочке."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The time between the request arriving and the first log line being written.",
+            "ru": "Время между приходом запроса и записью первой строки лога."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A span's duration includes everything its children did, so a slow span is not evidence that the slowness is yours. Subtracting the children is what separates \"this service is slow\" from \"this service is waiting for something slow\" — the two have completely different fixes.",
+        "ru": "Длительность span'а включает всё, что сделали его дети, поэтому медленный span ещё не доказывает, что медленность ваша. Вычитание детей отделяет «этот сервис медленный» от «этот сервис ждёт чего-то медленного», а лечатся эти два случая совершенно по-разному."
+      },
+      "sources": [
+        "https://opentelemetry.io/docs/concepts/signals/traces/",
+        "https://opentelemetry.io/docs/languages/java/getting-started/"
+      ]
+    },
+    {
+      "id": "observability.tracing.006",
+      "section": "tracing",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A request is handled, a message is published to Kafka, and a consumer processes it four minutes later. What is TRUE about tracing across that broker?",
+        "ru": "Запрос обработан, сообщение опубликовано в Kafka, консьюмер обрабатывает его через четыре минуты. Что верно про трассировку через брокер?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Kafka propagates trace context by itself; no headers are involved.",
+            "ru": "Kafka сама переносит контекст трассировки; заголовки ни при чём."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A trace cannot cross a broker at all, so the consumer must start an unrelated trace.",
+            "ru": "Трасса не может пересечь брокер вовсе, поэтому консьюмер обязан начать несвязанную трассу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The consumer must reuse the producer's span id as its own, so both sides share one span.",
+            "ru": "Консьюмер должен использовать span id продюсера как свой, чтобы обе стороны делили один span."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Tail sampling removes the need to propagate anything across the broker.",
+            "ru": "Tail-сэмплирование избавляет от необходимости что-либо переносить через брокер."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Context travels in the message headers, and because the consumer runs much later the useful relation is often a span link rather than a parent-child edge in one trace.",
+            "ru": "Контекст едет в заголовках сообщения, и, поскольку консьюмер работает сильно позже, полезной связью часто оказывается span link, а не ребро родитель–потомок в одной трассе."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The mechanism is the same as HTTP — inject on publish, extract on consume — but the semantics differ. Nesting a four-minute-later consumer under the producing request would make the parent span's duration meaningless, so tracing models this as a link between traces: the relationship is recorded without pretending the work was synchronous.",
+        "ru": "Механизм тот же, что в HTTP: вставить при публикации, извлечь при получении, — но семантика другая. Вложить консьюмера, отработавшего через четыре минуты, в породивший запрос значило бы обессмыслить длительность родительского span'а, поэтому трассировка моделирует это как link между трассами: связь фиксируется, но синхронность работы не изображается."
+      },
+      "sources": [
+        "https://opentelemetry.io/docs/concepts/signals/traces/",
+        "https://opentelemetry.io/docs/concepts/context-propagation/"
+      ]
+    },
+    {
+      "id": "observability.error-tracking.001",
+      "section": "error-tracking",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does an error tracker do that a log store does not?",
+        "ru": "Что делает трекер ошибок такого, чего не делает хранилище логов?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It folds many occurrences of the same failure into one issue with a count and a first-seen time.",
+            "ru": "Он сворачивает множество вхождений одного падения в один issue со счётчиком и временем первого появления."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It stores the same lines at a lower price per gigabyte.",
+            "ru": "Он хранит те же строки дешевле за гигабайт."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It formats stack traces so they are easier to read.",
+            "ru": "Он форматирует стектрейсы, чтобы их было легче читать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It keeps data for longer than a log store can.",
+            "ru": "Он хранит данные дольше, чем может хранилище логов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It encrypts events in transit, which a log pipeline cannot.",
+            "ru": "Он шифрует события при передаче, чего не умеет конвейер логов."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Grouping is the transformation that matters. Forty thousand identical stack traces in a log stream are forty thousand lines you cannot count or triage; as one issue they are a single row saying \"40,321 events, first seen 14 minutes ago\", next to the rarer bug that the volume would otherwise have buried.",
+        "ru": "Важное преобразование — именно группировка. Сорок тысяч одинаковых стектрейсов в потоке логов — это сорок тысяч строк, которые нельзя ни посчитать, ни разобрать; как один issue это одна строка «40 321 событие, впервые 14 минут назад» рядом с более редким багом, который объём иначе бы похоронил."
+      },
+      "sources": [
+        "https://docs.sentry.io/concepts/data-management/event-grouping/",
+        "https://docs.sentry.io/product/releases/"
+      ]
+    },
+    {
+      "id": "observability.error-tracking.002",
+      "section": "error-tracking",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What is a fingerprint in an error tracker?",
+        "ru": "Что такое fingerprint в трекере ошибок?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A hash of the entire event, including ids and timestamps.",
+            "ru": "Хеш всего события, включая идентификаторы и метки времени."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A value derived from the exception type and the shape of the stack trace, used to fold occurrences into one issue.",
+            "ru": "Значение, выведенное из типа исключения и формы стектрейса, по которому вхождения сворачиваются в один issue."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The version of the application that produced the event.",
+            "ru": "Версия приложения, породившая событие."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The id of the user affected by the failure.",
+            "ru": "Идентификатор пользователя, затронутого падением."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The trace id of the request that failed.",
+            "ru": "Trace id упавшего запроса."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The fingerprint deliberately ignores the parts that vary between occurrences, which is exactly why hashing the whole event would be useless — every event would be its own issue and nothing would ever group.",
+        "ru": "Отпечаток намеренно игнорирует части, меняющиеся от вхождения к вхождению, — именно поэтому хеш всего события был бы бесполезен: каждое событие стало бы собственным issue и не группировалось бы ничего."
+      },
+      "sources": [
+        "https://docs.sentry.io/concepts/data-management/event-grouping/fingerprint-rules/",
+        "https://docs.sentry.io/concepts/data-management/event-grouping/"
+      ]
+    },
+    {
+      "id": "observability.error-tracking.003",
+      "section": "error-tracking",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Which situation is an example of the default grouping UNDER-grouping, so that one bug appears as many issues?",
+        "ru": "Какая ситуация — пример того, что группировка по умолчанию дробит СЛИШКОМ мелко и один баг выглядит как множество issue?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A generic wrapper exception hides several genuinely different causes.",
+            "ru": "Обёрточное исключение общего вида прячет несколько действительно разных причин."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Two different exception types are thrown from the same method.",
+            "ru": "Из одного метода бросаются два разных типа исключений."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The exception message embeds a varying value, so \"user 8134 not found\" and \"user 9921 not found\" become separate issues.",
+            "ru": "В сообщение исключения зашито меняющееся значение, и «user 8134 not found» и «user 9921 not found» становятся разными issue."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A stack trace is truncated because the frame limit was reached.",
+            "ru": "Стектрейс обрезан, потому что достигнут лимит фреймов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An exception is thrown from inside a lambda.",
+            "ru": "Исключение брошено внутри лямбды."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The first option is the opposite problem — over-grouping, where distinct bugs are merged into one issue. Both are real and both are fixed the same way: by telling the tracker what the fingerprint should be, so the varying id stops being part of the identity of the bug.",
+        "ru": "Первый вариант — обратная проблема: слишком крупная группировка, когда разные баги сливаются в один issue. Обе реальны и обе лечатся одинаково — тем, что трекеру говорят, каким должен быть отпечаток, чтобы меняющийся id перестал быть частью личности бага."
+      },
+      "sources": [
+        "https://docs.sentry.io/concepts/data-management/event-grouping/fingerprint-rules/",
+        "https://docs.sentry.io/concepts/data-management/event-grouping/"
+      ]
+    },
+    {
+      "id": "observability.error-tracking.004",
+      "section": "error-tracking",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Why tag every event with the release that produced it?",
+        "ru": "Зачем помечать каждое событие релизом, который его породил?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because the fingerprint algorithm requires a version to work.",
+            "ru": "Потому что алгоритму отпечатка нужна версия, чтобы работать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "So the tracker can bill each team for its own events.",
+            "ru": "Чтобы трекер мог выставлять каждой команде счёт за её события."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "So events from old releases can be deleted automatically.",
+            "ru": "Чтобы события из старых релизов удалялись автоматически."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "So an issue's first-seen release identifies the deploy that introduced it, and an issue that returns after being fixed is marked a regression.",
+            "ru": "Чтобы релиз первого появления issue указывал на деплой, который его принёс, а вернувшийся после исправления issue помечался как регрессия."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because without it the tracker cannot display a stack trace.",
+            "ru": "Потому что без этого трекер не может показать стектрейс."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "This is the underused feature. It turns \"something is wrong\" into \"the 14:02 deploy is wrong\" within minutes, and it makes regressions visible — an issue you closed last month reappearing in today's release is a different and more urgent fact than a new issue.",
+        "ru": "Это недоиспользуемая возможность. Она за минуты превращает «что-то сломалось» в «сломался деплой в 14:02» и делает видимыми регрессии: закрытый в прошлом месяце issue, всплывший в сегодняшнем релизе, — факт другой и более срочный, чем новый issue."
+      },
+      "sources": [
+        "https://docs.sentry.io/product/releases/",
+        "https://docs.sentry.io/concepts/data-management/event-grouping/"
+      ]
+    },
+    {
+      "id": "observability.error-tracking.005",
+      "section": "error-tracking",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Which of these will an error tracker NOT tell you?",
+        "ru": "Чего трекер ошибок вам НЕ скажет?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "How often a given exception is being thrown right now.",
+            "ru": "Как часто данное исключение бросается прямо сейчас."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Which release an issue first appeared in.",
+            "ru": "В каком релизе issue появился впервые."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "What the failing request was and who made it.",
+            "ru": "Каким был упавший запрос и кто его сделал."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whether an issue you closed has come back.",
+            "ru": "Вернулся ли issue, который вы закрыли."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That a request succeeded but took eight seconds.",
+            "ru": "Что запрос завершился успешно, но занял восемь секунд."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A tracker only sees failures. Everything that is wrong without throwing — slow successes, a queue growing, a cache that stopped hitting — is invisible to it. That is why it is a third thing beside logs and metrics rather than a replacement for either.",
+        "ru": "Трекер видит только падения. Всё, что плохо, но не бросает исключение, — медленные успехи, растущая очередь, переставший попадать кэш — для него невидимо. Поэтому он третья вещь рядом с логами и метриками, а не замена ни той ни другой."
+      },
+      "sources": [
+        "https://docs.sentry.io/concepts/data-management/event-grouping/",
+        "https://docs.sentry.io/product/releases/"
+      ]
+    },
+    {
+      "id": "observability.error-tracking.006",
+      "section": "error-tracking",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "What is the privacy consideration when adding a hosted error tracker to a service?",
+        "ru": "О чём нужно подумать с точки зрения приватности, подключая к сервису облачный трекер ошибок?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Trackers capture request data and local variables by design, so data scrubbing must be configured — otherwise tokens and passwords leave your infrastructure with the event.",
+            "ru": "Трекеры по замыслу захватывают данные запроса и локальные переменные, поэтому вычистку данных надо настроить — иначе токены и пароли покинут вашу инфраструктуру вместе с событием."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "None — trackers detect and strip personal data automatically in every SDK.",
+            "ru": "Ни о чём: трекеры во всех SDK автоматически находят и вырезают персональные данные."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "None — because events are grouped into issues, individual values are never stored.",
+            "ru": "Ни о чём: раз события группируются в issue, отдельные значения не сохраняются."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Scrubbing is possible only when self-hosting; with a hosted tracker the data is sent as-is by design.",
+            "ru": "Вычистка возможна только при self-hosted-установке; облачный трекер по замыслу отправляет данные как есть."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Capturing local variables is disabled by default everywhere, so nothing sensitive can be captured.",
+            "ru": "Захват локальных переменных везде выключен по умолчанию, поэтому ничего чувствительного захватить нельзя."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The richness that makes a tracker useful is the same richness that makes it a data-export channel. Treat scrubbing configuration as part of the integration, not an optional extra: the rule about secrets in logs applies here with more force, because this data leaves your perimeter for a third party.",
+        "ru": "Та самая полнота, которая делает трекер полезным, делает его и каналом выгрузки данных. Считайте настройку вычистки частью интеграции, а не дополнением: правило о секретах в логах действует здесь сильнее, потому что эти данные уходят за ваш периметр третьей стороне."
+      },
+      "sources": [
+        "https://docs.sentry.io/security-legal-pii/scrubbing/",
+        "https://docs.sentry.io/concepts/data-management/event-grouping/"
+      ]
+    },
+    {
+      "id": "observability.health-and-profiling.001",
+      "section": "health-and-profiling",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "What should happen when a LIVENESS probe fails?",
+        "ru": "Что должно произойти, когда падает проба LIVENESS?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The instance is taken out of the load-balancer rotation but left running.",
+            "ru": "Инстанс выводится из ротации балансировщика, но остаётся работать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The process is killed and a new one is started.",
+            "ru": "Процесс убивается, и запускается новый."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The last request is retried automatically.",
+            "ru": "Последний запрос автоматически повторяется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The deployment is scaled up to add capacity.",
+            "ru": "Деплой масштабируется вверх, чтобы добавить мощности."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The application reloads its configuration.",
+            "ru": "Приложение перечитывает конфигурацию."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Liveness asks whether the process is broken beyond recovery, and the only response is a restart. Taking an instance out of rotation while leaving it alive is what a failed READINESS probe means — confusing the two is the root of the restart-loop outage.",
+        "ru": "Liveness спрашивает, сломан ли процесс безвозвратно, и единственный ответ — перезапуск. Вывод инстанса из ротации с сохранением жизни — это смысл упавшей пробы READINESS; смешение этих двух и лежит в корне аварии с циклом перезапусков."
+      },
+      "sources": [
+        "https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/",
+        "https://quarkus.io/guides/smallrye-health"
+      ]
+    },
+    {
+      "id": "observability.health-and-profiling.002",
+      "section": "health-and-profiling",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "Which check belongs in READINESS rather than liveness?",
+        "ru": "Какая проверка относится к READINESS, а не к liveness?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Whether the process is deadlocked.",
+            "ru": "Не находится ли процесс во взаимоблокировке."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whether the JVM process is still running at all.",
+            "ru": "Жив ли вообще процесс JVM."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whether the database is currently reachable.",
+            "ru": "Доступна ли база данных прямо сейчас."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Whether the heap is exhausted beyond recovery.",
+            "ru": "Исчерпана ли куча без возможности восстановления."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whether the event loop is wedged.",
+            "ru": "Не заклинил ли event loop."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Readiness is the probe that is allowed to consider dependencies, because its consequence — stop sending traffic here — is reversible and proportionate. The other four are about the process itself, which is exactly what liveness is for.",
+        "ru": "Readiness — та проба, которой позволено смотреть на зависимости, потому что её следствие («перестать слать сюда трафик») обратимо и соразмерно. Остальные четыре — про сам процесс, а это ровно то, для чего существует liveness."
+      },
+      "sources": [
+        "https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/",
+        "https://quarkus.io/guides/smallrye-health"
+      ]
+    },
+    {
+      "id": "observability.health-and-profiling.003",
+      "section": "health-and-profiling",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "Why is checking the database inside the LIVENESS probe dangerous?",
+        "ru": "Чем опасна проверка базы данных внутри пробы LIVENESS?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It makes the probe slightly slower, which delays the orchestrator's polling loop.",
+            "ru": "Она чуть замедляет пробу, задерживая цикл опроса оркестратора."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It can leak the connection string in the probe's response body.",
+            "ru": "Она может раскрыть строку подключения в теле ответа пробы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Orchestrators ignore failing liveness probes anyway, so the check is wasted work.",
+            "ru": "Оркестраторы всё равно игнорируют падающие пробы liveness, так что проверка — пустая работа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A database blip fails liveness on every instance at once, so the orchestrator kills them all and they restart into the same failure — turning a recoverable dependency outage into a total one.",
+            "ru": "Моргание базы одновременно проваливает liveness на всех инстансах, оркестратор убивает их все, и они перезапускаются в тот же отказ, превращая восстановимый сбой зависимости в полный простой."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Readiness would then never be evaluated, because liveness runs first.",
+            "ru": "Тогда readiness никогда не будет вычисляться, потому что liveness выполняется первой."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The restart loop is bad on its own, and worse than it looks: restarting throws away every warm cache and every established connection pool, so the fleet comes back in the weakest possible state exactly when the dependency is recovering. Liveness must not depend on anything outside the process.",
+        "ru": "Цикл перезапусков плох сам по себе и хуже, чем кажется: перезапуск выбрасывает все прогретые кэши и установленные пулы соединений, и флот возвращается в самом слабом возможном состоянии ровно тогда, когда зависимость восстанавливается. Liveness не должна зависеть ни от чего вне процесса."
+      },
+      "sources": [
+        "https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/",
+        "https://quarkus.io/guides/smallrye-health"
+      ]
+    },
+    {
+      "id": "observability.health-and-profiling.004",
+      "section": "health-and-profiling",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "A health endpoint returns 200 from a trivial handler that touches nothing. What is the risk?",
+        "ru": "Health-эндпоинт возвращает 200 из тривиального обработчика, который ничего не трогает. В чём риск?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It is too expensive to run at the orchestrator's polling frequency.",
+            "ru": "Он слишком дорог, чтобы выполняться с частотой опроса оркестратора."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It will fail during a long garbage-collection pause and cause a needless restart.",
+            "ru": "Он упадёт во время долгой паузы сборки мусора и вызовет ненужный перезапуск."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Its response cannot be cached, so the orchestrator re-evaluates it every time.",
+            "ru": "Его ответ нельзя кешировать, поэтому оркестратор каждый раз вычисляет его заново."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It requires authentication, which the orchestrator cannot provide.",
+            "ru": "Он требует аутентификации, которую оркестратор не может предоставить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It proves only that the HTTP layer accepts connections: the worker pool can be exhausted and every real request timing out while the probe stays green.",
+            "ru": "Он доказывает лишь то, что HTTP-слой принимает соединения: пул воркеров может быть исчерпан, каждый реальный запрос — падать по таймауту, а проба остаётся зелёной."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "This is the falsely-healthy direction, and it is the more dangerous one because monitoring shows green through an outage. It happens easily when the probe is served off a path that never touches the saturated resource. The opposite mistake — an expensive probe that adds load and fails on its own timeout — is real too, so the target is cheap but representative.",
+        "ru": "Это направление «ложно здоров», и оно опаснее, потому что мониторинг светит зелёным сквозь аварию. Возникает легко, когда пробу обслуживают по пути, который никогда не задевает насыщенный ресурс. Обратная ошибка — дорогая проба, добавляющая нагрузку и падающая по собственному таймауту, — тоже реальна, поэтому цель: дёшево, но репрезентативно."
+      },
+      "sources": [
+        "https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/",
+        "https://quarkus.io/guides/smallrye-health"
+      ]
+    },
+    {
+      "id": "observability.health-and-profiling.005",
+      "section": "health-and-profiling",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "Which statement about health checking in THIS project's deployment is accurate?",
+        "ru": "Какое утверждение о health-проверках в развёртывании ЭТОГО проекта верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It runs on a Render free instance that sleeps and a Neon database that scales to zero, which is why the connection acquisition timeout is raised to 30 s and Flyway retries its first connection — a probe here has to budget for waking up.",
+            "ru": "Он работает на бесплатном инстансе Render, который засыпает, и на базе Neon, масштабирующейся до нуля; поэтому таймаут получения соединения поднят до 30 с, а Flyway повторяет первое подключение — пробе здесь нужен запас на пробуждение."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The health endpoint is disabled in production to avoid exposing internals.",
+            "ru": "Health-эндпоинт выключен в проде, чтобы не раскрывать внутреннее устройство."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Render keeps the free instance warm, so a cold start never affects the probe.",
+            "ru": "Render держит бесплатный инстанс прогретым, поэтому холодный старт никогда не влияет на пробу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A startup probe suppresses liveness during boot, which is why the datasource timeouts could be left at their defaults.",
+            "ru": "Startup-проба подавляет liveness во время загрузки, поэтому таймауты источника данных удалось оставить по умолчанию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The health check verifies that the Prometheus metrics endpoint is responding.",
+            "ru": "Health-проверка убеждается, что эндпоинт метрик Prometheus отвечает."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Those settings exist because the first deploy of the Quarkus port died on an acquisition timeout in an environment the previous build had been booting on for weeks: Agroal gives up after 5 s by default where HikariCP waited 30 s. The generalisable lesson is that a probe against infrastructure allowed to sleep must include waking time in its budget, or it reports a broken service every time the service is merely cold.",
+        "ru": "Эти настройки появились потому, что первый деплой Quarkus-версии умер на acquisition timeout в окружении, на котором предыдущая сборка поднималась неделями: Agroal по умолчанию сдаётся через 5 с там, где HikariCP ждал 30 с. Обобщаемый урок: у пробы к инфраструктуре, которой позволено спать, в бюджете должно быть время пробуждения, иначе она сообщает о сломанном сервисе каждый раз, когда сервис просто холодный."
+      },
+      "sources": [
+        "https://quarkus.io/guides/smallrye-health",
+        "https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/"
+      ]
+    },
+    {
+      "id": "observability.health-and-profiling.006",
+      "section": "health-and-profiling",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "Which statement about JDK Flight Recorder is TRUE?",
+        "ru": "Какое утверждение о JDK Flight Recorder верно?"
+      },
+      "code": "jcmd <pid> JFR.start name=live settings=profile\njcmd <pid> JFR.dump  name=live filename=live.jfr",
+      "options": [
+        {
+          "text": {
+            "en": "It needs a separate agent jar and a JVM restart before any recording can begin.",
+            "ru": "Ему нужен отдельный jar-агент и перезапуск JVM, прежде чем запись вообще начнётся."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is built into the JVM and cheap enough to run in production, but `settings=profile` costs more than the default, and a .jfr file holds method names and SQL, so it is sensitive data.",
+            "ru": "Он встроен в JVM и достаточно дёшев для прода, но `settings=profile` дороже профиля по умолчанию, а файл .jfr содержит имена методов и SQL, то есть является чувствительными данными."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It has no measurable overhead, so the profile configuration can safely be left on permanently.",
+            "ru": "У него нет измеримых накладных расходов, поэтому конфигурацию profile можно спокойно оставить включённой навсегда."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A recording contains only aggregate counters, so a .jfr file can be shared freely.",
+            "ru": "Запись содержит только агрегированные счётчики, поэтому файлом .jfr можно свободно делиться."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It can only be enabled at launch; jcmd cannot start a recording on an already-running process.",
+            "ru": "Его можно включить только при запуске; jcmd не может начать запись на уже работающем процессе."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "JFR is in the JVM already, which is what makes it the one piece of deep observability that needs no integration work — `jcmd <pid> JFR.start` attaches to a live process. The two caveats in the correct option are the ones people skip: the profile settings are not free, and a recording is as sensitive as a heap dump.",
+        "ru": "JFR уже в JVM, и именно поэтому это единственный кусок глубокой наблюдаемости, не требующий работы по интеграции: `jcmd <pid> JFR.start` подключается к живому процессу. Две оговорки в верном варианте — те, что обычно пропускают: настройки profile не бесплатны, а запись так же чувствительна, как heap dump."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/17/jfapi/flight-recorder-api-programmers-guide.pdf",
+        "https://docs.oracle.com/en/java/java-components/jdk-mission-control/"
+      ]
+    },
+    {
+      "id": "observability.cardinality-and-cost.001",
+      "section": "cardinality-and-cost",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "In a dimensional metrics system, what is a time series?",
+        "ru": "Что такое временной ряд в размерной системе метрик?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A single data point written at a single moment.",
+            "ru": "Одна точка данных, записанная в один момент."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Everything one instance exposes on one scrape.",
+            "ru": "Всё, что один инстанс отдаёт за один опрос."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "One unique combination of metric name and label values.",
+            "ru": "Одна уникальная комбинация имени метрики и значений меток."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "One metric name, regardless of how many labels it carries.",
+            "ru": "Одно имя метрики независимо от того, сколько у неё меток."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "One scrape interval's worth of samples across the fleet.",
+            "ru": "Выборки за один интервал опроса по всему флоту."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "This definition is the whole reason cardinality matters: storage and memory cost is charged per series, not per point written. Adding a label does not add a column — it multiplies the number of series by that label's number of distinct values.",
+        "ru": "Из этого определения и вытекает вся важность кардинальности: стоимость хранения и памяти считается на ряд, а не на записанную точку. Добавление метки не добавляет столбец — оно умножает число рядов на количество различных значений этой метки."
+      },
+      "sources": [
+        "https://prometheus.io/docs/practices/naming/",
+        "https://grafana.com/docs/grafana-cloud/cost-management-and-billing/analyze-costs/metrics-costs/control-metrics-usage/"
+      ]
+    },
+    {
+      "id": "observability.cardinality-and-cost.002",
+      "section": "cardinality-and-cost",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "Which of these is a high-cardinality label that should NOT go on a metric?",
+        "ru": "Какая из этих меток имеет высокую кардинальность и НЕ должна попадать в метрику?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The HTTP method.",
+            "ru": "HTTP-метод."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The HTTP status code.",
+            "ru": "Код статуса HTTP."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The route template, such as /api/topics/{id}.",
+            "ru": "Шаблон маршрута, например /api/topics/{id}."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The id of the user who made the request.",
+            "ru": "Идентификатор пользователя, сделавшего запрос."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The name of the service emitting the metric.",
+            "ru": "Имя сервиса, отдающего метрику."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The rule of thumb is that a label's values should be something you could enumerate on a whiteboard. Methods, statuses, route templates and service names are bounded sets; a user id grows with your user base, and so does the number of series.",
+        "ru": "Эмпирическое правило: значения метки должны быть такими, что их можно перечислить на доске. Методы, статусы, шаблоны маршрутов и имена сервисов — ограниченные множества; идентификатор пользователя растёт вместе с базой пользователей, а вместе с ним и число рядов."
+      },
+      "sources": [
+        "https://prometheus.io/docs/practices/naming/",
+        "https://prometheus.io/docs/practices/instrumentation/"
+      ]
+    },
+    {
+      "id": "observability.cardinality-and-cost.003",
+      "section": "cardinality-and-cost",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "Why does adding a user_id label break a metrics backend rather than merely enlarging it?",
+        "ru": "Почему добавление метки user_id ломает бэкенд метрик, а не просто увеличивает его?"
+      },
+      "code": "http_requests_total{method, status, endpoint}\n  5 x 8 x 40 = 1,600 series\n\nhttp_requests_total{method, status, endpoint, user_id}\n  1,600 x 200,000 = 320,000,000 series",
+      "options": [
+        {
+          "text": {
+            "en": "Each extra label adds a fixed byte overhead to every data point written.",
+            "ru": "Каждая дополнительная метка добавляет фиксированный расход байтов к каждой записанной точке."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The scrape payload grows linearly, which eventually exceeds the HTTP body limit.",
+            "ru": "Полезная нагрузка опроса растёт линейно и в какой-то момент превышает лимит тела HTTP."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A label whose value changes breaks the counter's monotonicity.",
+            "ru": "Метка с меняющимся значением ломает монотонность счётчика."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Prometheus rejects labels that were not declared in advance.",
+            "ru": "Prometheus отвергает метки, не объявленные заранее."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Series count is the product of each label's distinct values and cost is per series, so an unbounded label multiplies rather than adds.",
+            "ru": "Число рядов — это произведение количеств различных значений меток, а стоимость считается на ряд, поэтому неограниченная метка умножает, а не прибавляет."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "1,600 series become 320,000,000 with one label. The failure is usually not a clean rejection either: the scrape slows, the backend's memory climbs, and the first symptom is a monitoring system dying in the middle of the incident it was supposed to explain.",
+        "ru": "1 600 рядов превращаются в 320 000 000 из-за одной метки. И падение обычно не выглядит честным отказом: опрос замедляется, память бэкенда растёт, и первым симптомом оказывается система мониторинга, умирающая посреди инцидента, который она должна была объяснить."
+      },
+      "sources": [
+        "https://prometheus.io/docs/practices/instrumentation/",
+        "https://grafana.com/docs/grafana-cloud/cost-management-and-billing/analyze-costs/metrics-costs/control-metrics-usage/"
+      ]
+    },
+    {
+      "id": "observability.cardinality-and-cost.004",
+      "section": "cardinality-and-cost",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "Per-request detail such as a request id genuinely is useful. Where does it belong?",
+        "ru": "Детали на запрос вроде id запроса действительно полезны. Где им место?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "In a log line or a span attribute, where storage is charged per event and no series index explodes.",
+            "ru": "В строке лога или атрибуте span'а, где хранение считается на событие и никакой индекс рядов не взрывается."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "In a summary quantile, which absorbs varying values.",
+            "ru": "В квантиле summary, который поглощает меняющиеся значения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "In a gauge whose metric NAME contains the id, since names are not labels.",
+            "ru": "В gauge, чьё ИМЯ метрики содержит id, — имена ведь не метки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "In an extra histogram bucket per request.",
+            "ru": "В дополнительной корзине гистограммы на каждый запрос."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nowhere — per-request detail should be discarded at the edge.",
+            "ru": "Нигде — детали на запрос надо отбрасывать на границе системы."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "This is the sharpest argument that the three signals are not interchangeable: traces and logs are exactly where high cardinality is affordable. Putting an id in the metric NAME is the same mistake wearing a disguise — each distinct name is its own series too.",
+        "ru": "Это самый резкий аргумент в пользу того, что три сигнала не взаимозаменяемы: трассы и логи — ровно то место, где высокая кардинальность по карману. Положить id в ИМЯ метрики — та же ошибка в маскировке: каждое отдельное имя — это тоже отдельный ряд."
+      },
+      "sources": [
+        "https://prometheus.io/docs/practices/instrumentation/",
+        "https://prometheus.io/docs/practices/naming/"
+      ]
+    },
+    {
+      "id": "observability.cardinality-and-cost.005",
+      "section": "cardinality-and-cost",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "What is the cost of HEAD sampling in tracing?",
+        "ru": "Какова плата за HEAD-сэмплирование в трассировке?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It requires the collector to buffer every in-flight trace in memory.",
+            "ru": "Оно требует от коллектора держать в памяти каждую незавершённую трассу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The decision is taken at the first span, before anything has happened, so 99% of your errors are discarded along with 99% of everything else.",
+            "ru": "Решение принимается на первом span'е, до того как что-либо произошло, поэтому 99% ваших ошибок выбрасываются вместе с 99% всего остального."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "All spans of one trace must be routed to the same collector instance.",
+            "ru": "Все span'ы одной трассы должны попасть в один и тот же инстанс коллектора."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The decision cannot be propagated downstream, so services disagree about what to keep.",
+            "ru": "Решение нельзя передать вниз по цепочке, поэтому сервисы расходятся в том, что сохранять."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It biases the sample towards slow requests.",
+            "ru": "Оно смещает выборку в сторону медленных запросов."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Head sampling is cheap precisely because it decides early, and that is also its whole weakness: at the head you do not yet know which requests will turn out to be interesting. Buffering and collector affinity are the costs of TAIL sampling, and the sampling flag in traceparent is exactly what keeps services from disagreeing.",
+        "ru": "Head-сэмплирование дёшево именно потому, что решает рано, и в этом же вся его слабость: в голове ещё неизвестно, какие запросы окажутся интересными. Буферизация и привязка к коллектору — это плата за TAIL-сэмплирование, а флаг сэмплирования в traceparent как раз и не даёт сервисам разойтись."
+      },
+      "sources": [
+        "https://opentelemetry.io/docs/concepts/sampling/",
+        "https://opentelemetry.io/docs/concepts/signals/traces/"
+      ]
+    },
+    {
+      "id": "observability.cardinality-and-cost.006",
+      "section": "cardinality-and-cost",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "Which statement about TAIL sampling is TRUE?",
+        "ru": "Какое утверждение о TAIL-сэмплировании верно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It decides at the first span and propagates that decision down the trace.",
+            "ru": "Оно решает на первом span'е и передаёт это решение вниз по трассе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is cheaper to operate than head sampling, because it keeps fewer traces.",
+            "ru": "Его дешевле эксплуатировать, чем head-сэмплирование, потому что оно сохраняет меньше трасс."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The collector buffers a complete trace before deciding, so every span of one trace must reach the same collector instance and in-flight traces sit in memory.",
+            "ru": "Коллектор буферизует трассу целиком, прежде чем решить, поэтому все span'ы одной трассы обязаны попасть в один инстанс коллектора, а незавершённые трассы висят в памяти."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It makes metrics unnecessary, because request counts can be recovered exactly from the kept traces.",
+            "ru": "Оно делает метрики ненужными, потому что количество запросов точно восстанавливается по сохранённым трассам."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It guarantees a statistically unbiased sample of production traffic.",
+            "ru": "Оно гарантирует статистически несмещённую выборку продового трафика."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Buffering is what buys the useful policy — keep everything that errored or was slow, plus a little of the boring remainder — and it is also the operational cost. Note that the result is deliberately biased, so counting from sampled traces is wrong twice over: the sample over-represents failures, and scaling it up multiplies the noise. Counting is what metrics are for.",
+        "ru": "Буферизация — это то, что покупает полезную политику (сохранять всё, что упало или было медленным, плюс немного скучного остатка), и она же — эксплуатационная плата. Заметьте, что результат намеренно смещён, поэтому считать по сэмплированным трассам неверно дважды: выборка переоценивает отказы, а домножение увеличивает и шум. Считать — это работа метрик."
+      },
+      "sources": [
+        "https://opentelemetry.io/docs/concepts/sampling/",
+        "https://grafana.com/docs/grafana-cloud/cost-management-and-billing/analyze-costs/metrics-costs/control-metrics-usage/"
+      ]
+    }
+  ]
+}

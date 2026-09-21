@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 2,
+  "topic": {
+    "id": "security",
+    "order": 11,
+    "name": {
+      "en": "Security and access control",
+      "ru": "Безопасность и контроль доступа"
+    },
+    "sections": [
+      {
+        "id": "authn-authz",
+        "order": 1,
+        "level": "junior",
+        "title": {
+          "en": "Authentication and authorization",
+          "ru": "Аутентификация и авторизация"
+        }
+      },
+      {
+        "id": "passwords-hashing",
+        "order": 2,
+        "level": "junior",
+        "title": {
+          "en": "Passwords and hashing",
+          "ru": "Пароли и хеширование"
+        }
+      },
+      {
+        "id": "sessions-tokens-jwt",
+        "order": 3,
+        "level": "middle",
+        "title": {
+          "en": "Sessions, tokens and JWT",
+          "ru": "Сессии, токены и JWT"
+        }
+      },
+      {
+        "id": "filter-chain",
+        "order": 4,
+        "level": "middle",
+        "title": {
+          "en": "The security filter chain",
+          "ru": "Цепочка фильтров безопасности"
+        }
+      },
+      {
+        "id": "method-and-data-authorization",
+        "order": 5,
+        "level": "middle",
+        "title": {
+          "en": "Authorizing the operation and the row",
+          "ru": "Авторизация операции и авторизация строки"
+        }
+      },
+      {
+        "id": "owasp-top-10",
+        "order": 6,
+        "level": "middle",
+        "title": {
+          "en": "OWASP Top 10 for the backend",
+          "ru": "OWASP Top 10 для бэкенда"
+        }
+      },
+      {
+        "id": "oauth-oidc",
+        "order": 7,
+        "level": "senior",
+        "title": {
+          "en": "OAuth 2.1 and OpenID Connect",
+          "ru": "OAuth 2.1 и OpenID Connect"
+        }
+      },
+      {
+        "id": "secrets-tls-headers",
+        "order": 8,
+        "level": "senior",
+        "title": {
+          "en": "Secrets, TLS and security headers",
+          "ru": "Секреты, TLS и security-заголовки"
+        }
+      }
+    ]
+  }
+}

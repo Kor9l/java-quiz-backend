@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 2,
+  "topic": {
+    "id": "distributed",
+    "order": 14,
+    "name": {
+      "en": "Microservices and distributed systems",
+      "ru": "Микросервисы и распределённые системы"
+    },
+    "sections": [
+      {
+        "id": "service-boundaries",
+        "order": 1,
+        "level": "junior",
+        "title": {
+          "en": "Service boundaries and what they cost",
+          "ru": "Границы сервисов и их цена"
+        }
+      },
+      {
+        "id": "sync-and-async",
+        "order": 2,
+        "level": "junior",
+        "title": {
+          "en": "Synchronous and asynchronous interaction",
+          "ru": "Синхронное и асинхронное взаимодействие"
+        }
+      },
+      {
+        "id": "resilience",
+        "order": 3,
+        "level": "middle",
+        "title": {
+          "en": "Resilience: timeouts, retries, circuit breaker",
+          "ru": "Отказоустойчивость: таймауты, ретраи, circuit breaker"
+        }
+      },
+      {
+        "id": "idempotency",
+        "order": 4,
+        "level": "middle",
+        "title": {
+          "en": "Idempotency and the price of exactly once",
+          "ru": "Идемпотентность и цена exactly once"
+        }
+      },
+      {
+        "id": "saga-and-outbox",
+        "order": 5,
+        "level": "middle",
+        "title": {
+          "en": "Saga, transactional outbox and CDC",
+          "ru": "Saga, transactional outbox и CDC"
+        }
+      },
+      {
+        "id": "discovery-and-gateway",
+        "order": 6,
+        "level": "middle",
+        "title": {
+          "en": "Discovery, configuration and the API gateway",
+          "ru": "Discovery, конфигурация и API gateway"
+        }
+      },
+      {
+        "id": "consistency",
+        "order": 7,
+        "level": "senior",
+        "title": {
+          "en": "Consistency: CAP, PACELC and clocks",
+          "ru": "Консистентность: CAP, PACELC и часы"
+        }
+      },
+      {
+        "id": "contract-evolution",
+        "order": 8,
+        "level": "senior",
+        "title": {
+          "en": "Evolving a contract between services",
+          "ru": "Эволюция контракта между сервисами"
+        }
+      }
+    ]
+  }
+}

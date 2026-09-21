@@ -1,0 +1,726 @@
+{
+  "schemaVersion": 1,
+  "track": "java",
+  "tasks": [
+    {
+      "id": "algorithms-easy-01",
+      "difficulty": "easy",
+      "order": 20,
+      "topic": "algorithms",
+      "section": "arrays-and-strings",
+      "className": "Solution",
+      "title": {
+        "en": "Rotate a list to the left",
+        "ru": "Циклический сдвиг списка влево"
+      },
+      "statement": {
+        "en": "Return a new list holding the same elements rotated left by shift positions, so that element shift ends up first and the ones before it wrap round to the end. A shift larger than the list, a shift of zero and an empty list all have to work; the input list must not be modified.",
+        "ru": "Верните новый список с теми же элементами, сдвинутыми влево на shift позиций, так чтобы элемент с индексом shift оказался первым, а предшествующие ему перешли в конец. Сдвиг больше длины списка, нулевой сдвиг и пустой список должны работать; исходный список изменять нельзя."
+      },
+      "hint": {
+        "en": "Take the shift modulo the size once, then copy element (i + offset) % size for each position i. Rotating by a multiple of the size is the identity.",
+        "ru": "Возьмите остаток shift по длине один раз, затем для каждой позиции i копируйте элемент (i + offset) % size. Сдвиг, кратный длине, ничего не меняет."
+      },
+      "starter": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n\n    public static List<Integer> rotateLeft(List<Integer> values, int shift) {\n        // TODO: start from position shift and wrap the earlier elements round to the end\n        return new ArrayList<>(values);\n    }\n}\n",
+      "solution": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n\n    public static List<Integer> rotateLeft(List<Integer> values, int shift) {\n        int size = values.size();\n        if (size == 0) {\n            return new ArrayList<>();\n        }\n        int offset = ((shift % size) + size) % size;\n        List<Integer> rotated = new ArrayList<>(size);\n        for (int i = 0; i < size; i++) {\n            rotated.add(values.get((i + offset) % size));\n        }\n        return rotated;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "rotateLeft([1, 2, 3, 4, 5], 2)",
+          "expression": "Solution.rotateLeft(List.of(1, 2, 3, 4, 5), 2)"
+        },
+        {
+          "label": "rotateLeft([1, 2, 3], 0)",
+          "expression": "Solution.rotateLeft(List.of(1, 2, 3), 0)"
+        },
+        {
+          "label": "rotateLeft([1, 2, 3], 5)",
+          "expression": "Solution.rotateLeft(List.of(1, 2, 3), 5)"
+        },
+        {
+          "label": "rotateLeft([7], 4)",
+          "expression": "Solution.rotateLeft(List.of(7), 4)"
+        },
+        {
+          "label": "rotateLeft([], 3)",
+          "expression": "Solution.rotateLeft(List.of(), 3)"
+        }
+      ],
+      "explanation": {
+        "en": "Rotation is an indexing exercise, not a shifting one: reading element (i + offset) % size builds the answer in one linear pass with no repeated removals. Doing it the other way — remove(0) and add at the end, shift times — is quadratic, because every remove(0) on an ArrayList moves the whole tail down by one. Reducing the shift modulo the size first is what makes a shift of five on three elements cheap instead of five passes, and the extra + size handles a negative shift.",
+        "ru": "Поворот — это задача об индексации, а не о сдвигах: чтение элемента (i + offset) % size строит ответ за один линейный проход без повторяющихся удалений. Обратный путь — remove(0) и добавление в конец, повторённые shift раз — квадратичен, потому что каждый remove(0) на ArrayList сдвигает весь хвост на позицию вниз. Предварительное взятие остатка по длине делает сдвиг на пять при трёх элементах дешёвым вместо пяти проходов, а дополнительное + size обрабатывает отрицательный сдвиг."
+      },
+      "sources": [
+        {
+          "title": "List (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html"
+        },
+        {
+          "title": "ArrayList (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html"
+        }
+      ]
+    },
+    {
+      "id": "algorithms-easy-02",
+      "difficulty": "easy",
+      "order": 21,
+      "topic": "algorithms",
+      "section": "complexity",
+      "className": "Solution",
+      "title": {
+        "en": "Count the repeated values in one pass",
+        "ru": "Подсчёт повторяющихся значений за один проход"
+      },
+      "statement": {
+        "en": "Return how many distinct values occur more than once in the list. A value that appears five times still counts once. Solve it in a single pass with sets rather than with a nested loop over the list.",
+        "ru": "Верните количество различных значений, встречающихся в списке более одного раза. Значение, встретившееся пять раз, всё равно учитывается один раз. Решайте за один проход с использованием множеств, а не вложенным циклом по списку."
+      },
+      "hint": {
+        "en": "Set.add returns false when the element was already there, which is the whole test you need. Keep a second set of the values that failed to be added.",
+        "ru": "Set.add возвращает false, если элемент уже был, — это и есть вся нужная проверка. Держите второе множество для значений, которые добавить не удалось."
+      },
+      "starter": "import java.util.List;\n\npublic class Solution {\n\n    public static int countRepeated(List<Integer> values) {\n        // TODO: count how many distinct values occur more than once\n        return 0;\n    }\n}\n",
+      "solution": "import java.util.HashSet;\nimport java.util.List;\nimport java.util.Set;\n\npublic class Solution {\n\n    public static int countRepeated(List<Integer> values) {\n        Set<Integer> seen = new HashSet<>();\n        Set<Integer> repeated = new HashSet<>();\n        for (Integer value : values) {\n            if (!seen.add(value)) {\n                repeated.add(value);\n            }\n        }\n        return repeated.size();\n    }\n}\n",
+      "cases": [
+        {
+          "label": "countRepeated([1, 2, 3, 2, 1, 1])",
+          "expression": "Solution.countRepeated(List.of(1, 2, 3, 2, 1, 1))"
+        },
+        {
+          "label": "countRepeated([1, 2, 3])",
+          "expression": "Solution.countRepeated(List.of(1, 2, 3))"
+        },
+        {
+          "label": "countRepeated([5, 5, 5, 5])",
+          "expression": "Solution.countRepeated(List.of(5, 5, 5, 5))"
+        },
+        {
+          "label": "countRepeated([])",
+          "expression": "Solution.countRepeated(List.of())"
+        }
+      ],
+      "explanation": {
+        "en": "The obvious solution compares every element with every later one, which is O(n^2) and becomes unusable at a few hundred thousand values. A hash set turns the question \"have I seen this before\" from a scan into an expected constant-time lookup, so the whole method is O(n) time and O(n) memory — the standard trade of space for time. Set.add returning false on a duplicate is what makes the loop a single pass instead of a lookup followed by an insert.",
+        "ru": "Очевидное решение сравнивает каждый элемент со всеми последующими, что даёт O(n^2) и становится непригодным уже на нескольких сотнях тысяч значений. Хеш-множество превращает вопрос «видел ли я это раньше» из просмотра в поиск за ожидаемое константное время, поэтому весь метод стоит O(n) времени и O(n) памяти — обычный обмен памяти на время. Возврат false из Set.add при повторе и делает цикл однопроходным вместо связки «поиск, затем вставка»."
+      },
+      "sources": [
+        {
+          "title": "Set.add (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html#add(E)"
+        },
+        {
+          "title": "HashSet (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/HashSet.html"
+        },
+        {
+          "title": "Introduction to Algorithms, 4th edition - Cormen, Leiserson, Rivest, Stein",
+          "url": "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/"
+        }
+      ]
+    },
+    {
+      "id": "algorithms-easy-03",
+      "difficulty": "easy",
+      "order": 22,
+      "topic": "algorithms",
+      "section": "arrays-and-strings",
+      "className": "Solution",
+      "title": {
+        "en": "Palindrome ignoring case and punctuation",
+        "ru": "Палиндром без учёта регистра и знаков"
+      },
+      "statement": {
+        "en": "Return true when the text reads the same forwards and backwards once everything that is not a letter or a digit has been dropped and case has been ignored. An empty text is a palindrome.",
+        "ru": "Верните true, если текст читается одинаково слева направо и справа налево после отбрасывания всего, что не является буквой или цифрой, и без учёта регистра. Пустой текст считается палиндромом."
+      },
+      "hint": {
+        "en": "Build the cleaned text once with a StringBuilder, then walk it with an index from each end. Character.isLetterOrDigit and Character.toLowerCase do the filtering.",
+        "ru": "Соберите очищенный текст один раз через StringBuilder, затем идите по нему двумя индексами с обоих концов. Фильтрацию выполняют Character.isLetterOrDigit и Character.toLowerCase."
+      },
+      "starter": "public class Solution {\n\n    public static boolean isPalindrome(String text) {\n        // TODO: ignore case and anything that is not a letter or a digit\n        return false;\n    }\n}\n",
+      "solution": "public class Solution {\n\n    public static boolean isPalindrome(String text) {\n        StringBuilder cleaned = new StringBuilder(text.length());\n        for (int i = 0; i < text.length(); i++) {\n            char current = text.charAt(i);\n            if (Character.isLetterOrDigit(current)) {\n                cleaned.append(Character.toLowerCase(current));\n            }\n        }\n        int left = 0;\n        int right = cleaned.length() - 1;\n        while (left < right) {\n            if (cleaned.charAt(left) != cleaned.charAt(right)) {\n                return false;\n            }\n            left++;\n            right--;\n        }\n        return true;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "isPalindrome(\"A man, a plan, a canal: Panama\")",
+          "expression": "Solution.isPalindrome(\"A man, a plan, a canal: Panama\")"
+        },
+        {
+          "label": "isPalindrome(\"race a car\")",
+          "expression": "Solution.isPalindrome(\"race a car\")"
+        },
+        {
+          "label": "isPalindrome(\"ab@ba\")",
+          "expression": "Solution.isPalindrome(\"ab@ba\")"
+        },
+        {
+          "label": "isPalindrome(\"Ab\")",
+          "expression": "Solution.isPalindrome(\"Ab\")"
+        },
+        {
+          "label": "isPalindrome(\"\")",
+          "expression": "Solution.isPalindrome(\"\")"
+        }
+      ],
+      "explanation": {
+        "en": "Two things are worth noticing here. The cleaning pass uses a StringBuilder rather than repeated string concatenation: each += on a String copies everything accumulated so far, which would make an O(n) filter into an O(n^2) one. The comparison then walks two indices towards each other, so the check is one pass and needs no reversed copy — reversing the cleaned text and calling equals is also correct, but allocates a second string for no reason.",
+        "ru": "Здесь стоит заметить две вещи. Проход очистки использует StringBuilder, а не повторную конкатенацию строк: каждый += у String копирует всё накопленное, что превратило бы фильтр из O(n) в O(n^2). Сравнение затем идёт двумя индексами навстречу друг другу, поэтому проверка выполняется за один проход и не требует перевёрнутой копии; развернуть очищенный текст и вызвать equals тоже корректно, но без нужды выделяет вторую строку."
+      },
+      "sources": [
+        {
+          "title": "StringBuilder (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuilder.html"
+        },
+        {
+          "title": "Character (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Character.html"
+        }
+      ]
+    },
+    {
+      "id": "algorithms-easy-04",
+      "difficulty": "easy",
+      "order": 23,
+      "topic": "algorithms",
+      "section": "lists-stacks-queues",
+      "className": "Solution",
+      "title": {
+        "en": "Balanced brackets with a deque",
+        "ru": "Сбалансированные скобки через дек"
+      },
+      "statement": {
+        "en": "Return true when every round, square and curly bracket in the text is closed by the matching kind in the right order. Characters that are not brackets are ignored. An empty text is balanced, and a text that closes a bracket that was never opened is not.",
+        "ru": "Верните true, если каждая круглая, квадратная и фигурная скобка в тексте закрыта скобкой того же вида и в правильном порядке. Символы, не являющиеся скобками, игнорируются. Пустой текст сбалансирован, а текст, закрывающий скобку, которая не открывалась, — нет."
+      },
+      "hint": {
+        "en": "Push every opening bracket onto an ArrayDeque and, on a closing one, pop and compare. The text is balanced only if the deque is empty at the end.",
+        "ru": "Кладите каждую открывающую скобку в ArrayDeque, а на закрывающей — снимайте и сравнивайте. Текст сбалансирован, только если в конце дек пуст."
+      },
+      "starter": "import java.util.ArrayDeque;\nimport java.util.Deque;\n\npublic class Solution {\n\n    public static boolean isBalanced(String text) {\n        // TODO: push openers onto a deque and match them against the closers\n        return true;\n    }\n}\n",
+      "solution": "import java.util.ArrayDeque;\nimport java.util.Deque;\n\npublic class Solution {\n\n    public static boolean isBalanced(String text) {\n        Deque<Character> open = new ArrayDeque<>();\n        for (int i = 0; i < text.length(); i++) {\n            char current = text.charAt(i);\n            if (current == '(' || current == '[' || current == '{') {\n                open.push(current);\n            } else if (current == ')' || current == ']' || current == '}') {\n                if (open.isEmpty() || open.pop() != opener(current)) {\n                    return false;\n                }\n            }\n        }\n        return open.isEmpty();\n    }\n\n    private static char opener(char closer) {\n        if (closer == ')') {\n            return '(';\n        }\n        return closer == ']' ? '[' : '{';\n    }\n}\n",
+      "cases": [
+        {
+          "label": "isBalanced(\"{[()]}\")",
+          "expression": "Solution.isBalanced(\"{[()]}\")"
+        },
+        {
+          "label": "isBalanced(\"(]\")",
+          "expression": "Solution.isBalanced(\"(]\")"
+        },
+        {
+          "label": "isBalanced(\"([)]\")",
+          "expression": "Solution.isBalanced(\"([)]\")"
+        },
+        {
+          "label": "isBalanced(\"a(b)c[d]\")",
+          "expression": "Solution.isBalanced(\"a(b)c[d]\")"
+        },
+        {
+          "label": "isBalanced(\")\")",
+          "expression": "Solution.isBalanced(\")\")"
+        },
+        {
+          "label": "isBalanced(\"\")",
+          "expression": "Solution.isBalanced(\"\")"
+        }
+      ],
+      "explanation": {
+        "en": "Matching brackets is the textbook use of a stack: the most recently opened bracket is the one that has to close first, which is exactly last-in-first-out. Two checks are easy to forget and both are tested here — a closer arriving with nothing open, and openers left over at the end. ArrayDeque is the stack to reach for rather than java.util.Stack, which extends Vector and synchronises every operation; on a Deque, push is addFirst and pop is removeFirst, both amortised constant time over a circular buffer.",
+        "ru": "Сопоставление скобок — хрестоматийное применение стека: закрыться первой обязана скобка, открытая последней, а это ровно «последним пришёл — первым ушёл». Две проверки легко забыть, и обе здесь протестированы: закрывающая скобка при пустом стеке и оставшиеся в конце открытые. В роли стека стоит брать ArrayDeque, а не java.util.Stack, который наследуется от Vector и синхронизирует каждую операцию; у Deque push — это addFirst, а pop — removeFirst, обе амортизированно константные поверх кольцевого буфера."
+      },
+      "sources": [
+        {
+          "title": "Deque (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Deque.html"
+        },
+        {
+          "title": "ArrayDeque (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayDeque.html"
+        }
+      ]
+    },
+    {
+      "id": "algorithms-medium-01",
+      "difficulty": "medium",
+      "order": 20,
+      "topic": "algorithms",
+      "section": "hash-tables",
+      "className": "Solution",
+      "title": {
+        "en": "Group anagrams by a canonical key",
+        "ru": "Группировка анаграмм по каноническому ключу"
+      },
+      "statement": {
+        "en": "Group the words so that words made of the same letters end up together. Return one string per group: the words of that group sorted alphabetically and joined with a comma. The returned list itself must be sorted alphabetically, so the answer does not depend on any map's iteration order.",
+        "ru": "Сгруппируйте слова так, чтобы слова из одних и тех же букв оказались вместе. Верните по одной строке на группу: слова группы, отсортированные по алфавиту и соединённые запятой. Сам возвращаемый список тоже должен быть отсортирован по алфавиту, чтобы ответ не зависел от порядка обхода какого-либо отображения."
+      },
+      "hint": {
+        "en": "Two words are anagrams exactly when their letters sorted are the same string — that sorted string is the map key. computeIfAbsent creates the group list on first use.",
+        "ru": "Два слова являются анаграммами ровно тогда, когда их отсортированные буквы дают одну и ту же строку, — эта отсортированная строка и есть ключ отображения. computeIfAbsent создаёт список группы при первом обращении."
+      },
+      "starter": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n\n    public static List<String> groupAnagrams(List<String> words) {\n        // TODO: key each word by its sorted letters, then sort inside and between groups\n        return new ArrayList<>();\n    }\n}\n",
+      "solution": "import java.util.ArrayList;\nimport java.util.Arrays;\nimport java.util.Collections;\nimport java.util.HashMap;\nimport java.util.List;\nimport java.util.Map;\n\npublic class Solution {\n\n    public static List<String> groupAnagrams(List<String> words) {\n        Map<String, List<String>> groups = new HashMap<>();\n        for (String word : words) {\n            char[] letters = word.toCharArray();\n            Arrays.sort(letters);\n            groups.computeIfAbsent(new String(letters), key -> new ArrayList<>()).add(word);\n        }\n        List<String> grouped = new ArrayList<>(groups.size());\n        for (List<String> group : groups.values()) {\n            Collections.sort(group);\n            grouped.add(String.join(\",\", group));\n        }\n        Collections.sort(grouped);\n        return grouped;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "groupAnagrams([eat, tea, tan, ate, nat, bat])",
+          "expression": "Solution.groupAnagrams(List.of(\"eat\", \"tea\", \"tan\", \"ate\", \"nat\", \"bat\"))"
+        },
+        {
+          "label": "groupAnagrams([ab, ba, ab])",
+          "expression": "Solution.groupAnagrams(List.of(\"ab\", \"ba\", \"ab\"))"
+        },
+        {
+          "label": "groupAnagrams([abc])",
+          "expression": "Solution.groupAnagrams(List.of(\"abc\"))"
+        },
+        {
+          "label": "groupAnagrams([])",
+          "expression": "Solution.groupAnagrams(List.of())"
+        }
+      ],
+      "explanation": {
+        "en": "Comparing every word with every other one is O(n^2) comparisons of whole words. Sorting each word's letters turns \"is an anagram of\" into \"has the same key as\", and a hash map answers that in expected constant time, so the method is O(n * k log k) for words of length k. The sorting at the end is not decoration: HashMap makes no promise about iteration order and is not required to give the same order twice, so an answer that leaked that order would be untestable.",
+        "ru": "Сравнение каждого слова с каждым даёт O(n^2) сравнений целых слов. Сортировка букв внутри слова превращает отношение «является анаграммой» в «имеет тот же ключ», а хеш-отображение отвечает на это за ожидаемое константное время, поэтому метод стоит O(n * k log k) для слов длины k. Сортировка в конце — не украшение: HashMap не обещает порядка обхода и не обязан дважды выдать один и тот же, поэтому ответ, протекающий этот порядок наружу, был бы непроверяемым."
+      },
+      "sources": [
+        {
+          "title": "HashMap (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/HashMap.html"
+        },
+        {
+          "title": "Map.computeIfAbsent (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#computeIfAbsent(K,java.util.function.Function)"
+        },
+        {
+          "title": "Arrays.sort (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Arrays.html#sort(int%5B%5D)"
+        }
+      ]
+    },
+    {
+      "id": "algorithms-medium-02",
+      "difficulty": "medium",
+      "order": 21,
+      "topic": "algorithms",
+      "section": "sorting",
+      "className": "Solution",
+      "title": {
+        "en": "Sort by length, stably",
+        "ru": "Устойчивая сортировка по длине"
+      },
+      "statement": {
+        "en": "Return a new list with the words ordered by length, shortest first. Words of the same length must keep the relative order they had in the input — that is what makes the answer unique. The input list must not be modified.",
+        "ru": "Верните новый список со словами, упорядоченными по длине, от коротких к длинным. Слова одинаковой длины обязаны сохранить относительный порядок из входных данных — именно это делает ответ единственным. Исходный список изменять нельзя."
+      },
+      "hint": {
+        "en": "List.sort is documented as stable, so one comparator on length is enough. Use Comparator.comparingInt rather than subtracting the two lengths.",
+        "ru": "List.sort задокументирован как устойчивый, поэтому достаточно одного компаратора по длине. Используйте Comparator.comparingInt, а не вычитание двух длин."
+      },
+      "starter": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n\n    public static List<String> sortByLength(List<String> words) {\n        // TODO: order by length while keeping equal-length words in input order\n        return new ArrayList<>(words);\n    }\n}\n",
+      "solution": "import java.util.ArrayList;\nimport java.util.Comparator;\nimport java.util.List;\n\npublic class Solution {\n\n    public static List<String> sortByLength(List<String> words) {\n        List<String> sorted = new ArrayList<>(words);\n        sorted.sort(Comparator.comparingInt(String::length));\n        return sorted;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "sortByLength([pear, fig, apple, kiwi, date, plum])",
+          "expression": "Solution.sortByLength(List.of(\"pear\", \"fig\", \"apple\", \"kiwi\", \"date\", \"plum\"))"
+        },
+        {
+          "label": "sortByLength([ccc, b, aa])",
+          "expression": "Solution.sortByLength(List.of(\"ccc\", \"b\", \"aa\"))"
+        },
+        {
+          "label": "sortByLength([bb, aa, cc])",
+          "expression": "Solution.sortByLength(List.of(\"bb\", \"aa\", \"cc\"))"
+        },
+        {
+          "label": "sortByLength([])",
+          "expression": "Solution.sortByLength(List.of())"
+        }
+      ],
+      "explanation": {
+        "en": "The cases pin the stability down: four words of length four come out in the order they were given, and a sort that shuffled ties would fail. Java guarantees that for object sorts — List.sort and Arrays.sort(Object[]) run TimSort, a stable merge sort — while Arrays.sort(int[]) makes no such promise, because two equal ints are indistinguishable anyway. Prefer Comparator.comparingInt over the subtraction trick: a - b overflows for values far apart, and a comparator that is not a total order makes TimSort throw IllegalArgumentException mid-merge.",
+        "ru": "Тест-кейсы фиксируют именно устойчивость: четыре слова длины четыре выходят в том порядке, в каком были заданы, и сортировка, перемешивающая ничьи, провалится. Java гарантирует это для сортировки объектов — List.sort и Arrays.sort(Object[]) запускают TimSort, устойчивую сортировку слиянием, — а Arrays.sort(int[]) ничего подобного не обещает, потому что два равных int всё равно неразличимы. Предпочитайте Comparator.comparingInt трюку с вычитанием: a - b переполняется на далёких значениях, а компаратор, не задающий полного порядка, заставляет TimSort бросить IllegalArgumentException посреди слияния."
+      },
+      "sources": [
+        {
+          "title": "List.sort (Java SE 17 API) - stability guarantee",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html#sort(java.util.Comparator)"
+        },
+        {
+          "title": "Comparator (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Comparator.html"
+        },
+        {
+          "title": "Timsort - Tim Peters, listsort.txt",
+          "url": "https://github.com/python/cpython/blob/main/Objects/listsort.txt"
+        }
+      ]
+    },
+    {
+      "id": "algorithms-medium-03",
+      "difficulty": "medium",
+      "order": 22,
+      "topic": "algorithms",
+      "section": "trees",
+      "className": "Solution",
+      "title": {
+        "en": "The k largest values with a bounded heap",
+        "ru": "k наибольших значений через ограниченную кучу"
+      },
+      "statement": {
+        "en": "Return the k largest values of the list, in descending order, keeping duplicates. If k is zero or negative return an empty list, and if k exceeds the size return every value. Use a heap of at most k elements rather than sorting the whole list.",
+        "ru": "Верните k наибольших значений списка в порядке убывания, сохраняя повторы. Если k равно нулю или отрицательно, верните пустой список, а если k больше длины — все значения. Используйте кучу не более чем из k элементов, а не сортировку всего списка."
+      },
+      "hint": {
+        "en": "A min-heap holding the k best candidates: add every value and poll whenever the size passes k, so the smallest of the candidates is always the one dropped.",
+        "ru": "Min-куча, хранящая k лучших кандидатов: добавляйте каждое значение и извлекайте, как только размер превысил k, — тогда выбрасывается всегда наименьший из кандидатов."
+      },
+      "starter": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n\n    public static List<Integer> largest(List<Integer> values, int k) {\n        // TODO: keep only the k best candidates in a heap, then order them descending\n        return new ArrayList<>();\n    }\n}\n",
+      "solution": "import java.util.ArrayList;\nimport java.util.Comparator;\nimport java.util.List;\nimport java.util.PriorityQueue;\n\npublic class Solution {\n\n    public static List<Integer> largest(List<Integer> values, int k) {\n        if (k <= 0) {\n            return new ArrayList<>();\n        }\n        PriorityQueue<Integer> best = new PriorityQueue<>();\n        for (Integer value : values) {\n            best.add(value);\n            if (best.size() > k) {\n                best.poll();\n            }\n        }\n        List<Integer> result = new ArrayList<>(best);\n        result.sort(Comparator.reverseOrder());\n        return result;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "largest([5, 1, 9, 3, 7, 7], 3)",
+          "expression": "Solution.largest(List.of(5, 1, 9, 3, 7, 7), 3)"
+        },
+        {
+          "label": "largest([4, 2], 5)",
+          "expression": "Solution.largest(List.of(4, 2), 5)"
+        },
+        {
+          "label": "largest([-1, -5, -3], 2)",
+          "expression": "Solution.largest(List.of(-1, -5, -3), 2)"
+        },
+        {
+          "label": "largest([1, 2, 3], 0)",
+          "expression": "Solution.largest(List.of(1, 2, 3), 0)"
+        },
+        {
+          "label": "largest([], 3)",
+          "expression": "Solution.largest(List.of(), 3)"
+        }
+      ],
+      "explanation": {
+        "en": "Sorting the whole list to take k elements is O(n log n); a heap bounded at k is O(n log k), which is the difference between log of a million and log of ten when you want the top ten of a million. The counter-intuitive part is that the heap is a min-heap: its head is the weakest candidate currently held, so it is exactly the one to drop when a better value arrives. The final sort is needed because a heap orders only its head — iterating a PriorityQueue yields the raw array, not a sorted sequence.",
+        "ru": "Сортировка всего списка ради k элементов стоит O(n log n); куча, ограниченная размером k, — O(n log k), а это разница между логарифмом миллиона и логарифмом десяти, когда нужна десятка лучших из миллиона. Неочевидно здесь то, что куча является min-кучей: её голова — самый слабый из удерживаемых кандидатов, то есть ровно тот, кого нужно выбросить при появлении лучшего значения. Финальная сортировка нужна потому, что куча упорядочивает только голову: обход PriorityQueue выдаёт сырой массив, а не отсортированную последовательность."
+      },
+      "sources": [
+        {
+          "title": "PriorityQueue (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/PriorityQueue.html"
+        },
+        {
+          "title": "Introduction to Algorithms, 4th edition - Cormen, Leiserson, Rivest, Stein",
+          "url": "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/"
+        }
+      ]
+    },
+    {
+      "id": "algorithms-medium-04",
+      "difficulty": "medium",
+      "order": 23,
+      "topic": "algorithms",
+      "section": "techniques",
+      "className": "Solution",
+      "title": {
+        "en": "Binary search for an insertion point",
+        "ru": "Бинарный поиск точки вставки"
+      },
+      "statement": {
+        "en": "The list is sorted ascending. Return the index of the first element that is not smaller than key — the position at which key could be inserted while keeping the list sorted, and the position of the leftmost occurrence when key is present. Return the size of the list when every element is smaller. Write the search yourself rather than calling a library method.",
+        "ru": "Список отсортирован по возрастанию. Верните индекс первого элемента, не меньшего key, — позицию, в которую key можно вставить, сохранив упорядоченность, и позицию самого левого вхождения, если key присутствует. Верните длину списка, если все элементы меньше. Напишите поиск сами, не вызывая библиотечный метод."
+      },
+      "hint": {
+        "en": "Keep a half-open range [low, high) with high starting at size. Compute the midpoint as low + (high - low) / 2, and move high — not high - 1 — when the middle element is not smaller than key.",
+        "ru": "Держите полуоткрытый диапазон [low, high), где high начинается с длины списка. Середину считайте как low + (high - low) / 2 и при элементе, не меньшем key, двигайте high, а не high - 1."
+      },
+      "starter": "import java.util.List;\n\npublic class Solution {\n\n    public static int insertionPoint(List<Integer> sorted, int key) {\n        // TODO: binary search for the first element that is not smaller than key\n        return 0;\n    }\n}\n",
+      "solution": "import java.util.List;\n\npublic class Solution {\n\n    public static int insertionPoint(List<Integer> sorted, int key) {\n        int low = 0;\n        int high = sorted.size();\n        while (low < high) {\n            int mid = low + (high - low) / 2;\n            if (sorted.get(mid) < key) {\n                low = mid + 1;\n            } else {\n                high = mid;\n            }\n        }\n        return low;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "insertionPoint([1, 3, 5, 7], 5)",
+          "expression": "Solution.insertionPoint(List.of(1, 3, 5, 7), 5)"
+        },
+        {
+          "label": "insertionPoint([1, 3, 5, 7], 4)",
+          "expression": "Solution.insertionPoint(List.of(1, 3, 5, 7), 4)"
+        },
+        {
+          "label": "insertionPoint([1, 3, 5, 7], 0)",
+          "expression": "Solution.insertionPoint(List.of(1, 3, 5, 7), 0)"
+        },
+        {
+          "label": "insertionPoint([1, 3, 5, 7], 9)",
+          "expression": "Solution.insertionPoint(List.of(1, 3, 5, 7), 9)"
+        },
+        {
+          "label": "insertionPoint([2, 2, 2], 2)",
+          "expression": "Solution.insertionPoint(List.of(2, 2, 2), 2)"
+        },
+        {
+          "label": "insertionPoint([], 1)",
+          "expression": "Solution.insertionPoint(List.of(), 1)"
+        }
+      ],
+      "explanation": {
+        "en": "Fix the invariant before writing the loop and the off-by-one errors disappear: with a half-open range the answer is always inside [low, high], high starts at size so that \"past the end\" is representable, and the loop ends when the range is empty. Moving high to mid rather than mid - 1 is what makes this find the leftmost match instead of an arbitrary one. The midpoint is written as low + (high - low) / 2 because low + high overflows int for large indices — the bug that sat in the JDK's own binarySearch for nine years.",
+        "ru": "Зафиксируйте инвариант до написания цикла — и ошибки на единицу исчезнут: при полуоткрытом диапазоне ответ всегда лежит внутри [low, high], high начинается с длины, чтобы позиция «за концом» была представима, а цикл завершается, когда диапазон пуст. Присваивание high = mid, а не mid - 1, и заставляет поиск найти самое левое совпадение, а не произвольное. Середина записана как low + (high - low) / 2, потому что low + high переполняет int на больших индексах — этот баг девять лет жил в собственном binarySearch у JDK."
+      },
+      "sources": [
+        {
+          "title": "Arrays.binarySearch (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Arrays.html#binarySearch(int%5B%5D,int)"
+        },
+        {
+          "title": "Nearly All Binary Searches and Mergesorts are Broken - Joshua Bloch",
+          "url": "https://research.google/blog/extra-extra-read-all-about-it-nearly-all-binary-searches-and-mergesorts-are-broken/"
+        }
+      ]
+    },
+    {
+      "id": "algorithms-hard-01",
+      "difficulty": "hard",
+      "order": 20,
+      "topic": "algorithms",
+      "section": "graphs",
+      "className": "Solution",
+      "title": {
+        "en": "Topological order, smallest first",
+        "ru": "Топологический порядок, наименьший первым"
+      },
+      "statement": {
+        "en": "The map sends each node to the nodes that must come after it. Return a topological order of every node that appears — as a key or as a target — choosing the alphabetically smallest available node whenever several are ready, so the answer is unique. Return an empty list when the graph contains a cycle.",
+        "ru": "Отображение сопоставляет каждому узлу узлы, которые должны идти после него. Верните топологический порядок всех встречающихся узлов — и ключей, и целей, — выбирая при нескольких готовых узлах алфавитно наименьший, чтобы ответ был единственным. Верните пустой список, если в графе есть цикл."
+      },
+      "hint": {
+        "en": "Kahn's algorithm: count incoming edges, start from the nodes with none, and decrement as you emit. A PriorityQueue of ready nodes gives the alphabetical tie-break; if fewer nodes come out than went in, the rest form a cycle.",
+        "ru": "Алгоритм Кана: посчитайте входящие рёбра, начните с узлов, у которых их нет, и уменьшайте счётчики по мере вывода. PriorityQueue готовых узлов даёт алфавитный разрыв ничьих; если на выход вышло меньше узлов, чем вошло, остаток образует цикл."
+      },
+      "starter": "import java.util.ArrayList;\nimport java.util.List;\nimport java.util.Map;\n\npublic class Solution {\n\n    public static List<String> topologicalOrder(Map<String, List<String>> graph) {\n        // TODO: count incoming edges, emit ready nodes smallest first, detect the cycle\n        return new ArrayList<>();\n    }\n}\n",
+      "solution": "import java.util.ArrayList;\nimport java.util.List;\nimport java.util.Map;\nimport java.util.PriorityQueue;\nimport java.util.TreeMap;\n\npublic class Solution {\n\n    public static List<String> topologicalOrder(Map<String, List<String>> graph) {\n        Map<String, Integer> incoming = new TreeMap<>();\n        for (String node : graph.keySet()) {\n            incoming.putIfAbsent(node, 0);\n        }\n        for (List<String> targets : graph.values()) {\n            for (String target : targets) {\n                incoming.merge(target, 1, Integer::sum);\n            }\n        }\n        PriorityQueue<String> ready = new PriorityQueue<>();\n        for (Map.Entry<String, Integer> entry : incoming.entrySet()) {\n            if (entry.getValue() == 0) {\n                ready.add(entry.getKey());\n            }\n        }\n        List<String> order = new ArrayList<>(incoming.size());\n        while (!ready.isEmpty()) {\n            String node = ready.poll();\n            order.add(node);\n            for (String target : graph.getOrDefault(node, List.of())) {\n                if (incoming.merge(target, -1, Integer::sum) == 0) {\n                    ready.add(target);\n                }\n            }\n        }\n        return order.size() == incoming.size() ? order : new ArrayList<>();\n    }\n}\n",
+      "cases": [
+        {
+          "label": "topologicalOrder(a->b,c; b->d; c->d; d->)",
+          "expression": "Solution.topologicalOrder(Map.of(\"a\", List.of(\"b\", \"c\"), \"b\", List.of(\"d\"), \"c\", List.of(\"d\"), \"d\", List.of()))"
+        },
+        {
+          "label": "topologicalOrder(z->y; a->y; y->)",
+          "expression": "Solution.topologicalOrder(Map.of(\"z\", List.of(\"y\"), \"a\", List.of(\"y\"), \"y\", List.of()))"
+        },
+        {
+          "label": "topologicalOrder(a->b; b->a)  [cycle]",
+          "expression": "Solution.topologicalOrder(Map.of(\"a\", List.of(\"b\"), \"b\", List.of(\"a\")))"
+        },
+        {
+          "label": "topologicalOrder(x->)",
+          "expression": "Solution.topologicalOrder(Map.of(\"x\", List.of()))"
+        },
+        {
+          "label": "topologicalOrder({})",
+          "expression": "Solution.topologicalOrder(Map.of())"
+        }
+      ],
+      "explanation": {
+        "en": "Kahn's algorithm removes a node with no remaining prerequisites and decrements its successors, which is O(V + E) overall. Cycle detection comes free: a node inside a cycle always has an incoming edge from another node of that cycle, so its counter never reaches zero and it is never emitted — a short output is a proof of a cycle, and this is the same computation a build tool runs to report a circular dependency. The PriorityQueue is what makes the answer unique: without a tie-break, several orders are equally valid, and a HashMap's iteration order would decide which one you got.",
+        "ru": "Алгоритм Кана удаляет узел, у которого не осталось предпосылок, и уменьшает счётчики его преемников; всего это O(V + E). Обнаружение цикла достаётся бесплатно: у узла внутри цикла всегда есть входящее ребро от другого узла того же цикла, поэтому его счётчик никогда не обнуляется и узел не выводится — укороченный вывод является доказательством цикла, и ровно это вычисление выполняет система сборки, сообщая о циклической зависимости. PriorityQueue делает ответ единственным: без разрыва ничьих одинаково корректны несколько порядков, и какой из них вы получите, решал бы порядок обхода HashMap."
+      },
+      "sources": [
+        {
+          "title": "Introduction to Algorithms, 4th edition - Cormen, Leiserson, Rivest, Stein",
+          "url": "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/"
+        },
+        {
+          "title": "Algorithms, 4th edition - Sedgewick and Wayne, Chapter 4: Graphs",
+          "url": "https://algs4.cs.princeton.edu/40graphs/"
+        },
+        {
+          "title": "PriorityQueue (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/PriorityQueue.html"
+        }
+      ]
+    },
+    {
+      "id": "algorithms-hard-02",
+      "difficulty": "hard",
+      "order": 21,
+      "topic": "algorithms",
+      "section": "graphs",
+      "className": "Solution",
+      "title": {
+        "en": "Fewest hops in an unweighted graph",
+        "ru": "Наименьшее число переходов в невзвешенном графе"
+      },
+      "statement": {
+        "en": "The map sends each node to the nodes it has a directed edge to. Return the smallest number of edges on a path from one node to another, zero when they are the same node, and -1 when no path exists. A node may be missing from the map, which simply means it has no outgoing edges.",
+        "ru": "Отображение сопоставляет каждому узлу узлы, в которые из него ведёт направленное ребро. Верните наименьшее число рёбер на пути от одного узла до другого, ноль — если это один и тот же узел, и -1 — если пути нет. Узел может отсутствовать в отображении: это просто означает, что исходящих рёбер у него нет."
+      },
+      "hint": {
+        "en": "Breadth-first search, level by level: the first time you see the target you have reached it by the fewest edges. Mark a node as visited when you enqueue it, not when you dequeue it.",
+        "ru": "Поиск в ширину, уровень за уровнем: увидев цель впервые, вы достигли её за наименьшее число рёбер. Отмечайте узел посещённым при помещении в очередь, а не при извлечении."
+      },
+      "starter": "import java.util.List;\nimport java.util.Map;\n\npublic class Solution {\n\n    public static int shortestPath(Map<String, List<String>> graph, String from, String to) {\n        // TODO: breadth-first search, counting the levels crossed\n        return -1;\n    }\n}\n",
+      "solution": "import java.util.ArrayDeque;\nimport java.util.Deque;\nimport java.util.HashSet;\nimport java.util.List;\nimport java.util.Map;\nimport java.util.Set;\n\npublic class Solution {\n\n    public static int shortestPath(Map<String, List<String>> graph, String from, String to) {\n        if (from.equals(to)) {\n            return 0;\n        }\n        Set<String> visited = new HashSet<>();\n        Deque<String> pending = new ArrayDeque<>();\n        visited.add(from);\n        pending.add(from);\n        int distance = 0;\n        while (!pending.isEmpty()) {\n            int level = pending.size();\n            distance++;\n            for (int i = 0; i < level; i++) {\n                String node = pending.poll();\n                for (String next : graph.getOrDefault(node, List.of())) {\n                    if (next.equals(to)) {\n                        return distance;\n                    }\n                    if (visited.add(next)) {\n                        pending.add(next);\n                    }\n                }\n            }\n        }\n        return -1;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "shortestPath(a->b->c->d, a, d)",
+          "expression": "Solution.shortestPath(Map.of(\"a\", List.of(\"b\"), \"b\", List.of(\"c\"), \"c\", List.of(\"d\"), \"d\", List.of()), \"a\", \"d\")"
+        },
+        {
+          "label": "shortestPath(a->b->c->d, d, a)",
+          "expression": "Solution.shortestPath(Map.of(\"a\", List.of(\"b\"), \"b\", List.of(\"c\"), \"c\", List.of(\"d\"), \"d\", List.of()), \"d\", \"a\")"
+        },
+        {
+          "label": "shortestPath(diamond, a, d)",
+          "expression": "Solution.shortestPath(Map.of(\"a\", List.of(\"b\", \"c\"), \"b\", List.of(\"d\"), \"c\", List.of(\"d\"), \"d\", List.of()), \"a\", \"d\")"
+        },
+        {
+          "label": "shortestPath(cycle a->b->a, a, a)",
+          "expression": "Solution.shortestPath(Map.of(\"a\", List.of(\"b\"), \"b\", List.of(\"a\")), \"a\", \"a\")"
+        },
+        {
+          "label": "shortestPath(a->, a, z)",
+          "expression": "Solution.shortestPath(Map.of(\"a\", List.of()), \"a\", \"z\")"
+        }
+      ],
+      "explanation": {
+        "en": "Breadth-first search is the shortest-path algorithm for an unweighted graph, and only for one: it minimises the number of edges, which stops meaning cheapest the moment edges carry different weights — that is where Dijkstra starts. Processing a whole level at a time is what lets one counter stand in for a distance map. Marking a node visited on enqueue rather than on dequeue matters: without it a node reachable from two nodes of the same level is queued twice, and a cycle makes the search run forever.",
+        "ru": "Поиск в ширину — алгоритм кратчайшего пути для невзвешенного графа, и только для него: он минимизирует число рёбер, а это перестаёт означать «дешевле всего», как только у рёбер появляются разные веса, — там начинается алгоритм Дейкстры. Обработка целого уровня за раз и позволяет одному счётчику заменить карту расстояний. Пометка узла посещённым при постановке в очередь, а не при извлечении, существенна: без неё узел, достижимый из двух узлов одного уровня, попадёт в очередь дважды, а цикл заставит поиск работать бесконечно."
+      },
+      "sources": [
+        {
+          "title": "Introduction to Algorithms, 4th edition - Cormen, Leiserson, Rivest, Stein",
+          "url": "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/"
+        },
+        {
+          "title": "Algorithms, 4th edition - Sedgewick and Wayne, Chapter 4: Graphs",
+          "url": "https://algs4.cs.princeton.edu/40graphs/"
+        },
+        {
+          "title": "ArrayDeque (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayDeque.html"
+        }
+      ]
+    },
+    {
+      "id": "algorithms-hard-03",
+      "difficulty": "hard",
+      "order": 22,
+      "topic": "algorithms",
+      "section": "techniques",
+      "className": "Solution",
+      "title": {
+        "en": "Count subarrays with a given sum",
+        "ru": "Подсчёт подмассивов с заданной суммой"
+      },
+      "statement": {
+        "en": "Return how many contiguous, non-empty stretches of the list add up to target. The values may be negative or zero, so a sliding window is not available; overlapping stretches all count. Aim for a single pass.",
+        "ru": "Верните количество непрерывных непустых участков списка, сумма которых равна target. Значения могут быть отрицательными или нулевыми, поэтому скользящее окно неприменимо; пересекающиеся участки считаются все. Стремитесь уложиться в один проход."
+      },
+      "hint": {
+        "en": "Keep a running prefix sum and a map from each prefix sum seen so far to how many times it occurred. Seed the map with zero mapped to one, so a stretch starting at index zero is counted.",
+        "ru": "Ведите текущую префиксную сумму и отображение из каждой встреченной префиксной суммы в число её появлений. Заполните отображение парой «ноль → один», чтобы участок, начинающийся с нулевого индекса, был учтён."
+      },
+      "starter": "import java.util.List;\n\npublic class Solution {\n\n    public static int countSubarrays(List<Integer> values, int target) {\n        // TODO: one pass with a prefix sum and a map of the prefix sums already seen\n        return 0;\n    }\n}\n",
+      "solution": "import java.util.HashMap;\nimport java.util.List;\nimport java.util.Map;\n\npublic class Solution {\n\n    public static int countSubarrays(List<Integer> values, int target) {\n        Map<Integer, Integer> seen = new HashMap<>();\n        seen.put(0, 1);\n        int running = 0;\n        int found = 0;\n        for (Integer value : values) {\n            running += value;\n            found += seen.getOrDefault(running - target, 0);\n            seen.merge(running, 1, Integer::sum);\n        }\n        return found;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "countSubarrays([1, 1, 1], 2)",
+          "expression": "Solution.countSubarrays(List.of(1, 1, 1), 2)"
+        },
+        {
+          "label": "countSubarrays([1, 2, 3], 3)",
+          "expression": "Solution.countSubarrays(List.of(1, 2, 3), 3)"
+        },
+        {
+          "label": "countSubarrays([3, 4, 7, 2, -3, 1, 4, 2], 7)",
+          "expression": "Solution.countSubarrays(List.of(3, 4, 7, 2, -3, 1, 4, 2), 7)"
+        },
+        {
+          "label": "countSubarrays([0, 0, 0], 0)",
+          "expression": "Solution.countSubarrays(List.of(0, 0, 0), 0)"
+        },
+        {
+          "label": "countSubarrays([-1, 1, -1], 0)",
+          "expression": "Solution.countSubarrays(List.of(-1, 1, -1), 0)"
+        },
+        {
+          "label": "countSubarrays([], 0)",
+          "expression": "Solution.countSubarrays(List.of(), 0)"
+        }
+      ],
+      "explanation": {
+        "en": "The stretch from i to j sums to prefix[j] - prefix[i], so it equals target exactly when an earlier prefix of value prefix[j] - target exists. Counting how many times each prefix sum has been seen turns that into one map lookup per element: O(n) time and O(n) memory, against O(n^2) for the nested loop. The seed entry 0 -> 1 stands for the empty prefix before the first element, without which every stretch starting at index zero is missed. This is the pattern that replaces a sliding window once negative values are allowed: shrinking a window is only safe while removing an element can never raise the sum.",
+        "ru": "Участок от i до j даёт сумму prefix[j] - prefix[i], поэтому она равна target ровно тогда, когда раньше встречался префикс со значением prefix[j] - target. Подсчёт числа появлений каждой префиксной суммы превращает это в один поиск по отображению на элемент: O(n) времени и O(n) памяти против O(n^2) у вложенного цикла. Начальная запись 0 -> 1 обозначает пустой префикс перед первым элементом, без неё теряется каждый участок, начинающийся с нулевого индекса. Это и есть приём, заменяющий скользящее окно, когда допущены отрицательные значения: сжимать окно безопасно лишь пока удаление элемента не может увеличить сумму."
+      },
+      "sources": [
+        {
+          "title": "Algorithms, 4th edition - Robert Sedgewick and Kevin Wayne",
+          "url": "https://algs4.cs.princeton.edu/home/"
+        },
+        {
+          "title": "HashMap (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/HashMap.html"
+        },
+        {
+          "title": "Map.merge (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#merge(K,V,java.util.function.BiFunction)"
+        }
+      ]
+    },
+    {
+      "id": "algorithms-hard-04",
+      "difficulty": "hard",
+      "order": 23,
+      "topic": "algorithms",
+      "section": "techniques",
+      "className": "Solution",
+      "title": {
+        "en": "Binary search on the answer: shipping capacity",
+        "ru": "Бинарный поиск по ответу: грузоподъёмность"
+      },
+      "statement": {
+        "en": "Packages must be shipped in the order given, within the number of days allowed. Each day the ship is loaded with as many of the next packages as fit. Return the smallest capacity that gets everything shipped in time. An empty list needs no capacity at all, so return zero for it.",
+        "ru": "Посылки нужно отправить в заданном порядке за отведённое число дней. Каждый день на судно грузится столько следующих посылок, сколько поместится. Верните наименьшую грузоподъёмность, при которой всё будет отправлено вовремя. Пустому списку грузоподъёмность не нужна вовсе — верните для него ноль."
+      },
+      "hint": {
+        "en": "Do not search the packages, search the capacities. The answer is between the heaviest package and the total weight, and \"does capacity c finish in time\" is a greedy pass that is false below the answer and true from it on.",
+        "ru": "Ищите не среди посылок, а среди грузоподъёмностей. Ответ лежит между весом самой тяжёлой посылки и суммой весов, а проверка «успевает ли грузоподъёмность c» — это жадный проход, ложный ниже ответа и истинный начиная с него."
+      },
+      "starter": "import java.util.List;\n\npublic class Solution {\n\n    public static int minimumCapacity(List<Integer> weights, int days) {\n        // TODO: binary search the capacity range, testing each candidate greedily\n        return 0;\n    }\n}\n",
+      "solution": "import java.util.List;\n\npublic class Solution {\n\n    public static int minimumCapacity(List<Integer> weights, int days) {\n        int low = 0;\n        int high = 0;\n        for (Integer weight : weights) {\n            low = Math.max(low, weight);\n            high += weight;\n        }\n        while (low < high) {\n            int mid = low + (high - low) / 2;\n            if (daysNeeded(weights, mid) <= days) {\n                high = mid;\n            } else {\n                low = mid + 1;\n            }\n        }\n        return low;\n    }\n\n    private static int daysNeeded(List<Integer> weights, int capacity) {\n        int used = 1;\n        int load = 0;\n        for (Integer weight : weights) {\n            if (load + weight > capacity) {\n                used++;\n                load = 0;\n            }\n            load += weight;\n        }\n        return used;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "minimumCapacity([1..10], 5)",
+          "expression": "Solution.minimumCapacity(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), 5)"
+        },
+        {
+          "label": "minimumCapacity([3, 2, 2, 4, 1, 4], 3)",
+          "expression": "Solution.minimumCapacity(List.of(3, 2, 2, 4, 1, 4), 3)"
+        },
+        {
+          "label": "minimumCapacity([1, 2, 3, 1, 1], 4)",
+          "expression": "Solution.minimumCapacity(List.of(1, 2, 3, 1, 1), 4)"
+        },
+        {
+          "label": "minimumCapacity([7], 1)",
+          "expression": "Solution.minimumCapacity(List.of(7), 1)"
+        },
+        {
+          "label": "minimumCapacity([], 3)",
+          "expression": "Solution.minimumCapacity(List.of(), 3)"
+        }
+      ],
+      "explanation": {
+        "en": "Binary search never needed a sorted array; it needed a predicate that flips exactly once. If capacity c finishes in time then so does every larger capacity, so feasibility reads false, false, ..., true, true over the candidate range and the boundary is the answer. The range is bounded below by the heaviest package — less than that and one package never fits — and above by the total, which always finishes in one day. Each check is an O(n) greedy pass, giving O(n log totalWeight) against an intractable search over loadings. Note the midpoint written as low + (high - low) / 2, which cannot overflow.",
+        "ru": "Бинарному поиску никогда не был нужен отсортированный массив — ему нужен предикат, переключающийся ровно один раз. Если грузоподъёмность c успевает, то успевает и любая большая, поэтому допустимость на диапазоне кандидатов читается как ложь, ложь, ..., истина, истина, и граница и есть ответ. Диапазон ограничен снизу весом самой тяжёлой посылки — ниже него одна посылка просто не поместится — и сверху суммой весов, при которой всё уходит за один день. Каждая проверка — это жадный проход за O(n), что даёт O(n log суммарного веса) вместо неподъёмного перебора вариантов загрузки. Обратите внимание на середину, записанную как low + (high - low) / 2: она не может переполниться."
+      },
+      "sources": [
+        {
+          "title": "Algorithms, 4th edition - Robert Sedgewick and Kevin Wayne",
+          "url": "https://algs4.cs.princeton.edu/home/"
+        },
+        {
+          "title": "Nearly All Binary Searches and Mergesorts are Broken - Joshua Bloch",
+          "url": "https://research.google/blog/extra-extra-read-all-about-it-nearly-all-binary-searches-and-mergesorts-are-broken/"
+        }
+      ]
+    }
+  ]
+}
