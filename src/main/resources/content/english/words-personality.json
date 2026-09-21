@@ -1,0 +1,174 @@
+{
+  "groups": [
+    {
+      "code": "seed-personality-traits",
+      "order": 9,
+      "title": "Personality traits",
+      "words": [
+        {
+          "text": "personality traits",
+          "translation": "черты (характера)"
+        },
+        {
+          "text": "a psychologist [saɪ'kɔləʤɪst]",
+          "translation": "психолог"
+        },
+        {
+          "text": "be open to experiences",
+          "translation": "быть открытым к (чему-либо)"
+        },
+        {
+          "text": "adventurous",
+          "translation": "любящий приключения, смелый"
+        },
+        {
+          "text": "cautious ['kɔːʃəs]",
+          "translation": "осторожный, осмотрительный"
+        },
+        {
+          "text": "careless",
+          "translation": "беспечный, небрежный"
+        },
+        {
+          "text": "outgoing",
+          "translation": "общительный, открытый"
+        },
+        {
+          "text": "reserved",
+          "translation": "скрытный, замкнутый"
+        },
+        {
+          "text": "trusting",
+          "translation": "доверчивый"
+        },
+        {
+          "text": "suspicious (of)",
+          "translation": "подозрительный (к кому-то/чему-то)"
+        },
+        {
+          "text": "conscientious(ness) [ˌkɒnʃiˈenʃəs]",
+          "translation": "добросовестный (добросовестность)",
+          "example": "Someone who is conscientious is very careful to do their work properly."
+        },
+        {
+          "text": "extroversion [ˌekstrə'vɜːʃ/ʒən]",
+          "translation": "экстраверсия, общительность"
+        },
+        {
+          "text": "to socialize",
+          "translation": "общаться, проводить время в компании"
+        },
+        {
+          "text": "agreeable(ness)",
+          "translation": "приятный, доброжелательный (доброжелательность, уживчивость; disagreeable — неприятный)",
+          "example": "If someone is agreeable, they are pleasant and try to please people. Someone who is disagreeable is unfriendly or unhelpful."
+        },
+        {
+          "text": "neurotic [njʊəˈrɒtɪk]",
+          "translation": "невротичный, склонный к тревожности"
+        },
+        {
+          "text": "thoughtful – thoughtless",
+          "translation": "внимательный (заботливый) – невнимательный (бестактный)"
+        },
+        {
+          "text": "respectable",
+          "translation": "уважаемый, почтенный"
+        },
+        {
+          "text": "content [kən'tent]",
+          "translation": "довольный, удовлетворенный",
+          "example": "If you are content, you are fairly happy or satisfied."
+        },
+        {
+          "text": "decide where you sit on the scale",
+          "translation": "определите, где вы находитесь на этой шкале"
+        },
+        {
+          "text": "to give an accurate picture of smth",
+          "translation": "дать точное представление (описание) о чем-либо"
+        },
+        {
+          "text": "to meet up with friends",
+          "translation": "встречаться с друзьями"
+        },
+        {
+          "text": "Do you find it difficult to remain calm during a discussion?",
+          "translation": "Вам трудно сохранять спокойствие во время дискуссии? – Нет, нисколько.",
+          "example": "No, not at all."
+        }
+      ]
+    },
+    {
+      "code": "seed-verb-noun-collocations",
+      "order": 10,
+      "title": "Verb + noun collocations",
+      "words": [
+        {
+          "text": "to speak your mind",
+          "translation": "говорить прямо"
+        },
+        {
+          "text": "to meet your deadlines",
+          "translation": "укладываться в сроки (дедлайны)"
+        },
+        {
+          "text": "to beat your deadlines",
+          "translation": "сдавать работу раньше срока"
+        },
+        {
+          "text": "to wait in line",
+          "translation": "стоять в очереди"
+        },
+        {
+          "text": "to lose your temper",
+          "translation": "выйти из себя"
+        },
+        {
+          "text": "to keep your promises",
+          "translation": "держать свои обещания"
+        },
+        {
+          "text": "to make your bed",
+          "translation": "застилать кровать"
+        },
+        {
+          "text": "to break the rules",
+          "translation": "нарушать правила"
+        },
+        {
+          "text": "to voice your opinion",
+          "translation": "озвучивать свое мнение"
+        },
+        {
+          "text": "to take charge",
+          "translation": "брать управление (ответственность) в свои руки"
+        },
+        {
+          "text": "to resolve the dispute",
+          "translation": "разрешить спор, урегулировать конфликт"
+        },
+        {
+          "text": "to take notes",
+          "translation": "делать записи"
+        },
+        {
+          "text": "to remain calm",
+          "translation": "сохранять спокойствие"
+        },
+        {
+          "text": "to take an interest in",
+          "translation": "проявлять интерес к"
+        },
+        {
+          "text": "to make time (for the task / to meet your friends)",
+          "translation": "находить, выделять время (для задачи / для встречи с друзьями)"
+        },
+        {
+          "text": "to return the favour",
+          "translation": "оказать ответную услугу"
+        }
+      ]
+    }
+  ]
+}

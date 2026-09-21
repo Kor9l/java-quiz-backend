@@ -30,16 +30,19 @@ class EnglishWordsContentTest {
     private static final String CORPUS = "/content/english/words.json";
     private static final String PART_TWO = "/content/english/words-2026-part-2.json";
     private static final String PART_TWO_EXTRA = "/content/english/words-2026-part-2-extra.json";
+    private static final String PERSONALITY = "/content/english/words-personality.json";
 
     private static JsonNode corpus;
     private static JsonNode partTwo;
     private static JsonNode partTwoExtra;
+    private static JsonNode personality;
 
     @BeforeAll
     static void load() throws Exception {
         corpus = read(CORPUS);
         partTwo = read(PART_TWO);
         partTwoExtra = read(PART_TWO_EXTRA);
+        personality = read(PERSONALITY);
     }
 
     private static JsonNode read(String resource) throws Exception {
@@ -54,6 +57,7 @@ class EnglishWordsContentTest {
         List<JsonNode> groups = new ArrayList<>();
         corpus.get("groups").forEach(groups::add);
         partTwo.get("groups").forEach(groups::add);
+        personality.get("groups").forEach(groups::add);
         return groups;
     }
 
@@ -167,5 +171,16 @@ class EnglishWordsContentTest {
         assertThat(partTwoExtra.path("groupCode").asText()).isEqualTo("seed-2026-part-2");
         assertThat(partTwoExtra.get("words")).hasSize(44);
         assertThat(wordsByGroup().get("seed-2026-part-2")).hasSize(86);
+    }
+
+    /**
+     * The personality lesson V36 loads, as the two groups the handout itself keeps apart: the
+     * trait vocabulary, and the verb + noun collocations drilled alongside it.
+     */
+    @Test
+    void carriesThePersonalityLesson() {
+        assertThat(personality.get("groups")).hasSize(2);
+        assertThat(wordsByGroup().get("seed-personality-traits")).hasSize(22);
+        assertThat(wordsByGroup().get("seed-verb-noun-collocations")).hasSize(16);
     }
 }
