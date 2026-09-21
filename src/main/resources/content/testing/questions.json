@@ -1,0 +1,2651 @@
+{
+  "schemaVersion": 2,
+  "questions": [
+    {
+      "id": "testing.test-pyramid.001",
+      "section": "test-pyramid",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What is the defining difference between a unit test and an integration test?",
+        "ru": "В чём определяющая разница между unit-тестом и интеграционным тестом?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A unit test is written by the developer, an integration test by the QA engineer.",
+            "ru": "Unit-тест пишет разработчик, а интеграционный — инженер по тестированию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A unit test uses assertions, an integration test only checks that nothing throws.",
+            "ru": "Unit-тест использует проверки, а интеграционный лишь смотрит, что ничего не упало."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A unit test exercises code in isolation with no I/O, while an integration test runs it against something real such as a database or an HTTP server.",
+            "ru": "Unit-тест проверяет код изолированно, без ввода-вывода, а интеграционный запускает его против чего-то настоящего — базы, HTTP-сервера."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A unit test may contain only one assertion, an integration test may contain many.",
+            "ru": "В unit-тесте допустима только одна проверка, в интеграционном — много."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A unit test runs in CI, an integration test runs only locally.",
+            "ru": "Unit-тест выполняется в CI, а интеграционный только локально."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The line is about what the test touches, not who wrote it or how many assertions it has. Isolation is what makes a unit test fast and makes its failure point at a line; touching real infrastructure is what makes an integration test slow and makes its failure say only that the wiring is wrong.",
+        "ru": "Граница проходит по тому, чего тест касается, а не по тому, кто его написал и сколько в нём проверок. Изоляция делает unit-тест быстрым, а его падение — указывающим на строку; обращение к настоящей инфраструктуре делает интеграционный тест медленным, а его падение — сообщающим лишь о неверной обвязке."
+      },
+      "sources": [
+        "https://martinfowler.com/bliki/UnitTest.html",
+        "https://martinfowler.com/articles/practical-test-pyramid.html"
+      ]
+    },
+    {
+      "id": "testing.test-pyramid.002",
+      "section": "test-pyramid",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which of these is the least worth writing a dedicated test for?",
+        "ru": "Для чего из перечисленного отдельный тест нужен меньше всего?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A generated getter that returns a field.",
+            "ru": "Сгенерированный геттер, возвращающий поле."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A method that computes a score from a list of answers.",
+            "ru": "Метод, вычисляющий результат по списку ответов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A branch that decides whether a session has expired.",
+            "ru": "Ветвление, решающее, истекла ли сессия."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A parser that turns a level string into an enum and rejects unknown values.",
+            "ru": "Парсер, превращающий строку уровня в enum и отвергающий неизвестные значения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A validation rule that refuses an empty answer set.",
+            "ru": "Правило валидации, отклоняющее пустой набор ответов."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A test earns its keep where a decision can be made wrongly. A generated getter contains no decision, so a test for it can only ever fail when the compiler is broken — and it is still code somebody has to maintain. Everything else on the list has a branch or a rule that can be got wrong.",
+        "ru": "Тест оправдывает себя там, где решение может быть принято неверно. В сгенерированном геттере решения нет, поэтому его тест способен упасть разве что при сломанном компиляторе — а сопровождать этот код всё равно придётся. Во всех прочих пунктах есть ветвление или правило, которое можно сделать неправильно."
+      },
+      "sources": [
+        "https://martinfowler.com/bliki/TestCoverage.html",
+        "https://martinfowler.com/articles/practical-test-pyramid.html"
+      ]
+    },
+    {
+      "id": "testing.test-pyramid.003",
+      "section": "test-pyramid",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "Why does the pyramid prescribe many tests at the bottom and few at the top?",
+        "ru": "Почему пирамида предписывает много тестов внизу и мало наверху?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because end-to-end tests find fewer bugs than unit tests do.",
+            "ru": "Потому что end-to-end тесты находят меньше багов, чем unit-тесты."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because unit tests can cover everything an end-to-end test covers.",
+            "ru": "Потому что unit-тесты покрывают всё то же, что и end-to-end тест."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because integration tests are unreliable by nature and should be avoided.",
+            "ru": "Потому что интеграционные тесты ненадёжны по своей природе, и их следует избегать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because as you go up, run time and the ambiguity of a failure grow much faster than the extra confidence the test buys.",
+            "ru": "Потому что вверх по пирамиде время прогона и неоднозначность падения растут гораздо быстрее, чем прибавка уверенности, которую тест покупает."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because upper-level tests cannot be run in CI.",
+            "ru": "Потому что тесты верхнего уровня нельзя запускать в CI."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Higher tests catch exactly what lower ones cannot — everything between the classes — so they are not worse and they are not optional. The shape is an economic argument: minutes instead of milliseconds, and a failure that could be your bug, the data or the environment. Keep few of them and make each one count.",
+        "ru": "Верхние тесты ловят ровно то, что не ловят нижние, — всё, что между классами, — поэтому они не хуже и не факультативны. Форма пирамиды — экономический аргумент: минуты вместо миллисекунд и падение, за которым может стоять ваш баг, данные или окружение. Держите их мало и делайте каждый значимым."
+      },
+      "sources": [
+        "https://martinfowler.com/articles/practical-test-pyramid.html",
+        "https://martinfowler.com/bliki/TestPyramid.html"
+      ]
+    },
+    {
+      "id": "testing.test-pyramid.004",
+      "section": "test-pyramid",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "A suite consists entirely of unit tests in which every collaborator is a mock. It is fully green, yet the application fails to start. What does that reveal?",
+        "ru": "Набор состоит только из unit-тестов, где каждый сосед — мок. Он полностью зелёный, но приложение не стартует. О чём это говорит?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "That the unit tests were written incorrectly and should assert more.",
+            "ru": "О том, что unit-тесты написаны неверно и должны проверять больше."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That nothing in the suite ever wired two real objects together, so the layer the pyramid puts above units is missing.",
+            "ru": "О том, что ни один тест ни разу не соединил два настоящих объекта, то есть отсутствует слой, который пирамида ставит над юнит-тестами."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "That mocks are a bad technique and should be replaced with spies.",
+            "ru": "О том, что моки — плохая техника и их надо заменить спаями."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That the suite needs a higher coverage threshold.",
+            "ru": "О том, что набору нужен более высокий порог покрытия."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That startup failures cannot be caught by tests at all.",
+            "ru": "О том, что падения при старте тестами не ловятся в принципе."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Each unit test proved its class works against an imagined collaborator. Wiring, configuration and the contracts between classes were never exercised, and that is precisely the gap an integration test exists to fill — one test that starts the context would have caught it. Raising coverage would not have: the lines were all executed.",
+        "ru": "Каждый unit-тест доказал, что его класс работает с воображаемым соседом. Обвязка, конфигурация и контракты между классами не проверялись никогда — а это ровно тот разрыв, ради которого существует интеграционный тест: один тест, поднимающий контекст, поймал бы это. Повышение покрытия не поймало бы: строки-то выполнялись."
+      },
+      "sources": [
+        "https://martinfowler.com/articles/practical-test-pyramid.html",
+        "https://martinfowler.com/articles/mocksArentStubs.html"
+      ]
+    },
+    {
+      "id": "testing.test-pyramid.005",
+      "section": "test-pyramid",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "Which of these assertions tests behaviour rather than structure?",
+        "ru": "Какая из проверок тестирует поведение, а не структуру?"
+      },
+      "code": "// A\nassertThat(service.getRepository()).isNotNull();\n// B\nassertThat(service.getClass().getDeclaredFields()).hasSize(3);\n// C\nassertThat(QuizService.class.getMethod(\"start\", String.class)).isNotNull();\n// D\nassertThat(service).isInstanceOf(QuizService.class);\n// E\nassertThat(service.start(\"junior\").questions()).hasSize(5);",
+      "options": [
+        {
+          "text": {
+            "en": "A - it proves the dependency was injected.",
+            "ru": "A — доказывает, что зависимость внедрена."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "B - it pins the shape of the class.",
+            "ru": "B — фиксирует форму класса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "C - it guarantees the method exists.",
+            "ru": "C — гарантирует, что метод существует."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "D - it checks the object is of the right type.",
+            "ru": "D — проверяет, что объект нужного типа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "E - it calls the method and checks the answer.",
+            "ru": "E — вызывает метод и проверяет ответ."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Only E would fail if the code computed the wrong result, and only E survives a rewrite of the internals. A to D restate facts the compiler already guarantees, and each of them breaks on a rename or a refactoring while catching no bug — that is the cost of nailing a test to structure.",
+        "ru": "Только E упадёт, если код посчитает неверно, и только E переживёт переписывание внутренностей. A–D повторяют факты, которые и так гарантирует компилятор, и каждая из них сломается при переименовании или рефакторинге, не поймав ни одного бага, — в этом и состоит цена теста, прибитого к структуре."
+      },
+      "sources": [
+        "https://martinfowler.com/bliki/UnitTest.html",
+        "https://docs.junit.org/current/user-guide/#writing-tests"
+      ]
+    },
+    {
+      "id": "testing.test-pyramid.006",
+      "section": "test-pyramid",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "A team inverts the pyramid: a handful of unit tests and several hundred end-to-end tests. Which consequence is the most damaging in practice?",
+        "ru": "Команда перевернула пирамиду: горстка unit-тестов и несколько сотен end-to-end. Какое следствие на практике самое разрушительное?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Feedback arrives late and a failure does not localise the defect, so red builds get re-run instead of investigated and the suite stops being trusted.",
+            "ru": "Обратная связь приходит поздно, а падение не локализует дефект, поэтому красные сборки перезапускают вместо разбора — и набору перестают доверять."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Line coverage drops below the threshold configured in CI.",
+            "ru": "Покрытие по строкам падает ниже порога, настроенного в CI."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "End-to-end tests cannot assert on database state.",
+            "ru": "End-to-end тесты не умеют проверять состояние базы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The build becomes impossible to run locally for technical reasons.",
+            "ru": "Сборку становится технически невозможно запустить локально."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Mocks can no longer be used anywhere in the project.",
+            "ru": "Моки больше нельзя применять нигде в проекте."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Coverage may well stay high — end-to-end tests execute a great many lines. The damage is in the feedback loop: a twenty-minute run whose failure could mean six different things trains people to hit re-run, and a suite nobody investigates protects nothing, whatever its coverage number says.",
+        "ru": "Покрытие при этом вполне может остаться высоким: end-to-end тесты прогоняют очень много строк. Урон — в петле обратной связи: двадцатиминутный прогон, падение которого может означать шесть разных вещей, приучает жать «перезапустить», а набор, который никто не разбирает, не защищает ничего, какое бы число покрытия он ни показывал."
+      },
+      "sources": [
+        "https://martinfowler.com/articles/practical-test-pyramid.html",
+        "https://martinfowler.com/articles/nonDeterminism.html"
+      ]
+    },
+    {
+      "id": "testing.junit5.001",
+      "section": "junit5",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "How many instances of a test class does JUnit 5 create by default for a class with four @Test methods?",
+        "ru": "Сколько экземпляров тестового класса создаст JUnit 5 по умолчанию для класса с четырьмя методами @Test?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "One, reused by all four tests.",
+            "ru": "Один, переиспользуемый всеми четырьмя тестами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Four - a new instance per test method.",
+            "ru": "Четыре — по новому экземпляру на каждый тестовый метод."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "One per @Nested class, regardless of the number of methods.",
+            "ru": "По одному на каждый @Nested-класс, независимо от числа методов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "None - JUnit calls the methods statically.",
+            "ru": "Ни одного — JUnit вызывает методы статически."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Four, but only if @TestInstance(PER_METHOD) is declared explicitly.",
+            "ru": "Четыре, но только если явно объявлен @TestInstance(PER_METHOD)."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "PER_METHOD is the default and needs no annotation. The fresh instance is what stops a field one test mutated from being visible to the next, which is also the reason @BeforeAll must be static: at that point no instance exists yet.",
+        "ru": "PER_METHOD — поведение по умолчанию, аннотация для него не нужна. Новый экземпляр не даёт полю, изменённому одним тестом, оказаться видимым следующему, и по той же причине @BeforeAll обязан быть статическим: экземпляра в этот момент ещё нет."
+      },
+      "sources": [
+        "https://docs.junit.org/current/user-guide/#writing-tests-test-instance-lifecycle",
+        "https://docs.junit.org/current/user-guide/#writing-tests-classes-and-methods"
+      ]
+    },
+    {
+      "id": "testing.junit5.002",
+      "section": "junit5",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "A test calls assumeTrue(dockerIsAvailable()) and the assumption is false. How is the test reported?",
+        "ru": "Тест вызывает assumeTrue(dockerIsAvailable()), и предположение ложно. Как тест попадёт в отчёт?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "As failed, with an AssertionFailedError.",
+            "ru": "Как упавший, с AssertionFailedError."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "As passed, since nothing threw.",
+            "ru": "Как пройденный, ведь ничего не упало."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "As an error, because the assumption is a precondition violation.",
+            "ru": "Как ошибка, потому что нарушено предусловие."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "As skipped - the test is aborted, neither passed nor failed.",
+            "ru": "Как пропущенный — тест прерван, он не пройден и не упал."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is not reported at all; JUnit silently omits it.",
+            "ru": "Никак — JUnit молча его не показывает."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A failed assumption aborts the test and it appears as skipped, which is exactly what you want for an environment precondition such as a Docker daemon. It is the wrong tool for business logic: a test that assumes its way past its own assertions is green and checks nothing.",
+        "ru": "Невыполненное предположение прерывает тест, и он показывается как пропущенный — ровно то, что нужно для предусловия окружения вроде демона Docker. Для бизнес-логики инструмент неверный: тест, который предположениями обходит собственные проверки, зелёный и не проверяет ничего."
+      },
+      "sources": [
+        "https://docs.junit.org/current/user-guide/#writing-tests-assumptions",
+        "https://docs.junit.org/current/user-guide/#writing-tests-disabling"
+      ]
+    },
+    {
+      "id": "testing.junit5.003",
+      "section": "junit5",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "Why does @BeforeAll have to be declared static under the default lifecycle?",
+        "ru": "Почему при жизненном цикле по умолчанию @BeforeAll обязан быть статическим?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because it runs before any instance of the test class has been created.",
+            "ru": "Потому что он выполняется до того, как создан хоть один экземпляр тестового класса."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because JUnit runs it on a separate thread that has no access to instance fields.",
+            "ru": "Потому что JUnit выполняет его в отдельном потоке, у которого нет доступа к полям экземпляра."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because static methods are faster to invoke by reflection.",
+            "ru": "Потому что статические методы быстрее вызывать через рефлексию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the JVM initialises static members before the class is loaded.",
+            "ru": "Потому что JVM инициализирует статические члены до загрузки класса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It does not have to be - static is only a convention.",
+            "ru": "Не обязан — static здесь лишь соглашение."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "With PER_METHOD, instances are created one per test, so at @BeforeAll time there is nothing to invoke an instance method on. Switching to @TestInstance(Lifecycle.PER_CLASS) creates a single instance for the class and does allow a non-static @BeforeAll — at the cost of the per-test isolation.",
+        "ru": "При PER_METHOD экземпляры создаются по одному на тест, поэтому в момент @BeforeAll вызывать метод экземпляра просто не на чем. Переход на @TestInstance(Lifecycle.PER_CLASS) создаёт один экземпляр на класс и действительно разрешает нестатический @BeforeAll — ценой изоляции между тестами."
+      },
+      "sources": [
+        "https://docs.junit.org/current/user-guide/#writing-tests-test-instance-lifecycle",
+        "https://docs.junit.org/current/user-guide/#writing-tests-annotations"
+      ]
+    },
+    {
+      "id": "testing.junit5.004",
+      "section": "junit5",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "What does rewriting a loop over inputs as a @ParameterizedTest actually buy you?",
+        "ru": "Что на самом деле даёт переписывание цикла по входным данным в @ParameterizedTest?"
+      },
+      "code": "@ParameterizedTest\n@CsvSource({\"junior,3\", \"middle,5\", \"senior,5\"})\nvoid picksThePoolSizeForTheTrack(String level, int expected) {\n    assertThat(service.poolSize(level)).isEqualTo(expected);\n}",
+      "options": [
+        {
+          "text": {
+            "en": "The cases run in parallel, so the test is faster.",
+            "ru": "Случаи выполняются параллельно, поэтому тест быстрее."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "JUnit retries a failing case automatically.",
+            "ru": "JUnit автоматически перезапускает упавший случай."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The arguments are validated against the method signature at compile time.",
+            "ru": "Аргументы проверяются на соответствие сигнатуре метода на этапе компиляции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only that the code is shorter; the report is identical.",
+            "ru": "Только то, что кода меньше; отчёт при этом идентичен."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Each row becomes its own reported test, so a failure names the input instead of saying a loop failed somewhere.",
+            "ru": "Каждая строка становится отдельным тестом в отчёте, поэтому падение называет вход, а не сообщает, что цикл где-то упал."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The reporting is the point. A loop stops at the first bad input and hides the rest; parameterized execution runs every row, names each one, and shows you all the failures at once. Parallelism is a separate, opt-in setting and has nothing to do with it.",
+        "ru": "Смысл именно в отчёте. Цикл останавливается на первом плохом входе и прячет остальные; параметризованный запуск выполняет все строки, называет каждую и показывает все падения сразу. Параллельность — отдельная, включаемая вручную настройка, и к этому она отношения не имеет."
+      },
+      "sources": [
+        "https://docs.junit.org/current/user-guide/#writing-tests-parameterized-tests",
+        "https://docs.junit.org/current/user-guide/#writing-tests-parameterized-tests-sources-CsvSource"
+      ]
+    },
+    {
+      "id": "testing.junit5.005",
+      "section": "junit5",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "This project generates one test per bundled exercise, where the exercises are read from a JSON file at run time. Which JUnit 5 feature does that?",
+        "ru": "Этот проект порождает по тесту на каждое поставляемое задание, а сами задания читаются из JSON-файла во время выполнения. Какая возможность JUnit 5 это делает?"
+      },
+      "code": "@TestFactory\nList<DynamicTest> referenceSolutionsRun() {\n    return tasks().stream()\n            .map(task -> DynamicTest.dynamicTest(task.get(\"id\").asText(), () -> { /* ... */ }))\n            .toList();\n}",
+      "options": [
+        {
+          "text": {
+            "en": "@RepeatedTest, with the repetition count taken from the file.",
+            "ru": "@RepeatedTest, где число повторов берётся из файла."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@ParameterizedTest with @CsvFileSource, which reads any file format.",
+            "ru": "@ParameterizedTest с @CsvFileSource, читающий файл любого формата."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@TestFactory returning DynamicTest instances, built while the test runs.",
+            "ru": "@TestFactory, возвращающий экземпляры DynamicTest, собранные во время выполнения."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "@Nested classes generated by an annotation processor.",
+            "ru": "@Nested-классы, сгенерированные процессором аннотаций."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A custom extension implementing BeforeEachCallback.",
+            "ru": "Своё расширение, реализующее BeforeEachCallback."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "@TestFactory is for cases that are not known at compile time: the factory method builds and names them while the test runs. In JavaPracticeContentTest each exercise becomes its own named dynamic test, so a broken exercise appears by name in the report instead of hiding inside a loop over all of them.",
+        "ru": "@TestFactory нужен там, где набор случаев неизвестен на этапе компиляции: фабричный метод собирает и именует их во время выполнения. В JavaPracticeContentTest каждое задание становится отдельным именованным динамическим тестом, поэтому сломанное задание видно в отчёте по имени, а не спрятано внутри цикла по всем."
+      },
+      "sources": [
+        "https://docs.junit.org/current/user-guide/#writing-tests-dynamic-tests",
+        "https://docs.junit.org/current/user-guide/#writing-tests-parameterized-tests"
+      ]
+    },
+    {
+      "id": "testing.junit5.006",
+      "section": "junit5",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "A class is annotated @TestInstance(Lifecycle.PER_CLASS) so that @BeforeAll can be non-static. What is the risk being accepted?",
+        "ru": "Класс помечен @TestInstance(Lifecycle.PER_CLASS), чтобы @BeforeAll мог быть нестатическим. Какой риск при этом принимается?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "@BeforeEach stops running before each test.",
+            "ru": "@BeforeEach перестаёт выполняться перед каждым тестом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Parameterized tests can no longer be used in the class.",
+            "ru": "В классе больше нельзя использовать параметризованные тесты."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "JUnit begins executing the methods in declaration order.",
+            "ru": "JUnit начинает выполнять методы в порядке объявления."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "All tests share one instance, so a field mutated by one test is visible to the next and the suite can become order-dependent.",
+            "ru": "Все тесты делят один экземпляр, поэтому поле, изменённое одним тестом, видно следующему, и набор может стать зависимым от порядка."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The class can no longer be discovered by the JUnit Platform.",
+            "ru": "Класс перестаёт обнаруживаться JUnit Platform."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "PER_CLASS removes the fresh instance, and with it the isolation that the default lifecycle provides for free. Nothing else changes: @BeforeEach still runs, order is still unspecified. It is a reasonable trade when the fixture is genuinely expensive and genuinely read-only, and a source of order-dependent flakiness when it is neither.",
+        "ru": "PER_CLASS убирает новый экземпляр, а вместе с ним и изоляцию, которую жизненный цикл по умолчанию даёт бесплатно. Больше ничего не меняется: @BeforeEach выполняется, порядок по-прежнему не оговорён. Это разумный размен, когда фикстура действительно дорогая и действительно неизменяемая, и источник зависящего от порядка flaky — когда ни того, ни другого нет."
+      },
+      "sources": [
+        "https://docs.junit.org/current/user-guide/#writing-tests-test-instance-lifecycle",
+        "https://docs.junit.org/current/user-guide/#writing-tests-test-execution-order"
+      ]
+    },
+    {
+      "id": "testing.mockito.001",
+      "section": "mockito",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does a method of a Mockito mock return if it has not been stubbed?",
+        "ru": "Что вернёт метод мока Mockito, если его не застабили?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It throws UnstubbedMethodException.",
+            "ru": "Бросит UnstubbedMethodException."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It calls the real implementation.",
+            "ru": "Вызовет настоящую реализацию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It fails the test immediately.",
+            "ru": "Немедленно уронит тест."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It returns null for every return type, including int and boolean.",
+            "ru": "Вернёт null для любого возвращаемого типа, включая int и boolean."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It returns a type-appropriate empty value: null for objects, 0 for numbers, false for boolean, an empty Optional or list for those types.",
+            "ru": "Вернёт пустое значение подходящего типа: null для объектов, 0 для чисел, false для boolean, пустой Optional или список для этих типов."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The default answer RETURNS_DEFAULTS gives an empty value per type, which is why an unstubbed mock quietly produces an empty list rather than an error. Convenient, and it is also the reason a forgotten stub can show up as a puzzling empty result rather than as a clear failure.",
+        "ru": "Ответ по умолчанию RETURNS_DEFAULTS отдаёт пустое значение по типу — поэтому незастабленный мок тихо выдаёт пустой список, а не ошибку. Удобно, и по той же причине забытый стаб проявляется как загадочный пустой результат, а не как внятное падение."
+      },
+      "sources": [
+        "https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html",
+        "https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Answers.html"
+      ]
+    },
+    {
+      "id": "testing.mockito.002",
+      "section": "mockito",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "How does a spy differ from a mock?",
+        "ru": "Чем спай отличается от мока?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A spy can only be used on interfaces, a mock only on classes.",
+            "ru": "Спай применим только к интерфейсам, а мок — только к классам."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A spy wraps a real object and calls the real implementation unless a method is stubbed; a mock has no behaviour of its own.",
+            "ru": "Спай оборачивает настоящий объект и вызывает реальную реализацию, пока метод не застаблен; у мока собственного поведения нет."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A spy records calls, a mock does not - verify only works on spies.",
+            "ru": "Спай записывает вызовы, а мок нет — verify работает только со спаями."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A spy is created at compile time, a mock at run time.",
+            "ru": "Спай создаётся на этапе компиляции, а мок — во время выполнения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "There is no difference; @Spy is an alias for @Mock.",
+            "ru": "Разницы нет; @Spy — синоним @Mock."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Both record their calls, so verify works on either. The difference is the fallback: a spy delegates to the real object, a mock returns an empty value. A spy is a useful lever on legacy code; in new code, wanting to stub half an object usually means the class is doing two jobs.",
+        "ru": "Оба записывают вызовы, так что verify работает и с тем и с другим. Разница в поведении по умолчанию: спай делегирует настоящему объекту, мок отдаёт пустое значение. Спай — полезный рычаг против легаси; в новом коде желание застабить половину объекта обычно означает, что класс делает две работы."
+      },
+      "sources": [
+        "https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html",
+        "https://martinfowler.com/articles/mocksArentStubs.html"
+      ]
+    },
+    {
+      "id": "testing.mockito.003",
+      "section": "mockito",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "In which situation is verify(...) the right assertion rather than checking a returned value?",
+        "ru": "В какой ситуации verify(...) уместнее проверки возвращённого значения?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Whenever the method under test has dependencies - every collaborator call should be verified.",
+            "ru": "Всегда, когда у тестируемого метода есть зависимости: каждый вызов соседа надо проверять."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When the method returns a value, because verify also checks the return.",
+            "ru": "Когда метод возвращает значение, потому что verify проверяет и его."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When the effect on a collaborator is the behaviour itself and there is nothing to read back - a message published, a mail sent, a row deleted.",
+            "ru": "Когда эффект на соседа и есть само поведение, а прочитать назад нечего: сообщение опубликовано, письмо отправлено, строка удалена."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Only in integration tests, where state assertions are unavailable.",
+            "ru": "Только в интеграционных тестах, где проверки состояния недоступны."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When you want the test to fail if a new call is ever added to the method.",
+            "ru": "Когда хочется, чтобы тест упал при добавлении в метод любого нового вызова."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Verification is a claim about an interaction, so it earns its place only where the interaction is the observable behaviour. Verifying a call whose result you already assert states the same thing twice, and the duplicate breaks on the next refactoring. Making the test fail whenever a call is added is what verifyNoMoreInteractions does, and it is usually a liability rather than a goal.",
+        "ru": "Verify — утверждение о взаимодействии, поэтому он уместен только там, где взаимодействие и есть наблюдаемое поведение. Verify вызова, результат которого вы и так проверяете, говорит одно и то же дважды, и при следующем рефакторинге ломается именно дубль. А падение при добавлении любого вызова — это поведение verifyNoMoreInteractions, и оно обычно обуза, а не цель."
+      },
+      "sources": [
+        "https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html",
+        "https://martinfowler.com/articles/mocksArentStubs.html"
+      ]
+    },
+    {
+      "id": "testing.mockito.004",
+      "section": "mockito",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Why does this verification throw InvalidUseOfMatchersException?",
+        "ru": "Почему эта проверка бросает InvalidUseOfMatchersException?"
+      },
+      "code": "verify(repository).findByTopicAndLevel(\"testing\", any(String.class));",
+      "options": [
+        {
+          "text": {
+            "en": "Because matchers and raw values may not be mixed in one call - once one argument is a matcher, all of them must be.",
+            "ru": "Потому что matcher'ы и обычные значения нельзя смешивать в одном вызове: как только один аргумент стал matcher'ом, ими должны стать все."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because any(String.class) may only be used inside when(...), never inside verify(...).",
+            "ru": "Потому что any(String.class) допустим только внутри when(...) и никогда внутри verify(...)."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the mock was never stubbed for that method.",
+            "ru": "Потому что мок никогда не стабился для этого метода."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because verify does not accept more than one argument.",
+            "ru": "Потому что verify не принимает больше одного аргумента."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the string literal has to be captured with an ArgumentCaptor first.",
+            "ru": "Потому что строковый литерал сначала надо перехватить через ArgumentCaptor."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Matchers work by pushing onto a stack that Mockito reads when the call returns, so a mixed call leaves the stack out of step with the arguments. Write eq(\"testing\") alongside any(String.class). Note the distinction worth keeping: a matcher makes the stub or verification conditional, while an ArgumentCaptor is for capturing a value you want to assert on afterwards.",
+        "ru": "Matcher'ы работают через стек, который Mockito читает при возврате из вызова, поэтому смешанный вызов рассогласовывает стек с аргументами. Пишите eq(\"testing\") рядом с any(String.class). И стоит держать в голове различие: matcher делает условным сам стаб или verify, а ArgumentCaptor нужен, чтобы перехватить значение и проверить его потом."
+      },
+      "sources": [
+        "https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/ArgumentMatchers.html",
+        "https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/ArgumentCaptor.html"
+      ]
+    },
+    {
+      "id": "testing.mockito.005",
+      "section": "mockito",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A repository method changes its contract: it now returns an empty list instead of null when nothing is found. A service test that stubs it keeps passing, but production breaks. What does this illustrate?",
+        "ru": "Метод репозитория поменял контракт: теперь при отсутствии данных он возвращает пустой список вместо null. Тест сервиса, который его стабит, продолжает проходить, а прод ломается. Что это иллюстрирует?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "That Mockito stubs must be refreshed by @BeforeEach.",
+            "ru": "Что стабы Mockito надо обновлять в @BeforeEach."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That the service test should have used a spy instead of a mock.",
+            "ru": "Что тесту сервиса следовало использовать спай вместо мока."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That the repository's own unit test was missing.",
+            "ru": "Что не хватало собственного unit-теста репозитория."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The specific cost of over-mocking: a stub freezes an assumption about a collaborator, and when the collaborator changes the test keeps certifying the old behaviour.",
+            "ru": "Конкретную цену over-mocking: стаб замораживает допущение о соседе, и когда сосед меняется, тест продолжает удостоверять старое поведение."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "That the test needed verifyNoMoreInteractions to catch the change.",
+            "ru": "Что для обнаружения изменения тесту требовался verifyNoMoreInteractions."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Nothing in a mock-based test is connected to the real collaborator, so a contract change cannot make it fail — the suite drifts from reality silently, and the drift is invisible until something integrates for real. The fix is not a different Mockito feature but at least one test that runs the real query.",
+        "ru": "В тесте на моках ничто не связано с настоящим соседом, поэтому изменение контракта не может его уронить: набор молча расходится с реальностью, и расхождение невидимо, пока что-то не соберётся вместе по-настоящему. Лечится это не другой возможностью Mockito, а хотя бы одним тестом, выполняющим настоящий запрос."
+      },
+      "sources": [
+        "https://martinfowler.com/articles/mocksArentStubs.html",
+        "https://martinfowler.com/articles/practical-test-pyramid.html"
+      ]
+    },
+    {
+      "id": "testing.mockito.006",
+      "section": "mockito",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "The first line below deletes a real file on disk before any stubbing takes effect. Why, and what is the fix?",
+        "ru": "Первая строка ниже реально удаляет файл с диска ещё до того, как стаб начнёт действовать. Почему и как это чинится?"
+      },
+      "code": "FileStore spy = Mockito.spy(new FileStore(path));\nwhen(spy.delete(\"report.csv\")).thenReturn(true);   // the file is gone by now",
+      "options": [
+        {
+          "text": {
+            "en": "Because a spy needs @InjectMocks to intercept calls; adding it fixes the problem.",
+            "ru": "Потому что спаю нужен @InjectMocks, чтобы перехватывать вызовы; добавление его решает проблему."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because when(...) has to evaluate spy.delete(...) to know which call to stub, and on a spy that runs the real method. Use doReturn(true).when(spy).delete(\"report.csv\").",
+            "ru": "Потому что when(...) вынужден вычислить spy.delete(...), чтобы понять, какой вызов стабить, а на спае это выполняет настоящий метод. Пишите doReturn(true).when(spy).delete(\"report.csv\")."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because delete is a final method and Mockito silently ignores the stub.",
+            "ru": "Потому что delete — final-метод, и Mockito молча игнорирует стаб."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the spy has to be reset with Mockito.reset(spy) before stubbing.",
+            "ru": "Потому что перед стабингом спай надо сбросить через Mockito.reset(spy)."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because thenReturn is lazy and the stub only applies from the second call onwards.",
+            "ru": "Потому что thenReturn ленив и стаб действует начиная со второго вызова."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "when(x.y()) is ordinary Java: the argument is evaluated first. On a mock that is harmless, since the method does nothing; on a spy it invokes the real implementation, side effects included. The doReturn(...).when(spy).method() form never calls the method, which is why it is the standard idiom for spies — and for stubbing void methods, where when(...) does not compile at all.",
+        "ru": "when(x.y()) — обычная Java: аргумент вычисляется первым. На моке это безобидно, потому что метод ничего не делает; на спае — вызывает настоящую реализацию вместе с побочными эффектами. Форма doReturn(...).when(spy).method() метод не вызывает вовсе, поэтому она и есть стандартная идиома для спаев — а также для стабинга void-методов, где when(...) просто не компилируется."
+      },
+      "sources": [
+        "https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html",
+        "https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/stubbing/Stubber.html"
+      ]
+    },
+    {
+      "id": "testing.spring-tests.001",
+      "section": "spring-tests",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What is the difference between @SpringBootTest and a slice such as @WebMvcTest?",
+        "ru": "В чём разница между @SpringBootTest и слайсом вроде @WebMvcTest?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "@SpringBootTest boots the whole application context, while a slice starts only a named subset of beans.",
+            "ru": "@SpringBootTest поднимает весь контекст приложения, а слайс запускает только названное подмножество бинов."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "@SpringBootTest runs in CI only, while a slice runs locally.",
+            "ru": "@SpringBootTest выполняется только в CI, а слайс — локально."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A slice always starts a real HTTP server, @SpringBootTest never does.",
+            "ru": "Слайс всегда поднимает настоящий HTTP-сервер, а @SpringBootTest — никогда."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@SpringBootTest rolls transactions back, a slice commits them.",
+            "ru": "@SpringBootTest откатывает транзакции, а слайс их фиксирует."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "There is no functional difference; a slice is just a shorter annotation.",
+            "ru": "Функциональной разницы нет; слайс — просто более короткая аннотация."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A slice instantiates fewer beans, which makes it faster, but the sharper benefit is diagnostic: a red @WebMvcTest is a web-layer bug, whereas a red @SpringBootTest is a bug somewhere in the application. Whether a real server starts is a separate axis, controlled by the webEnvironment attribute.",
+        "ru": "Слайс создаёт меньше бинов и потому быстрее, но более острая выгода — диагностическая: красный @WebMvcTest означает баг в web-слое, а красный @SpringBootTest — баг где-то в приложении. Поднимается ли настоящий сервер — отдельная ось, за неё отвечает атрибут webEnvironment."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/reference/testing/spring-boot-applications.html",
+        "https://docs.spring.io/spring-boot/reference/testing/spring-boot-applications.html#testing.spring-boot-applications.spring-mvc-tests"
+      ]
+    },
+    {
+      "id": "testing.spring-tests.002",
+      "section": "spring-tests",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Why does the Spring TestContext framework cache the ApplicationContext between test classes?",
+        "ru": "Зачем Spring TestContext кеширует ApplicationContext между тестовыми классами?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "To keep data created by one test class visible to the next.",
+            "ru": "Чтобы данные, созданные одним тестовым классом, оставались видны следующему."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "To allow test classes to run in parallel without extra configuration.",
+            "ru": "Чтобы тестовые классы могли выполняться параллельно без дополнительной настройки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because starting a context is expensive, so classes with the same configuration reuse one instead of booting again.",
+            "ru": "Потому что запуск контекста дорог, и классы с одинаковой конфигурацией переиспользуют один вместо повторного старта."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because singleton beans cannot be created more than once per JVM.",
+            "ru": "Потому что бины-синглтоны нельзя создать более одного раза на JVM."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "To guarantee that tests execute in a deterministic order.",
+            "ru": "Чтобы гарантировать детерминированный порядок выполнения тестов."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The cache exists purely for start-up time. It is keyed on the whole configuration — classes, profiles, property overrides, replaced beans — so classes with an identical key share a context and the second one starts instantly. It says nothing about data: that is what transactions and cleanup are for.",
+        "ru": "Кеш существует исключительно ради времени старта. Ключом служит вся конфигурация — классы, профили, переопределённые свойства, подменённые бины, — поэтому классы с одинаковым ключом делят контекст, и второй стартует мгновенно. К данным это отношения не имеет: за них отвечают транзакции и очистка."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/testing/testcontext-framework/ctx-management/caching.html",
+        "https://docs.spring.io/spring-boot/reference/testing/spring-boot-applications.html"
+      ]
+    },
+    {
+      "id": "testing.spring-tests.003",
+      "section": "spring-tests",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Ten test classes share one configuration and the suite boots once. A developer adds @MockitoBean to three of them. What happens to the start-up cost?",
+        "ru": "Десять тестовых классов делят одну конфигурацию, и набор стартует один раз. Разработчик добавил @MockitoBean в три из них. Что произойдёт со стоимостью старта?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing - bean replacement does not affect the cache.",
+            "ru": "Ничего — подмена бина на кеш не влияет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The cache is disabled entirely and every class boots its own context.",
+            "ru": "Кеш отключается целиком, и каждый класс поднимает свой контекст."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Start-up gets cheaper, because a mock bean is lighter than the real one.",
+            "ru": "Старт станет дешевле, потому что мок-бин легче настоящего."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only the first of the three pays; the other two reuse its context regardless of what they mock.",
+            "ru": "Заплатит только первый из трёх, а двое других переиспользуют его контекст независимо от того, что они мокают."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The replaced beans become part of the cache key, so those classes get their own context - the suite now boots more than once.",
+            "ru": "Подменённые бины входят в ключ кеша, поэтому у этих классов появится свой контекст — набор теперь стартует больше одного раза."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Bean replacements are part of the key, so every distinct set of them mints a new context. Classes mocking exactly the same beans still share one, which is why convergence helps: fewer distinct configurations means fewer boots. This is normally the single biggest lever on a slow Spring suite.",
+        "ru": "Подмены бинов входят в ключ, поэтому каждый их отличающийся набор чеканит новый контекст. Классы, мокающие ровно одни и те же бины, всё же делят его — потому сведение к общему и помогает: меньше различных конфигураций, меньше стартов. Обычно это самый мощный рычаг для медленного набора на Spring."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/testing/testcontext-framework/ctx-management/caching.html",
+        "https://docs.spring.io/spring-boot/reference/testing/spring-boot-applications.html#testing.spring-boot-applications.mocking-beans"
+      ]
+    },
+    {
+      "id": "testing.spring-tests.004",
+      "section": "spring-tests",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A @Transactional test rolls back at the end. Which of the following does that rollback NOT undo?",
+        "ru": "@Transactional-тест откатывается в конце. Чего этот откат НЕ отменит?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Rows inserted by the test method through the repository.",
+            "ru": "Строки, вставленные тестовым методом через репозиторий."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Updates the code under test made inside the same transaction.",
+            "ru": "Обновления, сделанные тестируемым кодом внутри той же транзакции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A delete issued through the injected EntityManager.",
+            "ru": "Удаление, выполненное через внедрённый EntityManager."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Work committed by a method annotated Propagation.REQUIRES_NEW, or performed on another thread.",
+            "ru": "Работу, зафиксированную методом с Propagation.REQUIRES_NEW или выполненную в другом потоке."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Entity changes flushed explicitly with entityManager.flush().",
+            "ru": "Изменения сущностей, явно сброшенные через entityManager.flush()."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The rollback covers exactly one transaction — the test's own. A nested REQUIRES_NEW commits independently, and another thread runs in a transaction of its own; both survive. An explicit flush does not commit anything, it only sends the statements, so it is still rolled back.",
+        "ru": "Откат покрывает ровно одну транзакцию — собственную транзакцию теста. Вложенный REQUIRES_NEW фиксируется независимо, а другой поток работает в своей транзакции; и то и другое переживёт откат. Явный flush ничего не фиксирует, он лишь отправляет операторы, поэтому он всё так же откатывается."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/testing/testcontext-framework/tx.html",
+        "https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/tx-propagation.html"
+      ]
+    },
+    {
+      "id": "testing.spring-tests.005",
+      "section": "spring-tests",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Why do many @DataJpaTest tests call flush() and clear() before asserting?",
+        "ru": "Почему во многих тестах с @DataJpaTest перед проверкой вызывают flush() и clear()?"
+      },
+      "code": "repository.save(attempt);\nentityManager.flush();\nentityManager.clear();\n\nassertThat(repository.findById(attempt.getId())).isPresent();",
+      "options": [
+        {
+          "text": {
+            "en": "Because otherwise the transaction would commit too early.",
+            "ru": "Потому что иначе транзакция зафиксировалась бы слишком рано."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the test shares a persistence context with the code under test, so a read can be answered from the first-level cache and a missing flush - or a broken mapping - stays invisible.",
+            "ru": "Потому что тест делит контекст персистентности с тестируемым кодом: чтение может быть обслужено кешем первого уровня, и забытый flush — как и сломанный маппинг — остаётся незаметным."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because findById does not work at all until the entity manager is cleared.",
+            "ru": "Потому что findById вообще не работает, пока entity manager не очищен."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because clear() is what triggers the rollback at the end of the test.",
+            "ru": "Потому что именно clear() запускает откат в конце теста."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because Spring requires it before any assertion on a repository.",
+            "ru": "Потому что Spring требует этого перед любой проверкой на репозитории."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Without the flush and clear, findById can return the very instance still sitting in the persistence context, so the test never touches the database and never learns whether the mapping or the constraint actually works. flush sends the statements; clear detaches everything so the next read goes to the database.",
+        "ru": "Без flush и clear findById может вернуть тот самый экземпляр, что лежит в контексте персистентности: тест не дойдёт до базы и не узнает, работают ли на самом деле маппинг и ограничение. flush отправляет операторы, clear отцепляет всё, чтобы следующее чтение ушло в базу."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-boot/reference/testing/spring-boot-applications.html#testing.spring-boot-applications.autoconfigured-spring-data-jpa",
+        "https://docs.spring.io/spring-framework/reference/testing/testcontext-framework/tx.html"
+      ]
+    },
+    {
+      "id": "testing.spring-tests.006",
+      "section": "spring-tests",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A Spring Boot suite of 200 tests has crept from 2 to 11 minutes with no new tests added. Which investigation is most likely to find the cause?",
+        "ru": "Набор из 200 тестов на Spring Boot незаметно вырос с 2 до 11 минут, хотя новых тестов не добавляли. Какое расследование вероятнее всего найдёт причину?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Measuring the slowest individual test methods and optimising their assertions.",
+            "ru": "Замерить самые медленные отдельные методы и оптимизировать в них проверки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Raising the surefire fork count so more tests run at once.",
+            "ru": "Увеличить число форков surefire, чтобы тесты шли в несколько потоков."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Counting how many distinct application contexts are created, and converging the configurations that differ by one property or one replaced bean.",
+            "ru": "Посчитать, сколько различных контекстов приложения создаётся, и свести конфигурации, отличающиеся одним свойством или одним подменённым бином."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Replacing the database with an in-memory engine so queries run faster.",
+            "ru": "Заменить базу на in-memory движок, чтобы запросы шли быстрее."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Adding @DirtiesContext to the slowest classes so they release memory.",
+            "ru": "Добавить @DirtiesContext самым медленным классам, чтобы они освобождали память."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Time that appears without new tests is almost always context boots. Each distinct configuration is a full start-up, and a single added property or mock bean is enough to create one; the Spring log prints a line per refresh, which is the cheapest way to count them. @DirtiesContext makes it strictly worse — it throws the cached context away deliberately.",
+        "ru": "Время, появившееся без новых тестов, — почти всегда старты контекста. Каждая отличающаяся конфигурация означает полный старт, а достаточно одного добавленного свойства или мок-бина, чтобы её создать; лог Spring печатает строку на каждое поднятие контекста — это самый дешёвый способ их посчитать. @DirtiesContext делает строго хуже: он намеренно выбрасывает закешированный контекст."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/testing/testcontext-framework/ctx-management/caching.html",
+        "https://docs.spring.io/spring-framework/reference/testing/annotations/integration-spring/annotation-dirtiescontext.html"
+      ]
+    },
+    {
+      "id": "testing.testcontainers.001",
+      "section": "testcontainers",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does Testcontainers give an integration test that an in-memory database does not?",
+        "ru": "Что даёт интеграционному тесту Testcontainers такого, чего не даёт in-memory база?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A faster start-up, because containers are cached in the JVM.",
+            "ru": "Более быстрый старт, потому что контейнеры кешируются в JVM."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Automatic isolation between tests, so no cleanup is needed.",
+            "ru": "Автоматическую изоляцию между тестами, так что очистка не нужна."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A guarantee that the test cannot be flaky.",
+            "ru": "Гарантию, что тест не может стать flaky."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The real engine the application ships against - the same dialect, the same migrations, the same lock behaviour.",
+            "ru": "Настоящий движок, с которым приложение едет в прод: тот же диалект, те же миграции, то же поведение блокировок."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The ability to run tests without a JDBC driver on the classpath.",
+            "ru": "Возможность запускать тесты без JDBC-драйвера в classpath."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The whole point is fidelity: an in-memory substitute parses your SQL its own way and implements locking its own way, so a test against it has no opinion about the database you actually deploy. Everything else on the list — speed, isolation, reliability — is something containers make harder, not easier.",
+        "ru": "Весь смысл в достоверности: суррогат in-memory разбирает ваш SQL по-своему и реализует блокировки по-своему, поэтому тест против него не имеет мнения о той базе, которую вы разворачиваете. Всё остальное из списка — скорость, изоляция, надёжность — с контейнерами становится сложнее, а не проще."
+      },
+      "sources": [
+        "https://java.testcontainers.org/modules/databases/postgres/",
+        "https://java.testcontainers.org/"
+      ]
+    },
+    {
+      "id": "testing.testcontainers.002",
+      "section": "testcontainers",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "In a @Testcontainers class, what changes if the @Container field is static rather than an instance field?",
+        "ru": "Что изменится в классе с @Testcontainers, если поле @Container сделать статическим, а не полем экземпляра?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing - Testcontainers ignores the modifier.",
+            "ru": "Ничего — Testcontainers игнорирует модификатор."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A static container is started lazily on first use, an instance container eagerly.",
+            "ru": "Статический контейнер поднимается лениво при первом обращении, а поле экземпляра — заранее."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A static container is reused across JVM runs, an instance container is not.",
+            "ru": "Статический контейнер переиспользуется между запусками JVM, а поле экземпляра — нет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A static container skips the wait strategy.",
+            "ru": "Статический контейнер пропускает стратегию ожидания."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A static container starts once for the whole class and is shared by its tests; an instance field starts a fresh container for every test method.",
+            "ru": "Статический контейнер поднимается один раз на класс и делится между его тестами; поле экземпляра поднимает новый контейнер на каждый тестовый метод."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Per-method containers give perfect isolation at a price almost no suite can pay. The usual choice is static plus explicit cleanup between tests — which does not remove the isolation problem, it moves it into your code. Reuse across JVM runs is a separate opt-in feature, not a consequence of static.",
+        "ru": "Контейнер на метод даёт идеальную изоляцию по цене, которую почти ни один набор не потянет. Обычный выбор — static плюс явная очистка между тестами: это не убирает задачу изоляции, а переносит её в ваш код. Переиспользование между запусками JVM — отдельная включаемая возможность, а не следствие static."
+      },
+      "sources": [
+        "https://java.testcontainers.org/test_framework_integration/junit_5/",
+        "https://java.testcontainers.org/features/reuse/"
+      ]
+    },
+    {
+      "id": "testing.testcontainers.003",
+      "section": "testcontainers",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A hand-written GenericContainer test passes locally and fails intermittently on a loaded CI machine with a connection refused. What is the most likely cause?",
+        "ru": "Тест на самодельном GenericContainer проходит локально и время от времени падает на загруженной машине CI с connection refused. Какая причина наиболее вероятна?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The CI machine blocks outbound network traffic from containers.",
+            "ru": "Машина CI блокирует исходящий сетевой трафик из контейнеров."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "No wait strategy is configured, so the test connects after the container has started but before the service inside it is ready.",
+            "ru": "Не настроена стратегия ожидания, и тест подключается после старта контейнера, но до готовности сервиса внутри него."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The image tag is not pinned, so a different image is pulled each run.",
+            "ru": "Тег образа не зафиксирован, поэтому каждый прогон скачивается другой образ."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Testcontainers cannot map ports when several containers run at once.",
+            "ru": "Testcontainers не умеет пробрасывать порты, когда одновременно работает несколько контейнеров."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The Ryuk cleanup container removed it too early.",
+            "ru": "Контейнер-уборщик Ryuk удалил его слишком рано."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A started container is not a ready container, and the gap widens exactly when the machine is busy — which is why it reproduces on CI and not on a laptop. The ready-made modules configure a suitable wait strategy for you; a hand-rolled GenericContainer needs one specified: a log message, a listening port, or a successful HTTP call.",
+        "ru": "Запустившийся контейнер и готовый контейнер — не одно и то же, а зазор расширяется ровно тогда, когда машина занята, — поэтому и воспроизводится на CI, а не на ноутбуке. Готовые модули настраивают подходящую стратегию ожидания сами; самодельному GenericContainer её надо задать: сообщение в логе, слушающий порт или успешный HTTP-вызов."
+      },
+      "sources": [
+        "https://java.testcontainers.org/features/startup_and_waits/",
+        "https://java.testcontainers.org/features/creating_container/"
+      ]
+    },
+    {
+      "id": "testing.testcontainers.004",
+      "section": "testcontainers",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "What is true of Testcontainers' reusable containers feature?",
+        "ru": "Что верно про возможность переиспользуемых контейнеров в Testcontainers?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It is enabled by default and applies everywhere the same way.",
+            "ru": "Она включена по умолчанию и работает везде одинаково."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It shares one container between several test classes within a single run only.",
+            "ru": "Она делит один контейнер между несколькими тестовыми классами только в пределах одного прогона."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It keeps a container alive between test runs and must be switched on per machine, which is why it is meant for developer machines and not for CI.",
+            "ru": "Она оставляет контейнер жить между прогонами и включается на конкретной машине — поэтому предназначена для машин разработчиков, а не для CI."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It resets the container's data automatically between runs.",
+            "ru": "Она автоматически сбрасывает данные контейнера между прогонами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It replaces the need for a wait strategy, since the container is already running.",
+            "ru": "Она снимает нужду в стратегии ожидания, ведь контейнер уже работает."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Reuse needs both withReuse(true) in the code and testcontainers.reuse.enable=true in the user's own properties file, so it cannot be turned on for everybody from the repository. That is deliberate: CI is precisely where starting from nothing is the point, and a reused container keeps its data — which is a trap if your tests assume an empty database.",
+        "ru": "Для reuse нужны и withReuse(true) в коде, и testcontainers.reuse.enable=true в личном файле свойств, поэтому включить его всем из репозитория нельзя. Это намеренно: на CI старт с нуля и есть смысл, а переиспользованный контейнер сохраняет данные — ловушка, если тесты рассчитывают на пустую базу."
+      },
+      "sources": [
+        "https://java.testcontainers.org/features/reuse/",
+        "https://java.testcontainers.org/features/configuration/"
+      ]
+    },
+    {
+      "id": "testing.testcontainers.005",
+      "section": "testcontainers",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Which test in this project is the clearest candidate for a real PostgreSQL container rather than a substitute engine?",
+        "ru": "Какой тест в этом проекте — самый явный кандидат на настоящий контейнер с PostgreSQL, а не на подменный движок?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "One that runs the Flyway migrations, since they are Java and SQL written against PostgreSQL and are the code a substitute would parse differently.",
+            "ru": "Тот, что прогоняет миграции Flyway: они написаны на Java и SQL под PostgreSQL и как раз являются кодом, который суррогат разобрал бы иначе."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The content tests that read topic.json and questions.json from the classpath.",
+            "ru": "Контентные тесты, читающие topic.json и questions.json из classpath."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A test of the scoring logic for a finished quiz session.",
+            "ru": "Тест логики подсчёта результата завершённой сессии квиза."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A test that a bilingual field is non-blank in both languages.",
+            "ru": "Тест на то, что двуязычное поле непусто в обоих языках."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A test of the Java practice sandbox's compilation limits.",
+            "ru": "Тест ограничений компиляции в песочнице Java-практики."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A container earns its seconds where the database's own behaviour is what is being tested. The migrations are exactly that case: each one runs once against a real database, so a dialect difference surfaces as a failed deployment. The content and scoring tests touch no database at all and would only be made slower.",
+        "ru": "Контейнер отрабатывает свои секунды там, где проверяется собственное поведение базы. Миграции — ровно этот случай: каждая выполняется один раз против настоящей базы, поэтому различие диалектов проявляется как упавший деплой. Контентные тесты и тест подсчёта базы не касаются вовсе, и их бы только замедлили."
+      },
+      "sources": [
+        "https://java.testcontainers.org/modules/databases/postgres/",
+        "https://documentation.red-gate.com/flyway/flyway-cli-and-api/concepts/migrations"
+      ]
+    },
+    {
+      "id": "testing.testcontainers.006",
+      "section": "testcontainers",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A team moves its repository tests onto one static PostgreSQL container shared by the class. Tests that passed individually now fail when the class runs as a whole. What is the correct reading?",
+        "ru": "Команда перевела тесты репозитория на один статический контейнер PostgreSQL, общий для класса. Тесты, проходившие поодиночке, теперь падают при прогоне всего класса. Как это правильно понимать?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The container needs a longer wait strategy timeout.",
+            "ru": "Контейнеру нужен больший таймаут в стратегии ожидания."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The image tag must be pinned to a specific minor version.",
+            "ru": "Тег образа надо зафиксировать до конкретной минорной версии."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Reuse should be enabled so the container keeps its state.",
+            "ru": "Надо включить reuse, чтобы контейнер сохранял состояние."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Testcontainers gives a real dependency, not isolation: sharing one database means the tests now need rollback, truncation or unique keys, which was previously provided by starting from scratch.",
+            "ru": "Testcontainers даёт настоящую зависимость, но не изоляцию: при общей базе тестам теперь нужны откат, truncate или уникальные ключи — то, что раньше обеспечивал старт с нуля."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A static container cannot be used with JUnit 5 and must be an instance field.",
+            "ru": "Статический контейнер несовместим с JUnit 5 и должен быть полем экземпляра."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Going from a container per method to one per class trades start-up time for shared state, and shared state is what the failures are made of — rows from an earlier test, a sequence that has moved on. The container is not the problem and reuse would make it worse; the missing piece is a deliberate isolation strategy, and unique keys per test are what also make parallel execution possible later.",
+        "ru": "Переход от контейнера на метод к контейнеру на класс меняет время старта на общее состояние — а падения сделаны именно из общего состояния: строки прошлого теста, ушедшая вперёд последовательность. Контейнер здесь ни при чём, а reuse сделал бы хуже; не хватает осознанной стратегии изоляции, и именно уникальные ключи на тест позже делают возможным параллельный запуск."
+      },
+      "sources": [
+        "https://java.testcontainers.org/test_framework_integration/junit_5/",
+        "https://docs.junit.org/current/user-guide/#writing-tests-parallel-execution"
+      ]
+    },
+    {
+      "id": "testing.web-contracts.001",
+      "section": "web-contracts",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does MockMvc actually execute when a test performs a request?",
+        "ru": "Что на самом деле выполняет MockMvc, когда тест отправляет запрос?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Only the controller method, called directly with mocked arguments.",
+            "ru": "Только метод контроллера, вызванный напрямую с мокнутыми аргументами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A real HTTP request against a server started on a random port.",
+            "ru": "Настоящий HTTP-запрос к серверу, поднятому на случайном порту."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The full Spring MVC pipeline - routing, argument resolution, validation, message conversion, exception handling - without opening a socket.",
+            "ru": "Весь конвейер Spring MVC — маршрутизацию, разрешение аргументов, валидацию, конвертацию сообщений, обработку исключений — не открывая сокет."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A recorded request replayed from a stored fixture file.",
+            "ru": "Записанный запрос, воспроизведённый из сохранённого файла фикстуры."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The servlet container's own filter chain, including TLS termination.",
+            "ru": "Собственную цепочку фильтров контейнера сервлетов, включая терминацию TLS."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "MockMvc drives the framework's dispatch machinery over mock request and response objects, so everything the framework does is exercised and nothing below it is. That is the trade: it is fast and it is blind to the servlet container, TLS and anything outside Spring MVC itself.",
+        "ru": "MockMvc прогоняет диспетчерскую машинерию фреймворка поверх мок-объектов запроса и ответа: всё, что делает фреймворк, проверяется, а всё, что ниже, — нет. В этом и размен: быстро, но слепо к контейнеру сервлетов, TLS и всему, что вне самого Spring MVC."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/testing/spring-mvc-test-framework.html",
+        "https://docs.spring.io/spring-boot/reference/testing/spring-boot-applications.html#testing.spring-boot-applications.spring-mvc-tests"
+      ]
+    },
+    {
+      "id": "testing.web-contracts.002",
+      "section": "web-contracts",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What is WireMock used for in a test?",
+        "ru": "Для чего в тесте применяют WireMock?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It runs an HTTP server that returns the responses you configure, standing in for a service your code calls out to.",
+            "ru": "Он поднимает HTTP-сервер, отдающий настроенные вами ответы, и заменяет сервис, к которому ходит ваш код."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It generates load against your own endpoints to measure throughput.",
+            "ru": "Он создаёт нагрузку на ваши эндпоинты, чтобы измерить пропускную способность."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It records the JSON your controllers return and compares it with a golden file.",
+            "ru": "Он записывает JSON, который возвращают ваши контроллеры, и сверяет его с эталонным файлом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It validates your OpenAPI document against the implementation.",
+            "ru": "Он проверяет ваш документ OpenAPI на соответствие реализации."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It replaces the servlet container so controllers can be tested without Spring.",
+            "ru": "Он заменяет контейнер сервлетов, чтобы контроллеры можно было тестировать без Spring."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "WireMock stubs the far side of a call your application makes. It is the outbound counterpart to MockMvc or REST-assured, which drive your own endpoints — and it can also inject delays and faults, which is how a timeout or a retry policy gets tested at all.",
+        "ru": "WireMock подменяет дальнюю сторону вызова, который делает ваше приложение. Это исходящий двойник MockMvc или REST-assured, которые дёргают ваши собственные эндпоинты, — и он умеет ещё задержки и сбои, а иначе таймаут или политику повторов не проверить вовсе."
+      },
+      "sources": [
+        "https://wiremock.org/docs/stubbing/",
+        "https://wiremock.org/docs/simulating-faults/"
+      ]
+    },
+    {
+      "id": "testing.web-contracts.003",
+      "section": "web-contracts",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Why stub an outbound call with WireMock instead of mocking the HTTP client class?",
+        "ru": "Зачем подменять исходящий вызов через WireMock вместо мока класса-клиента HTTP?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because Mockito cannot mock interfaces from third-party libraries.",
+            "ru": "Потому что Mockito не умеет мокать интерфейсы из сторонних библиотек."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because a mocked client cannot be verified with verify(...).",
+            "ru": "Потому что мокнутый клиент нельзя проверить через verify(...)."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because WireMock is faster than an in-JVM mock.",
+            "ru": "Потому что WireMock быстрее внутриJVM-мока."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because going over a socket exercises your deserialisation, timeouts, retries and error handling for a 503 - none of which a mocked interface touches.",
+            "ru": "Потому что проход через сокет прогоняет вашу десериализацию, таймауты, повторы и обработку 503 — ничего из этого мок интерфейса не затрагивает."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because a mocked client would make the test an integration test by definition.",
+            "ru": "Потому что мокнутый клиент по определению сделал бы тест интеграционным."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A mocked client returns a Java object you built, so everything between the wire and that object is skipped: the parsing, the content type, the timeout configuration, the retry policy. Those are precisely the parts that fail in production, and WireMock is slower specifically because it exercises them.",
+        "ru": "Мокнутый клиент возвращает объект Java, который вы сами собрали, поэтому всё между проводом и этим объектом пропускается: разбор, тип содержимого, настройка таймаута, политика повторов. Именно эти части и ломаются в проде, и WireMock медленнее ровно потому, что их прогоняет."
+      },
+      "sources": [
+        "https://wiremock.org/docs/stubbing/",
+        "https://wiremock.org/docs/simulating-faults/"
+      ]
+    },
+    {
+      "id": "testing.web-contracts.004",
+      "section": "web-contracts",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Which defect would a MockMvc test miss but a REST-assured test against a running server catch?",
+        "ru": "Какой дефект пропустит тест на MockMvc, но поймает тест на REST-assured против запущенного сервера?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A controller returning 200 where it should return 404.",
+            "ru": "Контроллер, возвращающий 200 там, где должен вернуть 404."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A validation annotation that is never triggered.",
+            "ru": "Аннотация валидации, которая никогда не срабатывает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A serialised field renamed by a @JsonProperty.",
+            "ru": "Поле, переименованное при сериализации через @JsonProperty."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An exception handler that maps the wrong exception type.",
+            "ru": "Обработчик исключений, отображающий не тот тип исключения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A misordered servlet filter or a compression setting that only takes effect in the real container.",
+            "ru": "Неправильно упорядоченный фильтр сервлетов или настройку сжатия, которая действует только в настоящем контейнере."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Everything inside Spring MVC — routing, validation, serialisation, exception handling — is exercised by MockMvc just as well and much faster. What it cannot see is the layer beneath: the servlet container's own filter chain and ordering, TLS, compression, a 404 produced before dispatch ever happens.",
+        "ru": "Всё, что внутри Spring MVC — маршрутизация, валидация, сериализация, обработка исключений, — MockMvc прогоняет ничуть не хуже и гораздо быстрее. Чего он не видит, так это слой под ним: собственную цепочку фильтров контейнера сервлетов и их порядок, TLS, сжатие, 404, выданный ещё до диспетчеризации."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/testing/spring-mvc-test-framework.html",
+        "https://github.com/rest-assured/rest-assured/wiki/Usage"
+      ]
+    },
+    {
+      "id": "testing.web-contracts.005",
+      "section": "web-contracts",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "An API test compares the entire response body against a stored golden JSON file. What is the practical problem with that?",
+        "ru": "Тест API сверяет всё тело ответа с сохранённым эталонным JSON-файлом. В чём практическая проблема?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Golden files cannot express nested objects.",
+            "ru": "Эталонные файлы не умеют выражать вложенные объекты."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Adding an optional field breaks the test even though no client is affected, which trains people to regenerate the file without reading the diff.",
+            "ru": "Добавление необязательного поля роняет тест, хотя ни один клиент не затронут, — и это приучает перегенерировать файл, не читая разницу."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "JSON comparison is too slow to run on every commit.",
+            "ru": "Сравнение JSON слишком медленное, чтобы гонять его на каждый коммит."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The response body is not available to assertions in MockMvc.",
+            "ru": "Тело ответа недоступно для проверок в MockMvc."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Golden files cannot be used together with REST-assured.",
+            "ru": "Эталонные файлы нельзя использовать вместе с REST-assured."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The failure is not technical, it is behavioural: a test that goes red for harmless changes gets its expected value regenerated by reflex, and on the day the change is harmful nobody looks either. Assert the contract instead — the status, the fields clients actually read, the shape of an error — and the red then means something.",
+        "ru": "Отказ здесь не технический, а поведенческий: тест, краснеющий от безобидных изменений, приучает перегенерировать ожидаемое значение рефлекторно, и в день, когда изменение вредное, тоже никто не посмотрит. Проверяйте контракт — статус, поля, которые клиенты действительно читают, форму ошибки, — и тогда красный будет что-то значить."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-framework/reference/testing/spring-mvc-test-framework.html",
+        "https://docs.pact.io/"
+      ]
+    },
+    {
+      "id": "testing.web-contracts.006",
+      "section": "web-contracts",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "Two teams own a provider and a consumer of the same API. Both suites are green and the integration still breaks on release. What does adding a contract test change?",
+        "ru": "Две команды владеют поставщиком и потребителем одного API. Оба набора тестов зелёные, а интеграция всё равно ломается на релизе. Что меняет добавление контрактного теста?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The provider's own build fails when it breaks a shape the consumer depends on, instead of the consumer discovering it after deployment.",
+            "ru": "Сборка самого поставщика падает, когда он ломает форму, от которой зависит потребитель, вместо того чтобы потребитель узнал об этом после деплоя."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It removes the need for integration tests on both sides.",
+            "ru": "Она снимает нужду в интеграционных тестах с обеих сторон."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It makes the two services deployable in any order without coordination.",
+            "ru": "Она делает сервисы развёртываемыми в любом порядке без согласования."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It verifies performance characteristics of the API as well as its shape.",
+            "ru": "Она проверяет и производительность API, а не только его форму."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It generates the consumer's client code from the provider's implementation.",
+            "ru": "Она генерирует клиентский код потребителя из реализации поставщика."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Each suite was green because each tested its own assumption about the shape; nothing compared the two assumptions. A contract puts the shape in one artifact both pipelines check, so the failure moves to the side that caused it and arrives before release. The cost is process — publishing the artifact and enforcing the check — which is why within one team and one consumer it usually does not pay.",
+        "ru": "Каждый набор был зелёным, потому что проверял собственное представление о форме; сравнивать эти представления было нечему. Контракт кладёт форму в один артефакт, который проверяют обе линии сборки, и падение переезжает на ту сторону, которая его вызвала, и случается до релиза. Цена — процессная: артефакт надо публиковать и обязывать проверять, — поэтому внутри одной команды с одним потребителем это обычно не окупается."
+      },
+      "sources": [
+        "https://docs.pact.io/",
+        "https://martinfowler.com/articles/practical-test-pyramid.html"
+      ]
+    },
+    {
+      "id": "testing.test-data-flakiness.001",
+      "section": "test-data-flakiness",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "What is the real cost of a flaky test - one that passes and fails without the code changing?",
+        "ru": "В чём настоящая цена flaky-теста — того, что проходит и падает без изменений в коде?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The CPU time wasted on re-runs.",
+            "ru": "Потраченное на перезапуски процессорное время."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That a red build stops being information, so genuine failures are re-run away along with the noise.",
+            "ru": "В том, что красная сборка перестаёт быть информацией, и настоящие падения перезапускают заодно с шумом."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "That coverage reported by the build becomes inaccurate.",
+            "ru": "В том, что покрытие, показываемое сборкой, становится неточным."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That the test cannot be run in parallel with others.",
+            "ru": "В том, что тест нельзя запускать параллельно с другими."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That it hides a bug in the test framework itself.",
+            "ru": "В том, что он скрывает баг в самом тестовом фреймворке."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The minutes are annoying; the habit is fatal. Once a team learns that red sometimes means nothing, the cheapest response to any red is to press re-run, and the suite stops being evidence about the code at all. That is why quarantining without an owner and a date solves nothing.",
+        "ru": "Минуты раздражают; привычка убивает. Стоит команде усвоить, что красный иногда ничего не значит, и самым дешёвым ответом на любой красный становится «перезапустить», а набор перестаёт быть свидетельством о коде вообще. Поэтому карантин без владельца и без даты ничего не решает."
+      },
+      "sources": [
+        "https://martinfowler.com/articles/nonDeterminism.html",
+        "https://docs.junit.org/current/user-guide/#writing-tests-disabling"
+      ]
+    },
+    {
+      "id": "testing.test-data-flakiness.002",
+      "section": "test-data-flakiness",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "A service calls LocalDate.now() inside its business logic and the test fails on the last day of the month. What is the standard fix?",
+        "ru": "Сервис вызывает LocalDate.now() внутри бизнес-логики, и тест падает в последний день месяца. Какое стандартное решение?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Skip the test on the last day of the month with assumeTrue.",
+            "ru": "Пропускать тест в последний день месяца через assumeTrue."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Set the JVM default time zone in a @BeforeAll method.",
+            "ru": "Задавать часовой пояс JVM по умолчанию в методе @BeforeAll."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Inject a Clock into the service and pass Clock.fixed(...) from the test.",
+            "ru": "Внедрить в сервис Clock и передавать из теста Clock.fixed(...)."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Retry the test three times and accept the majority result.",
+            "ru": "Перезапускать тест трижды и принимать результат большинства."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Round every date to the first of the month before comparing.",
+            "ru": "Округлять каждую дату до первого числа месяца перед сравнением."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Time read from a static call is an untestable dependency. Making the Clock a constructor parameter turns it into an ordinary input: the test hands over a fixed instant and the month boundary, the timezone and midnight all become cases you can write on purpose rather than accidents you wait for.",
+        "ru": "Время, прочитанное статическим вызовом, — непроверяемая зависимость. Clock, ставший параметром конструктора, превращается в обычный вход: тест передаёт фиксированный момент, и граница месяца, часовой пояс и полночь становятся случаями, которые вы пишете намеренно, а не происшествиями, которых ждёте."
+      },
+      "sources": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html",
+        "https://martinfowler.com/articles/nonDeterminism.html"
+      ]
+    },
+    {
+      "id": "testing.test-data-flakiness.003",
+      "section": "test-data-flakiness",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "An asynchronous test sleeps for 100 ms and then asserts. It passes locally and fails on CI. What is the right correction?",
+        "ru": "Асинхронный тест спит 100 мс и затем проверяет. Локально проходит, на CI падает. Как правильно это исправить?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Replace the sleep with waiting for a condition - a latch, or a polling assertion with a timeout.",
+            "ru": "Заменить сон ожиданием условия — защёлкой или опрашивающей проверкой с таймаутом."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Increase the sleep to 2 seconds, which is safe on any machine.",
+            "ru": "Увеличить сон до 2 секунд — на любой машине этого хватит."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Mark the test @Disabled on CI only.",
+            "ru": "Пометить тест @Disabled только для CI."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Run the test class with a single thread so the timing is stable.",
+            "ru": "Запускать класс в один поток, чтобы тайминг был стабильным."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Make the code under test synchronous just for the test.",
+            "ru": "Сделать тестируемый код синхронным специально ради теста."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A duration encodes an assumption about machine speed, and a loaded two-core CI runner does not honour it. Waiting for a condition is both more reliable and faster, because it returns the moment the work is done. A larger sleep only moves the threshold and makes every run slower while doing so.",
+        "ru": "Длительность кодирует допущение о скорости машины, а загруженный двухъядерный раннер CI его не выполняет. Ожидание условия и надёжнее, и быстрее, потому что возвращается ровно тогда, когда работа сделана. Больший сон лишь сдвигает порог и попутно замедляет каждый прогон."
+      },
+      "sources": [
+        "https://martinfowler.com/articles/nonDeterminism.html",
+        "https://docs.junit.org/current/user-guide/#writing-tests-parallel-execution"
+      ]
+    },
+    {
+      "id": "testing.test-data-flakiness.004",
+      "section": "test-data-flakiness",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "A test class passes when run whole but one of its tests fails when run alone. What does that mean, and what is the wrong fix?",
+        "ru": "Класс проходит при прогоне целиком, но один его тест падает при запуске в одиночку. Что это значит и какое исправление неверно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It means JUnit reorders methods randomly by default; the fix is to disable randomisation.",
+            "ru": "Это значит, что JUnit по умолчанию случайно перемешивает методы; лечится отключением рандомизации."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It means the test runner is misconfigured; the fix is to fork a JVM per class.",
+            "ru": "Это значит, что раннер настроен неверно; лечится форком JVM на класс."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It means the test is inherently flaky; the fix is to retry it.",
+            "ru": "Это значит, что тест по природе flaky; лечится повтором."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It means the test depends on state another test leaves behind; pinning the order with @TestMethodOrder hides the defect instead of fixing it.",
+            "ru": "Это значит, что тест зависит от состояния, оставленного другим тестом; фиксация порядка через @TestMethodOrder прячет дефект вместо исправления."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It means the assertion is wrong; the fix is to relax it.",
+            "ru": "Это значит, что проверка неверна; лечится её ослаблением."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A test that only passes in company is reading a fixture it did not create. The honest fix is to make it state its own preconditions. @TestMethodOrder exists for scenarios that really are sequential, and using it here freezes the hidden dependency in place — where it will resurface the day somebody adds a test in the middle.",
+        "ru": "Тест, проходящий только в компании, читает фикстуру, которой не создавал. Честное лечение — заставить его сформулировать собственные предусловия. @TestMethodOrder существует для действительно последовательных сценариев, а здесь он замораживает скрытую зависимость на месте — и она всплывёт в день, когда кто-нибудь вставит тест в середину."
+      },
+      "sources": [
+        "https://docs.junit.org/current/user-guide/#writing-tests-test-execution-order",
+        "https://martinfowler.com/articles/nonDeterminism.html"
+      ]
+    },
+    {
+      "id": "testing.test-data-flakiness.005",
+      "section": "test-data-flakiness",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "Which isolation strategy scales best to a suite that you also want to run in parallel?",
+        "ru": "Какая стратегия изоляции лучше всего масштабируется на набор, который вы хотите ещё и запускать параллельно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Rolling back a transaction after each test.",
+            "ru": "Откат транзакции после каждого теста."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Truncating every table after each test.",
+            "ru": "Truncate всех таблиц после каждого теста."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Recreating the schema before each test class.",
+            "ru": "Пересоздание схемы перед каждым тестовым классом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Loading one shared fixture once and having every test read from it.",
+            "ru": "Загрузка одной общей фикстуры и чтение из неё всеми тестами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Giving each test its own unique keys - its own tenant, user or id prefix - so two tests cannot touch the same rows.",
+            "ru": "Выдача каждому тесту собственных уникальных ключей — своего тенанта, пользователя или префикса идентификаторов, — чтобы два теста не могли задеть одни строки."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Rollback is the cheapest option but only undoes one transaction, and truncation or schema recreation serialise the whole suite on a shared database — exactly what parallel execution must avoid. Unique keys remove the collision instead of cleaning up after it, which is why they are what makes parallelism safe.",
+        "ru": "Откат — самый дешёвый вариант, но отменяет только одну транзакцию, а truncate и пересоздание схемы сериализуют весь набор на общей базе — ровно то, чего параллельный запуск должен избегать. Уникальные ключи убирают столкновение, а не прибирают после него, поэтому именно они и делают параллельность безопасной."
+      },
+      "sources": [
+        "https://docs.junit.org/current/user-guide/#writing-tests-parallel-execution",
+        "https://docs.spring.io/spring-framework/reference/testing/testcontext-framework/tx.html"
+      ]
+    },
+    {
+      "id": "testing.test-data-flakiness.006",
+      "section": "test-data-flakiness",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "An intermittent failure appears roughly once in thirty CI runs and never locally. What is the right first move?",
+        "ru": "Периодическое падение появляется примерно раз в тридцать прогонов CI и никогда локально. С чего правильно начать?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Add a retry rule so the pipeline stops going red while the cause is investigated later.",
+            "ru": "Добавить правило повтора, чтобы линия сборки перестала краснеть, а причину разобрать потом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Change the most suspicious assertion to a looser one and watch whether the failure stops.",
+            "ru": "Ослабить самую подозрительную проверку и посмотреть, прекратятся ли падения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Make it reproducible first - run it in a loop, alone, with the full suite, with fewer cores - and only then classify and fix it.",
+            "ru": "Сначала добиться воспроизведения — гонять в цикле, в одиночку, со всем набором, на меньшем числе ядер — и только потом классифицировать и чинить."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Disable the test and delete it if nobody complains within a release.",
+            "ru": "Отключить тест и удалить, если за релиз никто не пожалуется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Increase every timeout in the test until it stops failing.",
+            "ru": "Увеличивать все таймауты в тесте, пока он не перестанет падать."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A fix applied to a flake you never reproduced is a guess with a commit message, and it will be indistinguishable from a real fix for another thirty runs. Reproduce, then classify — order, shared state, time, concurrency, an external dependency, a resource limit — because the category tells you where to look. Retries and looser assertions both work by removing the evidence.",
+        "ru": "Правка невоспроизведённого flaky — это догадка с сообщением коммита, и ещё тридцать прогонов её не отличить от настоящего исправления. Сначала воспроизвести, затем классифицировать — порядок, общее состояние, время, конкурентность, внешняя зависимость, лимит ресурсов, — потому что категория подсказывает, куда смотреть. Повторы и ослабленные проверки работают одинаково: убирают улики."
+      },
+      "sources": [
+        "https://martinfowler.com/articles/nonDeterminism.html",
+        "https://docs.junit.org/current/user-guide/#writing-tests-test-execution-order"
+      ]
+    },
+    {
+      "id": "testing.coverage-mutation-tdd.001",
+      "section": "coverage-mutation-tdd",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "Can a suite report 100% line coverage while asserting nothing at all?",
+        "ru": "Может ли набор показать 100 % покрытия по строкам, не проверяя при этом ничего?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "No - a line only counts as covered if an assertion depends on it.",
+            "ru": "Нет — строка считается покрытой, только если от неё зависит проверка."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "No - coverage tools detect tests without assertions and exclude them.",
+            "ru": "Нет — инструменты покрытия обнаруживают тесты без проверок и исключают их."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only if the code contains no conditionals.",
+            "ru": "Только если в коде нет условий."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only when branch coverage is measured instead of line coverage.",
+            "ru": "Только если вместо покрытия по строкам измеряется покрытие по ветвям."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Yes - coverage counts lines that were executed and knows nothing about assertions.",
+            "ru": "Да — покрытие считает выполненные строки и ничего не знает о проверках."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A coverage agent records which lines the JVM executed. A test that calls every method and asserts nothing executes every line, so the report is a perfect 100%. That is the whole reason coverage is sound in one direction only: uncovered code is definitely untested, covered code may be untested.",
+        "ru": "Агент покрытия записывает, какие строки выполнила JVM. Тест, вызывающий все методы и ничего не проверяющий, выполняет все строки — и отчёт покажет ровные 100 %. Именно поэтому покрытие корректно лишь в одну сторону: непокрытый код точно не протестирован, покрытый — может быть не протестирован."
+      },
+      "sources": [
+        "https://www.jacoco.org/jacoco/trunk/doc/counters.html",
+        "https://martinfowler.com/bliki/TestCoverage.html"
+      ]
+    },
+    {
+      "id": "testing.coverage-mutation-tdd.002",
+      "section": "coverage-mutation-tdd",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "What does branch coverage measure that line coverage does not?",
+        "ru": "Что измеряет покрытие по ветвям такого, чего не измеряет покрытие по строкам?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "How many assertions were executed against each branch.",
+            "ru": "Сколько проверок было выполнено на каждую ветвь."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "How many times each line was executed.",
+            "ru": "Сколько раз выполнялась каждая строка."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Which methods were called by more than one test.",
+            "ru": "Какие методы вызывались более чем одним тестом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whether both outcomes of each conditional were taken, so an if executed only on its true path is not reported as fully covered.",
+            "ru": "Были ли пройдены оба исхода каждого условия: if, выполненный только по истинной ветке, не считается полностью покрытым."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Whether any exception paths exist in the code at all.",
+            "ru": "Есть ли в коде вообще пути с исключениями."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Line coverage marks a conditional as covered the moment the line runs, regardless of which way it went. Branch coverage counts both outcomes, so it catches the untested else. It is strictly more informative — and still counts no assertions, so the same blind spot remains.",
+        "ru": "Покрытие по строкам отмечает условие покрытым в момент выполнения строки, независимо от того, куда оно ушло. Покрытие по ветвям считает оба исхода и потому ловит непроверенный else. Оно строго информативнее — и всё так же не считает проверок, поэтому слепое пятно остаётся тем же."
+      },
+      "sources": [
+        "https://www.jacoco.org/jacoco/trunk/doc/counters.html",
+        "https://martinfowler.com/bliki/TestCoverage.html"
+      ]
+    },
+    {
+      "id": "testing.coverage-mutation-tdd.003",
+      "section": "coverage-mutation-tdd",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "PIT reports a mutation as SURVIVED. What does that tell you?",
+        "ru": "PIT сообщает, что мутация SURVIVED. О чём это говорит?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "That the mutated line is not covered by any test.",
+            "ru": "О том, что изменённая строка не покрыта ни одним тестом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That the tests covering that line still pass with the behaviour changed, so nothing there asserts on that behaviour.",
+            "ru": "О том, что покрывающие строку тесты проходят и при изменённом поведении, — значит, это поведение там никто не проверяет."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "That a test threw an unexpected exception during the mutated run.",
+            "ru": "О том, что на изменённом прогоне тест выбросил неожиданное исключение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That the mutation could not be applied to the bytecode.",
+            "ru": "О том, что мутацию не удалось применить к байт-коду."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That the build should fail, because a survivor is always a defect.",
+            "ru": "О том, что сборку надо ронять: выживший всегда дефект."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "PIT only runs the tests that cover the mutated line — uncovered code produces NO_COVERAGE, not a survivor. A survivor is the precise thing coverage cannot tell you: the line ran, and no assertion noticed when its behaviour changed. Read survivors as questions, since some are equivalent mutants that no test can kill.",
+        "ru": "PIT прогоняет только тесты, покрывающие изменённую строку: непокрытый код даёт NO_COVERAGE, а не выжившего. Выживший — это ровно то, чего покрытие сказать не может: строка выполнилась, и ни одна проверка не заметила изменения поведения. Читайте выживших как вопросы: часть из них — эквивалентные мутанты, которых не убьёт ни один тест."
+      },
+      "sources": [
+        "https://pitest.org/quickstart/basic_concepts/",
+        "https://pitest.org/quickstart/mutators/"
+      ]
+    },
+    {
+      "id": "testing.coverage-mutation-tdd.004",
+      "section": "coverage-mutation-tdd",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "What is an equivalent mutant, and why does it matter?",
+        "ru": "Что такое эквивалентный мутант и почему это важно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A mutation that cannot change observable behaviour, so no test can kill it - which is why chasing a 100% mutation score fails the same way chasing coverage does.",
+            "ru": "Мутация, не способная изменить наблюдаемое поведение, поэтому убить её не может ни один тест, — из-за чего погоня за мутационным баллом в 100 % ломается так же, как погоня за покрытием."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A mutation that two different mutators happen to produce identically.",
+            "ru": "Мутация, которую случайно одинаково порождают два разных мутатора."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A mutation in code that is covered by exactly one test.",
+            "ru": "Мутация в коде, покрытом ровно одним тестом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A mutation killed by every test that covers it.",
+            "ru": "Мутация, убиваемая каждым покрывающим её тестом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A mutation that makes the class fail to compile.",
+            "ru": "Мутация, из-за которой класс перестаёт компилироваться."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Changing a value that is never read, or a comparison whose result cannot differ for any reachable input, produces a program equivalent to the original. It survives every possible test, so it is noise in the score rather than a gap in the suite — and treating the score as a target means writing meaningless tests to chase it.",
+        "ru": "Изменение значения, которое никогда не читают, или сравнения, результат которого не может отличаться ни на одном достижимом входе, даёт программу, эквивалентную исходной. Она переживёт любой мыслимый тест, то есть это шум в метрике, а не пробел в наборе, — и превращение метрики в цель означает написание бессмысленных тестов ради неё."
+      },
+      "sources": [
+        "https://pitest.org/quickstart/basic_concepts/",
+        "https://pitest.org/quickstart/mutators/"
+      ]
+    },
+    {
+      "id": "testing.coverage-mutation-tdd.005",
+      "section": "coverage-mutation-tdd",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "A team sets a hard rule: every pull request must reach 85% line coverage. What typically happens?",
+        "ru": "Команда вводит жёсткое правило: каждый pull request обязан достигать 85 % покрытия по строкам. Что обычно происходит?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Defect rates fall in proportion to the coverage increase.",
+            "ru": "Число дефектов падает пропорционально росту покрытия."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Coverage becomes an accurate proxy for the quality of the suite.",
+            "ru": "Покрытие становится точным заменителем качества набора."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The cheapest way to reach the number wins - tests for getters and generated code - so the figure rises while the risk does not move.",
+            "ru": "Побеждает самый дешёвый способ добрать число — тесты геттеров и сгенерированного кода, — поэтому цифра растёт, а риск остаётся на месте."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The build becomes unable to measure coverage on new code.",
+            "ru": "Сборка теряет способность измерять покрытие нового кода."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Mutation testing becomes unnecessary, since coverage now implies assertions.",
+            "ru": "Мутационное тестирование становится ненужным, ведь покрытие теперь подразумевает проверки."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A measure used as a target stops measuring what it did. Coverage is still useful read as a list of untested files rather than as a number, and a threshold is defensible as a ratchet — the figure may not go down — provided everyone treats it as a floor. What it never becomes is evidence that the covered code is actually checked.",
+        "ru": "Мера, превращённая в цель, перестаёт мерить то, что мерила. Покрытие остаётся полезным, если читать его как список непротестированных файлов, а не как число, и порог защитим как храповик — цифре нельзя падать, — при условии что все считают его полом. Чем оно не станет никогда, так это доказательством, что покрытый код действительно проверяется."
+      },
+      "sources": [
+        "https://martinfowler.com/bliki/TestCoverage.html",
+        "https://www.jacoco.org/jacoco/trunk/doc/counters.html"
+      ]
+    },
+    {
+      "id": "testing.coverage-mutation-tdd.006",
+      "section": "coverage-mutation-tdd",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "Why is writing a failing test first the strongest case for TDD when fixing a reported bug?",
+        "ru": "Почему при исправлении зарегистрированного бага довод в пользу «сначала падающий тест» самый сильный?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because a bug fix cannot be merged without a new test in most workflows.",
+            "ru": "Потому что в большинстве процессов исправление бага нельзя влить без нового теста."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because tests written first always cover more branches than tests written afterwards.",
+            "ru": "Потому что тесты, написанные первыми, всегда покрывают больше ветвей, чем написанные после."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because TDD guarantees the fix is the minimal possible change.",
+            "ru": "Потому что TDD гарантирует, что исправление — минимально возможное изменение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the specification is not in doubt - the bug is the specification - and the red test proves you actually reproduced it before changing anything.",
+            "ru": "Потому что спецификация здесь вне сомнений — баг и есть спецификация, — а красный тест доказывает, что вы действительно воспроизвели его до того, как что-то менять."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because a test written after the fix cannot be added to the suite.",
+            "ru": "Потому что тест, написанный после исправления, нельзя добавить в набор."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Elsewhere TDD is a trade — design pressure and a definition of done against a shape you may not know yet. For a bug there is no ambiguity about what to assert, and a test that has never been red proves nothing: it may be green because the bug is fixed, or because it never touched the broken path. Writing it afterwards is acceptable; never watching it fail is not.",
+        "ru": "В остальных случаях TDD — это размен: давление на дизайн и определение готовности против формы, которой вы, возможно, ещё не знаете. Для бага двусмысленности в том, что проверять, нет, а тест, который ни разу не был красным, ничего не доказывает: он может быть зелёным и потому, что баг исправлен, и потому, что сломанного пути он не касался. Написать его после — приемлемо; ни разу не увидеть его падения — нет."
+      },
+      "sources": [
+        "https://martinfowler.com/bliki/TestDrivenDevelopment.html",
+        "https://martinfowler.com/bliki/SelfTestingCode.html"
+      ]
+    }
+  ]
+}

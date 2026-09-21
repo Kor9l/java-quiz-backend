@@ -1,0 +1,2652 @@
+{
+  "schemaVersion": 2,
+  "topic": "rest-http",
+  "questions": [
+    {
+      "id": "rest-http.http-methods-status.001",
+      "section": "http-methods-status",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which set contains only methods that HTTP defines as idempotent?",
+        "ru": "В каком наборе перечислены только методы, которые HTTP определяет как идемпотентные?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "GET, POST, PUT",
+            "ru": "GET, POST, PUT"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "POST, PATCH, DELETE",
+            "ru": "POST, PATCH, DELETE"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "GET, PUT, DELETE",
+            "ru": "GET, PUT, DELETE"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "POST, PUT, HEAD",
+            "ru": "POST, PUT, HEAD"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "PATCH, GET, POST",
+            "ru": "PATCH, GET, POST"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Idempotent means repeating the identical request leaves the server in the same state as sending it once: GET, HEAD, OPTIONS, PUT and DELETE qualify. POST is not idempotent — two identical POSTs to a collection create two resources. PATCH is not idempotent in general, because the body describes a change that may accumulate.",
+        "ru": "Идемпотентность означает, что повтор того же самого запроса оставляет сервер в том же состоянии, что и одна отправка: под это подходят GET, HEAD, OPTIONS, PUT и DELETE. POST не идемпотентен — два одинаковых POST в коллекцию создадут два ресурса. PATCH в общем случае тоже не идемпотентен, потому что тело описывает изменение, которое может накапливаться."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9110.html#name-methods",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods"
+      ]
+    },
+    {
+      "id": "rest-http.http-methods-status.002",
+      "section": "http-methods-status",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "A POST creates a new group. Which response is the conventional one?",
+        "ru": "POST создал новую группу. Какой ответ здесь общепринят?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "200 OK with an empty body; the client fetches the collection again to find the new item.",
+            "ru": "200 OK с пустым телом; клиент заново запрашивает коллекцию, чтобы найти новый элемент."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "204 No Content, since the creation itself is the whole result.",
+            "ru": "204 No Content, ведь создание само по себе и есть весь результат."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "202 Accepted, because every write is processed asynchronously.",
+            "ru": "202 Accepted, поскольку любая запись обрабатывается асинхронно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "200 OK with {\"created\": true} in the body.",
+            "ru": "200 OK с {\"created\": true} в теле."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "201 Created with a Location header pointing at the new resource.",
+            "ru": "201 Created с заголовком Location, указывающим на новый ресурс."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "201 Created is the status for a request that produced a new resource, and Location tells the client where it lives. Including the created representation in the body saves the follow-up GET. 202 is for work that has not finished yet, and 204 says there is nothing to return — which is false here, since there is a new identity to report.",
+        "ru": "201 Created — статус для запроса, который породил новый ресурс, а Location сообщает клиенту, где он находится. Представление созданного объекта в теле избавляет от дополнительного GET. 202 — для работы, которая ещё не закончена, а 204 говорит, что возвращать нечего, — здесь это неправда, ведь есть новая идентичность, о которой нужно сообщить."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9110.html#name-status-codes",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status"
+      ]
+    },
+    {
+      "id": "rest-http.http-methods-status.003",
+      "section": "http-methods-status",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "A request arrives with a valid token, but the user's role does not permit the operation. What should the server answer?",
+        "ru": "Запрос пришёл с валидным токеном, но роль пользователя не позволяет выполнить операцию. Что должен ответить сервер?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "403 Forbidden, because the identity is known and the answer is still no.",
+            "ru": "403 Forbidden, потому что личность известна, а ответ всё равно «нет»."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "401 Unauthorized with a WWW-Authenticate header, so the client can try other credentials.",
+            "ru": "401 Unauthorized с заголовком WWW-Authenticate, чтобы клиент попробовал другие учётные данные."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "400 Bad Request, because the request asked for something it should not have asked for.",
+            "ru": "400 Bad Request, потому что запрос попросил то, о чём просить не следовало."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "405 Method Not Allowed, since this role may not use this method.",
+            "ru": "405 Method Not Allowed, раз этой роли нельзя использовать этот метод."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "500 Internal Server Error, so that the refusal is picked up by monitoring.",
+            "ru": "500 Internal Server Error, чтобы отказ попал в мониторинг."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "401 means the request was not authenticated — the server does not know who is calling — and it must carry WWW-Authenticate describing how to authenticate. 403 means authentication succeeded and authorisation failed; re-sending credentials will not help. 405 is about the method not being supported on that URL at all, and it must carry an Allow header listing the ones that are.",
+        "ru": "401 означает, что запрос не аутентифицирован — сервер не знает, кто звонит, — и обязан нести WWW-Authenticate с описанием того, как аутентифицироваться. 403 означает, что аутентификация прошла, а авторизация — нет; повторная отправка учётных данных не поможет. 405 говорит о том, что метод вообще не поддерживается на этом URL, и обязан нести заголовок Allow со списком поддерживаемых."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9110.html#name-status-codes",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status"
+      ]
+    },
+    {
+      "id": "rest-http.http-methods-status.004",
+      "section": "http-methods-status",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "A mobile client loses the network after sending the request below, and its HTTP library retries once. What is the state of the server afterwards?",
+        "ru": "Мобильный клиент потерял сеть после отправки запроса ниже, и его HTTP-библиотека повторила отправку один раз. Каким будет состояние сервера?"
+      },
+      "code": "POST /api/english/groups HTTP/1.1\nContent-Type: application/json\n\n{\"title\": \"Unit 4\"}",
+      "options": [
+        {
+          "text": {
+            "en": "One group, because POST is safe and a repeated safe request changes nothing.",
+            "ru": "Одна группа, потому что POST безопасен, а повтор безопасного запроса ничего не меняет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "One group, because the server deduplicates identical request bodies automatically.",
+            "ru": "Одна группа, потому что сервер автоматически схлопывает одинаковые тела запросов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An error, because a retry of a POST is rejected by the protocol.",
+            "ru": "Ошибка, потому что повтор POST отвергается самим протоколом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Two groups, because POST is not idempotent and nothing here makes the retry safe.",
+            "ru": "Две группы, потому что POST не идемпотентен и ничто здесь не делает повтор безопасным."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "One group, because the second request arrives without a body after a connection reset.",
+            "ru": "Одна группа, потому что после обрыва соединения второй запрос придёт без тела."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The first request may have reached the server and only its response was lost. POST is neither safe nor idempotent, so the retry creates a second group. Nothing in HTTP prevents this: making the operation retryable requires an idempotency key that the server stores with the first result, or a design where the client names the resource and uses PUT.",
+        "ru": "Первый запрос мог дойти до сервера — потерялся только ответ. POST не является ни безопасным, ни идемпотентным, поэтому повтор создаёт вторую группу. Сам HTTP этому не мешает: чтобы операцию можно было повторять, нужен ключ идемпотентности, который сервер сохраняет вместе с первым результатом, либо схема, где имя ресурса называет клиент и используется PUT."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9110.html#name-methods",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods"
+      ]
+    },
+    {
+      "id": "rest-http.http-methods-status.005",
+      "section": "http-methods-status",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "An endpoint is declared for GET only, and a client sends DELETE to the same path. What must a correct response include?",
+        "ru": "Эндпоинт объявлен только для GET, а клиент отправил DELETE на тот же путь. Что обязан содержать корректный ответ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "404 Not Found, since no handler exists for that method.",
+            "ru": "404 Not Found, раз обработчика для такого метода нет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "405 Method Not Allowed together with an Allow header listing the supported methods.",
+            "ru": "405 Method Not Allowed вместе с заголовком Allow, перечисляющим поддерживаемые методы."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "403 Forbidden, because deleting is not permitted on this resource.",
+            "ru": "403 Forbidden, потому что удаление на этом ресурсе не разрешено."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "501 Not Implemented with a message saying the method is planned.",
+            "ru": "501 Not Implemented с сообщением, что метод запланирован."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "400 Bad Request with the list of supported methods in the JSON body.",
+            "ru": "400 Bad Request со списком поддерживаемых методов в теле JSON."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "405 says the target exists but does not support this method, and RFC 9110 requires the response to carry Allow so the client learns what it may use instead. 404 would claim the resource does not exist, which is a different and misleading fact. 501 means the server does not support the method at all, for any resource.",
+        "ru": "405 говорит, что цель существует, но этот метод не поддерживает, и RFC 9110 требует, чтобы ответ нёс Allow — тогда клиент узнает, чем можно воспользоваться. 404 утверждал бы, что ресурса нет, а это другой и вводящий в заблуждение факт. 501 означает, что сервер не поддерживает метод вообще, ни для какого ресурса."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9110.html#name-status-codes",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status"
+      ]
+    },
+    {
+      "id": "rest-http.http-methods-status.006",
+      "section": "http-methods-status",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "A service answers every request with 200 OK and puts {\"ok\": false, \"error\": ...} in the body when something fails. Which consequence is the most damaging?",
+        "ru": "Сервис на каждый запрос отвечает 200 OK, а при ошибке кладёт в тело {\"ok\": false, \"error\": ...}. Какое следствие наиболее разрушительно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The response body becomes larger than necessary, which costs bandwidth on mobile networks.",
+            "ru": "Тело ответа становится больше необходимого, что стоит трафика в мобильных сетях."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Browsers refuse to render a 200 response whose body contains an error field.",
+            "ru": "Браузеры отказываются отрисовывать ответ 200, в теле которого есть поле ошибки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Every intermediary that acts on status — retry policies, circuit breakers, alerting, caches — is blinded, and client error handling degrades into parsing bodies.",
+            "ru": "Слепнет всё, что действует по статусу: политики повторов, circuit breaker, алертинг, кэши, — а обработка ошибок на клиенте вырождается в разбор тела."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The server can no longer use HTTP/2, which requires distinct status codes per stream.",
+            "ru": "Сервер больше не может использовать HTTP/2, которому нужны разные статус-коды на поток."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Bean Validation stops running, because it only triggers on responses with 4xx codes.",
+            "ru": "Перестаёт работать Bean Validation, поскольку она срабатывает только на ответах с кодами 4xx."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The status code is the machine-readable half of the answer and the only part every intermediary understands. A retry policy retries 5xx and gives up on 4xx; a circuit breaker counts failures; an alert fires on an error rate; a cache stores successes. Hiding failure inside a 200 body makes all of them see a healthy service, and each client has to reimplement error detection by string matching.",
+        "ru": "Статус-код — машиночитаемая половина ответа и единственная её часть, которую понимает каждый посредник. Политика повторов повторяет 5xx и сдаётся на 4xx; circuit breaker считает отказы; алерт срабатывает на доле ошибок; кэш сохраняет успехи. Спрятав отказ внутрь тела с кодом 200, вы заставляете всех их видеть здоровый сервис, а каждому клиенту приходится заново изобретать распознавание ошибок сравнением строк."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9110.html#name-status-codes",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status"
+      ]
+    },
+    {
+      "id": "rest-http.resources-and-versioning.001",
+      "section": "resources-and-versioning",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which path follows the usual REST convention for renaming one vocabulary group?",
+        "ru": "Какой путь соответствует обычной REST-конвенции для переименования одной группы слов?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "PATCH /api/english/groups/{groupId}",
+            "ru": "PATCH /api/english/groups/{groupId}"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "POST /api/english/renameGroup?id={groupId}",
+            "ru": "POST /api/english/renameGroup?id={groupId}"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "GET /api/english/group/{groupId}/rename?title=Unit+4",
+            "ru": "GET /api/english/group/{groupId}/rename?title=Unit+4"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "PUT /api/english/groupRename/{groupId}",
+            "ru": "PUT /api/english/groupRename/{groupId}"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "POST /api/english/groups/update",
+            "ru": "POST /api/english/groups/update"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The path names the resource — a member of the groups collection — and the method carries the verb. PATCH applies a partial change to that member. Putting the verb in the path duplicates what the method already says, and a GET that changes state is worse still: it is unsafe, and any link prefetcher would fire it.",
+        "ru": "Путь называет ресурс — элемент коллекции групп, — а глагол несёт метод. PATCH применяет к этому элементу частичное изменение. Глагол в пути дублирует то, что уже сказано методом, а GET, меняющий состояние, ещё хуже: он небезопасен, и его выстрелит любой предзагрузчик ссылок."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9110.html#name-methods",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Identifying_resources_on_the_Web"
+      ]
+    },
+    {
+      "id": "rest-http.resources-and-versioning.002",
+      "section": "resources-and-versioning",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What is the difference between a collection endpoint and a member endpoint?",
+        "ru": "В чём разница между эндпоинтом коллекции и эндпоинтом элемента?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A collection endpoint is always public, while a member endpoint always requires authentication.",
+            "ru": "Эндпоинт коллекции всегда публичен, а эндпоинт элемента всегда требует аутентификации."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A collection endpoint may only be read; writes always go to a member endpoint.",
+            "ru": "Эндпоинт коллекции можно только читать; записи всегда идут в эндпоинт элемента."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A collection endpoint must be paginated, while a member endpoint must not be.",
+            "ru": "Эндпоинт коллекции обязан быть постраничным, а эндпоинт элемента — нет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "They differ only in naming; the framework treats them identically in every respect.",
+            "ru": "Они различаются только именованием; фреймворк относится к ним совершенно одинаково."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The collection (/groups) lists many and accepts a create; the member (/groups/{id}) returns one and accepts replace, partial update or delete.",
+            "ru": "Коллекция (/groups) перечисляет многих и принимает создание; элемент (/groups/{id}) возвращает одного и принимает замену, частичное обновление или удаление."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The two levels carry different method sets, and keeping them apart is what makes URLs predictable: GET and POST on the collection, GET, PUT, PATCH and DELETE on the member. Pagination is a common need on collections but not a rule, and authentication is orthogonal to both.",
+        "ru": "У двух уровней разные наборы методов, и именно их разделение делает URL предсказуемыми: GET и POST на коллекции, GET, PUT, PATCH и DELETE на элементе. Пагинация коллекциям часто нужна, но правилом не является, а аутентификация ортогональна и тому, и другому."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9110.html#name-methods",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Identifying_resources_on_the_Web"
+      ]
+    },
+    {
+      "id": "rest-http.resources-and-versioning.003",
+      "section": "resources-and-versioning",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "An API exposes /topics/{t}/sections/{s}/questions/{q}/options/{o}, and option ids are globally unique. What is the main argument against this path?",
+        "ru": "API отдаёт /topics/{t}/sections/{s}/questions/{q}/options/{o}, причём id варианта глобально уникальны. Какой главный аргумент против такого пути?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "HTTP limits a path to three segments, so the request will be rejected.",
+            "ru": "HTTP ограничивает путь тремя сегментами, поэтому запрос будет отклонён."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It forces callers to carry and keep in sync three identifiers they do not need to address the resource.",
+            "ru": "Он заставляет вызывающих таскать и держать согласованными три идентификатора, которые для адресации ресурса не нужны."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Deeply nested paths cannot be cached, because caches key only on the first segment.",
+            "ru": "Глубоко вложенные пути нельзя кэшировать, потому что кэши ключуют только по первому сегменту."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Path parameters beyond the second are not available to Jakarta REST resource methods.",
+            "ru": "Path-параметры дальше второго недоступны методам ресурсов в Jakarta REST."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nesting makes the endpoint unable to return 404, because the parent always exists.",
+            "ru": "Вложенность лишает эндпоинт возможности вернуть 404, потому что родитель существует всегда."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Deep nesting is a coupling problem, not a technical limit. Every client must hold the whole chain, and a wrong-but-existing parent id raises the question of whether to answer 404 or ignore it. When the last id already identifies the resource, /options/{o} addresses it directly and the hierarchy can be expressed as a query parameter where it is genuinely needed.",
+        "ru": "Глубокая вложенность — проблема связанности, а не техническое ограничение. Каждый клиент обязан держать всю цепочку, а существующий, но не тот родительский id порождает вопрос, отвечать ли 404 или игнорировать его. Когда последний id уже идентифицирует ресурс, /options/{o} адресует его напрямую, а иерархию, где она действительно нужна, можно выразить query-параметром."
+      },
+      "sources": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Identifying_resources_on_the_Web",
+        "https://www.rfc-editor.org/rfc/rfc9110.html"
+      ]
+    },
+    {
+      "id": "rest-http.resources-and-versioning.004",
+      "section": "resources-and-versioning",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "Why should a password reset token never be passed as a query parameter such as /reset?token=abc123?",
+        "ru": "Почему токен сброса пароля нельзя передавать query-параметром вида /reset?token=abc123?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Query strings are limited to 255 bytes, so a long token would be truncated.",
+            "ru": "Строка запроса ограничена 255 байтами, поэтому длинный токен будет обрезан."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Query parameters are not encrypted by TLS, while request bodies are.",
+            "ru": "Query-параметры не шифруются TLS, а тела запросов шифруются."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A GET with a query parameter cannot be authenticated, since Authorization is ignored on GET.",
+            "ru": "GET с query-параметром нельзя аутентифицировать, так как на GET заголовок Authorization игнорируется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The full URL is written to access logs, browser history and outgoing Referer headers, so the secret spreads far beyond the request.",
+            "ru": "Полный URL попадает в журналы доступа, историю браузера и исходящие заголовки Referer, поэтому секрет расходится далеко за пределы запроса."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Query parameters are always lowercased by intermediaries, which corrupts the token.",
+            "ru": "Посредники всегда приводят query-параметры к нижнему регистру, что портит токен."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "TLS does encrypt the whole request including the query string, so the problem is not the wire. It is everything that keeps URLs: the reverse proxy's access log, the application log, browser history, bookmarks and the Referer header sent to third-party resources on the page. Secrets belong in a header or a request body, which none of those record by default.",
+        "ru": "TLS действительно шифрует весь запрос вместе со строкой запроса, так что проблема не в канале. Проблема во всём, что сохраняет URL: журнал доступа обратного прокси, лог приложения, история браузера, закладки и заголовок Referer, уезжающий к сторонним ресурсам на странице. Секретам место в заголовке или теле запроса, которые ничто из перечисленного по умолчанию не записывает."
+      },
+      "sources": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Identifying_resources_on_the_Web",
+        "https://www.rfc-editor.org/rfc/rfc9110.html"
+      ]
+    },
+    {
+      "id": "rest-http.resources-and-versioning.005",
+      "section": "resources-and-versioning",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "Which of these changes to an existing JSON response is a breaking change for clients?",
+        "ru": "Какое из этих изменений существующего JSON-ответа ломает клиентов?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Adding a new optional field next to the existing ones.",
+            "ru": "Добавление нового необязательного поля рядом с существующими."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Adding a new endpoint under the same path prefix.",
+            "ru": "Добавление нового эндпоинта под тем же префиксом пути."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Renaming displayName to display_name.",
+            "ru": "Переименование displayName в display_name."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Returning the same fields in a different order.",
+            "ru": "Возврат тех же полей в другом порядке."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Starting to send an ETag header on the response.",
+            "ru": "Начало отправки заголовка ETag в ответе."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A rename removes a field and adds another, so every client reading the old name gets null. Addition is safe as long as clients are tolerant readers that ignore unknown fields; JSON object member order carries no meaning; a new header is invisible to a client that does not look for it. The other classic breaks are narrowing a type, making an optional field required and changing the meaning of a value.",
+        "ru": "Переименование удаляет одно поле и добавляет другое, поэтому каждый клиент, читающий старое имя, получит null. Добавление безопасно, пока клиенты написаны терпимыми читателями и игнорируют незнакомые поля; порядок членов JSON-объекта смысла не несёт; новый заголовок невидим клиенту, который его не ищет. Другие классические поломки — сужение типа, превращение необязательного поля в обязательное и смена смысла значения."
+      },
+      "sources": [
+        "https://spec.openapis.org/oas/v3.1.0.html",
+        "https://www.rfc-editor.org/rfc/rfc9110.html"
+      ]
+    },
+    {
+      "id": "rest-http.resources-and-versioning.006",
+      "section": "resources-and-versioning",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "A team must ship a breaking change to a public API with many external consumers. Which plan best limits the damage?",
+        "ru": "Команде нужно выпустить ломающее изменение публичного API, у которого много внешних потребителей. Какой план лучше всего ограничивает ущерб?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Keep the old field populated alongside the new shape, mark it deprecated in the OpenAPI document, announce removal with Deprecation and Sunset headers, and retire it once usage reaches zero.",
+            "ru": "Продолжать заполнять старое поле рядом с новой формой, пометить его устаревшим в документе OpenAPI, объявить удаление заголовками Deprecation и Sunset и убрать, когда использование дойдёт до нуля."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Change the representation in place and post the news in the changelog, since consumers are expected to read it.",
+            "ru": "Изменить представление на месте и написать об этом в changelog: предполагается, что потребители его читают."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Add a query parameter such as ?newFormat=true and leave the default shape unchanged forever.",
+            "ru": "Добавить query-параметр вроде ?newFormat=true и оставить форму по умолчанию неизменной навсегда."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Publish /v2 immediately and shut down /v1 on the same day, so nobody is tempted to stay behind.",
+            "ru": "Немедленно опубликовать /v2 и в тот же день выключить /v1, чтобы никто не соблазнился остаться."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Switch versioning from the path to a custom Accept media type, which makes the change non-breaking by definition.",
+            "ru": "Перенести версионирование из пути в собственный медиатип Accept, что по определению делает изменение неломающим."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The expensive part of a breaking change is not choosing the URL, it is running two shapes at once and knowing when you may stop. An overlap period with both fields populated, machine-readable deprecation in the contract, Deprecation and Sunset headers on responses, and a usage metric give a removal date grounded in evidence rather than in the announcement. A permanent opt-in parameter never lets you delete anything, and a same-day cutover simply moves the breakage to the consumers.",
+        "ru": "Дорогая часть ломающего изменения — не выбор URL, а одновременное содержание двух форм и понимание, когда можно остановиться. Период сосуществования с заполнением обоих полей, машиночитаемая пометка устаревания в контракте, заголовки Deprecation и Sunset в ответах и метрика использования дают дату удаления, основанную на фактах, а не на дате объявления. Вечный opt-in параметр не позволит удалить ничего, а отключение в тот же день просто перекладывает поломку на потребителей."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc8594.html",
+        "https://spec.openapis.org/oas/v3.1.0.html"
+      ]
+    },
+    {
+      "id": "rest-http.dto-validation.001",
+      "section": "dto-validation",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "An endpoint deserialises the request body straight into the JPA entity AppUser, which has a role field. What is the concrete risk?",
+        "ru": "Эндпоинт десериализует тело запроса прямо в JPA-сущность AppUser, у которой есть поле role. В чём конкретный риск?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Jackson cannot deserialise a JPA entity, so the request will always fail with 500.",
+            "ru": "Jackson не умеет десериализовать JPA-сущность, поэтому запрос всегда упадёт с 500."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The entity will be persisted twice, because deserialisation itself opens a transaction.",
+            "ru": "Сущность сохранится дважды, потому что сама десериализация открывает транзакцию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Bean Validation stops working, since constraints are only honoured on non-entity classes.",
+            "ru": "Bean Validation перестанет работать, так как ограничения действуют только на не-сущностях."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A caller can send {\"role\": \"ADMIN\"} in a profile update and escalate their own privileges.",
+            "ru": "Вызывающий может прислать {\"role\": \"ADMIN\"} в обновлении профиля и повысить себе права."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The response will contain lazy proxies, which is the only real problem with this approach.",
+            "ru": "В ответе окажутся ленивые прокси — единственная настоящая проблема этого подхода."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "This is mass assignment: the input type accepts every field the entity has, including ones no caller should set. Filtering them out afterwards is a list that has to be maintained forever. A request DTO with exactly the fields the use case needs — RegisterRequest here carries email, password and displayName — removes the question, because there is no role field to bind to.",
+        "ru": "Это mass assignment: входной тип принимает все поля сущности, включая те, которые не должен задавать никакой вызывающий. Отфильтровывать их постфактум — значит вести список, который придётся поддерживать вечно. DTO запроса ровно с теми полями, что нужны сценарию, — RegisterRequest здесь несёт email, password и displayName — снимает вопрос: связывать role просто не с чем."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/bean-validation/3.0/jakarta-bean-validation-spec-3.0.html",
+        "https://jakarta.ee/specifications/restful-ws/3.1/jakarta-restful-ws-spec-3.1.html"
+      ]
+    },
+    {
+      "id": "rest-http.dto-validation.002",
+      "section": "dto-validation",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "A display name arrives as the string \"   \" (three spaces). Which constraint rejects it?",
+        "ru": "Отображаемое имя пришло строкой \"   \" (три пробела). Какое ограничение её отвергнет?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "@NotNull",
+            "ru": "@NotNull"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@NotBlank",
+            "ru": "@NotBlank"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "@NotEmpty",
+            "ru": "@NotEmpty"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@Size(min = 1)",
+            "ru": "@Size(min = 1)"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@Pattern(regexp = \".*\")",
+            "ru": "@Pattern(regexp = \".*\")"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "@NotNull only rejects null, so \"\" passes. @NotEmpty rejects null and zero length, so \"   \" passes with length three. @NotBlank rejects null and any string that is empty after trimming, which is what a human-entered name needs. @Size(min = 1) counts characters, and three spaces are three characters.",
+        "ru": "@NotNull отвергает только null, поэтому \"\" проходит. @NotEmpty отвергает null и нулевую длину, поэтому \"   \" длиной три проходит. @NotBlank отвергает null и любую строку, пустую после обрезки пробелов, — именно это нужно имени, введённому человеком. @Size(min = 1) считает символы, а три пробела — это три символа."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/bean-validation/3.0/apidocs/jakarta/validation/constraints/package-summary",
+        "https://jakarta.ee/specifications/bean-validation/3.0/jakarta-bean-validation-spec-3.0.html"
+      ]
+    },
+    {
+      "id": "rest-http.dto-validation.003",
+      "section": "dto-validation",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "The DTO below carries constraints, but a request with an empty email is accepted and reaches the service. Why?",
+        "ru": "У DTO ниже есть ограничения, но запрос с пустым email принимается и доходит до сервиса. Почему?"
+      },
+      "code": "public class RegisterRequest {\n    @Email @NotBlank\n    public String email;\n\n    @NotBlank @Size(min = 8, max = 72)\n    public String password;\n}\n\n@POST\n@Path(\"/register\")\n@Consumes(MediaType.APPLICATION_JSON)\npublic AuthResponse register(RegisterRequest request) {\n    return authService.register(request);\n}",
+      "options": [
+        {
+          "text": {
+            "en": "Constraints on public fields are ignored; Bean Validation only reads getters.",
+            "ru": "Ограничения на публичных полях игнорируются; Bean Validation читает только геттеры."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "@Email already implies @NotBlank, and the two cancel each other out.",
+            "ru": "@Email уже подразумевает @NotBlank, и эти два ограничения гасят друг друга."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Validation only runs on response entities, never on request parameters.",
+            "ru": "Валидация выполняется только для сущностей ответа и никогда для параметров запроса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A 400 requires an explicit ExceptionMapper; without one the violations are swallowed.",
+            "ru": "Для 400 нужен явный ExceptionMapper; без него нарушения проглатываются."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The resource method parameter is not annotated @Valid, so the runtime never validates it.",
+            "ru": "Параметр метода ресурса не помечен @Valid, поэтому рантайм его не валидирует."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "In Jakarta REST the constraints on a request body are enforced only when the parameter carries @Valid. Without it the annotations are documentation — a silent failure that looks exactly like working code, because nothing logs and nothing throws. @Email on its own also accepts an empty string, which is why @NotBlank sits beside it.",
+        "ru": "В Jakarta REST ограничения на теле запроса применяются, только если параметр помечен @Valid. Без него аннотации остаются документацией — молчаливый отказ, выглядящий в точности как работающий код: ничего не логируется и ничего не бросается. К тому же сам по себе @Email пропускает пустую строку, поэтому рядом и стоит @NotBlank."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/restful-ws/3.1/jakarta-restful-ws-spec-3.1.html",
+        "https://jakarta.ee/specifications/bean-validation/3.0/jakarta-bean-validation-spec-3.0.html"
+      ]
+    },
+    {
+      "id": "rest-http.dto-validation.004",
+      "section": "dto-validation",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A request DTO holds a nested object whose own fields carry constraints. What makes those nested constraints run?",
+        "ru": "В DTO запроса есть вложенный объект, у полей которого свои ограничения. Что заставит эти вложенные ограничения сработать?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing extra — validation always descends into nested objects.",
+            "ru": "Ничего дополнительно — валидация всегда спускается во вложенные объекты."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Making the nested class implement a marker interface recognised by the validator.",
+            "ru": "Заставить вложенный класс реализовать маркерный интерфейс, который узнаёт валидатор."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Marking the nested field itself with @Valid so that cascading happens.",
+            "ru": "Пометить само вложенное поле аннотацией @Valid, чтобы включилось каскадирование."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Adding @NotNull to the nested field, which implies validating its contents.",
+            "ru": "Добавить @NotNull на вложенное поле, что подразумевает проверку его содержимого."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Declaring the nested class in the same package as the resource.",
+            "ru": "Объявить вложенный класс в том же пакете, что и ресурс."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Cascading is explicit in Bean Validation: @Valid on the field (or on the type argument of a collection, as in List<@Valid Row>) is what tells the validator to descend. Without it the nested object is treated as an opaque value and its constraints never run — the same silent gap as a missing @Valid on the resource method parameter.",
+        "ru": "Каскадирование в Bean Validation задаётся явно: именно @Valid на поле (или на аргументе типа коллекции, как в List<@Valid Row>) говорит валидатору спуститься внутрь. Без него вложенный объект считается непрозрачным значением и его ограничения не выполняются — тот же молчаливый пробел, что и отсутствующий @Valid на параметре метода ресурса."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/bean-validation/3.0/jakarta-bean-validation-spec-3.0.html",
+        "https://jakarta.ee/specifications/bean-validation/3.0/apidocs/jakarta/validation/constraints/package-summary"
+      ]
+    },
+    {
+      "id": "rest-http.dto-validation.005",
+      "section": "dto-validation",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Registration must refuse an email that is already taken. Where does that check belong and what should it answer?",
+        "ru": "Регистрация должна отказать, если email уже занят. Где место этой проверке и что она должна вернуть?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "In the service, answering 409 Conflict — the request is well-formed but conflicts with current state.",
+            "ru": "В сервисе, с ответом 409 Conflict: запрос корректен, но конфликтует с текущим состоянием."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "In a custom Bean Validation constraint that queries the database, answering 400.",
+            "ru": "В собственном ограничении Bean Validation, которое ходит в базу, с ответом 400."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "In the resource method, answering 500 so the failure is visible in monitoring.",
+            "ru": "В методе ресурса, с ответом 500, чтобы отказ был виден в мониторинге."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "In a database unique constraint alone, letting the driver exception reach the client.",
+            "ru": "Только в уникальном индексе базы, позволив исключению драйвера дойти до клиента."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "In the client, which should check availability before submitting the form.",
+            "ru": "В клиенте, который должен проверить доступность до отправки формы."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Bean Validation answers \"is this request well-formed\" from the request alone — a field is present, a string fits, a number is in range. Uniqueness needs the database and the current state, which makes it a business rule and puts it in the service. 409 is the status for a conflict with existing state; 400 would suggest the client can fix the syntax of what it sent. The unique index should still exist, as the race-condition backstop, but its exception must be translated rather than leaked.",
+        "ru": "Bean Validation отвечает на вопрос «корректно ли составлен запрос», опираясь только на сам запрос: поле на месте, строка нужной длины, число в диапазоне. Уникальность требует базы и текущего состояния, а значит, это бизнес-правило и место ему в сервисе. 409 — статус для конфликта с существующим состоянием; 400 намекал бы, что клиент может поправить синтаксис присланного. Уникальный индекс при этом всё равно нужен как страховка от гонки, но его исключение следует переводить, а не отдавать наружу."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9110.html#name-status-codes",
+        "https://jakarta.ee/specifications/bean-validation/3.0/jakarta-bean-validation-spec-3.0.html"
+      ]
+    },
+    {
+      "id": "rest-http.dto-validation.006",
+      "section": "dto-validation",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "This project spells out every Bean Validation message instead of relying on the default bundle. What problem does that avoid?",
+        "ru": "Этот проект выписывает каждое сообщение Bean Validation явно, вместо того чтобы полагаться на бандл по умолчанию. Какую проблему это снимает?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Default messages are interpolated at class-load time, which slows down startup.",
+            "ru": "Сообщения по умолчанию интерполируются во время загрузки класса, что замедляет старт."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Default messages contain the field's Java name, which leaks the entity mapping to the client.",
+            "ru": "Сообщения по умолчанию содержат Java-имя поля, что раскрывает клиенту маппинг сущности."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The default bundle is not on the classpath in a native image, so messages would be empty.",
+            "ru": "Бандла по умолчанию нет в classpath нативного образа, поэтому сообщения оказались бы пустыми."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The default bundle is resolved against the JVM locale, so the same rejection reads differently on a developer machine and on the server.",
+            "ru": "Бандл по умолчанию резолвится по локали JVM, поэтому один и тот же отказ читается по-разному на машине разработчика и на сервере."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Custom messages are required for the validator to report more than one violation at a time.",
+            "ru": "Собственные сообщения нужны, чтобы валидатор сообщал более чем об одном нарушении за раз."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The default messages come from a resource bundle chosen by locale, and the default locale is whatever the JVM is running with. The same bad password then produces an English sentence locally and something else in production, which makes the API's error text an environment detail rather than part of the contract. Writing the message on the constraint pins it. The class in this project records exactly that reasoning in a comment.",
+        "ru": "Сообщения по умолчанию берутся из ресурсного бандла, выбираемого по локали, а локаль по умолчанию — та, с которой запущена JVM. Один и тот же неудачный пароль даёт английскую фразу локально и что-то другое в продакшене, и текст ошибки API становится деталью окружения, а не частью контракта. Сообщение, написанное прямо в ограничении, фиксирует его. Ровно это рассуждение записано комментарием в соответствующем классе проекта."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/bean-validation/3.0/jakarta-bean-validation-spec-3.0.html",
+        "https://jakarta.ee/specifications/bean-validation/3.0/apidocs/jakarta/validation/constraints/package-summary"
+      ]
+    },
+    {
+      "id": "rest-http.error-responses.001",
+      "section": "error-responses",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which of these must never appear in an error response body sent to a client?",
+        "ru": "Что из перечисленного никогда не должно появляться в теле ответа с ошибкой, отправленного клиенту?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A correlation id identifying this request in the logs.",
+            "ru": "Correlation id, идентифицирующий этот запрос в логах."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The exception stack trace and the failing SQL statement.",
+            "ru": "Стектрейс исключения и упавший SQL-запрос."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A sentence naming the field that failed validation.",
+            "ru": "Фраза, называющая поле, не прошедшее валидацию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The HTTP status repeated inside the JSON body.",
+            "ru": "HTTP-статус, продублированный внутри JSON-тела."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A stable machine-readable error code.",
+            "ru": "Стабильный машиночитаемый код ошибки."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A stack trace describes your internals, your framework and your library versions to anyone who can send a request, and a SQL fragment describes your schema. The rule is that the server logs the detail and returns the summary: log the exception with a request id at ERROR, return one sentence and that id. Everything else on the list is useful to the caller and harmless to expose.",
+        "ru": "Стектрейс описывает ваши внутренности, фреймворк и версии библиотек любому, кто умеет отправить запрос, а фрагмент SQL описывает схему. Правило простое: сервер логирует детали и возвращает резюме — пишите исключение с идентификатором запроса на уровне ERROR, а наружу отдавайте одну фразу и этот идентификатор. Всё остальное из списка полезно вызывающему и безопасно для раскрытия."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9457.html",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status"
+      ]
+    },
+    {
+      "id": "rest-http.error-responses.002",
+      "section": "error-responses",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which media type does RFC 9457 define for a standard error body?",
+        "ru": "Какой медиатип RFC 9457 определяет для стандартного тела ошибки?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "application/problem+json",
+            "ru": "application/problem+json"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "application/error+json",
+            "ru": "application/error+json"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "application/json;profile=error",
+            "ru": "application/json;profile=error"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "text/problem",
+            "ru": "text/problem"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "application/vnd.error+json",
+            "ru": "application/vnd.error+json"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "RFC 9457, which replaced RFC 7807, defines application/problem+json (and an XML twin) with the members type, title, status, detail and instance, plus any extensions you add at the top level. Using the registered media type is what lets gateways, client libraries and SDK generators recognise the body without being told about your API.",
+        "ru": "RFC 9457, заменивший RFC 7807, определяет application/problem+json (и XML-двойник) с членами type, title, status, detail и instance плюс любыми расширениями, которые вы добавите на верхнем уровне. Именно использование зарегистрированного медиатипа позволяет шлюзам, клиентским библиотекам и генераторам SDK распознать тело, ничего не зная про ваш API."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9457.html",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status"
+      ]
+    },
+    {
+      "id": "rest-http.error-responses.003",
+      "section": "error-responses",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "In an application/problem+json body, which member should a client branch on when deciding how to handle the failure?",
+        "ru": "В теле application/problem+json по какому члену клиенту следует ветвиться, решая, как обработать отказ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "detail, because it describes exactly what went wrong this time.",
+            "ru": "detail, потому что он описывает, что именно пошло не так в этот раз."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "title, because it is the short human-readable summary.",
+            "ru": "title, потому что это короткое человекочитаемое резюме."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "instance, because it uniquely identifies the occurrence.",
+            "ru": "instance, потому что он однозначно идентифицирует конкретный случай."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "status, because the HTTP status is always enough to decide.",
+            "ru": "status, потому что HTTP-статуса всегда достаточно для решения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "type, because it is a URI identifying the kind of problem and stays stable when the wording changes.",
+            "ru": "type, потому что это URI, идентифицирующий вид проблемы, и он остаётся стабильным при смене формулировок."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "type identifies the problem kind and is the contract; title and detail are prose meant for humans and may be reworded or translated at any time. instance identifies one occurrence and differs on every request. status is coarse — several distinct problems share a 409 — so it narrows the handling but rarely determines it.",
+        "ru": "type идентифицирует вид проблемы и является контрактом; title и detail — проза для людей, которую могут в любой момент переформулировать или перевести. instance идентифицирует один случай и различается в каждом запросе. status слишком груб — несколько разных проблем делят один 409, — поэтому он сужает обработку, но редко определяет её."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9457.html"
+      ]
+    },
+    {
+      "id": "rest-http.error-responses.004",
+      "section": "error-responses",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A login endpoint answers \"no account with that email\" and \"wrong password\" with different messages. Why is that a problem?",
+        "ru": "Эндпоинт входа отвечает «нет аккаунта с таким email» и «неверный пароль» разными сообщениями. Почему это проблема?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Two messages for one endpoint break the single error format the clients rely on.",
+            "ru": "Два сообщения на один эндпоинт ломают единый формат ошибки, на который опираются клиенты."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It forces the endpoint to answer 404 instead of 401, which browsers cache.",
+            "ru": "Это вынуждает эндпоинт отвечать 404 вместо 401, а браузеры такие ответы кэшируют."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It turns the form into an account enumerator: an attacker learns which addresses are registered.",
+            "ru": "Форма превращается в перебиратель аккаунтов: атакующий узнаёт, какие адреса зарегистрированы."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Different messages cannot be localised consistently on the client.",
+            "ru": "Разные сообщения нельзя согласованно локализовать на клиенте."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It prevents rate limiting, because the two branches are counted separately.",
+            "ru": "Это мешает ограничению частоты, потому что две ветки считаются отдельно."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The two answers differ in a way the caller can observe, so a script can test an address list and learn which ones exist — useful for phishing, credential stuffing and for knowing which accounts are worth attacking. Answer both with one message and one status. The same reasoning applies to timing: a check that returns faster when the user does not exist leaks the same fact.",
+        "ru": "Два ответа различаются наблюдаемым для вызывающего образом, поэтому скрипт может прогнать список адресов и узнать, какие из них существуют, — это полезно для фишинга, для подстановки украденных паролей и для понимания, какие аккаунты стоит атаковать. Отвечайте в обоих случаях одним сообщением и одним статусом. То же рассуждение относится и ко времени ответа: проверка, возвращающаяся быстрее, когда пользователя нет, выдаёт тот же факт."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9110.html#name-status-codes",
+        "https://www.rfc-editor.org/rfc/rfc9457.html"
+      ]
+    },
+    {
+      "id": "rest-http.error-responses.005",
+      "section": "error-responses",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "What does registering the provider below achieve in a Jakarta REST application?",
+        "ru": "Чего добивается регистрация провайдера ниже в приложении на Jakarta REST?"
+      },
+      "code": "@Provider\npublic class ApiExceptionMapper implements ExceptionMapper<ApiException> {\n\n    @Override\n    public Response toResponse(ApiException exception) {\n        return Response.status(exception.getStatus())\n                .entity(Map.of(\"message\", exception.getMessage()))\n                .build();\n    }\n}",
+      "options": [
+        {
+          "text": {
+            "en": "It wraps every resource method in a try/catch generated at build time.",
+            "ru": "Она оборачивает каждый метод ресурса в try/catch, генерируемый на этапе сборки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It suppresses the exception so the request completes with 200 and an empty body.",
+            "ru": "Она подавляет исключение, и запрос завершается кодом 200 с пустым телом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It registers the exception with the container so that it is retried automatically.",
+            "ru": "Она регистрирует исключение в контейнере, чтобы запрос повторялся автоматически."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It converts one exception type into an HTTP response in one place, for every resource in the application.",
+            "ru": "Она в одном месте превращает один тип исключения в HTTP-ответ — для всех ресурсов приложения."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It validates the response entity against the declared media type before writing it.",
+            "ru": "Она проверяет сущность ответа на соответствие объявленному медиатипу перед записью."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "An ExceptionMapper is the extension point for turning an exception into a Response. Registered with @Provider, it applies to every resource, which is how an API keeps one error shape instead of repeating a try/catch in each method. This project uses the same mechanism for constraint violations and for security refusals, so all three produce the same {\"message\": ...} body.",
+        "ru": "ExceptionMapper — точка расширения, превращающая исключение в Response. Помеченный @Provider, он действует на все ресурсы, и именно так API сохраняет единую форму ошибки вместо повторения try/catch в каждом методе. Этот же механизм проект использует для нарушений ограничений и для отказов безопасности, поэтому все три случая дают одно и то же тело {\"message\": ...}."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/restful-ws/3.1/apidocs/jakarta.ws.rs/jakarta/ws/rs/ext/exceptionmapper",
+        "https://jakarta.ee/specifications/restful-ws/3.1/jakarta-restful-ws-spec-3.1.html"
+      ]
+    },
+    {
+      "id": "rest-http.error-responses.006",
+      "section": "error-responses",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A user requests a document that exists but belongs to someone else. The API answers 404 rather than 403. When is that the right call?",
+        "ru": "Пользователь запрашивает документ, который существует, но принадлежит другому. API отвечает 404, а не 403. Когда это правильное решение?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Always — 403 is reserved for authentication failures and must not be used here.",
+            "ru": "Всегда — 403 зарезервирован для отказов аутентификации и здесь применяться не должен."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When the mere existence of the resource is itself confidential, so 403 would confirm it — a deliberate choice, documented, and applied consistently.",
+            "ru": "Когда само существование ресурса конфиденциально и 403 его подтвердил бы, — это осознанный выбор, задокументированный и применяемый последовательно."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Never — the status must describe the server's true state, and the document does exist.",
+            "ru": "Никогда — статус обязан описывать истинное состояние сервера, а документ существует."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When the resource is large, because 403 would require the server to load it first.",
+            "ru": "Когда ресурс большой, потому что для 403 серверу пришлось бы сначала его загрузить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only for GET; writes must always answer 403 so that audit logging works.",
+            "ru": "Только для GET; записи обязаны отвечать 403, иначе не работает журнал аудита."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "403 tells the caller the resource is there and they may not have it, which is itself information — enough to enumerate private repositories or document ids. Answering 404 hides it, at the cost of being less helpful to a legitimate user who lost access. Either is defensible; what is not defensible is doing it by accident, or inconsistently, since a 403 on one path and a 404 on another leaks exactly what the 404 was meant to hide.",
+        "ru": "403 сообщает вызывающему, что ресурс есть и что ему его не дадут, — а это уже информация, достаточная, чтобы перебрать приватные репозитории или идентификаторы документов. Ответ 404 её скрывает ценой меньшей полезности для законного пользователя, потерявшего доступ. Защитимы оба варианта; незащитимо делать это случайно или непоследовательно: 403 на одном пути и 404 на другом выдают ровно то, что 404 должен был скрыть."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9110.html#name-status-codes",
+        "https://www.rfc-editor.org/rfc/rfc9457.html"
+      ]
+    },
+    {
+      "id": "rest-http.pagination-filtering.001",
+      "section": "pagination-filtering",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "A request asks for page 20 001 with a page size of 50, which becomes LIMIT 50 OFFSET 1000000. Why is this slow?",
+        "ru": "Запрос просит страницу 20 001 при размере страницы 50, что превращается в LIMIT 50 OFFSET 1000000. Почему это медленно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The database must produce and discard the first million rows before returning fifty.",
+            "ru": "База обязана произвести и выбросить первый миллион строк, прежде чем вернуть пятьдесят."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "OFFSET disables index usage, so the query always falls back to a sequential scan.",
+            "ru": "OFFSET отключает использование индексов, поэтому запрос всегда сваливается в последовательное сканирование."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The result set is transferred in full to the application and sliced there.",
+            "ru": "Результат целиком передаётся в приложение и нарезается уже там."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "OFFSET forces the planner to sort twice, once before and once after skipping.",
+            "ru": "OFFSET заставляет планировщик сортировать дважды: до пропуска и после него."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Page numbers above 10 000 exceed the integer range used by most drivers.",
+            "ru": "Номера страниц свыше 10 000 выходят за целочисленный диапазон, используемый большинством драйверов."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "OFFSET is defined as \"skip this many rows of the result\", and skipping still means producing them in order. The cost therefore grows with the depth of the page, and the deepest pages are the slowest in a way that is invisible in a test with a thousand rows. Keyset pagination replaces the skip with a seek into the index, which costs the same at any depth.",
+        "ru": "OFFSET определён как «пропусти столько строк результата», а пропуск всё равно означает, что строки надо произвести по порядку. Поэтому стоимость растёт с глубиной страницы, и самые глубокие страницы оказываются самыми медленными — что совершенно не видно на тесте с тысячей строк. Keyset-пагинация заменяет пропуск позиционированием в индексе, которое стоит одинаково на любой глубине."
+      },
+      "sources": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods",
+        "https://www.rfc-editor.org/rfc/rfc9110.html"
+      ]
+    },
+    {
+      "id": "rest-http.pagination-filtering.002",
+      "section": "pagination-filtering",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What distinguishes PUT from PATCH on the same member URL?",
+        "ru": "Чем PUT отличается от PATCH на одном и том же URL элемента?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "PUT may only create, while PATCH may only update an existing resource.",
+            "ru": "PUT может только создавать, а PATCH — только обновлять существующий ресурс."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "PUT is asynchronous and returns 202, while PATCH is synchronous.",
+            "ru": "PUT асинхронен и возвращает 202, а PATCH синхронен."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "PUT replaces the whole resource, so omitted fields are removed; PATCH describes a partial change.",
+            "ru": "PUT заменяет ресурс целиком, поэтому пропущенные поля удаляются; PATCH описывает частичное изменение."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "PUT requires a JSON body while PATCH requires a list of operations in all cases.",
+            "ru": "PUT требует JSON-тело, а PATCH во всех случаях требует список операций."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "PUT is cacheable and PATCH is not, which is the only practical difference.",
+            "ru": "PUT кэшируется, а PATCH нет — и это единственное практическое различие."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "PUT carries the full desired representation, so anything absent from the body is genuinely absent afterwards — sending only {\"title\": \"...\"} to a PUT endpoint wipes every other field. PATCH carries a description of the change. PATCH bodies come in two standard flavours, merge patch and JSON patch, so a list of operations is one option rather than the rule.",
+        "ru": "PUT несёт полное желаемое представление, поэтому всё, чего нет в теле, действительно исчезает — отправка одного лишь {\"title\": \"...\"} в PUT-эндпоинт сотрёт остальные поля. PATCH несёт описание изменения. Тела PATCH бывают двух стандартных видов — merge patch и JSON patch, — так что список операций это один из вариантов, а не правило."
+      },
+      "sources": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PATCH",
+        "https://www.rfc-editor.org/rfc/rfc9110.html#name-methods"
+      ]
+    },
+    {
+      "id": "rest-http.pagination-filtering.003",
+      "section": "pagination-filtering",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "The keyset query below sometimes skips rows and sometimes returns one twice. What is wrong with it?",
+        "ru": "Keyset-запрос ниже иногда пропускает строки, а иногда возвращает одну дважды. Что в нём не так?"
+      },
+      "code": "SELECT *\nFROM words\nWHERE created_at < :afterCreatedAt\nORDER BY created_at DESC\nLIMIT 50",
+      "options": [
+        {
+          "text": {
+            "en": "LIMIT must be applied before WHERE for keyset pagination to work.",
+            "ru": "Чтобы keyset-пагинация работала, LIMIT должен применяться до WHERE."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The cursor must be a row number rather than a column value.",
+            "ru": "Курсор должен быть номером строки, а не значением колонки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "DESC ordering is not supported by keyset pagination; it requires ascending order.",
+            "ru": "Keyset-пагинация не поддерживает сортировку DESC; ей нужен возрастающий порядок."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The comparison should use <= so that the cursor row is included again.",
+            "ru": "Сравнение должно быть <=, чтобы строка курсора включалась снова."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "created_at is not unique, so rows sharing a timestamp straddle the page boundary; the sort needs a unique tie-break column.",
+            "ru": "created_at не уникален, поэтому строки с одинаковой отметкой времени встают на границу страницы; сортировке нужна уникальная колонка-тайбрейк."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Keyset pagination requires a total order. With ties on created_at the database is free to return equal rows in any order, so a row seen on page two can reappear on page three or be skipped entirely. Adding the primary key as the last sort key and comparing the tuple — (created_at, id) < (:createdAt, :id) — makes the order total and the boundary exact.",
+        "ru": "Keyset-пагинации нужен полный порядок. При одинаковых created_at база вправе возвращать равные строки в любом порядке, поэтому строка, увиденная на второй странице, может снова появиться на третьей или пропасть совсем. Добавление первичного ключа последним ключом сортировки и сравнение кортежа — (created_at, id) < (:createdAt, :id) — делает порядок полным, а границу точной."
+      },
+      "sources": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods",
+        "https://www.rfc-editor.org/rfc/rfc9110.html"
+      ]
+    },
+    {
+      "id": "rest-http.pagination-filtering.004",
+      "section": "pagination-filtering",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A client walks an offset-paginated list while other users keep inserting rows at the top. What does it observe?",
+        "ru": "Клиент обходит список с offset-пагинацией, пока другие пользователи продолжают вставлять строки в начало. Что он увидит?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing unusual: each page is computed from a consistent snapshot of the whole result.",
+            "ru": "Ничего необычного: каждая страница считается по согласованному снимку всего результата."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Rows shift down between requests, so some items are returned twice and others are never returned.",
+            "ru": "Строки съезжают вниз между запросами, поэтому одни элементы возвращаются дважды, а другие не возвращаются никогда."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The server answers 409 Conflict once the underlying data changes mid-traversal.",
+            "ru": "Сервер отвечает 409 Conflict, как только данные меняются посреди обхода."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only the last page is affected; earlier pages are already materialised on the server.",
+            "ru": "Затронута только последняя страница; предыдущие уже материализованы на сервере."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The total count changes but the page contents stay stable, because offsets are recomputed.",
+            "ru": "Меняется только общее количество, а содержимое страниц остаётся стабильным, так как смещения пересчитываются."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Each page request is an independent query, so there is no snapshot across them. An insert before the current offset pushes everything down by one, and the row that was last on page two becomes first on page three — returned twice. A delete does the opposite and hides a row completely. Keyset pagination is immune because the cursor names a row rather than a position.",
+        "ru": "Каждый запрос страницы — самостоятельный запрос, снимка между ними нет. Вставка перед текущим смещением сдвигает всё на одну позицию вниз, и строка, бывшая последней на второй странице, становится первой на третьей — возвращается дважды. Удаление делает обратное и скрывает строку совсем. Keyset-пагинация к этому невосприимчива, потому что курсор называет строку, а не позицию."
+      },
+      "sources": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods",
+        "https://www.rfc-editor.org/rfc/rfc9110.html"
+      ]
+    },
+    {
+      "id": "rest-http.pagination-filtering.005",
+      "section": "pagination-filtering",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Using JSON Merge Patch (RFC 7396), what does the body below mean?",
+        "ru": "Что означает тело ниже в терминах JSON Merge Patch (RFC 7396)?"
+      },
+      "code": "PATCH /api/english/groups/9f1c HTTP/1.1\nContent-Type: application/merge-patch+json\n\n{\"title\": \"Unit 4\", \"note\": null}",
+      "options": [
+        {
+          "text": {
+            "en": "Set title and set note to the string \"null\".",
+            "ru": "Установить title и присвоить note строку \"null\"."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Set title and leave note untouched, because null means \"no change\".",
+            "ru": "Установить title и не трогать note, потому что null означает «без изменений»."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Reject the request, because null is not a valid merge patch value.",
+            "ru": "Отклонить запрос, потому что null недопустим в merge patch."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Set title and remove the note member from the resource.",
+            "ru": "Установить title и удалить член note из ресурса."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Replace the whole resource with these two members, removing every other field.",
+            "ru": "Заменить ресурс целиком этими двумя членами, удалив все остальные поля."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "In merge patch the body mirrors the resource: a member that is present is replaced, a member that is absent is left alone, and a member set to null is deleted. That is precisely why null and absent must stay distinguishable on the server — after deserialising into a Java DTO both arrive as null, and \"clear the note\" becomes indistinguishable from \"do not touch the note\".",
+        "ru": "В merge patch тело повторяет форму ресурса: присутствующий член заменяется, отсутствующий остаётся как был, а член, равный null, удаляется. Именно поэтому null и отсутствие обязаны оставаться различимыми на сервере: после десериализации в Java-DTO оба приходят как null, и «очисти заметку» становится неотличимо от «не трогай заметку»."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc7396.html",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PATCH"
+      ]
+    },
+    {
+      "id": "rest-http.pagination-filtering.006",
+      "section": "pagination-filtering",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A PATCH endpoint binds the body to the DTO below and copies every non-null field onto the entity. What behaviour does this design make impossible?",
+        "ru": "PATCH-эндпоинт связывает тело с DTO ниже и копирует в сущность каждое не-null поле. Какое поведение такая схема делает невозможным?"
+      },
+      "code": "public class GroupPatchRequest {\n    public String title;\n    public String note;\n}\n\nif (request.title != null) group.setTitle(request.title);\nif (request.note != null) group.setNote(request.note);",
+      "options": [
+        {
+          "text": {
+            "en": "Clearing a field, because an explicit null and an omitted field are indistinguishable after binding.",
+            "ru": "Очистку поля, потому что после связывания явный null неотличим от отсутствующего поля."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Updating two fields in one request, since only the first non-null field is applied.",
+            "ru": "Обновление двух полей одним запросом, так как применяется только первое не-null поле."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Validating the body, since Bean Validation cannot run on a partial representation.",
+            "ru": "Валидацию тела, поскольку Bean Validation не работает на частичном представлении."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Returning 200 with the updated resource, because PATCH must answer 204.",
+            "ru": "Ответ 200 с обновлённым ресурсом, потому что PATCH обязан отвечать 204."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Making the endpoint idempotent, which requires a full representation in the body.",
+            "ru": "Идемпотентность эндпоинта, для которой нужно полное представление в теле."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Jackson writes null into the field both when the key is missing and when the client sent null, so the \"copy non-null fields\" rule silently reads every clear as a no-op. The fixes are to record presence — a wrapper populated only when the key was there, or reading the raw JsonNode or Map and asking containsKey — or to document that this PATCH ignores nulls and offer another way to clear a value. Choosing neither is how a rename quietly leaves a stale note behind.",
+        "ru": "Jackson пишет в поле null и когда ключа нет, и когда клиент прислал null, поэтому правило «копируем не-null поля» молча превращает любую очистку в отсутствие действия. Лечится это фиксацией наличия ключа — обёрткой, заполняемой только когда ключ был, или чтением сырого JsonNode либо Map с проверкой containsKey — или явной документацией, что этот PATCH игнорирует null, плюс другим способом очистить значение. Не выбрать ни того, ни другого — это когда переименование тихо оставляет устаревшую заметку."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc7396.html",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PATCH"
+      ]
+    },
+    {
+      "id": "rest-http.caching-conditional.001",
+      "section": "caching-conditional",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does Cache-Control: no-cache instruct a cache to do?",
+        "ru": "Что предписывает кэшу заголовок Cache-Control: no-cache?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Never store the response anywhere, on disk or in memory.",
+            "ru": "Никогда и нигде не сохранять ответ — ни на диск, ни в память."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Store the response but never serve it to a different user.",
+            "ru": "Сохранить ответ, но никогда не отдавать его другому пользователю."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Store the response, but revalidate with the origin before reusing it.",
+            "ru": "Сохранить ответ, но перед переиспользованием провалидировать его у источника."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Serve the response from cache only when the origin is unreachable.",
+            "ru": "Отдавать ответ из кэша только когда источник недоступен."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Cache the response for the default heuristic lifetime of ten minutes.",
+            "ru": "Кэшировать ответ на эвристическое время жизни по умолчанию — десять минут."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "no-cache is a confusing name: it permits storage and forbids reuse without validation, which usually means a conditional request that can be answered with a cheap 304. The directive that forbids storage altogether is no-store, and that is the one for personal data. private is the one that forbids shared caches from keeping a copy.",
+        "ru": "no-cache — сбивающее с толку имя: он разрешает хранение и запрещает переиспользование без валидации, что обычно означает условный запрос, на который можно дёшево ответить 304. Директива, запрещающая хранение вовсе, — это no-store, и именно она нужна персональным данным. А хранить копию общим кэшам запрещает private."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching"
+      ]
+    },
+    {
+      "id": "rest-http.caching-conditional.002",
+      "section": "caching-conditional",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "A client repeats a GET with If-None-Match and the representation has not changed. What does the server send?",
+        "ru": "Клиент повторяет GET с заголовком If-None-Match, а представление не изменилось. Что отправит сервер?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "200 OK with the unchanged body, so the client can compare it itself.",
+            "ru": "200 OK с неизменившимся телом, чтобы клиент сам его сравнил."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "204 No Content, since there is nothing new to send.",
+            "ru": "204 No Content, раз посылать нечего нового."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "412 Precondition Failed, because the validator matched.",
+            "ru": "412 Precondition Failed, потому что валидатор совпал."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "404 Not Found, because a conditional GET does not address a resource.",
+            "ru": "404 Not Found, потому что условный GET не адресует ресурс."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "304 Not Modified with no body, and the client reuses its stored copy.",
+            "ru": "304 Not Modified без тела, и клиент переиспользует свою сохранённую копию."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "If-None-Match asks \"send it only if my copy is stale\". A match means the copy is current, so the server answers 304 with headers but no body and the bytes never cross the network. 412 is the answer to a failed If-Match on a write, not to a successful If-None-Match on a read. 204 means a successful request with nothing to return, which is a different situation.",
+        "ru": "If-None-Match означает «пришли, только если моя копия устарела». Совпадение означает, что копия актуальна, поэтому сервер отвечает 304 с заголовками, но без тела, и байты по сети не идут. 412 — ответ на несработавший If-Match при записи, а не на удачный If-None-Match при чтении. 204 означает успешный запрос, которому нечего возвращать, — другая ситуация."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9110.html#name-conditional-requests",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching"
+      ]
+    },
+    {
+      "id": "rest-http.caching-conditional.003",
+      "section": "caching-conditional",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "When should a server prefer a weak ETag (W/\"abc\") over a strong one?",
+        "ru": "Когда серверу стоит предпочесть слабый ETag (W/\"abc\") сильному?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "When the resource is large, because weak validators are cheaper to compute by definition.",
+            "ru": "Когда ресурс большой, ведь слабые валидаторы по определению дешевле вычислять."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When representations are semantically equivalent but not guaranteed byte-identical — field order or formatting may differ.",
+            "ru": "Когда представления семантически эквивалентны, но побайтовая идентичность не гарантирована: порядок полей или форматирование могут отличаться."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "When the client does not support range requests, which require a strong validator.",
+            "ru": "Когда клиент не поддерживает range-запросы, для которых нужен сильный валидатор."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When the response is private, since shared caches only accept weak validators.",
+            "ru": "Когда ответ приватный, поскольку общие кэши принимают только слабые валидаторы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Never — a weak ETag is a legacy form kept only for HTTP/1.0 compatibility.",
+            "ru": "Никогда — слабый ETag это наследие, оставленное лишь ради совместимости с HTTP/1.0."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A strong validator promises byte-for-byte identity, which is what range requests need in order to stitch a partial response onto a stored one. A weak validator promises only that the meaning is the same, which is the honest claim when your serialiser may reorder fields or change whitespace. Claiming strength you cannot deliver is what corrupts a resumed download.",
+        "ru": "Сильный валидатор обещает побайтовую идентичность — именно это нужно range-запросам, чтобы пристыковать частичный ответ к сохранённому. Слабый обещает лишь совпадение смысла, и это честное утверждение, когда ваш сериализатор может переставить поля или изменить пробелы. Заявленная, но не обеспеченная сила — это то, что портит возобновлённую загрузку."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9110.html#name-conditional-requests",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching"
+      ]
+    },
+    {
+      "id": "rest-http.caching-conditional.004",
+      "section": "caching-conditional",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Two editors load the same group, both change the title, and both save. Which mechanism makes the second write fail instead of silently overwriting the first?",
+        "ru": "Два редактора загрузили одну группу, оба поменяли название и оба сохранили. Какой механизм заставит вторую запись упасть, а не молча затереть первую?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Sending If-None-Match with the ETag, so the server answers 304 on the second write.",
+            "ru": "Отправка If-None-Match с ETag, чтобы сервер ответил 304 на вторую запись."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Sending Cache-Control: no-store on the write, which disables reuse of stale data.",
+            "ru": "Отправка Cache-Control: no-store при записи, что запрещает переиспользование устаревших данных."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Sending Expires in the past, which forces the server to reload before writing.",
+            "ru": "Отправка Expires в прошлом, что вынуждает сервер перечитать данные перед записью."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Sending If-Match with the ETag seen when reading; a changed resource answers 412 Precondition Failed.",
+            "ru": "Отправка If-Match с тем ETag, который был при чтении; изменившийся ресурс ответит 412 Precondition Failed."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Sending Vary: ETag, which makes the cache key include the current version.",
+            "ru": "Отправка Vary: ETag, чтобы ключ кэша включал текущую версию."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "If-Match makes the write conditional on the resource still being the version the client read. If it has changed, the ETag no longer matches and the server answers 412 without writing, so the client can refetch and decide. This is the HTTP-level twin of a JPA @Version column, and the two compose: derive the ETag from the version and the database enforces what the header promised. If-None-Match is the read-side header.",
+        "ru": "If-Match делает запись условной: она пройдёт, только если ресурс всё ещё той версии, которую прочитал клиент. Если он изменился, ETag не совпадёт и сервер ответит 412, ничего не записав, — клиент сможет перезапросить и решить. Это HTTP-двойник колонки @Version в JPA, и они сочетаются: выведите ETag из версии, и база будет обеспечивать обещанное заголовком. If-None-Match — заголовок стороны чтения."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9110.html#name-conditional-requests",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching"
+      ]
+    },
+    {
+      "id": "rest-http.caching-conditional.005",
+      "section": "caching-conditional",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A response body differs depending on the Accept-Language header. What must the server send so that a shared cache does not serve the wrong copy?",
+        "ru": "Тело ответа различается в зависимости от заголовка Accept-Language. Что сервер обязан отправить, чтобы общий кэш не отдал не ту копию?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Vary: Accept-Language, which adds that header to the cache key.",
+            "ru": "Vary: Accept-Language, который добавляет этот заголовок в ключ кэша."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Content-Language, which caches use as part of the key automatically.",
+            "ru": "Content-Language, который кэши автоматически используют как часть ключа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Cache-Control: private, which prevents any mixing between clients.",
+            "ru": "Cache-Control: private, что исключает любое смешение между клиентами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "ETag, which distinguishes the two representations by their content.",
+            "ru": "ETag, который различает два представления по их содержимому."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Age: 0, which tells the cache the response was generated for this request only.",
+            "ru": "Age: 0, который сообщает кэшу, что ответ сгенерирован только для этого запроса."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A cache keys on the URL, so two representations at the same URL are indistinguishable to it unless Vary names the request headers that select between them. Content-Language only labels the body. private would work by forbidding shared caching altogether, but it is a blunt instrument that also gives up the sharing you wanted. One header deserves care: Vary: Authorization invites a shared cache to keep per-user copies, and one misconfiguration from there is one user's data served to another.",
+        "ru": "Кэш ключует по URL, поэтому два представления по одному URL для него неразличимы, пока Vary не назовёт заголовки запроса, которые между ними выбирают. Content-Language лишь помечает тело. private сработал бы, вовсе запретив общее кэширование, но это грубый инструмент, отказывающийся заодно и от нужного вам разделения. Один заголовок требует осторожности: Vary: Authorization приглашает общий кэш хранить копии по пользователям, и оттуда одна ошибка конфигурации до выдачи данных одного пользователя другому."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching"
+      ]
+    },
+    {
+      "id": "rest-http.caching-conditional.006",
+      "section": "caching-conditional",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "An API wants conditional writes to be mandatory rather than optional. Which status expresses that a request was refused for arriving without a precondition?",
+        "ru": "API хочет, чтобы условные записи были обязательными, а не опциональными. Какой статус выражает отказ из-за того, что запрос пришёл без предусловия?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "409 Conflict, because an unconditional write conflicts with the API's policy.",
+            "ru": "409 Conflict, потому что безусловная запись конфликтует с политикой API."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "412 Precondition Failed, which is the general answer to any precondition problem.",
+            "ru": "412 Precondition Failed — общий ответ на любую проблему с предусловием."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "428 Precondition Required, which tells the client to retry with a conditional request.",
+            "ru": "428 Precondition Required, который велит клиенту повторить запрос условным."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "400 Bad Request, since a missing required header makes the request malformed.",
+            "ru": "400 Bad Request, ведь отсутствие обязательного заголовка делает запрос некорректным."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "426 Upgrade Required, which asks the client to use a newer protocol feature.",
+            "ru": "426 Upgrade Required, просящий клиента воспользоваться более новой возможностью протокола."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "412 means a precondition was supplied and did not hold; 428, defined in RFC 6585, means none was supplied and the server insists on one. The distinction matters because the two ask the client for different things: refetch and reconsider versus resend with If-Match. Making 428 the policy is what turns the lost-update protection from something well-behaved clients opt into, into something every client must do.",
+        "ru": "412 означает, что предусловие было прислано и не выполнилось; 428, определённый в RFC 6585, означает, что его не прислали вовсе, а сервер на нём настаивает. Различие важно, потому что эти два ответа просят у клиента разного: перезапросить и передумать против переотправить с If-Match. Сделать 428 политикой — значит превратить защиту от потери обновления из того, на что соглашаются аккуратные клиенты, в то, что обязан делать каждый."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc6585.html",
+        "https://www.rfc-editor.org/rfc/rfc9110.html#name-conditional-requests"
+      ]
+    },
+    {
+      "id": "rest-http.negotiation-openapi.001",
+      "section": "negotiation-openapi",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "What is the difference between the Accept and Content-Type headers?",
+        "ru": "В чём разница между заголовками Accept и Content-Type?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Accept is a request header and Content-Type is a response header; neither appears on the other side.",
+            "ru": "Accept — заголовок запроса, Content-Type — заголовок ответа; ни один не появляется на другой стороне."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "They are synonyms kept for compatibility between HTTP/1.1 and HTTP/2.",
+            "ru": "Это синонимы, оставленные ради совместимости HTTP/1.1 и HTTP/2."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Accept names the character set while Content-Type names the media type.",
+            "ru": "Accept называет кодировку, а Content-Type — медиатип."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Accept applies to the body and Content-Type applies to the headers.",
+            "ru": "Accept относится к телу, а Content-Type — к заголовкам."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Accept states what the sender is willing to receive; Content-Type describes the body actually present in that message.",
+            "ru": "Accept сообщает, что отправитель готов принять; Content-Type описывает тело, которое реально есть в этом сообщении."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Content-Type describes a body that is present, so it appears on a request that carries one and on a response that carries one. Accept expresses a preference about what comes back, which is why it belongs on the request. The server must state its choice in the response's Content-Type — the client should never have to guess what it received.",
+        "ru": "Content-Type описывает присутствующее тело, поэтому появляется и в запросе с телом, и в ответе с телом. Accept выражает предпочтение о том, что придёт обратно, — поэтому его место в запросе. Сервер обязан объявить свой выбор в Content-Type ответа: клиенту не должно приходиться угадывать, что он получил."
+      },
+      "sources": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation",
+        "https://www.rfc-editor.org/rfc/rfc9110.html"
+      ]
+    },
+    {
+      "id": "rest-http.negotiation-openapi.002",
+      "section": "negotiation-openapi",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "A client posts XML to an endpoint declared @Consumes(MediaType.APPLICATION_JSON). Which status is correct?",
+        "ru": "Клиент отправил XML на эндпоинт, объявленный как @Consumes(MediaType.APPLICATION_JSON). Какой статус корректен?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "406 Not Acceptable",
+            "ru": "406 Not Acceptable"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "400 Bad Request",
+            "ru": "400 Bad Request"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "422 Unprocessable Content",
+            "ru": "422 Unprocessable Content"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "415 Unsupported Media Type",
+            "ru": "415 Unsupported Media Type"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "501 Not Implemented",
+            "ru": "501 Not Implemented"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "415 is about the request body: the media type the client sent is one the endpoint does not read. 406 is the mirror image and concerns the response: the server cannot produce anything in the client's Accept list. In Jakarta REST the two come from @Consumes and @Produces respectively, and the runtime raises them before the resource method is entered.",
+        "ru": "415 относится к телу запроса: клиент прислал медиатип, который эндпоинт не читает. 406 — зеркальный случай и относится к ответу: сервер не может произвести ничего из списка Accept клиента. В Jakarta REST эти два кода порождаются соответственно @Consumes и @Produces, и рантайм отдаёт их ещё до входа в метод ресурса."
+      },
+      "sources": [
+        "https://jakarta.ee/specifications/restful-ws/3.1/jakarta-restful-ws-spec-3.1.html",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation"
+      ]
+    },
+    {
+      "id": "rest-http.negotiation-openapi.003",
+      "section": "negotiation-openapi",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "An endpoint can produce application/json and text/csv. Which does the server pick for the header below?",
+        "ru": "Эндпоинт умеет отдавать application/json и text/csv. Что выберет сервер для заголовка ниже?"
+      },
+      "code": "Accept: application/json, text/csv;q=0.8, */*;q=0.1",
+      "options": [
+        {
+          "text": {
+            "en": "text/csv, because it is listed with an explicit q value while application/json is not.",
+            "ru": "text/csv, потому что у него явно указан q, а у application/json — нет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "application/json, because an omitted q defaults to 1.0 and outranks 0.8.",
+            "ru": "application/json, потому что пропущенный q по умолчанию равен 1.0 и обходит 0.8."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Neither — mixing weighted and unweighted types makes the header invalid, so the answer is 406.",
+            "ru": "Ничего — смешение взвешенных и невзвешенных типов делает заголовок некорректным, поэтому ответ 406."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whichever is listed first in @Produces, since Accept is only a hint the server may ignore.",
+            "ru": "То, что стоит первым в @Produces, ведь Accept — лишь подсказка, которую сервер может игнорировать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "text/csv, because a more specific type always wins over application/json.",
+            "ru": "text/csv, потому что более специфичный тип всегда побеждает application/json."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The q parameter is a weight from 0 to 1 and defaults to 1 when absent, so application/json is requested at full preference and text/csv at 0.8. Specificity only breaks ties between entries of equal weight, where a concrete type beats a subtype wildcard and that beats */*. A q of 0 means \"not acceptable at all\".",
+        "ru": "Параметр q — вес от 0 до 1, и при отсутствии он равен 1, поэтому application/json запрошен с полным предпочтением, а text/csv — с 0.8. Специфичность разрешает только ничьи между записями равного веса, где конкретный тип бьёт маску подтипа, а та бьёт */*. Значение q, равное 0, означает «вообще неприемлемо»."
+      },
+      "sources": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation",
+        "https://www.rfc-editor.org/rfc/rfc9110.html"
+      ]
+    },
+    {
+      "id": "rest-http.negotiation-openapi.004",
+      "section": "negotiation-openapi",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "What does contract-first development with OpenAPI buy that code-first does not?",
+        "ru": "Что даёт contract-first разработка с OpenAPI такого, чего не даёт code-first?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Breaking the contract requires editing the contract, so the change is visible in review and consumers can build against it before the server exists.",
+            "ru": "Чтобы сломать контракт, нужно отредактировать контракт, поэтому изменение видно на ревью, а потребители могут собираться против него ещё до того, как появится сервер."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A document that is guaranteed to match the running implementation at all times.",
+            "ru": "Документ, гарантированно совпадающий с работающей реализацией в любой момент."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Automatic generation of database schemas from the response models.",
+            "ru": "Автоматическую генерацию схем базы данных из моделей ответа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Freedom from versioning, because a written contract can be changed without notice.",
+            "ru": "Свободу от версионирования, ведь записанный контракт можно менять без предупреждения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Runtime validation of every request, which code-first cannot provide.",
+            "ru": "Валидацию каждого запроса в рантайме, которую code-first обеспечить не может."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Guaranteed agreement with the implementation is code-first's advantage, not contract-first's — a generated document is always true, and that is exactly why a rename in the code can break the contract before anyone notices. Contract-first inverts the risk: the document is the artefact under review, mocks and client stubs exist from day one, and a breaking change has to be made deliberately. Both can generate request validators.",
+        "ru": "Гарантированное совпадение с реализацией — преимущество code-first, а не contract-first: сгенерированный документ всегда правдив, и именно поэтому переименование в коде способно сломать контракт раньше, чем это заметят. Contract-first переворачивает риск: под ревью попадает сам документ, моки и клиентские заглушки существуют с первого дня, а ломающее изменение приходится делать осознанно. Валидаторы запросов умеют генерировать оба подхода."
+      },
+      "sources": [
+        "https://spec.openapis.org/oas/v3.1.0.html",
+        "https://jakarta.ee/specifications/restful-ws/3.1/jakarta-restful-ws-spec-3.1.html"
+      ]
+    },
+    {
+      "id": "rest-http.negotiation-openapi.005",
+      "section": "negotiation-openapi",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "An API adds a new value to an enum field that is already in production. Why is this often a breaking change in practice?",
+        "ru": "API добавил новое значение в enum-поле, которое уже в продакшене. Почему на практике это часто оказывается ломающим изменением?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "JSON forbids adding members to an enumeration after the schema is published.",
+            "ru": "JSON запрещает добавлять члены в перечисление после публикации схемы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The OpenAPI document cannot express a partially known enumeration, so generation fails.",
+            "ru": "Документ OpenAPI не умеет выражать частично известное перечисление, поэтому генерация падает."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Consumers deserialising into a Java enum throw on a value that did not exist when they were compiled.",
+            "ru": "Потребители, десериализующие значение в Java-enum, падают на значении, которого не существовало в момент их компиляции."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Adding a value changes the wire format from string to integer.",
+            "ru": "Добавление значения меняет формат передачи со строки на целое число."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Caches key on enum values, so existing cached responses become unreachable.",
+            "ru": "Кэши ключуют по значениям перечисления, поэтому существующие закэшированные ответы становятся недоступны."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "On paper a new enum value is additive; in practice the consumer's generated or hand-written enum is a closed set, and the default behaviour of most JSON binders is to fail on an unknown constant. The defences are to document and implement a fallback to a known default on the consumer side, or to introduce the new state under a separate field, or to treat enum widening as a versioned change. This is the reason many APIs model open sets as plain strings.",
+        "ru": "На бумаге новое значение перечисления аддитивно; на практике enum потребителя — сгенерированный или написанный руками — это закрытое множество, и поведение большинства JSON-биндеров по умолчанию — упасть на неизвестной константе. Защита: задокументировать и реализовать на стороне потребителя откат к известному умолчанию, ввести новое состояние отдельным полем или считать расширение перечисления версионируемым изменением. Именно поэтому многие API моделируют открытые множества обычными строками."
+      },
+      "sources": [
+        "https://spec.openapis.org/oas/v3.1.0.html",
+        "https://www.rfc-editor.org/rfc/rfc9110.html"
+      ]
+    },
+    {
+      "id": "rest-http.negotiation-openapi.006",
+      "section": "negotiation-openapi",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "Which change to an existing endpoint is safe for tolerant-reader clients?",
+        "ru": "Какое изменение существующего эндпоинта безопасно для клиентов, написанных терпимыми читателями?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Changing createdAt from an ISO-8601 string to epoch milliseconds.",
+            "ru": "Смена createdAt со строки ISO-8601 на миллисекунды эпохи."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Making a previously optional request field required.",
+            "ru": "Превращение ранее необязательного поля запроса в обязательное."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Tightening validation so that input which used to be accepted is now rejected.",
+            "ru": "Ужесточение валидации так, что ранее принимавшийся вход теперь отвергается."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Narrowing a field's type from string to a closed enumeration.",
+            "ru": "Сужение типа поля со строки до закрытого перечисления."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Adding a new optional field to the response alongside the existing ones.",
+            "ru": "Добавление нового необязательного поля в ответ рядом с существующими."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A tolerant reader parses what it needs and ignores what it does not recognise, so a new optional field costs it nothing — provided unknown-property failures are switched off, which is why consumers usually disable Jackson's FAIL_ON_UNKNOWN_PROPERTIES. Every other option changes the meaning or the acceptance of something that already worked: same field name, different units; input that used to pass and now fails. Those need an overlap period and a deprecation, not just a changelog entry.",
+        "ru": "Терпимый читатель разбирает нужное и игнорирует незнакомое, поэтому новое необязательное поле не стоит ему ничего — при условии, что падение на неизвестных свойствах выключено, из-за чего потребители обычно и отключают FAIL_ON_UNKNOWN_PROPERTIES в Jackson. Все остальные варианты меняют смысл или допустимость того, что уже работало: то же имя поля, другие единицы; вход, который раньше проходил, а теперь нет. Таким изменениям нужен период сосуществования и объявленное устаревание, а не строчка в changelog."
+      },
+      "sources": [
+        "https://spec.openapis.org/oas/v3.1.0.html",
+        "https://www.rfc-editor.org/rfc/rfc9110.html"
+      ]
+    },
+    {
+      "id": "rest-http.cross-cutting.001",
+      "section": "cross-cutting",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "A CORS error appears in the browser console. What does it tell you about the request?",
+        "ru": "В консоли браузера появилась ошибка CORS. Что это говорит о запросе?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The server rejected the request, so no handler ever ran.",
+            "ru": "Сервер отклонил запрос, поэтому обработчик так и не выполнился."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The request never left the browser, because CORS is checked before sending.",
+            "ru": "Запрос вообще не покинул браузер, потому что CORS проверяется до отправки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The TLS certificate of the API host is not trusted by the browser.",
+            "ru": "Браузер не доверяет TLS-сертификату хоста API."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The browser refused to expose the response to the page's JavaScript; the server may well have processed the request.",
+            "ru": "Браузер отказался отдать ответ JavaScript страницы; сервер при этом вполне мог обработать запрос."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The API returned a 4xx status, which the browser reports as a CORS failure.",
+            "ru": "API вернул статус 4xx, который браузер показывает как ошибку CORS."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "CORS is enforced by the browser and only restricts what page JavaScript may read. A simple request is sent and handled normally; the browser then withholds the response because the required headers are missing. That is why a CORS failure on a POST can leave a row in the database. It also means CORS protects the user's browser session, not the server — curl, a mobile app and another backend never consult it.",
+        "ru": "CORS обеспечивает браузер, и ограничивает он только то, что вправе прочитать JavaScript страницы. Простой запрос отправляется и обрабатывается как обычно, а браузер потом не отдаёт ответ, потому что нужных заголовков нет. Поэтому ошибка CORS на POST вполне может оставить строку в базе. Отсюда же следует, что CORS защищает браузерную сессию пользователя, а не сервер: curl, мобильное приложение и другой бэкенд к нему не обращаются."
+      },
+      "sources": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS",
+        "https://quarkus.io/guides/security-cors"
+      ]
+    },
+    {
+      "id": "rest-http.cross-cutting.002",
+      "section": "cross-cutting",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "Which of these requests causes the browser to send a CORS preflight?",
+        "ru": "Какой из этих запросов заставит браузер отправить CORS-preflight?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "GET with no custom headers.",
+            "ru": "GET без собственных заголовков."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "PATCH with Content-Type: application/json and an Authorization header.",
+            "ru": "PATCH с Content-Type: application/json и заголовком Authorization."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "POST with Content-Type: application/x-www-form-urlencoded.",
+            "ru": "POST с Content-Type: application/x-www-form-urlencoded."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "HEAD with Accept: text/plain.",
+            "ru": "HEAD с Accept: text/plain."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "GET with a query string longer than 2 000 characters.",
+            "ru": "GET со строкой запроса длиннее 2000 символов."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A request is \"simple\" only with GET, HEAD or POST, a small set of allowed headers, and a Content-Type of form-urlencoded, multipart/form-data or text/plain. Anything else — another method, a JSON content type, an Authorization or custom header — triggers an OPTIONS preflight first. Since almost every authenticated JSON API matches that description, preflights are the norm rather than the exception, which is what Access-Control-Max-Age is for.",
+        "ru": "«Простым» запрос считается только при методе GET, HEAD или POST, небольшом наборе разрешённых заголовков и Content-Type из form-urlencoded, multipart/form-data или text/plain. Всё остальное — другой метод, JSON-тип содержимого, Authorization или собственный заголовок — сначала вызывает preflight методом OPTIONS. Под это описание подходит почти любой аутентифицированный JSON API, поэтому preflight — норма, а не исключение, и именно для него существует Access-Control-Max-Age."
+      },
+      "sources": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS",
+        "https://quarkus.io/guides/security-cors"
+      ]
+    },
+    {
+      "id": "rest-http.cross-cutting.003",
+      "section": "cross-cutting",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "An API sends credentials with cross-origin requests. Why can it not answer with Access-Control-Allow-Origin: *?",
+        "ru": "API отправляет учётные данные в кросс-доменных запросах. Почему он не может отвечать Access-Control-Allow-Origin: *?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The browser rejects the combination of a wildcard origin with credentials; the exact origin must be echoed instead.",
+            "ru": "Браузер отвергает сочетание маски с учётными данными; вместо неё нужно вернуть точный источник."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The wildcard is only valid for GET, so other methods would be refused anyway.",
+            "ru": "Маска допустима только для GET, поэтому остальные методы всё равно были бы отклонены."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The wildcard disables preflight caching, which makes credentialed requests too slow.",
+            "ru": "Маска отключает кэширование preflight, из-за чего запросы с учётными данными становятся слишком медленными."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Credentials require the origin to be listed in Vary rather than in Allow-Origin.",
+            "ru": "Для учётных данных источник должен быть указан в Vary, а не в Allow-Origin."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A wildcard forces the server to accept requests from any origin, including the server's own.",
+            "ru": "Маска заставляет сервер принимать запросы с любого источника, включая свой собственный."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The CORS specification forbids the wildcard when Access-Control-Allow-Credentials is true, and the browser fails the request rather than relaxing the rule — otherwise any site could read authenticated responses using the visitor's cookies. The server must echo one concrete origin, which in practice means validating it against an allowlist; this project lists its origins in configuration rather than reflecting whatever arrives. Reflecting the Origin header unchecked is the same hole with extra steps.",
+        "ru": "Спецификация CORS запрещает маску при Access-Control-Allow-Credentials: true, и браузер роняет запрос, а не ослабляет правило, — иначе любой сайт мог бы читать аутентифицированные ответы, пользуясь cookie посетителя. Сервер обязан вернуть один конкретный источник, что на практике означает проверку по белому списку; этот проект перечисляет источники в конфигурации, а не отражает то, что пришло. Бездумно отражённый заголовок Origin — та же дыра, только в обход."
+      },
+      "sources": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS",
+        "https://quarkus.io/guides/security-cors"
+      ]
+    },
+    {
+      "id": "rest-http.cross-cutting.004",
+      "section": "cross-cutting",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "A dependency recovers after a brief outage, and the service is immediately knocked over by its own clients retrying. Which measure addresses this directly?",
+        "ru": "Зависимость восстановилась после короткой аварии, и сервис тут же кладут собственные клиенты своими повторами. Какая мера борется именно с этим?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Retrying more aggressively so that the queue drains faster.",
+            "ru": "Повторять агрессивнее, чтобы очередь разгребалась быстрее."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Switching every retried request from POST to PUT.",
+            "ru": "Перевести все повторяемые запросы с POST на PUT."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Exponential backoff with randomised jitter, plus a cap on attempts and a circuit breaker in front.",
+            "ru": "Экспоненциальная задержка со случайным джиттером плюс ограничение числа попыток и circuit breaker впереди."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Increasing the read timeout so that fewer requests are considered failed.",
+            "ru": "Увеличить read-таймаут, чтобы меньше запросов считалось упавшими."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Returning 503 to every client until traffic falls on its own.",
+            "ru": "Отвечать 503 всем клиентам, пока трафик сам не спадёт."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Clients that failed at the same instant retry at the same instant, so a fixed or purely exponential delay preserves the synchronisation and the retry wave exceeds normal traffic. Jitter spreads the attempts out; a cap stops the multiplication, which matters because retries at several layers compose — three layers of three attempts is twenty-seven requests for one call; a circuit breaker stops sending work at a dependency that is still down. A longer timeout makes the thundering herd hold resources for longer, not go away.",
+        "ru": "Клиенты, упавшие в один момент, повторяют в один момент, поэтому фиксированная или чисто экспоненциальная задержка сохраняет синхронность, и волна повторов превышает обычный трафик. Джиттер разносит попытки во времени; ограничение числа попыток останавливает умножение, а оно важно, потому что повторы на разных слоях перемножаются: три слоя по три попытки дают двадцать семь запросов на один вызов; circuit breaker перестаёт слать работу зависимости, которая всё ещё лежит. Более длинный таймаут заставляет толпу дольше удерживать ресурсы, а не исчезает её."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc6585.html",
+        "https://www.rfc-editor.org/rfc/rfc9110.html#name-status-codes"
+      ]
+    },
+    {
+      "id": "rest-http.cross-cutting.005",
+      "section": "cross-cutting",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "How does an idempotency key make a POST safe to retry?",
+        "ru": "Как ключ идемпотентности делает POST безопасным для повтора?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The proxy detects the duplicate key and drops the second request before it reaches the server.",
+            "ru": "Прокси распознаёт дублирующийся ключ и отбрасывает второй запрос до того, как он дойдёт до сервера."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The key makes the browser convert the retry into a conditional GET.",
+            "ru": "Ключ заставляет браузер превратить повтор в условный GET."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The key is a hash of the body, so identical bodies are automatically collapsed by HTTP.",
+            "ru": "Ключ — это хеш тела, поэтому одинаковые тела схлопывает сам HTTP."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It changes the method's semantics to PUT, which HTTP defines as idempotent.",
+            "ru": "Он меняет семантику метода на PUT, который HTTP определяет как идемпотентный."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The client sends a unique key per logical operation; the server stores it with the first result and replays that result instead of acting again.",
+            "ru": "Клиент присылает уникальный ключ на логическую операцию; сервер сохраняет его вместе с первым результатом и при повторе отдаёт этот результат, а не выполняет действие снова."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The key is generated by the client for one logical operation — not per attempt — and sent as a header. The server records the key together with the outcome and, on seeing it again, returns the stored response. The effect happens once no matter how many times the request arrives, which is how payment APIs make \"charge this card\" retryable. Two decisions come with it: how long keys are kept, and what to do when the same key arrives with a different body.",
+        "ru": "Ключ генерирует клиент на одну логическую операцию — не на попытку — и присылает его заголовком. Сервер записывает ключ вместе с результатом и, увидев его снова, возвращает сохранённый ответ. Эффект наступает один раз, сколько бы раз запрос ни пришёл, — именно так платёжные API делают «списать с карты» повторяемым. Вместе с этим приходят два решения: сколько хранить ключи и что делать, если тот же ключ пришёл с другим телом."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9110.html#name-methods",
+        "https://www.rfc-editor.org/rfc/rfc6585.html"
+      ]
+    },
+    {
+      "id": "rest-http.cross-cutting.006",
+      "section": "cross-cutting",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A client exceeds its rate limit. Which response is correct, and why does the common alternative hurt?",
+        "ru": "Клиент превысил свой лимит частоты. Какой ответ корректен и чем вредит частая альтернатива?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "503 Service Unavailable, because the service is deliberately unavailable to this client.",
+            "ru": "503 Service Unavailable, потому что сервис намеренно недоступен этому клиенту."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "403 Forbidden, because the client is not permitted to make this request right now.",
+            "ru": "403 Forbidden, потому что прямо сейчас клиенту не дозволено делать этот запрос."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "204 No Content, so that the client's loop terminates without an error path.",
+            "ru": "204 No Content, чтобы цикл клиента завершился без ветки ошибки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "429 Too Many Requests with Retry-After; answering 403 instead tells a client to stop permanently rather than to wait.",
+            "ru": "429 Too Many Requests с Retry-After; ответ 403 вместо него велит клиенту прекратить навсегда, а не подождать."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "408 Request Timeout, because the request is being deferred rather than processed.",
+            "ru": "408 Request Timeout, потому что запрос откладывается, а не обрабатывается."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "429 is the status defined for rate limiting, and Retry-After — a delay in seconds or an HTTP date — tells a well-behaved client exactly when to come back, which is what prevents the refusal from turning into a retry storm. 403 is a permanent refusal about permissions, so a correct client treats it as \"never\" and a careless one retries blindly. 503 says the whole service is down, which misdirects both dashboards and clients. RateLimit headers reporting limit, remaining and reset let a client slow down before it is refused at all.",
+        "ru": "429 — статус, определённый для ограничения частоты, а Retry-After (задержка в секундах или HTTP-дата) сообщает аккуратному клиенту, когда именно возвращаться, — это и не даёт отказу превратиться в шторм повторов. 403 — постоянный отказ о правах, поэтому корректный клиент трактует его как «никогда», а небрежный повторяет вслепую. 503 говорит, что лежит весь сервис, и вводит в заблуждение и дашборды, и клиентов. Заголовки RateLimit с лимитом, остатком и моментом сброса позволяют клиенту притормозить ещё до отказа."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc6585.html",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status"
+      ]
+    }
+  ]
+}

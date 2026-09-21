@@ -1,0 +1,2647 @@
+{
+  "schemaVersion": 2,
+  "questions": [
+    {
+      "id": "security.authn-authz.001",
+      "section": "authn-authz",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "A request arrives with a valid, unexpired token. The caller is a normal user and the endpoint is reserved for administrators. Which status code is the correct answer?",
+        "ru": "Приходит запрос с действительным, не истёкшим токеном. Вызывающий — обычный пользователь, а эндпоинт предназначен только для администраторов. Какой код ответа здесь правильный?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "401 Unauthorized, because the caller does not have the right to this endpoint.",
+            "ru": "401 Unauthorized, потому что у вызывающего нет прав на этот эндпоинт."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "403 Forbidden, because the caller is authenticated but not permitted.",
+            "ru": "403 Forbidden, потому что вызывающий аутентифицирован, но не допущен."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "400 Bad Request, because the request should not have been sent at all.",
+            "ru": "400 Bad Request, потому что такой запрос вообще не следовало отправлять."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "302 Found to the login page, so the user can sign in as an administrator.",
+            "ru": "302 Found на страницу логина, чтобы пользователь вошёл администратором."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "500 Internal Server Error, because the authorization rule could not be satisfied.",
+            "ru": "500 Internal Server Error, потому что правило авторизации не выполнено."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Despite its name, 401 means unauthenticated: no credential, or a bad one, and the response tells the caller how to authenticate. Here the credential is fine and the identity is known, so the refusal is 403 — repeating the request with the same identity will not help. Some systems answer 404 instead when the existence of the resource is itself sensitive, but 401 and a redirect to login are both wrong: the user is already signed in.",
+        "ru": "Несмотря на название, 401 означает «не аутентифицирован»: учётных данных нет или они негодные, и ответ подсказывает, как аутентифицироваться. Здесь учётные данные в порядке и личность известна, поэтому отказ — 403: повтор запроса с той же личностью не поможет. Некоторые системы отвечают 404, если само существование ресурса чувствительно, но 401 и редирект на логин одинаково неверны — пользователь уже вошёл."
+      },
+      "sources": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+        "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "security.authn-authz.002",
+      "section": "authn-authz",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which of these logins is genuinely multi-factor?",
+        "ru": "Какой из этих входов действительно является многофакторным?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A password, then a second password chosen at registration.",
+            "ru": "Пароль, затем второй пароль, заданный при регистрации."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A password, then a security question about the user's first school.",
+            "ru": "Пароль, затем контрольный вопрос про первую школу пользователя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An email address and a password.",
+            "ru": "Адрес электронной почты и пароль."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A password, then a one-time code from an authenticator app on the user's phone.",
+            "ru": "Пароль, затем одноразовый код из приложения-аутентификатора на телефоне пользователя."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A password typed twice, to rule out a typo.",
+            "ru": "Пароль, введённый дважды, чтобы исключить опечатку."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Multi-factor means evidence from different categories: something you know, something you have, something you are. A password plus a code generated on a device the user holds combines the first two. A second password and a security question are both knowledge, so a single leak — a phishing page, a reused answer — takes them together, and an email address is an identifier rather than a factor at all.",
+        "ru": "Многофакторность — это доказательства из разных категорий: то, что вы знаете, то, что у вас есть, то, чем вы являетесь. Пароль плюс код, сгенерированный на устройстве пользователя, сочетает первые две. Второй пароль и контрольный вопрос — оба из категории знания, поэтому одна утечка (фишинговая страница, повторно использованный ответ) забирает их вместе, а адрес почты вообще идентификатор, а не фактор."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
+        "https://pages.nist.gov/800-63-3/sp800-63b.html"
+      ]
+    },
+    {
+      "id": "security.authn-authz.003",
+      "section": "authn-authz",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "An endpoint takes the caller's id from the request: GET /api/progress?userId=... . The token is verified before the handler runs. What is wrong?",
+        "ru": "Эндпоинт берёт идентификатор вызывающего из запроса: GET /api/progress?userId=... . Токен проверяется до того, как отработает обработчик. Что здесь не так?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing, as long as the token was verified the request is authenticated.",
+            "ru": "Ничего: раз токен проверен, запрос аутентифицирован."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The id should be sent in a header instead, where it cannot be seen.",
+            "ru": "Идентификатор следовало передавать в заголовке, где его не видно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The parameter identifies a user but does not authenticate one, so any caller can read any id.",
+            "ru": "Параметр идентифицирует пользователя, но не аутентифицирует его, поэтому любой вызывающий прочитает любой id."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A UUID in a query string is too easy to guess, so a longer id would fix it.",
+            "ru": "UUID в query-строке слишком легко угадать, помог бы более длинный идентификатор."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The endpoint should be POST, because GET responses can be cached.",
+            "ru": "Эндпоинт должен быть POST, потому что GET-ответы кешируются."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Verifying the token establishes who the caller is. Reading the id from the request throws that away and trusts whatever was typed — identification, not authentication. The fix is to ignore the parameter and take the id from the verified identity, which is what CurrentUser.id() does in this project; it is the only source of a caller id in the services. Making the id longer only slows down guessing, and guessing is not required when the value is simply accepted.",
+        "ru": "Проверка токена устанавливает, кто вызывающий. Чтение id из запроса это выбрасывает и доверяет тому, что набрали, — это идентификация, а не аутентификация. Исправление — игнорировать параметр и брать id из проверенной личности; именно это делает `CurrentUser.id()` в проекте, и это единственный источник id вызывающего в сервисах. Удлинение идентификатора лишь замедляет подбор, а подбор и не нужен, когда значение просто принимают."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+        "https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "security.authn-authz.004",
+      "section": "authn-authz",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "Which rule is attribute-based (ABAC) rather than role-based (RBAC)?",
+        "ru": "Какое правило относится к атрибутной модели (ABAC), а не к ролевой (RBAC)?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Any user holding the ADMIN role may open the admin API.",
+            "ru": "Любой пользователь с ролью ADMIN может открыть админский API."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Users in the SUPPORT role may read tickets.",
+            "ru": "Пользователи с ролью SUPPORT могут читать тикеты."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A personal word group may be edited by the user who owns it.",
+            "ru": "Личную группу слов может редактировать тот пользователь, которому она принадлежит."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Only the REPORTING role may export data.",
+            "ru": "Только роль REPORTING может выгружать данные."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A user must hold either the EDITOR or the ADMIN role to publish.",
+            "ru": "Для публикации пользователю нужна роль EDITOR или ADMIN."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "RBAC decides from the names the caller holds, and all of the wrong answers are exactly that. Ownership is a relationship between the caller and the resource, so the decision needs an attribute of the row — that is ABAC, whether or not the team calls it that. WordGroupService.canEdit in this project is the small version: a personal group belongs to its owner, a shared one is admin-only, which mixes both models in one method.",
+        "ru": "RBAC решает по именам, которыми владеет вызывающий, и все неверные варианты именно таковы. Владение — это отношение между вызывающим и ресурсом, поэтому решение требует атрибута строки; это и есть ABAC, называет команда его так или нет. `WordGroupService.canEdit` в проекте — маленький пример: личная группа принадлежит владельцу, общая доступна только админу, и в одном методе смешаны обе модели."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+        "https://csrc.nist.gov/pubs/sp/800/162/upd2/final"
+      ]
+    },
+    {
+      "id": "security.authn-authz.005",
+      "section": "authn-authz",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "The whole admin API of this project is protected by one annotation on the resource class. What does that annotation NOT do?",
+        "ru": "Весь админский API этого проекта защищён одной аннотацией на классе ресурса. Чего эта аннотация НЕ делает?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It does not authenticate the caller; it only checks a role on an already established identity.",
+            "ru": "Она не аутентифицирует вызывающего: она лишь проверяет роль у уже установленной личности."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It does not decide which rows of data the caller may touch inside the method.",
+            "ru": "Она не решает, какие строки данных вызывающему можно трогать внутри метода."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It does not help if the role were taken from an unverified claim.",
+            "ru": "Она не спасёт, если роль взята из непроверенного claim'а."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It does nothing at all, because roles are strings and therefore untrustworthy.",
+            "ru": "Она не делает ничего, потому что роли — строки, а значит, им нельзя доверять."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It does not replace a check that the operation itself is allowed for anonymous callers.",
+            "ru": "Она не заменяет проверку того, разрешена ли операция анонимным вызывающим."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Four of these statements are true limits of an annotation: it consumes an identity rather than producing one, it knows nothing about individual rows, it is only as good as the source of the role, and it is one layer among several. The false statement is the fourth — a role being a string says nothing about trustworthiness. In this project the role arrives on the SecurityIdentity built by JwtIdentityProvider, which reads it from the database rather than from the token.",
+        "ru": "Четыре утверждения — настоящие ограничения аннотации: она потребляет личность, а не создаёт её; ничего не знает об отдельных строках; хороша ровно настолько, насколько надёжен источник роли; и она лишь один слой из нескольких. Ложное — четвёртое: то, что роль представлена строкой, ничего не говорит о доверии к ней. В проекте роль приходит в `SecurityIdentity`, который собирает `JwtIdentityProvider`, читая её из базы, а не из токена."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+        "https://docs.spring.io/spring-security/reference/servlet/authorization/method-security.html"
+      ]
+    },
+    {
+      "id": "security.authn-authz.006",
+      "section": "authn-authz",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "Support engineers must be able to read any user's profile, but only while they have an open ticket from that user, and only during working hours. What is the cheapest model that expresses this without a new role per case?",
+        "ru": "Инженеры поддержки должны иметь возможность читать профиль любого пользователя, но только пока у них открыт тикет от этого пользователя и только в рабочие часы. Какая модель выражает это дешевле всего, не заводя по роли на каждый случай?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Create a role per user segment and grant support engineers all of them.",
+            "ru": "Завести по роли на каждый сегмент пользователей и выдать их всем инженерам поддержки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An attribute-based rule over the ticket relation and the time of day, on top of a SUPPORT role gate.",
+            "ru": "Атрибутное правило по связи с тикетом и времени суток поверх ролевой проверки SUPPORT."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Grant the SUPPORT role read access to all profiles and review the audit log afterwards.",
+            "ru": "Выдать роли SUPPORT чтение всех профилей и разбирать журнал постфактум."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Issue a token with a very short lifetime whenever a ticket is opened.",
+            "ru": "Выпускать токен с очень коротким сроком жизни при открытии тикета."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Put the check in an HTTP filter that matches the profile URL pattern.",
+            "ru": "Положить проверку в HTTP-фильтр, сопоставляющий шаблон URL профиля."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The condition depends on a relationship (this engineer, this ticket, this user) and on the environment (the clock). Neither can be named in advance, so roles alone would need one per combination — the role explosion RBAC is known for. The workable shape is a coarse role gate on the endpoint plus an attribute rule evaluated where the ticket and profile are loaded. A short-lived token does not express the relation, auditing afterwards is detection rather than control, and a URL filter cannot see which ticket is involved.",
+        "ru": "Условие зависит от отношения (этот инженер, этот тикет, этот пользователь) и от окружения (время). Ни то, ни другое нельзя назвать заранее, поэтому на одних ролях понадобилась бы роль на каждую комбинацию — тот самый взрыв ролей, которым известна RBAC. Рабочая форма — грубая ролевая проверка на эндпоинте плюс атрибутное правило там, где загружаются тикет и профиль. Короткоживущий токен отношения не выражает, разбор журнала — это обнаружение, а не контроль, а фильтр по URL не видит, о каком тикете речь."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+        "https://csrc.nist.gov/pubs/sp/800/162/upd2/final"
+      ]
+    },
+    {
+      "id": "security.passwords-hashing.001",
+      "section": "passwords-hashing",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Why is a password store hashed rather than encrypted?",
+        "ru": "Почему хранилище паролей хешируют, а не шифруют?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because hashing is faster, and a login endpoint must answer quickly.",
+            "ru": "Потому что хеширование быстрее, а эндпоинт логина должен отвечать быстро."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because encryption output is longer and would not fit in a database column.",
+            "ru": "Потому что результат шифрования длиннее и не поместится в колонку базы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because hashes are unique, so two users can never share a password.",
+            "ru": "Потому что хеши уникальны, и два пользователя не могут иметь одинаковый пароль."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because encryption is reversible and the key would sit on the same server as the data.",
+            "ru": "Потому что шифрование обратимо, а ключ лежал бы на том же сервере, что и данные."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because encrypted passwords cannot be compared without decrypting them first.",
+            "ru": "Потому что зашифрованные пароли нельзя сравнить, не расшифровав их."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The threat model assumes the store leaks. Encryption has a key, and whoever holds the key gets the plaintext back — on a server that must verify logins, the key is right there. A hash has no inverse, so the only route back to the password is guessing. Password hashes are also deliberately slow rather than fast, which rules out the first answer, and identical passwords produce identical hashes unless a salt makes them differ.",
+        "ru": "Модель угроз исходит из того, что хранилище утечёт. У шифрования есть ключ, и владелец ключа получает открытый текст обратно, — а на сервере, который обязан проверять входы, ключ лежит тут же. У хеша обратной функции нет, поэтому единственный путь к паролю — перебор. Парольные хеши к тому же нарочно медленные, а не быстрые, что исключает первый вариант; одинаковые пароли дают одинаковые хеши, пока их не разведёт соль."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "security.passwords-hashing.002",
+      "section": "passwords-hashing",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What is a salt for, and does it need to be secret?",
+        "ru": "Для чего нужна соль и должна ли она быть секретной?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It makes every stored hash a separate problem to attack, and it is stored in the clear.",
+            "ru": "Она делает каждый хеш отдельной задачей для атаки и хранится в открытом виде."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It encrypts the hash, so it must be kept as carefully as a key.",
+            "ru": "Она шифрует хеш, поэтому её нужно беречь как ключ."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It makes the hash longer, which makes brute force proportionally slower.",
+            "ru": "Она удлиняет хеш, отчего перебор пропорционально замедляется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is a secret value shared by all rows and held outside the database.",
+            "ru": "Это секретное значение, общее для всех строк и хранящееся вне базы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It lets the same password produce the same hash, so duplicates can be found.",
+            "ru": "Она заставляет одинаковые пароли давать одинаковый хеш, чтобы находить дубликаты."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A salt is a random value unique to each password, stored alongside the hash and not secret. Its job is to defeat precomputation: one table no longer covers two accounts, and identical passwords no longer produce identical hashes, so the dump stops announcing which users share one. Bcrypt keeps the salt inside the hash string itself. The description of a single secret value held outside the database is a pepper, which is a different and narrower defence.",
+        "ru": "Соль — случайное значение, уникальное для каждого пароля, хранится рядом с хешем и секретом не является. Её задача — сорвать предвычисление: одна таблица больше не покрывает два аккаунта, а одинаковые пароли перестают давать одинаковый хеш, и дамп больше не сообщает, у кого пароль общий. Bcrypt держит соль внутри самой строки хеша. Описание единого секрета вне базы — это «перец», другая и более узкая защита."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html",
+        "https://www.usenix.org/legacy/events/usenix99/provos.html"
+      ]
+    },
+    {
+      "id": "security.passwords-hashing.003",
+      "section": "passwords-hashing",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "Bcrypt's cost parameter is logarithmic. Roughly how much more work is cost 12 than cost 10?",
+        "ru": "Параметр cost у bcrypt логарифмический. Во сколько примерно раз cost 12 дороже cost 10?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "About 1.2 times, since the cost is a percentage adjustment.",
+            "ru": "Примерно в 1,2 раза: cost задаёт поправку в процентах."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "About twice, since each step adds a fixed amount of work.",
+            "ru": "Примерно вдвое: каждый шаг добавляет фиксированный объём работы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "About 12 times, since the cost is the number of rounds.",
+            "ru": "Примерно в 12 раз: cost — это число раундов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The same, since the cost only changes the length of the salt.",
+            "ru": "Столько же: cost меняет только длину соли."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "About four times, since each step doubles the work.",
+            "ru": "Примерно вчетверо: каждый шаг удваивает работу."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The cost is an exponent: the number of iterations is two to the power of the cost, so each increment doubles the work and two increments quadruple it. That is what makes the parameter useful — one number tracks hardware getting faster. The value also travels inside the hash string, which is why raising it does not change existing rows: they keep verifying at their old cost until each user signs in and the password is rehashed.",
+        "ru": "Cost — это показатель степени: число итераций равно двойке в степени cost, поэтому каждый шаг удваивает работу, а два шага учетверяют. Этим параметр и полезен: одно число отслеживает ускорение железа. Значение к тому же едет внутри строки хеша — поэтому его повышение не меняет существующие строки: они продолжают проверяться со старой стоимостью, пока пользователь не войдёт и пароль не будет перехеширован."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html",
+        "https://www.usenix.org/legacy/events/usenix99/provos.html"
+      ]
+    },
+    {
+      "id": "security.passwords-hashing.004",
+      "section": "passwords-hashing",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "A team adds a pepper: a single secret value, held in the secrets manager, mixed into every password before hashing. What does this actually buy?",
+        "ru": "Команда добавляет «перец»: единый секрет, лежащий в менеджере секретов и подмешиваемый к каждому паролю перед хешированием. Что это на самом деле даёт?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It replaces the salt, because one secret protects all rows at once.",
+            "ru": "Он заменяет соль, потому что один секрет защищает все строки сразу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It protects in the case where the database leaks but the secret store does not.",
+            "ru": "Он защищает в случае, когда утекла база, но не хранилище секретов."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It makes each guess more expensive, in the same way a higher cost does.",
+            "ru": "Он делает каждую попытку дороже — так же, как более высокий cost."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It makes the hashes reversible for administrators who hold the secret.",
+            "ru": "Он делает хеши обратимыми для администраторов, у которых есть секрет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It removes the need to rehash when the work factor is raised.",
+            "ru": "Он избавляет от перехеширования при повышении work factor."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A pepper is orthogonal to a salt, not a replacement: the salt separates rows from each other, the pepper separates the whole table from anyone who has only the table. That is a real scenario — a SQL injection or a stolen backup — but a narrow one, and it buys nothing against an attacker who reaches the application process. It does not change the cost per guess and does not make anything reversible; rotating it requires rehashing, so it has an operational price of its own.",
+        "ru": "«Перец» ортогонален соли, а не заменяет её: соль разделяет строки между собой, а перец отделяет всю таблицу от того, у кого есть только таблица. Сценарий реальный — SQL-инъекция или украденный бэкап, — но узкий, и против атакующего, добравшегося до процесса приложения, он не даёт ничего. Стоимость одной попытки он не меняет и ничего не делает обратимым; его ротация требует перехеширования, то есть у него есть своя эксплуатационная цена."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "security.passwords-hashing.005",
+      "section": "passwords-hashing",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "This project configures bcrypt with LongPasswordStrategies.truncate. What is the consequence for a user whose passphrase is 200 characters long?",
+        "ru": "В проекте bcrypt настроен со стратегией LongPasswordStrategies.truncate. Каково последствие для пользователя с парольной фразой в 200 символов?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Registration fails, because bcrypt rejects input longer than 72 bytes.",
+            "ru": "Регистрация не проходит: bcrypt отвергает вход длиннее 72 байт."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The passphrase is hashed in blocks, so its full length still counts.",
+            "ru": "Фраза хешируется блоками, поэтому её полная длина всё равно учитывается."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The passphrase is hashed with SHA-512 first, so nothing is lost.",
+            "ru": "Фраза сначала хешируется SHA-512, поэтому ничего не теряется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The cost parameter is raised automatically to compensate for the length.",
+            "ru": "Параметр cost автоматически повышается, компенсируя длину."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only the first 72 bytes matter, so the extra length adds no strength.",
+            "ru": "Значение имеют только первые 72 байта, и лишняя длина не добавляет стойкости."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Bcrypt consumes at most 72 bytes, so a library must either reject longer input or truncate it. This project truncates deliberately — the comment in PasswordHasher says it matches what Spring Security's BCryptPasswordEncoder did, so hashes written before the port still verify. The cost of that compatibility is exactly this: a long passphrase is only as strong as its first 72 bytes, and non-ASCII characters reach the limit sooner because the count is in bytes. Pre-hashing with SHA-512 is the modern alternative, but switching to it invalidates every stored hash.",
+        "ru": "Bcrypt принимает не более 72 байт, поэтому библиотека обязана либо отвергать более длинный вход, либо обрезать его. Проект обрезает намеренно: в комментарии к `PasswordHasher` сказано, что это повторяет поведение `BCryptPasswordEncoder` из Spring Security, и хеши, записанные до переезда, продолжают проверяться. Цена совместимости ровно такая: длинная фраза стойка настолько, насколько её первые 72 байта, а не-ASCII символы упираются в предел раньше, потому что счёт идёт в байтах. Предварительный SHA-512 — современная альтернатива, но переход на неё обесценивает все сохранённые хеши."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html",
+        "https://www.usenix.org/legacy/events/usenix99/provos.html"
+      ]
+    },
+    {
+      "id": "security.passwords-hashing.006",
+      "section": "passwords-hashing",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "You raise the bcrypt cost from 10 to 12 and deploy. What happens to the accounts that already exist?",
+        "ru": "Вы поднимаете cost у bcrypt с 10 до 12 и выкатываете изменение. Что происходит с уже существующими учётными записями?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Their stored hashes keep cost 10 and still verify; only a rehash at next successful login moves them.",
+            "ru": "Их хеши сохраняют cost 10 и по-прежнему проверяются; перевести их может только перехеширование при следующем удачном входе."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "They stop verifying, so every existing user must reset their password.",
+            "ru": "Они перестают проверяться, и каждому существующему пользователю придётся сбросить пароль."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "They are rehashed lazily by the library the first time each row is read.",
+            "ru": "Библиотека перехеширует их лениво, при первом чтении каждой строки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "They are upgraded by the next database migration, which rewrites the column.",
+            "ru": "Их обновит следующая миграция базы, переписав колонку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing changes for them, and new accounts also keep cost 10 for compatibility.",
+            "ru": "Для них ничего не меняется, и новые записи тоже остаются на cost 10 ради совместимости."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A bcrypt hash carries its own parameters: the version, the cost and the salt are all inside the $2a$10$... string. Verification therefore reads the cost from the row and keeps working, which is what makes the change safe to deploy — and also what makes it incomplete. Old rows only move when the plaintext is available again, that is during a successful login, where the application compares, then rehashes at the new cost and writes the row back. No migration can do it, because the migration does not have the passwords.",
+        "ru": "Bcrypt-хеш несёт свои параметры в себе: версия, cost и соль лежат внутри строки `$2a$10$...`. Проверка поэтому читает cost из строки и продолжает работать — именно это делает выкатку безопасной и одновременно неполной. Старые строки переезжают лишь тогда, когда открытый пароль снова доступен, то есть при удачном входе: приложение сравнивает, затем перехеширует с новой стоимостью и записывает строку обратно. Миграция так не умеет, потому что паролей у неё нет."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html",
+        "https://www.usenix.org/legacy/events/usenix99/provos.html",
+        "https://www.rfc-editor.org/rfc/rfc9106"
+      ]
+    },
+    {
+      "id": "security.sessions-tokens-jwt.001",
+      "section": "sessions-tokens-jwt",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "A colleague suggests putting a user's internal notes into a JWT claim, arguing that the token is signed and therefore safe. What is wrong with that?",
+        "ru": "Коллега предлагает положить внутренние заметки о пользователе в claim JWT, аргументируя тем, что токен подписан и потому безопасен. Что здесь не так?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Nothing, as long as the signing algorithm is HS256 or stronger.",
+            "ru": "Ничего, если алгоритм подписи HS256 или сильнее."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The signature would have to be recomputed every time the notes change.",
+            "ru": "Подпись пришлось бы пересчитывать при каждом изменении заметок."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Claims may only hold strings, so the notes would have to be serialised anyway.",
+            "ru": "В claim'ах можно хранить только строки, поэтому заметки всё равно пришлось бы сериализовать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The payload is base64url encoded, not encrypted, so anyone holding the token reads it.",
+            "ru": "Payload закодирован base64url, а не зашифрован, поэтому его прочитает любой держатель токена."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The token would exceed the maximum size allowed by the JWT specification.",
+            "ru": "Токен превысил бы максимальный размер, разрешённый спецификацией JWT."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A signature proves that the content has not been altered; it does not hide it. The header and payload are base64url, which is an encoding anyone can reverse in a browser console. A JWT should therefore carry nothing the client is not already entitled to see, and never a secret. JWE is the variant that actually encrypts, and it is rarely what people mean when they say JWT.",
+        "ru": "Подпись доказывает, что содержимое не менялось, но не скрывает его. Заголовок и payload закодированы base64url — это кодирование, которое любой развернёт в консоли браузера. Поэтому в JWT не кладут ничего, чего клиенту и так не положено видеть, и никогда — секретов. Шифрует вариант JWE, но, говоря «JWT», обычно имеют в виду не его."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc7519",
+        "https://www.rfc-editor.org/rfc/rfc8725"
+      ]
+    },
+    {
+      "id": "security.sessions-tokens-jwt.002",
+      "section": "sessions-tokens-jwt",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "A stateless JWT API has a logout button. The frontend deletes the token from local storage. Is the user logged out?",
+        "ru": "У stateless JWT API есть кнопка выхода. Фронтенд удаляет токен из локального хранилища. Вышел ли пользователь?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Yes, because the server checks on every request whether the token is still held by a client.",
+            "ru": "Да, потому что сервер на каждом запросе проверяет, держит ли токен ещё какой-нибудь клиент."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Yes, because deleting the token invalidates its signature.",
+            "ru": "Да, потому что удаление токена делает подпись недействительной."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Yes, because the exp claim is recalculated on the server at logout.",
+            "ru": "Да, потому что при выходе сервер пересчитывает claim exp."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "No, because logout requires the token to be re-signed with a new key.",
+            "ru": "Нет, потому что для выхода токен нужно переподписать новым ключом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "From this browser yes, but a copy of the token taken earlier keeps working until it expires.",
+            "ru": "Из этого браузера да, но снятая ранее копия токена работает до истечения срока."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Statelessness means the server holds nothing to delete. Verification only checks the signature and the expiry, so any copy of the token that was taken before logout still verifies. That is the price paid for not doing a lookup. Real revocation needs state somewhere — a denylist of jti values, a per-user token version, or a short access token paired with a server-side refresh token.",
+        "ru": "Бесстатусность означает, что серверу нечего удалять. Проверка смотрит только на подпись и срок, поэтому любая копия токена, снятая до выхода, продолжает проходить проверку. Это и есть плата за отказ от поиска в хранилище. Настоящий отзыв требует состояния где-то: denylist по `jti`, версия токена у пользователя или короткий access-токен в паре с серверным refresh-токеном."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc8725",
+        "https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "security.sessions-tokens-jwt.003",
+      "section": "sessions-tokens-jwt",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A verifier reads the alg field out of the incoming token and picks its verification routine from it. Why is that a vulnerability?",
+        "ru": "Проверяющая сторона читает поле alg из входящего токена и по нему выбирает процедуру проверки. Почему это уязвимость?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because alg is optional, so a token without it cannot be verified at all.",
+            "ru": "Потому что alg необязателен, и токен без него вообще нельзя проверить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because reading the header costs an extra base64 decode on every request.",
+            "ru": "Потому что чтение заголовка стоит лишнего декодирования base64 на каждом запросе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because different libraries spell the algorithm names differently.",
+            "ru": "Потому что разные библиотеки пишут названия алгоритмов по-разному."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because alg only describes the payload encoding and says nothing about the signature.",
+            "ru": "Потому что alg описывает лишь кодирование payload и ничего не говорит о подписи."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the attacker chooses the algorithm: none accepts an unsigned token, and HS256 lets a public key be used as the shared secret.",
+            "ru": "Потому что алгоритм выбирает атакующий: none принимает неподписанный токен, а HS256 позволяет использовать открытый ключ как общий секрет."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "The header travels with the token, so obeying it lets the sender decide how their own token is checked. Two classic attacks follow: alg set to none, where a library that supports unsecured JWTs accepts a token with an empty signature, and an RS256 verifier tricked into HS256, where the attacker signs with the published public key and the verifier uses that same key as the HMAC secret. The fix is to pin the expected algorithm and key on the verifying side, which is what Jwts.parser().verifyWith(key) does here: the key type fixes the family.",
+        "ru": "Заголовок едет вместе с токеном, поэтому подчиняться ему — значит дать отправителю решать, как проверят его же токен. Отсюда две классические атаки: `alg: none`, когда библиотека, поддерживающая незащищённые JWT, принимает токен с пустой подписью, и подмена RS256 на HS256, когда атакующий подписывает опубликованным открытым ключом, а проверяющий использует тот же ключ как секрет HMAC. Исправление — фиксировать ожидаемый алгоритм и ключ на стороне проверки; именно это делает `Jwts.parser().verifyWith(key)`: тип ключа задаёт семейство."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc8725",
+        "https://cheatsheetseries.owasp.org/cheatsheets/JSON_Web_Token_for_Java_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "security.sessions-tokens-jwt.004",
+      "section": "sessions-tokens-jwt",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A team wants immediate revocation for its stateless JWTs and adds a denylist of jti values checked on every request. What have they traded away?",
+        "ru": "Команда хочет немедленного отзыва своих stateless JWT и добавляет denylist по значениям jti, проверяемый на каждом запросе. Чем они при этом пожертвовали?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The signature check, which the denylist now replaces.",
+            "ru": "Проверкой подписи, которую теперь заменяет denylist."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing: a denylist is free because it only holds revoked tokens.",
+            "ru": "Ничем: denylist бесплатен, потому что хранит только отозванные токены."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The ability to use short expiry times, which a denylist makes impossible.",
+            "ru": "Возможностью использовать короткие сроки жизни, которую denylist делает невозможной."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The statelessness itself: every request now needs a lookup in shared storage.",
+            "ru": "Самой бесстатусностью: каждый запрос теперь требует обращения в общее хранилище."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Interoperability, because jti is not part of the JWT specification.",
+            "ru": "Совместимостью, потому что jti не входит в спецификацию JWT."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Revocation and statelessness pull against each other, and a denylist resolves it by giving up the second. The lookup the design removed comes back, along with the shared store that must be reachable from every instance, so the properties start to resemble a session — which is fine, as long as it is a decision rather than an accident. Cheaper variants exist, such as a per-user token version compared against a claim, but they are the same trade in a smaller package. jti is a registered claim, and the signature still has to be checked either way.",
+        "ru": "Отзыв и бесстатусность тянут в разные стороны, и denylist разрешает конфликт, отказываясь от второй. Возвращается тот самый поиск, ради избавления от которого всё затевалось, а с ним и общее хранилище, доступное каждому экземпляру, — свойства начинают напоминать сессию. Это нормально, если это решение, а не случайность. Есть варианты дешевле, например версия токена у пользователя, сверяемая с claim'ом, но это тот же размен в меньшей упаковке. `jti` — стандартный claim, а подпись в любом случае проверять придётся."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc8725",
+        "https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "security.sessions-tokens-jwt.005",
+      "section": "sessions-tokens-jwt",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "This project's tokens carry a role claim, but JwtIdentityProvider ignores it and loads the user from the database on every request. What does that buy, and what does it not?",
+        "ru": "Токены этого проекта несут claim role, но JwtIdentityProvider его игнорирует и на каждом запросе загружает пользователя из базы. Что это даёт и чего не даёт?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It makes the token revocable, because a deleted row invalidates the signature.",
+            "ru": "Это делает токен отзываемым, потому что удалённая строка делает подпись недействительной."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It removes the need for an expiry, because the database is now the source of truth.",
+            "ru": "Это снимает необходимость в сроке жизни, потому что источником истины стала база."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It lets the service verify tokens issued by another service without sharing a key.",
+            "ru": "Это позволяет проверять токены, выпущенные другим сервисом, без общего ключа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It protects against a forged signature, which the claim alone could not do.",
+            "ru": "Это защищает от подделки подписи, чего один claim сделать не мог бы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A demoted admin loses admin rights at once, but the token itself is still valid until it expires.",
+            "ru": "Разжалованный админ теряет права немедленно, но сам токен остаётся действительным до истечения срока."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Reading the role from the row means authorization is evaluated against current data rather than against a snapshot taken when the token was minted, so a demotion or a deletion takes effect on the next request. What it does not do is revoke the token: the signature and expiry are unchanged, and a stolen token still authenticates as that user until exp. The cost is a query per request — the honest description is a trade, not a best practice, and it is the same lookup a session would have needed.",
+        "ru": "Чтение роли из строки означает, что авторизация считается по текущим данным, а не по снимку на момент выпуска токена, поэтому понижение или удаление действует со следующего запроса. Чего это не делает — не отзывает токен: подпись и срок не меняются, и украденный токен по-прежнему аутентифицирует этого пользователя до `exp`. Плата — запрос на каждый вызов; честно это описывается как размен, а не как «правильная практика», и это тот же поиск, который понадобился бы сессии."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc8725",
+        "https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "security.sessions-tokens-jwt.006",
+      "section": "sessions-tokens-jwt",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A second service must verify tokens this service issues, but must never be able to issue one itself. What changes?",
+        "ru": "Второй сервис должен проверять токены, которые выпускает этот сервис, но сам выпускать их не должен ни при каких условиях. Что нужно изменить?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Keep HS256 and give the second service a read-only copy of the shared secret.",
+            "ru": "Оставить HS256 и выдать второму сервису копию общего секрета только на чтение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Keep HS256 and add an issuer claim that the second service refuses to write.",
+            "ru": "Оставить HS256 и добавить claim issuer, который второй сервис не станет записывать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Have the second service call this one over HTTP to verify each token.",
+            "ru": "Заставить второй сервис вызывать этот по HTTP для проверки каждого токена."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Encrypt the token with the second service's key so only it can read the claims.",
+            "ru": "Зашифровать токен ключом второго сервиса, чтобы только он мог прочитать claim'ы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Move to an asymmetric algorithm such as RS256 or ES256 and publish only the public key.",
+            "ru": "Перейти на асимметричный алгоритм вроде RS256 или ES256 и публиковать только открытый ключ."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "With HMAC the verifying key is the signing key, so anyone who can check a token can mint one; there is no read-only copy of a symmetric secret. Asymmetric signing splits the capability: the issuer keeps the private key, verifiers hold only the public one, usually fetched from a published JWKS so rotation does not require a redeploy. Encryption solves confidentiality rather than authenticity, an issuer claim is only as trustworthy as the signature under it, and a verification call per request turns a stateless check back into a network dependency.",
+        "ru": "При HMAC ключ проверки и есть ключ подписи, поэтому всякий, кто может проверить токен, может его и выпустить: копии симметричного секрета «только на чтение» не бывает. Асимметричная подпись разделяет эти возможности: издатель держит закрытый ключ, проверяющие — только открытый, обычно забираемый из опубликованного JWKS, чтобы ротация не требовала передеплоя. Шифрование решает вопрос конфиденциальности, а не подлинности; claim issuer надёжен ровно настолько, насколько подпись под ним; а вызов на проверку при каждом запросе превращает бесстатусную проверку обратно в сетевую зависимость."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc7519",
+        "https://www.rfc-editor.org/rfc/rfc8725",
+        "https://cheatsheetseries.owasp.org/cheatsheets/JSON_Web_Token_for_Java_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "security.filter-chain.001",
+      "section": "filter-chain",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "The authentication mechanism in this project returns no identity when the Authorization header is missing. What does that mean for the request?",
+        "ru": "Механизм аутентификации в этом проекте не возвращает личности, если заголовок Authorization отсутствует. Что это означает для запроса?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It continues as an anonymous request, and the authorization rules decide whether that is enough.",
+            "ru": "Запрос продолжается как анонимный, а правила авторизации решают, достаточно ли этого."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is rejected immediately with 401 by the mechanism itself.",
+            "ru": "Он немедленно отвергается самим механизмом с кодом 401."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is rejected immediately with 403, because no role could be determined.",
+            "ru": "Он немедленно отвергается с кодом 403, потому что роль определить не удалось."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is retried once with an empty credential before being refused.",
+            "ru": "Он один раз повторяется с пустыми учётными данными, а потом отклоняется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It bypasses the security layer entirely and reaches the handler.",
+            "ru": "Он полностью минует слой безопасности и доходит до обработчика."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Authentication and authorization are separate steps on purpose. The mechanism's job is to produce a fact — here there is no credential to read, so the fact is that the request is anonymous. Only the authorization step, reading the path rules, decides whether anonymous is acceptable; that is what lets one chain serve both the public sign-in endpoints and everything under /api. Returning nothing is not the same as bypassing the security layer: the rules still run.",
+        "ru": "Аутентификация и авторизация разделены намеренно. Задача механизма — произвести факт; здесь читать нечего, и факт состоит в том, что запрос анонимный. Достаточно ли анонимности, решает только шаг авторизации, читающий правила по путям, — и именно это позволяет одной цепочке обслуживать и публичные эндпоинты входа, и всё, что под `/api`. Не вернуть ничего — не то же самое, что обойти слой безопасности: правила всё равно отработают."
+      },
+      "sources": [
+        "https://quarkus.io/guides/security-overview",
+        "https://docs.spring.io/spring-security/reference/servlet/architecture.html"
+      ]
+    },
+    {
+      "id": "security.filter-chain.002",
+      "section": "filter-chain",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Why is the configuration below safer than listing every protected endpoint by name?",
+        "ru": "Почему конфигурация ниже безопаснее, чем перечисление каждого защищённого эндпоинта поимённо?"
+      },
+      "code": "quarkus.http.auth.permission.authenticated.paths=/api/*\nquarkus.http.auth.permission.authenticated.policy=authenticated\nquarkus.http.auth.permission.public.paths=/api/auth/login,/api/auth/register\nquarkus.http.auth.permission.public.policy=permit",
+      "options": [
+        {
+          "text": {
+            "en": "Because path prefixes are matched faster than a long list of exact paths.",
+            "ru": "Потому что префиксы путей сопоставляются быстрее длинного списка точных путей."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because a prefix rule cannot be bypassed by percent-encoding, while an exact path can.",
+            "ru": "Потому что префиксное правило нельзя обойти процентным кодированием, а точный путь можно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the list of public endpoints is shorter and therefore easier to review.",
+            "ru": "Потому что список публичных эндпоинтов короче и его легче просматривать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because it keeps CORS preflight requests from reaching the security layer.",
+            "ru": "Потому что так preflight-запросы CORS не доходят до слоя безопасности."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because a new endpoint under /api is protected the moment it exists, rather than when someone remembers to protect it.",
+            "ru": "Потому что новый эндпоинт под /api защищён с момента появления, а не с момента, когда кто-то вспомнит его защитить."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "This is deny by default. Everything under the prefix is closed and the exceptions are named, so forgetting a rule produces a 401 on a working endpoint — a loud failure someone notices. The opposite arrangement, open until annotated, fails silently and puts an unprotected endpoint in production; that pattern is a large part of what OWASP files under Broken Access Control. Review convenience and matching speed are side effects, not the reason.",
+        "ru": "Это запрет по умолчанию. Всё под префиксом закрыто, а исключения названы поимённо, поэтому забытое правило даёт 401 на работающем эндпоинте — громкий отказ, который кто-нибудь заметит. Обратная схема, «открыто, пока не аннотировано», ломается молча и выпускает в прод незащищённый эндпоинт; из этого во многом и состоит категория Broken Access Control у OWASP. Удобство ревью и скорость сопоставления — побочные эффекты, а не причина."
+      },
+      "sources": [
+        "https://owasp.org/Top10/A01_2021-Broken_Access_Control/",
+        "https://quarkus.io/guides/security-overview"
+      ]
+    },
+    {
+      "id": "security.filter-chain.003",
+      "section": "filter-chain",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "What is the purpose of the challenge the authentication mechanism produces?",
+        "ru": "Для чего нужен challenge, который производит механизм аутентификации?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It carries the next token to be used, so the client does not have to sign in again.",
+            "ru": "Он несёт следующий токен, чтобы клиенту не пришлось входить заново."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It tells a caller refused for lack of credentials how it is expected to authenticate.",
+            "ru": "Он сообщает вызывающему, которому отказано из-за отсутствия учётных данных, каким способом от него ждут аутентификации."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It logs the failed attempt so repeated failures can be rate limited.",
+            "ru": "Он записывает неудачную попытку, чтобы ограничивать частоту повторов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It redirects the browser to the configured frontend login page.",
+            "ru": "Он перенаправляет браузер на настроенную страницу входа фронтенда."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It proves to the client that the server holds the signing key.",
+            "ru": "Он доказывает клиенту, что у сервера есть ключ подписи."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A challenge is the response sent when access is refused because nothing was presented: status 401 with a WWW-Authenticate header naming the scheme, here Bearer. It is the mechanism telling the client what kind of credential would work, which is why the mechanism owns it rather than the authorization layer. A redirect would be the browser-oriented equivalent of a form login, and it is the wrong answer for an API whose clients are not browsers following redirects.",
+        "ru": "Challenge — это ответ, отправляемый при отказе из-за того, что ничего не предъявили: статус 401 и заголовок `WWW-Authenticate` с названием схемы, здесь Bearer. Так механизм сообщает клиенту, какие учётные данные подошли бы, — поэтому он принадлежит механизму, а не слою авторизации. Редирект был бы браузерным эквивалентом формы входа и неверен для API, клиенты которого за редиректами не ходят."
+      },
+      "sources": [
+        "https://quarkus.io/guides/security-overview",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/WWW-Authenticate"
+      ]
+    },
+    {
+      "id": "security.filter-chain.004",
+      "section": "filter-chain",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "JwtIdentityProvider wraps its database lookup in context.runBlocking(...). What breaks if that wrapper is removed?",
+        "ru": "JwtIdentityProvider оборачивает обращение к базе в context.runBlocking(...). Что сломается, если убрать эту обёртку?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The transaction interceptor stops applying, so the lookup runs without a transaction.",
+            "ru": "Перестанет применяться перехватчик транзакций, и запрос пойдёт без транзакции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A blocking call runs on the event loop and stalls every other request that loop is serving.",
+            "ru": "Блокирующий вызов исполнится на event loop и подвесит все остальные запросы этого цикла."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The SecurityIdentity is built before the token signature has been verified.",
+            "ru": "SecurityIdentity будет построен до того, как проверена подпись токена."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The identity is cached per thread, so the next request sees the previous user.",
+            "ru": "Личность закешируется на потоке, и следующий запрос увидит предыдущего пользователя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing at runtime; it is a readability convention for asynchronous code.",
+            "ru": "Во время выполнения ничего; это соглашение о читаемости асинхронного кода."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The provider is called on an event-loop thread, which is shared by many connections and must never block. A JDBC lookup does block, so the work is handed to a worker thread. Removing the wrapper does not throw an exception that points at the cause — it simply makes unrelated requests slow under load, which is a much harder failure to read from a stack trace. The transaction boundary is a separate concern, and it is why the lookup lives in its own bean, AuthenticatedUserLookup.",
+        "ru": "Провайдер вызывается на потоке event loop, который разделяют многие соединения и который нельзя блокировать. JDBC-запрос блокирует, поэтому работа передаётся воркеру. Снятие обёртки не приводит к исключению, указывающему на причину, — оно просто делает посторонние запросы медленными под нагрузкой, а такую поломку куда труднее прочитать по стектрейсу. Граница транзакции — отдельная забота, ради неё поиск и вынесен в собственный бин `AuthenticatedUserLookup`."
+      },
+      "sources": [
+        "https://quarkus.io/guides/security-overview"
+      ]
+    },
+    {
+      "id": "security.filter-chain.005",
+      "section": "filter-chain",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A service copies the current principal into a field of a singleton bean during request handling, so a background job can read it later. Why is that dangerous?",
+        "ru": "Сервис копирует текущий principal в поле синглтон-бина во время обработки запроса, чтобы фоновая задача могла прочитать его позже. Почему это опасно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because a principal is not serializable and the field would fail to persist.",
+            "ru": "Потому что principal не сериализуем и поле не удастся сохранить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the security context is read-only and the copy would always be null.",
+            "ru": "Потому что контекст безопасности доступен только для чтения и копия всегда была бы null."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because one request overwrites the field for every concurrent request, and the value outlives the request that set it.",
+            "ru": "Потому что один запрос перезаписывает поле для всех параллельных запросов, а значение переживает тот запрос, который его установило."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because the framework clears the field at the end of the request anyway.",
+            "ru": "Потому что фреймворк всё равно очистит это поле в конце запроса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because reading a principal outside a request requires an extra role.",
+            "ru": "Потому что чтение principal вне запроса требует дополнительной роли."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A singleton has one field and the server has many concurrent requests, so the last writer wins and a background job reads whoever happened to be last — or an identity from a request that finished minutes ago. The framework manages the lifetime of its own context, including clearing it on a pooled thread, but it knows nothing about a field somebody else wrote. If a background task needs an identity, pass it explicitly as a parameter, or use the framework's own context propagation.",
+        "ru": "У синглтона одно поле, а у сервера много параллельных запросов: побеждает последний записавший, и фоновая задача читает того, кто случайно оказался последним, — или личность из запроса, завершившегося несколько минут назад. Фреймворк управляет временем жизни своего контекста, в том числе очищает его на потоке из пула, но ничего не знает о поле, которое записал кто-то другой. Если фоновой задаче нужна личность, передавайте её явно параметром или используйте штатный механизм переноса контекста."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-security/reference/servlet/architecture.html",
+        "https://quarkus.io/guides/security-overview"
+      ]
+    },
+    {
+      "id": "security.filter-chain.006",
+      "section": "filter-chain",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A requirement arrives: a user may only read a document that belongs to their organisation. A developer proposes an HTTP filter that matches /api/documents/** and checks the organisation. What is the strongest objection?",
+        "ru": "Приходит требование: пользователь может читать документ только своей организации. Разработчик предлагает HTTP-фильтр, который сопоставляет /api/documents/** и проверяет организацию. Какое возражение сильнее всего?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A filter cannot read the request body, so a POST search endpoint would be missed.",
+            "ru": "Фильтр не может прочитать тело запроса, поэтому POST-эндпоинт поиска будет пропущен."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Filters run before CORS, so a browser would block the response.",
+            "ru": "Фильтры отрабатывают раньше CORS, и браузер заблокировал бы ответ."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The check belongs where the document is loaded: a filter sees a URL, and a URL the filter and the router read differently is a bypass.",
+            "ru": "Проверке место там, где документ загружается: фильтр видит URL, а URL, который фильтр и роутер читают по-разному, — это обход."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A filter cannot throw an exception, so it cannot refuse the request.",
+            "ru": "Фильтр не может бросить исключение, а значит, не может отказать в запросе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The organisation is an attribute, and filters can only evaluate roles.",
+            "ru": "Организация — атрибут, а фильтры умеют проверять только роли."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The rule is about a row, and a filter does not have the row — it has a string it must parse back into an id, then look up separately. Every place where its idea of the URL differs from the router's is a way past it: a trailing slash, percent-encoding, case sensitivity, a matrix parameter, a second route that reaches the same document. Putting the check where the document is loaded removes the gap entirely, because there is nothing left to disagree about. The other statements are either false or minor.",
+        "ru": "Правило относится к строке данных, а у фильтра строки нет — у него есть текст, который надо разобрать обратно в идентификатор и отдельно найти. Каждое место, где его представление об URL расходится с представлением роутера, — путь мимо него: завершающий слеш, процентное кодирование, регистр, матричный параметр, второй маршрут, ведущий к тому же документу. Проверка там, где документ загружается, убирает зазор целиком, потому что расходиться больше нечему. Остальные утверждения либо неверны, либо второстепенны."
+      },
+      "sources": [
+        "https://owasp.org/Top10/A01_2021-Broken_Access_Control/",
+        "https://docs.spring.io/spring-security/reference/servlet/architecture.html",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS"
+      ]
+    },
+    {
+      "id": "security.method-and-data-authorization.001",
+      "section": "method-and-data-authorization",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "An endpoint is annotated so that any authenticated user may call it, and it loads a record by the id in the path. Which question is still unanswered?",
+        "ru": "Эндпоинт аннотирован так, что вызвать его может любой аутентифицированный пользователь, и он загружает запись по идентификатору из пути. Какой вопрос остаётся без ответа?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Whether the caller's token has expired.",
+            "ru": "Не истёк ли токен вызывающего."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whether the caller holds a role at all.",
+            "ru": "Есть ли у вызывающего вообще какая-нибудь роль."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whether the HTTP method is the right one for this operation.",
+            "ru": "Тот ли HTTP-метод выбран для этой операции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whether the request body passed validation.",
+            "ru": "Прошло ли тело запроса валидацию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whether this particular record belongs to this particular caller.",
+            "ru": "Принадлежит ли эта конкретная запись этому конкретному вызывающему."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "An annotation authorizes the operation: may a caller of this kind perform this kind of action. It is evaluated before anything is loaded, so it cannot know anything about the row. Whether the id in the path is the caller's own is a separate fact that only the data can answer, and it is the fact most often left unchecked. Expiry and validation are handled earlier and elsewhere.",
+        "ru": "Аннотация авторизует операцию: можно ли такому вызывающему такое действие вообще. Она вычисляется до того, как что-либо загружено, и потому ничего не знает о строке. Принадлежит ли идентификатор из пути самому вызывающему — отдельный факт, ответ на который есть только у данных, и именно его чаще всего не проверяют. Срок действия и валидация обрабатываются раньше и в другом месте."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+        "https://owasp.org/Top10/A01_2021-Broken_Access_Control/"
+      ]
+    },
+    {
+      "id": "security.method-and-data-authorization.002",
+      "section": "method-and-data-authorization",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What is an insecure direct object reference (IDOR)?",
+        "ru": "Что такое небезопасная прямая ссылка на объект (IDOR)?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A reference to an object that has already been garbage collected.",
+            "ru": "Ссылка на объект, который уже собран сборщиком мусора."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An identifier accepted from the request that reaches a record without a check that the caller owns it.",
+            "ru": "Принятый из запроса идентификатор, который доводит до записи без проверки, что она принадлежит вызывающему."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A database identifier exposed in an API response instead of a surrogate key.",
+            "ru": "Идентификатор базы, показанный в ответе API вместо суррогатного ключа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A foreign key that points at a row in a table the service does not own.",
+            "ru": "Внешний ключ, указывающий на строку в таблице, которая сервису не принадлежит."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A URL that is guessable because it uses sequential integers.",
+            "ru": "URL, угадываемый из-за последовательных целочисленных идентификаторов."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "IDOR is a missing authorization check, not a naming problem. Changing an identifier in a request reaches somebody else's record because nothing compares the record's owner with the caller. Sequential ids make the gap easier to find, and UUIDs make it harder, but neither closes it — an attacker who has ever seen an id can replay it. The fix is the check, not the shape of the identifier.",
+        "ru": "IDOR — это отсутствующая проверка авторизации, а не проблема именования. Замена идентификатора в запросе доводит до чужой записи потому, что владельца записи никто не сравнивает с вызывающим. Последовательные идентификаторы облегчают поиск дыры, UUID усложняют, но ни то, ни другое её не закрывает: атакующий, однажды увидевший идентификатор, повторит его. Лечится проверкой, а не формой идентификатора."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html",
+        "https://owasp.org/Top10/A01_2021-Broken_Access_Control/"
+      ]
+    },
+    {
+      "id": "security.method-and-data-authorization.003",
+      "section": "method-and-data-authorization",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "In the code below, the forbidden branch repeats the not-found message instead of saying that the session belongs to somebody else. Why?",
+        "ru": "В коде ниже ветка запрета повторяет сообщение «не найдено» вместо того, чтобы сказать, что сессия принадлежит кому-то другому. Почему?"
+      },
+      "code": "private QuizSessionEntity loadOwned(UUID userId, UUID sessionId) {\n    QuizSessionEntity entity = sessions.findById(sessionId)\n            .orElseThrow(() -> new ApiException(Status.NOT_FOUND, \"Quiz session not found\"));\n    if (!entity.getUserId().equals(userId)) {\n        throw new ApiException(Status.FORBIDDEN, \"Quiz session not found\");\n    }\n    return entity;\n}",
+      "options": [
+        {
+          "text": {
+            "en": "To keep the two messages translatable from a single resource key.",
+            "ru": "Чтобы оба сообщения переводились из одного ключа ресурсов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because a 403 response body is discarded by most HTTP clients anyway.",
+            "ru": "Потому что тело ответа 403 всё равно отбрасывается большинством HTTP-клиентов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "So the endpoint does not confirm to a stranger that a session with that id exists.",
+            "ru": "Чтобы эндпоинт не подтверждал постороннему, что сессия с таким идентификатором существует."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because the framework requires the message of a 403 to match the 404 of the same handler.",
+            "ru": "Потому что фреймворк требует, чтобы сообщение 403 совпадало с 404 того же обработчика."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "To make the error easier to correlate in the log.",
+            "ru": "Чтобы ошибку было проще связывать по логам."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The existence of a record can itself be information. A response that distinguishes not-found from not-yours turns the endpoint into an oracle: an attacker enumerates ids and learns which ones are real, which is useful even without reading the contents. Keeping the message identical removes that signal. The status code still differs here, so a complete treatment would return 404 for both — the message is the cheap half of the defence.",
+        "ru": "Само существование записи может быть информацией. Ответ, отличающий «не найдено» от «не ваше», превращает эндпоинт в оракул: атакующий перебирает идентификаторы и узнаёт, какие из них настоящие, — это полезно даже без чтения содержимого. Одинаковое сообщение убирает этот сигнал. Код статуса здесь всё же различается, поэтому полная реализация возвращала бы 404 в обоих случаях; сообщение — дешёвая половина защиты."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+        "https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "security.method-and-data-authorization.004",
+      "section": "method-and-data-authorization",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A list endpoint loads all records and then filters out the ones the caller does not own, in Java. Apart from memory, what is the concrete correctness problem?",
+        "ru": "Списочный эндпоинт загружает все записи и затем отфильтровывает в Java те, которые вызывающему не принадлежат. Если отвлечься от памяти, в чём конкретная проблема с корректностью?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Pagination is computed before the filter, so page sizes and totals describe other people's data.",
+            "ru": "Пагинация считается до фильтра, поэтому размеры страниц и итоги описывают чужие данные."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The filter runs outside the transaction, so it sees stale rows.",
+            "ru": "Фильтр отрабатывает вне транзакции и потому видит устаревшие строки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Java comparisons of UUIDs are case sensitive, so some rows are dropped.",
+            "ru": "Сравнение UUID в Java чувствительно к регистру, и часть строк теряется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The database cannot use an index when the result is filtered afterwards.",
+            "ru": "База не может использовать индекс, когда результат фильтруется после выборки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Lazy associations are not initialised, so ownership cannot be read.",
+            "ru": "Ленивые связи не инициализированы, и владельца прочитать нельзя."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The visible bug is arithmetic. A page requested as twenty rows is twenty rows of everybody's data, of which the caller sees only their own, so pages come back short, totals are wrong and rows are skipped between pages. It is also a leak in its own right: the count tells the caller how many records exist overall. Filtering in the query fixes both, which is why the repositories here expose lookups like findAccessible(userId) rather than findAll.",
+        "ru": "Видимая ошибка — арифметическая. Запрошенная страница в двадцать строк — это двадцать строк общих данных, из которых вызывающий видит только свои: страницы приходят неполными, итоги неверны, а строки между страницами теряются. Это и утечка сама по себе: счётчик сообщает вызывающему, сколько записей существует всего. Фильтрация в запросе чинит и то, и другое — поэтому репозитории здесь дают поиски вида `findAccessible(userId)`, а не `findAll`."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+        "https://owasp.org/Top10/A01_2021-Broken_Access_Control/"
+      ]
+    },
+    {
+      "id": "security.method-and-data-authorization.005",
+      "section": "method-and-data-authorization",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A registration endpoint binds the incoming JSON directly onto the user entity and saves it. What is the name and the fix for the resulting bug?",
+        "ru": "Эндпоинт регистрации привязывает входящий JSON прямо на сущность пользователя и сохраняет её. Как называется получившаяся ошибка и как она лечится?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Open redirect; validate the target URL against an allowlist.",
+            "ru": "Открытый редирект; проверять целевой URL по списку разрешённых."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Prototype pollution; freeze the object before binding.",
+            "ru": "Загрязнение прототипа; заморозить объект перед привязкой."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Mass assignment; accept a DTO with only the fields a client may set and map explicitly.",
+            "ru": "Массовое присваивание; принимать DTO только с теми полями, которые клиент вправе задавать, и маппить явно."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Injection; parameterise the insert statement.",
+            "ru": "Инъекция; параметризовать выражение вставки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Broken authentication; require a second factor at registration.",
+            "ru": "Сломанная аутентификация; требовать второй фактор при регистрации."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Binding a request body onto an entity gives the client every settable field, so a caller who adds a role to the JSON becomes an administrator and one who adds an id overwrites somebody else's row. This project takes a RegisterRequest instead and sets Role.USER itself, which is the general fix: an explicit input type and an explicit mapping, rather than an allowlist maintained by annotations that someone will forget to update when a field is added.",
+        "ru": "Привязка тела запроса на сущность отдаёт клиенту все устанавливаемые поля: тот, кто добавит в JSON роль, станет администратором, а тот, кто добавит id, перезапишет чужую строку. В проекте вместо этого принимается `RegisterRequest`, а `Role.USER` ставится самим сервисом — это и есть общее лекарство: явный входной тип и явный маппинг, а не список разрешённых полей на аннотациях, который кто-нибудь забудет обновить при добавлении поля."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html",
+        "https://owasp.org/Top10/A01_2021-Broken_Access_Control/"
+      ]
+    },
+    {
+      "id": "security.method-and-data-authorization.006",
+      "section": "method-and-data-authorization",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A service has a public method annotated with @PreAuthorize, and another method in the same class calls it directly. Is the annotation enforced?",
+        "ru": "У сервиса есть публичный метод с аннотацией @PreAuthorize, а другой метод того же класса вызывает его напрямую. Сработает ли аннотация?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Yes, because method security is woven into the bytecode at build time.",
+            "ru": "Да, потому что method security вплетается в байт-код на этапе сборки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Yes, but only if the method is also annotated as transactional.",
+            "ru": "Да, но только если метод к тому же помечен как транзакционный."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "No, because a self-invocation does not pass through the proxy that applies the check.",
+            "ru": "Нет, потому что самовызов не проходит через прокси, который применяет проверку."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "No, because @PreAuthorize only applies to controller methods.",
+            "ru": "Нет, потому что @PreAuthorize применяется только к методам контроллеров."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Yes, because the security context is thread-bound and available inside the class.",
+            "ru": "Да, потому что контекст безопасности привязан к потоку и доступен внутри класса."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Method security in the default configuration works through a proxy: callers holding the injected reference go through the interceptor, and a call on this does not. The check silently does not run, which is the worst possible failure mode for an authorization rule. The same trap applies to transactions and caching for the same reason. The ways out are to move the protected method to another bean, to inject the bean into itself, or to switch to AspectJ weaving — and the reason to know all three is that an annotation that looks applied and is not will never show up in a passing test suite.",
+        "ru": "Method security в конфигурации по умолчанию работает через прокси: вызывающие, у которых есть внедрённая ссылка, проходят через перехватчик, а вызов на `this` — нет. Проверка молча не выполняется, и для правила авторизации это худший из возможных способов сломаться. Та же ловушка по той же причине действует для транзакций и кеширования. Выходы: вынести защищённый метод в другой бин, внедрить бин в самого себя или перейти на вплетение AspectJ. Знать все три стоит потому, что аннотация, которая выглядит применённой и не применена, никогда не проявится в зелёном наборе тестов."
+      },
+      "sources": [
+        "https://docs.spring.io/spring-security/reference/servlet/authorization/method-security.html",
+        "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "security.owasp-top-10.001",
+      "section": "owasp-top-10",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which statement about the two queries below is correct?",
+        "ru": "Какое утверждение о двух запросах ниже верно?"
+      },
+      "code": "// 1\nString sql = \"SELECT * FROM users WHERE email = '\" + email + \"'\";\nstatement.executeQuery(sql);\n\n// 2\nPreparedStatement ps = conn.prepareStatement(\"SELECT * FROM users WHERE email = ?\");\nps.setString(1, email);",
+      "options": [
+        {
+          "text": {
+            "en": "Both are safe, because JDBC escapes single quotes in either form.",
+            "ru": "Оба безопасны, потому что JDBC экранирует одинарные кавычки в обоих случаях."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The second is safe because the value is sent apart from the statement and can never become code.",
+            "ru": "Второй безопасен, потому что значение передаётся отдельно от выражения и не может стать кодом."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The first becomes safe if the value is checked for the characters ' and --.",
+            "ru": "Первый становится безопасным, если проверить значение на символы ' и --."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The second is only safe for strings; numbers still have to be validated.",
+            "ru": "Второй безопасен только для строк, числа всё равно надо валидировать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both are equivalent, and the second is merely more readable.",
+            "ru": "Оба эквивалентны, а второй просто читабельнее."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "In the first version the value is part of the statement by the time the database parses it, so the parser cannot tell data from instructions. Filtering characters is writing a parser to defeat a parser, and the attempt fails on encodings, comment syntaxes and dialect quirks. A parameter is sent separately and is bound after parsing, so its content is never interpreted as SQL, whatever it contains and whatever its type.",
+        "ru": "В первом варианте значение становится частью выражения ещё до того, как база начнёт его разбирать, и парсер не может отличить данные от инструкций. Фильтрация символов — это попытка написать парсер, чтобы победить парсер, и она разбивается о кодировки, синтаксис комментариев и особенности диалектов. Параметр передаётся отдельно и связывается после разбора, поэтому его содержимое не интерпретируется как SQL — что бы в нём ни было и какого бы он ни был типа."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
+        "https://owasp.org/Top10/"
+      ]
+    },
+    {
+      "id": "security.owasp-top-10.002",
+      "section": "owasp-top-10",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does the OWASP Top 10 actually rank?",
+        "ru": "Что на самом деле ранжирует OWASP Top 10?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Categories of weakness, ordered from data gathered across many applications.",
+            "ru": "Категории слабостей, упорядоченные по данным, собранным с множества приложений."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Individual CVEs, ordered by their CVSS score.",
+            "ru": "Отдельные CVE, упорядоченные по их оценке CVSS."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Programming languages, ordered by how often they are exploited.",
+            "ru": "Языки программирования, упорядоченные по частоте эксплуатации."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Security tools, ordered by how much they detect.",
+            "ru": "Средства защиты, упорядоченные по полноте обнаружения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Compliance requirements that an application must meet to be certified.",
+            "ru": "Требования соответствия, которые приложение обязано выполнить для сертификации."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The Top 10 is an awareness document listing categories — broken access control, injection, cryptographic failures — rebuilt every few years from contributed data on real applications. It is not a standard and nothing is certified against it. When testable requirements are needed the Application Security Verification Standard is the document to reach for, and the cheat sheets carry the concrete guidance per technology.",
+        "ru": "Top 10 — документ для осведомлённости, перечисляющий категории: сломанный контроль доступа, инъекции, криптографические провалы, — и пересобираемый раз в несколько лет по присланным данным о реальных приложениях. Это не стандарт, и по нему ничего не сертифицируют. Когда нужны проверяемые требования, берут Application Security Verification Standard, а конкретные рекомендации по технологиям лежат в cheat sheet'ах."
+      },
+      "sources": [
+        "https://owasp.org/Top10/"
+      ]
+    },
+    {
+      "id": "security.owasp-top-10.003",
+      "section": "owasp-top-10",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "An endpoint accepts a sort column name as a query parameter and appends it to ORDER BY. Why can a bind parameter not fix this, and what does?",
+        "ru": "Эндпоинт принимает имя колонки сортировки в query-параметре и дописывает его в ORDER BY. Почему связанный параметр это не чинит и что чинит?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A parameter cannot be used in ORDER BY only in PostgreSQL; an allowlist is a portability workaround.",
+            "ru": "Параметр нельзя использовать в ORDER BY только в PostgreSQL; список разрешённых — обходной путь ради переносимости."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A bind parameter would work, but it is slower, so an allowlist is preferred for performance.",
+            "ru": "Связанный параметр сработал бы, но медленнее, поэтому список разрешённых выбирают ради производительности."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Identifiers are part of the statement structure and cannot be bound, so the value must be checked against a list of known columns.",
+            "ru": "Идентификаторы — часть структуры выражения и не связываются, поэтому значение нужно сверять со списком известных колонок."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Escaping the value with the driver's quote method is equivalent and simpler.",
+            "ru": "Экранирование значения методом кавычек драйвера эквивалентно и проще."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing is needed, because ORDER BY cannot change which rows are returned.",
+            "ru": "Ничего не нужно, потому что ORDER BY не меняет, какие строки вернутся."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Binding replaces values, and a column name is not a value — the statement's structure has to be fixed before the database can prepare it. So the only safe construction is to map the incoming string onto one of a fixed set of known columns and reject everything else: an allowlist, not escaping. And ORDER BY is not harmless: an injected expression there can be used to read other columns a row at a time, so this is a real injection point rather than a cosmetic one.",
+        "ru": "Связывание подставляет значения, а имя колонки — не значение: структура выражения должна быть зафиксирована до того, как база его подготовит. Поэтому единственная безопасная конструкция — отобразить пришедшую строку на одну из фиксированного набора известных колонок и отвергнуть всё остальное: именно список разрешённых, а не экранирование. И ORDER BY не безобиден: внедрённое туда выражение позволяет вычитывать другие колонки по строке за раз, так что это настоящая точка инъекции, а не косметическая."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "security.owasp-top-10.004",
+      "section": "owasp-top-10",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A feature lets users register a webhook URL that the backend then calls. Which control most directly addresses the SSRF risk?",
+        "ru": "Функция позволяет пользователям зарегистрировать URL вебхука, который бэкенд затем вызывает. Какая мера наиболее прямо закрывает риск SSRF?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Require the URL to use HTTPS, so the request cannot be read in transit.",
+            "ru": "Требовать, чтобы URL был на HTTPS, чтобы запрос нельзя было прочитать в канале."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Limit the response size, so an internal page cannot be exfiltrated whole.",
+            "ru": "Ограничить размер ответа, чтобы внутреннюю страницу нельзя было выгрузить целиком."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Strip the Authorization header before the call, so no credential leaves the service.",
+            "ru": "Убирать заголовок Authorization перед вызовом, чтобы наружу не уходили учётные данные."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Resolve the host and check the resulting address against an allowlist, and refuse redirects.",
+            "ru": "Резолвить хост, проверять получившийся адрес по списку разрешённых и отказывать в редиректах."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Reject URLs containing the words localhost or internal.",
+            "ru": "Отвергать URL, содержащие слова localhost или internal."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "SSRF is about where the request lands, so the control has to be about the destination address rather than the string. Validating the resolved IP against an allowlist defeats hostnames that resolve to internal addresses, and refusing redirects stops a permitted host from forwarding the call inward. A denylist of words is bypassed by any alternative spelling of an address; size limits and TLS reduce impact at best; removing credentials is good hygiene but does not stop the request from reaching an internal service that trusts the network.",
+        "ru": "SSRF — про то, куда попадёт запрос, поэтому мера должна касаться адреса назначения, а не строки. Проверка разрезолвленного IP по списку разрешённых побеждает имена, указывающие на внутренние адреса, а отказ от редиректов не даёт разрешённому хосту перенаправить вызов внутрь. Список запрещённых слов обходится любой альтернативной записью адреса; ограничение размера и TLS в лучшем случае снижают ущерб; снятие учётных данных — хорошая гигиена, но она не мешает запросу дойти до внутреннего сервиса, который доверяет сети."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html",
+        "https://owasp.org/Top10/"
+      ]
+    },
+    {
+      "id": "security.owasp-top-10.005",
+      "section": "owasp-top-10",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "This API authenticates every call with an Authorization header and has no CSRF protection at all. Is that a gap?",
+        "ru": "Этот API аутентифицирует каждый вызов заголовком Authorization и не имеет никакой защиты от CSRF. Это пробел?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Yes: any state-changing endpoint needs a CSRF token regardless of how it authenticates.",
+            "ru": "Да: любому изменяющему состояние эндпоинту нужен CSRF-токен независимо от способа аутентификации."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Yes, but only for endpoints that accept form-encoded bodies.",
+            "ru": "Да, но только для эндпоинтов, принимающих тело в формате формы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "No, because CORS already blocks cross-origin requests from reaching the server.",
+            "ru": "Нет, потому что CORS уже не даёт кросс-доменным запросам дойти до сервера."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "No: CSRF depends on credentials a browser attaches automatically, and nothing attaches this header.",
+            "ru": "Нет: CSRF опирается на учётные данные, которые браузер прикрепляет сам, а этот заголовок никто автоматически не прикрепляет."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "No, because a JWT cannot be replayed once it has been used.",
+            "ru": "Нет, потому что JWT нельзя повторно использовать после первого применения."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Cross-site request forgery works on ambient credentials: a cookie is attached by the browser no matter which page triggered the request. A token the frontend has to read and set itself is not attached by anything, so a form on another site cannot authenticate its request. The exposure returns the moment the same token is moved into a cookie. CORS is the wrong reason — it governs whether a browser lets the page read the response, not whether the request is sent, and a simple cross-origin POST reaches the server either way.",
+        "ru": "Межсайтовая подделка запроса работает на неявных учётных данных: куку браузер прикрепляет сам, независимо от того, какая страница инициировала запрос. Токен, который фронтенд обязан сам прочитать и проставить, никто не прикрепляет, поэтому форма на чужом сайте не сможет аутентифицировать свой запрос. Уязвимость вернётся в тот момент, когда тот же токен переедет в куку. CORS — неверное обоснование: он определяет, позволит ли браузер странице прочитать ответ, а не будет ли запрос отправлен; простой кросс-доменный POST доходит до сервера в любом случае."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
+        "https://owasp.org/Top10/"
+      ]
+    },
+    {
+      "id": "security.owasp-top-10.006",
+      "section": "owasp-top-10",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A service accepts Java-serialized bytes from a partner over HTTPS. The team argues it is safe because the classes in the payload are their own DTOs. What is the flaw in that reasoning?",
+        "ru": "Сервис принимает от партнёра нативно сериализованные Java-байты по HTTPS. Команда считает это безопасным, потому что в payload'е только их собственные DTO. В чём изъян рассуждения?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Deserialization reconstructs whatever types the stream names, and gadget chains in ordinary libraries on the classpath can be driven into code execution.",
+            "ru": "Десериализация восстанавливает те типы, которые назовёт поток, а цепочки гаджетов в обычных библиотеках на classpath могут быть доведены до исполнения кода."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "HTTPS does not compress the payload, so a large object graph can exhaust memory.",
+            "ru": "HTTPS не сжимает payload, поэтому большой граф объектов может исчерпать память."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Serialized bytes carry a serialVersionUID, so a partner upgrade silently changes the meaning of fields.",
+            "ru": "Сериализованные байты несут serialVersionUID, поэтому обновление у партнёра молча меняет смысл полей."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The DTOs would have to implement Serializable, which exposes their private fields to reflection.",
+            "ru": "DTO пришлось бы реализовать Serializable, что открывает их приватные поля рефлексии."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Java serialization is not portable, so the partner might send a payload this JVM cannot read.",
+            "ru": "Сериализация Java непереносима, поэтому партнёр может прислать payload, который эта JVM не прочитает."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The stream, not the receiving code, decides which classes are instantiated, and readObject and friends run as part of reading. An attacker therefore selects from everything on the classpath, chaining ordinary library classes until the chain performs something useful — the vulnerability lives in the mechanism, not in the DTOs. TLS authenticates the channel and says nothing about whether the partner's system has been compromised or the bytes tampered with before they were sent. The practical rule is not to deserialize native Java bytes from any source you do not fully control; use a data format that maps onto declared types, and avoid payload-driven polymorphic typing in JSON for the same reason.",
+        "ru": "Какие классы будут созданы, решает поток, а не принимающий код, и `readObject` с соседями выполняются прямо при чтении. Атакующий поэтому выбирает из всего, что есть на classpath, соединяя обычные библиотечные классы в цепочку, пока та не сделает что-нибудь полезное, — уязвимость живёт в механизме, а не в DTO. TLS аутентифицирует канал и ничего не говорит ни о компрометации системы партнёра, ни о подмене байтов до отправки. Практическое правило: не десериализовать нативные Java-байты из источника, который вы не контролируете полностью; использовать формат данных, ложащийся на объявленные типы, и по той же причине избегать полиморфной типизации, управляемой payload'ом, в JSON."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html",
+        "https://owasp.org/Top10/"
+      ]
+    },
+    {
+      "id": "security.oauth-oidc.001",
+      "section": "oauth-oidc",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "Which sentence describes the relationship between OAuth 2.0 and OpenID Connect correctly?",
+        "ru": "Какое предложение верно описывает отношение между OAuth 2.0 и OpenID Connect?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "OpenID Connect is the older protocol that OAuth 2.0 replaced.",
+            "ru": "OpenID Connect — более старый протокол, который заменил OAuth 2.0."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "They are competing standards for the same job, and a service picks one.",
+            "ru": "Это конкурирующие стандарты для одной и той же задачи, и сервис выбирает один из них."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "OAuth 2.0 is delegated authorization; OpenID Connect adds authentication on top of it.",
+            "ru": "OAuth 2.0 — это делегированная авторизация; OpenID Connect добавляет поверх неё аутентификацию."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "OAuth 2.0 authenticates the user and OpenID Connect authorizes the client.",
+            "ru": "OAuth 2.0 аутентифицирует пользователя, а OpenID Connect авторизует клиента."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "OpenID Connect is the transport layer that OAuth 2.0 runs over.",
+            "ru": "OpenID Connect — транспортный уровень, поверх которого работает OAuth 2.0."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "OAuth lets an application act on a resource owner's behalf without learning their password; it says who may do what with a delegation, not who the user is. OIDC is a thin layer on the same flows that adds an identity answer: the openid scope, a userinfo endpoint, discovery, and the ID token. The distinction matters because treating a bare OAuth access token as proof of identity is the root of a large share of incidents.",
+        "ru": "OAuth позволяет приложению действовать от имени владельца ресурса, не узнавая его пароля; он говорит, кому что можно делать с делегированием, а не кто такой пользователь. OIDC — тонкий слой поверх тех же потоков, добавляющий ответ о личности: scope `openid`, эндпоинт userinfo, discovery и ID-токен. Различие важно потому, что попытка считать голый access-токен OAuth доказательством личности лежит в основе изрядной доли инцидентов."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc6749",
+        "https://openid.net/specs/openid-connect-core-1_0.html"
+      ]
+    },
+    {
+      "id": "security.oauth-oidc.002",
+      "section": "oauth-oidc",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "OAuth 2.1 removes the implicit flow. What was wrong with it?",
+        "ru": "OAuth 2.1 убирает implicit-поток. Что с ним было не так?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It required a client secret, which a browser application cannot keep.",
+            "ru": "Он требовал client secret, который браузерное приложение хранить не может."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It could only be used with a single redirect URI per client.",
+            "ru": "Его можно было использовать только с одним redirect URI на клиента."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It returned no refresh token, so users had to sign in again every hour.",
+            "ru": "Он не возвращал refresh-токен, и пользователям приходилось входить заново каждый час."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It returned the access token in the URL fragment, where it reaches history, referrers and logs.",
+            "ru": "Он возвращал access-токен во фрагменте URL, откуда тот попадает в историю, referrer и логи."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It did not support scopes, so a client always received full access.",
+            "ru": "Он не поддерживал scope, поэтому клиент всегда получал полный доступ."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The implicit flow handed the token straight to the browser as part of a redirect URL. Anything that sees URLs then sees the token: browser history, an extension, a referrer header, a proxy log. It existed because public clients had no way to authenticate at the token endpoint, and PKCE solved that problem better — so OAuth 2.1 keeps only the authorization code flow, where the token is fetched over a direct back-channel call and never appears in a URL.",
+        "ru": "Implicit-поток отдавал токен прямо в браузер частью URL редиректа. Всё, что видит URL, видит и токен: история браузера, расширение, заголовок referrer, лог прокси. Он существовал потому, что публичным клиентам нечем было аутентифицироваться на токен-эндпоинте, и PKCE решил эту задачу лучше. Поэтому OAuth 2.1 оставляет только поток authorization code, где токен забирается прямым серверным вызовом и в URL не появляется вовсе."
+      },
+      "sources": [
+        "https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1",
+        "https://www.rfc-editor.org/rfc/rfc9700"
+      ]
+    },
+    {
+      "id": "security.oauth-oidc.003",
+      "section": "oauth-oidc",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "A team adds PKCE to their authorization code flow and asks whether the state parameter is now redundant. What is the answer?",
+        "ru": "Команда добавляет PKCE в свой поток authorization code и спрашивает, не стал ли параметр state лишним. Каков ответ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "No: state protects the redirect from cross-site request forgery, PKCE protects the code from interception.",
+            "ru": "Нет: state защищает редирект от межсайтовой подделки запроса, PKCE защищает код от перехвата."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Yes: the code verifier serves the same purpose and is unguessable.",
+            "ru": "Да: code verifier служит той же цели и его нельзя угадать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Yes, but only for confidential clients, which authenticate at the token endpoint anyway.",
+            "ru": "Да, но только для конфиденциальных клиентов, которые и так аутентифицируются на токен-эндпоинте."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "No, but only because some authorization servers reject requests without state.",
+            "ru": "Нет, но лишь потому, что некоторые серверы авторизации отвергают запросы без state."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Yes: OAuth 2.1 replaced state with the nonce claim of the ID token.",
+            "ru": "Да: OAuth 2.1 заменил state на claim nonce в ID-токене."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The two defend different steps. State is remembered by the client and compared when the browser comes back, which stops an attacker from making your browser complete their authorization and silently linking their account to your session. PKCE binds the code to a secret the redeeming client holds, so a code stolen in transit or from a redirect cannot be exchanged by anybody else. Neither substitutes for the other, and the nonce is an OIDC replay defence for the ID token rather than a replacement for either.",
+        "ru": "Они защищают разные шаги. `state` клиент запоминает и сверяет, когда браузер возвращается, — это не даёт атакующему заставить ваш браузер завершить его авторизацию и тихо привязать его аккаунт к вашей сессии. PKCE привязывает код к секрету, которым владеет обменивающий его клиент, поэтому код, украденный в канале или из редиректа, не обменяет никто другой. Одно не заменяет другого, а `nonce` — это защита ID-токена от повторов в OIDC, а не замена чему-либо из них."
+      },
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc7636",
+        "https://www.rfc-editor.org/rfc/rfc9700",
+        "https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1"
+      ]
+    },
+    {
+      "id": "security.oauth-oidc.004",
+      "section": "oauth-oidc",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "A mobile app signs in with OIDC and sends the ID token to your API as a bearer credential. Why is that the wrong artifact?",
+        "ru": "Мобильное приложение входит через OIDC и отправляет ID-токен в ваш API как bearer-учётные данные. Почему это не тот артефакт?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because an ID token is not signed and therefore cannot be verified by the API.",
+            "ru": "Потому что ID-токен не подписан и API не может его проверить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because an ID token is addressed to the client and nothing binds it to your API.",
+            "ru": "Потому что ID-токен адресован клиенту, и ничто не связывает его с вашим API."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because an ID token expires in seconds and would be stale before it arrived.",
+            "ru": "Потому что ID-токен живёт секунды и устареет ещё до прибытия."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because an ID token is opaque, so the API cannot read any claims from it.",
+            "ru": "Потому что ID-токен непрозрачен и API не сможет прочитать из него ни одного claim'а."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because an ID token can only be issued to confidential clients.",
+            "ru": "Потому что ID-токен выдаётся только конфиденциальным клиентам."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The two tokens have different audiences on purpose. The ID token describes an authentication event to the client that requested it, and its aud claim names that client, not your API; the access token is the one issued for a resource server and constrained by scope. Accepting an ID token means accepting something minted for a different party, and if the API does not check aud strictly, a token issued to any other application by the same provider is accepted too. It is the access token that belongs in the Authorization header, and the API validates its signature, issuer, audience and expiry.",
+        "ru": "У двух токенов разные адресаты, и это сделано намеренно. ID-токен описывает событие аутентификации клиенту, который его запросил, и его claim `aud` называет именно этого клиента, а не ваш API; для сервера ресурсов выпускается access-токен, ограниченный scope. Принимать ID-токен — значит принимать то, что выписано другой стороне, а если API не проверяет `aud` строго, то принимается и токен, выпущенный тем же провайдером любому другому приложению. В заголовке Authorization место access-токену, а API проверяет его подпись, издателя, аудиторию и срок."
+      },
+      "sources": [
+        "https://openid.net/specs/openid-connect-core-1_0.html",
+        "https://www.rfc-editor.org/rfc/rfc9700"
+      ]
+    },
+    {
+      "id": "security.oauth-oidc.005",
+      "section": "oauth-oidc",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "GoogleOAuthResource reads the id_token payload without verifying its signature. Under what reasoning is that acceptable here?",
+        "ru": "GoogleOAuthResource читает payload id_token, не проверяя подпись. При каком рассуждении это здесь допустимо?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because the aud claim is checked, and that is equivalent to verifying the signature.",
+            "ru": "Потому что проверяется claim aud, а это равносильно проверке подписи."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because Google's tokens are short-lived, so a forged one would expire before use.",
+            "ru": "Потому что токены Google короткоживущие, и подделанный истёк бы раньше использования."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the token was received directly from the token endpoint over TLS, in the response to a request carrying the client secret.",
+            "ru": "Потому что токен получен непосредственно с токен-эндпоинта по TLS, в ответе на запрос, несущий client secret."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because the backend is a confidential client, and confidential clients may skip all token validation.",
+            "ru": "Потому что бэкенд — конфиденциальный клиент, а конфиденциальные клиенты могут пропускать любую проверку токенов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the signature is verified later, when the application's own JWT is issued.",
+            "ru": "Потому что подпись проверяется позже, при выпуске собственного JWT приложения."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The OIDC specification allows a client to skip signature validation exactly when the token was obtained straight from the token endpoint over a TLS-protected channel — the provenance is what rules out substitution in transit, and the client secret in the request is what rules out an impostor endpoint. The code still checks aud against the configured client id, which is a separate defence and not a replacement. The important part is how narrow the exemption is: the same bytes arriving by any other route, such as from a client that says it just signed in, must be verified in full against the issuer's JWKS.",
+        "ru": "Спецификация OIDC разрешает клиенту пропустить проверку подписи ровно тогда, когда токен получен непосредственно с токен-эндпоинта по защищённому TLS каналу: происхождение исключает подмену в канале, а client secret в запросе исключает поддельный эндпоинт. Код при этом всё равно сверяет `aud` с настроенным client id — это отдельная защита, а не замена. Важна узость послабления: те же байты, пришедшие любым другим путём, например от клиента, который утверждает, что только что вошёл, обязаны проверяться полностью по JWKS издателя."
+      },
+      "sources": [
+        "https://openid.net/specs/openid-connect-core-1_0.html",
+        "https://www.rfc-editor.org/rfc/rfc9700"
+      ]
+    },
+    {
+      "id": "security.oauth-oidc.006",
+      "section": "oauth-oidc",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "After a Google sign-in, loginWithGoogle finds or creates a local AppUser and takes the role from that row. A reviewer asks why the granted scopes are not used to decide what the user may do. What is the best answer?",
+        "ru": "После входа через Google loginWithGoogle находит или создаёт локального AppUser и берёт роль из этой строки. Ревьюер спрашивает, почему выданные scope не используются для решения, что пользователю можно. Что ответить?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Scopes describe a delegation to a client; they say nothing about the user's standing in this application.",
+            "ru": "Scope описывают делегирование клиенту; они ничего не говорят о положении пользователя в этом приложении."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Scopes are advisory in OIDC and providers are free to ignore them.",
+            "ru": "В OIDC scope носят рекомендательный характер, и провайдеры вправе их игнорировать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Scopes cannot be read from an ID token, only from the userinfo endpoint.",
+            "ru": "Scope нельзя прочитать из ID-токена, только с эндпоинта userinfo."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Scopes change on every sign-in, so a decision based on them would be unstable.",
+            "ru": "Scope меняются при каждом входе, поэтому решение на их основе было бы неустойчивым."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Scopes are only meaningful for confidential clients, and this client is public.",
+            "ru": "Scope осмысленны только для конфиденциальных клиентов, а этот клиент публичный."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A scope bounds what the client may do with the user's data at the provider: openid profile email means Google will hand over an identity and a profile, nothing more. It is a statement about a delegation, in the provider's namespace, and it cannot express that somebody is an administrator of a quiz application the provider has never heard of. The external identity is therefore mapped onto a local account, and authorization is read from the local store — which also keeps the answer stable when the provider changes what it returns, and keeps a user's rights under this application's control rather than Google's.",
+        "ru": "Scope ограничивает то, что клиент вправе делать с данными пользователя у провайдера: `openid profile email` означает, что Google отдаст личность и профиль, и не более. Это утверждение о делегировании в пространстве имён провайдера, и оно не может выразить, что кто-то администратор квиз-приложения, о котором провайдер никогда не слышал. Поэтому внешняя личность отображается на локальную учётную запись, а авторизация читается из локального хранилища — заодно ответ остаётся устойчивым, когда провайдер меняет состав возвращаемого, а права пользователя остаются под контролем этого приложения, а не Google."
+      },
+      "sources": [
+        "https://openid.net/specs/openid-connect-core-1_0.html",
+        "https://www.rfc-editor.org/rfc/rfc6749",
+        "https://www.rfc-editor.org/rfc/rfc9700"
+      ]
+    },
+    {
+      "id": "security.secrets-tls-headers.001",
+      "section": "secrets-tls-headers",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "An API key was committed to a repository two weeks ago. The developer removes the line and pushes the fix. Is the problem solved?",
+        "ru": "Ключ API попал в репозиторий две недели назад. Разработчик удаляет строку и отправляет исправление. Проблема решена?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "No: the value is in the history and in every clone, so the key must be rotated.",
+            "ru": "Нет: значение осталось в истории и во всех клонах, поэтому ключ нужно ротировать."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Yes, as long as the branch was never merged into the default branch.",
+            "ru": "Да, если ветку ни разу не влили в основную."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Yes, because the file no longer contains the value after the push.",
+            "ru": "Да, потому что после отправки файл больше не содержит значение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "No, but only if the repository is public; a private repository is unaffected.",
+            "ru": "Нет, но только если репозиторий публичный; приватного это не касается."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Yes, provided the commit is amended rather than reverted.",
+            "ru": "Да, при условии что коммит поправлен через amend, а не откачен."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Git stores history, so a deletion is a new commit rather than an erasure — the value is still reachable in the old commit, in every fork, in every clone, in CI caches and in any mirror. Rewriting history helps only where you control every copy, which is almost never true. A secret that has been pushed must be treated as disclosed and rotated, and a private repository changes only how many people had the opportunity.",
+        "ru": "Git хранит историю, поэтому удаление — это новый коммит, а не стирание: значение по-прежнему достижимо в старом коммите, в каждом форке, в каждом клоне, в кешах CI и в любом зеркале. Переписывание истории помогает лишь там, где вы контролируете все копии, а это почти никогда не так. Секрет, который отправили в репозиторий, считают раскрытым и ротируют; приватность репозитория меняет только число тех, у кого была возможность его увидеть."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "security.secrets-tls-headers.002",
+      "section": "secrets-tls-headers",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "Which of these is acceptable to write to an application log?",
+        "ru": "Что из перечисленного допустимо писать в лог приложения?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The Authorization header of the incoming request, for troubleshooting.",
+            "ru": "Заголовок Authorization входящего запроса — для разбора проблем."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The user id of the authenticated caller, to correlate the request.",
+            "ru": "Идентификатор аутентифицированного вызывающего — чтобы связать запросы между собой."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The submitted password when a login fails, to confirm it was a typo.",
+            "ru": "Присланный пароль при неудачном входе — чтобы убедиться, что это опечатка."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The full request body of the sign-in endpoint at DEBUG level.",
+            "ru": "Полное тело запроса к эндпоинту входа на уровне DEBUG."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The session identifier, so a support engineer can reproduce the session.",
+            "ru": "Идентификатор сессии — чтобы инженер поддержки мог воспроизвести сессию."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Logs are copied, shipped, indexed and kept far longer than intended, and they are read by people who would never be given database access, so anything in them should be treated as semi-public. A user id identifies a row without being a credential, which is exactly what correlation needs. Everything else in the list is a working credential or contains one; a failed login is not an exception, and a debug level is not a safe place, because levels get raised in production to investigate the very incident that then leaks.",
+        "ru": "Логи копируют, пересылают, индексируют и хранят дольше, чем рассчитывали, и читают их люди, которым доступ к базе никто бы не дал, — поэтому всё, что в них попало, считается полупубличным. Идентификатор пользователя указывает на строку, не будучи учётными данными, а это ровно то, что нужно для связывания запросов. Всё остальное в списке — рабочие учётные данные или содержит их; неудачный вход не исключение, а уровень DEBUG не безопасное место, потому что уровни поднимают в проде как раз при разборе того инцидента, который после этого и утекает."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "security.secrets-tls-headers.003",
+      "section": "secrets-tls-headers",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "The configuration below ships with the application. What is the risk that the pattern itself creates?",
+        "ru": "Конфигурация ниже едет вместе с приложением. Какой риск создаёт сама эта схема?"
+      },
+      "code": "app.jwt.secret=${JWT_SECRET:dev-secret-change-me-please-use-at-least-32-chars!!}\napp.google.client-secret=${GOOGLE_CLIENT_SECRET:}",
+      "options": [
+        {
+          "text": {
+            "en": "The variable name is visible in the file, so an attacker learns which variable to target.",
+            "ru": "Имя переменной видно в файле, и атакующий узнаёт, какую переменную атаковать."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "If the variable is unset in production, the service starts anyway and signs tokens with a published value.",
+            "ru": "Если переменная не задана в проде, сервис всё равно стартует и подписывает токены опубликованным значением."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Property placeholders are resolved at build time, so the production value is baked into the artifact.",
+            "ru": "Подстановки свойств вычисляются на этапе сборки, поэтому продовое значение запекается в артефакт."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Environment variables are encrypted by the platform, so the default can never be used.",
+            "ru": "Переменные окружения шифруются платформой, поэтому значение по умолчанию никогда не применится."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A default longer than 32 characters is truncated, which weakens the key.",
+            "ru": "Значение по умолчанию длиннее 32 символов обрезается, и это ослабляет ключ."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Reading configuration from the environment is right; the trap is a default that works. A missing variable then produces a running service rather than a failed start, and the value it falls back to is in a public repository — anyone can mint a token for any user id, because the signing key is known. For a secret whose absence is fatal, an empty default and a refusal to boot is the safer shape. The same file also shows a related habit worth questioning: JwtService pads a short secret to 32 bytes rather than rejecting it, which turns a weak key into a working one.",
+        "ru": "Читать конфигурацию из окружения правильно; ловушка — в работающем значении по умолчанию. Незаданная переменная тогда даёт работающий сервис вместо упавшего старта, а значение, на которое он откатился, лежит в публичном репозитории: ключ подписи известен, и кто угодно выпишет токен на любой id пользователя. Для секрета, отсутствие которого фатально, безопаснее пустое значение по умолчанию и отказ стартовать. В том же файле видна и родственная привычка, которую стоит поставить под вопрос: `JwtService` дополняет короткий секрет до 32 байт вместо того, чтобы его отвергнуть, превращая слабый ключ в рабочий."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "security.secrets-tls-headers.004",
+      "section": "secrets-tls-headers",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "To make a self-signed test server work, a developer installs a TrustManager that accepts every certificate, and the code reaches production. Which property of TLS has been lost?",
+        "ru": "Чтобы заработал самоподписанный тестовый сервер, разработчик ставит TrustManager, принимающий любой сертификат, и код доезжает до прода. Какое свойство TLS при этом потеряно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Confidentiality: the traffic is now sent in the clear.",
+            "ru": "Конфиденциальность: трафик теперь идёт открытым текстом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Integrity: the payload can be modified without detection.",
+            "ru": "Целостность: payload можно изменить незаметно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Forward secrecy: past sessions can be decrypted if the key leaks.",
+            "ru": "Прямая секретность: прошлые сессии расшифруются при утечке ключа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Server authentication: nothing establishes that the peer is the host you meant to reach.",
+            "ru": "Аутентификация сервера: ничто не подтверждает, что собеседник — тот хост, к которому вы шли."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Compression: the handshake falls back to an uncompressed cipher suite.",
+            "ru": "Сжатие: рукопожатие откатывается на набор шифров без сжатия."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The session is still encrypted — with whoever answered. Certificate validation is what ties the encrypted channel to the identity in the URL, and removing it means a man in the middle can terminate the connection, present any certificate and relay the traffic onward, reading and modifying everything. Confidentiality and integrity look intact from inside the process, which is what makes the change easy to ship and hard to notice. The correct fix for a test server is to trust that specific certificate in the test configuration, never to accept all of them.",
+        "ru": "Сессия по-прежнему зашифрована — с тем, кто ответил. Проверка сертификата — это то, что связывает зашифрованный канал с личностью, указанной в URL, и без неё человек посередине может завершить соединение на себе, предъявить любой сертификат и пересылать трафик дальше, читая и изменяя всё. Изнутри процесса конфиденциальность и целостность выглядят целыми — поэтому такую правку легко выкатить и трудно заметить. Верное решение для тестового сервера — доверять именно этому сертификату в тестовой конфигурации, а не принимать все подряд."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Security_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "security.secrets-tls-headers.005",
+      "section": "secrets-tls-headers",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "TLS is terminated at the platform's proxy and the application receives plain HTTP. It decides whether the original request was secure by reading X-Forwarded-Proto. When is that header trustworthy?",
+        "ru": "TLS терминируется на прокси платформы, и приложение получает обычный HTTP. Оно определяет, был ли исходный запрос защищённым, по заголовку X-Forwarded-Proto. Когда этому заголовку можно доверять?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Only when the proxy overwrites it and the application is reachable only through that proxy.",
+            "ru": "Только когда прокси его перезаписывает и приложение доступно исключительно через этот прокси."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Always, because the header is reserved and clients are not permitted to send it.",
+            "ru": "Всегда: заголовок зарезервирован, и клиентам не разрешено его отправлять."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whenever the connection from the proxy to the application also uses TLS.",
+            "ru": "Всегда, когда соединение от прокси к приложению тоже идёт по TLS."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whenever the request also carries a valid bearer token.",
+            "ru": "Всегда, когда запрос несёт действительный bearer-токен."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only for GET requests, since other methods may be replayed.",
+            "ru": "Только для GET-запросов, поскольку остальные методы могут быть повторены."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A header is input unless something in the path guarantees otherwise. If the proxy appends rather than replaces, or if the application port is reachable directly, a client can assert https for itself and any decision built on the header — issuing a Secure cookie, skipping a redirect, believing the request was protected — is made on attacker-controlled data. The guarantee has two halves: the proxy must overwrite the value it forwards, and nothing may bypass the proxy. A token in the request says nothing about the channel.",
+        "ru": "Заголовок — это входные данные, если что-то на пути не гарантирует обратного. Если прокси дописывает значение, а не заменяет его, или если порт приложения доступен напрямую, клиент может объявить себе `https`, и любое решение на основе заголовка — выдать куку `Secure`, пропустить редирект, счесть запрос защищённым — принимается по данным, которыми управляет атакующий. Гарантия состоит из двух половин: прокси обязан перезаписывать пересылаемое значение, и мимо прокси пройти нельзя. Токен в запросе о канале не говорит ничего."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Security_Cheat_Sheet.html",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security"
+      ]
+    },
+    {
+      "id": "security.secrets-tls-headers.006",
+      "section": "secrets-tls-headers",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A service currently accepts its API token as a query parameter. Which single change most reduces the chance that a working credential ends up in logs nobody on the team controls?",
+        "ru": "Сервис сейчас принимает свой API-токен в query-параметре. Какое одно изменение сильнее всего снижает шанс, что рабочие учётные данные окажутся в логах, которые никто в команде не контролирует?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Add Cache-Control: no-store to every authenticated response.",
+            "ru": "Добавить Cache-Control: no-store ко всем аутентифицированным ответам."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Enable HSTS so the token is never sent over plain HTTP.",
+            "ru": "Включить HSTS, чтобы токен никогда не уходил по открытому HTTP."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Set Referrer-Policy to no-referrer on all responses.",
+            "ru": "Выставить Referrer-Policy: no-referrer на всех ответах."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Shorten the token lifetime to fifteen minutes.",
+            "ru": "Сократить срок жизни токена до пятнадцати минут."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Move the token into the Authorization header, so it is not part of the URL.",
+            "ru": "Перенести токен в заголовок Authorization, чтобы он не был частью URL."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A URL is recorded by machinery outside your control as a matter of routine: every proxy and load balancer on the path writes it to an access log, it appears in browser history and in bookmarks, and it is forwarded in a Referer header to any third party the page links to. Moving the credential out of the URL removes all of those paths at once, because headers are not logged by default anywhere in that chain. The other options each close one downstream leak or limit the damage — a referrer policy covers only the browser, a shorter lifetime shortens the window rather than preventing the exposure — and none of them stops the value being written down in the first place.",
+        "ru": "URL записывается механизмами вне вашего контроля просто по умолчанию: каждый прокси и балансировщик на пути пишет его в access-лог, он попадает в историю браузера и в закладки и пересылается в заголовке Referer любой третьей стороне, на которую ссылается страница. Вынос учётных данных из URL закрывает все эти пути разом, потому что заголовки нигде в этой цепочке по умолчанию не логируются. Остальные варианты закрывают по одной утечке ниже по течению или ограничивают ущерб — политика referrer покрывает только браузер, короткий срок жизни сокращает окно, а не предотвращает раскрытие, — и ни один из них не мешает значению быть записанным в принципе."
+      },
+      "sources": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html",
+        "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP"
+      ]
+    }
+  ]
+}

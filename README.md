@@ -79,7 +79,7 @@ before creating one, so the first sign-in links the Google identity to this row 
 instead of making a second `USER` account beside it. Both paths leave everything but the role
 alone.
 
-Content is 7 topics, 61 article sections and 366 quiz questions, all bilingual, loaded from
+Content is 11 topics, 93 article sections and 558 quiz questions, all bilingual, loaded from
 `src/main/resources/content/` by Flyway **Java** migrations — Java rather than SQL scripts
 because Spring questions contain `${...}` placeholders that Flyway would interpolate.
 
@@ -101,6 +101,11 @@ because Spring questions contain `${...}` placeholders that Flyway would interpo
 | `V20__LoadGrammarHomework` | the homework course: 2 sections, articles, 6 questions, 6 exercises | `content/english/grammar/homework/` |
 | `V21__LoadJavaConcurrencyPractice` | 11 concurrency exercises on the Java track | `content/practice/java-concurrency.json` |
 | `V22__BackfillLevels` | junior/middle/senior on the six topics loaded before levels existed | `content/topics.json`, `content/sql/topic.json`, `content/questions/`, `content/sql/questions.json` |
+| `V23__LoadRestHttpTopic` | HTTP and REST API design: 8 sections, articles, 48 questions | `content/rest-http/` |
+| `V24__LoadTestingTopic` | Testing: 8 sections, articles, 48 questions | `content/testing/` |
+| `V25__LoadDatabasesTopic` | Databases under the query: 8 sections, articles, 48 questions | `content/databases/` |
+| `V26__LoadSecurityTopic` | Security and access control: 8 sections, articles, 48 questions | `content/security/` |
+| `V27__LoadJavaCorePracticeExtra` | 9 more Java Core exercises, levelling the per-section counts | `content/practice/java-core-extra.json` |
 
 SQL and Java Concurrency live in their own directories rather than in the shared files because
 V2 has already run everywhere; adding a topic to `topics.json` would load it on a fresh database
@@ -117,12 +122,13 @@ know the material at all.
 until then and left the ladder with one rung occupied: a junior track draws on `JUNIOR` and
 nothing below it, so for six topics out of seven a junior got an empty round, and the senior
 track saw 366 questions of which 20 were senior material. `V22__BackfillLevels` is what fixed
-that, reading the levels the content files now carry:
+that, reading the levels the content files now carry. Every topic added since has arrived with
+its levels already set, and the backend module now stands at:
 
 | | junior | middle | senior |
 |---|---|---|---|
-| backend questions | 163 | 132 | 71 |
-| backend sections | 23 | 28 | 10 |
+| questions | 235 | 204 | 119 |
+| sections | 31 | 44 | 18 |
 
 A section's level is a judgement about who the article is for. A question's level was derived
 from it — easy one rung down, hard one rung up, clamped at the ends of the ladder — which is a
@@ -147,10 +153,20 @@ below it, so fundamentals stay in the senior pool instead of vanishing from it, 
 ×0.5, two below ×0.25. A senior session therefore leans senior while still revisiting basics, and
 a junior session is never diluted because nothing sits below it.
 
-The track comes from `level` in `/api/settings`, and `POST /api/quiz/start` accepts a `level`
-of its own to override it for a single session. Sections report their level in `/api/topics`
-and `/api/materials/...` but are never filtered out of them: labelling a section that is above
-the reader is useful, hiding it would also hide progress they already have on it.
+The track comes from `/api/settings`, which carries one field per ladder — `level` for the
+backend one and `grammarLevel` for English — and `POST /api/quiz/start` accepts a `level` of its
+own to override it for a single session. A round that is not drilling one section also saves its
+setup as the standing one, track included, so the two paths write the same field and a client
+that started a round has to re-read settings rather than assume.
+
+Both fields are stored as given, an off-ladder value included: `SettingsPayload.levelFor` is
+what decides which ladder a track is read against, and it answers with the module's default for
+anything that does not belong there. Validating on the way in would make a client that sends
+both tracks in one body fail on the half that is none of its business.
+
+Sections report their level in `/api/topics` and `/api/materials/...` but are never filtered out
+of them: labelling a section that is above the reader is useful, hiding it would also hide
+progress they already have on it.
 
 ## Java Concurrency
 
@@ -203,11 +219,17 @@ three with no sandbox.
 
 ## Java practice
 
-The same idea carried into a compiled language: 29 exercises the learner solves by writing a
+The same idea carried into a compiled language: 38 exercises the learner solves by writing a
 class that is then **compiled and run**, cross-linked with the study sections the way the SQL
-ones are. Eighteen of them are Java Core, six each at easy / medium / hard, over seven sections.
-The other eleven are concurrency, one for each section of that topic a sandbox can grade — three
-easy, five medium, three hard, following the level of the section they belong to.
+ones are. Twenty-seven are Java Core, spread four to a section over six sections and three over
+`streams-lambdas`. The other eleven are concurrency, one for each section of that topic a sandbox
+can grade — three easy, five medium, three hard, following the level of the section they belong
+to.
+
+`jvm-memory` is the Java Core section with no exercises and is meant to stay that way: the
+sandbox cannot name the management APIs a heap or GC exercise would need, and "when is this
+object collected" has no deterministic answer to compare against a reference. That is a quiz
+question, not a graded program.
 
 `virtual-threads` is the section without an exercise. The topic is written against Java 21 while
 the application builds and runs on JDK 17, and the sandbox compiles with `-source 17`: an

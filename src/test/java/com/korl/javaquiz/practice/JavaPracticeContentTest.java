@@ -37,7 +37,8 @@ class JavaPracticeContentTest {
      */
     private static final List<String> CONTENT = List.of(
             "/content/practice/java.json",
-            "/content/practice/java-concurrency.json");
+            "/content/practice/java-concurrency.json",
+            "/content/practice/java-core-extra.json");
 
     private static List<JsonNode> roots;
 

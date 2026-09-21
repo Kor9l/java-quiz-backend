@@ -13,7 +13,16 @@ import java.util.List;
 public class SettingsRequest {
 
     public Language language;
+
+    /**
+     * The two tracks are two fields because they are two ladders: {@code level} is the backend
+     * one (junior / middle / senior) and {@code grammarLevel} the English one (base /
+     * intermediate / pro). A single field would have to guess which ladder a value came from,
+     * and {@code SettingsPayload.levelFor} would answer with the module's default either way.
+     */
     public Level level;
+    public Level grammarLevel;
+
     public List<String> selectedTopics;
     public Integer questionCount;
     public Boolean infiniteMode;

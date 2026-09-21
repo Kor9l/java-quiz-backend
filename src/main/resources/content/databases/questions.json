@@ -1,0 +1,2645 @@
+{
+  "schemaVersion": 2,
+  "topic": "databases",
+  "questions": [
+    {
+      "id": "databases.acid-isolation.001",
+      "section": "acid-isolation",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does the D in ACID promise once COMMIT has returned successfully?",
+        "ru": "Что обещает буква D в ACID после того, как COMMIT успешно вернул управление?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "That the change survives a crash or power loss of the server.",
+            "ru": "Что изменение переживёт падение или потерю питания сервером."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "That every other transaction immediately sees the change.",
+            "ru": "Что все остальные транзакции немедленно увидят изменение."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That the change has been replicated to every standby server.",
+            "ru": "Что изменение уже реплицировано на все резервные серверы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That the change can still be rolled back by a later transaction.",
+            "ru": "Что изменение ещё можно откатить более поздней транзакцией."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "That the change has been written into the table files on disk.",
+            "ru": "Что изменение записано в файлы самой таблицы на диске."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Durability is about surviving failure, not about visibility or replication. PostgreSQL delivers it by flushing the write-ahead log before COMMIT answers; the table files themselves are written later by the background writer and a checkpoint, and the WAL is what replays them after a crash. Replication is a separate guarantee with its own settings, and a committed change is never rolled back — undoing it takes a new transaction.",
+        "ru": "Долговечность — про то, чтобы пережить сбой, а не про видимость или репликацию. PostgreSQL обеспечивает её сбросом журнала упреждающей записи до того, как COMMIT ответит; сами файлы таблицы пишутся позже фоновым процессом и контрольной точкой, а восстанавливает их после падения именно WAL. Репликация — отдельная гарантия со своими настройками, а закоммиченное изменение не откатывается: отменить его может только новая транзакция."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/wal-reliability.html",
+        "https://www.postgresql.org/docs/current/transaction-iso.html"
+      ]
+    },
+    {
+      "id": "databases.acid-isolation.002",
+      "section": "acid-isolation",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which isolation level does PostgreSQL use when a transaction does not ask for one?",
+        "ru": "Какой уровень изоляции использует PostgreSQL, если транзакция не запросила уровень явно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "SERIALIZABLE",
+            "ru": "SERIALIZABLE"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "REPEATABLE READ",
+            "ru": "REPEATABLE READ"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "READ COMMITTED",
+            "ru": "READ COMMITTED"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "READ UNCOMMITTED",
+            "ru": "READ UNCOMMITTED"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It depends on whether the transaction writes anything.",
+            "ru": "Зависит от того, пишет ли транзакция что-нибудь."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "READ COMMITTED is the default, and it is what `default_transaction_isolation` is set to out of the box. At that level every statement takes a fresh snapshot, so a transaction sees data committed before each of its statements began — never uncommitted data, but not a single stable view of the database either. The level never depends on what the transaction does; it is fixed before its first query.",
+        "ru": "По умолчанию используется READ COMMITTED — именно это значение имеет параметр `default_transaction_isolation` из коробки. На этом уровне каждый оператор берёт свежий снимок, поэтому транзакция видит данные, закоммиченные до начала каждого её оператора: незакоммиченных данных не видит никогда, но и единого устойчивого среза базы не имеет. Уровень никогда не зависит от того, что транзакция делает, — он фиксируется до её первого запроса."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/transaction-iso.html",
+        "https://www.postgresql.org/docs/current/sql-set-transaction.html"
+      ]
+    },
+    {
+      "id": "databases.acid-isolation.003",
+      "section": "acid-isolation",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "At READ COMMITTED in PostgreSQL, a transaction runs the same SELECT twice with no writes of its own in between. What may it see?",
+        "ru": "На уровне READ COMMITTED в PostgreSQL транзакция дважды выполняет один и тот же SELECT, ничего между ними не записывая. Что она может увидеть?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Exactly the same rows both times — the snapshot is taken once per transaction.",
+            "ru": "Ровно те же строки оба раза — снимок берётся один раз на транзакцию."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Different rows, because each statement takes its own snapshot of committed data.",
+            "ru": "Другие строки, потому что каждый оператор берёт собственный снимок закоммиченных данных."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Different rows, including rows written by transactions that have not committed.",
+            "ru": "Другие строки, в том числе записанные ещё не закоммиченными транзакциями."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An error, because PostgreSQL forbids repeating a query inside one transaction.",
+            "ru": "Ошибку, потому что PostgreSQL запрещает повторять запрос внутри одной транзакции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The same rows, but with the values other transactions have since written.",
+            "ru": "Те же строки, но со значениями, которые с тех пор записали другие транзакции."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "READ COMMITTED gives each statement its own snapshot, so anything committed between the two SELECTs becomes visible — both changed rows (a non-repeatable read) and new ones (a phantom). Uncommitted data is never visible at any PostgreSQL level. If a transaction needs one stable view for several statements, that is what REPEATABLE READ is for: it takes a single snapshot at the first query and keeps it.",
+        "ru": "READ COMMITTED выдаёт каждому оператору собственный снимок, поэтому всё закоммиченное между двумя SELECT становится видимым — и изменённые строки (неповторяющееся чтение), и новые (фантом). Незакоммиченные данные не видны ни на одном уровне PostgreSQL. Если транзакции нужен один устойчивый срез на несколько операторов, для этого и существует REPEATABLE READ: он берёт единственный снимок на первом запросе и держит его."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/transaction-iso.html",
+        "https://www.postgresql.org/docs/current/mvcc-intro.html"
+      ]
+    },
+    {
+      "id": "databases.acid-isolation.004",
+      "section": "acid-isolation",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "Which letter of ACID does the database only partly own, so that the application shares the responsibility?",
+        "ru": "Какую букву ACID база держит лишь отчасти, так что ответственность делит с приложением?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Atomicity — the application must undo its own partial work.",
+            "ru": "Atomicity — приложение обязано само отменять свою частичную работу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Isolation — the application must lock every row it reads.",
+            "ru": "Isolation — приложение обязано блокировать каждую прочитанную строку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Durability — the application must flush its own writes.",
+            "ru": "Durability — приложение обязано само сбрасывать свои записи."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Consistency — the database enforces only the constraints that were declared.",
+            "ru": "Consistency — база проверяет только те ограничения, которые были объявлены."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "None of them; all four are entirely the database's job.",
+            "ru": "Ни одну; все четыре целиком забота базы."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Atomicity, isolation and durability are mechanisms the engine implements. Consistency is a statement about invariants, and the engine can only check the invariants you wrote into the schema: a NOT NULL, a foreign key, a CHECK. A rule that lives only in a service class is enforced on the code paths that go through that class and nowhere else — which is the argument for pushing invariants down into constraints.",
+        "ru": "Атомарность, изоляция и долговечность — механизмы, которые реализует движок. Согласованность — утверждение об инвариантах, а движок способен проверить только те инварианты, которые вы записали в схему: NOT NULL, внешний ключ, CHECK. Правило, живущее лишь в сервисном классе, действует на тех ветках кода, что проходят через этот класс, и больше нигде — это и есть аргумент за то, чтобы опускать инварианты в ограничения."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/ddl-constraints.html",
+        "https://www.postgresql.org/docs/current/transaction-iso.html"
+      ]
+    },
+    {
+      "id": "databases.acid-isolation.005",
+      "section": "acid-isolation",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "What happens if a PostgreSQL transaction asks for SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED?",
+        "ru": "Что произойдёт, если транзакция PostgreSQL выполнит SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The statement fails: PostgreSQL rejects the level as unsupported.",
+            "ru": "Оператор завершится ошибкой: PostgreSQL отвергнет этот уровень как неподдерживаемый."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is accepted and the transaction behaves exactly as READ COMMITTED.",
+            "ru": "Он принимается, и транзакция ведёт себя ровно как READ COMMITTED."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It is accepted and the transaction can then read uncommitted row versions.",
+            "ru": "Он принимается, и транзакция сможет читать незакоммиченные версии строк."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is accepted but silently upgrades the transaction to REPEATABLE READ.",
+            "ru": "Он принимается, но молча повышает транзакцию до REPEATABLE READ."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is accepted only for read-only transactions and fails for any write.",
+            "ru": "Он принимается только для читающих транзакций и падает на любой записи."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The standard permits an engine to give stronger isolation than asked for, and PostgreSQL always does here: READ UNCOMMITTED is accepted for portability and run as READ COMMITTED. Dirty reads are not merely discouraged, they are impossible under MVCC — an uncommitted row version is invisible to every snapshot but its own writer. This is the clearest example of why an isolation level only means something once you name the engine.",
+        "ru": "Стандарт разрешает движку давать более сильную изоляцию, чем запрошена, и PostgreSQL здесь всегда так и делает: READ UNCOMMITTED принимается ради переносимости и исполняется как READ COMMITTED. Грязные чтения тут не просто не рекомендуются — при MVCC они невозможны: незакоммиченная версия строки невидима любому снимку, кроме снимка её же писателя. Это самый наглядный пример того, почему уровень изоляции что-то значит только вместе с названием движка."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/transaction-iso.html",
+        "https://www.postgresql.org/docs/current/sql-set-transaction.html"
+      ]
+    },
+    {
+      "id": "databases.acid-isolation.006",
+      "section": "acid-isolation",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "A transaction at SERIALIZABLE fails with SQLSTATE 40001 (serialization_failure) although its SQL is correct. What is the right response in the application?",
+        "ru": "Транзакция на уровне SERIALIZABLE падает с SQLSTATE 40001 (serialization_failure), хотя её SQL корректен. Как правильно отреагировать в приложении?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Catch it and continue issuing statements in the same transaction.",
+            "ru": "Перехватить ошибку и продолжать выполнять операторы в той же транзакции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Lower the level to READ COMMITTED permanently, since SERIALIZABLE is unusable.",
+            "ru": "Навсегда понизить уровень до READ COMMITTED, раз SERIALIZABLE непригоден."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Report the error to the user: the data has been left inconsistent.",
+            "ru": "Сообщить об ошибке пользователю: данные остались несогласованными."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Retry the whole transaction from the beginning, with a bounded number of attempts.",
+            "ru": "Повторить всю транзакцию с начала, ограничив число попыток."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Add SELECT ... FOR UPDATE to every read so the failure cannot happen again.",
+            "ru": "Добавить SELECT ... FOR UPDATE к каждому чтению, чтобы ошибка больше не возникала."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Serialization failures are the price of SERIALIZABLE, not a bug: PostgreSQL detected a set of concurrent transactions whose outcome would not match any serial order and aborted one of them. Nothing is left inconsistent — the aborted transaction is rolled back whole. A failed transaction cannot be continued, so the retry must restart it from BEGIN, which means the retry loop sits outside the transaction boundary and the work inside it must be safe to repeat.",
+        "ru": "Ошибки сериализации — это цена SERIALIZABLE, а не дефект: PostgreSQL обнаружил набор параллельных транзакций, результат которых не совпал бы ни с одним последовательным порядком, и прервал одну из них. Несогласованным ничего не остаётся — прерванная транзакция откатывается целиком. Упавшую транзакцию нельзя продолжить, поэтому повтор обязан начинаться с BEGIN: цикл повтора находится снаружи границы транзакции, а работа внутри неё должна быть безопасна для повторения."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/mvcc-serialization-failure-handling.html",
+        "https://www.postgresql.org/docs/current/transaction-iso.html"
+      ]
+    },
+    {
+      "id": "databases.schema-design.001",
+      "section": "schema-design",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "How many rows with NULL can a column declared UNIQUE hold in PostgreSQL by default?",
+        "ru": "Сколько строк со значением NULL может хранить колонка, объявленная UNIQUE, в PostgreSQL по умолчанию?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "None: NULL is rejected by a UNIQUE constraint.",
+            "ru": "Ни одной: ограничение UNIQUE отвергает NULL."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Any number, because two NULLs are not considered equal.",
+            "ru": "Сколько угодно, потому что два NULL не считаются равными."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Exactly one, the same as for any other value.",
+            "ru": "Ровно одну — так же, как для любого другого значения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Any number, but only if the column is also part of the primary key.",
+            "ru": "Сколько угодно, но только если колонка входит в первичный ключ."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It depends on the index type behind the constraint.",
+            "ru": "Зависит от типа индекса, стоящего за ограничением."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "UNIQUE forbids duplicate values, and NULL is not a value that can equal another — so the constraint never fires on it and the column accepts as many nulls as you like. This surprises people who use a nullable unique column such as `users.google_id` as if it were exclusive. PostgreSQL 15 added UNIQUE NULLS NOT DISTINCT for the other behaviour; before that the workaround is a partial unique index on the non-null rows.",
+        "ru": "UNIQUE запрещает повторяющиеся значения, а NULL не является значением, которое может быть равно другому, — поэтому ограничение на нём просто не срабатывает, и колонка принимает сколько угодно null. Это удивляет тех, кто пользуется nullable-колонкой вроде `users.google_id` так, будто она исключающая. В PostgreSQL 15 появилось UNIQUE NULLS NOT DISTINCT для обратного поведения; до этого обходной путь — частичный уникальный индекс по строкам без null."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/ddl-constraints.html",
+        "https://www.postgresql.org/docs/current/sql-createtable.html"
+      ]
+    },
+    {
+      "id": "databases.schema-design.002",
+      "section": "schema-design",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What is the main practical cost of storing several tags in one column as the text 'java,sql,jpa'?",
+        "ru": "В чём главная практическая цена хранения нескольких тегов в одной колонке в виде текста 'java,sql,jpa'?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It uses more disk space than one row per tag.",
+            "ru": "Это занимает больше места на диске, чем по строке на тег."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "PostgreSQL refuses to index any column containing commas.",
+            "ru": "PostgreSQL отказывается индексировать колонки, содержащие запятые."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Sorting the table becomes impossible.",
+            "ru": "Сортировка таблицы становится невозможной."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It breaks third normal form, but nothing else changes.",
+            "ru": "Это нарушает третью нормальную форму, но больше ничего не меняется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The values cannot be searched, typed or referenced by a foreign key.",
+            "ru": "По значениям нельзя искать, их нельзя типизировать и на них нельзя сослаться внешним ключом."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Packing several values into one column breaks first normal form, and the damage is functional rather than spatial — the list is usually smaller on disk than separate rows. What you lose is everything the database could have done for you: finding rows by one tag means a LIKE over a string, a typo in a tag is undetectable, no foreign key can point at the tag list, and no index serves a containment query. A join table, or a real array or jsonb column with a GIN index, keeps those abilities.",
+        "ru": "Упаковка нескольких значений в одну колонку нарушает первую нормальную форму, и ущерб здесь функциональный, а не объёмный — список на диске обычно меньше отдельных строк. Теряется всё, что база могла бы сделать за вас: поиск строк по одному тегу превращается в LIKE по строке, опечатку в теге обнаружить нечем, внешний ключ на список тегов не поставить, и ни один индекс не обслужит запрос на вхождение. Таблица связи — или настоящий массив либо колонка jsonb с индексом GIN — эти возможности сохраняет."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/datatype.html",
+        "https://www.postgresql.org/docs/current/indexes-types.html"
+      ]
+    },
+    {
+      "id": "databases.schema-design.003",
+      "section": "schema-design",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "The sections table has the primary key (topic_id, id). Why would adding a topic_name_en column to it be a normalisation error?",
+        "ru": "У таблицы sections первичный ключ (topic_id, id). Почему добавление в неё колонки topic_name_en было бы ошибкой нормализации?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because the topic name depends on only part of the key, so it would be stored once per section.",
+            "ru": "Потому что имя темы зависит только от части ключа и хранилось бы по копии на каждый раздел."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because a composite primary key may not have more than two columns beside it.",
+            "ru": "Потому что рядом с составным первичным ключом нельзя держать больше двух колонок."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because text columns may not appear in a table whose key is composite.",
+            "ru": "Потому что текстовые колонки нельзя держать в таблице с составным ключом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because it would make the foreign key from questions ambiguous.",
+            "ru": "Потому что это сделало бы внешний ключ из questions неоднозначным."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It would not be an error; the name is part of the section's identity.",
+            "ru": "Это не было бы ошибкой: имя — часть идентичности раздела."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "This is the second normal form: no non-key column may depend on part of a composite key. The topic name is a function of topic_id alone, so storing it in sections repeats it once per section and creates a way for two rows to disagree about the same topic's name. Renaming the topic then means an UPDATE over every section instead of over one row in topics, and any missed row is a silent inconsistency the schema cannot detect.",
+        "ru": "Это вторая нормальная форма: ни одна неключевая колонка не должна зависеть от части составного ключа. Имя темы является функцией одного лишь topic_id, поэтому хранение его в sections повторяет имя по разу на каждый раздел и создаёт возможность для двух строк разойтись в имени одной темы. Переименование темы тогда превращается в UPDATE по всем разделам вместо одной строки в topics, а любая пропущенная строка — это тихая несогласованность, которую схема обнаружить не может."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/sql-createtable.html",
+        "https://www.postgresql.org/docs/current/ddl-constraints.html"
+      ]
+    },
+    {
+      "id": "databases.schema-design.004",
+      "section": "schema-design",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "A table has CHECK (quantity > 0). An INSERT supplies NULL for quantity. What happens?",
+        "ru": "У таблицы есть ограничение CHECK (quantity > 0). INSERT подставляет в quantity значение NULL. Что произойдёт?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The insert is rejected: NULL is not greater than zero.",
+            "ru": "Вставка отвергается: NULL не больше нуля."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The insert is rejected, but only if the column is also indexed.",
+            "ru": "Вставка отвергается, но только если колонка ещё и проиндексирована."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The insert succeeds and quantity is silently stored as 0.",
+            "ru": "Вставка проходит, и quantity молча сохраняется как 0."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The behaviour depends on the transaction's isolation level.",
+            "ru": "Поведение зависит от уровня изоляции транзакции."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The insert succeeds: a CHECK rejects a row only when the condition is false.",
+            "ru": "Вставка проходит: CHECK отвергает строку только когда условие ложно."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "`NULL > 0` evaluates to unknown, not to false, and a CHECK constraint only rejects a row when its condition evaluates to false. So the row is accepted and the invariant you thought you had declared quietly does not hold. The fix is to declare both facts: NOT NULL for 'there is always a quantity' and CHECK for 'it is positive'. The same three-valued logic is why a nullable column silently escapes most CHECK constraints.",
+        "ru": "Выражение `NULL > 0` даёт неизвестность, а не ложь, а ограничение CHECK отвергает строку только тогда, когда условие вычисляется в ложь. Поэтому строка принимается, и инвариант, который вы считали объявленным, тихо не выполняется. Лечение — объявить оба факта: NOT NULL для «количество есть всегда» и CHECK для «оно положительно». Из-за той же трёхзначной логики nullable-колонка незаметно ускользает от большинства ограничений CHECK."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/ddl-constraints.html",
+        "https://www.postgresql.org/docs/current/datatype.html"
+      ]
+    },
+    {
+      "id": "databases.schema-design.005",
+      "section": "schema-design",
+      "difficulty": "medium",
+      "level": "junior",
+      "text": {
+        "en": "The questions table already has a foreign key to sections (topic_id, id). Why does it also carry the index questions_topic_section_idx on the same columns?",
+        "ru": "У таблицы questions уже есть внешний ключ на sections (topic_id, id). Зачем она дополнительно несёт индекс questions_topic_section_idx по тем же колонкам?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because a foreign key needs a second index to be checked at all.",
+            "ru": "Потому что внешний ключ без второго индекса вообще не проверяется."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because PostgreSQL indexes only the parent side, leaving deletes and lookups on the child side to scan.",
+            "ru": "Потому что PostgreSQL индексирует только родительскую сторону, оставляя удаления и поиск на дочерней стороне сканированию."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because the index makes the foreign key check transactional.",
+            "ru": "Потому что индекс делает проверку внешнего ключа транзакционной."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because a composite foreign key cannot be enforced without a matching index.",
+            "ru": "Потому что составной внешний ключ нельзя обеспечить без совпадающего индекса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is redundant: PostgreSQL creates this index with the constraint.",
+            "ru": "Он избыточен: PostgreSQL создаёт такой индекс вместе с ограничением."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A foreign key requires a unique index on the *referenced* columns, and PostgreSQL has one there because those columns are the parent's primary key. Nothing is created on the child side. Without an index there, deleting or updating a parent row has to scan the whole child table to prove no child refers to it, and the application's own 'all questions of this section' query has to scan too. Indexing foreign key columns is close to a default habit for exactly these two reasons.",
+        "ru": "Внешний ключ требует уникального индекса на *целевых* колонках, и в PostgreSQL он там есть, потому что это первичный ключ родителя. На дочерней стороне не создаётся ничего. Без индекса там удаление или обновление родительской строки вынуждено сканировать всю дочернюю таблицу, чтобы доказать, что на неё никто не ссылается, и собственный запрос приложения «все вопросы этого раздела» тоже сканирует. Индексировать колонки внешнего ключа стоит почти по умолчанию именно по этим двум причинам."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/ddl-constraints.html",
+        "https://www.postgresql.org/docs/current/indexes.html"
+      ]
+    },
+    {
+      "id": "databases.schema-design.006",
+      "section": "schema-design",
+      "difficulty": "hard",
+      "level": "middle",
+      "text": {
+        "en": "user_stats.total_answered could be recomputed by counting answers, but it is stored. What is the real, lasting cost of that denormalisation?",
+        "ru": "Значение user_stats.total_answered можно было бы пересчитывать подсчётом ответов, но оно хранится. В чём настоящая, постоянная цена такой денормализации?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Every future code path that records an answer must also maintain the counter, or it silently drifts.",
+            "ru": "Каждая будущая ветка кода, записывающая ответ, обязана поддерживать счётчик, иначе он тихо разойдётся с правдой."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The extra disk space taken by one integer per user.",
+            "ru": "Дополнительное место на диске под одно целое на пользователя."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The table can no longer be indexed on user_id.",
+            "ru": "Таблицу больше нельзя индексировать по user_id."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "PostgreSQL must take a table lock whenever the counter is read.",
+            "ru": "PostgreSQL вынужден брать блокировку таблицы при каждом чтении счётчика."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Queries that read the counter can no longer run at READ COMMITTED.",
+            "ru": "Запросы, читающие счётчик, больше не могут работать на READ COMMITTED."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A denormalised value is a cache inside the schema, and the expensive part of a cache is invalidation. Disk is irrelevant here; what you have taken on is a correctness obligation that no constraint can enforce and that every future writer — including an admin script and the next migration — must honour. That trade is worth making when the read is frequent and the recomputation is genuinely expensive, and it should come with a way to recompute the value so drift can be detected and repaired.",
+        "ru": "Денормализованное значение — это кэш внутри схемы, а дорогая часть кэша — инвалидация. Диск здесь ни при чём; вы приняли на себя обязательство по корректности, которое не обеспечит ни одно ограничение и которое обязан соблюдать каждый будущий писатель, включая админский скрипт и следующую миграцию. Такой обмен оправдан, когда чтение частое, а пересчёт действительно дорогой, и к нему стоит прилагать способ пересчитать значение, чтобы расхождение можно было обнаружить и починить."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/sql-createtable.html",
+        "https://www.postgresql.org/docs/current/ddl-constraints.html"
+      ]
+    },
+    {
+      "id": "databases.anomalies.001",
+      "section": "anomalies",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which anomaly is it when a transaction reads a row version that another transaction has written but not yet committed?",
+        "ru": "Как называется аномалия, при которой транзакция читает версию строки, записанную другой транзакцией, но ещё не закоммиченную?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Non-repeatable read",
+            "ru": "Неповторяющееся чтение"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Phantom read",
+            "ru": "Фантомное чтение"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Write skew",
+            "ru": "Write skew (перекос записи)"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Lost update",
+            "ru": "Потерянное обновление"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Dirty read",
+            "ru": "Грязное чтение"
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A dirty read is reading data that may never have existed: if the writer rolls back, the reader acted on a value no committed state ever contained. Only READ UNCOMMITTED permits it in the standard, and PostgreSQL permits it nowhere — MVCC makes an uncommitted row version invisible to every snapshot but its writer's. The other anomalies all involve data that was committed; they differ in what changed between two reads.",
+        "ru": "Грязное чтение — это чтение данных, которых могло никогда не существовать: если писатель откатится, читатель действовал по значению, которого не было ни в одном закоммиченном состоянии. В стандарте это разрешает только READ UNCOMMITTED, а PostgreSQL не разрешает нигде: при MVCC незакоммиченная версия строки невидима любому снимку, кроме снимка её писателя. Остальные аномалии касаются уже закоммиченных данных и различаются тем, что изменилось между двумя чтениями."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/transaction-iso.html",
+        "https://www.postgresql.org/docs/current/mvcc-intro.html"
+      ]
+    },
+    {
+      "id": "databases.anomalies.002",
+      "section": "anomalies",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What distinguishes a phantom read from a non-repeatable read?",
+        "ru": "Чем фантомное чтение отличается от неповторяющегося?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A phantom concerns rows appearing in or leaving a result set; a non-repeatable read concerns a value changing in a row already read.",
+            "ru": "Фантом касается строк, появляющихся в результате или уходящих из него; неповторяющееся чтение — изменения значения в уже прочитанной строке."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A phantom happens only in queries without a WHERE clause.",
+            "ru": "Фантом возникает только в запросах без условия WHERE."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A phantom involves uncommitted data, a non-repeatable read only committed data.",
+            "ru": "Фантом связан с незакоммиченными данными, а неповторяющееся чтение — только с закоммиченными."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A phantom is caused by DELETE, a non-repeatable read by INSERT.",
+            "ru": "Фантом вызывается DELETE, а неповторяющееся чтение — INSERT."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "They are two names for the same anomaly.",
+            "ru": "Это два названия одной и той же аномалии."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Both are caused by another transaction committing between two of your reads; the difference is what changed. A non-repeatable read is the same row with a new value — an UPDATE the reader sees. A phantom is a change in membership of the set your predicate selects — an INSERT or DELETE that makes the same query return a different number of rows. The distinction matters because the standard lets REPEATABLE READ forbid the first while still permitting the second.",
+        "ru": "Обе вызваны тем, что между двумя вашими чтениями закоммитилась другая транзакция; разница в том, что именно изменилось. Неповторяющееся чтение — та же строка с новым значением, то есть увиденный читателем UPDATE. Фантом — изменение состава множества, выбираемого вашим предикатом: INSERT или DELETE, из-за которого тот же запрос возвращает другое число строк. Различие важно потому, что стандарт позволяет уровню REPEATABLE READ запрещать первое, но по-прежнему допускать второе."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/transaction-iso.html"
+      ]
+    },
+    {
+      "id": "databases.anomalies.003",
+      "section": "anomalies",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Two requests run this Java-side pattern concurrently at READ COMMITTED. Which change removes the lost update with the least contention?",
+        "ru": "Два запроса параллельно выполняют этот шаблон на стороне Java при READ COMMITTED. Какое изменение убирает потерянное обновление с наименьшей конкуренцией?"
+      },
+      "code": "int current = jdbc.queryForObject(\n        \"SELECT total_answered FROM user_stats WHERE user_id = ?\", Integer.class, userId);\njdbc.update(\"UPDATE user_stats SET total_answered = ? WHERE user_id = ?\", current + 1, userId);",
+      "options": [
+        {
+          "text": {
+            "en": "Move the whole block into a synchronized method in the application.",
+            "ru": "Перенести весь блок в synchronized-метод приложения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Raise the isolation level to SERIALIZABLE for every transaction in the service.",
+            "ru": "Поднять уровень изоляции до SERIALIZABLE для всех транзакций сервиса."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Do the arithmetic in SQL: UPDATE user_stats SET total_answered = total_answered + 1 WHERE user_id = ?",
+            "ru": "Выполнить арифметику в SQL: UPDATE user_stats SET total_answered = total_answered + 1 WHERE user_id = ?"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Re-read the row after the update and write it again if it does not match.",
+            "ru": "Перечитать строку после обновления и записать её снова, если значение не совпало."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Wrap the two statements in BEGIN and COMMIT, which they are not in yet.",
+            "ru": "Обернуть два оператора в BEGIN и COMMIT, чего сейчас нет."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The bug is the round trip through application memory: both transactions read 41, both compute 42, one increment disappears. Doing the arithmetic in the UPDATE makes the read and the write one statement — the second writer blocks briefly on the row lock, then re-reads the committed value and adds to it. A synchronized method only helps in a single JVM; SERIALIZABLE would work but adds retry handling everywhere for one counter; and transaction boundaries alone do not stop a lost update at READ COMMITTED.",
+        "ru": "Ошибка в путешествии значения через память приложения: обе транзакции читают 41, обе вычисляют 42, один инкремент исчезает. Арифметика внутри UPDATE делает чтение и запись одним оператором — второй писатель ненадолго блокируется на строке, затем перечитывает закоммиченное значение и прибавляет к нему. synchronized-метод помогает только внутри одной JVM; SERIALIZABLE сработал бы, но потребовал бы обработки повторов повсюду ради одного счётчика; а сами по себе границы транзакции потерянное обновление на READ COMMITTED не останавливают."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/transaction-iso.html",
+        "https://www.postgresql.org/docs/current/explicit-locking.html"
+      ]
+    },
+    {
+      "id": "databases.anomalies.004",
+      "section": "anomalies",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Which PostgreSQL isolation level is the lowest one that prevents write skew?",
+        "ru": "Какой уровень изоляции PostgreSQL является самым низким из тех, что предотвращают write skew?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "READ COMMITTED",
+            "ru": "READ COMMITTED"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "REPEATABLE READ",
+            "ru": "REPEATABLE READ"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "SERIALIZABLE",
+            "ru": "SERIALIZABLE"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "READ UNCOMMITTED, because it takes no snapshot at all.",
+            "ru": "READ UNCOMMITTED, потому что он вообще не берёт снимок."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "None of them: write skew must always be handled by the application.",
+            "ru": "Никакой: write skew всегда приходится обрабатывать приложению."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Write skew is the anomaly snapshot isolation misses: two transactions read an overlapping set, each checks an invariant that still holds, and each writes a different row. No row is written twice, so REPEATABLE READ sees no conflict. SERIALIZABLE adds predicate locking — it tracks what each transaction read as well as wrote — detects the dangerous pattern and aborts one with SQLSTATE 40001. Below that level the application must take the read locks itself, for example with SELECT ... FOR UPDATE over the rows the decision depends on.",
+        "ru": "Write skew — это аномалия, которую снимочная изоляция пропускает: две транзакции читают пересекающееся множество, каждая проверяет инвариант, который ещё выполняется, и каждая пишет свою строку. Ни одна строка не записана дважды, поэтому REPEATABLE READ конфликта не видит. SERIALIZABLE добавляет предикатные блокировки — он отслеживает не только записи, но и чтения каждой транзакции, — распознаёт опасный шаблон и прерывает одну из них с SQLSTATE 40001. Ниже этого уровня блокировки на чтение приходится брать приложению, например SELECT ... FOR UPDATE по строкам, от которых зависит решение."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/transaction-iso.html",
+        "https://www.postgresql.org/docs/current/mvcc-serialization-failure-handling.html"
+      ]
+    },
+    {
+      "id": "databases.anomalies.005",
+      "section": "anomalies",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A team reads that the SQL standard permits phantom reads at REPEATABLE READ and plans around them. What is true on PostgreSQL?",
+        "ru": "Команда прочитала, что стандарт SQL допускает фантомные чтения на уровне REPEATABLE READ, и строит планы с учётом этого. Что верно для PostgreSQL?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "PostgreSQL permits phantoms there, exactly as the standard allows.",
+            "ru": "PostgreSQL допускает там фантомы ровно так, как разрешает стандарт."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "PostgreSQL does not produce phantoms there: the level is implemented as snapshot isolation.",
+            "ru": "PostgreSQL там фантомов не порождает: уровень реализован как снимочная изоляция."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "PostgreSQL permits phantoms there only for queries that use an index.",
+            "ru": "PostgreSQL допускает там фантомы только для запросов, использующих индекс."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "PostgreSQL silently runs REPEATABLE READ as SERIALIZABLE.",
+            "ru": "PostgreSQL молча исполняет REPEATABLE READ как SERIALIZABLE."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Phantoms appear there only when the table has been vacuumed.",
+            "ru": "Фантомы появляются там только после вакуумирования таблицы."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The standard sets a floor, not a ceiling: an engine may forbid more anomalies than required. PostgreSQL's REPEATABLE READ takes one snapshot for the whole transaction, and a row created after that snapshot is invisible whether it is new or merely updated — so phantoms do not occur. It is still not SERIALIZABLE, because write skew survives. The lesson generalises: an isolation level names a guarantee only once you also name the engine and its version.",
+        "ru": "Стандарт задаёт нижнюю границу, а не верхнюю: движок вправе запрещать больше аномалий, чем требуется. REPEATABLE READ в PostgreSQL берёт один снимок на всю транзакцию, и строка, созданная после этого снимка, невидима — неважно, новая она или лишь обновлённая, — поэтому фантомов не возникает. Но это всё ещё не SERIALIZABLE, потому что write skew уровень переживает. Вывод обобщается: уровень изоляции называет гарантию только вместе с названием движка и его версией."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/transaction-iso.html"
+      ]
+    },
+    {
+      "id": "databases.anomalies.006",
+      "section": "anomalies",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "At REPEATABLE READ, transaction A reads a row, transaction B updates and commits the same row, then A updates it. What does PostgreSQL do?",
+        "ru": "На уровне REPEATABLE READ транзакция A читает строку, транзакция B обновляет и коммитит ту же строку, затем A её обновляет. Что сделает PostgreSQL?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A's update silently overwrites B's, because A is working from its own snapshot.",
+            "ru": "Обновление A молча перезаписывает обновление B, потому что A работает со своим снимком."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A blocks until B commits, then applies its update to B's new value.",
+            "ru": "A блокируется до коммита B, затем применяет своё обновление к новому значению B."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A is aborted with a serialization failure, and the application must retry it.",
+            "ru": "A прерывается ошибкой сериализации, и приложение обязано её повторить."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "B is rolled back retroactively, because A started first.",
+            "ru": "B откатывается задним числом, потому что A началась раньше."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A's update succeeds and both changes are merged column by column.",
+            "ru": "Обновление A проходит, и оба изменения сливаются поколоночно."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "At REPEATABLE READ a writer that meets a row version committed after its snapshot cannot proceed: applying its update would produce a state matching no serial order, and silently discarding B's change is exactly the lost update the level forbids. PostgreSQL therefore aborts A with SQLSTATE 40001. At READ COMMITTED the same sequence takes the second branch — A waits, then re-evaluates its UPDATE against the new version. The practical consequence is that moving above READ COMMITTED adds failures your code must retry.",
+        "ru": "На REPEATABLE READ писатель, встретивший версию строки, закоммиченную после его снимка, продолжить не может: применение его обновления дало бы состояние, не соответствующее ни одному последовательному порядку, а тихо отбросить изменение B — это ровно то потерянное обновление, которое уровень запрещает. Поэтому PostgreSQL прерывает A с SQLSTATE 40001. На READ COMMITTED та же последовательность идёт по второй ветке: A ждёт, а затем переоценивает свой UPDATE относительно новой версии. Практическое следствие: переход выше READ COMMITTED добавляет отказы, которые код обязан повторять."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/transaction-iso.html",
+        "https://www.postgresql.org/docs/current/mvcc-serialization-failure-handling.html"
+      ]
+    },
+    {
+      "id": "databases.mvcc-vacuum.001",
+      "section": "mvcc-vacuum",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does PostgreSQL physically do when a transaction runs UPDATE on a row?",
+        "ru": "Что физически делает PostgreSQL, когда транзакция выполняет UPDATE строки?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It overwrites the row in place and writes the previous value to an undo log.",
+            "ru": "Перезаписывает строку на месте, а прежнее значение пишет в журнал отмены."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It locks the page, edits the bytes of the row and releases the lock.",
+            "ru": "Блокирует страницу, правит байты строки и отпускает блокировку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It deletes the row and schedules an insert for after the commit.",
+            "ru": "Удаляет строку и планирует вставку после коммита."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It writes a new version of the row and marks the old version as superseded.",
+            "ru": "Пишет новую версию строки и помечает старую как вытесненную."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It copies the whole page to a new location and updates every index.",
+            "ru": "Копирует страницу целиком в новое место и обновляет все индексы."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "PostgreSQL implements MVCC by never modifying a row in place: an UPDATE inserts a new tuple and stamps the old one with the updating transaction's id in xmax. Both versions exist until vacuum removes the dead one, which is what lets a concurrent reader keep using the version its snapshot needs. Engines with an undo log, such as Oracle and InnoDB, make the opposite trade: in-place updates and a separate structure to reconstruct old versions.",
+        "ru": "PostgreSQL реализует MVCC тем, что никогда не меняет строку на месте: UPDATE вставляет новый кортеж и проставляет в xmax старого идентификатор обновляющей транзакции. Обе версии существуют, пока вакуум не уберёт мёртвую, — именно это позволяет параллельному читателю продолжать пользоваться версией, которая нужна его снимку. Движки с журналом отмены, такие как Oracle и InnoDB, делают обратный размен: обновление на месте и отдельная структура для восстановления старых версий."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/mvcc-intro.html",
+        "https://www.postgresql.org/docs/current/routine-vacuuming.html"
+      ]
+    },
+    {
+      "id": "databases.mvcc-vacuum.002",
+      "section": "mvcc-vacuum",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "What does a plain VACUUM (not VACUUM FULL) do with the space held by dead tuples?",
+        "ru": "Что делает обычный VACUUM (не VACUUM FULL) с местом, занятым мёртвыми кортежами?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It returns the space to the operating system immediately.",
+            "ru": "Немедленно возвращает место операционной системе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It marks the space reusable by future rows of the same table.",
+            "ru": "Помечает место как доступное для повторного использования будущими строками той же таблицы."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It compacts the table by rewriting every page in order.",
+            "ru": "Уплотняет таблицу, переписывая все страницы по порядку."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It moves the dead tuples into a separate archive table.",
+            "ru": "Переносит мёртвые кортежи в отдельную архивную таблицу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nothing: only VACUUM FULL touches dead tuples at all.",
+            "ru": "Ничего: мёртвые кортежи трогает только VACUUM FULL."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Plain VACUUM reclaims dead tuples for reuse inside the relation and cleans the matching index entries, without an exclusive lock, so normal traffic continues. The file does not shrink — a table that ballooned stays that size and simply stops growing. VACUUM FULL is what returns space to the operating system, and it does so by rewriting the whole table under an ACCESS EXCLUSIVE lock that blocks even SELECT, which is why it belongs in a maintenance window rather than in routine work.",
+        "ru": "Обычный VACUUM освобождает мёртвые кортежи для повторного использования внутри отношения и чистит соответствующие записи индексов, не беря исключительную блокировку, так что обычный трафик продолжается. Файл при этом не уменьшается: раздувшаяся таблица остаётся такого же размера и просто перестаёт расти. Место операционной системе возвращает VACUUM FULL, и делает он это переписыванием всей таблицы под блокировкой ACCESS EXCLUSIVE, которая блокирует даже SELECT, — поэтому ему место в технологическом окне, а не в рутине."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/sql-vacuum.html",
+        "https://www.postgresql.org/docs/current/routine-vacuuming.html"
+      ]
+    },
+    {
+      "id": "databases.mvcc-vacuum.003",
+      "section": "mvcc-vacuum",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A heavily updated table keeps growing although autovacuum is enabled and running. What should be checked first?",
+        "ru": "Активно обновляемая таблица продолжает расти, хотя автовакуум включён и работает. Что следует проверить в первую очередь?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Whether the table has an index on its primary key.",
+            "ru": "Есть ли у таблицы индекс по первичному ключу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whether the disk is full, which disables vacuum.",
+            "ru": "Не заполнен ли диск, что отключает вакуум."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whether a long-running or idle-in-transaction session is holding back the xmin horizon.",
+            "ru": "Нет ли долгой или висящей в idle in transaction сессии, удерживающей горизонт xmin."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Whether the table was created before the last major version upgrade.",
+            "ru": "Не создана ли таблица до последнего мажорного обновления версии."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Whether the isolation level of the writers is READ COMMITTED.",
+            "ru": "Работают ли писатели на уровне READ COMMITTED."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Vacuum may only remove row versions that no live snapshot could still need. One session sitting in an open transaction — even doing nothing, state 'idle in transaction' — pins the oldest transaction id the system must preserve, and every table in the cluster keeps its garbage for as long as that session lives. pg_stat_activity ordered by xact_start finds it in seconds. Autovacuum is usually working correctly in this situation; it is simply not permitted to delete anything.",
+        "ru": "Вакуум вправе удалять только те версии строк, которые не могут понадобиться ни одному живому снимку. Одна сессия с открытой транзакцией — даже ничего не делающая, в состоянии idle in transaction — удерживает самый старый идентификатор транзакции, который система обязана сохранять, и каждая таблица кластера хранит свой мусор всё время жизни этой сессии. Запрос к pg_stat_activity с сортировкой по xact_start находит её за секунды. Автовакуум в такой ситуации обычно работает правильно — ему просто не позволено ничего удалять."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/routine-vacuuming.html",
+        "https://www.postgresql.org/docs/current/mvcc-intro.html"
+      ]
+    },
+    {
+      "id": "databases.mvcc-vacuum.004",
+      "section": "mvcc-vacuum",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Why is VACUUM FULL a poor choice for reclaiming bloat on a table that is serving live traffic?",
+        "ru": "Почему VACUUM FULL — плохой выбор для устранения раздувания в таблице, обслуживающей живой трафик?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It takes an ACCESS EXCLUSIVE lock, blocking even SELECT until the rewrite finishes.",
+            "ru": "Он берёт блокировку ACCESS EXCLUSIVE, блокируя даже SELECT до конца перезаписи."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It cannot run while autovacuum is enabled on the table.",
+            "ru": "Он не может работать, пока на таблице включён автовакуум."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It discards the table's indexes and they must be recreated by hand.",
+            "ru": "Он выбрасывает индексы таблицы, и их приходится создавать вручную."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It only reclaims space from indexes, never from the table itself.",
+            "ru": "Он освобождает место только в индексах, но не в самой таблице."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It requires the table to be empty of uncommitted transactions for an hour.",
+            "ru": "Он требует, чтобы в таблице час не было незакоммиченных транзакций."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "VACUUM FULL rewrites the table into a new file, so it needs the strongest lock there is for the whole operation — on a large table, minutes or hours during which every query on it waits. It also needs free disk space for a second copy. Routine VACUUM avoids all of that by reusing space in place, and when a table really must shrink, a tool that rewrites it with brief locks, or a planned maintenance window, is the safer route.",
+        "ru": "VACUUM FULL переписывает таблицу в новый файл, поэтому ему нужна самая сильная из существующих блокировок на всю операцию — на большой таблице это минуты или часы, в течение которых любой запрос к ней ждёт. Ему нужно ещё и свободное место на диске под вторую копию. Рутинный VACUUM всего этого избегает, переиспользуя место на месте, а когда таблицу действительно необходимо уменьшить, безопаснее инструмент, переписывающий её с короткими блокировками, или запланированное технологическое окно."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/sql-vacuum.html",
+        "https://www.postgresql.org/docs/current/explicit-locking.html"
+      ]
+    },
+    {
+      "id": "databases.mvcc-vacuum.005",
+      "section": "mvcc-vacuum",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "An EXPLAIN (ANALYZE) shows an Index Only Scan with a large Heap Fetches value. What does that indicate?",
+        "ru": "EXPLAIN (ANALYZE) показывает Index Only Scan с большим значением Heap Fetches. О чём это говорит?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The index is corrupt and must be rebuilt with REINDEX.",
+            "ru": "Индекс повреждён и требует перестроения через REINDEX."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The query selects columns that are not in the index.",
+            "ru": "Запрос выбирает колонки, которых нет в индексе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The visibility map is out of date, so the scan is reading the table to check visibility anyway.",
+            "ru": "Карта видимости устарела, и сканирование всё равно читает таблицу, чтобы проверить видимость."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The planner chose the wrong join strategy above this node.",
+            "ru": "Планировщик выбрал неверную стратегию соединения над этим узлом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The index was created with INCLUDE columns, which always cost heap fetches.",
+            "ru": "Индекс создан с колонками INCLUDE, которые всегда стоят обращений к таблице."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "An index entry does not record whether its row version is visible to the current snapshot, so an index-only scan has to prove visibility some other way: the visibility map, which VACUUM maintains and which marks pages where every tuple is visible to everyone. If recent writes have left pages unmarked, the scan falls back to reading those rows from the table, and Heap Fetches counts exactly that. The fix is vacuuming the table more aggressively, not touching the index or the query.",
+        "ru": "Запись индекса не хранит, видима ли её версия строки текущему снимку, поэтому index-only scan обязан доказать видимость иначе — через карту видимости, которую поддерживает VACUUM и которая отмечает страницы, где все кортежи видны всем. Если недавние записи оставили страницы неотмеченными, сканирование возвращается к чтению этих строк из таблицы, и Heap Fetches считает именно это. Лечение — более агрессивное вакуумирование таблицы, а не правка индекса или запроса."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/indexes-index-only-scans.html",
+        "https://www.postgresql.org/docs/current/routine-vacuuming.html"
+      ]
+    },
+    {
+      "id": "databases.mvcc-vacuum.006",
+      "section": "mvcc-vacuum",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "Under which condition can PostgreSQL perform a HOT update, and why does that matter?",
+        "ru": "При каком условии PostgreSQL может выполнить HOT-обновление и почему это важно?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "When the table has no indexes at all; it then skips writing WAL for the update.",
+            "ru": "Когда у таблицы вообще нет индексов; тогда он не пишет WAL для обновления."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When no indexed column changed and the new version fits on the same page, so no index entry has to be added.",
+            "ru": "Когда ни одна индексируемая колонка не изменилась и новая версия помещается на ту же страницу, так что запись в индекс добавлять не нужно."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "When the update runs at SERIALIZABLE, which lets it modify the tuple in place.",
+            "ru": "Когда обновление идёт на уровне SERIALIZABLE, что позволяет менять кортеж на месте."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When the row has never been read, so no snapshot can depend on it.",
+            "ru": "Когда строку ещё ни разу не читали, так что от неё не зависит ни один снимок."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When autovacuum is disabled for the table, letting the old version be overwritten.",
+            "ru": "Когда для таблицы отключён автовакуум, что позволяет перезаписать старую версию."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A normal UPDATE writes the new version at a new location, so every index on the table needs a new entry pointing at it — index maintenance is often the larger part of an update's cost. A heap-only tuple update keeps the new version on the same page, chained from the old one, and the existing index entries still lead to it, so no index is touched. The two preconditions are that no indexed column changed and that the page has room, which is why lowering fillfactor on a hot table, and not over-indexing it, are real tuning decisions.",
+        "ru": "Обычный UPDATE пишет новую версию по новому адресу, поэтому каждому индексу таблицы нужна новая запись, указывающая на неё, — сопровождение индексов часто составляет бóльшую часть стоимости обновления. HOT-обновление оставляет новую версию на той же странице, связывая её цепочкой со старой, и существующие записи индексов по-прежнему до неё доводят, так что индексы не трогаются вовсе. Два предусловия — ни одна индексируемая колонка не изменилась и на странице есть место; поэтому снижение fillfactor на горячей таблице и отказ от лишних индексов на ней являются реальными решениями по настройке."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/mvcc-intro.html",
+        "https://www.postgresql.org/docs/current/sql-createtable.html"
+      ]
+    },
+    {
+      "id": "databases.indexes.001",
+      "section": "indexes",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Which index type does CREATE INDEX build by default in PostgreSQL, and what makes it the usual right answer?",
+        "ru": "Какой тип индекса строит CREATE INDEX в PostgreSQL по умолчанию и почему он обычно и есть правильный ответ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Hash, because equality is the most common predicate.",
+            "ru": "Hash, потому что равенство — самый частый предикат."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "B-tree, because it serves equality, ranges and ordering with one structure.",
+            "ru": "B-tree, потому что одной структурой обслуживает равенство, диапазоны и упорядочивание."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "GIN, because it can index any data type.",
+            "ru": "GIN, потому что умеет индексировать любой тип данных."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "BRIN, because it is the smallest index on disk.",
+            "ru": "BRIN, потому что он самый компактный на диске."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "GiST, because it is the most general-purpose type.",
+            "ru": "GiST, потому что это самый универсальный тип."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A B-tree keeps entries in sorted order, which is why one structure answers `=`, `<`, `>`, BETWEEN, IN and prefix LIKE, and can additionally hand rows to an ORDER BY or a merge join already sorted. Unique constraints are implemented with it too. Hash indexes handle equality only; GIN is for columns holding many values per row such as jsonb and arrays; BRIN suits huge physically ordered tables; GiST covers geometric and range types.",
+        "ru": "B-tree хранит записи в отсортированном порядке — поэтому одна структура отвечает на `=`, `<`, `>`, BETWEEN, IN и префиксный LIKE, а вдобавок отдаёт строки уже отсортированными для ORDER BY или merge join. Через него же реализованы ограничения уникальности. Hash-индексы обслуживают только равенство; GIN предназначен для колонок с множеством значений в строке, таких как jsonb и массивы; BRIN подходит огромным физически упорядоченным таблицам; GiST покрывает геометрические и диапазонные типы."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/indexes-types.html",
+        "https://www.postgresql.org/docs/current/indexes.html"
+      ]
+    },
+    {
+      "id": "databases.indexes.002",
+      "section": "indexes",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "A table has one index on (topic_id, section_id). Which query can it NOT help?",
+        "ru": "У таблицы есть один индекс по (topic_id, section_id). Какому запросу он помочь НЕ может?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "WHERE topic_id = 'sql'",
+            "ru": "WHERE topic_id = 'sql'"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "WHERE topic_id = 'sql' AND section_id = 'joins'",
+            "ru": "WHERE topic_id = 'sql' AND section_id = 'joins'"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "WHERE topic_id = 'sql' ORDER BY section_id",
+            "ru": "WHERE topic_id = 'sql' ORDER BY section_id"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "WHERE section_id = 'joins'",
+            "ru": "WHERE section_id = 'joins'"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "WHERE topic_id IN ('sql', 'databases')",
+            "ru": "WHERE topic_id IN ('sql', 'databases')"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A composite index is sorted by its first column, then by the second within each value of the first. Rows for one section_id are therefore scattered all through it, and a filter on the second column alone gives the index nothing to seek on — the same reason a phone book sorted by surname then first name cannot find every Maria. Everything that constrains the leading column first is served, including ranges, IN lists and ordering by the following column.",
+        "ru": "Составной индекс отсортирован по первой колонке, а внутри каждого её значения — по второй. Строки одного section_id поэтому разбросаны по всему индексу, и фильтр только по второй колонке не даёт индексу точки входа — по той же причине телефонная книга, отсортированная по фамилии, затем по имени, не поможет найти всех Марий. Обслуживается всё, что сначала ограничивает ведущую колонку, включая диапазоны, списки IN и упорядочивание по следующей колонке."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/indexes.html",
+        "https://www.postgresql.org/docs/current/sql-createindex.html"
+      ]
+    },
+    {
+      "id": "databases.indexes.003",
+      "section": "indexes",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Which index type turns a containment query over a jsonb column, such as payload @> '{\"stage\":\"REVIEW\"}', into a lookup?",
+        "ru": "Какой тип индекса превращает запрос на вхождение по колонке jsonb, например payload @> '{\"stage\":\"REVIEW\"}', в поиск?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A B-tree on the whole payload column.",
+            "ru": "B-tree по всей колонке payload."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A hash index on the whole payload column.",
+            "ru": "Hash-индекс по всей колонке payload."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A BRIN index on the table's primary key.",
+            "ru": "BRIN-индекс по первичному ключу таблицы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "No index can; jsonb containment is always a sequential scan.",
+            "ru": "Никакой: вхождение в jsonb всегда сканирует таблицу последовательно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A GIN index on the payload column.",
+            "ru": "GIN-индекс по колонке payload."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "GIN — a generalised inverted index — stores each key or element found inside a value and maps it to the rows containing it, which is exactly the shape a containment or a full-text query needs. A B-tree on a jsonb column indexes the document as a single opaque value, so it can only answer 'payload equals this whole document'. The price of GIN is write cost: each insert must add an entry per element, softened but not removed by the pending list it can flush later.",
+        "ru": "GIN — обобщённый инвертированный индекс — хранит каждый ключ или элемент, найденный внутри значения, и сопоставляет его строкам, которые его содержат: ровно та форма, что нужна запросу на вхождение или полнотекстовому поиску. B-tree по колонке jsonb индексирует документ как одно непрозрачное значение, поэтому отвечает только на «payload равен этому документу целиком». Цена GIN — стоимость записи: каждая вставка обязана добавить запись на каждый элемент, и отложенный список, который сбрасывается позже, смягчает это, но не убирает."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/indexes-types.html",
+        "https://www.postgresql.org/docs/current/indexes.html"
+      ]
+    },
+    {
+      "id": "databases.indexes.004",
+      "section": "indexes",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Why does the planner usually ignore a standalone index on a boolean column such as quiz_sessions.finished?",
+        "ru": "Почему планировщик обычно игнорирует отдельный индекс по булевой колонке вроде quiz_sessions.finished?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because each value matches a large share of the table, so a sequential scan is cheaper than the random reads.",
+            "ru": "Потому что каждое значение соответствует большой доле таблицы, и последовательное сканирование дешевле случайных чтений."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because PostgreSQL cannot index boolean columns.",
+            "ru": "Потому что PostgreSQL не умеет индексировать булевы колонки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because a boolean index is only used inside a join.",
+            "ru": "Потому что индекс по булевой колонке используется только внутри соединения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the column is nullable and NULLs are not indexed.",
+            "ru": "Потому что колонка допускает NULL, а NULL не индексируются."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because such an index is invalidated by every UPDATE of the table.",
+            "ru": "Потому что такой индекс инвалидируется каждым UPDATE таблицы."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "An index pays off by eliminating most of the table. A flag that splits rows roughly in half eliminates almost nothing, and fetching half the rows one random read at a time costs more than reading every page in order — the planner knows this from the statistics and is right to skip it. Two things make such a column useful: putting it after a selective column, as the project's (user_id, finished) index does, or a partial index that stores only the rare value and stays small.",
+        "ru": "Индекс окупается тем, что отсекает большую часть таблицы. Флаг, делящий строки примерно пополам, не отсекает почти ничего, а забирать половину строк по одному случайному чтению дороже, чем прочитать все страницы подряд, — планировщик знает это из статистики и справедливо его пропускает. Полезной такую колонку делают две вещи: поставить её после селективной колонки, как в индексе проекта (user_id, finished), или частичный индекс, хранящий только редкое значение и остающийся маленьким."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/indexes.html",
+        "https://www.postgresql.org/docs/current/planner-stats.html"
+      ]
+    },
+    {
+      "id": "databases.indexes.005",
+      "section": "indexes",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "What does the INCLUDE clause add to CREATE INDEX ... (topic_id, level) INCLUDE (difficulty)?",
+        "ru": "Что добавляет предложение INCLUDE в CREATE INDEX ... (topic_id, level) INCLUDE (difficulty)?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It makes difficulty part of the index ordering, as a third key column.",
+            "ru": "Делает difficulty частью упорядочивания индекса, третьей ключевой колонкой."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It creates a second index on difficulty automatically.",
+            "ru": "Автоматически создаёт второй индекс по difficulty."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It stores difficulty in the index so a query needing it can be answered without reading the table.",
+            "ru": "Хранит difficulty в индексе, чтобы запрос, которому она нужна, мог быть отвечен без чтения таблицы."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It forces the planner to use this index for any query touching difficulty.",
+            "ru": "Заставляет планировщик использовать этот индекс для любого запроса, затрагивающего difficulty."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It excludes rows where difficulty is null from the index.",
+            "ru": "Исключает из индекса строки, где difficulty равна null."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "INCLUDE columns are payload: stored in the leaf entries, returned with them, but not part of the key, so they cannot be searched or used for ordering. The purpose is to make an index covering for a particular query so PostgreSQL can choose an index-only scan and skip the heap. Two caveats: a covering index is larger and costlier to maintain, and the index-only scan still needs an up-to-date visibility map to avoid falling back to heap fetches.",
+        "ru": "Колонки INCLUDE — это нагрузка: они хранятся в листовых записях и возвращаются вместе с ними, но в ключ не входят, поэтому по ним нельзя ни искать, ни упорядочивать. Смысл — сделать индекс покрывающим для конкретного запроса, чтобы PostgreSQL мог выбрать index-only scan и не ходить в таблицу. Две оговорки: покрывающий индекс больше и дороже в сопровождении, а index-only scan по-прежнему требует свежей карты видимости, иначе он вернётся к чтению строк из таблицы."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/indexes-index-only-scans.html",
+        "https://www.postgresql.org/docs/current/sql-createindex.html"
+      ]
+    },
+    {
+      "id": "databases.indexes.006",
+      "section": "indexes",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "Adding one more index to a write-heavy table slows down UPDATEs of columns the index does not even contain. Why?",
+        "ru": "Добавление ещё одного индекса в таблицу с интенсивной записью замедляет UPDATE колонок, которых в индексе нет. Почему?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because every index must be locked for the duration of any UPDATE on the table.",
+            "ru": "Потому что каждый индекс блокируется на всё время любого UPDATE по таблице."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the planner must now consider more plans for the UPDATE statement.",
+            "ru": "Потому что планировщику теперь приходится рассматривать больше планов для оператора UPDATE."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because more indexes make the visibility map coarser.",
+            "ru": "Потому что чем больше индексов, тем грубее карта видимости."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because an update that cannot stay on the same page must add an entry to every index, so more indexes mean more work and less chance of a HOT update.",
+            "ru": "Потому что обновление, не уместившееся на той же странице, обязано добавить запись в каждый индекс, так что больше индексов — больше работы и меньше шансов на HOT-обновление."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because autovacuum refuses to run on tables with more than four indexes.",
+            "ru": "Потому что автовакуум отказывается работать на таблицах более чем с четырьмя индексами."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "An UPDATE writes a new row version. If it can stay on the same page and no indexed column changed, the HOT optimisation lets every existing index entry keep pointing at it and no index is touched. As indexes and their entries consume page space, the odds of fitting on the same page fall, and once the new version lands elsewhere all indexes — including ones irrelevant to the statement — need a new entry. That, plus more pages to cache and more work for vacuum, is the standing tax an unused index charges.",
+        "ru": "UPDATE пишет новую версию строки. Если она умещается на той же странице и ни одна индексируемая колонка не изменилась, оптимизация HOT позволяет всем существующим записям индексов по-прежнему указывать на неё, и индексы не трогаются. Но чем больше индексов и их записей занимают место на странице, тем ниже шансы уместиться на той же странице, а как только новая версия попадает в другое место, запись требуется всем индексам — включая те, что к оператору отношения не имеют. Это, плюс лишние страницы в кэше и лишняя работа вакууму, и есть постоянный налог, который берёт неиспользуемый индекс."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/indexes.html",
+        "https://www.postgresql.org/docs/current/mvcc-intro.html"
+      ]
+    },
+    {
+      "id": "databases.pooling-n-plus-one.001",
+      "section": "pooling-n-plus-one",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "Why do applications keep a pool of connections to PostgreSQL instead of opening one per request?",
+        "ru": "Почему приложения держат пул соединений с PostgreSQL, а не открывают по соединению на запрос?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because PostgreSQL limits each client to one connection at a time.",
+            "ru": "Потому что PostgreSQL ограничивает каждого клиента одним соединением одновременно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because a pooled connection can run several transactions in parallel.",
+            "ru": "Потому что соединение из пула может выполнять несколько транзакций параллельно."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because the server forks a backend process per connection, which is costly to create and to keep.",
+            "ru": "Потому что сервер порождает на каждое соединение отдельный серверный процесс, дорогой и в создании, и в содержании."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because connections expire after a fixed number of statements.",
+            "ru": "Потому что соединения истекают после фиксированного числа операторов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because only a pool can send prepared statements.",
+            "ru": "Потому что подготовленные операторы умеет отправлять только пул."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "PostgreSQL gives every connection its own operating-system process with its own memory, so opening one costs a fork, an authentication round trip and a fresh set of caches — far more than the query that follows. A pool amortises that by keeping connections open and lending them out for the length of a transaction. A connection still runs one statement at a time, and the pool changes nothing about that; what it changes is who pays for setup.",
+        "ru": "PostgreSQL выдаёт каждому соединению собственный процесс операционной системы со своей памятью, поэтому открытие соединения стоит порождения процесса, обмена на аутентификацию и заново прогреваемых кэшей — гораздо дороже следующего за ним запроса. Пул амортизирует это, держа соединения открытыми и выдавая их на время транзакции. Соединение по-прежнему выполняет один оператор за раз, и пул этого не меняет; он меняет лишь то, кто платит за установку."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/runtime-config-connection.html",
+        "https://jdbc.postgresql.org/documentation/use/"
+      ]
+    },
+    {
+      "id": "databases.pooling-n-plus-one.002",
+      "section": "pooling-n-plus-one",
+      "difficulty": "easy",
+      "level": "junior",
+      "text": {
+        "en": "A page loads 48 questions and then their options, issuing 49 statements in total. What is this pattern called, and why does it hurt?",
+        "ru": "Страница загружает 48 вопросов, затем их варианты ответов, отправляя в сумме 49 операторов. Как называется этот шаблон и чем он вреден?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A Cartesian product: the result set is multiplied by the number of options.",
+            "ru": "Декартово произведение: результат умножается на число вариантов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A lost update: the second query overwrites the first one's result.",
+            "ru": "Потерянное обновление: второй запрос перезаписывает результат первого."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A phantom read: the options may change between the two queries.",
+            "ru": "Фантомное чтение: варианты могут измениться между двумя запросами."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A hash join spill: the options do not fit in work_mem.",
+            "ru": "Сброс hash join: варианты не помещаются в work_mem."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "An N+1: each query is fast, but the round trips add up and the cost grows with the list.",
+            "ru": "N+1: каждый запрос быстрый, но обращения к серверу суммируются, и стоимость растёт вместе со списком."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "N+1 means one query for the list plus one per element. Every individual statement looks healthy in a slow-query log, which is why the pattern survives so long: the damage is the count, not the duration, and against a managed database a round trip can cost more than the query. It also scales with the data, so a page that is fine with three rows in development collapses with three hundred in production. Count statements per request and it becomes obvious immediately.",
+        "ru": "N+1 означает один запрос за списком плюс по одному на каждый элемент. Каждый отдельный оператор выглядит здоровым в логе медленных запросов — поэтому шаблон живёт так долго: вред в количестве, а не в длительности, а на управляемой базе одно обращение может стоить дороже самого запроса. Он ещё и масштабируется вместе с данными, поэтому страница, нормальная на трёх строках в разработке, рушится на трёхстах в продакшене. Считайте операторы на запрос — и он станет очевиден сразу."
+      },
+      "sources": [
+        "https://jdbc.postgresql.org/documentation/use/",
+        "https://www.postgresql.org/docs/current/runtime-config-connection.html"
+      ]
+    },
+    {
+      "id": "databases.pooling-n-plus-one.003",
+      "section": "pooling-n-plus-one",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Under load, requests spend time waiting for a connection. The pool size is doubled and throughput gets worse. What is the most likely explanation?",
+        "ru": "Под нагрузкой запросы ждут соединения. Размер пула удваивают, и пропускная способность падает. Чем это вероятнее всего объясняется?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The pool now exceeds the JDBC driver's internal limit and queues twice.",
+            "ru": "Пул превысил внутренний лимит JDBC-драйвера и теперь встаёт в очередь дважды."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The database was already saturated; more concurrent work adds context switching and contention instead of capacity.",
+            "ru": "База уже была насыщена: дополнительная параллельная работа добавляет переключений контекста и конкуренции, а не производительности."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Doubling the pool halves each connection's share of work_mem, so every query spills to disk.",
+            "ru": "Удвоение пула вдвое сокращает долю work_mem у соединения, поэтому каждый запрос уходит на диск."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Connections beyond the first twenty are opened without prepared statement caching.",
+            "ru": "Соединения после первых двадцати открываются без кэша подготовленных операторов."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A larger pool forces the planner to choose sequential scans.",
+            "ru": "Больший пул заставляет планировщик выбирать последовательные сканирования."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A pool is a queue, and the queue is doing useful work: it caps how many statements the database runs at once. Once CPU and disk are saturated, extra concurrency does not create capacity — it adds process switching, lock contention and cache pressure, so each query slows and total throughput falls. Waiting in the application for a fast connection beats waiting inside a database that is thrashing. Pool size should also stay well under the server's max_connections across all instances.",
+        "ru": "Пул — это очередь, и очередь делает полезную работу: она ограничивает, сколько операторов база выполняет одновременно. Когда процессор и диск уже насыщены, дополнительная параллельность не создаёт производительности — она добавляет переключений процессов, конкуренции за блокировки и давления на кэш, поэтому каждый запрос замедляется, а суммарная пропускная способность падает. Ждать быстрого соединения в приложении лучше, чем ждать внутри базы, которая захлёбывается. Размер пула вдобавок должен по всем экземплярам оставаться заметно ниже серверного max_connections."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/runtime-config-connection.html",
+        "https://www.postgresql.org/docs/current/runtime-config-resource.html"
+      ]
+    },
+    {
+      "id": "databases.pooling-n-plus-one.004",
+      "section": "pooling-n-plus-one",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "Why is calling an external HTTP API in the middle of a database transaction a problem even when the call is usually fast?",
+        "ru": "Почему вызов внешнего HTTP API посреди транзакции базы данных — проблема, даже если вызов обычно быстрый?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The transaction holds its connection and its row locks for the whole call, so a slow remote service becomes a database outage.",
+            "ru": "Транзакция удерживает своё соединение и свои блокировки строк на всё время вызова, и медленный удалённый сервис превращается в отказ базы."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "PostgreSQL aborts any transaction that stays open longer than a second.",
+            "ru": "PostgreSQL прерывает любую транзакцию, открытую дольше секунды."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The JDBC driver closes the connection when it detects an idle socket.",
+            "ru": "JDBC-драйвер закрывает соединение, обнаружив простаивающий сокет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "HTTP responses cannot be stored in a transaction that has not committed.",
+            "ru": "Ответы HTTP нельзя сохранить в транзакции, которая ещё не закоммичена."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The call makes the transaction's isolation level revert to READ UNCOMMITTED.",
+            "ru": "Вызов сбрасывает уровень изоляции транзакции до READ UNCOMMITTED."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A connection belongs to its transaction until commit or rollback, and so do every row lock it has taken and the snapshot that holds back vacuum. When the remote service degrades, those connections are pinned for the length of someone else's timeout, the pool empties, and requests that never touch that service start failing to get a connection at all. Do the remote call before the transaction or after it, and keep transactions to work the database itself performs.",
+        "ru": "Соединение принадлежит своей транзакции до коммита или отката — как и все взятые ею блокировки строк, и снимок, сдерживающий вакуум. Когда удалённый сервис деградирует, эти соединения оказываются пришпилены на длительность чужого таймаута, пул пустеет, и запросы, вообще не обращающиеся к тому сервису, перестают получать соединение. Делайте удалённый вызов до транзакции или после неё, а в транзакции держите только ту работу, которую выполняет сама база."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/runtime-config-connection.html",
+        "https://www.postgresql.org/docs/current/explicit-locking.html"
+      ]
+    },
+    {
+      "id": "databases.pooling-n-plus-one.005",
+      "section": "pooling-n-plus-one",
+      "difficulty": "medium",
+      "level": "middle",
+      "text": {
+        "en": "A migration adds CREATE INDEX CONCURRENTLY and fails with an error about running inside a transaction block. What is going on?",
+        "ru": "Миграция добавляет CREATE INDEX CONCURRENTLY и падает с ошибкой о выполнении внутри транзакционного блока. В чём дело?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "CONCURRENTLY is only valid for unique indexes, which this one is not.",
+            "ru": "CONCURRENTLY допустим только для уникальных индексов, а этот таковым не является."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The migration tool wraps each migration in a transaction, and a concurrent index build cannot run inside one.",
+            "ru": "Инструмент миграций оборачивает каждую миграцию в транзакцию, а конкурентное построение индекса внутри транзакции невозможно."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The table already has an index on those columns, so the build is rejected.",
+            "ru": "У таблицы уже есть индекс по этим колонкам, поэтому построение отвергнуто."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "CONCURRENTLY requires superuser rights the migration user does not have.",
+            "ru": "CONCURRENTLY требует прав суперпользователя, которых у пользователя миграции нет."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The error is spurious; retrying the same migration succeeds.",
+            "ru": "Ошибка ложная; повторный запуск той же миграции проходит успешно."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A concurrent build works in several passes and has to commit between them so that other transactions can see its intermediate state, which is precisely what lets it avoid blocking writes. That is impossible inside an enclosing transaction, so the statement refuses to start. The fix is to mark the migration as non-transactional in the tool's own configuration. Worth remembering: a concurrent build can also fail and leave an INVALID index behind, which must be dropped and rebuilt.",
+        "ru": "Конкурентное построение идёт в несколько проходов и обязано коммитить между ними, чтобы другие транзакции видели его промежуточное состояние, — именно это и позволяет ему не блокировать запись. Внутри охватывающей транзакции такое невозможно, поэтому оператор отказывается стартовать. Лечение — пометить миграцию как нетранзакционную в настройках самого инструмента. Стоит помнить и другое: конкурентное построение может упасть и оставить после себя индекс в состоянии INVALID, который придётся удалить и построить заново."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/sql-createindex.html",
+        "https://www.postgresql.org/docs/current/sql-altertable.html"
+      ]
+    },
+    {
+      "id": "databases.pooling-n-plus-one.006",
+      "section": "pooling-n-plus-one",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "JDBC batching is switched on for bulk inserts, yet the driver still sends one INSERT per row. Which entity mapping explains this best?",
+        "ru": "Батчинг JDBC включён для массовых вставок, но драйвер по-прежнему шлёт по одному INSERT на строку. Какое отображение сущности объясняет это лучше всего?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The entity uses an identity column, so the generated key must be read back for each row.",
+            "ru": "Сущность использует identity-колонку, поэтому сгенерированный ключ приходится считывать обратно для каждой строки."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The entity has a lazy association, which forces a flush per row.",
+            "ru": "У сущности есть ленивая связь, которая вызывает сброс на каждой строке."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The entity has a composite primary key, which cannot be batched.",
+            "ru": "У сущности составной первичный ключ, который нельзя батчить."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The entity is mapped to a table with a foreign key constraint.",
+            "ru": "Сущность отображена на таблицу с ограничением внешнего ключа."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The entity has a version column, and optimistic locking disables batching.",
+            "ru": "У сущности есть колонка версии, и оптимистичная блокировка отключает батчинг."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "With identity generation the database assigns the key during the insert, so the ORM must execute each statement and read its generated value before it can continue building the object graph — there is nothing left to group, and the batching setting is ignored without a warning. A sequence with a preallocated block avoids it: the keys are known before any statement is sent, so the whole set can go in one batch. On PostgreSQL, adding reWriteBatchedInserts=true then lets the driver fold a batch into a single multi-row INSERT.",
+        "ru": "При identity-генерации ключ назначает база в момент вставки, поэтому ORM обязана выполнить каждый оператор и прочитать сгенерированное значение, прежде чем продолжать строить граф объектов, — группировать становится нечего, и настройка батчинга игнорируется без всякого предупреждения. Последовательность с предварительно выделенным блоком от этого избавляет: ключи известны до отправки операторов, и весь набор уходит одной пачкой. В PostgreSQL параметр reWriteBatchedInserts=true дополнительно позволяет драйверу свернуть пачку в один многострочный INSERT."
+      },
+      "sources": [
+        "https://jdbc.postgresql.org/documentation/use/",
+        "https://www.postgresql.org/docs/current/sql-createtable.html"
+      ]
+    },
+    {
+      "id": "databases.locks-deadlocks.001",
+      "section": "locks-deadlocks",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "What does SELECT ... FOR UPDATE do that a plain SELECT does not?",
+        "ru": "Что делает SELECT ... FOR UPDATE такого, чего не делает обычный SELECT?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It reads the rows outside the transaction's snapshot, bypassing MVCC.",
+            "ru": "Читает строки вне снимка транзакции, обходя MVCC."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It prevents other transactions from reading the selected rows.",
+            "ru": "Не даёт другим транзакциям читать выбранные строки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It upgrades the transaction to SERIALIZABLE for its remaining statements.",
+            "ru": "Повышает транзакцию до SERIALIZABLE на оставшиеся операторы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It locks the selected rows so no other transaction can update or delete them until this one ends.",
+            "ru": "Блокирует выбранные строки, чтобы до конца этой транзакции их не могла обновить или удалить другая."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It takes a table-level lock for the duration of the statement.",
+            "ru": "Берёт блокировку уровня таблицы на время выполнения оператора."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "FOR UPDATE takes the same row lock an UPDATE would take, but at read time, so the rows the transaction is about to modify cannot change under it. Other transactions may still read those rows freely — that is the point of MVCC, and no row lock blocks a plain SELECT. The lock lives until commit or rollback, which is why the work between the SELECT and the COMMIT should be short and should not include a remote call.",
+        "ru": "FOR UPDATE берёт ту же блокировку строки, что взял бы UPDATE, но в момент чтения, — чтобы строки, которые транзакция собирается менять, не изменились у неё под руками. Другие транзакции при этом свободно эти строки читают: в этом и смысл MVCC, и ни одна блокировка строки не мешает обычному SELECT. Блокировка живёт до коммита или отката, поэтому работа между SELECT и COMMIT должна быть короткой и не должна включать удалённый вызов."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/sql-select.html#SQL-FOR-UPDATE-SHARE",
+        "https://www.postgresql.org/docs/current/explicit-locking.html"
+      ]
+    },
+    {
+      "id": "databases.locks-deadlocks.002",
+      "section": "locks-deadlocks",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "Ten workers poll a jobs table for the next READY row. Which clause lets each one take a different row instead of queueing behind the first?",
+        "ru": "Десять рабочих опрашивают таблицу задач в поисках следующей строки READY. Какое предложение позволит каждому взять свою строку, а не встать в очередь за первым?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "FOR UPDATE SKIP LOCKED",
+            "ru": "FOR UPDATE SKIP LOCKED"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "FOR SHARE",
+            "ru": "FOR SHARE"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "FOR UPDATE NOWAIT",
+            "ru": "FOR UPDATE NOWAIT"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "LOCK TABLE jobs IN EXCLUSIVE MODE",
+            "ru": "LOCK TABLE jobs IN EXCLUSIVE MODE"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "SET TRANSACTION ISOLATION LEVEL SERIALIZABLE",
+            "ru": "SET TRANSACTION ISOLATION LEVEL SERIALIZABLE"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "SKIP LOCKED tells the scan to step over rows another transaction has already locked rather than wait for them, which turns a queue table into something ten workers can share. NOWAIT is the other modifier: it raises an error at once instead of skipping, which suits an interactive request that must not hang but does not help a worker find work. FOR SHARE would let several workers claim the same job, and a table lock serialises them completely.",
+        "ru": "SKIP LOCKED велит сканированию перешагивать через строки, уже заблокированные другой транзакцией, вместо того чтобы их ждать, — и таблица-очередь становится пригодной для десяти рабочих сразу. NOWAIT — другой модификатор: он немедленно поднимает ошибку вместо пропуска, что подходит интерактивному запросу, которому нельзя зависать, но не помогает рабочему найти работу. FOR SHARE позволил бы нескольким рабочим забрать одну задачу, а блокировка таблицы сериализует их полностью."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/sql-select.html#SQL-FOR-UPDATE-SHARE",
+        "https://www.postgresql.org/docs/current/explicit-locking.html"
+      ]
+    },
+    {
+      "id": "databases.locks-deadlocks.003",
+      "section": "locks-deadlocks",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "Why can an ALTER TABLE that itself takes milliseconds bring an entire service down?",
+        "ru": "Почему ALTER TABLE, который сам по себе выполняется миллисекунды, способен положить весь сервис?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Because ALTER TABLE rewrites the table in every case.",
+            "ru": "Потому что ALTER TABLE в любом случае переписывает таблицу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because DDL cannot run inside a transaction, so it commits partially.",
+            "ru": "Потому что DDL нельзя выполнять в транзакции и он коммитится частично."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because it needs ACCESS EXCLUSIVE, and while it waits behind one long query every later statement queues behind it.",
+            "ru": "Потому что ему нужен режим ACCESS EXCLUSIVE, и пока он ждёт за одним долгим запросом, все последующие операторы встают в очередь уже за ним."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because it invalidates the planner's statistics for the whole database.",
+            "ru": "Потому что он инвалидирует статистику планировщика по всей базе."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because it forces autovacuum to run immediately on the table.",
+            "ru": "Потому что он заставляет автовакуум немедленно отработать по таблице."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "PostgreSQL grants locks in order of request. An ALTER TABLE asks for ACCESS EXCLUSIVE, which conflicts with everything including plain SELECT; if one long-running query holds the table, the ALTER waits — and every statement arriving afterwards waits behind the ALTER rather than joining the query that is already running. A one-millisecond change becomes a full stop for as long as the original query lasts. Setting lock_timeout before DDL makes the migration fail fast instead.",
+        "ru": "PostgreSQL выдаёт блокировки в порядке запроса. ALTER TABLE просит режим ACCESS EXCLUSIVE, конфликтующий со всем, включая обычный SELECT; если таблицу держит один долгий запрос, ALTER ждёт — а каждый пришедший после него оператор ждёт уже за ALTER, а не присоединяется к уже выполняющемуся запросу. Изменение на миллисекунду превращается в полную остановку на всё время жизни исходного запроса. Установка lock_timeout перед DDL заставляет миграцию вместо этого быстро упасть."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/explicit-locking.html",
+        "https://www.postgresql.org/docs/current/sql-altertable.html"
+      ]
+    },
+    {
+      "id": "databases.locks-deadlocks.004",
+      "section": "locks-deadlocks",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "Two transactions deadlock in PostgreSQL. What happens next?",
+        "ru": "Две транзакции попали в deadlock в PostgreSQL. Что произойдёт дальше?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Both wait until statement_timeout expires and both fail.",
+            "ru": "Обе ждут истечения statement_timeout и обе падают."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The server blocks new connections until an administrator intervenes.",
+            "ru": "Сервер перестаёт принимать новые соединения до вмешательства администратора."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Both transactions are rolled back to protect the data.",
+            "ru": "Обе транзакции откатываются ради защиты данных."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The deadlock detector aborts one transaction with SQLSTATE 40P01 and lets the other finish.",
+            "ru": "Детектор взаимных блокировок прерывает одну транзакцию с SQLSTATE 40P01 и даёт второй завершиться."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The transaction that waited longest is granted both locks automatically.",
+            "ru": "Транзакции, ждавшей дольше, автоматически выдаются обе блокировки."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A deadlock is a cycle in the wait graph, so no amount of waiting resolves it. PostgreSQL starts looking for such a cycle once a lock wait exceeds deadlock_timeout (one second by default), and breaks it by aborting one transaction — the other proceeds. To the application it is an ordinary error to retry, not a hung server. Prevention is to take locks in a consistent order, for example by sorting the ids a transaction will touch.",
+        "ru": "Deadlock — это цикл в графе ожидания, поэтому никакое ожидание его не разрешает. PostgreSQL начинает искать такой цикл, когда ожидание блокировки превышает deadlock_timeout (по умолчанию одна секунда), и разрывает его, прерывая одну транзакцию; вторая продолжается. Для приложения это обычная ошибка, которую надо повторить, а не зависший сервер. Профилактика — брать блокировки в одинаковом порядке, например сортируя идентификаторы, которые транзакция будет трогать."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/explicit-locking.html",
+        "https://www.postgresql.org/docs/current/mvcc-serialization-failure-handling.html"
+      ]
+    },
+    {
+      "id": "databases.locks-deadlocks.005",
+      "section": "locks-deadlocks",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "A user opens an edit form, thinks for ten minutes and saves. Which concurrency strategy fits, and why?",
+        "ru": "Пользователь открывает форму редактирования, десять минут думает и сохраняет. Какая стратегия конкуренции подходит и почему?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Pessimistic: SELECT ... FOR UPDATE when the form is opened, held until it is saved.",
+            "ru": "Пессимистичная: SELECT ... FOR UPDATE при открытии формы, удерживаемый до сохранения."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Pessimistic, with a LOCK TABLE so no other row can change meanwhile.",
+            "ru": "Пессимистичная, с LOCK TABLE, чтобы за это время не изменилась ни одна другая строка."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "SERIALIZABLE for the reading transaction, which covers the think time.",
+            "ru": "SERIALIZABLE для читающей транзакции — он покроет время раздумий."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Optimistic: carry a version and update only if it still matches, otherwise tell the user.",
+            "ru": "Оптимистичная: нести версию и обновлять только при её совпадении, иначе сообщить пользователю."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Neither: at READ COMMITTED the second save simply wins, which is correct behaviour.",
+            "ru": "Никакая: на READ COMMITTED второе сохранение просто побеждает, и это правильное поведение."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "No database lock can span think time, because holding a transaction open for ten minutes pins a connection, keeps row locks and blocks vacuum for the whole cluster. A version column costs nothing while the form is open: the UPDATE carries WHERE version = ? and affects zero rows if somebody else saved first, at which point the application can merge, reload or tell the user. Letting the last save win is a lost update — sometimes acceptable, but it should be a decision rather than an accident.",
+        "ru": "Ни одна блокировка базы не может покрывать время раздумий: транзакция, открытая десять минут, пришпиливает соединение, держит блокировки строк и мешает вакууму по всему кластеру. Колонка версии не стоит ничего, пока форма открыта: UPDATE несёт WHERE version = ? и затрагивает ноль строк, если кто-то сохранил раньше, — и тогда приложение может слить изменения, перезагрузить данные или сказать пользователю. Позволить победить последнему сохранению — это потерянное обновление: иногда приемлемое, но оно должно быть решением, а не случайностью."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/sql-select.html#SQL-FOR-UPDATE-SHARE",
+        "https://www.postgresql.org/docs/current/explicit-locking.html"
+      ]
+    },
+    {
+      "id": "databases.locks-deadlocks.006",
+      "section": "locks-deadlocks",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A batch job updates many rows per transaction and deadlocks with itself under concurrency. Which change removes the deadlocks most reliably?",
+        "ru": "Пакетное задание обновляет много строк за транзакцию и под нагрузкой вступает в deadlock само с собой. Какое изменение надёжнее всего убирает взаимные блокировки?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Raise deadlock_timeout so the detector gives the transactions more time to finish.",
+            "ru": "Увеличить deadlock_timeout, чтобы детектор дал транзакциям больше времени завершиться."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Lower the isolation level to READ COMMITTED, which takes fewer locks.",
+            "ru": "Понизить уровень изоляции до READ COMMITTED, который берёт меньше блокировок."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Update the rows in a deterministic order, for example sorted by primary key, in every code path.",
+            "ru": "Обновлять строки в детерминированном порядке, например отсортированном по первичному ключу, во всех ветках кода."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Wrap each individual row update in its own transaction and retry the failures.",
+            "ru": "Обернуть обновление каждой строки в отдельную транзакцию и повторять неудачные."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Take an explicit LOCK TABLE in SHARE ROW EXCLUSIVE mode at the start of the job.",
+            "ru": "Брать в начале задания явную блокировку LOCK TABLE в режиме SHARE ROW EXCLUSIVE."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Deadlocks need a cycle, and a cycle needs two transactions acquiring the same locks in opposite orders. Impose one global order — sort the ids before updating, and make every path that touches these tables use it — and a cycle cannot form, whatever the concurrency. Raising deadlock_timeout only delays detection; the isolation level does not change which rows are locked; per-row transactions lose atomicity for the batch; and a table lock does work but serialises the whole job, which is a much larger price.",
+        "ru": "Для взаимной блокировки нужен цикл, а для цикла — две транзакции, берущие одни и те же блокировки в противоположном порядке. Введите один глобальный порядок — сортируйте идентификаторы перед обновлением и приучите к этому все ветки, трогающие эти таблицы, — и цикл не образуется ни при какой параллельности. Увеличение deadlock_timeout лишь откладывает обнаружение; уровень изоляции не меняет, какие строки блокируются; транзакция на строку теряет атомарность пакета; а блокировка таблицы работает, но сериализует всё задание, и это гораздо более высокая цена."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/explicit-locking.html",
+        "https://www.postgresql.org/docs/current/sql-select.html#SQL-FOR-UPDATE-SHARE"
+      ]
+    },
+    {
+      "id": "databases.query-plans.001",
+      "section": "query-plans",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "What is the difference between EXPLAIN and EXPLAIN ANALYZE?",
+        "ru": "В чём разница между EXPLAIN и EXPLAIN ANALYZE?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "EXPLAIN ANALYZE also updates the table's statistics, as the ANALYZE command does.",
+            "ru": "EXPLAIN ANALYZE заодно обновляет статистику таблицы, как это делает команда ANALYZE."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "EXPLAIN shows the plan in text, EXPLAIN ANALYZE shows the same plan in JSON.",
+            "ru": "EXPLAIN показывает план текстом, EXPLAIN ANALYZE — тот же план в JSON."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "There is none; ANALYZE is an alias kept for compatibility.",
+            "ru": "Разницы нет; ANALYZE — псевдоним, оставленный для совместимости."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "EXPLAIN works only on SELECT, EXPLAIN ANALYZE only on INSERT, UPDATE and DELETE.",
+            "ru": "EXPLAIN работает только с SELECT, а EXPLAIN ANALYZE — только с INSERT, UPDATE и DELETE."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "EXPLAIN shows the planner's chosen plan with estimates; EXPLAIN ANALYZE runs the statement and adds real timings and row counts.",
+            "ru": "EXPLAIN показывает выбранный планировщиком план с оценками; EXPLAIN ANALYZE выполняет оператор и добавляет фактическое время и число строк."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "EXPLAIN asks the planner what it would do and prints its estimates. EXPLAIN ANALYZE actually executes the statement, so the output carries measured time, loop counts and real row counts beside the estimates — which is the only way to see where the estimate was wrong. Because it executes, an EXPLAIN ANALYZE of an UPDATE or DELETE changes data unless you wrap it in BEGIN and ROLLBACK. Despite the name it has nothing to do with the ANALYZE command that refreshes statistics.",
+        "ru": "EXPLAIN спрашивает планировщик, что он сделал бы, и печатает его оценки. EXPLAIN ANALYZE действительно выполняет оператор, поэтому в выводе рядом с оценками появляются измеренное время, число проходов и фактическое число строк — а это единственный способ увидеть, где оценка ошиблась. Поскольку он выполняется, EXPLAIN ANALYZE для UPDATE или DELETE изменит данные, если не обернуть его в BEGIN и ROLLBACK. Вопреки названию, к команде ANALYZE, обновляющей статистику, он отношения не имеет."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/sql-explain.html",
+        "https://www.postgresql.org/docs/current/using-explain.html"
+      ]
+    },
+    {
+      "id": "databases.query-plans.002",
+      "section": "query-plans",
+      "difficulty": "easy",
+      "level": "middle",
+      "text": {
+        "en": "A plan node reads (cost=0.28..8.30 rows=12) (actual time=0.019..0.042 rows=12 loops=500). How much time did this node account for?",
+        "ru": "Узел плана выглядит так: (cost=0.28..8.30 rows=12) (actual time=0.019..0.042 rows=12 loops=500). Сколько времени пришлось на этот узел?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "0.042 ms in total, since that is the measured end time.",
+            "ru": "0,042 мс суммарно, поскольку это измеренное время окончания."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "8.30 ms, because cost is expressed in milliseconds.",
+            "ru": "8,30 мс, потому что стоимость выражена в миллисекундах."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "0.023 ms, the difference between the two actual times.",
+            "ru": "0,023 мс — разница между двумя значениями actual time."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Roughly 21 ms: the per-loop time multiplied by 500 loops.",
+            "ru": "Примерно 21 мс: время одного прохода, умноженное на 500 проходов."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It cannot be derived from the numbers shown.",
+            "ru": "Из показанных чисел это вывести нельзя."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Both actual time and actual rows are reported per loop, so a node executed 500 times contributes 500 times its per-loop time: 0.042 ms each, about 21 ms altogether, and it produced roughly 6000 rows rather than 12. Missing this is the classic misreading of a nested loop, where a cheap-looking inner node is the whole cost of the query. Cost, meanwhile, is in arbitrary units calibrated to a sequential page read and never converts to milliseconds.",
+        "ru": "И actual time, и actual rows печатаются в расчёте на один проход, поэтому узел, выполненный 500 раз, вносит в 500 раз больше своего времени прохода: по 0,042 мс каждый, около 21 мс в сумме, и произвёл он порядка 6000 строк, а не 12. Упустить это — классическая ошибка чтения nested loop, где дёшево выглядящий внутренний узел и составляет всю стоимость запроса. Стоимость же измеряется в условных единицах, откалиброванных по последовательному чтению страницы, и в миллисекунды не переводится."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/using-explain.html",
+        "https://www.postgresql.org/docs/current/sql-explain.html"
+      ]
+    },
+    {
+      "id": "databases.query-plans.003",
+      "section": "query-plans",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "A plan node estimates rows=12 but the run reports actual rows=180000. What is the most productive thing to do first?",
+        "ru": "Узел плана оценивает rows=12, а при выполнении получает actual rows=180000. С чего продуктивнее всего начать?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Fix the statistics behind the estimate: run ANALYZE, raise the statistics target, or declare extended statistics for correlated columns.",
+            "ru": "Починить статистику, стоящую за оценкой: выполнить ANALYZE, поднять statistics target или объявить расширенную статистику для коррелирующих колонок."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Rewrite the query so the planner cannot choose this node.",
+            "ru": "Переписать запрос так, чтобы планировщик не мог выбрать этот узел."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Add an index on every column mentioned in the WHERE clause.",
+            "ru": "Добавить индекс на каждую колонку из условия WHERE."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Increase work_mem so the node has room for the extra rows.",
+            "ru": "Увеличить work_mem, чтобы узлу хватило места на лишние строки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Disable nested loops for the session with enable_nestloop = off.",
+            "ru": "Отключить nested loop для сессии через enable_nestloop = off."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A four-order-of-magnitude error means every decision the planner made above that node rests on a false premise — it will have chosen a nested loop where a hash join belonged, or skipped an index it should have used. Fixing the plan without fixing the estimate treats the symptom. The usual causes are stale statistics after a bulk load, a skewed distribution that needs a finer histogram, and two correlated columns whose selectivities were multiplied as if independent, which CREATE STATISTICS addresses. Disabling a node type is a diagnostic trick, not a fix.",
+        "ru": "Ошибка в четыре порядка означает, что каждое решение планировщика выше этого узла опирается на ложную посылку: он выберет nested loop там, где нужен hash join, или пропустит индекс, который следовало взять. Править план, не починив оценку, — лечить симптом. Обычные причины: устаревшая статистика после массовой загрузки, перекошенное распределение, которому нужна более подробная гистограмма, и две коррелирующие колонки, чьи селективности перемножили как независимые, — последнее лечит CREATE STATISTICS. Отключение типа узла — диагностический приём, а не лечение."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/planner-stats.html",
+        "https://www.postgresql.org/docs/current/sql-createstatistics.html"
+      ]
+    },
+    {
+      "id": "databases.query-plans.004",
+      "section": "query-plans",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "When is a Bitmap Heap Scan the plan the planner prefers?",
+        "ru": "Когда планировщик предпочитает Bitmap Heap Scan?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "When the table is small enough to fit entirely in shared buffers.",
+            "ru": "Когда таблица целиком помещается в разделяемые буферы."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When exactly one row matches, because it avoids the index descent.",
+            "ru": "Когда подходит ровно одна строка, потому что это избавляет от спуска по индексу."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When the index is larger than the table it belongs to.",
+            "ru": "Когда индекс больше таблицы, которой принадлежит."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When the query has no WHERE clause at all.",
+            "ru": "Когда в запросе вообще нет условия WHERE."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When a moderate share of rows matches: it collects their locations from the index, sorts them and reads the table in physical order.",
+            "ru": "Когда подходит умеренная доля строк: он собирает их адреса из индекса, упорядочивает и читает таблицу в физическом порядке."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A plain index scan fetches matching rows one at a time in index order, which becomes a storm of random reads once many rows match; a sequential scan is only worth it when most rows match. The bitmap plan sits between them: gather the row locations first, sort them, then walk the table once in physical order, so every page is read at most once. It also allows combining several indexes with BitmapAnd or BitmapOr before touching the table.",
+        "ru": "Обычный index scan достаёт подходящие строки по одной в порядке индекса, и при большом числе совпадений это превращается в шторм случайных чтений; последовательное сканирование окупается, только когда подходит большинство строк. Битовый план стоит между ними: сначала собрать адреса строк, упорядочить их, затем один раз пройти таблицу в физическом порядке, так что каждая страница читается не более раза. Он же позволяет объединить несколько индексов через BitmapAnd или BitmapOr, ещё не касаясь таблицы."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/using-explain.html",
+        "https://www.postgresql.org/docs/current/indexes.html"
+      ]
+    },
+    {
+      "id": "databases.query-plans.005",
+      "section": "query-plans",
+      "difficulty": "medium",
+      "level": "senior",
+      "text": {
+        "en": "A plan shows 'Sort Method: external merge  Disk: 24000kB'. What does that tell you?",
+        "ru": "В плане видно «Sort Method: external merge  Disk: 24000kB». О чём это говорит?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The table needs to be clustered on the sort key.",
+            "ru": "Таблицу нужно физически упорядочить (CLUSTER) по ключу сортировки."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The sort key has no index, which always forces a disk sort.",
+            "ru": "По ключу сортировки нет индекса, а это всегда вынуждает сортировать на диске."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The result set was written to a temporary table before being returned.",
+            "ru": "Результат был записан во временную таблицу перед возвратом."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The disk is nearly full and PostgreSQL switched to a degraded mode.",
+            "ru": "Диск почти заполнен, и PostgreSQL переключился в аварийный режим."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The sort did not fit in work_mem and spilled to temporary files, which is usually the largest fixable cost in such a plan.",
+            "ru": "Сортировка не поместилась в work_mem и ушла во временные файлы — обычно это крупнейшая устранимая статья расходов в таком плане."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "Sorts, hash joins and hash aggregates each get work_mem per operation; when the data does not fit, PostgreSQL falls back to a multi-pass algorithm using temporary files, and the plan reports the method and the bytes. The remedies, in order: return fewer rows or fewer columns so less has to be sorted; provide an index that supplies the rows already ordered; or raise work_mem for that statement, remembering that the setting is per operation and per connection, so a large value multiplied by a large pool is a memory incident waiting to happen.",
+        "ru": "Сортировки, hash join и hash-агрегации получают по work_mem на операцию; когда данные не помещаются, PostgreSQL переходит к многопроходному алгоритму с временными файлами, и план сообщает метод и объём. Лечение по порядку: возвращать меньше строк или колонок, чтобы сортировать приходилось меньше; дать индекс, отдающий строки уже упорядоченными; либо поднять work_mem для этого оператора, помня, что параметр действует на каждую операцию и каждое соединение, так что большое значение, умноженное на большой пул, — это будущая авария по памяти."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/using-explain.html",
+        "https://www.postgresql.org/docs/current/runtime-config-resource.html"
+      ]
+    },
+    {
+      "id": "databases.query-plans.006",
+      "section": "query-plans",
+      "difficulty": "hard",
+      "level": "senior",
+      "text": {
+        "en": "A join that is fast in staging is slow in production with the same query. The plan there uses a Nested Loop where staging uses a Hash Join. What is the usual root cause?",
+        "ru": "Соединение, быстрое на стенде, в продакшене работает медленно при том же запросе. Там план использует Nested Loop, а на стенде — Hash Join. В чём обычная первопричина?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Production runs an older major version whose planner lacks hash joins.",
+            "ru": "В продакшене более старая мажорная версия, планировщик которой не умеет hash join."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Nested Loop is always the wrong choice and should be disabled globally.",
+            "ru": "Nested Loop всегда неверный выбор, и его следует отключить глобально."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The connection pool in production is larger, which changes the planner's cost model.",
+            "ru": "Пул соединений в продакшене больше, а это меняет модель стоимости планировщика."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Production has more indexes, and extra indexes force nested loops.",
+            "ru": "В продакшене больше индексов, а лишние индексы вынуждают выбирать nested loop."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The outer side's row estimate is far too low, and a nested loop multiplies that error by repeating the inner lookup for every row.",
+            "ru": "Оценка числа строк внешней стороны сильно занижена, а nested loop умножает эту ошибку, повторяя внутренний поиск для каждой строки."
+          },
+          "correct": true
+        }
+      ],
+      "explanation": {
+        "en": "A nested loop is the cheapest join when the outer side yields a handful of rows and the inner side has an index — and the most expensive when the outer side yields many, because its cost is outer rows multiplied by the inner lookup. A staging database with a different data distribution, or production statistics that are stale or miss a correlation between columns, produces exactly this: the estimate says ten outer rows, reality delivers a hundred thousand, and the plan that was optimal for ten is a disaster for a hundred thousand. Look at estimated versus actual rows on the outer node first, and fix the statistics rather than the plan.",
+        "ru": "Nested loop — самое дешёвое соединение, когда внешняя сторона отдаёт горстку строк, а у внутренней есть индекс, и самое дорогое, когда внешняя отдаёт много, потому что его стоимость есть число внешних строк, умноженное на внутренний поиск. Стенд с другим распределением данных или продакшен с устаревшей статистикой либо без учёта корреляции колонок дают ровно это: оценка обещает десять внешних строк, реальность приносит сто тысяч, и план, оптимальный для десяти, оказывается катастрофой для ста тысяч. Смотрите сначала на ожидаемые и фактические строки внешнего узла и чините статистику, а не план."
+      },
+      "sources": [
+        "https://www.postgresql.org/docs/current/using-explain.html",
+        "https://www.postgresql.org/docs/current/planner-stats.html"
+      ]
+    }
+  ]
+}

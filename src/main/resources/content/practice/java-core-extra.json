@@ -1,0 +1,552 @@
+{
+  "schemaVersion": 1,
+  "track": "java",
+  "tasks": [
+    {
+      "id": "java-core-easy-01",
+      "difficulty": "easy",
+      "order": 10,
+      "topic": "java-core",
+      "section": "exceptions",
+      "className": "Solution",
+      "title": {
+        "en": "Parse it, or fall back",
+        "ru": "Разобрать число или вернуть запасное значение"
+      },
+      "statement": {
+        "en": "Return the text parsed as an int. When it is not one — empty, not a number, or too large for an int — return the fallback instead. A parsing failure must never escape the method.",
+        "ru": "Верните текст, разобранный как int. Если это не int — пустая строка, не число или слишком большое для int значение, — верните запасное значение. Ошибка разбора не должна выходить за пределы метода."
+      },
+      "hint": {
+        "en": "Java has no tryParse: Integer.parseInt is the only parser, and it reports every one of these cases with a NumberFormatException.",
+        "ru": "В Java нет tryParse: Integer.parseInt — единственный разборщик, и обо всех таких случаях он сообщает через NumberFormatException."
+      },
+      "starter": "public class Solution {\n\n    public static int parseOrDefault(String text, int fallback) {\n        // TODO: return text parsed as an int, or fallback when it is not one\n        return fallback;\n    }\n}\n",
+      "solution": "public class Solution {\n\n    public static int parseOrDefault(String text, int fallback) {\n        try {\n            return Integer.parseInt(text);\n        } catch (NumberFormatException notANumber) {\n            return fallback;\n        }\n    }\n}\n",
+      "cases": [
+        {
+          "label": "parseOrDefault(\"42\", -1)",
+          "expression": "Solution.parseOrDefault(\"42\", -1)"
+        },
+        {
+          "label": "parseOrDefault(\"\", -1)",
+          "expression": "Solution.parseOrDefault(\"\", -1)"
+        },
+        {
+          "label": "parseOrDefault(\"-7\", 0)",
+          "expression": "Solution.parseOrDefault(\"-7\", 0)"
+        },
+        {
+          "label": "parseOrDefault(\" 7 \", 0)",
+          "expression": "Solution.parseOrDefault(\" 7 \", 0)"
+        },
+        {
+          "label": "parseOrDefault(\"2147483648\", 0)",
+          "expression": "Solution.parseOrDefault(\"2147483648\", 0)"
+        },
+        {
+          "label": "parseOrDefault(null, 99)",
+          "expression": "Solution.parseOrDefault(null, 99)"
+        }
+      ],
+      "explanation": {
+        "en": "Catching NumberFormatException is the whole method, because Java offers no way to ask whether a string is a number without trying to parse it. Catch that one exception rather than Exception: a wider catch would also swallow a bug of your own and report it as \"not a number\". The last two cases are the reminder that surrounding spaces and a string of digits one past Integer.MAX_VALUE fail the same way an empty string does.",
+        "ru": "Перехват NumberFormatException — это и есть весь метод: в Java нельзя спросить, является ли строка числом, не попытавшись её разобрать. Ловите именно это исключение, а не Exception: более широкий catch проглотил бы и вашу собственную ошибку, выдав её за «не число». Последние два случая напоминают, что пробелы вокруг числа и строка цифр на единицу больше Integer.MAX_VALUE падают так же, как пустая строка."
+      },
+      "sources": [
+        {
+          "title": "Exceptions",
+          "url": "https://dev.java/learn/exceptions/"
+        },
+        {
+          "title": "Integer.parseInt (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html#parseInt(java.lang.String)"
+        }
+      ]
+    },
+    {
+      "id": "java-core-easy-02",
+      "difficulty": "easy",
+      "order": 11,
+      "topic": "java-core",
+      "section": "oop-basics",
+      "className": "Solution",
+      "title": {
+        "en": "One constructor doing the work",
+        "ru": "Один конструктор делает работу"
+      },
+      "statement": {
+        "en": "Write a Solution holding a name and a quantity. Give it a public constructor taking both, a second public constructor taking only the name and meaning a quantity of 1, a describe() returning the quantity, \" x \" and the name — \"3 x bolt\" — and a quantity() accessor. The short constructor must not assign the fields itself.",
+        "ru": "Напишите Solution, хранящий название и количество. Дайте ему публичный конструктор с обоими параметрами, второй публичный конструктор только с названием, означающий количество 1, метод describe(), возвращающий количество, \" x \" и название — \"3 x bolt\", — и метод quantity(). Короткий конструктор не должен присваивать поля сам."
+      },
+      "hint": {
+        "en": "this(...) as the first statement of a constructor calls another constructor of the same class.",
+        "ru": "this(...) первой инструкцией конструктора вызывает другой конструктор того же класса."
+      },
+      "starter": "public class Solution {\n\n    private final String name;\n    private final int quantity;\n\n    public Solution(String name, int quantity) {\n        this.name = name;\n        this.quantity = quantity;\n    }\n\n    public Solution(String name) {\n        // TODO: delegate to the constructor above with a quantity of 1\n        this(name, 0);\n    }\n\n    public String describe() {\n        // TODO: the quantity, then \" x \", then the name\n        return name;\n    }\n\n    public int quantity() {\n        return quantity;\n    }\n}\n",
+      "solution": "public class Solution {\n\n    private final String name;\n    private final int quantity;\n\n    public Solution(String name, int quantity) {\n        this.name = name;\n        this.quantity = quantity;\n    }\n\n    public Solution(String name) {\n        this(name, 1);\n    }\n\n    public String describe() {\n        return quantity + \" x \" + name;\n    }\n\n    public int quantity() {\n        return quantity;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "new Solution(\"bolt\", 3).describe()",
+          "expression": "new Solution(\"bolt\", 3).describe()"
+        },
+        {
+          "label": "new Solution(\"bolt\").describe()",
+          "expression": "new Solution(\"bolt\").describe()"
+        },
+        {
+          "label": "new Solution(\"bolt\").quantity()",
+          "expression": "new Solution(\"bolt\").quantity()"
+        },
+        {
+          "label": "new Solution(\"nut\", 0).describe()",
+          "expression": "new Solution(\"nut\", 0).describe()"
+        },
+        {
+          "label": "new Solution(\"nut\", 0).quantity()",
+          "expression": "new Solution(\"nut\", 0).quantity()"
+        }
+      ],
+      "explanation": {
+        "en": "Only one constructor ever touches the fields, and the short one says what it means — \"the same thing, with a quantity of 1\" — by calling it. The version that assigns the fields a second time is where the two constructors drift apart: add a validation check to the long one, and the short one quietly goes on without it.",
+        "ru": "Поля трогает ровно один конструктор, а короткий выражает свой смысл — «то же самое, но с количеством 1» — вызовом длинного. Вариант, присваивающий поля второй раз, — это место, где два конструктора расходятся: добавьте проверку в длинный, и короткий тихо продолжит работать без неё."
+      },
+      "sources": [
+        {
+          "title": "Classes and Objects",
+          "url": "https://dev.java/learn/classes-objects/"
+        },
+        {
+          "title": "Objects (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Objects.html"
+        }
+      ]
+    },
+    {
+      "id": "java-core-easy-03",
+      "difficulty": "easy",
+      "order": 12,
+      "topic": "java-core",
+      "section": "equals-hashcode",
+      "className": "Solution",
+      "title": {
+        "en": "Tags that ignore case",
+        "ru": "Теги без учёта регистра"
+      },
+      "statement": {
+        "en": "Write a Solution holding one String tag, with a public constructor, a toString returning the tag as given, and equals and hashCode under which two tags differing only in case are the same tag.",
+        "ru": "Напишите Solution, хранящий один строковый тег, с публичным конструктором, методом toString, возвращающим тег как есть, и такими equals и hashCode, при которых два тега, различающиеся только регистром, считаются одним тегом."
+      },
+      "hint": {
+        "en": "String.equalsIgnoreCase covers equals; hashCode has to hash the same normalised form that equals compares.",
+        "ru": "String.equalsIgnoreCase закрывает equals; hashCode должен хешировать ту же приведённую форму, которую сравнивает equals."
+      },
+      "starter": "public class Solution {\n\n    private final String tag;\n\n    public Solution(String tag) {\n        this.tag = tag;\n    }\n\n    @Override\n    public boolean equals(Object other) {\n        // TODO: two tags differing only in case are the same tag\n        return this == other;\n    }\n\n    @Override\n    public int hashCode() {\n        // TODO: tags that are equal have to hash the same\n        return tag.hashCode();\n    }\n\n    @Override\n    public String toString() {\n        return tag;\n    }\n}\n",
+      "solution": "import java.util.Locale;\n\npublic class Solution {\n\n    private final String tag;\n\n    public Solution(String tag) {\n        this.tag = tag;\n    }\n\n    @Override\n    public boolean equals(Object other) {\n        if (this == other) {\n            return true;\n        }\n        if (!(other instanceof Solution label)) {\n            return false;\n        }\n        return tag.equalsIgnoreCase(label.tag);\n    }\n\n    @Override\n    public int hashCode() {\n        return tag.toLowerCase(Locale.ROOT).hashCode();\n    }\n\n    @Override\n    public String toString() {\n        return tag;\n    }\n}\n",
+      "cases": [
+        {
+          "label": "\"Java\" equals \"java\"",
+          "expression": "new Solution(\"Java\").equals(new Solution(\"java\"))"
+        },
+        {
+          "label": "\"java\" equals \"JAVA\"",
+          "expression": "new Solution(\"java\").equals(new Solution(\"JAVA\"))"
+        },
+        {
+          "label": "\"java\" equals \"rust\"",
+          "expression": "new Solution(\"java\").equals(new Solution(\"rust\"))"
+        },
+        {
+          "label": "compared with a String",
+          "expression": "new Solution(\"java\").equals(\"java\")"
+        },
+        {
+          "label": "hash codes agree",
+          "expression": "new Solution(\"Java\").hashCode() == new Solution(\"jAVA\").hashCode()"
+        },
+        {
+          "label": "a HashSet of three tags",
+          "expression": "new HashSet<>(List.of(new Solution(\"Java\"), new Solution(\"JAVA\"), new Solution(\"rust\"))).size()"
+        }
+      ],
+      "explanation": {
+        "en": "hashCode has to be computed from the very form equals compares, so lowercasing once is what keeps the two in step — a hashCode over the tag as typed would put \"Java\" and \"JAVA\" in different buckets of the HashSet and let both survive. Locale.ROOT is not decoration either: in a Turkish locale \"I\".toLowerCase() is not \"i\", and the same set would behave differently on another machine.",
+        "ru": "hashCode обязан считаться ровно по той форме, которую сравнивает equals, поэтому однократное приведение к нижнему регистру и держит их согласованными: hashCode по тегу «как написан» положил бы \"Java\" и \"JAVA\" в разные корзины HashSet, и выжили бы оба. Locale.ROOT тоже не украшение: в турецкой локали \"I\".toLowerCase() даёт не \"i\", и то же множество повело бы себя иначе на другой машине."
+      },
+      "sources": [
+        {
+          "title": "Object.equals (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)"
+        },
+        {
+          "title": "String.equalsIgnoreCase (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#equalsIgnoreCase(java.lang.String)"
+        }
+      ]
+    },
+    {
+      "id": "java-core-medium-01",
+      "difficulty": "medium",
+      "order": 12,
+      "topic": "java-core",
+      "section": "exceptions",
+      "className": "Solution",
+      "title": {
+        "en": "An exception that carries the field",
+        "ru": "Исключение, которое несёт имя поля"
+      },
+      "statement": {
+        "en": "register(name, age) returns \"name/age\", but rejects a null or blank name and an age below 18. Both rejections must throw one public static InvalidFieldException of your own, unchecked, carrying the offending field name next to the message — \"name\" with \"name is blank\", \"age\" with \"age is 17\". describeFailure(name, age) returns what register returned, or \"<field> -> <message>\" when it threw.",
+        "ru": "register(name, age) возвращает \"name/age\", но отвергает null или пустое имя и возраст меньше 18. Оба отказа должны выбрасывать ваше собственное публичное статическое unchecked-исключение InvalidFieldException, несущее рядом с сообщением имя ошибочного поля: \"name\" при \"name is blank\", \"age\" при \"age is 17\". describeFailure(name, age) возвращает результат register или \"<поле> -> <сообщение>\", если тот выбросил исключение."
+      },
+      "hint": {
+        "en": "Extend RuntimeException, pass the message up with super(message) and keep the field in a final field of your own.",
+        "ru": "Наследуйтесь от RuntimeException, передайте сообщение наверх через super(message), а имя поля храните в собственном final-поле."
+      },
+      "starter": "public class Solution {\n\n    // TODO: add a public static InvalidFieldException extending RuntimeException that\n    // carries the name of the offending field alongside the message\n\n    public static String register(String name, int age) {\n        if (name == null || name.isBlank()) {\n            throw new IllegalArgumentException(\"name is blank\");\n        }\n        if (age < 18) {\n            throw new IllegalArgumentException(\"age is \" + age);\n        }\n        return name + \"/\" + age;\n    }\n\n    public static String describeFailure(String name, int age) {\n        // TODO: call register, and turn a failure into \"<field> -> <message>\"\n        return \"TODO\";\n    }\n}\n",
+      "solution": "public class Solution {\n\n    public static class InvalidFieldException extends RuntimeException {\n\n        private final String field;\n\n        public InvalidFieldException(String field, String message) {\n            super(message);\n            this.field = field;\n        }\n\n        public String field() {\n            return field;\n        }\n    }\n\n    public static String register(String name, int age) {\n        if (name == null || name.isBlank()) {\n            throw new InvalidFieldException(\"name\", \"name is blank\");\n        }\n        if (age < 18) {\n            throw new InvalidFieldException(\"age\", \"age is \" + age);\n        }\n        return name + \"/\" + age;\n    }\n\n    public static String describeFailure(String name, int age) {\n        try {\n            return register(name, age);\n        } catch (InvalidFieldException invalid) {\n            return invalid.field() + \" -> \" + invalid.getMessage();\n        }\n    }\n}\n",
+      "cases": [
+        {
+          "label": "register(\"ann\", 30)",
+          "expression": "Solution.register(\"ann\", 30)"
+        },
+        {
+          "label": "register(\"\", 30) throws",
+          "expression": "attempt(() -> Solution.register(\"\", 30))"
+        },
+        {
+          "label": "register(null, 30) throws",
+          "expression": "attempt(() -> Solution.register(null, 30))"
+        },
+        {
+          "label": "register(\"ann\", 17) throws",
+          "expression": "attempt(() -> Solution.register(\"ann\", 17))"
+        },
+        {
+          "label": "describeFailure(\"ann\", 30)",
+          "expression": "Solution.describeFailure(\"ann\", 30)"
+        },
+        {
+          "label": "describeFailure(\" \", 30)",
+          "expression": "Solution.describeFailure(\" \", 30)"
+        },
+        {
+          "label": "describeFailure(\"ann\", 12)",
+          "expression": "Solution.describeFailure(\"ann\", 12)"
+        }
+      ],
+      "explanation": {
+        "en": "The caller of a validation method usually needs to know more than that something was wrong — which field it was, so it can be highlighted — and a message is the wrong place to keep that, because parsing it back out is guesswork. A type of your own gives the field a field, and lets the catch clause select exactly these failures: catching IllegalArgumentException would also catch one thrown three calls deeper by something else entirely.",
+        "ru": "Вызывающему коду обычно нужно знать не только то, что что-то не так, но и какое именно поле — чтобы его подсветить, — а сообщение для этого плохое место: разбирать его обратно значит гадать. Собственный тип даёт полю поле и позволяет catch выбрать именно эти ошибки: перехват IllegalArgumentException поймал бы и то, что бросил тремя вызовами глубже кто-то совсем другой."
+      },
+      "sources": [
+        {
+          "title": "Exceptions",
+          "url": "https://dev.java/learn/exceptions/"
+        },
+        {
+          "title": "RuntimeException (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html"
+        }
+      ]
+    },
+    {
+      "id": "java-core-medium-02",
+      "difficulty": "medium",
+      "order": 13,
+      "topic": "java-core",
+      "section": "generics",
+      "className": "Solution",
+      "title": {
+        "en": "A pair that keeps both types",
+        "ru": "Пара, сохраняющая оба типа"
+      },
+      "statement": {
+        "en": "Turn Solution into a pair generic in two type parameters: a static factory of(first, second), accessors first() and second() returning the caller's own types, a swapped() returning a pair of the two the other way round, and a toString of \"(first, second)\".",
+        "ru": "Превратите Solution в пару, обобщённую по двум параметрам типа: статическая фабрика of(first, second), методы first() и second(), возвращающие типы вызывающего, swapped(), возвращающий пару с переставленными компонентами, и toString вида \"(first, second)\"."
+      },
+      "hint": {
+        "en": "A generic class declares its parameters after the name — class Solution<A, B> — and swapped() returns a Solution<B, A>, which is a different type from this one.",
+        "ru": "Обобщённый класс объявляет параметры после имени — class Solution<A, B>, — а swapped() возвращает Solution<B, A>, то есть другой тип, а не этот же."
+      },
+      "starter": "public class Solution {\n\n    private final Object first;\n    private final Object second;\n\n    private Solution(Object first, Object second) {\n        this.first = first;\n        this.second = second;\n    }\n\n    // TODO: give the class two type parameters, so first() and second() come back as\n    // the caller's own types instead of Object\n    public static Solution of(Object first, Object second) {\n        return new Solution(first, second);\n    }\n\n    public Object first() {\n        return first;\n    }\n\n    public Object second() {\n        return second;\n    }\n\n    public Solution swapped() {\n        // TODO: a pair holding the two components the other way round\n        return this;\n    }\n\n    @Override\n    public String toString() {\n        return \"(\" + first + \", \" + second + \")\";\n    }\n}\n",
+      "solution": "public class Solution<A, B> {\n\n    private final A first;\n    private final B second;\n\n    private Solution(A first, B second) {\n        this.first = first;\n        this.second = second;\n    }\n\n    public static <A, B> Solution<A, B> of(A first, B second) {\n        return new Solution<>(first, second);\n    }\n\n    public A first() {\n        return first;\n    }\n\n    public B second() {\n        return second;\n    }\n\n    public Solution<B, A> swapped() {\n        return new Solution<>(second, first);\n    }\n\n    @Override\n    public String toString() {\n        return \"(\" + first + \", \" + second + \")\";\n    }\n}\n",
+      "cases": [
+        {
+          "label": "of(\"x\", 1)",
+          "expression": "Solution.of(\"x\", 1).toString()"
+        },
+        {
+          "label": "of(\"x\", 1).swapped()",
+          "expression": "Solution.of(\"x\", 1).swapped().toString()"
+        },
+        {
+          "label": "swapped twice",
+          "expression": "Solution.of(\"x\", 1).swapped().swapped().toString()"
+        },
+        {
+          "label": "first() needs no cast",
+          "expression": "Solution.of(\"x\", 1).first().length()"
+        },
+        {
+          "label": "second() needs no cast",
+          "expression": "Solution.of(\"x\", 1).second() + 1"
+        },
+        {
+          "label": "a list paired with a string",
+          "expression": "Solution.of(List.of(1, 2), \"z\").first()"
+        }
+      ],
+      "explanation": {
+        "en": "The two type parameters are what make first() and second() useful: the Object version compiles just as well, but every caller then has to cast, and a cast is a promise the compiler cannot check. swapped() returning Solution<B, A> is the case that shows the parameters are really types and not labels — the swapped pair is a different type, and the compiler knows which is which.",
+        "ru": "Именно два параметра типа делают first() и second() полезными: вариант на Object компилируется не хуже, но тогда каждый вызывающий обязан приводить тип, а приведение — обещание, которое компилятор проверить не может. swapped(), возвращающий Solution<B, A>, — тот случай, который показывает, что параметры действительно типы, а не ярлыки: переставленная пара имеет другой тип, и компилятор знает, какой именно."
+      },
+      "sources": [
+        {
+          "title": "Generics",
+          "url": "https://dev.java/learn/generics/"
+        },
+        {
+          "title": "Type Inference (Java SE 17 tutorial)",
+          "url": "https://docs.oracle.com/javase/tutorial/java/generics/genTypeInference.html"
+        }
+      ]
+    },
+    {
+      "id": "java-core-medium-03",
+      "difficulty": "medium",
+      "order": 14,
+      "topic": "java-core",
+      "section": "oop-basics",
+      "className": "Solution",
+      "title": {
+        "en": "Encapsulation that actually holds",
+        "ru": "Инкапсуляция, которая действительно держит"
+      },
+      "statement": {
+        "en": "Solution keeps a list of tags. Its state must be reachable only through its own methods: the constructor must not keep the caller's list, and tags() must hand back a view that cannot be written through. add(tag) and size() stay as they are.",
+        "ru": "Solution хранит список тегов. Его состояние должно быть доступно только через его собственные методы: конструктор не должен сохранять список вызывающего, а tags() обязан отдавать представление, в которое нельзя писать. add(tag) и size() остаются как есть."
+      },
+      "hint": {
+        "en": "new ArrayList<>(tags) copies on the way in; Collections.unmodifiableList wraps on the way out.",
+        "ru": "new ArrayList<>(tags) копирует на входе; Collections.unmodifiableList оборачивает на выходе."
+      },
+      "starter": "import java.util.List;\n\npublic class Solution {\n\n    private final List<String> tags;\n\n    public Solution(List<String> tags) {\n        // TODO: keep a copy, so a later change to the caller's list cannot reach in here\n        this.tags = tags;\n    }\n\n    public List<String> tags() {\n        // TODO: hand back a view that cannot be written through\n        return tags;\n    }\n\n    public void add(String tag) {\n        tags.add(tag);\n    }\n\n    public int size() {\n        return tags.size();\n    }\n}\n",
+      "solution": "import java.util.ArrayList;\nimport java.util.Collections;\nimport java.util.List;\n\npublic class Solution {\n\n    private final List<String> tags;\n\n    public Solution(List<String> tags) {\n        this.tags = new ArrayList<>(tags);\n    }\n\n    public List<String> tags() {\n        return Collections.unmodifiableList(tags);\n    }\n\n    public void add(String tag) {\n        tags.add(tag);\n    }\n\n    public int size() {\n        return tags.size();\n    }\n}\n",
+      "cases": [
+        {
+          "label": "the tags of a new box",
+          "expression": "new Solution(List.of(\"a\", \"b\")).tags()"
+        },
+        {
+          "label": "the caller changes its list afterwards",
+          "expression": "attempt(() -> { List<String> source = new ArrayList<>(List.of(\"a\", \"b\")); Solution box = new Solution(source); source.add(\"c\"); return box.size(); })"
+        },
+        {
+          "label": "writing through the view",
+          "expression": "attempt(() -> new Solution(new ArrayList<>(List.of(\"a\"))).tags().add(\"b\"))"
+        },
+        {
+          "label": "adding through the class",
+          "expression": "attempt(() -> { Solution box = new Solution(List.of(\"a\")); box.add(\"b\"); return box.tags(); })"
+        },
+        {
+          "label": "an empty box",
+          "expression": "new Solution(List.<String>of()).size()"
+        }
+      ],
+      "explanation": {
+        "en": "A final field only stops the reference from being reassigned; it says nothing about the list it points at, so a constructor that stores the caller's list leaves the caller holding a second handle on the object's insides. Copying in and wrapping out closes both ends, and the wrapper is a view rather than another copy — add() through the class is still visible through tags().",
+        "ru": "final-поле лишь запрещает переприсвоить ссылку и ничего не говорит о списке, на который она указывает: конструктор, сохранивший список вызывающего, оставляет тому вторую ручку от внутренностей объекта. Копия на входе и обёртка на выходе закрывают оба конца, причём обёртка — представление, а не ещё одна копия: добавление через класс по-прежнему видно в tags()."
+      },
+      "sources": [
+        {
+          "title": "Classes and Objects",
+          "url": "https://dev.java/learn/classes-objects/"
+        },
+        {
+          "title": "Collections.unmodifiableList (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collections.html#unmodifiableList(java.util.List)"
+        }
+      ]
+    },
+    {
+      "id": "java-core-hard-01",
+      "difficulty": "hard",
+      "order": 10,
+      "topic": "java-core",
+      "section": "exceptions",
+      "className": "Solution",
+      "title": {
+        "en": "What close() throws, and when",
+        "ru": "Что бросает close() и когда"
+      },
+      "statement": {
+        "en": "Probe is given: it logs \"open:<name>\" when built, logs \"close:<name>\" when closed, and then throws an IllegalStateException(\"close:<name>\") if it was asked to fail. Write audit(failInBody, failOnClose): open Probe \"a\" and then Probe \"b\" with try-with-resources, log \"body\", throw an IllegalStateException(\"body\") from the body when failInBody, and catch whatever comes out — logging \"caught:<message>\" and then \"suppressed:<message>\" for each suppressed exception, in order. Return the log joined with commas.",
+        "ru": "Probe уже написан: при создании он пишет в журнал \"open:<имя>\", при закрытии — \"close:<имя>\", после чего бросает IllegalStateException(\"close:<имя>\"), если его об этом просили. Напишите audit(failInBody, failOnClose): откройте через try-with-resources Probe \"a\", затем Probe \"b\", запишите \"body\", при failInBody бросьте из тела IllegalStateException(\"body\") и перехватите всё, что вышло наружу, записав \"caught:<сообщение>\", а затем по \"suppressed:<сообщение>\" на каждое подавленное исключение, по порядку. Верните журнал, склеенный запятыми."
+      },
+      "hint": {
+        "en": "Resources are closed in reverse order of opening, and an exception from close() does not replace the one already on its way out — Throwable.getSuppressed() is where it goes instead.",
+        "ru": "Ресурсы закрываются в порядке, обратном открытию, а исключение из close() не вытесняет то, что уже летит наружу: оно попадает в Throwable.getSuppressed()."
+      },
+      "starter": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n\n    static final class Probe implements AutoCloseable {\n\n        private final String name;\n        private final List<String> log;\n        private final boolean failOnClose;\n\n        Probe(String name, List<String> log, boolean failOnClose) {\n            this.name = name;\n            this.log = log;\n            this.failOnClose = failOnClose;\n            log.add(\"open:\" + name);\n        }\n\n        @Override\n        public void close() {\n            log.add(\"close:\" + name);\n            if (failOnClose) {\n                throw new IllegalStateException(\"close:\" + name);\n            }\n        }\n    }\n\n    public static String audit(boolean failInBody, boolean failOnClose) {\n        List<String> log = new ArrayList<>();\n        // TODO: open \"a\" and then \"b\" with try-with-resources, log \"body\", throw\n        // when failInBody, and record what was caught and what it suppressed\n        return String.join(\",\", log);\n    }\n}\n",
+      "solution": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n\n    static final class Probe implements AutoCloseable {\n\n        private final String name;\n        private final List<String> log;\n        private final boolean failOnClose;\n\n        Probe(String name, List<String> log, boolean failOnClose) {\n            this.name = name;\n            this.log = log;\n            this.failOnClose = failOnClose;\n            log.add(\"open:\" + name);\n        }\n\n        @Override\n        public void close() {\n            log.add(\"close:\" + name);\n            if (failOnClose) {\n                throw new IllegalStateException(\"close:\" + name);\n            }\n        }\n    }\n\n    public static String audit(boolean failInBody, boolean failOnClose) {\n        List<String> log = new ArrayList<>();\n        try (Probe first = new Probe(\"a\", log, failOnClose);\n             Probe second = new Probe(\"b\", log, failOnClose)) {\n            log.add(\"body\");\n            if (failInBody) {\n                throw new IllegalStateException(\"body\");\n            }\n        } catch (RuntimeException thrown) {\n            log.add(\"caught:\" + thrown.getMessage());\n            for (Throwable suppressed : thrown.getSuppressed()) {\n                log.add(\"suppressed:\" + suppressed.getMessage());\n            }\n        }\n        return String.join(\",\", log);\n    }\n}\n",
+      "cases": [
+        {
+          "label": "audit(false, false)",
+          "expression": "Solution.audit(false, false)"
+        },
+        {
+          "label": "audit(true, false)",
+          "expression": "Solution.audit(true, false)"
+        },
+        {
+          "label": "audit(false, true)",
+          "expression": "Solution.audit(false, true)"
+        },
+        {
+          "label": "audit(true, true)",
+          "expression": "Solution.audit(true, true)"
+        }
+      ],
+      "explanation": {
+        "en": "Closing happens in reverse — \"b\" before \"a\" — and it happens before the catch clause runs, which is why every log ends with both closes before \"caught\". The last case is the one the hand-written try/finally gets wrong: a finally that calls close() and lets it throw replaces the real failure with the cleanup's, and the \"body\" exception is lost. try-with-resources keeps the first one and attaches the others as suppressed, in the order they were thrown.",
+        "ru": "Закрытие идёт в обратном порядке — сначала \"b\", потом \"a\" — и происходит до выполнения catch, поэтому в каждом журнале оба close стоят перед \"caught\". Последний случай — тот, на котором ломается рукописный try/finally: finally, вызывающий close() и позволяющий ему бросить, подменяет настоящую ошибку ошибкой уборки, и исключение \"body\" теряется. try-with-resources сохраняет первое, а остальные прикрепляет как подавленные, в порядке возникновения."
+      },
+      "sources": [
+        {
+          "title": "Exceptions",
+          "url": "https://dev.java/learn/exceptions/"
+        },
+        {
+          "title": "Throwable.getSuppressed (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#getSuppressed()"
+        }
+      ]
+    },
+    {
+      "id": "java-core-hard-02",
+      "difficulty": "hard",
+      "order": 11,
+      "topic": "java-core",
+      "section": "generics",
+      "className": "Solution",
+      "title": {
+        "en": "A container keyed by type",
+        "ru": "Контейнер с ключом-типом"
+      },
+      "statement": {
+        "en": "Make put and get generic in the key's own type, so that put(String.class, \"hello\") is the only put a String key accepts and get(String.class) comes back as a String without a cast. put returns this so calls can be chained, get returns null for a type nothing was stored under, and a value the key is not an instance of is refused with an IllegalArgumentException whose message is the simple name of the type, a space, and \"expected\".",
+        "ru": "Сделайте put и get обобщёнными по типу самого ключа, чтобы put(String.class, \"hello\") был единственным put, который принимает ключ String, а get(String.class) возвращался как String без приведения. put возвращает this для цепочки вызовов, get возвращает null для типа, под которым ничего не сохранено, а значение, не являющееся экземпляром ключа, отвергается через IllegalArgumentException с сообщением из простого имени типа, пробела и слова \"expected\"."
+      },
+      "hint": {
+        "en": "Class<T> is the key that also knows T: type.isInstance(value) checks at run time what the signature promises, and type.cast is how get returns a T rather than an Object.",
+        "ru": "Class<T> — ключ, который заодно знает T: type.isInstance(value) проверяет во время выполнения то, что обещает сигнатура, а type.cast — способ вернуть из get именно T, а не Object."
+      },
+      "starter": "import java.util.HashMap;\nimport java.util.Map;\n\npublic class Solution {\n\n    private final Map<Class<?>, Object> values = new HashMap<>();\n\n    // TODO: make put and get generic in the key's own type, and refuse a value the key\n    // is not an instance of\n    public Solution put(Class<?> type, Object value) {\n        values.put(type, value);\n        return this;\n    }\n\n    public Object get(Class<?> type) {\n        return values.get(type);\n    }\n}\n",
+      "solution": "import java.util.HashMap;\nimport java.util.Map;\n\npublic class Solution {\n\n    private final Map<Class<?>, Object> values = new HashMap<>();\n\n    public <T> Solution put(Class<T> type, T value) {\n        if (!type.isInstance(value)) {\n            throw new IllegalArgumentException(type.getSimpleName() + \" expected\");\n        }\n        values.put(type, value);\n        return this;\n    }\n\n    public <T> T get(Class<T> type) {\n        return type.cast(values.get(type));\n    }\n}\n",
+      "cases": [
+        {
+          "label": "put then get a String",
+          "expression": "new Solution().put(String.class, \"hello\").get(String.class)"
+        },
+        {
+          "label": "the String comes back as a String",
+          "expression": "new Solution().put(String.class, \"hello\").get(String.class).length()"
+        },
+        {
+          "label": "two types at once",
+          "expression": "new Solution().put(Integer.class, 7).put(String.class, \"x\").get(Integer.class) + 1"
+        },
+        {
+          "label": "nothing stored under that type",
+          "expression": "new Solution().put(String.class, \"a\").get(Integer.class)"
+        },
+        {
+          "label": "the same type stored twice",
+          "expression": "new Solution().put(String.class, \"a\").put(String.class, \"b\").get(String.class)"
+        },
+        {
+          "label": "a raw key that lies about its value",
+          "expression": "attempt(() -> new Solution().put((Class) Integer.class, \"text\").get(Integer.class))"
+        }
+      ],
+      "explanation": {
+        "en": "One type parameter per call rather than one per container is what lets a single map hold a String and an Integer and still hand each back at its own type — the second case simply would not compile against an Object-typed get. The last case is why the run-time check is there: a raw Class defeats the compiler's promise, and without isInstance the wrong value would sit in the map until some later get(Integer.class) failed far away from the put that caused it.",
+        "ru": "Параметр типа на вызов, а не на контейнер, и позволяет одной карте держать String и Integer и отдавать каждый под своим типом: второй случай просто не скомпилировался бы с get, возвращающим Object. Последний случай объясняет проверку во время выполнения: сырой Class обходит обещание компилятора, и без isInstance чужое значение лежало бы в карте до тех пор, пока какой-нибудь get(Integer.class) не упал бы далеко от вызвавшего это put."
+      },
+      "sources": [
+        {
+          "title": "Generics",
+          "url": "https://dev.java/learn/generics/"
+        },
+        {
+          "title": "Class.cast (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html#cast(java.lang.Object)"
+        }
+      ]
+    },
+    {
+      "id": "java-core-hard-03",
+      "difficulty": "hard",
+      "order": 12,
+      "topic": "java-core",
+      "section": "equals-hashcode",
+      "className": "Solution",
+      "title": {
+        "en": "equals that stays symmetric",
+        "ru": "equals, остающийся симметричным"
+      },
+      "statement": {
+        "en": "Solution holds an int id and has a nested subclass Tagged adding a String tag. Give both an equals and a hashCode under which a Solution and a Tagged are never equal in either direction, two Tagged are equal only when both id and tag match, and equal objects always hash the same.",
+        "ru": "Solution хранит int id и имеет вложенный подкласс Tagged, добавляющий строковый тег. Дайте обоим такие equals и hashCode, при которых Solution и Tagged никогда не равны ни в одну сторону, два Tagged равны только при совпадении и id, и тега, а равные объекты всегда имеют одинаковый хеш."
+      },
+      "hint": {
+        "en": "instanceof answers \"is it at least a Solution\", which is not the same question in both directions; getClass() != other.getClass() is.",
+        "ru": "instanceof отвечает на вопрос «это хотя бы Solution?», а он несимметричен; getClass() != other.getClass() — симметричен."
+      },
+      "starter": "public class Solution {\n\n    private final int id;\n\n    public Solution(int id) {\n        this.id = id;\n    }\n\n    public int id() {\n        return id;\n    }\n\n    @Override\n    public boolean equals(Object other) {\n        // TODO: this test holds in only one direction once a subclass exists\n        return other instanceof Solution && id == ((Solution) other).id;\n    }\n\n    @Override\n    public int hashCode() {\n        return Integer.hashCode(id);\n    }\n\n    @Override\n    public String toString() {\n        return \"Solution(\" + id + \")\";\n    }\n\n    public static class Tagged extends Solution {\n\n        private final String tag;\n\n        public Tagged(int id, String tag) {\n            super(id);\n            this.tag = tag;\n        }\n\n        // TODO: give Tagged the equals and hashCode its extra field needs\n\n        @Override\n        public String toString() {\n            return \"Tagged(\" + id() + \",\" + tag + \")\";\n        }\n    }\n}\n",
+      "solution": "import java.util.Objects;\n\npublic class Solution {\n\n    private final int id;\n\n    public Solution(int id) {\n        this.id = id;\n    }\n\n    public int id() {\n        return id;\n    }\n\n    @Override\n    public boolean equals(Object other) {\n        if (this == other) {\n            return true;\n        }\n        if (other == null || getClass() != other.getClass()) {\n            return false;\n        }\n        return id == ((Solution) other).id;\n    }\n\n    @Override\n    public int hashCode() {\n        return Integer.hashCode(id);\n    }\n\n    @Override\n    public String toString() {\n        return \"Solution(\" + id + \")\";\n    }\n\n    public static class Tagged extends Solution {\n\n        private final String tag;\n\n        public Tagged(int id, String tag) {\n            super(id);\n            this.tag = tag;\n        }\n\n        @Override\n        public boolean equals(Object other) {\n            if (this == other) {\n                return true;\n            }\n            if (other == null || getClass() != other.getClass()) {\n                return false;\n            }\n            Tagged tagged = (Tagged) other;\n            return id() == tagged.id() && Objects.equals(tag, tagged.tag);\n        }\n\n        @Override\n        public int hashCode() {\n            return Objects.hash(id(), tag);\n        }\n\n        @Override\n        public String toString() {\n            return \"Tagged(\" + id() + \",\" + tag + \")\";\n        }\n    }\n}\n",
+      "cases": [
+        {
+          "label": "two plain ids",
+          "expression": "new Solution(1).equals(new Solution(1))"
+        },
+        {
+          "label": "plain compared with tagged",
+          "expression": "new Solution(1).equals(new Solution.Tagged(1, \"x\"))"
+        },
+        {
+          "label": "tagged compared with plain",
+          "expression": "new Solution.Tagged(1, \"x\").equals(new Solution(1))"
+        },
+        {
+          "label": "two tagged alike",
+          "expression": "new Solution.Tagged(1, \"x\").equals(new Solution.Tagged(1, \"x\"))"
+        },
+        {
+          "label": "two tagged differing by tag",
+          "expression": "new Solution.Tagged(1, \"x\").equals(new Solution.Tagged(1, \"y\"))"
+        },
+        {
+          "label": "a HashSet of all three",
+          "expression": "new HashSet<>(List.of(new Solution(1), new Solution.Tagged(1, \"x\"), new Solution(1))).size()"
+        }
+      ],
+      "explanation": {
+        "en": "instanceof reads differently depending on which side calls it: a plain Solution accepts a Tagged, while a Tagged comparing its tag rejects the plain one, and equals stops being symmetric — after which a HashSet's answer depends on the order the elements went in. getClass() asks the same question from both sides, which is what makes the contract hold; the price is that no subclass instance can ever equal a base one, and that is the trade this exercise is really about.",
+        "ru": "instanceof читается по-разному в зависимости от того, с какой стороны его вызвали: обычный Solution принимает Tagged, а Tagged, сравнивающий тег, обычный отвергает — и equals перестаёт быть симметричным, после чего ответ HashSet зависит от порядка добавления. getClass() задаёт один и тот же вопрос с обеих сторон, и именно это держит контракт; плата в том, что экземпляр подкласса уже никогда не будет равен базовому, и об этом размене всё упражнение."
+      },
+      "sources": [
+        {
+          "title": "Object.equals (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)"
+        },
+        {
+          "title": "Objects.hash (Java SE 17 API)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Objects.html#hash(java.lang.Object...)"
+        }
+      ]
+    }
+  ]
+}

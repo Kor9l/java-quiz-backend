@@ -57,6 +57,13 @@ public class UserStateService {
         if (incoming.level != null) {
             payload.level = incoming.level;
         }
+        // Saved as given, off-ladder value included: SettingsPayload.levelFor is what decides
+        // which ladder a track is read against, and it answers with the module's default for
+        // anything that does not belong. Rejecting here would make a client that sends both
+        // tracks in one body fail on the half that is none of its business.
+        if (incoming.grammarLevel != null) {
+            payload.grammarLevel = incoming.grammarLevel;
+        }
         if (incoming.selectedTopics != null) {
             payload.setSelectedTopics(incoming.selectedTopics);
         }
