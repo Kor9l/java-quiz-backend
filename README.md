@@ -114,6 +114,8 @@ because Spring questions contain `${...}` placeholders that Flyway would interpo
 | `V33__LoadAlgorithmsTopic` | Algorithms and data structures: 8 sections, articles, 48 questions | `content/algorithms/` |
 | `V34__LoadAlgorithmsPractice` | 12 algorithm exercises on the Java track | `content/practice/algorithms.json` |
 | `V35__LoadGitTopic` | Git — branches, rebase, conflicts: 8 sections, articles, 48 questions | `content/git/` |
+| `V36__LoadPersonalityWords` | two English groups from the Unit 1C personality lesson: "Personality traits", 22 words, and "Verb + noun collocations", 16 | `content/english/words-personality.json` |
+| `V37__MergePersonalityWordsInto2026Part2` | folds both of those into "2026 part 2 words", taking it to 124, and drops the emptied groups | `content/english/words-2026-part-2-merge.json` |
 
 SQL and Java Concurrency live in their own directories rather than in the shared files because
 V2 has already run everywhere; adding a topic to `topics.json` would load it on a fresh database
@@ -498,6 +500,22 @@ new words cannot go into `words-2026-part-2.json` either. The extension file the
 target by `groupCode` instead of declaring a group, and the migration looks the group up by that
 code and appends after whatever it already holds — read from `max(sort_order)`, not counted from
 the file, since an admin may have edited the group in between.
+
+The Unit 1C personality lesson ended up in the same group, in two steps. `V36__LoadPersonalityWords`
+loaded it first as two groups of its own, from `content/english/words-personality.json` — 22
+traits, and the 16 verb + noun collocations the handout lists apart — and
+`V37__MergePersonalityWordsInto2026Part2` then folded both into `2026 part 2 words`, taking it to
+124. Unit 1C belongs with the rest of Wordlist Unit 1; being able to drill the two lists apart is
+what the merge gives up.
+
+The words are moved rather than copied: each row keeps its id and only changes `group_id`, so
+favourites and the per-word answer history carry over, and nothing is listed twice. Whatever else
+named the two groups by id is repointed before they are deleted — a saved quiz setup or an
+unfinished round that selected either now selects the merged group, rather than falling back to
+every group, and their per-group answer counts in the word stats are added into the merged
+group's. The migration reads `content/english/words-2026-part-2-merge.json`, which names the
+target by `groupCode` and the groups it absorbs under `mergeFrom`, so `EnglishWordsContentTest`
+checks the group as the trainer will show it: 124 words, none repeated.
 
 **Every seeded group is PUBLIC.** Four of the eight were one learner's private groups in the old
 app, but that app numbered its users and this one identifies them by UUID, so there is nobody here
