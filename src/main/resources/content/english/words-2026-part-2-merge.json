@@ -1,0 +1,7 @@
+{
+  "groupCode": "seed-2026-part-2",
+  "mergeFrom": [
+    "seed-personality-traits",
+    "seed-verb-noun-collocations"
+  ]
+}

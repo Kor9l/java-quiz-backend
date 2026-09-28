@@ -21,9 +21,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * <p>Every bundled file is checked together, since they all land in the same two tables: a code
  * repeated across files would break the unique constraint on {@code word_groups.code} exactly as
- * one repeated inside a file would. Files come in two shapes — the ones that declare groups, and
- * the ones that name an existing group and add to it — and the word-level checks run over the
- * union, because that is what a group actually holds once every migration has run.
+ * one repeated inside a file would. Files come in three shapes — the ones that declare groups,
+ * the ones that name an existing group and add to it, and the one that folds groups into another
+ * — and the word-level checks run over the result, because that is what a group actually holds
+ * once every migration has run.
  */
 class EnglishWordsContentTest {
 
@@ -31,11 +32,13 @@ class EnglishWordsContentTest {
     private static final String PART_TWO = "/content/english/words-2026-part-2.json";
     private static final String PART_TWO_EXTRA = "/content/english/words-2026-part-2-extra.json";
     private static final String PERSONALITY = "/content/english/words-personality.json";
+    private static final String PART_TWO_MERGE = "/content/english/words-2026-part-2-merge.json";
 
     private static JsonNode corpus;
     private static JsonNode partTwo;
     private static JsonNode partTwoExtra;
     private static JsonNode personality;
+    private static JsonNode partTwoMerge;
 
     @BeforeAll
     static void load() throws Exception {
@@ -43,6 +46,7 @@ class EnglishWordsContentTest {
         partTwo = read(PART_TWO);
         partTwoExtra = read(PART_TWO_EXTRA);
         personality = read(PERSONALITY);
+        partTwoMerge = read(PART_TWO_MERGE);
     }
 
     private static JsonNode read(String resource) throws Exception {
@@ -61,7 +65,10 @@ class EnglishWordsContentTest {
         return groups;
     }
 
-    /** Each group's words with the additions folded in, keyed by the group code. */
+    /**
+     * Each group's words once every migration has run, keyed by the group code: the additions
+     * appended, and the merged groups folded into their target and gone.
+     */
     private static Map<String, List<JsonNode>> wordsByGroup() {
         Map<String, List<JsonNode>> words = new LinkedHashMap<>();
         for (JsonNode group : allGroups()) {
@@ -73,6 +80,16 @@ class EnglishWordsContentTest {
             assertThat(into).describedAs("group %s the additions extend", addition.path("groupCode").asText())
                     .isNotNull();
             addition.get("words").forEach(into::add);
+        }
+        for (JsonNode merge : List.of(partTwoMerge)) {
+            List<JsonNode> into = words.get(merge.path("groupCode").asText());
+            assertThat(into).describedAs("group %s the merge folds into", merge.path("groupCode").asText())
+                    .isNotNull();
+            for (JsonNode code : merge.get("mergeFrom")) {
+                List<JsonNode> from = words.remove(code.asText());
+                assertThat(from).describedAs("group %s the merge folds in", code.asText()).isNotNull();
+                into.addAll(from);
+            }
         }
         return words;
     }
@@ -110,8 +127,8 @@ class EnglishWordsContentTest {
 
     /**
      * The same word twice in one group is a paste accident; across groups it is deliberate. The
-     * group is the merged one, so a phrase the additions repeat from the file they extend is
-     * caught here rather than showing up twice in the trainer.
+     * group is the merged one, so a phrase that the additions or a folded-in group repeat from
+     * what the group already holds is caught here rather than showing up twice in the trainer.
      */
     @Test
     void noGroupRepeatsAWord() {
@@ -170,7 +187,6 @@ class EnglishWordsContentTest {
     void extendsTheTwentyTwentySixHandout() {
         assertThat(partTwoExtra.path("groupCode").asText()).isEqualTo("seed-2026-part-2");
         assertThat(partTwoExtra.get("words")).hasSize(44);
-        assertThat(wordsByGroup().get("seed-2026-part-2")).hasSize(86);
     }
 
     /**
@@ -180,7 +196,26 @@ class EnglishWordsContentTest {
     @Test
     void carriesThePersonalityLesson() {
         assertThat(personality.get("groups")).hasSize(2);
-        assertThat(wordsByGroup().get("seed-personality-traits")).hasSize(22);
-        assertThat(wordsByGroup().get("seed-verb-noun-collocations")).hasSize(16);
+        JsonNode traits = personality.get("groups").get(0);
+        JsonNode collocations = personality.get("groups").get(1);
+        assertThat(traits.path("code").asText()).isEqualTo("seed-personality-traits");
+        assertThat(traits.get("words")).hasSize(22);
+        assertThat(collocations.path("code").asText()).isEqualTo("seed-verb-noun-collocations");
+        assertThat(collocations.get("words")).hasSize(16);
+    }
+
+    /**
+     * What V37 then does with those two groups: folds them into the 2026 one, which is therefore
+     * where their words live once every migration has run — 42 from V14, 44 from V17, 22 and 16
+     * from V36 — while the groups V36 declared are gone.
+     */
+    @Test
+    void foldsThePersonalityLessonIntoTheTwentyTwentySixGroup() {
+        assertThat(partTwoMerge.path("groupCode").asText()).isEqualTo("seed-2026-part-2");
+        assertThat(partTwoMerge.get("mergeFrom")).extracting(JsonNode::asText)
+                .containsExactly("seed-personality-traits", "seed-verb-noun-collocations");
+        Map<String, List<JsonNode>> words = wordsByGroup();
+        assertThat(words.get("seed-2026-part-2")).hasSize(124);
+        assertThat(words).doesNotContainKeys("seed-personality-traits", "seed-verb-noun-collocations");
     }
 }
