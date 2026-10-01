@@ -1,0 +1,253 @@
+{
+  "groups": [
+    {
+      "code": "seed-wordlist-unit-1d-011026",
+      "order": 11,
+      "title": "01.10.26 Wordlist_Unit 1D",
+      "words": [
+        {
+          "text": "to encourage smn to do smth",
+          "translation": "побуждать кого-либо делать что-либо",
+          "example": "My team lead encouraged me to apply for the senior position, even though I felt I wasn't fully ready."
+        },
+        {
+          "text": "to discourage smn from doing smth",
+          "translation": "отговаривать кого-либо от чего-либо",
+          "example": "Her doctor discouraged her from taking on heavy physical exertion during her recovery period."
+        },
+        {
+          "text": "to warn smn about smth",
+          "translation": "предупреждать кого-либо о чём-либо",
+          "example": "I tried to warn him about the tight deadline, but it was like water off a duck's back."
+        },
+        {
+          "text": "to make it possible to do smth",
+          "translation": "делать возможным что-либо",
+          "example": "Adopting a flexible working policy made it possible for the team to achieve a better work-life balance."
+        },
+        {
+          "text": "to do a marathon",
+          "translation": "участвовать в марафоне"
+        },
+        {
+          "text": "sugary snacks",
+          "translation": "сладкие перекусы (сладости)"
+        },
+        {
+          "text": "the whole lot",
+          "translation": "всё целиком, всё до единого (и о предметах, и о задачах, процессах, данных)",
+          "example": "I intended to leave a few chocolates for later, but I ended up eating the whole lot while watching the movie."
+        },
+        {
+          "text": "times change",
+          "translation": "времена меняются",
+          "example": "Times change, and what worked in project management five years ago might not be effective today."
+        },
+        {
+          "text": "to look after (the staff)",
+          "translation": "заботиться о (сотрудниках)"
+        },
+        {
+          "text": "a higher interest rate",
+          "translation": "более высокая процентная ставка",
+          "example": "If you keep your savings in a fixed-term account, you will usually qualify for a higher interest rate."
+        },
+        {
+          "text": "to leave it up to smn",
+          "translation": "предоставить кому-либо самому решать",
+          "example": "I'll leave it up to you to decide whether we should push back on the cost estimate or accept it."
+        },
+        {
+          "text": "In/From my experience, …",
+          "translation": "По моему опыту, …",
+          "example": "In my experience, flagging a concern early on prevents major roadblocks later in the project."
+        },
+        {
+          "text": "On the plus side, …",
+          "translation": "Положительным моментом является то, что …",
+          "example": "I have to work through the weekend, but on the plus side, I'll be all caught up on my overdue tasks by Monday."
+        },
+        {
+          "text": "On balance, …",
+          "translation": "В целом, … / Если взвесить все за и против, …",
+          "example": "The contract has strict terms, but on balance, the financial benefits outweigh the risks."
+        },
+        {
+          "text": "Overall, …",
+          "translation": "В целом, … / В общем, …",
+          "example": "The meeting was longer than expected, but overall, we made a lot of progress on the key deliverables."
+        },
+        {
+          "text": "to build up stamina ['stæmɪnə] / endurance [ɪnˈdjʊərəns]",
+          "translation": "развивать выносливость",
+          "example": "I've started swimming twice a week to build up my stamina without putting stress on my joints."
+        },
+        {
+          "text": "to engage in moderate physical activity",
+          "translation": "заниматься умеренной физической нагрузкой",
+          "example": "Doctors recommend engaging in moderate physical activity for at least 30 minutes a day."
+        },
+        {
+          "text": "to keep in shape / to stay fit",
+          "translation": "поддерживать хорошую физическую форму",
+          "example": "She manages to stay fit despite having a busy desk job."
+        },
+        {
+          "text": "to strike a balance (between work and leisure)",
+          "translation": "соблюдать / находить баланс (между работой и отдыхом)",
+          "example": "It's essential to strike a balance between rigorous training and adequate rest."
+        },
+        {
+          "text": "to maintain a well-balanced diet",
+          "translation": "питаться сбалансированно",
+          "example": "Maintaining a well-balanced diet is far more effective than following extreme, trendy diets."
+        },
+        {
+          "text": "to cut down on (processed foods / sugar)",
+          "translation": "сократить потребление (обработанных продуктов / сахара)",
+          "example": "I'm trying to cut down on refined sugar to improve my energy levels throughout the day."
+        },
+        {
+          "text": "to keep stress in check",
+          "translation": "держать стресс под контролем",
+          "example": "Practicing mindfulness daily helps me keep my stress in check during busy work weeks."
+        },
+        {
+          "text": "to lead a sedentary ['sedəntərɪ] lifestyle",
+          "translation": "вести сидячий (малоподвижный) образ жизни",
+          "example": "Leading a sedentary lifestyle can contribute to back issues and cardiovascular problems over time."
+        },
+        {
+          "text": "to establish a sustainable routine",
+          "translation": "выстроить устойчивый / долгосрочный режим",
+          "example": "Instead of extreme fitness challenges, I focused on establishing a sustainable routine I actually enjoy."
+        },
+        {
+          "text": "to allow ample ['æmpl] time for recovery",
+          "translation": "выделять достаточно времени на восстановление (ample — достаточный, обильный)"
+        },
+        {
+          "text": "to adopt a preventive mindset",
+          "translation": "придерживаться принципа профилактики",
+          "example": "Adopting a preventive mindset means taking rest days before your body forces you to stop."
+        },
+        {
+          "text": "to refrain from (harmful habits)",
+          "translation": "воздерживаться от (вредных привычек)",
+          "example": "People should refrain from harmful habits such as smoking and excessive alcohol consumption."
+        },
+        {
+          "text": "to be mindful of (one's eating habits)",
+          "translation": "осознанно относиться к (своим пищевым привычкам)",
+          "example": "Being mindful of your eating habits can help you avoid overeating."
+        },
+        {
+          "text": "to promote longevity [lɔn'ʤevətɪ] and healthy ageing",
+          "translation": "способствовать долголетию и здоровому старению",
+          "example": "Regular exercise and a nutritious diet can promote longevity and healthy ageing."
+        },
+        {
+          "text": "to nourish ['nʌrɪʃ] the body with essential nutrients",
+          "translation": "насыщать организм необходимыми питательными веществами",
+          "example": "A balanced diet helps nourish the body with essential nutrients."
+        },
+        {
+          "text": "You've got a point.",
+          "translation": "В этом есть смысл. / Ты прав в этом."
+        },
+        {
+          "text": "That's a good point.",
+          "translation": "Это хороший аргумент."
+        },
+        {
+          "text": "You're absolutely right.",
+          "translation": "Ты совершенно прав."
+        },
+        {
+          "text": "I couldn't agree more, especially regarding (the need to simplify the onboarding process).",
+          "translation": "Не могу не согласиться, особенно что касается (необходимости упростить процесс онбординга / адаптации)."
+        },
+        {
+          "text": "You might be right, I guess.",
+          "translation": "Наверное, ты прав."
+        },
+        {
+          "text": "I'm not really with you on that one.",
+          "translation": "Тут я с тобой не совсем согласен."
+        },
+        {
+          "text": "I see where you're coming from, but (we also need to consider the impact on the timeline).",
+          "translation": "Я понимаю вашу логику / ход ваших мыслей, но (нам также нужно учесть, как это повлияет на сроки)."
+        },
+        {
+          "text": "I take your point (about budget constraints, but cutting quality now might cost us more later).",
+          "translation": "Я понимаю вашу точку зрения (насчёт бюджетных ограничений, но снижение качества сейчас может обойтись нам дороже потом)."
+        },
+        {
+          "text": "That's a valid observation, (although user behavior might differ significantly in international markets).",
+          "translation": "Это справедливое / верное замечание, (хотя поведение пользователей на международных рынках может существенно отличаться)."
+        },
+        {
+          "text": "Fair enough, though I wonder if (that approach would work for smaller teams).",
+          "translation": "Логично / Справедливо, хотя интересно, (подойдёт ли такой подход командам поменьше)."
+        },
+        {
+          "text": "I hear what you're saying, but from another perspective, (it might save us time in the long run).",
+          "translation": "Я понимаю вашу позицию, но с другой стороны (в долгосрочной перспективе это может сэкономить нам время)."
+        },
+        {
+          "text": "What makes you say that?",
+          "translation": "Почему ты так думаешь?"
+        },
+        {
+          "text": "I bet (that's difficult to measure).",
+          "translation": "Уверен, что (это трудно измерить)."
+        },
+        {
+          "text": "That reminds me of (the story I read).",
+          "translation": "Это напоминает мне (историю, которую я прочитал)."
+        },
+        {
+          "text": "That happened to me once.",
+          "translation": "Со мной однажды такое случилось."
+        },
+        {
+          "text": "You could look at it another way.",
+          "translation": "На это можно посмотреть по-другому."
+        },
+        {
+          "text": "To build on what Sarah just said, (expanding that feature could also open up new customer segments).",
+          "translation": "В продолжение того, что только что сказала Сара, (расширение этой функции также может открыть для нас новые сегменты клиентов)."
+        },
+        {
+          "text": "That ties in nicely with (the point Alex raised earlier about resource constraints).",
+          "translation": "Это отлично перекликается с (мыслью, которую Алекс озвучил ранее по поводу ограничений в ресурсах)."
+        },
+        {
+          "text": "Could you expand a bit on (how you plan to measure the initial results)?",
+          "translation": "Могли бы вы подробнее рассказать о том, (как вы планируете оценивать первые результаты)?"
+        },
+        {
+          "text": "If I'm tracking correctly, (you're suggesting that we push back the launch date by two weeks).",
+          "translation": "Если я правильно всё понимаю, (вы предлагаете сдвинуть дату запуска на две недели)."
+        },
+        {
+          "text": "Correct me if I'm wrong, but (didn't we agree to finalize the design assets before testing?)",
+          "translation": "Поправьте меня, если я ошибаюсь, но (разве мы не договаривались утвердить дизайн-макеты перед тестированием?)"
+        },
+        {
+          "text": "That's a great proposal, but (its success hinges on whether engineering can deliver the integration in time).",
+          "translation": "Это отличное предложение, но (его успех напрямую зависит от того, успеет ли отдел разработки выкатить интеграцию вовремя)."
+        },
+        {
+          "text": "To take a step back for a moment, (what is the ultimate outcome we want our clients to experience?)",
+          "translation": "Если на секунду взглянуть на ситуацию шире / вернуться к главному, (какого итогового результата мы хотим добиться для наших клиентов?)"
+        },
+        {
+          "text": "Playing devil's advocate for a second, (what happens if our primary vendor runs out of stock?)",
+          "translation": "Если побуду немного адвокатом дьявола: (что произойдёт, если у нашего основного поставщика закончатся товары на складе?)"
+        }
+      ]
+    }
+  ]
+}
