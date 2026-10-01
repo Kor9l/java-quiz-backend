@@ -116,6 +116,7 @@ because Spring questions contain `${...}` placeholders that Flyway would interpo
 | `V35__LoadGitTopic` | Git — branches, rebase, conflicts: 8 sections, articles, 48 questions | `content/git/` |
 | `V36__LoadPersonalityWords` | two English groups from the Unit 1C personality lesson: "Personality traits", 22 words, and "Verb + noun collocations", 16 | `content/english/words-personality.json` |
 | `V37__MergePersonalityWordsInto2026Part2` | folds both of those into "2026 part 2 words", taking it to 124, and drops the emptied groups | `content/english/words-2026-part-2-merge.json` |
+| `V38__LoadWordlistUnit1D` | one more English group: "01.10.26 Wordlist_Unit 1D", 54 words | `content/english/words-unit-1d.json` |
 
 SQL and Java Concurrency live in their own directories rather than in the shared files because
 V2 has already run everywhere; adding a topic to `topics.json` would load it on a fresh database

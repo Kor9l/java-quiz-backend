@@ -33,12 +33,14 @@ class EnglishWordsContentTest {
     private static final String PART_TWO_EXTRA = "/content/english/words-2026-part-2-extra.json";
     private static final String PERSONALITY = "/content/english/words-personality.json";
     private static final String PART_TWO_MERGE = "/content/english/words-2026-part-2-merge.json";
+    private static final String UNIT_1D = "/content/english/words-unit-1d.json";
 
     private static JsonNode corpus;
     private static JsonNode partTwo;
     private static JsonNode partTwoExtra;
     private static JsonNode personality;
     private static JsonNode partTwoMerge;
+    private static JsonNode unitOneD;
 
     @BeforeAll
     static void load() throws Exception {
@@ -47,6 +49,7 @@ class EnglishWordsContentTest {
         partTwoExtra = read(PART_TWO_EXTRA);
         personality = read(PERSONALITY);
         partTwoMerge = read(PART_TWO_MERGE);
+        unitOneD = read(UNIT_1D);
     }
 
     private static JsonNode read(String resource) throws Exception {
@@ -62,6 +65,7 @@ class EnglishWordsContentTest {
         corpus.get("groups").forEach(groups::add);
         partTwo.get("groups").forEach(groups::add);
         personality.get("groups").forEach(groups::add);
+        unitOneD.get("groups").forEach(groups::add);
         return groups;
     }
 
@@ -217,5 +221,15 @@ class EnglishWordsContentTest {
         Map<String, List<JsonNode>> words = wordsByGroup();
         assertThat(words.get("seed-2026-part-2")).hasSize(124);
         assertThat(words).doesNotContainKeys("seed-personality-traits", "seed-verb-noun-collocations");
+    }
+
+    /** The Wordlist Unit 1D handout V38 loads: one group of its own, named by date and file. */
+    @Test
+    void carriesTheUnitOneDHandout() {
+        assertThat(unitOneD.get("groups")).hasSize(1);
+        JsonNode group = unitOneD.get("groups").get(0);
+        assertThat(group.path("code").asText()).isEqualTo("seed-wordlist-unit-1d-011026");
+        assertThat(group.path("title").asText()).isEqualTo("01.10.26 Wordlist_Unit 1D");
+        assertThat(group.get("words")).hasSize(54);
     }
 }
