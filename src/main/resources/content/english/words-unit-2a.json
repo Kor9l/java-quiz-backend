@@ -1,0 +1,283 @@
+{
+  "groups": [
+    {
+      "code": "seed-wordlist-unit-2a",
+      "order": 12,
+      "title": "Wordlist_Unit 2A",
+      "words": [
+        {
+          "text": "stunning",
+          "translation": "ошеломительный",
+          "example": "The view from the top of the mountain was absolutely stunning."
+        },
+        {
+          "text": "to travel the world",
+          "translation": "путешествовать по миру",
+          "example": "After graduating from university, she decided to travel the world for a year."
+        },
+        {
+          "text": "to do smth for a living",
+          "translation": "зарабатывать на жизнь чем-либо",
+          "example": "What do you do for a living? – I'm a graphic designer."
+        },
+        {
+          "text": "No 2 days are alike.",
+          "translation": "Ни один день не похож на другой.",
+          "example": "I love my job as a journalist because no two days are alike."
+        },
+        {
+          "text": "(to go) scuba-diving",
+          "translation": "подводное плавание с аквалангом",
+          "example": "We went scuba-diving in the Red Sea to see the coral reefs."
+        },
+        {
+          "text": "(to go) bungee jumping",
+          "translation": "прыжки с тарзанки",
+          "example": "I tried bungee jumping off a high bridge during my trip to New Zealand."
+        },
+        {
+          "text": "a holiday resort",
+          "translation": "курорт",
+          "example": "They stayed at a luxury holiday resort right by the beach."
+        },
+        {
+          "text": "a downside ↔ an upside",
+          "translation": "минус (недостаток) ↔ плюс (преимущество)",
+          "example": "The downside of working remotely is isolation, but the upside is flexibility."
+        },
+        {
+          "text": "to make money",
+          "translation": "зарабатывать деньги",
+          "example": "It takes time and effort to make money as a freelancer."
+        },
+        {
+          "text": "a social media post",
+          "translation": "пост в социальных сетях"
+        },
+        {
+          "text": "on social media",
+          "translation": "в социальных сетях",
+          "example": "He spends way too much time reading the news on social media."
+        },
+        {
+          "text": "to hustle",
+          "translation": "крутиться, вкалывать, активно действовать",
+          "example": "If you run your own small business, you have to hustle every single day."
+        },
+        {
+          "text": "to pitch for work",
+          "translation": "предлагать свои услуги, бороться за заказ/проект",
+          "example": "As a freelancer, I spend a lot of time writing emails to pitch for work."
+        },
+        {
+          "text": "to take a photo of",
+          "translation": "сфотографировать что-либо/кого-либо",
+          "example": "Could you please take a photo of us in front of the fountain?"
+        },
+        {
+          "text": "on average",
+          "translation": "в среднем",
+          "example": "On average, he works about 40 hours per week."
+        },
+        {
+          "text": "to lower prices",
+          "translation": "снижать цены"
+        },
+        {
+          "text": "literally",
+          "translation": "буквально, в прямом смысле слова"
+        },
+        {
+          "text": "most days",
+          "translation": "большинство дней",
+          "example": "Most days I go for a quick run in the park before work."
+        },
+        {
+          "text": "be/go on holiday",
+          "translation": "быть / уехать в отпуск",
+          "example": "She is on holiday this week, and we're going on holiday next month."
+        },
+        {
+          "text": "holidaying",
+          "translation": "проведения отпуска",
+          "example": "They spent two weeks holidaying on a small island in Greece."
+        },
+        {
+          "text": "disillusioned",
+          "translation": "разочарованный",
+          "example": "He became disillusioned with his career after working long hours with no promotion."
+        },
+        {
+          "text": "to take the leap",
+          "translation": "сделать решающий шаг, решиться на риск",
+          "example": "After years of dreaming about freelancing, she finally took the leap and quit her corporate job."
+        },
+        {
+          "text": "to scratch the itch",
+          "translation": "утолить жажду (потребность) в чём-либо, реализовать давнее желание",
+          "example": "He took a three-month sabbatical to travel Southeast Asia just to scratch the itch."
+        },
+        {
+          "text": "a change of scenery",
+          "translation": "смена обстановки",
+          "example": "I've been working from home for three weeks, so I need a change of scenery – let's work from a cafe today."
+        },
+        {
+          "text": "to trade security for flexibility",
+          "translation": "променять стабильность на гибкость",
+          "example": "Many digital nomads choose to trade security for flexibility when they leave their 9-to-5 jobs."
+        },
+        {
+          "text": "to get stuck in a rut",
+          "translation": "погрязнуть в рутине / застрять в деньках сурка",
+          "example": "I felt like I was getting stuck in a rut, so I booked a trip to get a change of scenery."
+        },
+        {
+          "text": "to call the shots",
+          "translation": "сам себе хозяин / командовать парадом",
+          "example": "The best part of running your own business is that you get to call the shots."
+        },
+        {
+          "text": "to learn the ropes",
+          "translation": "изучить основы",
+          "example": "It took him a couple of months to learn the ropes as a school bus driver after working in tech for 25 years."
+        },
+        {
+          "text": "to roll with the punches",
+          "translation": "приспосабливаться к обстоятельствам (трудностям)",
+          "example": "In freelancing, unexpected delays happen all the time, so you just have to learn to roll with the punches."
+        },
+        {
+          "text": "get carried away",
+          "translation": "увлечься, переборщить",
+          "example": "I only meant to buy one shirt, but I got carried away and spent all my money."
+        },
+        {
+          "text": "get in touch",
+          "translation": "связаться (с кем-то)",
+          "example": "Please get in touch with me if you have any questions about the project."
+        },
+        {
+          "text": "get it (=understand)",
+          "translation": "понимать",
+          "example": "Oh, I get it now! That math problem makes total sense."
+        },
+        {
+          "text": "get on smn's nerves",
+          "translation": "действовать кому-то на нервы",
+          "example": "The loud clicking of his pen was really getting on my nerves."
+        },
+        {
+          "text": "get smn's attention",
+          "translation": "привлечь чьё-то внимание",
+          "example": "She waved her hand to get the waiter's attention."
+        },
+        {
+          "text": "get some rest",
+          "translation": "передохнуть",
+          "example": "You look exhausted; you should go home and get some rest."
+        },
+        {
+          "text": "get straight to the point",
+          "translation": "перейти сразу к делу (сути)",
+          "example": "We don't have much time, so let's get straight to the point."
+        },
+        {
+          "text": "get the feeling",
+          "translation": "казаться, чуять",
+          "example": "I get the feeling that she isn't telling us the whole truth."
+        },
+        {
+          "text": "get to do smth",
+          "translation": "получать возможность / шанс сделать что-то",
+          "example": "We got to visit the backstage area after the concert ended."
+        },
+        {
+          "text": "get together",
+          "translation": "встречаться",
+          "example": "Let's get together for a coffee this weekend!"
+        },
+        {
+          "text": "to get the hang of smth",
+          "translation": "освоить, набить руку",
+          "example": "It was confusing at first, but after a few days I started to get the hang of the new software."
+        },
+        {
+          "text": "to get your message/point across",
+          "translation": "донести свою мысль",
+          "example": "You don't need a huge vocabulary to get your point across effectively in a meeting."
+        },
+        {
+          "text": "to get around to doing smth",
+          "translation": "наконец-то добраться до чего-то, найти время",
+          "example": "I've been meaning to update my CV for months, but I just haven't gotten around to it."
+        },
+        {
+          "text": "to get cold feet",
+          "translation": "струсить, струхнуть в самый последний момент",
+          "example": "He was ready to quit his corporate job and move abroad, but he got cold feet right before signing the lease."
+        },
+        {
+          "text": "to get off on the wrong foot (with smn)",
+          "translation": "начать отношения не с той ноги, неудачно стартовать",
+          "example": "I'm afraid we got off on the wrong foot during our first interview, so I sent a polite follow-up email."
+        },
+        {
+          "text": "to get a word in edgeways / edgewise",
+          "translation": "вставить хоть слово (в разговор)",
+          "example": "The professor talked for two hours non-stop, so no one could get a word in edgeways."
+        },
+        {
+          "text": "to look smn in the eye",
+          "translation": "смотреть кому-то в глаза",
+          "example": "He was so embarrassed that he couldn't even look me in the eye."
+        },
+        {
+          "text": "Now you come to mention it…",
+          "translation": "Раз уж ты об этом упомянул…",
+          "example": "Now you come to mention it, I did notice he was acting a bit strange today."
+        },
+        {
+          "text": "to go to pieces",
+          "translation": "потерять контроль над собой, раскиснуть",
+          "example": "She completely went to pieces when she heard the bad news."
+        },
+        {
+          "text": "to go too far",
+          "translation": "зайти слишком далеко, перегнуть палку",
+          "example": "His jokes are usually funny, but this time he went too far."
+        },
+        {
+          "text": "(not) look your age",
+          "translation": "(не) выглядеть на свой возраст",
+          "example": "She's turning fifty next week, but she definitely doesn't look her age."
+        },
+        {
+          "text": "to come and go",
+          "translation": "приходить и уходить, появляться и исчезать",
+          "example": "The pain in my shoulder seems to come and go throughout the day."
+        },
+        {
+          "text": "to come (get) to the point",
+          "translation": "перейти к главному",
+          "example": "Stop beating around the bush and come to the point!"
+        },
+        {
+          "text": "to go without saying",
+          "translation": "само собой разумеется",
+          "example": "It goes without saying that hard work leads to success."
+        },
+        {
+          "text": "to look on the bright side",
+          "translation": "искать плюсы",
+          "example": "Even though we missed the flight, let's look on the bright side – we get an extra day in Rome!"
+        },
+        {
+          "text": "to go to great lengths (to do smth)",
+          "translation": "идти на всё, из кожи вон лезть (чтобы сделать что-то)",
+          "example": "She went to great lengths to organize the perfect surprise party for her friend."
+        }
+      ]
+    }
+  ]
+}
