@@ -1,0 +1,104 @@
+{
+  "groups": [
+    {
+      "code": "seed-wordlist-unit-2b-251026",
+      "order": 14,
+      "title": "25.10.26 Wordlist_Unit 2B_DevelopYourReading",
+      "words": [
+        {
+          "text": "heavy-handed",
+          "translation": "жесткий, действующий топорно / силовыми методами (using too much force, unnecessarily severe)",
+          "example": "Her manager's heavy-handed style made the team feel micromanaged and stressed."
+        },
+        {
+          "text": "over-the-top",
+          "translation": "чересчур, перебор (excessive, exaggerated)",
+          "example": "Her reaction was completely over-the-top; she started crying when her coffee was slightly cold."
+        },
+        {
+          "text": "to crack down on (late payers)",
+          "translation": "жёстко пресекать, принимать суровые меры (против должников) (to start enforcing rules much more strictly to eliminate bad behavior)",
+          "example": "The city council decided to crack down on illegal parking near the school. Universities are cracking down on students who use AI to write their essays."
+        },
+        { "text": "non-payers", "translation": "неплательщики, должники" },
+        {
+          "text": "In simple English, …",
+          "translation": "Простыми словами, …",
+          "example": "In simple English, we are running out of budget."
+        },
+        {
+          "text": "wording",
+          "translation": "формулировка",
+          "example": "The wording of the contract was far too ambiguous."
+        },
+        {
+          "text": "to dispose of (rubbish)",
+          "translation": "выбрасывать, утилизировать (мусор)",
+          "example": "Please dispose of hazardous waste properly."
+        },
+        { "text": "to drop rubbish", "translation": "бросать мусор (где попало)" },
+        {
+          "text": "to trial",
+          "translation": "тестировать, испытывать",
+          "example": "The company is trialing a four-day workweek this quarter."
+        },
+        {
+          "text": "to tackle a problem",
+          "translation": "бороться с проблемой (to begin working hard to resolve a difficult issue directly)",
+          "example": "We need to schedule a meeting to tackle this technical problem right away."
+        },
+        { "text": "two separate openings for rubbish", "translation": "два раздельных отверстия для мусора (в урнах)" },
+        {
+          "text": "to customize",
+          "translation": "настраивать под кого-то, индивидуализировать (to modify or alter something so that it meets a person's specific preferences)",
+          "example": "You can customize your laptop's desktop background and layout."
+        },
+        { "text": "on a street", "translation": "на улице" },
+        { "text": "to carry out research", "translation": "проводить исследование" },
+        { "text": "to deposit (the rubbish in the bin)", "translation": "выбрасывать / помещать (мусор в урну)" },
+        {
+          "text": "littering",
+          "translation": "разбрасывание мусора",
+          "example": "Littering in public parks carries a heavy fine."
+        },
+        { "text": "the authorities", "translation": "власти" },
+        {
+          "text": "to roll out (bins to other parts of the country)",
+          "translation": "внедрять, запускать, масштабировать (установку урн в других регионах страны) (to officially launch)"
+        },
+        { "text": "to take action", "translation": "принимать меры" },
+        { "text": "student performance in exams", "translation": "результаты студентов на экзаменах" },
+        { "text": "to link performance to pay", "translation": "привязывать оплату труда к результатам" },
+        { "text": "the better the results, the higher the bonus", "translation": "чем лучше результаты, тем выше премия" },
+        {
+          "text": "the experiment had a twist",
+          "translation": "в эксперименте был неожиданный поворот (a twist – an unexpected turn of events)"
+        },
+        { "text": "improvements in", "translation": "улучшения в" },
+        { "text": "the fear of loss", "translation": "страх потери (упустить что-то)" },
+        { "text": "the prospect of gain", "translation": "перспектива выгоды" },
+        { "text": "the success of the trial", "translation": "успех испытания" },
+        { "text": "the target group", "translation": "целевая группа" },
+        {
+          "text": "It goes to show that…",
+          "translation": "Это показывает / доказывает, что…",
+          "example": "It goes to show that preparation pays off."
+        },
+        { "text": "precise numbers", "translation": "точные цифры" },
+        { "text": "rounded numbers", "translation": "округленные цифры" },
+        {
+          "text": "to nudge smn to do sth",
+          "translation": "подталкивать кого-либо к (to gently encourage, push)",
+          "example": "Small discounts can nudge customers to buy online."
+        },
+        { "text": "increase in (theft)", "translation": "увеличение (числа краж)" },
+        {
+          "text": "I reckon that…",
+          "translation": "Я считаю, что…",
+          "example": "I reckon that prices will drop after the holidays."
+        },
+        { "text": "a train carriage (a train car)", "translation": "вагон поезда" }
+      ]
+    }
+  ]
+}
