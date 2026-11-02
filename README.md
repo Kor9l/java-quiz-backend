@@ -119,6 +119,7 @@ because Spring questions contain `${...}` placeholders that Flyway would interpo
 | `V38__LoadWordlistUnit1D` | one more English group: "01.10.26 Wordlist_Unit 1D", 54 words | `content/english/words-unit-1d.json` |
 | `V39__LoadWordlistUnit2A` | one more English group: "Wordlist_Unit 2A", 55 words | `content/english/words-unit-2a.json` |
 | `V40__LoadOnlineMeetingsAndUnit2B` | two more English groups: "25.10.26 Phrases for Online Meetings", 85 words, and "25.10.26 Wordlist_Unit 2B_DevelopYourReading", 35 words | `content/english/words-online-meetings.json`, `content/english/words-unit-2b.json` |
+| `V41__ExtendWordlistUnit2B` | 47 more words for "25.10.26 Wordlist_Unit 2B_DevelopYourReading": Running Wild, B2+/C1 collocations, giving an opinion | `content/english/words-unit-2b-extra.json` |
 
 SQL and Java Concurrency live in their own directories rather than in the shared files because
 V2 has already run everywhere; adding a topic to `topics.json` would load it on a fresh database
