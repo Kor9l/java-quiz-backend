@@ -37,6 +37,7 @@ class EnglishWordsContentTest {
     private static final String UNIT_2A = "/content/english/words-unit-2a.json";
     private static final String ONLINE_MEETINGS = "/content/english/words-online-meetings.json";
     private static final String UNIT_2B = "/content/english/words-unit-2b.json";
+    private static final String UNIT_2B_EXTRA = "/content/english/words-unit-2b-extra.json";
 
     private static JsonNode corpus;
     private static JsonNode partTwo;
@@ -47,6 +48,7 @@ class EnglishWordsContentTest {
     private static JsonNode unitTwoA;
     private static JsonNode onlineMeetings;
     private static JsonNode unitTwoB;
+    private static JsonNode unitTwoBExtra;
 
     @BeforeAll
     static void load() throws Exception {
@@ -59,6 +61,7 @@ class EnglishWordsContentTest {
         unitTwoA = read(UNIT_2A);
         onlineMeetings = read(ONLINE_MEETINGS);
         unitTwoB = read(UNIT_2B);
+        unitTwoBExtra = read(UNIT_2B_EXTRA);
     }
 
     private static JsonNode read(String resource) throws Exception {
@@ -91,7 +94,7 @@ class EnglishWordsContentTest {
             List<JsonNode> into = words.computeIfAbsent(group.path("code").asText(), key -> new ArrayList<>());
             group.get("words").forEach(into::add);
         }
-        for (JsonNode addition : List.of(partTwoExtra)) {
+        for (JsonNode addition : List.of(partTwoExtra, unitTwoBExtra)) {
             List<JsonNode> into = words.get(addition.path("groupCode").asText());
             assertThat(into).describedAs("group %s the additions extend", addition.path("groupCode").asText())
                     .isNotNull();
@@ -273,5 +276,16 @@ class EnglishWordsContentTest {
         assertThat(group.path("code").asText()).isEqualTo("seed-wordlist-unit-2b-251026");
         assertThat(group.path("title").asText()).isEqualTo("25.10.26 Wordlist_Unit 2B_DevelopYourReading");
         assertThat(group.get("words")).hasSize(35);
+    }
+
+    /**
+     * What V41 appends to that group: the Running Wild table, its collocations and the opinion
+     * phrases from the updated handout — 35 from V40 and 47 from V41 once both have run.
+     */
+    @Test
+    void extendsTheUnitTwoBHandout() {
+        assertThat(unitTwoBExtra.path("groupCode").asText()).isEqualTo("seed-wordlist-unit-2b-251026");
+        assertThat(unitTwoBExtra.get("words")).hasSize(47);
+        assertThat(wordsByGroup().get("seed-wordlist-unit-2b-251026")).hasSize(82);
     }
 }
