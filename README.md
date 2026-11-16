@@ -121,6 +121,7 @@ because Spring questions contain `${...}` placeholders that Flyway would interpo
 | `V40__LoadOnlineMeetingsAndUnit2B` | two more English groups: "25.10.26 Phrases for Online Meetings", 85 words, and "25.10.26 Wordlist_Unit 2B_DevelopYourReading", 35 words | `content/english/words-online-meetings.json`, `content/english/words-unit-2b.json` |
 | `V41__ExtendWordlistUnit2B` | 47 more words for "25.10.26 Wordlist_Unit 2B_DevelopYourReading": Running Wild, B2+/C1 collocations, giving an opinion | `content/english/words-unit-2b-extra.json` |
 | `V42__LoadWordlistUnit2C` | one more English group: "Wordlist_Unit 2C", 79 words | `content/english/words-unit-2c.json` |
+| `V43__LoadGrammarHomework2` | the second homework handout into `grammar-homework`: Present Perfect Simple or Continuous, the passive, -ed / -ing adjectives — 6 sections, 18 questions, 18 `GAP_FILL` exercises | `content/english/grammar/homework-2/` |
 
 SQL and Java Concurrency live in their own directories rather than in the shared files because
 V2 has already run everywhere; adding a topic to `topics.json` would load it on a fresh database
@@ -422,6 +423,13 @@ order in direct and indirect questions, which nothing in `grammar-base` covers p
 yes/no question, and a handout section whose six exercises drill it. Loaded by
 `V20__LoadGrammarHomework` from `content/english/grammar/homework/`.
 
+The second handout (`V43__LoadGrammarHomework2`, `content/english/grammar/homework-2/`) covers
+three topics — Present Perfect Simple or Continuous, the passive, and -ed / -ing adjectives
+(Murphy units 7-10, 42-43 and 98) — as three pairs of a theory section with a quiz and a handout
+section with six `GAP_FILL` exercises. It appends sections to the course V20 created rather than
+editing V20's files, which live databases were already loaded from, and its exercises carry on the
+track's per-difficulty numbering. `GrammarHomework2ContentTest` checks it across both handouts.
+
 A course runs one level end to end, so every section and question in `grammar-base` is `BASE`.
 That is what makes it readable as a course rather than a filtered view, and the cumulative track
 still works because a `PRO` round draws on all three courses at once rather than on three levels
@@ -452,9 +460,14 @@ the other two tracks leave optional: `practice_tasks` has no `level` column, a g
 takes its level from the section it drills, and an exercise with no section would be an exercise
 with no level — which in this module means an empty round rather than an odd one.
 
-`WORD_ORDER` is the only kind implemented, because it is the only one with content. A prompt is
+Two kinds are implemented, because they are the two with content. In `WORD_ORDER` the prompt is
 the shuffled chunks as the handout printed them, separated by `/`, and putting them in the right
-order is the answer. The five kinds the plan lists arrive with the exercises that need them: a
+order is the answer. In `GAP_FILL` the prompt is a text with `{{1}}`, `{{2}}` markers, usually
+followed by the word to put into form in brackets; the answer travels as one line per gap, in gap
+order, and every gap is graded on its own, so the response's `blanks` say which ones are wrong. A
+gap left empty keeps its place and is simply wrong; more lines than gaps is refused, because then
+nothing says which line belongs to which gap. `check` on a `GAP_FILL` reports only whether every
+gap is filled. The four remaining kinds the plan lists arrive with the exercises that need them: a
 `kind` the engine cannot grade would be a promise the API does not keep.
 
 **What is forgiven, and why.** Capitals, the final question mark, repeated spaces and a phone's

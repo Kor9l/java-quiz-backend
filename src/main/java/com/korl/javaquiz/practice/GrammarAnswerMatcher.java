@@ -37,7 +37,42 @@ public final class GrammarAnswerMatcher {
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
+    /** A gap in a {@code GAP_FILL} text: {@code {{1}}}, {@code {{2}}}, … */
+    private static final Pattern GAP_MARKER = Pattern.compile("\\{\\{(\\d+)}}");
+
+    /** How a {@code GAP_FILL} answer separates its gaps: one line each. */
+    private static final Pattern LINE_BREAK = Pattern.compile("\\r?\\n");
+
     private GrammarAnswerMatcher() {
+    }
+
+    /**
+     * The gap numbers a {@code GAP_FILL} text marks, in the order they appear. Returned as written
+     * rather than validated: a text numbered 1, 3 or with a gap twice is broken content, and the
+     * content test is where that is caught.
+     */
+    public static List<Integer> gaps(String sentence) {
+        if (sentence == null) {
+            return List.of();
+        }
+        List<Integer> gaps = new ArrayList<>();
+        var matcher = GAP_MARKER.matcher(sentence);
+        while (matcher.find()) {
+            gaps.add(Integer.parseInt(matcher.group(1)));
+        }
+        return List.copyOf(gaps);
+    }
+
+    /**
+     * A {@code GAP_FILL} answer as one entry per gap. Empty lines are kept, not dropped: a gap
+     * the learner left empty still holds its place, so the answers after it stay lined up with
+     * their own gaps instead of sliding one to the left.
+     */
+    public static List<String> lines(String answer) {
+        if (answer == null) {
+            return List.of();
+        }
+        return List.of(LINE_BREAK.split(answer, -1));
     }
 
     /**

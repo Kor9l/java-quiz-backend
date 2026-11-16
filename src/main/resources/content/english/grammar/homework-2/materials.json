@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 3,
+  "topic": "grammar-homework",
+  "sections": [
+    {
+      "id": "pp-vs-ppc",
+      "estimatedMinutes": 15,
+      "summary": {
+        "en": "Result or activity: the simple counts what is done, the continuous describes the process and how long it has gone on - plus state verbs, the cases where both work, and why not the Present Simple.",
+        "ru": "Результат или процесс: simple считает сделанное, continuous описывает процесс и сколько он длится - плюс глаголы состояния, случаи, где годятся обе формы, и почему не Present Simple."
+      },
+      "body": {
+        "en": "Both tenses join the past to now. The question is what you are talking about: **the result** of the action, or **the action itself**.\n\n```\nI have painted the kitchen.        result: the kitchen is painted, the job is done\nI have been painting the kitchen.  activity: that is what I was busy with; maybe not finished\n```\n\nIn *English Grammar in Use* this is units 7-10, and unit 10 is the comparison itself.\n\n## Simple: what is done, how much, how many\n\nThe Present Perfect Simple looks at the finished result. Whenever the sentence counts or measures the result, it is the simple form:\n\n```\nShe has written three emails this morning.   how many\nI have read fifty pages so far.              how much\nSomebody has broken the window.              result you can see\n```\n\n## Continuous: the activity, and how long\n\nThe Present Perfect Continuous looks at the activity and its duration. It is the natural answer to `how long`, especially when the activity is still going on:\n\n```\nHow long have you been waiting?   I have been waiting for twenty minutes.\nIt has been raining since lunchtime.\n```\n\n`how long` -> continuous; `how much` / `how many` -> simple. The same verb changes form with the question:\n\n```\nHow long have you been learning English?\nHow many words have you learnt today?\n```\n\n## Evidence: you can see the activity just stopped\n\nThe continuous also explains something visible now - tiredness, dirt, wet streets - by the activity that caused it:\n\n```\nYou're out of breath. Have you been running?\nSorry about my hands. I've been fixing the bike.\n```\n\nHere the point is not that the bike is fixed. If the question were \"Is the bike ready?\", the answer would be the simple: `Yes, I've fixed it.`\n\n## Verbs that do not take the continuous\n\nState verbs - `know`, `like`, `love`, `want`, `believe`, `understand`, `own`, `be`, and `have` in the meaning \"possess\" - describe a state, not an activity, so they stay simple even with `how long`:\n\n```\nI have known Anna for ten years.      not: have been knowing\nHow long have you had that car?       not: have you been having\n```\n\n## When both are fine\n\nWith `live`, `work`, `study` and `for` / `since`, both forms are correct, and the difference is a shade of meaning: the continuous sounds more temporary, the simple more permanent.\n\n```\nI have lived here since 2020.  /  I have been living here since 2020.\n```\n\n## Not the Present Simple\n\nA situation that started in the past and is still true needs a perfect form. The Present Simple with `for` / `since` is the most common mistake:\n\n```\nI have been living here for two years.   not: I live here for two years\nHe has been ill since Monday.            not: He is ill since Monday\n```\n",
+        "ru": "Оба времени связывают прошлое с настоящим. Вопрос в том, о чём вы говорите: о **результате** действия или о **самом действии**.\n\n```\nI have painted the kitchen.        результат: кухня покрашена, работа сделана\nI have been painting the kitchen.  процесс: вот чем я был занят; возможно, не закончил\n```\n\nВ *English Grammar in Use* это юниты 7-10, а юнит 10 - само сравнение.\n\n## Simple: что сделано, сколько, сколько раз\n\nPresent Perfect Simple смотрит на готовый результат. Если предложение считает или измеряет результат, нужна простая форма:\n\n```\nShe has written three emails this morning.   сколько штук\nI have read fifty pages so far.              сколько\nSomebody has broken the window.              видимый результат\n```\n\n## Continuous: процесс и как долго\n\nPresent Perfect Continuous смотрит на процесс и его длительность. Это естественный ответ на `how long`, особенно когда действие ещё продолжается:\n\n```\nHow long have you been waiting?   I have been waiting for twenty minutes.\nIt has been raining since lunchtime.\n```\n\n`how long` -> continuous; `how much` / `how many` -> simple. Один и тот же глагол меняет форму вместе с вопросом:\n\n```\nHow long have you been learning English?\nHow many words have you learnt today?\n```\n\n## Следы: видно, что действие только что шло\n\nContinuous ещё и объясняет то, что видно сейчас - усталость, грязь, мокрые улицы - процессом, который это вызвал:\n\n```\nYou're out of breath. Have you been running?\nSorry about my hands. I've been fixing the bike.\n```\n\nЗдесь важно не то, что велосипед починен. Если бы спросили «Велосипед готов?», ответ был бы в простой форме: `Yes, I've fixed it.`\n\n## Глаголы, которые не бывают в continuous\n\nГлаголы состояния - `know`, `like`, `love`, `want`, `believe`, `understand`, `own`, `be` и `have` в значении «владеть» - описывают состояние, а не процесс, поэтому остаются в простой форме даже с `how long`:\n\n```\nI have known Anna for ten years.      не: have been knowing\nHow long have you had that car?       не: have you been having\n```\n\n## Когда подходят обе формы\n\nС `live`, `work`, `study` и `for` / `since` верны обе формы, разница - в оттенке: continuous звучит временнее, simple - постояннее.\n\n```\nI have lived here since 2020.  /  I have been living here since 2020.\n```\n\n## Не Present Simple\n\nСитуации, которая началась в прошлом и всё ещё длится, нужна перфектная форма. Present Simple с `for` / `since` - самая частая ошибка русскоговорящих (по-русски ведь «я живу здесь два года»):\n\n```\nI have been living here for two years.   не: I live here for two years\nHe has been ill since Monday.            не: He is ill since Monday\n```\n"
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - present perfect simple or continuous?",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-simple-or-continuous"
+        },
+        {
+          "title": "Cambridge Grammar - present perfect continuous",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-continuous-i-have-been-working"
+        },
+        {
+          "title": "Cambridge Grammar - present perfect simple",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-simple-i-have-worked"
+        }
+      ]
+    },
+    {
+      "id": "hw-pp-vs-ppc",
+      "estimatedMinutes": 12,
+      "summary": {
+        "en": "Six gap-fill texts on the Present Perfect Simple and Continuous, the four questions to ask at every gap, and what the checker accepts.",
+        "ru": "Шесть текстов с пропусками на Present Perfect Simple и Continuous, четыре вопроса к каждому пропуску и что принимает проверка."
+      },
+      "body": {
+        "en": "Six short texts with gaps. Each gap gets one verb from the brackets, in the Present Perfect Simple (`have done`) or the Present Perfect Continuous (`have been doing`). The theory is in the previous section, `Present Perfect or Present Perfect Continuous`.\n\n## How to decide, gap by gap\n\n1. Is it a state verb (`know`, `have` = own, `want`, `be`...)? Then simple, whatever else the sentence says.\n2. Does the sentence count or measure the result - `three emails`, `fifty pages`, `the third time`? Simple.\n3. Does it say how long, or explain something visible by an activity - tired, dirty, out of breath? Continuous.\n4. Is the job done and the result the point? Simple. Still going, or only the activity matters? Continuous.\n\n## What the checker accepts\n\n- When the subject is given in brackets - `(you / wait)` - the gap holds the whole question form: `have you been waiting`.\n- Contractions are fine: `'ve been waiting` = `have been waiting`, `hasn't` = `has not`.\n- Capitals and a full stop at the end are ignored.\n- Where both forms are good English, both are accepted, and the explanation says why.\n",
+        "ru": "Шесть коротких текстов с пропусками. В каждый пропуск - глагол из скобок в Present Perfect Simple (`have done`) или Present Perfect Continuous (`have been doing`). Теория - в предыдущем разделе, `Present Perfect или Present Perfect Continuous`.\n\n## Как решать, пропуск за пропуском\n\n1. Это глагол состояния (`know`, `have` = владеть, `want`, `be`...)? Тогда simple, что бы ещё ни было в предложении.\n2. Предложение считает или измеряет результат - `three emails`, `fifty pages`, `the third time`? Simple.\n3. Говорится, как долго, или видимое объясняется процессом - устал, испачкался, запыхался? Continuous.\n4. Работа сделана и важен результат? Simple. Ещё идёт или важен сам процесс? Continuous.\n\n## Что принимает проверка\n\n- Если подлежащее дано в скобках - `(you / wait)` - в пропуск пишется вся вопросительная форма: `have you been waiting`.\n- Сокращения можно: `'ve been waiting` = `have been waiting`, `hasn't` = `has not`.\n- Заглавные буквы и точка в конце не учитываются.\n- Где по-английски верны обе формы, принимаются обе, и в разборе сказано почему.\n"
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - present perfect simple or continuous?",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-simple-or-continuous"
+        }
+      ]
+    },
+    {
+      "id": "passive",
+      "estimatedMinutes": 15,
+      "summary": {
+        "en": "How the passive is built in every tense - be in that tense plus the past participle - when to use it, the be / been / being forms of unit 43, verbs that have no passive, and born.",
+        "ru": "Как строится пассив в любом времени - be в этом времени плюс третья форма, - когда он нужен, формы be / been / being из юнита 43, глаголы без пассива и born."
+      },
+      "body": {
+        "en": "In an active sentence the subject does the action. In a passive one the subject is what the action is done **to**:\n\n```\nSomebody built this bridge in 1890.   active: about the builders\nThis bridge was built in 1890.        passive: about the bridge\n```\n\nThe passive is used when who did it is unknown, unimportant or obvious, and the thing it was done to is what the sentence is about. If the doer matters, add `by`: `The Mona Lisa was painted by Leonardo da Vinci.`\n\nIn *English Grammar in Use* this is units 42-43.\n\n## The form: be + past participle\n\nThe past participle never changes - `built`, `made`, `sold`, `born`. All the tense is carried by `be`, so to put the passive into any tense, put `be` into that tense:\n\n```\nPresent simple       Paper is made from wood.\nPresent continuous   The road is being repaired.\nPresent perfect      My bike has been stolen!\nPast simple          The letters were delivered yesterday.\nPast continuous      Our room was still being cleaned.\nPast perfect         The tickets had been sold out.\nwill / modals        It will be fixed soon.  It must be kept cold.\n```\n\nQuestions and negatives work on `be` as well: `Was it built?`, `It hasn't been decided yet.`\n\n## Unit 43: be done, been done, being done\n\nAfter a modal verb or `to`, the passive infinitive is `be` + participle:\n\n```\nThe tickets can be bought online.\nThe report needs to be finished by Friday.\n```\n\nAfter verbs and prepositions that take `-ing` (`like`, `hate`, `mind`, `afraid of`), it is `being` + participle:\n\n```\nI hate being kept waiting.\nHe's afraid of being laughed at.\n```\n\n`been` and `being` are the two most often confused words here. `been` follows `have`: `The house has been sold.` `being` follows `is/was` (continuous) or stands in an `-ing` slot: `It is being sold.`, `I don't like being told what to do.`\n\n## Verbs that have no passive\n\nOnly a verb that takes an object can be passive. `happen`, `arrive`, `die`, `come`, `appear` take none, so there is nothing to make the subject of a passive:\n\n```\nThe accident happened at 10 p.m.      not: was happened\n```\n\n## born\n\n`be born` is a passive, and it is the only normal way to say it: `I was born in 1995`, not `I born in 1995` and not `I am born`.\n",
+        "ru": "В активном предложении подлежащее совершает действие. В пассивном подлежащее - то, **над чем** действие совершают:\n\n```\nSomebody built this bridge in 1890.   актив: о строителях\nThis bridge was built in 1890.        пассив: о мосте\n```\n\nПассив нужен, когда неважно, неизвестно или и так понятно, кто это сделал, а речь идёт о предмете действия. Если исполнитель важен, добавьте `by`: `The Mona Lisa was painted by Leonardo da Vinci.`\n\nВ *English Grammar in Use* это юниты 42-43.\n\n## Форма: be + третья форма глагола\n\nПричастие не меняется никогда - `built`, `made`, `sold`, `born`. Всё время несёт `be`: чтобы поставить пассив в любое время, ставьте в это время `be`:\n\n```\nPresent simple       Paper is made from wood.\nPresent continuous   The road is being repaired.\nPresent perfect      My bike has been stolen!\nPast simple          The letters were delivered yesterday.\nPast continuous      Our room was still being cleaned.\nPast perfect         The tickets had been sold out.\nwill / модальные     It will be fixed soon.  It must be kept cold.\n```\n\nВопросы и отрицания тоже строятся на `be`: `Was it built?`, `It hasn't been decided yet.`\n\n## Юнит 43: be done, been done, being done\n\nПосле модального глагола или `to` пассивный инфинитив - это `be` + причастие:\n\n```\nThe tickets can be bought online.\nThe report needs to be finished by Friday.\n```\n\nПосле глаголов и предлогов, за которыми идёт `-ing` (`like`, `hate`, `mind`, `afraid of`), - `being` + причастие:\n\n```\nI hate being kept waiting.\nHe's afraid of being laughed at.\n```\n\n`been` и `being` путают чаще всего. `been` идёт после `have`: `The house has been sold.` `being` - после `is/was` (continuous) или на месте `-ing`: `It is being sold.`, `I don't like being told what to do.`\n\n## Глаголы, у которых нет пассива\n\nПассив бывает только у глагола с дополнением. У `happen`, `arrive`, `die`, `come`, `appear` дополнения нет, значит, нечего делать подлежащим пассива:\n\n```\nThe accident happened at 10 p.m.      не: was happened\n```\n\nПо-русски «авария произошла» звучит как будто «сама с собой что-то сделала», и рука тянется к `was happened` - это самая частая ошибка в теме.\n\n## born\n\n`be born` - это пассив, и по-другому не говорят: `I was born in 1995`, а не `I born in 1995` и не `I am born`.\n"
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - passive voice",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/passive-voice"
+        },
+        {
+          "title": "Cambridge Grammar - passive: forms",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/passive-forms"
+        }
+      ]
+    },
+    {
+      "id": "hw-passive",
+      "estimatedMinutes": 12,
+      "summary": {
+        "en": "Six gap-fill texts on the passive in different tenses, with modals and -ing, and one on active or passive; the questions to ask at every gap, and what the checker accepts.",
+        "ru": "Шесть текстов с пропусками на пассив в разных временах, с модальными глаголами и -ing, и один - актив или пассив; вопросы к каждому пропуску и что принимает проверка."
+      },
+      "body": {
+        "en": "Six short texts with gaps. Put each verb in brackets into the right form - usually passive, but not always: some gaps want the active, and one of the texts is about telling the two apart. The theory is in the previous section, `The passive`.\n\n## How to decide, gap by gap\n\n1. Does the subject do the action, or is the action done to it? Done to it -> passive.\n2. Does the verb take an object at all? `happen`, `arrive`, `die` do not, so they are never passive.\n3. Which tense? Put `be` into it - `is`, `was`, `has been`, `is being`, `will be` - and add the past participle.\n4. After a modal or `to` -> `be done`. After `like`, `hate`, `mind` or a preposition -> `being done`. After `have` -> `been done`.\n\n## What the checker accepts\n\n- When the subject is in the brackets - `(the telephone / invent)` - the gap holds the whole question: `was the telephone invented`.\n- Contractions are fine: `isn't allowed` = `is not allowed`, `'s been stolen` = `has been stolen`.\n- Capitals and a full stop at the end are ignored; where two forms are both right, both are accepted.\n",
+        "ru": "Шесть коротких текстов с пропусками. Поставьте каждый глагол из скобок в нужную форму - обычно пассивную, но не всегда: в некоторых пропусках нужен актив, а один из текстов как раз про то, чтобы их различать. Теория - в предыдущем разделе, `Пассив`.\n\n## Как решать, пропуск за пропуском\n\n1. Подлежащее совершает действие или действие совершают над ним? Над ним -> пассив.\n2. Есть ли у глагола дополнение вообще? У `happen`, `arrive`, `die` нет, значит, пассива у них не бывает.\n3. Какое время? Поставьте в него `be` - `is`, `was`, `has been`, `is being`, `will be` - и добавьте третью форму.\n4. После модального глагола или `to` -> `be done`. После `like`, `hate`, `mind` или предлога -> `being done`. После `have` -> `been done`.\n\n## Что принимает проверка\n\n- Если подлежащее дано в скобках - `(the telephone / invent)` - в пропуск пишется весь вопрос: `was the telephone invented`.\n- Сокращения можно: `isn't allowed` = `is not allowed`, `'s been stolen` = `has been stolen`.\n- Заглавные буквы и точка в конце не учитываются; где верны две формы, принимаются обе.\n"
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - passive: forms",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/passive-forms"
+        }
+      ]
+    },
+    {
+      "id": "ed-ing-adjectives",
+      "estimatedMinutes": 12,
+      "summary": {
+        "en": "-ing for what causes a feeling, -ed for how somebody feels; why a person can be both, the common pairs and their spelling, and the prepositions that follow -ed.",
+        "ru": "-ing - о том, что вызывает чувство, -ed - о том, что человек чувствует; почему человек может быть и тем и другим, частые пары, их написание и предлоги после -ed."
+      },
+      "body": {
+        "en": "Many feeling words come in pairs: `bored` / `boring`, `interested` / `interesting`, `tired` / `tiring`. They are not interchangeable - they look at the feeling from opposite ends.\n\n```\nThe film was boring.   the film causes the feeling\nI was bored.           I have the feeling\n```\n\nIn *English Grammar in Use* this is unit 98.\n\n## -ing: what causes the feeling\n\nAn `-ing` adjective describes the thing, the situation or the person that **makes** you feel something:\n\n```\nThe lesson was interesting.\nCleaning the whole house is tiring.\nThe news was shocking.\n```\n\n## -ed: how somebody feels\n\nAn `-ed` adjective describes how a person (or an animal) **feels**:\n\n```\nI'm interested in history.\nWe were tired after the walk.\nEverybody was shocked.\n```\n\n## A person can be both - with different meanings\n\n```\nDan is bored.    Dan feels bored: he has nothing to do.\nDan is boring.   Dan makes other people bored: nobody wants to listen to him.\n```\n\nThis is the trap for Russian speakers: `Мне скучно` is `I'm bored`, and `I'm boring` says something rather unkind about yourself. In the same way `Мне интересно` is `I'm interested`, not `I'm interesting`.\n\n## The common pairs\n\n```\namazed / amazing            annoyed / annoying\nbored / boring              confused / confusing\ndepressed / depressing      disappointed / disappointing\nembarrassed / embarrassing  excited / exciting\nexhausted / exhausting      frightened / frightening\ninterested / interesting    relaxed / relaxing\nsatisfied / satisfying      shocked / shocking\nsurprised / surprising      terrified / terrifying\ntired / tiring              worried / worrying\n```\n\nWatch the spelling: a final `-y` after a consonant becomes `-ied` (`worry` -> `worried`, `terrify` -> `terrified`) but stays in `-ing` (`worrying`, `terrifying`); a final `-e` drops before both (`tire` -> `tired`, `tiring`; `amaze` -> `amazed`, `amazing`).\n\n## Prepositions after -ed\n\nThe `-ed` form often takes a preposition, and it is worth learning it together with the word:\n\n```\ninterested in      bored with / of     tired of\nexcited about      worried about       surprised at / by\nshocked by         disappointed with   satisfied with\n```\n",
+        "ru": "Многие слова про чувства ходят парами: `bored` / `boring`, `interested` / `interesting`, `tired` / `tiring`. Они не взаимозаменяемы - они смотрят на чувство с разных концов.\n\n```\nThe film was boring.   фильм вызывает чувство\nI was bored.           чувство испытываю я\n```\n\nВ *English Grammar in Use* это юнит 98.\n\n## -ing: что вызывает чувство\n\nПрилагательное на `-ing` описывает предмет, ситуацию или человека, которые **вызывают** чувство:\n\n```\nThe lesson was interesting.\nCleaning the whole house is tiring.\nThe news was shocking.\n```\n\n## -ed: что человек чувствует\n\nПрилагательное на `-ed` описывает, что человек (или животное) **чувствует**:\n\n```\nI'm interested in history.\nWe were tired after the walk.\nEverybody was shocked.\n```\n\n## Человек может быть и тем, и другим - с разным смыслом\n\n```\nDan is bored.    Дэну скучно: ему нечем заняться.\nDan is boring.   Дэн скучный: с ним скучно другим.\n```\n\nЗдесь ловушка для русскоговорящих: «Мне скучно» - это `I'm bored`, а `I'm boring` говорит о вас довольно обидную вещь. Точно так же «Мне интересно» - `I'm interested`, а не `I'm interesting`.\n\n## Частые пары\n\n```\namazed / amazing            annoyed / annoying\nbored / boring              confused / confusing\ndepressed / depressing      disappointed / disappointing\nembarrassed / embarrassing  excited / exciting\nexhausted / exhausting      frightened / frightening\ninterested / interesting    relaxed / relaxing\nsatisfied / satisfying      shocked / shocking\nsurprised / surprising      terrified / terrifying\ntired / tiring              worried / worrying\n```\n\nСледите за написанием: `-y` после согласной превращается в `-ied` (`worry` -> `worried`, `terrify` -> `terrified`), но остаётся перед `-ing` (`worrying`, `terrifying`); конечное `-e` выпадает в обоих случаях (`tire` -> `tired`, `tiring`; `amaze` -> `amazed`, `amazing`).\n\n## Предлоги после -ed\n\nФорма на `-ed` часто требует предлога, и его стоит учить вместе со словом:\n\n```\ninterested in      bored with / of     tired of\nexcited about      worried about       surprised at / by\nshocked by         disappointed with   satisfied with\n```\n"
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - adjectives: forms (-ing and -ed)",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/adjectives-forms"
+        },
+        {
+          "title": "Cambridge Grammar - adjectives",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/adjectives"
+        }
+      ]
+    },
+    {
+      "id": "hw-ed-ing-adjectives",
+      "estimatedMinutes": 11,
+      "summary": {
+        "en": "Six gap-fill texts on -ed and -ing adjectives, the questions to ask at every gap, and what the checker accepts.",
+        "ru": "Шесть текстов с пропусками на прилагательные с -ed и -ing, вопросы к каждому пропуску и что принимает проверка."
+      },
+      "body": {
+        "en": "Six short texts with gaps. Each gap takes the `-ed` or the `-ing` adjective made from the word in brackets: `(bore)` -> `bored` or `boring`. The theory is in the previous section, `Adjectives in -ed and -ing`.\n\n## How to decide, gap by gap\n\n1. Who or what is being described?\n2. If it is a person, and the sentence says how they **feel** -> `-ed`.\n3. If it is the thing, the situation or a person that **makes others feel** something -> `-ing`.\n4. A preposition after the gap (`in`, `about`, `with`, `by`) almost always means `-ed`.\n\n## What the checker accepts\n\n- One word per gap - the adjective itself.\n- Check the spelling: `worried`, `terrifying`, `embarrassed`. A spelling mistake counts as a wrong answer.\n- Capitals and a full stop at the end are ignored.\n",
+        "ru": "Шесть коротких текстов с пропусками. В каждый пропуск - прилагательное на `-ed` или `-ing`, образованное от слова в скобках: `(bore)` -> `bored` или `boring`. Теория - в предыдущем разделе, `Прилагательные на -ed и -ing`.\n\n## Как решать, пропуск за пропуском\n\n1. Кого или что описывает слово?\n2. Если человека, и предложение говорит, что он **чувствует**, -> `-ed`.\n3. Если предмет, ситуацию или человека, который **вызывает чувство у других**, -> `-ing`.\n4. Предлог после пропуска (`in`, `about`, `with`, `by`) почти всегда означает `-ed`.\n\n## Что принимает проверка\n\n- Одно слово в пропуске - само прилагательное.\n- Проверьте написание: `worried`, `terrifying`, `embarrassed`. Ошибка в написании считается неверным ответом.\n- Заглавные буквы и точка в конце не учитываются.\n"
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - adjectives: forms (-ing and -ed)",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/adjectives-forms"
+        }
+      ]
+    }
+  ]
+}

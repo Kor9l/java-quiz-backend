@@ -1,0 +1,1237 @@
+{
+  "schemaVersion": 1,
+  "track": "grammar",
+  "tasks": [
+    {
+      "id": "grammar-easy-03",
+      "kind": "gap_fill",
+      "difficulty": "easy",
+      "order": 3,
+      "topic": "grammar-homework",
+      "section": "hw-pp-vs-ppc",
+      "caseSensitive": false,
+      "title": {
+        "en": "Result or activity?",
+        "ru": "Результат или процесс?"
+      },
+      "statement": {
+        "en": "Put each verb in brackets into the Present Perfect Simple or the Present Perfect Continuous. When the subject is in the brackets too, write the whole question form.",
+        "ru": "Поставьте каждый глагол из скобок в Present Perfect Simple или Present Perfect Continuous. Если в скобках есть и подлежащее, напишите всю вопросительную форму."
+      },
+      "sentence": "Your clothes are so dirty! What {{1}} (you / do)?\nLook! Somebody {{2}} (break) the window.\nSorry I'm late. {{3}} (you / wait) long?\nMia {{4}} (write) four emails this morning.\nIt {{5}} (rain) since lunchtime, and the roads are flooded.",
+      "hint": {
+        "en": "Dirty clothes, a long wait and flooded roads point at an activity. A broken window and four emails are results you can see or count.",
+        "ru": "Грязная одежда, долгое ожидание и затопленные дороги указывают на процесс. Разбитое окно и четыре письма - результаты, которые видно или можно посчитать."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "have you been doing"
+          ]
+        },
+        {
+          "index": 2,
+          "accepted": [
+            "has broken",
+            "'s broken"
+          ]
+        },
+        {
+          "index": 3,
+          "accepted": [
+            "have you been waiting"
+          ]
+        },
+        {
+          "index": 4,
+          "accepted": [
+            "has written",
+            "'s written"
+          ]
+        },
+        {
+          "index": 5,
+          "accepted": [
+            "has been raining",
+            "'s been raining"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "1. `have you been doing` - the dirt is explained by the activity; `What have you done?` would ask what damage you caused.\n2. `has broken` - the result is in front of you.\n3. `have you been waiting` - how long, and the waiting has only just stopped.\n4. `has written` - `four emails` counts the result.\n5. `has been raining` - since lunchtime until now, and the flooded roads are its trace.",
+        "ru": "1. `have you been doing` - грязь объясняется процессом; `What have you done?` спрашивал бы, что вы натворили.\n2. `has broken` - результат перед глазами.\n3. `have you been waiting` - как долго, и ожидание только что закончилось.\n4. `has written` - `four emails` считает результат.\n5. `has been raining` - с обеда до сих пор, а затопленные дороги - его след."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - present perfect simple or continuous?",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-simple-or-continuous"
+        },
+        {
+          "title": "Cambridge Grammar - present perfect continuous",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-continuous-i-have-been-working"
+        }
+      ]
+    },
+    {
+      "id": "grammar-easy-04",
+      "kind": "gap_fill",
+      "difficulty": "easy",
+      "order": 4,
+      "topic": "grammar-homework",
+      "section": "hw-pp-vs-ppc",
+      "caseSensitive": false,
+      "title": {
+        "en": "How long or how many?",
+        "ru": "Как долго или сколько?"
+      },
+      "statement": {
+        "en": "Put each verb in brackets into the Present Perfect Simple or the Present Perfect Continuous. When the subject is in the brackets too, write the whole question form.",
+        "ru": "Поставьте каждый глагол из скобок в Present Perfect Simple или Present Perfect Continuous. Если в скобках есть и подлежащее, напишите всю вопросительную форму."
+      },
+      "sentence": "How long {{1}} (you / learn) English?\nHow many cups of coffee {{2}} (you / drink) today?\nBen is still on the phone. He {{3}} (talk) to his mum for an hour.\nI {{4}} (read) fifty pages of the book so far.\nThey {{5}} (build) the new bridge for two years, and it still isn't finished.",
+      "hint": {
+        "en": "`how long` and `for` with an activity that is still going on -> continuous. `how many` and `fifty pages` count a result -> simple.",
+        "ru": "`how long` и `for` с процессом, который ещё идёт, -> continuous. `how many` и `fifty pages` считают результат -> simple."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "have you been learning"
+          ]
+        },
+        {
+          "index": 2,
+          "accepted": [
+            "have you drunk"
+          ]
+        },
+        {
+          "index": 3,
+          "accepted": [
+            "has been talking",
+            "'s been talking"
+          ]
+        },
+        {
+          "index": 4,
+          "accepted": [
+            "have read",
+            "'ve read"
+          ]
+        },
+        {
+          "index": 5,
+          "accepted": [
+            "have been building",
+            "'ve been building"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "1. `have you been learning` - how long, and you are still learning.\n2. `have you drunk` - how many cups: a count of the result.\n3. `has been talking` - for an hour, and he is still on the phone.\n4. `have read` - fifty pages is how much is done.\n5. `have been building` - two years of an activity that is not finished.",
+        "ru": "1. `have you been learning` - как долго, и вы всё ещё учите.\n2. `have you drunk` - сколько чашек: подсчёт результата.\n3. `has been talking` - уже час, и он всё ещё говорит.\n4. `have read` - пятьдесят страниц - это сколько сделано.\n5. `have been building` - два года процесса, который не закончен."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - present perfect simple or continuous?",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-simple-or-continuous"
+        },
+        {
+          "title": "Cambridge Grammar - present perfect continuous",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-continuous-i-have-been-working"
+        }
+      ]
+    },
+    {
+      "id": "grammar-medium-03",
+      "kind": "gap_fill",
+      "difficulty": "medium",
+      "order": 3,
+      "topic": "grammar-homework",
+      "section": "hw-pp-vs-ppc",
+      "caseSensitive": false,
+      "title": {
+        "en": "State verbs",
+        "ru": "Глаголы состояния"
+      },
+      "statement": {
+        "en": "Put each verb in brackets into the Present Perfect Simple or the Present Perfect Continuous. When the subject is in the brackets too, write the whole question form.",
+        "ru": "Поставьте каждый глагол из скобок в Present Perfect Simple или Present Perfect Continuous. Если в скобках есть и подлежащее, напишите всю вопросительную форму."
+      },
+      "sentence": "I {{1}} (know) Anna for ten years.\nHow long {{2}} (you / have) that car?\nShe {{3}} (want) to visit Japan since she was a child.\nWe {{4}} (look) for a new flat for months, but we {{5}} (not / find) anything yet.",
+      "hint": {
+        "en": "`know`, `have` (= own) and `want` are states, so they stay simple even with `for` and `since`. `look for` is an activity; `not find ... yet` is about a result.",
+        "ru": "`know`, `have` (= владеть) и `want` - состояния, поэтому остаются в simple даже с `for` и `since`. `look for` - процесс; `not find ... yet` - про результат."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "have known",
+            "'ve known"
+          ]
+        },
+        {
+          "index": 2,
+          "accepted": [
+            "have you had"
+          ]
+        },
+        {
+          "index": 3,
+          "accepted": [
+            "has wanted",
+            "'s wanted"
+          ]
+        },
+        {
+          "index": 4,
+          "accepted": [
+            "have been looking",
+            "'ve been looking"
+          ]
+        },
+        {
+          "index": 5,
+          "accepted": [
+            "have not found",
+            "haven't found"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "1. `have known` - `know` is a state verb, never `have been knowing`.\n2. `have you had` - `have` here means own, a state.\n3. `has wanted` - `want` is a state verb.\n4. `have been looking` - an activity that has gone on for months.\n5. `haven't found` - the result that is still missing; `yet` goes with the simple.",
+        "ru": "1. `have known` - `know` - глагол состояния, никогда не `have been knowing`.\n2. `have you had` - `have` здесь «владеть», это состояние.\n3. `has wanted` - `want` - глагол состояния.\n4. `have been looking` - процесс, который идёт уже несколько месяцев.\n5. `haven't found` - результата всё ещё нет; `yet` - с простой формой."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - present perfect simple or continuous?",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-simple-or-continuous"
+        },
+        {
+          "title": "Cambridge Grammar - present perfect continuous",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-continuous-i-have-been-working"
+        }
+      ]
+    },
+    {
+      "id": "grammar-medium-04",
+      "kind": "gap_fill",
+      "difficulty": "medium",
+      "order": 4,
+      "topic": "grammar-homework",
+      "section": "hw-pp-vs-ppc",
+      "caseSensitive": false,
+      "title": {
+        "en": "Finished or not?",
+        "ru": "Закончено или нет?"
+      },
+      "statement": {
+        "en": "Put each verb in brackets into the Present Perfect Simple or the Present Perfect Continuous. When the subject is in the brackets too, write the whole question form.",
+        "ru": "Поставьте каждый глагол из скобок в Present Perfect Simple или Present Perfect Continuous. Если в скобках есть и подлежащее, напишите всю вопросительную форму."
+      },
+      "sentence": "I {{1}} (paint) the kitchen. It looks great now - come and see!\nI {{2}} (paint) the kitchen all day, and I'm only half done.\nKate {{3}} (lose) her keys, so she can't get into the house.\nMy eyes hurt. I {{4}} (look) at a screen all day.\nWho {{5}} (eat) my chocolate? There's none left!",
+      "hint": {
+        "en": "The same verb `paint` twice: once the job is done, once it is not. Look for the words that tell you which - `looks great now`, `only half done`.",
+        "ru": "Один и тот же глагол `paint` дважды: в одном случае работа сделана, в другом нет. Ищите слова-подсказки - `looks great now`, `only half done`."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "have painted",
+            "'ve painted"
+          ]
+        },
+        {
+          "index": 2,
+          "accepted": [
+            "have been painting",
+            "'ve been painting"
+          ]
+        },
+        {
+          "index": 3,
+          "accepted": [
+            "has lost",
+            "'s lost"
+          ]
+        },
+        {
+          "index": 4,
+          "accepted": [
+            "have been looking",
+            "'ve been looking"
+          ]
+        },
+        {
+          "index": 5,
+          "accepted": [
+            "has eaten",
+            "'s eaten"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "1. `have painted` - finished, and the result is what you are invited to see.\n2. `have been painting` - all day, and only half done: the activity, unfinished.\n3. `has lost` - the result: no keys, so no way in.\n4. `have been looking` - sore eyes explained by a whole day's activity.\n5. `has eaten` - none left, so the eating is complete. `Who's been eating my chocolate?` would suit a half-eaten bar.",
+        "ru": "1. `have painted` - закончено, и вас зовут посмотреть на результат.\n2. `have been painting` - весь день и только наполовину: незаконченный процесс.\n3. `has lost` - результат: ключей нет, войти нельзя.\n4. `have been looking` - глаза болят от целого дня процесса.\n5. `has eaten` - ничего не осталось, значит съедено всё. `Who's been eating my chocolate?` подошло бы к надкусанной плитке."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - present perfect simple or continuous?",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-simple-or-continuous"
+        },
+        {
+          "title": "Cambridge Grammar - present perfect continuous",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-continuous-i-have-been-working"
+        }
+      ]
+    },
+    {
+      "id": "grammar-hard-03",
+      "kind": "gap_fill",
+      "difficulty": "hard",
+      "order": 3,
+      "topic": "grammar-homework",
+      "section": "hw-pp-vs-ppc",
+      "caseSensitive": false,
+      "title": {
+        "en": "A dialogue: cleaning the flat",
+        "ru": "Диалог: уборка квартиры"
+      },
+      "statement": {
+        "en": "Put each verb in brackets into the Present Perfect Simple or the Present Perfect Continuous. When the subject is in the brackets too, write the whole question form.",
+        "ru": "Поставьте каждый глагол из скобок в Present Perfect Simple или Present Perfect Continuous. Если в скобках есть и подлежащее, напишите всю вопросительную форму."
+      },
+      "sentence": "A: You look exhausted. What {{1}} (you / do)?\nB: I {{2}} (clean) the flat since eight o'clock.\nA: {{3}} (you / finish)?\nB: Not yet. I {{4}} (do) the kitchen and the bathroom, but I {{5}} (not / start) the bedroom.",
+      "hint": {
+        "en": "The dialogue switches between the activity (how B has spent the morning) and the results (which rooms are done).",
+        "ru": "Диалог переключается между процессом (чем B занят с утра) и результатами (какие комнаты готовы)."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "have you been doing"
+          ]
+        },
+        {
+          "index": 2,
+          "accepted": [
+            "have been cleaning",
+            "'ve been cleaning"
+          ]
+        },
+        {
+          "index": 3,
+          "accepted": [
+            "have you finished"
+          ]
+        },
+        {
+          "index": 4,
+          "accepted": [
+            "have done",
+            "'ve done"
+          ]
+        },
+        {
+          "index": 5,
+          "accepted": [
+            "have not started",
+            "haven't started"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "1. `have you been doing` - exhausted: explained by an activity.\n2. `have been cleaning` - since eight o'clock and still going.\n3. `have you finished` - asks about the result.\n4. `have done` - two rooms are finished: a result.\n5. `haven't started` - the result that is not there yet.",
+        "ru": "1. `have you been doing` - вымотан: объясняется процессом.\n2. `have been cleaning` - с восьми утра и всё ещё идёт.\n3. `have you finished` - вопрос о результате.\n4. `have done` - две комнаты готовы: результат.\n5. `haven't started` - результата ещё нет."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - present perfect simple or continuous?",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-simple-or-continuous"
+        },
+        {
+          "title": "Cambridge Grammar - present perfect continuous",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-continuous-i-have-been-working"
+        }
+      ]
+    },
+    {
+      "id": "grammar-hard-04",
+      "kind": "gap_fill",
+      "difficulty": "hard",
+      "order": 4,
+      "topic": "grammar-homework",
+      "section": "hw-pp-vs-ppc",
+      "caseSensitive": false,
+      "title": {
+        "en": "Mixed: for, since and the trap of the Present Simple",
+        "ru": "Вперемешку: for, since и ловушка Present Simple"
+      },
+      "statement": {
+        "en": "Put each verb in brackets into the Present Perfect Simple or the Present Perfect Continuous. When the subject is in the brackets too, write the whole question form.",
+        "ru": "Поставьте каждый глагол из скобок в Present Perfect Simple или Present Perfect Continuous. Если в скобках есть и подлежащее, напишите всю вопросительную форму."
+      },
+      "sentence": "I {{1}} (live) here since 2020, and I love it.\nHe {{2}} (be) ill since Monday.\nSorry about my hands - I {{3}} (fix) the bike.\nThis is the third time you {{4}} (ask) me that question today.\nOur team {{5}} (not / win) a match since the season started.",
+      "hint": {
+        "en": "None of these is the Present Simple, even though Russian would use the present in most of them. One gap accepts both perfect forms.",
+        "ru": "Ни в одном пропуске не Present Simple, хотя по-русски в большинстве было бы настоящее время. Один пропуск принимает обе перфектные формы."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "have lived",
+            "'ve lived",
+            "have been living",
+            "'ve been living"
+          ]
+        },
+        {
+          "index": 2,
+          "accepted": [
+            "has been",
+            "'s been"
+          ]
+        },
+        {
+          "index": 3,
+          "accepted": [
+            "have been fixing",
+            "'ve been fixing"
+          ]
+        },
+        {
+          "index": 4,
+          "accepted": [
+            "have asked",
+            "'ve asked"
+          ]
+        },
+        {
+          "index": 5,
+          "accepted": [
+            "has not won",
+            "hasn't won"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "1. `have lived` or `have been living` - with `live` and `since` both are right; the continuous sounds a little more temporary.\n2. `has been` - `be` is a state verb; `He is ill since Monday` is the classic mistake.\n3. `have been fixing` - dirty hands are the trace of an activity. `I've fixed the bike` would answer \"Is it ready?\".\n4. `have asked` - `the third time` counts, and counting is simple.\n5. `hasn't won` - no wins is a result, counted at zero.",
+        "ru": "1. `have lived` или `have been living` - с `live` и `since` верны обе; continuous звучит чуть временнее.\n2. `has been` - `be` - глагол состояния; `He is ill since Monday` - классическая ошибка.\n3. `have been fixing` - грязные руки - след процесса. `I've fixed the bike` ответил бы на вопрос «Он готов?».\n4. `have asked` - `the third time` считает, а подсчёт - это simple.\n5. `hasn't won` - ни одной победы - это результат, посчитанный как ноль."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - present perfect simple or continuous?",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-simple-or-continuous"
+        },
+        {
+          "title": "Cambridge Grammar - present perfect continuous",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-continuous-i-have-been-working"
+        }
+      ]
+    },
+    {
+      "id": "grammar-easy-05",
+      "kind": "gap_fill",
+      "difficulty": "easy",
+      "order": 5,
+      "topic": "grammar-homework",
+      "section": "hw-passive",
+      "caseSensitive": false,
+      "title": {
+        "en": "Present and past simple passive",
+        "ru": "Пассив в Present и Past Simple"
+      },
+      "statement": {
+        "en": "Put each verb in brackets into the correct form - passive or, where the verb or the meaning needs it, active. When the subject is in the brackets too, write the whole question.",
+        "ru": "Поставьте каждый глагол из скобок в правильную форму - пассивную или, где этого требует глагол или смысл, активную. Если в скобках есть и подлежащее, напишите весь вопрос."
+      },
+      "sentence": "Paper {{1}} (make) from wood.\nThe Mona Lisa {{2}} (paint) by Leonardo da Vinci.\nThese days most cars {{3}} (produce) by robots.\nI {{4}} (bear) in 1995.\nThe letters {{5}} (deliver) yesterday morning.",
+      "hint": {
+        "en": "Every gap is passive here. Decide only the tense of `be` - a general fact or a finished past - and whether the subject is singular or plural.",
+        "ru": "Здесь все пропуски пассивные. Решите только, в каком времени `be` - общий факт или законченное прошлое, - и в единственном ли числе подлежащее."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "is made"
+          ]
+        },
+        {
+          "index": 2,
+          "accepted": [
+            "was painted"
+          ]
+        },
+        {
+          "index": 3,
+          "accepted": [
+            "are produced"
+          ]
+        },
+        {
+          "index": 4,
+          "accepted": [
+            "was born"
+          ]
+        },
+        {
+          "index": 5,
+          "accepted": [
+            "were delivered"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "1. `is made` - a general fact, singular.\n2. `was painted` - finished past; `by` names the painter.\n3. `are produced` - these days: present, and `cars` is plural.\n4. `was born` - `bear` has the participle `born`; never `I born`.\n5. `were delivered` - yesterday, plural.",
+        "ru": "1. `is made` - общий факт, единственное число.\n2. `was painted` - законченное прошлое; `by` называет художника.\n3. `are produced` - these days: настоящее, а `cars` - множественное.\n4. `was born` - у `bear` третья форма `born`; никогда не `I born`.\n5. `were delivered` - вчера, множественное число."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - passive: forms",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/passive-forms"
+        },
+        {
+          "title": "Cambridge Grammar - passive voice",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/passive-voice"
+        }
+      ]
+    },
+    {
+      "id": "grammar-easy-06",
+      "kind": "gap_fill",
+      "difficulty": "easy",
+      "order": 6,
+      "topic": "grammar-homework",
+      "section": "hw-passive",
+      "caseSensitive": false,
+      "title": {
+        "en": "Questions and negatives",
+        "ru": "Вопросы и отрицания"
+      },
+      "statement": {
+        "en": "Put each verb in brackets into the correct form - passive or, where the verb or the meaning needs it, active. When the subject is in the brackets too, write the whole question.",
+        "ru": "Поставьте каждый глагол из скобок в правильную форму - пассивную или, где этого требует глагол или смысл, активную. Если в скобках есть и подлежащее, напишите весь вопрос."
+      },
+      "sentence": "When {{1}} (the telephone / invent)?\nSmoking {{2}} (not / allow) in this building.\n{{3}} (you / invite) to the party last week?\nThese bags {{4}} (not / sell) in shops, only online.\nHow {{5}} (your name / spell)?",
+      "hint": {
+        "en": "Questions and negatives are built on `be`, exactly as in active sentences with `be`: `be` moves in front of the subject, `not` goes after it.",
+        "ru": "Вопросы и отрицания строятся на `be` - так же, как в активных предложениях с `be`: `be` встаёт перед подлежащим, `not` - после него."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "was the telephone invented"
+          ]
+        },
+        {
+          "index": 2,
+          "accepted": [
+            "is not allowed",
+            "isn't allowed"
+          ]
+        },
+        {
+          "index": 3,
+          "accepted": [
+            "were you invited"
+          ]
+        },
+        {
+          "index": 4,
+          "accepted": [
+            "are not sold",
+            "aren't sold"
+          ]
+        },
+        {
+          "index": 5,
+          "accepted": [
+            "is your name spelt",
+            "is your name spelled"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "1. `was the telephone invented` - past; `was` in front of the subject.\n2. `isn't allowed` - a rule, so present.\n3. `were you invited` - last week; `were` with `you`.\n4. `aren't sold` - present, plural.\n5. `is your name spelt` - `spelled` is fine too; British English has both.",
+        "ru": "1. `was the telephone invented` - прошлое; `was` перед подлежащим.\n2. `isn't allowed` - правило, значит настоящее.\n3. `were you invited` - на прошлой неделе; с `you` - `were`.\n4. `aren't sold` - настоящее, множественное.\n5. `is your name spelt` - `spelled` тоже верно; в британском есть оба варианта."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - passive: forms",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/passive-forms"
+        },
+        {
+          "title": "Cambridge Grammar - passive voice",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/passive-voice"
+        }
+      ]
+    },
+    {
+      "id": "grammar-medium-05",
+      "kind": "gap_fill",
+      "difficulty": "medium",
+      "order": 5,
+      "topic": "grammar-homework",
+      "section": "hw-passive",
+      "caseSensitive": false,
+      "title": {
+        "en": "Perfect and continuous passive",
+        "ru": "Пассив в perfect и continuous"
+      },
+      "statement": {
+        "en": "Put each verb in brackets into the correct form - passive or, where the verb or the meaning needs it, active. When the subject is in the brackets too, write the whole question.",
+        "ru": "Поставьте каждый глагол из скобок в правильную форму - пассивную или, где этого требует глагол или смысл, активную. Если в скобках есть и подлежащее, напишите весь вопрос."
+      },
+      "sentence": "My bike {{1}} (steal)! It was here an hour ago.\nThe road is closed because it {{2}} (repair).\nA new hospital {{3}} (build) in our town at the moment.\nDon't worry, the problem {{4}} (already / solve).\nWhen we got to the hotel, our room {{5}} (still / clean), so we waited in the bar.",
+      "hint": {
+        "en": "The continuous passive is `be being done`, the perfect passive is `have been done`. An adverb like `already` or `still` sits after the first auxiliary.",
+        "ru": "Пассив в continuous - `be being done`, в perfect - `have been done`. Наречие вроде `already` или `still` встаёт после первого вспомогательного."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "has been stolen",
+            "'s been stolen"
+          ]
+        },
+        {
+          "index": 2,
+          "accepted": [
+            "is being repaired"
+          ]
+        },
+        {
+          "index": 3,
+          "accepted": [
+            "is being built"
+          ]
+        },
+        {
+          "index": 4,
+          "accepted": [
+            "has already been solved",
+            "'s already been solved"
+          ]
+        },
+        {
+          "index": 5,
+          "accepted": [
+            "was still being cleaned"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "1. `has been stolen` - the result is now: the bike is gone.\n2. `is being repaired` - work in progress, so the road is closed.\n3. `is being built` - at the moment.\n4. `has already been solved` - a result, with `already` after `has`.\n5. `was still being cleaned` - in progress at that moment in the past.",
+        "ru": "1. `has been stolen` - результат сейчас: велосипеда нет.\n2. `is being repaired` - работы идут, поэтому дорога закрыта.\n3. `is being built` - в данный момент.\n4. `has already been solved` - результат, `already` после `has`.\n5. `was still being cleaned` - шло в тот момент в прошлом."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - passive: forms",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/passive-forms"
+        },
+        {
+          "title": "Cambridge Grammar - passive voice",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/passive-voice"
+        }
+      ]
+    },
+    {
+      "id": "grammar-medium-06",
+      "kind": "gap_fill",
+      "difficulty": "medium",
+      "order": 6,
+      "topic": "grammar-homework",
+      "section": "hw-passive",
+      "caseSensitive": false,
+      "title": {
+        "en": "Active or passive? A news report",
+        "ru": "Актив или пассив? Новостная заметка"
+      },
+      "statement": {
+        "en": "Put each verb in brackets into the correct form - passive or, where the verb or the meaning needs it, active. When the subject is in the brackets too, write the whole question.",
+        "ru": "Поставьте каждый глагол из скобок в правильную форму - пассивную или, где этого требует глагол или смысл, активную. Если в скобках есть и подлежащее, напишите весь вопрос."
+      },
+      "sentence": "The accident {{1}} (happen) at about 10 p.m.\nTwo people {{2}} (injure) and {{3}} (take) to hospital.\nThe driver of the car {{4}} (arrest) the next morning.\nThe police still do not know what {{5}} (cause) the accident.",
+      "hint": {
+        "en": "Two of the five gaps are active. Ask of each verb: does it have an object? And is the subject the one doing it?",
+        "ru": "Два пропуска из пяти - активные. Спросите про каждый глагол: есть ли у него дополнение? И подлежащее ли совершает действие?"
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "happened"
+          ]
+        },
+        {
+          "index": 2,
+          "accepted": [
+            "were injured"
+          ]
+        },
+        {
+          "index": 3,
+          "accepted": [
+            "were taken",
+            "taken"
+          ]
+        },
+        {
+          "index": 4,
+          "accepted": [
+            "was arrested"
+          ]
+        },
+        {
+          "index": 5,
+          "accepted": [
+            "caused"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "1. `happened` - `happen` has no passive.\n2. `were injured` - the people did not injure anyone.\n3. `were taken` - or just `taken`, since `were` can be shared with the first verb: `were injured and taken`.\n4. `was arrested` - the police arrested him.\n5. `caused` - `what` is the subject and it caused the accident: active.",
+        "ru": "1. `happened` - у `happen` нет пассива.\n2. `were injured` - эти люди никого не ранили.\n3. `were taken` - или просто `taken`: `were` можно не повторять, `were injured and taken`.\n4. `was arrested` - его арестовала полиция.\n5. `caused` - `what` здесь подлежащее, и это оно вызвало аварию: актив."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - passive: forms",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/passive-forms"
+        },
+        {
+          "title": "Cambridge Grammar - passive voice",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/passive-voice"
+        }
+      ]
+    },
+    {
+      "id": "grammar-hard-05",
+      "kind": "gap_fill",
+      "difficulty": "hard",
+      "order": 5,
+      "topic": "grammar-homework",
+      "section": "hw-passive",
+      "caseSensitive": false,
+      "title": {
+        "en": "After modals and to: be done",
+        "ru": "После модальных и to: be done"
+      },
+      "statement": {
+        "en": "Put each verb in brackets into the correct form - passive or, where the verb or the meaning needs it, active. When the subject is in the brackets too, write the whole question.",
+        "ru": "Поставьте каждый глагол из скобок в правильную форму - пассивную или, где этого требует глагол или смысл, активную. Если в скобках есть и подлежащее, напишите весь вопрос."
+      },
+      "sentence": "This medicine must {{1}} (keep) in a fridge.\nThe tickets can {{2}} (buy) online.\nThe report needs to {{3}} (finish) by Friday.\nYour password should {{4}} (change) every few months.\nI hope the problem will {{5}} (fix) soon.",
+      "hint": {
+        "en": "The modal or `to` is already in the text, so each gap is two words: `be` and the past participle.",
+        "ru": "Модальный глагол или `to` уже есть в тексте, поэтому в каждом пропуске два слова: `be` и третья форма."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "be kept"
+          ]
+        },
+        {
+          "index": 2,
+          "accepted": [
+            "be bought"
+          ]
+        },
+        {
+          "index": 3,
+          "accepted": [
+            "be finished"
+          ]
+        },
+        {
+          "index": 4,
+          "accepted": [
+            "be changed"
+          ]
+        },
+        {
+          "index": 5,
+          "accepted": [
+            "be fixed"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "1. `be kept` - `keep, kept, kept`.\n2. `be bought` - `buy, bought, bought`.\n3. `be finished` - after `to`, the same `be` + participle.\n4. `be changed`.\n5. `be fixed` - `will` works like any other modal.",
+        "ru": "1. `be kept` - `keep, kept, kept`.\n2. `be bought` - `buy, bought, bought`.\n3. `be finished` - после `to` то же самое: `be` + причастие.\n4. `be changed`.\n5. `be fixed` - `will` ведёт себя как любой модальный."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - passive: forms",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/passive-forms"
+        },
+        {
+          "title": "Cambridge Grammar - passive voice",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/passive-voice"
+        }
+      ]
+    },
+    {
+      "id": "grammar-hard-06",
+      "kind": "gap_fill",
+      "difficulty": "hard",
+      "order": 6,
+      "topic": "grammar-homework",
+      "section": "hw-passive",
+      "caseSensitive": false,
+      "title": {
+        "en": "being done or been done?",
+        "ru": "being done или been done?"
+      },
+      "statement": {
+        "en": "Put each verb in brackets into the correct form - passive or, where the verb or the meaning needs it, active. When the subject is in the brackets too, write the whole question.",
+        "ru": "Поставьте каждый глагол из скобок в правильную форму - пассивную или, где этого требует глагол или смысл, активную. Если в скобках есть и подлежащее, напишите весь вопрос."
+      },
+      "sentence": "I hate {{1}} (keep) waiting.\nShe didn't mind {{2}} (ask) for her passport.\nThe house has {{3}} (sell) - the new owners move in next week.\nHe's afraid of {{4}} (laugh) at.\nThis room hasn't {{5}} (use) for years.",
+      "hint": {
+        "en": "Look at the word just before the gap. `have` -> `been`. `hate`, `mind` or a preposition -> `being`.",
+        "ru": "Смотрите на слово прямо перед пропуском. `have` -> `been`. `hate`, `mind` или предлог -> `being`."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "being kept"
+          ]
+        },
+        {
+          "index": 2,
+          "accepted": [
+            "being asked"
+          ]
+        },
+        {
+          "index": 3,
+          "accepted": [
+            "been sold"
+          ]
+        },
+        {
+          "index": 4,
+          "accepted": [
+            "being laughed"
+          ]
+        },
+        {
+          "index": 5,
+          "accepted": [
+            "been used"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "1. `being kept` - `hate` takes `-ing`.\n2. `being asked` - `mind` takes `-ing`.\n3. `been sold` - after `has`, the perfect passive.\n4. `being laughed` - after the preposition `of`; `at` stays with `laugh`.\n5. `been used` - after `hasn't`.",
+        "ru": "1. `being kept` - после `hate` идёт `-ing`.\n2. `being asked` - после `mind` идёт `-ing`.\n3. `been sold` - после `has`, перфектный пассив.\n4. `being laughed` - после предлога `of`; `at` остаётся при `laugh`.\n5. `been used` - после `hasn't`."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - passive: forms",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/passive-forms"
+        },
+        {
+          "title": "Cambridge Grammar - passive voice",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/passive-voice"
+        }
+      ]
+    },
+    {
+      "id": "grammar-easy-07",
+      "kind": "gap_fill",
+      "difficulty": "easy",
+      "order": 7,
+      "topic": "grammar-homework",
+      "section": "hw-ed-ing-adjectives",
+      "caseSensitive": false,
+      "title": {
+        "en": "bore, interest, tire",
+        "ru": "bore, interest, tire"
+      },
+      "statement": {
+        "en": "Complete each sentence with the -ed or the -ing adjective made from the word in brackets.",
+        "ru": "Вставьте в каждый пропуск прилагательное на -ed или -ing, образованное от слова в скобках."
+      },
+      "sentence": "I'm {{1}} (bore). Let's go out.\nThis book is really {{2}} (interest) - I can't put it down.\nAfter the long walk we were all very {{3}} (tire).\nCleaning the whole house in one day is {{4}} (tire).\nAre you {{5}} (interest) in football?",
+      "hint": {
+        "en": "People who feel something -> `-ed`. A thing or an activity that causes the feeling -> `-ing`.",
+        "ru": "Человек, который что-то чувствует, -> `-ed`. Предмет или занятие, которое вызывает чувство, -> `-ing`."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "bored"
+          ]
+        },
+        {
+          "index": 2,
+          "accepted": [
+            "interesting"
+          ]
+        },
+        {
+          "index": 3,
+          "accepted": [
+            "tired"
+          ]
+        },
+        {
+          "index": 4,
+          "accepted": [
+            "tiring"
+          ]
+        },
+        {
+          "index": 5,
+          "accepted": [
+            "interested"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "1. `bored` - I feel it. `I'm boring` would be a sad thing to say about yourself.\n2. `interesting` - the book causes the feeling.\n3. `tired` - we feel it.\n4. `tiring` - the cleaning causes it.\n5. `interested` - you feel it, and `in` follows.",
+        "ru": "1. `bored` - это моё чувство. `I'm boring` - грустно так говорить о себе.\n2. `interesting` - чувство вызывает книга.\n3. `tired` - это наше чувство.\n4. `tiring` - его вызывает уборка.\n5. `interested` - чувство ваше, и после идёт `in`."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - adjectives: forms (-ing and -ed)",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/adjectives-forms"
+        }
+      ]
+    },
+    {
+      "id": "grammar-easy-08",
+      "kind": "gap_fill",
+      "difficulty": "easy",
+      "order": 8,
+      "topic": "grammar-homework",
+      "section": "hw-ed-ing-adjectives",
+      "caseSensitive": false,
+      "title": {
+        "en": "excite, surprise, annoy, relax, amaze",
+        "ru": "excite, surprise, annoy, relax, amaze"
+      },
+      "statement": {
+        "en": "Complete each sentence with the -ed or the -ing adjective made from the word in brackets.",
+        "ru": "Вставьте в каждый пропуск прилагательное на -ed или -ing, образованное от слова в скобках."
+      },
+      "sentence": "The children are {{1}} (excite) because it's their birthday tomorrow.\nIt's {{2}} (surprise) that nobody noticed the mistake.\nThe noise from the street is very {{3}} (annoy).\nA hot bath is so {{4}} (relax) after a long day.\nThe view from the top was {{5}} (amaze).",
+      "hint": {
+        "en": "Only one of the five describes how people feel. The rest describe a fact, a noise, a bath and a view.",
+        "ru": "Только один пропуск из пяти - о том, что чувствуют люди. Остальные описывают факт, шум, ванну и вид."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "excited"
+          ]
+        },
+        {
+          "index": 2,
+          "accepted": [
+            "surprising"
+          ]
+        },
+        {
+          "index": 3,
+          "accepted": [
+            "annoying"
+          ]
+        },
+        {
+          "index": 4,
+          "accepted": [
+            "relaxing"
+          ]
+        },
+        {
+          "index": 5,
+          "accepted": [
+            "amazing"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "1. `excited` - the children feel it.\n2. `surprising` - the fact causes surprise.\n3. `annoying` - the noise causes it.\n4. `relaxing` - the bath makes you relaxed.\n5. `amazing` - the view causes it; `-e` drops before `-ing`.",
+        "ru": "1. `excited` - это чувство детей.\n2. `surprising` - удивление вызывает факт.\n3. `annoying` - раздражает шум.\n4. `relaxing` - ванна расслабляет.\n5. `amazing` - восхищение вызывает вид; `-e` выпадает перед `-ing`."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - adjectives: forms (-ing and -ed)",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/adjectives-forms"
+        }
+      ]
+    },
+    {
+      "id": "grammar-medium-07",
+      "kind": "gap_fill",
+      "difficulty": "medium",
+      "order": 7,
+      "topic": "grammar-homework",
+      "section": "hw-ed-ing-adjectives",
+      "caseSensitive": false,
+      "title": {
+        "en": "Watch the spelling",
+        "ru": "Следите за написанием"
+      },
+      "statement": {
+        "en": "Complete each sentence with the -ed or the -ing adjective made from the word in brackets.",
+        "ru": "Вставьте в каждый пропуск прилагательное на -ed или -ing, образованное от слова в скобках."
+      },
+      "sentence": "I was so {{1}} (embarrass) when I forgot her name.\nThe instructions were really {{2}} (confuse), so I called the help desk.\nYour exam results are a bit {{3}} (disappoint). You can do better.\nDon't be {{4}} (frighten) - the dog is friendly.\nThe situation is {{5}} (worry), but we can still fix it.",
+      "hint": {
+        "en": "Decide the ending first, then check the spelling: double `r` and double `s` in `embarrass`, and `worry` keeps its `y` before `-ing`.",
+        "ru": "Сначала решите, какое окончание, потом проверьте написание: в `embarrass` двойные `r` и `s`, а `worry` сохраняет `y` перед `-ing`."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "embarrassed"
+          ]
+        },
+        {
+          "index": 2,
+          "accepted": [
+            "confusing"
+          ]
+        },
+        {
+          "index": 3,
+          "accepted": [
+            "disappointing"
+          ]
+        },
+        {
+          "index": 4,
+          "accepted": [
+            "frightened"
+          ]
+        },
+        {
+          "index": 5,
+          "accepted": [
+            "worrying"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "1. `embarrassed` - I felt it; two `r`, two `s`.\n2. `confusing` - the instructions cause confusion; `-e` drops.\n3. `disappointing` - the results cause the feeling.\n4. `frightened` - don't feel frightened.\n5. `worrying` - the situation causes worry; the `y` stays.",
+        "ru": "1. `embarrassed` - это моё чувство; две `r`, две `s`.\n2. `confusing` - запутывают инструкции; `-e` выпадает.\n3. `disappointing` - разочарование вызывают результаты.\n4. `frightened` - не бойтесь, то есть не чувствуйте страха.\n5. `worrying` - беспокойство вызывает ситуация; `y` остаётся."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - adjectives: forms (-ing and -ed)",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/adjectives-forms"
+        }
+      ]
+    },
+    {
+      "id": "grammar-medium-08",
+      "kind": "gap_fill",
+      "difficulty": "medium",
+      "order": 8,
+      "topic": "grammar-homework",
+      "section": "hw-ed-ing-adjectives",
+      "caseSensitive": false,
+      "title": {
+        "en": "A person can be both",
+        "ru": "Человек может быть и тем, и другим"
+      },
+      "statement": {
+        "en": "Complete each sentence with the -ed or the -ing adjective made from the word in brackets.",
+        "ru": "Вставьте в каждый пропуск прилагательное на -ed или -ing, образованное от слова в скобках."
+      },
+      "sentence": "Nobody listens to Dan - his stories are so {{1}} (bore).\nBut Dan himself is never {{2}} (bore): he always has something to do.\nLucy is a very {{3}} (interest) person - she has lived in five countries.\nShe is {{4}} (interest) in everyone she meets.\nWhen I explained the plan, he looked {{5}} (confuse), so I explained it again.",
+      "hint": {
+        "en": "Every gap describes a person or what they say. Ask: does this person feel it, or make others feel it?",
+        "ru": "Каждый пропуск - о человеке или о том, что он говорит. Спросите: этот человек сам чувствует или вызывает чувство у других?"
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "boring"
+          ]
+        },
+        {
+          "index": 2,
+          "accepted": [
+            "bored"
+          ]
+        },
+        {
+          "index": 3,
+          "accepted": [
+            "interesting"
+          ]
+        },
+        {
+          "index": 4,
+          "accepted": [
+            "interested"
+          ]
+        },
+        {
+          "index": 5,
+          "accepted": [
+            "confused"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "1. `boring` - the stories make others bored.\n2. `bored` - Dan does not feel bored.\n3. `interesting` - Lucy makes other people interested.\n4. `interested` - she feels interest in others; `in` follows.\n5. `confused` - he felt it, and his face showed it.",
+        "ru": "1. `boring` - от историй скучно другим.\n2. `bored` - самому Дэну скучно не бывает.\n3. `interesting` - Люси интересна другим.\n4. `interested` - она сама интересуется другими; после идёт `in`.\n5. `confused` - он был сбит с толку, и это было видно."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - adjectives: forms (-ing and -ed)",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/adjectives-forms"
+        }
+      ]
+    },
+    {
+      "id": "grammar-hard-07",
+      "kind": "gap_fill",
+      "difficulty": "hard",
+      "order": 7,
+      "topic": "grammar-homework",
+      "section": "hw-ed-ing-adjectives",
+      "caseSensitive": false,
+      "title": {
+        "en": "A dialogue: after the concert",
+        "ru": "Диалог: после концерта"
+      },
+      "statement": {
+        "en": "Complete each sentence with the -ed or the -ing adjective made from the word in brackets.",
+        "ru": "Вставьте в каждый пропуск прилагательное на -ed или -ing, образованное от слова в скобках."
+      },
+      "sentence": "A: How was the concert?\nB: Honestly, a bit {{1}} (disappoint). The band were {{2}} (exhaust) after their tour and didn't play much.\nA: Oh no. Were you {{3}} (annoy)?\nB: A little. But the support act was {{4}} (amaze), so I wasn't too {{5}} (depress).",
+      "hint": {
+        "en": "Follow who is being described in each line: the concert, the band, B, the support act, B again.",
+        "ru": "Следите, кого описывает каждая реплика: концерт, группу, B, разогрев, снова B."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "disappointing"
+          ]
+        },
+        {
+          "index": 2,
+          "accepted": [
+            "exhausted"
+          ]
+        },
+        {
+          "index": 3,
+          "accepted": [
+            "annoyed"
+          ]
+        },
+        {
+          "index": 4,
+          "accepted": [
+            "amazing"
+          ]
+        },
+        {
+          "index": 5,
+          "accepted": [
+            "depressed"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "1. `disappointing` - the concert caused the feeling.\n2. `exhausted` - the band felt it.\n3. `annoyed` - asks how B felt.\n4. `amazing` - the support act caused it.\n5. `depressed` - how B felt.",
+        "ru": "1. `disappointing` - разочарование вызвал концерт.\n2. `exhausted` - вымотана была группа.\n3. `annoyed` - вопрос о том, что чувствовал B.\n4. `amazing` - восхищение вызвал разогрев.\n5. `depressed` - что чувствовал B."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - adjectives: forms (-ing and -ed)",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/adjectives-forms"
+        }
+      ]
+    },
+    {
+      "id": "grammar-hard-08",
+      "kind": "gap_fill",
+      "difficulty": "hard",
+      "order": 8,
+      "topic": "grammar-homework",
+      "section": "hw-ed-ing-adjectives",
+      "caseSensitive": false,
+      "title": {
+        "en": "-ed with a preposition, and the Russian trap",
+        "ru": "-ed с предлогом и русская ловушка"
+      },
+      "statement": {
+        "en": "Complete each sentence with the -ed or the -ing adjective made from the word in brackets.",
+        "ru": "Вставьте в каждый пропуск прилагательное на -ed или -ing, образованное от слова в скобках."
+      },
+      "sentence": "I'm {{1}} (bore) with this game. Can we play something else?\nShe's very {{2}} (excite) about her new job.\nWe were {{3}} (shock) by the price of the tickets.\nIt was a {{4}} (terrify) experience - the plane suddenly dropped a hundred metres.\nI'm {{5}} (satisfy) with the result, although it wasn't perfect.",
+      "hint": {
+        "en": "A preposition right after the gap is a strong hint. And where Russian says `мне скучно`, English says `I'm bored`.",
+        "ru": "Предлог сразу после пропуска - сильная подсказка. А где по-русски «мне скучно», по-английски `I'm bored`."
+      },
+      "blanks": [
+        {
+          "index": 1,
+          "accepted": [
+            "bored"
+          ]
+        },
+        {
+          "index": 2,
+          "accepted": [
+            "excited"
+          ]
+        },
+        {
+          "index": 3,
+          "accepted": [
+            "shocked"
+          ]
+        },
+        {
+          "index": 4,
+          "accepted": [
+            "terrifying"
+          ]
+        },
+        {
+          "index": 5,
+          "accepted": [
+            "satisfied"
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "1. `bored` - `мне скучно`, and `with` follows.\n2. `excited` - with `about`.\n3. `shocked` - with `by`.\n4. `terrifying` - the experience caused the fear; `terrify` keeps its `y` before `-ing`.\n5. `satisfied` - with `with`; `-y` after a consonant becomes `-ied`.",
+        "ru": "1. `bored` - «мне скучно», и после идёт `with`.\n2. `excited` - с `about`.\n3. `shocked` - с `by`.\n4. `terrifying` - ужас вызвал случай; `terrify` сохраняет `y` перед `-ing`.\n5. `satisfied` - с `with`; `-y` после согласной превращается в `-ied`."
+      },
+      "sources": [
+        {
+          "title": "Cambridge Grammar - adjectives: forms (-ing and -ed)",
+          "url": "https://dictionary.cambridge.org/grammar/british-grammar/adjectives-forms"
+        }
+      ]
+    }
+  ]
+}

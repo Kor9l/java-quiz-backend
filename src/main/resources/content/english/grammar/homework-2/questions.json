@@ -1,0 +1,1008 @@
+{
+  "schemaVersion": 3,
+  "topic": "grammar-homework",
+  "questions": [
+    {
+      "id": "grammar-homework.pp-vs-ppc.001",
+      "section": "pp-vs-ppc",
+      "difficulty": "easy",
+      "level": "intermediate",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Have you been running",
+            "ru": "Have you been running"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Have you run",
+            "ru": "Have you run"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Are you running",
+            "ru": "Are you running"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Do you run",
+            "ru": "Do you run"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Have you been run",
+            "ru": "Have you been run"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Being out of breath is visible now, and it is explained by the activity that has just stopped - that is the Present Perfect Continuous. `Have you run?` would ask about a finished result; `Are you running?` does not fit someone standing in front of you.",
+        "ru": "Одышка видна сейчас, и объясняется она процессом, который только что закончился, - это Present Perfect Continuous. `Have you run?` спрашивал бы о готовом результате; `Are you running?` не подходит человеку, который стоит перед вами."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-simple-or-continuous",
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-continuous-i-have-been-working"
+      ],
+      "code": "You're out of breath. ___?"
+    },
+    {
+      "id": "grammar-homework.pp-vs-ppc.002",
+      "section": "pp-vs-ppc",
+      "difficulty": "easy",
+      "level": "intermediate",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "has written",
+            "ru": "has written"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "has been writing",
+            "ru": "has been writing"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "writes",
+            "ru": "writes"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "is writing",
+            "ru": "is writing"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "has been written",
+            "ru": "has been written"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`three books` counts the result, and counting the result is the Present Perfect Simple. The continuous talks about the activity and cannot be counted like this; `has been written` is passive and has no subject to write the books.",
+        "ru": "`three books` считает результат, а подсчёт результата - это Present Perfect Simple. Continuous говорит о процессе, и так его не посчитать; `has been written` - пассив, в нём некому писать книги."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-simple-or-continuous",
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-continuous-i-have-been-working"
+      ],
+      "code": "She ___ three books this year."
+    },
+    {
+      "id": "grammar-homework.pp-vs-ppc.003",
+      "section": "pp-vs-ppc",
+      "difficulty": "medium",
+      "level": "intermediate",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "have known",
+            "ru": "have known"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "have been knowing",
+            "ru": "have been knowing"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "know",
+            "ru": "know"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "am knowing",
+            "ru": "am knowing"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "knew",
+            "ru": "knew"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`know` is a state verb, so it does not take the continuous, even with `since`. The state started in the past and is still true, so it is the Present Perfect Simple; the Present Simple `I know Tom since...` is the typical mistake.",
+        "ru": "`know` - глагол состояния, continuous с ним не бывает даже со `since`. Состояние началось в прошлом и длится до сих пор, значит Present Perfect Simple; Present Simple `I know Tom since...` - типичная ошибка."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-simple-or-continuous",
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-continuous-i-have-been-working"
+      ],
+      "code": "I ___ Tom since we were at school."
+    },
+    {
+      "id": "grammar-homework.pp-vs-ppc.004",
+      "section": "pp-vs-ppc",
+      "difficulty": "medium",
+      "level": "intermediate",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "have you been waiting",
+            "ru": "have you been waiting"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "are you waiting",
+            "ru": "are you waiting"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "do you wait",
+            "ru": "do you wait"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "did you wait",
+            "ru": "did you wait"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "have you been wait",
+            "ru": "have you been wait"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The waiting started in the past and is still going on, and the question is `how long` - the Present Perfect Continuous. `did you wait` would treat it as finished, and the present tenses cannot measure time back from now.",
+        "ru": "Ожидание началось в прошлом и всё ещё идёт, а вопрос - `how long`: это Present Perfect Continuous. `did you wait` считал бы его законченным, а настоящие времена не умеют отмерять время от «сейчас» назад."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-simple-or-continuous",
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-continuous-i-have-been-working"
+      ],
+      "code": "You're still at the bus stop? How long ___?"
+    },
+    {
+      "id": "grammar-homework.pp-vs-ppc.005",
+      "section": "pp-vs-ppc",
+      "difficulty": "hard",
+      "level": "intermediate",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "'ve written",
+            "ru": "'ve written"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "'ve been writing",
+            "ru": "'ve been writing"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "'m writing",
+            "ru": "'m writing"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "write",
+            "ru": "write"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "'ve been written",
+            "ru": "'ve been written"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`so you can read it now` means the report is finished - the result is the point, so it is the Present Perfect Simple. `'ve been writing` would say I was busy with it and maybe have not finished, and then it could not be read yet.",
+        "ru": "`so you can read it now` значит, что отчёт готов - важен результат, поэтому Present Perfect Simple. `'ve been writing` сказал бы, что я был им занят и, возможно, не закончил, - и тогда читать было бы ещё нечего."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-simple-or-continuous",
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-continuous-i-have-been-working"
+      ],
+      "code": "I ___ the report, so you can read it now."
+    },
+    {
+      "id": "grammar-homework.pp-vs-ppc.006",
+      "section": "pp-vs-ppc",
+      "difficulty": "hard",
+      "level": "intermediate",
+      "text": {
+        "en": "Which sentence is correct?",
+        "ru": "Какое предложение правильное?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "We have been living in this flat since 2019.",
+            "ru": "We have been living in this flat since 2019."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "We live in this flat since 2019.",
+            "ru": "We live in this flat since 2019."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "We are living in this flat since 2019.",
+            "ru": "We are living in this flat since 2019."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "We have been lived in this flat since 2019.",
+            "ru": "We have been lived in this flat since 2019."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "We lived in this flat since 2019.",
+            "ru": "We lived in this flat since 2019."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A situation that started in 2019 and is still true needs a perfect form. The Present Simple and Present Continuous cannot go with `since`, the Past Simple would mean we no longer live there, and `have been lived` is not a form at all. `We have lived here since 2019` would also be right, which is why it is not among the options.",
+        "ru": "Ситуации, которая началась в 2019 году и длится сейчас, нужна перфектная форма. Present Simple и Present Continuous не сочетаются со `since`, Past Simple означал бы, что мы там больше не живём, а `have been lived` - вообще не форма. `We have lived here since 2019` тоже было бы верно, поэтому этого варианта среди ответов нет."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-simple-or-continuous",
+        "https://dictionary.cambridge.org/grammar/british-grammar/present-perfect-continuous-i-have-been-working"
+      ],
+      "code": null
+    },
+    {
+      "id": "grammar-homework.passive.001",
+      "section": "passive",
+      "difficulty": "easy",
+      "level": "intermediate",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "was built",
+            "ru": "was built"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "built",
+            "ru": "built"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "is built",
+            "ru": "is built"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "has built",
+            "ru": "has built"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "was build",
+            "ru": "was build"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The bridge did not build anything - it was built, so the passive. `in 1890` is a finished past time, so `be` goes into the Past Simple: `was built`. `was build` uses the base form where the past participle is needed.",
+        "ru": "Мост ничего не строил - его построили, значит пассив. `in 1890` - законченное прошлое, поэтому `be` в Past Simple: `was built`. В `was build` стоит начальная форма вместо третьей."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/passive-voice",
+        "https://dictionary.cambridge.org/grammar/british-grammar/passive-forms"
+      ],
+      "code": "This bridge ___ in 1890."
+    },
+    {
+      "id": "grammar-homework.passive.002",
+      "section": "passive",
+      "difficulty": "easy",
+      "level": "intermediate",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "is spoken",
+            "ru": "is spoken"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "speaks",
+            "ru": "speaks"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "is speaking",
+            "ru": "is speaking"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "spoken",
+            "ru": "spoken"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "is speak",
+            "ru": "is speak"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A language does not speak - people speak it, so the passive. It is a general fact, so the Present Simple of `be`: `is spoken`. Without `is` the participle has no verb to hang on.",
+        "ru": "Язык не говорит - на нём говорят, значит пассив. Это общий факт, поэтому `be` в Present Simple: `is spoken`. Без `is` причастию не на чем держаться."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/passive-voice",
+        "https://dictionary.cambridge.org/grammar/british-grammar/passive-forms"
+      ],
+      "code": "English ___ in many countries."
+    },
+    {
+      "id": "grammar-homework.passive.003",
+      "section": "passive",
+      "difficulty": "medium",
+      "level": "intermediate",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "happened",
+            "ru": "happened"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "was happened",
+            "ru": "was happened"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "has been happened",
+            "ru": "has been happened"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "was happen",
+            "ru": "was happen"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "is happened",
+            "ru": "is happened"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`happen` takes no object, so it has no passive at all - every option with `be` is wrong. `last night` is a finished time, so the Past Simple active: `happened`.",
+        "ru": "У `happen` нет дополнения, а значит, нет и пассива - все варианты с `be` неверны. `last night` - законченное время, поэтому активный Past Simple: `happened`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/passive-voice",
+        "https://dictionary.cambridge.org/grammar/british-grammar/passive-forms"
+      ],
+      "code": "The accident ___ last night."
+    },
+    {
+      "id": "grammar-homework.passive.004",
+      "section": "passive",
+      "difficulty": "medium",
+      "level": "intermediate",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "is being cleaned",
+            "ru": "is being cleaned"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "is cleaned",
+            "ru": "is cleaned"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "is been cleaned",
+            "ru": "is been cleaned"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "has cleaned",
+            "ru": "has cleaned"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "is cleaning",
+            "ru": "is cleaning"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`right now` asks for the continuous, and the room is cleaned by somebody, so the continuous passive: `is being cleaned`. `is cleaning` would mean the room itself is cleaning something; `is been` is not a form.",
+        "ru": "`right now` требует continuous, а комнату убирает кто-то, поэтому пассив в continuous: `is being cleaned`. `is cleaning` значило бы, что комната сама что-то убирает; `is been` - такой формы нет."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/passive-voice",
+        "https://dictionary.cambridge.org/grammar/british-grammar/passive-forms"
+      ],
+      "code": "Sorry, the room isn't ready. It ___ right now."
+    },
+    {
+      "id": "grammar-homework.passive.005",
+      "section": "passive",
+      "difficulty": "hard",
+      "level": "intermediate",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "being told",
+            "ru": "being told"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "been told",
+            "ru": "been told"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "be told",
+            "ru": "be told"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "to told",
+            "ru": "to told"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "telling",
+            "ru": "telling"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`like` here takes `-ing`, and I am the one who is told, so the `-ing` passive: `being told`. `been` follows `have`, `be` follows a modal or `to`, and `telling` would make me the one giving the orders.",
+        "ru": "После `like` здесь идёт `-ing`, а говорят мне, поэтому пассив с `-ing`: `being told`. `been` ставится после `have`, `be` - после модального или `to`, а `telling` означало бы, что распоряжаюсь я."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/passive-voice",
+        "https://dictionary.cambridge.org/grammar/british-grammar/passive-forms"
+      ],
+      "code": "I don't like ___ what to do."
+    },
+    {
+      "id": "grammar-homework.passive.006",
+      "section": "passive",
+      "difficulty": "hard",
+      "level": "intermediate",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "be finished",
+            "ru": "be finished"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "been finished",
+            "ru": "been finished"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "being finished",
+            "ru": "being finished"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "finished",
+            "ru": "finished"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "to be finished",
+            "ru": "to be finished"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "After a modal verb the passive infinitive is `be` + participle: `must be finished`. `must` is never followed by `to`, and `been` / `being` need `have` / `be` in front of them.",
+        "ru": "После модального глагола пассивный инфинитив - `be` + причастие: `must be finished`. После `must` не бывает `to`, а `been` / `being` требуют перед собой `have` / `be`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/passive-voice",
+        "https://dictionary.cambridge.org/grammar/british-grammar/passive-forms"
+      ],
+      "code": "The work must ___ by Friday."
+    },
+    {
+      "id": "grammar-homework.ed-ing-adjectives.001",
+      "section": "ed-ing-adjectives",
+      "difficulty": "easy",
+      "level": "intermediate",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "boring",
+            "ru": "boring"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "bored",
+            "ru": "bored"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "bore",
+            "ru": "bore"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "boredom",
+            "ru": "boredom"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "bores",
+            "ru": "bores"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The film causes the feeling, so the `-ing` adjective: `boring`. `bored` would mean the film itself felt bored; `boredom` is a noun.",
+        "ru": "Фильм вызывает чувство, поэтому прилагательное на `-ing`: `boring`. `bored` значило бы, что скучал сам фильм; `boredom` - существительное."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/adjectives-forms"
+      ],
+      "code": "The film was so long and slow. It was really ___."
+    },
+    {
+      "id": "grammar-homework.ed-ing-adjectives.002",
+      "section": "ed-ing-adjectives",
+      "difficulty": "easy",
+      "level": "intermediate",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "interested",
+            "ru": "interested"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "interesting",
+            "ru": "interesting"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "interest",
+            "ru": "interest"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "interests",
+            "ru": "interests"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "interestingly",
+            "ru": "interestingly"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The sentence says how I feel, and `in` follows the gap - both point to `interested`. `I'm interesting in history` would claim that I am fascinating, and the preposition would make no sense.",
+        "ru": "Предложение говорит, что я чувствую, и после пропуска стоит `in` - оба признака указывают на `interested`. `I'm interesting in history` утверждало бы, что я увлекательный, и предлог потерял бы смысл."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/adjectives-forms"
+      ],
+      "code": "I'm ___ in history, so I loved the museum."
+    },
+    {
+      "id": "grammar-homework.ed-ing-adjectives.003",
+      "section": "ed-ing-adjectives",
+      "difficulty": "medium",
+      "level": "intermediate",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "surprised",
+            "ru": "surprised"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "surprising",
+            "ru": "surprising"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "surprise",
+            "ru": "surprise"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "surprisingly",
+            "ru": "surprisingly"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "surprises",
+            "ru": "surprises"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "`We` are the people with the feeling, so `-ed`: `surprised`. `surprising` would describe the news, not us.",
+        "ru": "Чувство испытываем `we`, поэтому `-ed`: `surprised`. `surprising` описывало бы новость, а не нас."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/adjectives-forms"
+      ],
+      "code": "We were ___ to hear that the shop had closed."
+    },
+    {
+      "id": "grammar-homework.ed-ing-adjectives.004",
+      "section": "ed-ing-adjectives",
+      "difficulty": "medium",
+      "level": "intermediate",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "boring",
+            "ru": "boring"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "bored",
+            "ru": "bored"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "bore",
+            "ru": "bore"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "boredom",
+            "ru": "boredom"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "bores",
+            "ru": "bores"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Mark makes other people feel bored, so `boring`. `He's so bored` would mean Mark feels bored himself - but he is the one talking all evening.",
+        "ru": "Марк нагоняет скуку на других, поэтому `boring`. `He's so bored` означало бы, что скучно самому Марку, - но это он весь вечер говорит."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/adjectives-forms"
+      ],
+      "code": "Mark talks about his job all evening. He's so ___!"
+    },
+    {
+      "id": "grammar-homework.ed-ing-adjectives.005",
+      "section": "ed-ing-adjectives",
+      "difficulty": "hard",
+      "level": "intermediate",
+      "text": {
+        "en": "Which sentence is correct?",
+        "ru": "Какое предложение правильное?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "I'm really excited about the trip.",
+            "ru": "I'm really excited about the trip."
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "I'm really exciting about the trip.",
+            "ru": "I'm really exciting about the trip."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The trip is really excited.",
+            "ru": "The trip is really excited."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I'm really excite about the trip.",
+            "ru": "I'm really excite about the trip."
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "I really excited about the trip.",
+            "ru": "I really excited about the trip."
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "I have the feeling, so `excited`, with `be` in front and `about` after it. `exciting` would describe the trip, `The trip is excited` gives the trip a feeling, and the last two have no proper adjective or no `be`.",
+        "ru": "Чувство испытываю я, поэтому `excited`, с `be` перед ним и `about` после. `exciting` описывало бы поездку, `The trip is excited` приписывает чувство поездке, а в двух последних нет нормального прилагательного или `be`."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/adjectives-forms"
+      ],
+      "code": null
+    },
+    {
+      "id": "grammar-homework.ed-ing-adjectives.006",
+      "section": "ed-ing-adjectives",
+      "difficulty": "hard",
+      "level": "intermediate",
+      "text": {
+        "en": "Choose the option that completes the sentence correctly.",
+        "ru": "Выберите вариант, который правильно завершает предложение."
+      },
+      "options": [
+        {
+          "text": {
+            "en": "shocking ... shocked",
+            "ru": "shocking ... shocked"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "shocked ... shocking",
+            "ru": "shocked ... shocking"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "shocking ... shocking",
+            "ru": "shocking ... shocking"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "shocked ... shocked",
+            "ru": "shocked ... shocked"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "shock ... shocked",
+            "ru": "shock ... shocked"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The news causes the feeling -> `shocking`; the people have it -> `shocked`. Both halves of one sentence, one from each end.",
+        "ru": "Новость вызывает чувство -> `shocking`; люди его испытывают -> `shocked`. Две половины одного предложения - по одной с каждого конца."
+      },
+      "sources": [
+        "https://dictionary.cambridge.org/grammar/british-grammar/adjectives-forms"
+      ],
+      "code": "The news was ___, and everyone looked ___."
+    }
+  ]
+}

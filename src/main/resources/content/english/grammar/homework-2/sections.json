@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 3,
+  "topic": "grammar-homework",
+  "sections": [
+    {
+      "id": "pp-vs-ppc",
+      "order": 3,
+      "level": "intermediate",
+      "area": "tenses",
+      "title": {
+        "en": "Present Perfect or Present Perfect Continuous",
+        "ru": "Present Perfect или Present Perfect Continuous"
+      }
+    },
+    {
+      "id": "hw-pp-vs-ppc",
+      "order": 4,
+      "level": "intermediate",
+      "area": "tenses",
+      "title": {
+        "en": "Homework: Present Perfect or Continuous - fill the gaps",
+        "ru": "Домашка: Present Perfect или Continuous - заполнить пропуски"
+      }
+    },
+    {
+      "id": "passive",
+      "order": 5,
+      "level": "intermediate",
+      "area": "verbs",
+      "title": {
+        "en": "The passive: is done, was done, has been done, being done",
+        "ru": "Пассив: is done, was done, has been done, being done"
+      }
+    },
+    {
+      "id": "hw-passive",
+      "order": 6,
+      "level": "intermediate",
+      "area": "verbs",
+      "title": {
+        "en": "Homework: the passive - fill the gaps",
+        "ru": "Домашка: пассив - заполнить пропуски"
+      }
+    },
+    {
+      "id": "ed-ing-adjectives",
+      "order": 7,
+      "level": "intermediate",
+      "area": "adjectives",
+      "title": {
+        "en": "Adjectives in -ed and -ing: bored or boring",
+        "ru": "Прилагательные на -ed и -ing: bored или boring"
+      }
+    },
+    {
+      "id": "hw-ed-ing-adjectives",
+      "order": 8,
+      "level": "intermediate",
+      "area": "adjectives",
+      "title": {
+        "en": "Homework: -ed or -ing - fill the gaps",
+        "ru": "Домашка: -ed или -ing - заполнить пропуски"
+      }
+    }
+  ]
+}
