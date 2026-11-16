@@ -35,6 +35,8 @@ class EnglishWordsContentTest {
     private static final String PART_TWO_MERGE = "/content/english/words-2026-part-2-merge.json";
     private static final String UNIT_1D = "/content/english/words-unit-1d.json";
     private static final String UNIT_2A = "/content/english/words-unit-2a.json";
+    private static final String UNIT_2B = "/content/english/words-unit-2b.json";
+    private static final String UNIT_2C = "/content/english/words-unit-2c.json";
 
     private static JsonNode corpus;
     private static JsonNode partTwo;
@@ -43,6 +45,8 @@ class EnglishWordsContentTest {
     private static JsonNode partTwoMerge;
     private static JsonNode unitOneD;
     private static JsonNode unitTwoA;
+    private static JsonNode unitTwoB;
+    private static JsonNode unitTwoC;
 
     @BeforeAll
     static void load() throws Exception {
@@ -53,6 +57,8 @@ class EnglishWordsContentTest {
         partTwoMerge = read(PART_TWO_MERGE);
         unitOneD = read(UNIT_1D);
         unitTwoA = read(UNIT_2A);
+        unitTwoB = read(UNIT_2B);
+        unitTwoC = read(UNIT_2C);
     }
 
     private static JsonNode read(String resource) throws Exception {
@@ -70,6 +76,8 @@ class EnglishWordsContentTest {
         personality.get("groups").forEach(groups::add);
         unitOneD.get("groups").forEach(groups::add);
         unitTwoA.get("groups").forEach(groups::add);
+        unitTwoB.get("groups").forEach(groups::add);
+        unitTwoC.get("groups").forEach(groups::add);
         return groups;
     }
 
@@ -245,5 +253,25 @@ class EnglishWordsContentTest {
         assertThat(group.path("code").asText()).isEqualTo("seed-wordlist-unit-2a");
         assertThat(group.path("title").asText()).isEqualTo("Wordlist_Unit 2A");
         assertThat(group.get("words")).hasSize(55);
+    }
+
+    /** The Wordlist Unit 2B handout V40 loads: one group of its own, "If you ask me" once. */
+    @Test
+    void carriesTheUnitTwoBHandout() {
+        assertThat(unitTwoB.get("groups")).hasSize(1);
+        JsonNode group = unitTwoB.get("groups").get(0);
+        assertThat(group.path("code").asText()).isEqualTo("seed-wordlist-unit-2b");
+        assertThat(group.path("title").asText()).isEqualTo("Wordlist_Unit 2B");
+        assertThat(group.get("words")).hasSize(49);
+    }
+
+    /** The Wordlist Unit 2C handout V41 loads: one group of its own, named after the file. */
+    @Test
+    void carriesTheUnitTwoCHandout() {
+        assertThat(unitTwoC.get("groups")).hasSize(1);
+        JsonNode group = unitTwoC.get("groups").get(0);
+        assertThat(group.path("code").asText()).isEqualTo("seed-wordlist-unit-2c");
+        assertThat(group.path("title").asText()).isEqualTo("Wordlist_Unit 2C");
+        assertThat(group.get("words")).hasSize(79);
     }
 }
