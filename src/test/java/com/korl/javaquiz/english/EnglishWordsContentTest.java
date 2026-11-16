@@ -38,6 +38,7 @@ class EnglishWordsContentTest {
     private static final String ONLINE_MEETINGS = "/content/english/words-online-meetings.json";
     private static final String UNIT_2B = "/content/english/words-unit-2b.json";
     private static final String UNIT_2B_EXTRA = "/content/english/words-unit-2b-extra.json";
+    private static final String UNIT_2C = "/content/english/words-unit-2c.json";
 
     private static JsonNode corpus;
     private static JsonNode partTwo;
@@ -49,6 +50,7 @@ class EnglishWordsContentTest {
     private static JsonNode onlineMeetings;
     private static JsonNode unitTwoB;
     private static JsonNode unitTwoBExtra;
+    private static JsonNode unitTwoC;
 
     @BeforeAll
     static void load() throws Exception {
@@ -62,6 +64,7 @@ class EnglishWordsContentTest {
         onlineMeetings = read(ONLINE_MEETINGS);
         unitTwoB = read(UNIT_2B);
         unitTwoBExtra = read(UNIT_2B_EXTRA);
+        unitTwoC = read(UNIT_2C);
     }
 
     private static JsonNode read(String resource) throws Exception {
@@ -81,6 +84,7 @@ class EnglishWordsContentTest {
         unitTwoA.get("groups").forEach(groups::add);
         onlineMeetings.get("groups").forEach(groups::add);
         unitTwoB.get("groups").forEach(groups::add);
+        unitTwoC.get("groups").forEach(groups::add);
         return groups;
     }
 
@@ -287,5 +291,15 @@ class EnglishWordsContentTest {
         assertThat(unitTwoBExtra.path("groupCode").asText()).isEqualTo("seed-wordlist-unit-2b-251026");
         assertThat(unitTwoBExtra.get("words")).hasSize(47);
         assertThat(wordsByGroup().get("seed-wordlist-unit-2b-251026")).hasSize(82);
+    }
+
+    /** The Wordlist Unit 2C handout V42 loads: one group of its own, named after the file. */
+    @Test
+    void carriesTheUnitTwoCHandout() {
+        assertThat(unitTwoC.get("groups")).hasSize(1);
+        JsonNode group = unitTwoC.get("groups").get(0);
+        assertThat(group.path("code").asText()).isEqualTo("seed-wordlist-unit-2c");
+        assertThat(group.path("title").asText()).isEqualTo("Wordlist_Unit 2C");
+        assertThat(group.get("words")).hasSize(79);
     }
 }

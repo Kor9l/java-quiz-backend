@@ -1,0 +1,342 @@
+{
+  "groups": [
+    {
+      "code": "seed-wordlist-unit-2c",
+      "order": 15,
+      "title": "Wordlist_Unit 2C",
+      "words": [
+        {
+          "text": "to have a runny nose",
+          "translation": "иметь насморк"
+        },
+        {
+          "text": "to get a call from an unknown number",
+          "translation": "получить звонок с незнакомого номера"
+        },
+        {
+          "text": "to be (left) on hold",
+          "translation": "висеть на линии (в режиме ожидания)"
+        },
+        {
+          "text": "to miss a parcel delivery",
+          "translation": "пропустить доставку посылки"
+        },
+        {
+          "text": "to queue properly",
+          "translation": "стоять в очереди по правилам"
+        },
+        {
+          "text": "door-to-door salespeople",
+          "translation": "коммивояжёры"
+        },
+        {
+          "text": "to have poor phone reception",
+          "translation": "иметь плохую телефонную связь"
+        },
+        {
+          "text": "not to be able to find the end of the sticky tape",
+          "translation": "не мочь найти край скотча"
+        },
+        {
+          "text": "to overcharge smn",
+          "translation": "обсчитать кого-то / завысить цену"
+        },
+        {
+          "text": "to speak to a service engineer",
+          "translation": "поговорить с сервисным инженером (мастером по обслуживанию)"
+        },
+        {
+          "text": "to knock on the door",
+          "translation": "постучать в дверь"
+        },
+        {
+          "text": "Wouldn’t take no for an answer.",
+          "translation": "Не принимаю отказ. / «Нет» и слышать не хочу."
+        },
+        {
+          "text": "This is ridiculous! I’ve been on hold for 10 minutes. I’ve got better things to do!",
+          "translation": "Это смешно (издевательство)! Я вишу на линии уже 10 минут. У меня есть дела поважнее!"
+        },
+        {
+          "text": "Can I have a go?",
+          "translation": "Можно мне попробовать?"
+        },
+        {
+          "text": "It’s a part of our drive to cut down on the use of plastic.",
+          "translation": "Это часть инициативы (нашей кампании) по сокращению использования пластика."
+        },
+        {
+          "text": "a faulty product",
+          "translation": "дефектный товар"
+        },
+        {
+          "text": "broken promises",
+          "translation": "невыполненные обещания"
+        },
+        {
+          "text": "poor customer service",
+          "translation": "плохое обслуживание клиентов"
+        },
+        {
+          "text": "a billing dispute",
+          "translation": "спор по поводу выставленного счёта"
+        },
+        {
+          "text": "a cold caller",
+          "translation": "телефонный продавец/агент (cold calling – contacting potential customers by phone without having spoken to them or received their permission beforehand, usually to sell something)"
+        },
+        {
+          "text": "to face sth / to be faced with sth",
+          "translation": "столкнуться с чем-либо",
+          "example": "She had to face the consequences of her decision. We were faced with a difficult choice when the company announced job cuts."
+        },
+        {
+          "text": "a step-by-step guide",
+          "translation": "пошаговое руководство"
+        },
+        {
+          "text": "to put forward (a more positive view)",
+          "translation": "выдвинуть (более позитивную точку зрения)"
+        },
+        {
+          "text": "to care about (the project)",
+          "translation": "неравнодушно относиться к проекту"
+        },
+        {
+          "text": "a purse / a wallet",
+          "translation": "женская сумка (амер.) / дамский кошелёк (брит.) / бумажник"
+        },
+        {
+          "text": "stone cold (coffee)",
+          "translation": "совершенно остывший (кофе)"
+        },
+        {
+          "text": "to tell the truth / to tell a lie",
+          "translation": "сказать правду / солгать"
+        },
+        {
+          "text": "stressed / stressful",
+          "translation": "в состоянии стресса / вызывающий стресс"
+        },
+        {
+          "text": "infuriating",
+          "translation": "приводящий в ярость / бесящий"
+        },
+        {
+          "text": "insulting",
+          "translation": "оскорбительный"
+        },
+        {
+          "text": "a rip-off",
+          "translation": "обдираловка"
+        },
+        {
+          "text": "a fairly convincing argument",
+          "translation": "довольно убедительный аргумент"
+        },
+        {
+          "text": "to ask for time off from your work",
+          "translation": "отпроситься с работы / попросить отгул"
+        },
+        {
+          "text": "to understand your worth",
+          "translation": "знать себе цену"
+        },
+        {
+          "text": "to resign",
+          "translation": "уволиться"
+        },
+        {
+          "text": "to borrow some money (from smn)",
+          "translation": "одолжить немного денег (у кого-то)"
+        },
+        {
+          "text": "a pay rise (Br.) / a raise (Am.)",
+          "translation": "прибавка к зарплате"
+        },
+        {
+          "text": "to request a pay rise",
+          "translation": "запросить прибавку к зарплате"
+        },
+        {
+          "text": "First and foremost, …",
+          "translation": "Прежде всего, …"
+        },
+        {
+          "text": "first thing Monday morning",
+          "translation": "первым делом в понедельник утром"
+        },
+        {
+          "text": "last thing on a Friday",
+          "translation": "под самый конец рабочего дня в пятницу"
+        },
+        {
+          "text": "Everyone has their mind on other things at those times.",
+          "translation": "В такое время у всех мысли совсем о другом."
+        },
+        {
+          "text": "to take the time (to make a list of your achievements)",
+          "translation": "уделить время (тому, чтобы составить список своих достижений)"
+        },
+        {
+          "text": "to resist the temptation",
+          "translation": "устоять перед искушением"
+        },
+        {
+          "text": "to mix your personal life and your professional life",
+          "translation": "смешивать личную жизнь с профессиональной"
+        },
+        {
+          "text": "to arrange a face-to-face meeting",
+          "translation": "организовать очную встречу"
+        },
+        {
+          "text": "out of the blue (idiom)",
+          "translation": "как гром среди ясного неба"
+        },
+        {
+          "text": "Equally, …",
+          "translation": "Точно так же, … / В равной степени, …"
+        },
+        {
+          "text": "Alternatively, …",
+          "translation": "Как вариант, …"
+        },
+        {
+          "text": "to announce job cuts",
+          "translation": "объявить о сокращении рабочих мест (штата)"
+        },
+        {
+          "text": "On that topic, (if your boss says no, it’s important…)",
+          "translation": "Кстати об этом / Возвращаясь к этой теме (если начальник откажет, важно…)"
+        },
+        {
+          "text": "a travel allowance",
+          "translation": "командировочные выплаты"
+        },
+        {
+          "text": "to be committed to the company",
+          "translation": "быть преданным компании"
+        },
+        {
+          "text": "in the future / in future",
+          "translation": "в будущем / впредь, отныне",
+          "example": "I'd like to work abroad in the future. Please make sure you arrive on time in future."
+        },
+        {
+          "text": "to give one other piece of advice",
+          "translation": "дать ещё один совет"
+        },
+        {
+          "text": "This is a big no-no.",
+          "translation": "Это категорически запрещено."
+        },
+        {
+          "text": "(He was made redundant soon after his request), which just goes to show!",
+          "translation": "(Его сократили вскоре после его просьбы), что лишний раз это подтверждает!"
+        },
+        {
+          "text": "to access all the information in a handy document",
+          "translation": "получить доступ ко всей информации в удобном файле (документе)"
+        },
+        {
+          "text": "to like the human touch",
+          "translation": "ценить живой контакт (душевный подход)"
+        },
+        {
+          "text": "to go on a business trip",
+          "translation": "поехать в командировку"
+        },
+        {
+          "text": "to pack light",
+          "translation": "путешествовать налегке"
+        },
+        {
+          "text": "to find the only other person (in a lift)",
+          "translation": "оказаться наедине с другим человеком (в лифте)"
+        },
+        {
+          "text": "to be on the phone",
+          "translation": "говорить по телефону"
+        },
+        {
+          "text": "Office politics is a fraught [frɔːt] game.",
+          "translation": "Офисные интриги (политика) – игра опасная (полная подводных камней). fraught – удручающий (=worrying or difficult)"
+        },
+        {
+          "text": "to ignore something altogether",
+          "translation": "полностью (наотрез) что-то игнорировать"
+        },
+        {
+          "text": "(the best) course of action",
+          "translation": "(наилучший) план действий"
+        },
+        {
+          "text": "to lodge a formal complaint",
+          "translation": "подать официальную жалобу (=to make an official complaint about a problem; to lodge – подавать заявление)",
+          "example": "I eventually lodged a formal complaint after several unsuccessful attempts to contact customer service."
+        },
+        {
+          "text": "to be entitled to a refund ['riːfʌnd]",
+          "translation": "иметь право на возврат денег",
+          "example": "If the product is faulty, you may be entitled to a full refund."
+        },
+        {
+          "text": "to get your money's worth",
+          "translation": "оправдать потраченные деньги (=to receive good value for the money you have spent)",
+          "example": "The service was so poor that I certainly didn't get my money's worth."
+        },
+        {
+          "text": "to take something up with someone",
+          "translation": "обратиться к кому-либо по какому-либо вопросу; поднять вопрос перед кем-либо (=to discuss a problem with someone who can help resolve it)",
+          "example": "If the issue isn't resolved, I'll take it up with the manager."
+        },
+        {
+          "text": "to test the waters",
+          "translation": "прощупать почву (=to try something or find out people's reactions before making a decision)",
+          "example": "I decided to test the waters by asking my boss how he felt about flexible working hours before formally requesting a change."
+        },
+        {
+          "text": "to have second thoughts about sth",
+          "translation": "усомниться в чём-либо (=to start having doubts about a decision)",
+          "example": "I had second thoughts about buying the extended warranty after reading the small print."
+        },
+        {
+          "text": "to bring sth to someone's attention",
+          "translation": "обратить чьё-либо внимание на что-либо",
+          "example": "I'd like to bring a problem with my latest bill to your attention."
+        },
+        {
+          "text": "to be under no obligation to do sth",
+          "translation": "не быть обязанным что-либо делать",
+          "example": "You're under no obligation to accept their offer straight away."
+        },
+        {
+          "text": "to take a toll on sb",
+          "translation": "негативно сказываться на ком-либо (=to have a serious negative effect on someone's health, energy or well-being)",
+          "example": "Constant interruptions and unrealistic deadlines can take a toll on your mental health."
+        },
+        {
+          "text": "to come to terms with sth",
+          "translation": "смириться с чем-либо (=to gradually accept a difficult or unpleasant situation)",
+          "example": "It took me a while to come to terms with the fact that I wasn't getting a pay rise."
+        },
+        {
+          "text": "to go to the trouble of doing sth",
+          "translation": "потрудиться сделать что-либо; приложить усилия (=to make a special effort to do something, often when it is inconvenient)",
+          "example": "She went to the trouble of preparing a detailed report, but nobody bothered to read it."
+        },
+        {
+          "text": "to be given little consideration",
+          "translation": "не получать должного внимания",
+          "example": "Employees' personal circumstances are sometimes given little consideration when redundancies are announced."
+        },
+        {
+          "text": "to get caught up in sth",
+          "translation": "увлечься чем-либо; оказаться втянутым во что-либо (=to become involved in something, often without intending to)",
+          "example": "It's easy to get caught up in office politics and lose sight of what really matters."
+        }
+      ]
+    }
+  ]
+}
