@@ -149,4 +149,87 @@ class GrammarPracticeEngineTest {
         assertThat(outcome.result()).isNull();
         assertThat(outcome.expected()).isNull();
     }
+
+    // ---- GAP_FILL ------------------------------------------------------------------------
+
+    private static GrammarTaskSpec gaps() {
+        return new GrammarTaskSpec(
+                "grammar-gap-01",
+                GrammarExerciseKind.GAP_FILL,
+                "I {{1}} (wait) for you for an hour.\nShe {{2}} (finish) the report.",
+                List.of(
+                        new GrammarTaskSpec.Blank(1, List.of("have been waiting", "'ve been waiting")),
+                        new GrammarTaskSpec.Blank(2, List.of("has finished", "'s finished"))),
+                false);
+    }
+
+    @Test
+    void gapFillPassesWhenEveryGapIsRight() {
+        SubmissionOutcome outcome = engine.grade(gaps(), "have been waiting\nhas finished");
+
+        assertThat(outcome.passed()).isTrue();
+        assertThat(outcome.blanks()).containsExactly(new BlankOutcome(1, true), new BlankOutcome(2, true));
+    }
+
+    @Test
+    void gapFillTakesAnyAcceptedFormAndIgnoresCaseAndSpacing() {
+        SubmissionOutcome outcome = engine.grade(gaps(), "  ’ve  been waiting \r\nHas finished.");
+
+        assertThat(outcome.passed()).isTrue();
+    }
+
+    /** One wrong form out of two says which one, rather than "wrong". */
+    @Test
+    void gapFillReportsEachGapOnItsOwn() {
+        SubmissionOutcome outcome = engine.grade(gaps(), "have waited\nhas finished");
+
+        assertThat(outcome.status()).isEqualTo(SubmissionStatus.WRONG_RESULT);
+        assertThat(outcome.messageKey()).isEqualTo("practice.diff.gapFill");
+        assertThat(outcome.blanks()).containsExactly(new BlankOutcome(1, false), new BlankOutcome(2, true));
+    }
+
+    /** An empty first gap holds its place, so the second answer is still judged as the second. */
+    @Test
+    void gapFillKeepsAnEmptyGapInItsPlace() {
+        SubmissionOutcome outcome = engine.grade(gaps(), "\nhas finished");
+
+        assertThat(outcome.blanks()).containsExactly(new BlankOutcome(1, false), new BlankOutcome(2, true));
+    }
+
+    @Test
+    void gapFillCountsAMissingLineAsAWrongGap() {
+        SubmissionOutcome outcome = engine.grade(gaps(), "have been waiting");
+
+        assertThat(outcome.blanks()).containsExactly(new BlankOutcome(1, true), new BlankOutcome(2, false));
+    }
+
+    @Test
+    void gapFillRefusesMoreLinesThanGaps() {
+        SubmissionOutcome outcome = engine.grade(gaps(), "have been waiting\nhas finished\nextra");
+
+        assertThat(outcome.status()).isEqualTo(SubmissionStatus.SYNTAX_ERROR);
+        assertThat(outcome.messageKey()).isEqualTo("practice.error.tooManyGaps");
+    }
+
+    /** The check says whether every gap is filled, and nothing about whether it is right. */
+    @Test
+    void gapFillCheckPassesWrongButCompleteAnswers() {
+        assertThat(engine.check(gaps(), "waited\nfinished").passed()).isTrue();
+
+        SubmissionOutcome partial = engine.check(gaps(), "waited\n ");
+        assertThat(partial.passed()).isFalse();
+        assertThat(partial.messageKey()).isEqualTo("practice.error.gapsUnfilled");
+    }
+
+    @Test
+    void gapFillRefusesToGradeATextWhoseGapsDoNotMatchItsAnswers() {
+        GrammarTaskSpec spec = new GrammarTaskSpec(
+                "grammar-gap-99", GrammarExerciseKind.GAP_FILL, "I {{1}} and {{3}}.",
+                List.of(new GrammarTaskSpec.Blank(1, List.of("a")), new GrammarTaskSpec.Blank(3, List.of("b"))),
+                false);
+
+        assertThatThrownBy(() -> engine.grade(spec, "a\nb"))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("grammar-gap-99");
+    }
 }

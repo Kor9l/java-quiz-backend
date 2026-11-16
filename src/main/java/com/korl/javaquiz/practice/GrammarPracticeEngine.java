@@ -2,7 +2,10 @@ package com.korl.javaquiz.practice;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * Grades grammar submissions: guard, then a check that the answer is built from the material the
@@ -40,6 +43,18 @@ public class GrammarPracticeEngine {
     public SubmissionOutcome check(GrammarTaskSpec task, String answer) {
         long started = System.nanoTime();
         guard(answer);
+        if (task.kind() == GrammarExerciseKind.GAP_FILL) {
+            List<GrammarTaskSpec.Blank> blanks = requireGaps(task);
+            List<String> lines = GrammarAnswerMatcher.lines(answer);
+            if (lines.size() > blanks.size()) {
+                return outcome(SubmissionStatus.SYNTAX_ERROR, "practice.error.tooManyGaps", List.of(), started);
+            }
+            boolean allFilled = lines.size() == blanks.size()
+                    && lines.stream().noneMatch(String::isBlank);
+            return allFilled
+                    ? outcome(SubmissionStatus.PASSED, null, List.of(), started)
+                    : outcome(SubmissionStatus.SYNTAX_ERROR, "practice.error.gapsUnfilled", List.of(), started);
+        }
         List<String> chunks = requireChunks(task);
         if (!GrammarAnswerMatcher.usesGivenWords(chunks, answer, task.caseSensitive())) {
             return outcome(SubmissionStatus.SYNTAX_ERROR, "practice.error.notTheseWords", List.of(), started);
@@ -51,6 +66,9 @@ public class GrammarPracticeEngine {
     public SubmissionOutcome grade(GrammarTaskSpec task, String answer) {
         long started = System.nanoTime();
         guard(answer);
+        if (task.kind() == GrammarExerciseKind.GAP_FILL) {
+            return gradeGaps(task, answer, started);
+        }
         List<String> chunks = requireChunks(task);
         GrammarTaskSpec.Blank blank = requireSingleBlank(task);
         // Told apart from a wrong order on purpose: a learner who used five of the six chunks
@@ -68,6 +86,35 @@ public class GrammarPracticeEngine {
                 correct ? SubmissionStatus.PASSED : SubmissionStatus.WRONG_RESULT,
                 correct ? null : "practice.diff.wordOrder",
                 List.of(new BlankOutcome(blank.index(), correct)),
+                started);
+    }
+
+    /**
+     * Grades every gap on its own, so a text with one wrong form out of eight says which one.
+     * A gap left empty — or missing because the answer has fewer lines than the text has gaps —
+     * is simply a wrong gap: the learner is told where they stand rather than refused outright.
+     * More lines than gaps is refused, because then there is no telling which line was meant
+     * for which gap.
+     */
+    private SubmissionOutcome gradeGaps(GrammarTaskSpec task, String answer, long started) {
+        List<GrammarTaskSpec.Blank> blanks = requireGaps(task);
+        List<String> lines = GrammarAnswerMatcher.lines(answer);
+        if (lines.size() > blanks.size()) {
+            return outcome(SubmissionStatus.SYNTAX_ERROR, "practice.error.tooManyGaps", List.of(), started);
+        }
+        List<BlankOutcome> outcomes = new ArrayList<>();
+        boolean allCorrect = true;
+        for (int i = 0; i < blanks.size(); i++) {
+            GrammarTaskSpec.Blank blank = blanks.get(i);
+            String line = i < lines.size() ? lines.get(i) : "";
+            boolean correct = GrammarAnswerMatcher.matches(blank.accepted(), line, task.caseSensitive());
+            outcomes.add(new BlankOutcome(blank.index(), correct));
+            allCorrect &= correct;
+        }
+        return outcome(
+                allCorrect ? SubmissionStatus.PASSED : SubmissionStatus.WRONG_RESULT,
+                allCorrect ? null : "practice.diff.gapFill",
+                List.copyOf(outcomes),
                 started);
     }
 
@@ -96,6 +143,29 @@ public class GrammarPracticeEngine {
             throw new IllegalStateException("Exercise " + task.id() + " hands out nothing to order");
         }
         return chunks;
+    }
+
+    /**
+     * The blanks of a {@code GAP_FILL} exercise, in gap order, after checking they line up with
+     * the text: gaps numbered 1..n in reading order, each with at least one accepted answer.
+     * Broken content otherwise, and the content test is what keeps it from getting this far.
+     */
+    private static List<GrammarTaskSpec.Blank> requireGaps(GrammarTaskSpec task) {
+        List<Integer> gaps = task.gaps();
+        if (gaps.isEmpty()) {
+            throw new IllegalStateException("Exercise " + task.id() + " marks no gaps to fill");
+        }
+        List<GrammarTaskSpec.Blank> blanks = task.blanks().stream()
+                .sorted(Comparator.comparingInt(GrammarTaskSpec.Blank::index))
+                .toList();
+        List<Integer> indices = blanks.stream().map(GrammarTaskSpec.Blank::index).toList();
+        List<Integer> expected = IntStream.rangeClosed(1, gaps.size()).boxed().toList();
+        if (!gaps.equals(expected) || !indices.equals(expected)
+                || blanks.stream().anyMatch(blank -> blank.accepted().isEmpty())) {
+            throw new IllegalStateException("Exercise " + task.id()
+                    + " has gaps " + gaps + " but answers for " + indices);
+        }
+        return blanks;
     }
 
     private static GrammarTaskSpec.Blank requireSingleBlank(GrammarTaskSpec task) {

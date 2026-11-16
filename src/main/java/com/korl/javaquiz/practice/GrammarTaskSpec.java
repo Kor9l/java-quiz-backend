@@ -37,4 +37,9 @@ public record GrammarTaskSpec(
     public List<String> chunks() {
         return GrammarAnswerMatcher.chunks(sentence);
     }
+
+    /** The gap numbers a {@code GAP_FILL} text marks, in the order they appear in it. */
+    public List<Integer> gaps() {
+        return GrammarAnswerMatcher.gaps(sentence);
+    }
 }

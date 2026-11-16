@@ -11,6 +11,7 @@ import com.korl.javaquiz.domain.PracticeTask;
 import com.korl.javaquiz.domain.PracticeTaskRepository;
 import com.korl.javaquiz.practice.BlankOutcome;
 import com.korl.javaquiz.practice.CompileDiagnostic;
+import com.korl.javaquiz.practice.GrammarExerciseKind;
 import com.korl.javaquiz.practice.GrammarPracticeEngine;
 import com.korl.javaquiz.practice.GrammarTaskSpec;
 import com.korl.javaquiz.practice.JavaPracticeEngine;
@@ -123,8 +124,15 @@ public class PracticeService {
             dto.put("cases", casesDto(task));
             dto.put("expected", tableDto(javaEngine.expectedResult(javaSpec(task))));
         } else if (isGrammar(task)) {
-            // The chunks are the material, and the only thing withheld is the order they go in.
-            dto.put("chunks", grammarSpec(task).chunks());
+            if (task.getKind() == GrammarExerciseKind.GAP_FILL) {
+                // The text with its {{n}} markers, rendered by the client as inputs in place.
+                // Its answer travels back as one line per gap, in gap order.
+                dto.put("sentence", task.getSentence());
+                dto.put("gapCount", grammarSpec(task).gaps().size());
+            } else {
+                // The chunks are the material, and the only thing withheld is the order they go in.
+                dto.put("chunks", grammarSpec(task).chunks());
+            }
             dto.put("caseSensitive", task.isCaseSensitive());
             dto.put("lastAnswer", state == null ? null : state.getLastSubmission());
             // No `expected` on this track, deliberately. On the other two the reference result
